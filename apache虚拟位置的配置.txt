@@ -1,0 +1,31 @@
+对于apache虚拟位置的配置，主要有以下几个要点：（此处以my93jiang.com，网站根目录为D:/appserv/www为例）
+1.修改windows中system32中的hosts文件。比如说：127.0.0.1 my93jiang.com(这样的话服务器解析地址时会跳转到指定位置)
+2.修改apache安装目录下的httpd.conf文件。
+1》添加
+<Directory "D:/appserv/www">        ---》D:/appserv/www为网站文件的根目录
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+</Directory>
+2》
+添加如下字段      ---》 监听事件
+Listen 127.0.0.1:8080
+Listen 8080
+3》
+添加如下字段       ----》启用虚拟位置服务
+# Virtual hosts
+Include conf/extra/httpd-vhosts.conf 
+
+3.修改httpd.vhosts.conf文件。
+添加如下字段
+<VirtualHost *:8080>
+    ServerAdmin webmaster@my93jiang.com
+    DocumentRoot "D:/appserv/www"
+    ServerName my93jiang.com
+    ServerAlias www.my93jiang.com
+    ErrorLog "logs/my93jiang.com-error.log"
+    CustomLog "logs/my93jiang.com-access.log" common
+</VirtualHost>
+以后如果有新的虚拟地址需要添加的话，在这里添加即可
+4.重启一下apache服务器试一下
