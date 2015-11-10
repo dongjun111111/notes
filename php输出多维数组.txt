@@ -9,3 +9,11 @@ foreach($arr as $k=>$val)
 {
    echo $val['name'].$val['age'].$val['sex']."<br>";
 }
+
+这里也存在一个问题，如果数组中的元素有很多，如果一个一个的写出键值的方法就不是适用了，可不可再以写一个循环捏。
+将上面echo内容换成
+foreach($value as $t=>$d)
+	 {
+    echo $value[$t].'<br>';
+     }
+虽然实现了任意多个元素随意输出，但是仍然是有问题的，待完善。
