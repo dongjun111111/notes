@@ -30,7 +30,7 @@ stripos()与strpos(),前者对大小写不敏感，后者则敏感，类似的还有str_ireplace()与st
 
 7》》》》》》》array_filter(array,function)
 array_filter(array,function);筛选出需要的结果
-function myfudction($v)
+function myfunction($v)
 {
 if($v=="H")
 {
@@ -40,7 +40,9 @@ if($v=="H")
 return false;
 }
 $as=array("H","d","s");
-print_r(array_filter($as,"myfudction"));
+print_r(array_filter($as,"myfunction"));
+输出结果为：
+Array ( [0] => H ) 
 
 8》》》》》》》array_intersect()
 array_intersect() 函数返回两个或多个数组的交集数组。
