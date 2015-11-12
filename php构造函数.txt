@@ -1,0 +1,64 @@
+构造函数形式:function　__construct(){}。
+1.要知道访问一个有构造函数的类时，默认先访问构造函数；
+2.主要用法区别如下：
+（无构造函数，变量不是私有属性）
+class person
+{
+var $name;
+var $age;
+var $action;
+function say($age,$name,$action)              //看这里
+	{
+    echo $age."岁的".$name.$action."<br>";
+    }
+}
+$person1=new person();
+$person1->name="Bob";
+$person1->age=22;
+$person1->action='saying something';
+$person1->say($person1->name,$person1->age,$person1->action);
+
+（有构造函数，变量不是私有属性）
+class car
+{
+var $carname;
+var $carage;
+var $carprice;
+function __cnstruct($carname,$carage,$carprice)
+	{
+   $this->carname=$carname;
+   $this->carage=$carage;
+   $this->carprice=$carprice;
+    }
+	function action()                     //看这里
+	{ 
+	echo $this->carname."的年限是".$this->carage.",价格是".$this->carprice;
+	}
+}
+$newcar=new car();
+$newcar->carname="Benz";
+$newcar->carage="23";
+$newcar->carprice="1000000000";
+$newcar->action();
+
+（有构造函数，变量是私有属性）
+还有一种情况，就是当变量是私有属性的时候，外部给它每个变量赋值时候是不成功的，如$clo->size="444";
+$clo->price="1111";当时用$clo=new clothing("333","444");这种写法则可以通过。
+class clothing
+{
+private $size;
+private $price;
+function __construct($size,$price)
+	{
+  $this->size=$size;
+  $this->price=$price;
+  }
+function show()
+	{
+  echo $this->size."码的衣服价格是".$this->price;
+  }
+}
+$clo=new clothing("333","444");
+//$clo->size="444";
+//$clo->price="1111";
+$clo->show();
