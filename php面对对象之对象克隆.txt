@@ -1,0 +1,29 @@
+clone 关键字用于克隆一个完全一样的对象，__clone() 方法来重写原本的属性和方法。
+有的时候我们需要在一个项目里面使用两个或多个一样的对象，如果使用 new 关键字重新创建对象，
+再赋值上相同的属性，这样做比较烦琐而且也容易出错。PHP 提供了对象克隆功能，
+可以根据一个对象完全克隆出一个一模一样的对象，而且克隆以后，两个对象互不干扰。
+
+class People
+{
+private $name;
+private $age;
+function __construct($name,$age)
+	{
+$this->name=$name;
+$this->age=$age;
+  }
+function say()
+	{
+	echo "<br>我的名字叫：".$this->name."<br>";
+	echo "年龄是".$this->age;
+  }
+  function __clone()                     //看这里
+	{             
+  $this->name="我是假的".$this->name;
+  $this->age=30;
+  }
+}
+$pe=new People('张三','20');
+$pe->say();
+$pe2=clone $pe;                          //看这里
+$pe2->say();
