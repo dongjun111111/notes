@@ -1,4 +1,4 @@
-如题，这一个重点是自动加载类__autoload(),它可以大大方便引用文件。
+如题，这一个重点是自动加载类__autoload()的方法,它可以大大简化引用文件的步骤。
 Person3.php
 <?php
 class Person3
