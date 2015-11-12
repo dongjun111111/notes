@@ -1,0 +1,25 @@
+serialize()与unserialize()
+将对象序列化成可以存储的字节流保存起来，便于其他文件中的方法使用。
+class Person
+{
+private $name;
+private $age;
+function __construct($name,$age)
+	{
+$this->name=$name;
+$this->age=$age;
+   }
+   function say()
+	{
+   echo "name is :".$this->name."<br>age is :".$this->age;
+     }
+}
+$p1=new Person("Bob","20");
+$p1_string=serialize($p1);
+
+/*$file=fopen("p1_string.txt","a");
+fwrite($file,$p1_string);
+fclose($file);
+*/
+$p2=unserialize(file_get_contents('p1_string.txt'));
+$p2->say();
