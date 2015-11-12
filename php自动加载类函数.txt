@@ -1,0 +1,28 @@
+如题，这一个重点是自动加载类__autoload(),它可以大大方便引用文件。
+Person3.php
+<?php
+class Person3
+{
+private $pname;
+private $page;
+function __construct($pname,$page)
+	{
+  $this->pname=$pname;
+  $this->page=$page;
+    }
+  function say()	
+  { 
+  echo "姓名是：".$this->pname."年龄是:".$this->page;
+  }
+}
+?>
+
+test.php
+<?php
+function __autoload($class_name)
+{
+ require_once $class_name.".php";
+}
+$person1=new Person3("Bob","33");
+$person1->say();
+?>
