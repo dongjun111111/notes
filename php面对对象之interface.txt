@@ -1,0 +1,54 @@
+如题，要点：interface下的接口中不能有变量，方法必须为空。
+interface Person//创建一个Person接口，并且有一个eat方法
+{
+public function eat();
+}
+//class Man extends Person//不是继承，不是继承
+class Man implements Person
+{
+public function eat()
+	{
+	return "Man is eating<br>";
+  }
+}
+//class Woman extends Person
+class Woman implements Person
+{
+public function eat()
+	{
+  return "Woman is eating<br>";
+   }
+}
+$p=new Man();
+echo $p->eat();
+$p2=new Woman();
+echo $p2->eat();
+以上是自己写的，网上有一篇文章（http://blog.sina.com.cn/s/blog_495697e60100ket2.html）有一些不一样，如下：
+interface Person//创建一个Person接口，并且有一个eat方法
+{
+public function eat();
+}
+//class Man extends Person//不是继承，不是继承
+class Man implements Person
+{
+public function eat()
+	{
+	return "Man is eating<br>";
+  }
+}
+//class Woman extends Person
+class Woman implements Person
+{
+public function eat()
+	{
+  return "Woman is eating<br>";
+   }
+}
+function eat($rr)   //主要是这里，这里传递一个接口进去，以供调用,主要的灵活就在这里
+{
+ return $rr->eat();
+}
+$p = new Man();
+ echo eat($p);
+$p2 = new Woman();
+ echo eat($p2);
