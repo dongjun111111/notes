@@ -1,1 +1,3 @@
 push文件夹时，文件夹名不能是有汉字的！！！！！！！！！！！！！！！
+如果git push 出现No configured push destination.的错误，
+请试试先打开Windows客户端GitHub再用GitShell试一试。
