@@ -1,0 +1,123 @@
+     主网站：   www.kancloud.cn/manual/thinkphp
+1.  use Think\Controller   ----/1686
+表示的是引入Think\Controller类库便于直接使用。
+namespace Home\Controller;
+use Think\Controller;
+class IndexController extends Controller
+
+等同于
+namespace Home\Controller;
+class IndexController extends \Think\Controller
+
+
+那么这个Controller的方法在哪个文件找到？？
+在：D:\wamp\wamp\apps\think\ThinkPHP\Library\OT\TagLib下面有一个Think.class.php。
+里面有sql查询的封装方法，_query($tag,$content),_value($tag,$content,$type='getField'),
+_count($attr,$content),_sum($attr,$content),_max($attr,$content), _min($attr,$content),
+_avg($attr,$content),_article($tag,$content),等其他方法
+
+
+use Think\Controller
+
+引入的是D:\wamp\wamp\apps\think\ThinkPHP\Library\Think下的Controller.class.php文件，里面有start(),
+addMap($class, $map='')，autoload($class)，instance($class,$method='')等方法
+
+
+2  系统提供了C方法来读取已有的配置，用法：
+$model=C("URL_MODEL");读取当前的URL模式配置参数
+C("USER_CONFIG.USER_TYPE"); 读取用户配置的用户类型设置
+C方法也可以用来动态设置某些参数，
+C("DATA_CACHE_TIME",60); 改变缓存有效期
+C方法可以用来批量设置配置参数
+$config=array("WEB_SITE_TITLE"=>"Thinkphp","WEB_SITE_DESCRIPTION"=>"开源php框架");
+C($config);
+
+A 快速实例化Action类库
+B 执行行为类
+C (如上面)
+D 快速实例化Model类库 即实例化数据模型
+F 快速简单文本数据存取方法
+L 语言参数存取方法
+M 快速高性能实例化模型   （M实例化的是数据库的表名，D实例化的是你自己在Model文件夹下面建立的模型文件，D就是
+在你没有定义模型的时候，系统帮你定义一个模型，这样你才可以进行简单的数据输出与输入）
+R 快速远程调用Action类方法
+S 快速缓存存取方法
+U URL动态生成和重定向方法
+W 快速Widget输出方法
+
+3.规则路由
+每个参数以":"开头的参数都表示动态参数，自动对应一个GET参数，:year代表$_GET['year']
+
+4.
+ajaxReturn方法  默认是json格式
+$data['status']=1;
+$data['content']='content';
+$this->ajaxReturn($data);
+
+页面跳转与重定向  success和error方法
+$User=M("User");
+$result=$User->add($data);
+if($result)
+{
+$this->success("新增成功","/User/index");
+}
+else
+{
+$this->error("新增失败");
+}
+ redirect()方法
+$this->redirect("New/category",array(cate_id=>2),5,"页面跳转中");
+停留5秒后跳转到New模块的category方法中，并且显示跳转中字样
+redirect("/New/category/cate_id/2",5,"页面跳转中");
+仅仅在5秒后跳到另一个url地址
+
+
+I()方法  获取变量
+I("get.id");  相当于 $_GET["id"];
+I("get.name",0); 如果不存在$_GET["id"]，则返回0
+I("get."); 获取整个$_GET的数组
+I("post.name","htmlspacialchars");  采用htmlspecialchars方法对$_POST['name']进行过滤
+I("cookie."); 获取整个Cookie数组
+I("param.id") 相当于$_GET["id"]或者$_POST["id"],比较灵活，其实它更可以简写成I("id")
+I("get.name","/^\d+$/"); 对传入的数据进行正则过滤
+I("post.email",FILTER_VALIDATE_EMAIL)  对传入的数据进行email格式过滤，如果不符合则会返回0
+类似的还有FILTER_FLOAT FILTER_BOOLEAN FILTER_URL FILTER_STRING FILTER_MAGIC_QUOTES 等等，具体的请
+看www.kancloud.cn/manual/thinkphp/1721
+
+5.判断请求类型
+IS_GET IS_POST IS_AJAX IS_PUT 等等
+if(IS_GET)
+{
+$user= M("User");
+$user->create();
+$user->save();
+$user->success("保存成功");  //页面跳转
+}
+else
+{
+$this->error("非法请求");     //页面跳转
+}
+
+6.模型
+通常继承系统的\Think\Model类或其他类，大多数操作数据表，大多数命名也是自动对应数据表，方便开发
+UserModel约定对应think_user表   (think是前缀)
+UserTypeModel约定对应think_type_model表
+  
+
+数据库连接支持3种方式：
+1，字符串定义；2，数组定义；3，配置定义
+第一种字符串：
+new \Home\Model\NewModel('blog','think_',''mysql://root:1234@localhost/demo');
+第二种数组：
+$connection=array(
+'db_type' => 'mysql',
+'db_host' => '127.0.0.1',
+'db_user'=>'root',
+'db_pwd'=>'12345',
+'db_port'=>3306,
+'db_name'=>'demo',
+'db_charset'=>'utf8',
+);
+
+
+
