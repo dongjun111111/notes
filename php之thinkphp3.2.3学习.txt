@@ -263,4 +263,71 @@ fetch()方法     获取渲染模板的输出内容而不是直接输出（display()），可以使用fetch
 $content=$this->fetch('Member:edit');
 把edit模板的内容赋给$content,然后可以对$content进行处理
 
+系统变量输出
+{$Think.server.script_name}  输出$_SERVER["SCRIPT_NAME"]
+{$Think.session.user_id} 输出$_SESSION["user_id"]
+{$Think.get.pageNumber}  输出$_GET["pageNumber"]
+{$Think.cookie.name} 输出$_COOKIE["name"]
+
+使用函数
+{$data.name|md5}
+相当于：<?php echo(md5($data["name"]));?>
+多函数也是支持的
+{$name|md5|strtoupper}
+相当于: <?php echo (strtoupper(md5($name)));?>
+
+以下为模板内容
+模板  <block></block> 好比类的继承一样，模板也可以定义一个基础模板，并且其中定义的区块，然后继承该基础模板的子模板就可以对基础模板这个中定义的区块进行重载。
+定义一个base.html的基础模板文件
+<extend name="base" />  引入base.html文件
+
+thinkphp中的三目运算
+{$status?"成功":"失败"}
+
+上传操作
+使用的是Think\upload类，假设前面的表单提交到当前控制器的upload方法:
+public function upload()
+{
+$upload=new \Think\Upload(); //实例化上传类
+$upload->maxSize =354728;
+$upload->exts    = array('jpg','png','gif','jpeg');
+$upload->rootPath= './Uploads/';
+$upload->savePath='';
+$info =$upload->upload();
+if(!$info)
+{
+$this->error($upload->getError());
+}
+else
+{
+$this->success('上传成功！');
+}
+
+
+getDbError();调用数据库相关错误
+getError();调用模型等其他错误
+}
+
+生成验证码
+Think\Verify类可以支持验证码的生成与验证功能
+$Verify= new \Think\Verify();
+$Verify->entry();
+生成的验证码信息会保存到session中，包含的数据有：
+array('verify_code'=>'当前验证码的值'，verify_time=>'验证码生成的时间戳');
+
+图像处理
+使用\think\Image类进行图像处理功能，支持GD库和Imagick库。
+$image= new \Think\Image();
+$image->open("./1.jpg");
+$width=$image->width(); //返回图片的高度
+$height=$image->height();
+$type=$image->type(); //返回图片的类型
+$size=$image->size();  //返回图片的尺寸
+$image->crop(400,400)->save('./crop.jpg'); //将图片裁剪为400*400并保存为crop.jpg
+
+REST(Representational State Transfer表述性状态转移)是一种针对网络应用的设计和开发方式，可以降低开发的复杂性，提高系统的可伸缩性。REST是设计风格而不是标准。REST通常基于使用HTTP，URI，和XML以及HTML这些现有的广泛流行的协议和标准。
+
+get_client_ip获取客户端的IP地址
+$ip=get_client_ip();
+
 
