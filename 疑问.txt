@@ -126,13 +126,12 @@ $User=M("User");
 $User->where("type=1 AND status=1")->select();
 以上等同于
 select * from think_user where type=1 and status=1
-add()方法
-插入数据
+add()方法  （写入数据库中）  
 $User = M("User"); // 实例化User对象
 $data['name'] = 'ThinkPHP';
 $data['email'] = 'ThinkPHP@gmail.com';
 $User->add($data);这样就插入了数据库中
-save()方法
+save()方法  （更新到数据库中）
 更新数据
 在ThinkPHP中使用save方法更新数据库，并且也支持连贯操作的使用。
 $User = M("User"); // 实例化User对象
@@ -155,6 +154,9 @@ $Model->alias("a")->join("__DEPT__ b ON b.user_id=a.id")->select();
 最终生成如下：
 select * from think_user a inner join think_dept b ON b.user_id=a.id
 create方法  创建数据对象
+$data['name']='Thinkphp';$data['123@qq.com'];$User->Create($data);Create方法创建的数据对象时保存在内存中的，
+并没有实际的写入到数据库中，使用add()或者save()方法才会真正写入数据库中，谨记谨记！！！！
+插入数据
 可以对POST提交的数据进行处理（通过表中的字段名称与表单提交的名称对应关系自动封装数据实例），
 例如user表中有一个字段名叫"username",如果表单中有一个<input name="username" value="小明">,
 那么$User = M('User'); $data = $User->create(); echo $data['username'];就会输出"小明",不用你用$_POST['username']去接收。
@@ -206,4 +208,26 @@ inner join  如果表中至少有一个匹配，则返回行
 left join  即使右表中没有匹配，也从左表返回所有的行
 right join 即使左表中没有匹配，也从右表返回所有的行
 full join 只要其中一个表中存在匹配，就返回两个表中的所有的行
-
+$Model=M('Article');
+$Model->join('RIGHT JOIN __WORK__ON__ARTIST__.id=__WORK__.artist_id')->select();
+union()方法
+union操作用于合并两个或多个select语句的结果集
+$Model->field('name')->table('think_user_0')->union('select name from think_user_1')
+->union('select name from think_user_2')->select();
+distinct()
+distinct()用于列出表中仅仅不同的值，多个重复的值只输出一次
+-----------
+id  name
+1   a
+2   a
+3   b
+4   a
+5   c
+6   c
+------------
+$Model->distinct(true)->field('name')->select();
+相当于 select distinct name from think_user;
+结果为 a ; b ; c;
+lock()方法-设置数据库锁机、cache()方法-设置数据库缓存、comment()方法-添加注释内容、token()方法-用于临时关闭令牌验证、
+find()方法
+读取数据，它与select()语句很像，但是不一样！！find它返回的是满足条件的第一组数据的一维数组，而select返回的是一个结果集，是数据库中所有满足条件的一行或多行记录的二维数组。
