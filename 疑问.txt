@@ -215,15 +215,16 @@ $Model->field('name')->table('think_user_0')->union('select name from think_user
 ->union('select name from think_user_2')->select();
 distinct()
 distinct()用于列出表中仅仅不同的值，多个重复的值只输出一次
------------
+------------
 id  name
+------------
 1   a
 2   a
 3   b
 4   a
 5   c
 6   c
-------------
+-------------
 $Model->distinct(true)->field('name')->select();
 相当于 select distinct name from think_user;
 结果为 a ; b ; c;
