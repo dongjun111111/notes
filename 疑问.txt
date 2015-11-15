@@ -38,7 +38,7 @@ C (如上面)
 D 快速实例化Model类库 即实例化数据模型
 F 快速简单文本数据存取方法
 L 语言参数存取方法
-M 快速高性能实例化模型   （M实例化的是数据库的表名，D实例化的是你自己在Model文件夹下面建立的模型文件，D就是
+M 快速高性能实例化模型   （ M 实例化的是数据库的表名，D 实例化的是你自己在Model文件夹下面建立的模型文件，D就是
 在你没有定义模型的时候，系统帮你定义一个模型，这样你才可以进行简单的数据输出与输入）
 R 快速远程调用Action类方法
 S 快速缓存存取方法
@@ -119,5 +119,42 @@ $connection=array(
 'db_charset'=>'utf8',
 );
 
+7.数据库连贯操作
+select()方法
+查找数据
+$User=M("User");
+$User->where("type=1 AND status=1")->select();
+以上等同于
+select * from think_user where type=1 and status=1
+add()方法
+插入数据
+$User = M("User"); // 实例化User对象
+$data['name'] = 'ThinkPHP';
+$data['email'] = 'ThinkPHP@gmail.com';
+$User->add($data);这样就插入了数据库中
+save()方法
+更新数据
+在ThinkPHP中使用save方法更新数据库，并且也支持连贯操作的使用。
+$User = M("User"); // 实例化User对象
+$data['name'] = 'ThinkPHP';// 要修改的数据对象属性重新赋值
+$data['email'] = 'ThinkPHP@gmail.com';// 要修改的数据对象属性重新赋值
+$User->where('id=5')->save($data); // 根据条件保存修改的数据
+delete()方法
+删除数据
+$User = M("User"); // 实例化User对象
+$User->where('id=5')->delete(); // 删除id为5的用户数据
+$User->where('status=0')->delete();//删除状态为0的所有用户数据
 
-
+table()方法
+切换操作的数据表；对多表进行操作。
+$Model->table("think_user")->where("status>1")->select();
+alias()方法
+用于设置当前数据表的别名，便于使用其他连贯操作如join方法
+$Model=M("User");
+$Model->alias("a")->join("__DEPT__ b ON b.user_id=a.id")->select();
+最终生成如下：
+select * from think_user a inner join think_dept b ON b.user_id=a.id
+create方法  创建数据对象
+可以对POST提交的数据进行处理（通过表中的字段名称与表单提交的名称对应关系自动封装数据实例），
+例如user表中有一个字段名叫"username",如果表单中有一个<input name="username" value="小明">,
+那么$User = M('User'); $data = $User->create(); echo $data['username'];就会输出"小明",不用你用$_POST['username']去接收。
