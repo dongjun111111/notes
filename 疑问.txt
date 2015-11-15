@@ -231,3 +231,31 @@ $Model->distinct(true)->field('name')->select();
 lock()方法-设置数据库锁机、cache()方法-设置数据库缓存、comment()方法-添加注释内容、token()方法-用于临时关闭令牌验证、
 find()方法
 读取数据，它与select()语句很像，但是不一样！！find它返回的是满足条件的第一组数据的一维数组，而select返回的是一个结果集，是数据库中所有满足条件的一行或多行记录的二维数组。
+表达式查询，EQ（相等）、NEQ（不相等）、GT（大于）、LT（小于）等等
+$map['id']=array('eq',100);
+相当于 $map['id']=100;
+query()方法
+用于执行SQL查询操作，如果数据非法或者查询错误则返回false，否则返回结果集。该方法仅用于读，对数据库写的话请使用exexute()
+$Model= new \Think\Model();//实例化一个model对象，没有对应任何数据表
+$Model->query("select * from think_user where status=1");
+execute()方法
+用于更新和写入数据的sql操作，如果数据非法或者查询错误返回false，否则返回影响的记录数。
+$Model= new \Think\Model();
+$Model->execute("update  think_user set name='thinkphp' where status=1");
+模板
+assign()方法
+assign()方法对模板变量进行赋值，无论何种变量类型都是用assign,assign必须在display和show方法之前调用。
+$this->assign('name',$value);
+$this->name=$value;
+如果同时输出多个模板变量，可以用数组形式：
+$array['name']='thinkphp';
+$array['email']='123@qq.com';
+$array['phone']='1234567';
+$this->assign($array);
+在模板文件中同时接收到name、email、phone三个变量，可以用{$name}{$email}{$phone}输出显示出来
+display()方法                 模板渲染
+$this->display();系统根据默认规则定位模板文件，定位到\当前模块\默认视图目录\当前主题\当前控制器\当前操作.html
+$this->display('edit'); 指定edit.html文件接受渲染
+$this->display('Member:read'); 指定Member控制器下的read模板，也就是read.html
+$this->theme('blue')->display('User:edit'); 调用blue主题下面的User控制器的edit模板
+$this->display('read','utf-8','text/html'); 指定在utf-8编码text/html类型下read.html模板文件接受渲染
