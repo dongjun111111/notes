@@ -158,3 +158,52 @@ create方法  创建数据对象
 可以对POST提交的数据进行处理（通过表中的字段名称与表单提交的名称对应关系自动封装数据实例），
 例如user表中有一个字段名叫"username",如果表单中有一个<input name="username" value="小明">,
 那么$User = M('User'); $data = $User->create(); echo $data['username'];就会输出"小明",不用你用$_POST['username']去接收。
+field()方法
+主要目标是要返回或者操作的字段，用于查询与写入操作
+$Model->field('id,title,content')->select();
+相当于 select id,title,content from table;
+它也可以用来给某个字段设置别名：
+$Model->field('idnickname as name')->select();
+相当于 select id,nickname as name from table;
+也可以再field方法中直接使用函数，
+$Model->field('id,SUM(score)')->select();
+相当于 select id,SUM(socre) from table;
+$Model->select();
+$Model->field()->select();
+$Model->field('*')->select();
+以上三个效果相同，都等于 select * from table
+$Model->field(true)->select(); 显示数据库中所有字段列表
+$Model->field('content',true)->select();
+显示除content字段之外的所有其他字段
+order()方法
+对数据进行排序
+$Model->where('status=1')->order('id desc')->limit(5)->select();
+相当于 select * from table where status=1 limit(5) order by id desc;
+group()方法 
+对应原生的group by()函数，用于结合合计函数，根据一个或者多个结果进行分组，
+例如有一个Orders表
+----------------------
+OrderPrice  Customer
+---------------------- 
+1000        Bush
+1600        Carter
+700         Bush
+300         Bush
+2000        Adams
+100         Carter
+----------------------
+$this->field('Customer,SUM(OrderPrice)')->group('Customer')->select();
+相当于
+select Customer.SUM(OrderPrice) From 'Orders' group by Customer
+结果是：  Bush 2000   ; Carter     1700    ;Adams       2000.
+having()方法
+用于配合group()方法完成从分组的结果中筛选数据
+$this->field('Customer,SUM(OrderPrice)')->group('Customer')->having('SUM(OrderPrice>1800)')->select();
+结果为:    Bush  2000  ;  Adams    2000;
+join()方法
+用于根据两个或者多个表中的列之间的关系，从这些表中查询数据
+inner join  如果表中至少有一个匹配，则返回行
+left join  即使右表中没有匹配，也从左表返回所有的行
+right join 即使左表中没有匹配，也从右表返回所有的行
+full join 只要其中一个表中存在匹配，就返回两个表中的所有的行
+
