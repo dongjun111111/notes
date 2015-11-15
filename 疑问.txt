@@ -32,18 +32,17 @@ C方法可以用来批量设置配置参数
 $config=array("WEB_SITE_TITLE"=>"Thinkphp","WEB_SITE_DESCRIPTION"=>"开源php框架");
 C($config);
 
-A 快速实例化Action类库
-B 执行行为类
-C (如上面)
-D 快速实例化Model类库 即实例化数据模型
-F 快速简单文本数据存取方法
+A A()方法用于在内部实例化控制器          （对控制器进行操作） 最简单的用法： $User = A('User');   
+R R()方法远程调用控制器的内部的操作方法  （对控制器进行操作） $index=R("Index","myHello"); echo $index;     实例化Index控制器，并且调用其中的myHello方法，将结果赋给$index,然后将其echo出去。    
+D 快速实例化Model类库   （对模型进行操作） D函数用于实例化一个存在模型文件的Model  
+M 快速高性能实例化模型  （对模型进行操作） M函数用于实例化一个没有模型文件的Model（ M 实例化的是数据库的表名，D 实例化的是你自己在Model文件夹下面建立的模型文件，D就是在你没有定义模型的时候，系统帮你定义一个模型，这样你才可以进行简单的数据输出与输入）
+U URL动态生成和重定向方法  U('Blog/read?id=1')普通模式，生成的URL地址是：http://serverName/index.php?m=Blog&a=read$id=1REWRITE模式，生成的URL地址是：http://serverName/Blog/read/id/1.html
+C C()方法来读取已有的配置
 L 语言参数存取方法
-M 快速高性能实例化模型   （ M 实例化的是数据库的表名，D 实例化的是你自己在Model文件夹下面建立的模型文件，D就是
-在你没有定义模型的时候，系统帮你定义一个模型，这样你才可以进行简单的数据输出与输入）
-R 快速远程调用Action类方法
+F 快速简单文本数据存取方法
 S 快速缓存存取方法
-U URL动态生成和重定向方法
-W 快速Widget输出方法
+B 执行行为类 B('app_begin');就是在项目开始之前，执行这个行为定义的所有函数,支持2个参数
+W 快速Widget输出方法  
 
 3.规则路由
 每个参数以":"开头的参数都表示动态参数，自动对应一个GET参数，:year代表$_GET['year']
@@ -253,9 +252,14 @@ $array['email']='123@qq.com';
 $array['phone']='1234567';
 $this->assign($array);
 在模板文件中同时接收到name、email、phone三个变量，可以用{$name}{$email}{$phone}输出显示出来
-display()方法                 模板渲染
+display()方法    模板渲染
 $this->display();系统根据默认规则定位模板文件，定位到\当前模块\默认视图目录\当前主题\当前控制器\当前操作.html
 $this->display('edit'); 指定edit.html文件接受渲染
 $this->display('Member:read'); 指定Member控制器下的read模板，也就是read.html
 $this->theme('blue')->display('User:edit'); 调用blue主题下面的User控制器的edit模板
 $this->display('read','utf-8','text/html'); 指定在utf-8编码text/html类型下read.html模板文件接受渲染
+fetch()方法     获取渲染模板的输出内容而不是直接输出（display()），可以使用fetch()方法
+$content=$this->fetch('Member:edit');
+把edit模板的内容赋给$content,然后可以对$content进行处理
+
+
