@@ -32,8 +32,8 @@ C方法可以用来批量设置配置参数
 $config=array("WEB_SITE_TITLE"=>"Thinkphp","WEB_SITE_DESCRIPTION"=>"开源php框架");
 C($config);
 
-A A()方法用于在内部实例化控制器          （对控制器进行操作） 最简单的用法： $User = A('User');   
-R R()方法远程调用控制器的内部的操作方法  （对控制器进行操作） $index=R("Index","myHello"); echo $index;     实例化Index控制器，并且调用其中的myHello方法，将结果赋给$index,然后将其echo出去。    
+A A()方法用于在内部实例化控制器          （对控制器进行操作） 最简单的用法： $User = A('User');（适合用来调用使用其他模块内的多个方法，避免多次实例化对象）
+R R()方法远程调用控制器的内部的操作方法  （对控制器进行操作） $index=R("Index","myHello"); echo $index;     实例化Index控制器，并且调用其中的myHello方法，将结果赋给$index,然后将其echo出去。（适合只需要使用其他模块内的其中一个方法 ）   
 D 快速实例化Model类库   （对模型进行操作） D函数用于实例化一个存在模型文件的Model  
 M 快速高性能实例化模型  （对模型进行操作） M函数用于实例化一个没有模型文件的Model（ M 实例化的是数据库的表名，D 实例化的是你自己在Model文件夹下面建立的模型文件，D就是在你没有定义模型的时候，系统帮你定义一个模型，这样你才可以进行简单的数据输出与输入）
 U URL动态生成和重定向方法  U('Blog/read?id=1')普通模式，生成的URL地址是：http://serverName/index.php?m=Blog&a=read$id=1REWRITE模式，生成的URL地址是：http://serverName/Blog/read/id/1.html
@@ -119,17 +119,20 @@ $connection=array(
 );
 
 7.数据库连贯操作
+
 select()方法
 查找数据
 $User=M("User");
 $User->where("type=1 AND status=1")->select();
 以上等同于
 select * from think_user where type=1 and status=1
+
 add()方法  （写入数据库中）  
 $User = M("User"); // 实例化User对象
 $data['name'] = 'ThinkPHP';
 $data['email'] = 'ThinkPHP@gmail.com';
 $User->add($data);这样就插入了数据库中
+
 save()方法  （更新到数据库中）
 更新数据
 在ThinkPHP中使用save方法更新数据库，并且也支持连贯操作的使用。
@@ -137,6 +140,7 @@ $User = M("User"); // 实例化User对象
 $data['name'] = 'ThinkPHP';// 要修改的数据对象属性重新赋值
 $data['email'] = 'ThinkPHP@gmail.com';// 要修改的数据对象属性重新赋值
 $User->where('id=5')->save($data); // 根据条件保存修改的数据
+
 delete()方法
 删除数据
 $User = M("User"); // 实例化User对象
@@ -331,3 +335,103 @@ get_client_ip获取客户端的IP地址
 $ip=get_client_ip();
 
 
+从数据库中取出数据实例：  操作数据库的方法在model文件中才有，所以必须先实例化M（）方法，或者 new \Think\Model();
+1》》》》
+  $Model=new \Think\Model();//这种方法取出的是数据库中不是以onethink_为前缀的数据表 
+  $table=$Model->query('select * from addcategory where id =5');
+2》》》》
+  $Data=M('action');//这里种默认找数据库中_onethink_action的数据表，可以在conf文件中更改设置，因为操作数据库的方法在model文件中才有，所以必须先实例化M（）方法，或者 new \Think\Model();
+  $table=$Data->field('remark')->where('id=5')->select();
+更新数据库信息实例：
+  //更新的是onethink_action表中id=1条数据的remark信息
+$Model=D('action');
+	$data['remark']='+10';
+	$res=$Model->where('id=1')->save($data);
+	if($res)
+		{
+	 $this->success("成功");
+	  }
+	  else
+		  {
+	  
+	  	 $this->success("失败",U('Index/index'));//Index/index表示的是该大的目录(Home)下Index控制器中index方法，改成Admin/Index/index可以跳到后台Index控制器下的index方法，如果没有登录，则会跳到login方法
+
+	  }
+删除数据库信息实例：
+
+$Model=D('action');
+	$res=$Model->where('id=5')->delete();
+	if($res)
+		{
+	 $this->success('删除成功',U('Index/index'));
+	  }
+	  else
+		  {
+	  
+	  	 $this->success("删除失败",U('Index/index'));//Index/index表示的是该大的目录(Home)下Index控制器中index方法，改成Admin/Index/index可以跳到后台Index控制器下的index方法，如果没有登录，则会跳到login方法
+
+	  }
+
+插入数据库信息实例：       //注意语法的格式，是$res=$Model->add($data);   没有field,没有where
+ $Model=D('action_log');
+	$data['action_id']='1';
+	$data['user_id']='1';
+	$data['action_ip']=$_SERVER['REMOTE_ADDR'];
+	$data['model']='member';
+	$data['record_id']='1';
+	$data['remark']='这是添加的一条数据'; 
+	$data['status']='1';
+	$data['create_time']=time();
+//	var_dump($data['user_ip']);
+
+	$res=$Model->add($data);
+	if($res)
+		{
+	 $this->success('成功',U('Index/index'));
+	  }
+	  else
+		  {
+	  
+	  	 $this->success("失败",U('Index/index'));//Index/index表示的是该大的目录(Home)下Index控制器中index方法，改成Admin/Index/index可以跳到后台Index控制器下的index方法，如果没有登录，则会跳到login方法
+
+	  }
+
+在视图文件中写链接：
+<volist name="data" id="vo">
+<tr><td>{$vo['categoryname']}</td><td>
+{$vo['highlevel']} </td><td>
+{$vo['categorymessage']}</td><td>
+{$vo['categorysort']}</td><td>
+{$vo['categorystatus']}</td>
+<td>{$vo['id']}<a href='{:U("Category/edit?id=$vo[id]")}'>修改</a></td>   //看这里看这里看这里看这里  id=$vo[id]
+</volist>
+
+
+
+
+
+strcmp()函数
+比较两个字符串（区分大小写）：
+<?php
+echo strcmp("Hello world!","Hello world!");
+?>
+
+array_unique() 函数
+该函数用来移除数组中的重复的值，并返回结果数组。
+当几个数组元素的值相等时，只保留第一个元素，其他的元素被删除。
+返回的数组中键名不变。
+语法
+array_unique(array)
+
+控制器接收表单传递数据时候需要有一个IS_POST的判断，不然会出现未知错警告
+	if(IS_POST)                   //提交表单接受时候必须要有一个IS_POST的判断
+	   {
+		if($update)
+	    {
+		$this->success('编辑成功！',U('Index'));
+		}
+		else
+	   {
+		$this->error(empty($error) ? '未知错误！' : $error);
+		}
+	   }
