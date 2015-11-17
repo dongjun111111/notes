@@ -35,6 +35,15 @@ class CategoryController extends AdminController {
 	 //显示start	
 	    $id=$_GET['id'];
 		$result=$Model->where("id=$id")->select();
+	if($result[0]['categorystatus']=="0")
+		   {
+		 $result[0]['categorystatus']="正常";
+		  }
+		  else
+		   {
+		 $result[0]['categorystatus']="禁用";
+		  }
+		 
 		$this->assign('categorylist',$result);
 		$all=$Model->field('categoryname')->select();
         $this->assign('alll',$all);
