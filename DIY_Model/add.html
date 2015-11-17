@@ -1,0 +1,44 @@
+<extend name="Public/base"/>
+
+<block name="body">
+	<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+	<div class="main-title">
+		<h2>{:isset($info['id'])?'编辑':'添加'}分类</h2>
+	</div>
+	<p><a href="{:U('index')}">返回</a></p>
+<form action="{:U('add')}" method="post">
+分类名称：<input type="text"  class="text input-large"   name="categoryname" /><br>
+上级分类：<input type="text"  class="text input-large"   name="highlevel" /><br>
+分类注释：<input type="text"  class="text input-large"   name="categorymessage" /><br>
+分类排序：<input type="text"  class="text input-large"   name="categorysort" /><br>
+分类状态：<input type="text"  class="text input-large"   name="categorystatus" /><br>
+<input type="submit" id="submit" style="width:470px;" class="submit-btn " target-form="form-horizontal" value="添加" />
+</form>
+</block>
+
+
+
+
+
+<block name="script">  <!--页面控制显示区域-->
+	<script type="text/javascript">
+		<present name="info.id">
+		Think.setValue("allow_publish", {$info.allow_publish|default=1});
+		Think.setValue("check", {$info.check|default=0});
+		Think.setValue("model[]", {$info.model|json_encode} || [1]);
+		Think.setValue("type[]", {$info.type|json_encode} || [2]);
+		Think.setValue("display", {$info.display|default=1});
+		Think.setValue("reply", {$info.reply|default=0});
+		Think.setValue("reply_model[]", {$info.reply_model|json_encode} || [1]);
+		</present>
+		$(function(){
+			showTab();
+			$("input[name=reply]").change(function(){
+				var $reply = $(".form-item.reply");
+				parseInt(this.value) ? $reply.show() : $reply.hide();
+			}).filter(":checked").change();
+		});
+		//导航高亮
+		highlight_subnav('{:U('Category/index')}');
+	</script>
+</block>

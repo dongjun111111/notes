@@ -1,0 +1,44 @@
+<extend name="Public/base"/>
+
+<block name="body">
+	<script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+	<div class="main-title">
+		<h2>{:isset($info['id'])?'编辑':'修改'}分类</h2>
+	</div>
+<br>分类名:
+<form action="{:U('edit')}" method="post" >
+<input type="hidden" name="uid" value="<?php echo $_GET[id];?>" />
+<input type="text"  class="text input-large"   name="categoryname"
+value="{$data[0]['categoryname']}" />
+<input type="submit" id="submit"  class="submit-btn " target-form="form-horizontal" value="确认修改" />
+</form>
+
+	
+</block>
+
+
+
+
+
+<block name="script">  <!--页面控制显示区域-->
+	<script type="text/javascript">
+		<present name="info.id">
+		Think.setValue("allow_publish", {$info.allow_publish|default=1});
+		Think.setValue("check", {$info.check|default=0});
+		Think.setValue("model[]", {$info.model|json_encode} || [1]);
+		Think.setValue("type[]", {$info.type|json_encode} || [2]);
+		Think.setValue("display", {$info.display|default=1});
+		Think.setValue("reply", {$info.reply|default=0});
+		Think.setValue("reply_model[]", {$info.reply_model|json_encode} || [1]);
+		</present>
+		$(function(){
+			showTab();
+			$("input[name=reply]").change(function(){
+				var $reply = $(".form-item.reply");
+				parseInt(this.value) ? $reply.show() : $reply.hide();
+			}).filter(":checked").change();
+		});
+		//导航高亮
+		highlight_subnav('{:U('Category/index')}');
+	</script>
+</block>
