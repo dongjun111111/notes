@@ -10,18 +10,37 @@
 			<a class="btn" href="{:U('add')}">新 增</a>
 		</div>
 	<br>
-<table border="1px" width="100%">
+
+	 <div class="data-table">
+        <div class="data-table table-striped">
+<table class="">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="">分类名称</th>
+		<th class="">上级分类</th>
+		<th class="">分类注释</th>
+		<th class="">分类排序</th>
+		<th class="">分类状态</th>
+		<th class="">修改</th>
+		<th class="">删除</th>
+		</tr>
+    </thead>
+    <tbody>
+<!--<table border="1px" width="100%"> border="1px" width="100%" 
 <thead style='color:red;'>
-<tr><td>分类名</td><td>上级分类</td><td>注释</td><td>排序</td><td>状态</td><td>修改</td><td>删除</td></tr>
-</thead>
-<tbody>
+<tr><td>分类名称</td><td>上级分类</td><td>注释</td><td>排序</td><td>状态</td><td>修改</td><td>删除</td></tr>
+</thead>  -->
+<tbody>  
 </td>
 <volist name="data" id="vo">
-<tr><td>{$vo['categoryname']}</td><td>
-{$vo['highlevel']} </td><td>
-{$vo['categorymessage']}</td><td>
-{$vo['categorysort']}</td><td>
-{$vo['categorystatus']}</td>
+<tr>
+<td><input class="ids" type="checkbox" name="ids[]" value="{$vo.id}" /></td>
+<td>{$vo['categoryname']}</td>
+<td>{$vo['highlevel']} </td>
+<td>{$vo['categorymessage']}</td>
+<td>{$vo['categorysort']}</td>
+<td>{$vo['categorystatus']}</td>
 <td><a href='{:U("edit?id=$vo[id]")}'>修改</a></td>
 <td><a href='{:U("delete?id=$vo[id]")}'>删除</a></td>
 </volist>

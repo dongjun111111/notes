@@ -5,11 +5,19 @@
 	<div class="main-title">
 		<h2>{:isset($info['id'])?'编辑':'修改'}分类</h2>
 	</div>
-<br>分类名:
 <form action="{:U('edit')}" method="post" >
-<input type="hidden" name="uid" value="<?php echo $_GET[id];?>" />
-<input type="text"  class="text input-large"   name="categoryname"
-value="{$data[0]['categoryname']}" />
+<input type="hidden" name="uid" value="<?php echo $_GET[id];?>" /><br>
+分类名称：<input type="text"  class="text input-large"   name="categoryname"
+value="{$categorylist[0]['categoryname']}" /><br>
+上级分类：<select  class="text input-large"   name="highlevel" >
+<option value='0' selected >--------------------------------顶级分类--------------------------------</option>
+<volist name="alll" id="vo">
+<option value='{$vo['categoryname']}' >{$vo['categoryname']}</option>
+</volist>
+</select><br>
+分类注释：<input type="text"  class="text input-large"   name="categorymessage" value="{$categorylist[0]['categorymessage']}" /><br>
+分类排序：<input type="text"  class="text input-large"   name="categorysort" value="{$categorylist[0]['categorysort']}" /><br>
+分类状态：<input type="text"  class="text input-large"   name="categorystatus" value="{$categorylist[0]['categorystatus']}" /><br>
 <input type="submit" id="submit"  class="submit-btn " target-form="form-horizontal" value="确认修改" />
 </form>
 

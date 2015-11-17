@@ -1,14 +1,21 @@
 <?php
+
 namespace Admin\Controller;
+header('content-type:text/html;charset=utf-8');
 class CategoryController extends AdminController {
 
     public function index(){
  
-		$Model=D('addcategory');   //对应的是表名
+		$Model=D('addcategory'); //对应的是表名
 		$result=$Model->field('*')->select();
+		foreach($result as $num=>$highlevellist)
+		{
+		if($highlevellist['highlevel']==0)
+		{
+	$highlevellist['highlevel']='顶级分类';}
+		}
 		$this->assign('data',$result);
-        $this->display('');
-		
+        $this->display();
 	}
 
     /* 编辑分类 */
@@ -19,16 +26,17 @@ class CategoryController extends AdminController {
 	 //显示start	
 	    $id=$_GET['id'];
 		$result=$Model->where("id=$id")->select();
-		$this->assign('data',$result);
+		$this->assign('categorylist',$result);
+		$all=$Model->field('categoryname')->select();
+        $this->assign('alll',$all);
 		$this->display();
       //显示end
 	   }
-		else //新增
+		else        //新增
 	    {
 	  $uid=$_POST['uid'];
       $data['categoryname']=$_POST["categoryname"];
-	
-	  $res=$Model->where("id=$uid")->save($data); //TMD把这里的'id=$uid'改成"id=$uid"就成功了，也是醉了 ！！！！！！！！！！！
+	  $res=$Model->where("id=$uid")->save($data);   //TMD把这里的'id=$uid'改成"id=$uid"就成功了，也是醉了 ！！！！！！！！！！！
 		if($res)
 	    {
 		$this->success('修改成功！',U('Index'));
@@ -42,9 +50,9 @@ class CategoryController extends AdminController {
 
 
 	 public function delete(){
-         //只在本页面的不用this->display();
+                                                    //只在本页面的不用this->display();
 		$id=$_GET['id'];
-		if(IS_GET)  //get与post要分清楚
+		if(IS_GET)                                  //get与post要分清楚
 	   {
 		$Mo=M('addcategory');
 		$update=$Mo->where("id=$id")->delete();
@@ -62,17 +70,21 @@ class CategoryController extends AdminController {
 
 	public function add(){
 		if(!IS_POST)
-		{  
+		{  $Model=M('addcategory');
+ $resul=$Model->field('categoryname')->select();
+		$this->assign('categorylist',$resul);
+	//	var_dump($resul);exit;
 		$this->display();
 		}
 		else
 		{
-		$Model=M('addcategory');
-		 $arr['categoryname']=$_POST['categoryname'];
+	  $Model=M('addcategory');
+	  $arr['categoryname']=$_POST['categoryname'];
 	  $arr['highlevel']=$_POST['highlevel'];
 	  $arr['categorymessage']=$_POST['categorymessage'];
 	  $arr['categorysort']=$_POST['categorysort'];
 	  $arr['categorystatus']=$_POST['categorystatus']; 
+	  var_dump($arr['highlevel']);exit;
 	  $resu=$Model->add($arr);
 	if($resu)
 		{
