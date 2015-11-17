@@ -5,7 +5,7 @@
 	<div class="main-title">
 		<h2>{:isset($info['id'])?'编辑':'添加'}分类</h2>
 	</div>
-	<p><a href="{:U('index')}">返回</a></p>
+<a  onclick="javascript:history.back(-1);return false;" style="cursor:pointer;">返 回</a>
 <form action="{:U('add')}" method="post">
 分类名称：<input type="text"  class="text input-large"   name="categoryname" /><br>
 上级分类：<select  class="text input-large"   name="highlevel" >
@@ -15,12 +15,12 @@
 </volist>
 </select><br>
 分类注释：<input type="text"  class="text input-large"   name="categorymessage" /><br>
-分类排序：<input type="text"  class="text input-large"   name="categorysort" /><br>
-分类状态：<input type="text"  class="text input-large"   name="categorystatus" /><br>
-<input type="submit" id="submit" style="width:470px;" class="submit-btn " target-form="form-horizontal" value="添加" />
+分类排序：<input type="text"  class="text input-large"   name="categorysort" value="999" /><br>
+分类状态：<input type="radio" name="categorystatus"  value="0" selected />正常
+<input type="radio" name="categorystatus" value="1" />禁用<br>
+<input type="submit" id="submit"  class="submit-btn " target-form="form-horizontal" value="添加" /> 
 </form>
 </block>
-
 
 
 

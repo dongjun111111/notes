@@ -52,12 +52,22 @@ class CategoryController extends AdminController {
 	   }
 		else        //新增
 	   {
-	 $uid=$_POST['uid'];
-     $data['categoryname']=$_POST["categoryname"];
+     $uid=$_POST['uid'];
+  /*   $data['categoryname']=$_POST["categoryname"];
 	 $data['highlevel']=$_POST["highlevel"];
      $data['categorymessage']=$_POST["categorymessage"];
      $data['categorysort']=$_POST["categorysort"];
      $data['categorystatus']=$_POST["categorystatus"];
+	*/
+	 $data=$Model->create(); //create可以创建那边form表单内传过来的字段，但不能传过来不在里面的东西是，包括GET与POST内容
+     if($data['categorystatus']=="禁用")
+		 {
+	  $data['categorystatus']=1;
+	   }
+	   else
+		 {
+	    $data['categorystatus']=0;
+	   }
 	  $res=$Model->where("id=$uid")->save($data);   //TMD把这里的'id=$uid'改成"id=$uid"就成功了，也是醉了 ！！！！！！！！！！！
 		if($res)
 	    {
