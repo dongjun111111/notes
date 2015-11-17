@@ -1,4 +1,5 @@
      主网站：   www.kancloud.cn/manual/thinkphp
+
 1.  use Think\Controller   ----/1686
 表示的是引入Think\Controller类库便于直接使用。
 namespace Home\Controller;
@@ -407,31 +408,61 @@ $Model=D('action');
 </volist>
 
 
+ 控制器接收表单传递数据时候需要有一个IS_POST或者IS_GET的判断，以确定是需要显示页面还是数据处理！
 
 
 
-strcmp()函数
-比较两个字符串（区分大小写）：
+ThinkPHP实现Ajax方法具体实现：
+MessageAction.class.php页面代码如下：
 <?php
-echo strcmp("Hello world!","Hello world!");
+class MessageAction extends Action{
+   
+  function index(){
+    $this->display();  
+  }
+ 
+  function addtwo(){
+    $m=M('message');
+    if($vo=$m->create()){
+      if($m->add()){
+        $this->ajaxReturn($vo,'添加成功',1);  
+      }else{
+        $this->ajaxReturn(0,'添加失败',0);  
+      }  
+    }else{
+      $this->error($m->getError());  
+    }
+  }
+}
 ?>
-
-array_unique() 函数
-该函数用来移除数组中的重复的值，并返回结果数组。
-当几个数组元素的值相等时，只保留第一个元素，其他的元素被删除。
-返回的数组中键名不变。
-语法
-array_unique(array)
-
-控制器接收表单传递数据时候需要有一个IS_POST的判断，不然会出现未知错警告
-	if(IS_POST)                   //提交表单接受时候必须要有一个IS_POST的判断
-	   {
-		if($update)
-	    {
-		$this->success('编辑成功！',U('Index'));
-		}
-		else
-	   {
-		$this->error(empty($error) ? '未知错误！' : $error);
-		}
-	   }
+模板index.html代码如下：
+<html>
+<head>
+<script type="text/javascript" src="__PUBLIC__/Js/Base.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/prototype.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/mootools.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Js/ThinkAjax.js"></script>
+<script type="text/javascript">
+  function add(){
+                                  //ThinkAjax.sendForm(表单ID,URL,回调函数,信息显示的地方);
+    ThinkAjax.sendForm('frm','__URL__/addtwo',wc);  
+  }
+  function wc(data,status){
+    if(status!=1){
+      alert('发送失败');
+    }else{
+      $('list').innerHTML+='标题'+data.title+',信息'+data.message;  
+    }  
+  }
+</script>
+ 
+</head>
+<body>
+<div id="list"></div>
+<form action="" method="POST" id="frm">
+ 标题：<input type="text" name="title" /><br />
+ 信息：<input type="text" name="message" /><br />
+    <input type="button" value="提交" onClick="add()" />
+</form>
+</body>
+</html>
