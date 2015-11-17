@@ -159,7 +159,7 @@ $Model->alias("a")->join("__DEPT__ b ON b.user_id=a.id")->select();
 select * from think_user a inner join think_dept b ON b.user_id=a.id
 create方法  创建数据对象
 $data['name']='Thinkphp';$data['123@qq.com'];$User->Create($data);Create方法创建的数据对象时保存在内存中的，
-并没有实际的写入到数据库中，使用add()或者save()方法才会真正写入数据库中，谨记谨记！！！！
+并没有实际的写入到数据库中，create可以创建那边form表单内传过来的字段，但不能传过来不在里面的东西；使用add()或者save()方法才会真正写入数据库中，谨记谨记！！！！
 插入数据
 可以对POST提交的数据进行处理（通过表中的字段名称与表单提交的名称对应关系自动封装数据实例），
 例如user表中有一个字段名叫"username",如果表单中有一个<input name="username" value="小明">,

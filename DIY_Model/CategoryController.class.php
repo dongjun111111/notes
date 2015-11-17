@@ -59,7 +59,7 @@ class CategoryController extends AdminController {
      $data['categorysort']=$_POST["categorysort"];
      $data['categorystatus']=$_POST["categorystatus"];
 	*/
-	 $data=$Model->create(); //create可以创建那边form表单内传过来的字段，但不能传过来不在里面的东西是，包括GET与POST内容
+	 $data=$Model->create(); //create可以创建那边form表单内传过来的字段，但不能传过来不在里面的东西
      if($data['categorystatus']=="禁用")
 		 {
 	  $data['categorystatus']=1;
