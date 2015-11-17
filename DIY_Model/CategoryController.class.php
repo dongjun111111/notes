@@ -8,11 +8,20 @@ class CategoryController extends AdminController {
  
 		$Model=D('addcategory'); //对应的是表名
 		$result=$Model->field('*')->select();
-		foreach($result as $num=>$highlevellist)
+		foreach($result as $num=>$highlevellist)      //显示数据替换
 		{
 		if($highlevellist['highlevel']==0)
-		{
-	$highlevellist['highlevel']='顶级分类';}
+			{
+			$result[$num]['highlevel']='顶级分类';
+			}
+		if($highlevellist['categorystatus']==0)
+			{
+		   $result[$num]['categorystatus']='正常';
+		    }
+			else
+			{
+		$result[$num]['categorystatus']='禁用';
+			}
 		}
 		$this->assign('data',$result);
         $this->display();
@@ -33,9 +42,13 @@ class CategoryController extends AdminController {
       //显示end
 	   }
 		else        //新增
-	    {
-	  $uid=$_POST['uid'];
-      $data['categoryname']=$_POST["categoryname"];
+	   {
+	 $uid=$_POST['uid'];
+     $data['categoryname']=$_POST["categoryname"];
+	 $data['highlevel']=$_POST["highlevel"];
+     $data['categorymessage']=$_POST["categorymessage"];
+     $data['categorysort']=$_POST["categorysort"];
+     $data['categorystatus']=$_POST["categorystatus"];
 	  $res=$Model->where("id=$uid")->save($data);   //TMD把这里的'id=$uid'改成"id=$uid"就成功了，也是醉了 ！！！！！！！！！！！
 		if($res)
 	    {
@@ -84,7 +97,6 @@ class CategoryController extends AdminController {
 	  $arr['categorymessage']=$_POST['categorymessage'];
 	  $arr['categorysort']=$_POST['categorysort'];
 	  $arr['categorystatus']=$_POST['categorystatus']; 
-	  var_dump($arr['highlevel']);exit;
 	  $resu=$Model->add($arr);
 	if($resu)
 		{
