@@ -33,10 +33,24 @@ C方法可以用来批量设置配置参数
 $config=array("WEB_SITE_TITLE"=>"Thinkphp","WEB_SITE_DESCRIPTION"=>"开源php框架");
 C($config);
 
-A A()方法用于在内部实例化控制器          （对控制器进行操作） 最简单的用法： $User = A('User');（适合用来调用使用其他模块内的多个方法，避免多次实例化对象）
-R R()方法远程调用控制器的内部的操作方法  （对控制器进行操作） $index=R("Index","myHello"); echo $index;     实例化Index控制器，并且调用其中的myHello方法，将结果赋给$index,然后将其echo出去。（适合只需要使用其他模块内的其中一个方法 ）   
-D 快速实例化Model类库   （对模型进行操作） D函数用于实例化一个存在模型文件的Model  
-M 快速高性能实例化模型  （对模型进行操作） M函数用于实例化一个没有模型文件的Model（ M 实例化的是数据库的表名，D 实例化的是你自己在Model文件夹下面建立的模型文件，D就是在你没有定义模型的时候，系统帮你定义一个模型，这样你才可以进行简单的数据输出与输入）
+
+$this 可以使用 $this 来调用当前模块内的方法，但实际情况中还经常会在当前模块调用其他模块的方法。ThinkPHP 内置了 A 方法与 R 方法这两个特殊的大写字母方法来处理跨模块调用的问题。
+A A()方法用于在内部实例化控制器        （对控制器进行操作）（适合需要使用其他模块内的所有方法） 最简单的用法： $User = A('User');（适合用来调用使用其他模块内的多个方法，避免多次实例化对象）
+CategoryController.class.php调用同在Admin/Controller（后台）目录下的ModelController.class.php控制器
+$Model3=A('Model');             //看这里看这里看这里看这里
+$name=$Model3->showName();
+$this->assign('testname',$name);
+CategoryController.class.php调用在Home/Controller（前台）目录下的IndexController.class.php控制器
+$Home=A('Home/Index');
+$kuai=$Home->testA();
+$this->assign('testa',$kuai);
+R R()方法远程调用控制器的内部的操作方法（对控制器进行操作）（适合只需要使用其他模块内的其中一个方法）
+$Model3=R("Model/showName");    //看这里看这里看这里看这里   从它与A方法的写法区别上可以看出，R()方法适合用来调用其他模块其中的一个方法
+$this->assign('testname',$Model3);
+该实例与A方法中第一个效果一样。但是写法上不一样。
+实例化Model控制器，并且调用其中的showName方法，将结果赋给$Model3,然后将其传到视图文件中。   
+D 快速实例化Model类库 (使用复杂功能)（对模型进行操作） （D函数用于实例化一个存在模型文件的Model）（需要使用 ThinkPHP 模型中一些高级功能如自动验证功能（create()方法中实现）、关联模型等业务逻辑比较复杂，且涉及的表众多）
+M 快速高性能实例化模型  （简单CURD）（对模型进行操作） （M函数用于实例化一个没有模型文件的Model）（ M 实例化的是数据库的表名，D 实例化的是你自己在Model文件夹下面建立的模型文件，D就是在你没有定义模型的时候，系统帮你定义一个模型，这样你才可以进行简单的数据输出与输入，对数据表进行简单的 CURD 操作而无复杂的业务逻辑的情况下）
 U URL动态生成和重定向方法  U('Blog/read?id=1')普通模式，生成的URL地址是：http://serverName/index.php?m=Blog&a=read$id=1REWRITE模式，生成的URL地址是：http://serverName/Blog/read/id/1.html
 C C()方法来读取已有的配置
 L 语言参数存取方法
@@ -44,6 +58,7 @@ F 快速简单文本数据存取方法
 S 快速缓存存取方法
 B 执行行为类 B('app_begin');就是在项目开始之前，执行这个行为定义的所有函数,支持2个参数
 W 快速Widget输出方法  
+
 
 3.规则路由
 每个参数以":"开头的参数都表示动态参数，自动对应一个GET参数，:year代表$_GET['year']
