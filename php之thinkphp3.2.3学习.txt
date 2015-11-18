@@ -466,3 +466,7 @@ class MessageAction extends Action{
 </form>
 </body>
 </html>
+
+   在thinkphp中,$this可以赋值: 在控制器中写上 $this->meta_title = '模型管理';在视图文件中用{$meta_title}接收显示
+复杂的U()写法：
+   <a href="{:U('model/setstatus?ids='.$vo['id'].'&status='.abs(1-$vo['status']))}" class="ajax-get">{$vo.status|show_status_op}</a>

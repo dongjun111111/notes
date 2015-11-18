@@ -1,0 +1,97 @@
+1.tcp协议中nagle算法-->
+	 1.nagle算法主要目的是减少网络流量，当你发送的数据包太小时，TCP并不立即发送该数据包，而是缓存起来直到数据包
+	   到达一定大小后才发送。
+	 2.当应用程序每次发送的数据很小，特别是只发送1个字节，加上TCP和IP头的封装，TCP头占20个字节，IP头也占20个字节，
+	 这时候发一个包是41个字节，效率太低。而nagle算法允许计算机缓冲数据，当数据缓存到一定长度后，如果之前发送的数据
+	 得到了ACK确认且接收方有足够空间容纳数据 （当然也要考虑MSS），就发送这些数据，否则继续等待。
+	 3.TCP socket提供了关闭nagle算法的接口，可以通过TCP_NODELAY选项决定是否开启该算法。  
+	wikipedia上面关于这个算法的资料：http://en.wikipedia.org/wiki/Nagle's_algorithm。
+	4.默认情况下，发送数据采用Nagle 算法。这样虽然提高了网络吞吐量，但是实时性却降低了，
+	在一些交互性很强的应用程序来说是不允许的，使用TCP_NODELAY选项可以禁止Nagle 算法。
+
+2.递归算法判断数组a[n]是否为一个递增数组-->
+递归的方法，记录当前最大的，并且判断当前的是否比这个还大，大则继续，否则返回false结束:
+bool fun(int a[], int n)
+{
+    if(n= =1)
+        return true;
+    if( n= =2 )
+        return a[n-1] >= a[n-2];
+    return fun( a,n-1) && ( a[n-1] >= a[n-2] );
+}
+
+3.Hello World 变为olleh dlrow-->
+$str="Hello world";
+$arr=explode(' ',$str);
+foreach($arr as $key=>$value)
+{
+ echo strtolower(strrev($value))." ";
+}
+
+4.从'我30你40她50'提取出数字然后求和-->
+$st2r="我30你40她50'提取出数字然后求和";
+preg_match_all("/\d{1,}/",$st2r,$arrrr);
+function getsum($q,$w,$e)
+{
+return $s=$q+$w+$e;
+}
+echo getsum($arrrr[0][0],$arrrr[0][1],$arrrr[0][2]);
+
+5.array(1,2,3,-6,1);
+要求输出结果为
+6
+1 2 3.  -->
+$arr=array(1,3,2,-6,1);
+$arr=array_unique($arr);
+foreach($arr as $k=>$v)
+{
+ $arr[3]=abs($arr[3]);
+}
+echo max($arr).'<br>';
+$pos=array_search(max($arr),$arr);
+unset($arr[$pos]);
+sort($arr);
+foreach($arr as $k=>$v)
+{
+ echo $v."  ";
+}
+
+6.使用递归算法求出第8个人多大，第一个10岁，第2个比第一个大2岁-->
+function a($i)
+{
+    if( $i == 1){
+        return 10;
+    }
+    else
+    {
+        return a($i-1)+2;
+    }
+}
+ 
+echo a(8);
+
+7.所有邮箱地址中的@替换成at;-->
+$arr="ffbb@grrgjrgns@gbfjf@bnnb@bhnrgn@gnrff@gfnbbnbhthtyto45yjy0@fgtg@rtty5t";
+$dd=preg_replace("/[@]/",'dot',$arr);
+
+8.捕获与冒泡机制-->
+一个元素中又嵌套了另一个元素
+------------------------------
+| element1 |
+| ------------------------- |
+|   |element2  |
+| ------------------------- |
+| |
+-----------------------------
+并且两者都有一个onClick事件处理函数(event handler)。如果用户单击元素2，则元素1和元素2的单击事件都会被触发。
+但是哪一个事件先被触发？哪一个事件处理函数会被首先执行？换句话说，事件的发生顺序到底如何？
+两种模型
+不出所料，在那些“不堪回首”（浏览器大战）的日子里，Netscape和微软有两种截然不同的处理方法：
+Netscape主张元素1的事件首先发生，这种事件发生顺序被称为捕获型
+微软则保持元素2具有优先权，这种事件顺序被称为冒泡型
+
+9.笔记而已
+array_search()与in_array():
+array_search()判断某个值在不在这个数组中，有的话返回对应的键名，无则返回空;
+in_array()判断某个值在不在这个数组中，存在返回true，否则返回false;
+max()返回数组中最大的值；
