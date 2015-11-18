@@ -556,3 +556,27 @@ window.open('/Designer/autologin/?uid={$vo.id}&role=3')">伪登录</a>   （打开新页
 </foreach>
 Foreach标签相对比volist标签简洁，没有volist标签那么多的功能。
 优势是可以对对象进行遍历输出，而volist标签通常是用于输出数组。
+
+
+视图中状态改变：
+<if condition = "$vo['status']">
+       <a class="confirm ajax-get" href="{:U('Admindj/Help/help_status',array('cid'=>$vo['id'],'status'=>0))}" target="_self">禁用</a>
+   <else />
+       <a class="confirm ajax-get" href="{:U('Admindj/Help/help_status',array('cid'=>$vo['id'],'status'=>1))}" target="_self">启用</a>
+</if>
+
+
+视图：
+switch--》
+
+<switch name="变量" >               //此处的变量名称不用加$或者{}，直接写上变量名称就行了
+ <case value="值1" break="0或1">输出内容1</case>
+ <case value="值2">输出内容2</case>
+ <default />默认情况
+ </switch>
+例如：
+<switch name="Think.get.userId|abs"> //此处的变量名称不用加$或者{}，直接写上变量名称就行了
+    <case value="1" break="0">admin</case>
+    <case value="2">admin</case>
+    <default />default
+ </switch>
