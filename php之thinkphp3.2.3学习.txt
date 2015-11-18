@@ -74,7 +74,7 @@ $User=M("User");
 $result=$User->add($data);
 if($result)
 {
-$this->success("ĞÂÔö³É¹¦","/User/index");
+$this->success("ĞÂÔö³É¹¦",U('Index'));
 }
 else
 {
@@ -350,6 +350,9 @@ REST(Representational State Transfer±íÊöĞÔ×´Ì¬×ªÒÆ)ÊÇÒ»ÖÖÕë¶ÔÍøÂçÓ¦ÓÃµÄÉè¼ÆºÍ¿ª·
 get_client_ip»ñÈ¡¿Í»§¶ËµÄIPµØÖ·
 $ip=get_client_ip();
 
+display()Óëshow£¨£©
+Ä£°å¶¨Òåºó¾Í¿ÉÒÔÍ¨¹ıdisplayºÍshow·½·¨À´äÖÈ¾Êä³ö¡£ÆäÖĞdisplay·½·¨ĞèÒªÎÒÃÇÓĞ¶¨ÒåÄ£°åÎÄ¼ş£¬¶øshow·½·¨ÔòÊÇÖ±½ÓäÖÈ¾ÄÚÈİÊä³ö¡£
+$this->display()£»$this->show()
 
 ´ÓÊı¾İ¿âÖĞÈ¡³öÊı¾İÊµÀı£º  ²Ù×÷Êı¾İ¿âµÄ·½·¨ÔÚmodelÎÄ¼şÖĞ²ÅÓĞ£¬ËùÒÔ±ØĞëÏÈÊµÀı»¯M£¨£©·½·¨£¬»òÕß new \Think\Model();
 1¡·¡·¡·¡·
@@ -485,3 +488,71 @@ class MessageAction extends Action{
    ÔÚthinkphpÖĞ,$this¿ÉÒÔ¸³Öµ: ÔÚ¿ØÖÆÆ÷ÖĞĞ´ÉÏ $this->meta_title = 'Ä£ĞÍ¹ÜÀí';ÔÚÊÓÍ¼ÎÄ¼şÖĞÓÃ{$meta_title}½ÓÊÕÏÔÊ¾
 ¸´ÔÓµÄU()Ğ´·¨£º
    <a href="{:U('model/setstatus?ids='.$vo['id'].'&status='.abs(1-$vo['status']))}" class="ajax-get">{$vo.status|show_status_op}</a>
+
+Ä³ÍøÕ¾ºóÌ¨µÄ·ÖÒ³²Ù×÷ÊµÀı£º
+ControllerÎÄ¼şÖĞ£º
+ÔÚnamespaceÏÂ¼ÓÉÏ
+use \Think\Page;
+        $Model=D('addcategory'); 
+        $list = $Model->page($_GET['p'].',5')->select();
+	$this->assign('data',$list);// ¸³ÖµÊı¾İ¼¯
+	import(¡°ORG.Util.Page¡±);// µ¼Èë·ÖÒ³Àà
+	$count      = $Model->count();// ²éÑ¯Âú×ãÒªÇóµÄ×Ü¼ÇÂ¼Êı
+	$Page       = new Page($count,5);// ÊµÀı»¯·ÖÒ³Àà ´«Èë×Ü¼ÇÂ¼ÊıºÍÃ¿Ò³ÏÔÊ¾µÄ¼ÇÂ¼Êı
+	$show       = $Page->show();// ·ÖÒ³ÏÔÊ¾Êä³ö   //var_dump($show);  ÕâÀïÒÑ¾­°ÑËùÓĞ·ÖÒ³Á´½ÓÉú³É
+	$this->assign('_page',$show);// ¸³Öµ·ÖÒ³Êä³ö
+	$this->display(); // Êä³öÄ£°å
+
+ÊÓÍ¼ÎÄ¼şÖĞ£º
+<div class="page">
+        {$_page}
+    </div>
+
+
+
+×Ô¼ºĞ´µÄÁ½¸ö£º
+1--¡·¿ØÖÆÆ÷£º
+$Model=D('addcategory'); 
+$result=$Model->field('*')->limit(5)->page($_GET['p'])->select();
+$count=$Model->count();
+$Everypage=5;
+$pagecount=ceil($count/$Everypage);
+$this->assign('count',$count);
+$this->assign('pagecount',$pagecount);
+ÊÓÍ¼£º
+<p>¹²{$count}ÌõÊı¾İ|¹²{$pagecount}Ò³
+<?php 
+for($i=1;$i<=$pagecount;$i++)
+{
+echo "<a href='http://think.myjiang.com:8080/index.php?s=/Admin/Category/index/p/$i.html'>$i</a>";
+}
+?>
+</p>
+
+2--¡·¿ØÖÆÆ÷£º(Ö»ĞèÒª´«¹ıÀ´×ÜÒ³Êı$pagecount¾ÍĞĞÁË)
+$count= $Model->count();// ²éÑ¯Âú×ãÒªÇóµÄ×Ü¼ÇÂ¼Êı
+$pagecount=ceil($count/5);
+$this->assign('pagecount',$pagecount);
+ÊÓÍ¼£º
+  <div class="page">
+  <for start='1' end='$pagecount+1' >
+  <a href="{:U('index?p='.$i)}">{$i}</a>
+  </for> 
+  </div>
+
+
+
+Î±µÇÂ¼ÊÓÍ¼Ò³ÃæÉÏ´úÂë£º
+<a href="javascript:void(0)"  onclick="alert('Î±µÇÂ¼Ê±Ö»ÔÊĞí²é¿´£¬Çë²»Òª½øĞĞÈÎºÎ²Ù×÷');
+window.open('/Designer/autologin/?uid={$vo.id}&role=3')">Î±µÇÂ¼</a>   £¨´ò¿ªĞÂÒ³Ãæ£©
+
+<a href="{:U('Admindj/seller/edit',array('sid'=>$vo['id']))}" target="_self">±à¼­</a>£¨ÔÚ±¾Ò³Ãæ¿ò¼ÜÄÚ´ò¿ª£©
+
+
+ÊÓÍ¼ÖĞÄ£°åäÖÈ¾µÄvolistÓëforeachµÄÊ¹ÓÃÇø±ğ£º
+<foreach name="list" item="vo">
+{$vo.id}
+{$vo.name}
+</foreach>
+Foreach±êÇ©Ïà¶Ô±Èvolist±êÇ©¼ò½à£¬Ã»ÓĞvolist±êÇ©ÄÇÃ´¶àµÄ¹¦ÄÜ¡£
+ÓÅÊÆÊÇ¿ÉÒÔ¶Ô¶ÔÏó½øĞĞ±éÀúÊä³ö£¬¶øvolist±êÇ©Í¨³£ÊÇÓÃÓÚÊä³öÊı×é¡£
