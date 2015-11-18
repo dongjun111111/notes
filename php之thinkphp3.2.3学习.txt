@@ -51,7 +51,7 @@ $this->assign('testname',$Model3);
 实例化Model控制器，并且调用其中的showName方法，将结果赋给$Model3,然后将其传到视图文件中。   
 D 快速实例化Model类库 (使用复杂功能)（对模型进行操作） （D函数用于实例化一个存在模型文件的Model）（需要使用 ThinkPHP 模型中一些高级功能如自动验证功能（create()方法中实现）、关联模型等业务逻辑比较复杂，且涉及的表众多）
 M 快速高性能实例化模型  （简单CURD）（对模型进行操作） （M函数用于实例化一个没有模型文件的Model）（ M 实例化的是数据库的表名，D 实例化的是你自己在Model文件夹下面建立的模型文件，D就是在你没有定义模型的时候，系统帮你定义一个模型，这样你才可以进行简单的数据输出与输入，对数据表进行简单的 CURD 操作而无复杂的业务逻辑的情况下）
-U URL动态生成和重定向方法  U('Blog/read?id=1')普通模式，生成的URL地址是：http://serverName/index.php?m=Blog&a=read$id=1REWRITE模式，生成的URL地址是：http://serverName/Blog/read/id/1.html
+U URL动态生成和重定向方法 在非视图文件中 U('Blog/read?id=1'),在视图文件中{:U('')}; 普通模式，生成的URL地址是：http://serverName/index.php?m=Blog&a=read$id=1REWRITE模式，生成的URL地址是：http://serverName/Blog/read/id/1.html
 C C()方法来读取已有的配置
 L 语言参数存取方法
 F 快速简单文本数据存取方法
