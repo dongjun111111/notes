@@ -628,4 +628,47 @@ Defined标签：判断常量是否已定义<defined name="NAME">NAME常量已经定义<else /> NAM
             <td><input class="ids" type="checkbox" name="ids[]" value="{$vo.id}" /></td>
 
 
-控制器代码无：
+控制器代码：（无）
+
+
+thinkphp上传文件：
+视图页面代码：
+<form action="__URL__/upload" enctype="multipart/form-data" method="post" >
+<input type="text" name="name" />
+<input type="file" name="photo" />
+<input type="submit" value="提交" >
+</form>
+
+控制器代码：
+public function upload(){
+    $upload = new \Think\Upload();// 实例化上传类
+    $upload->maxSize   =     3145728 ;// 设置附件上传大小
+    $upload->exts      =     array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+    $upload->rootPath  =     './Uploads/'; // 设置附件上传根目录
+    $upload->savePath  =     ''; // 设置附件上传（子）目录
+    // 上传文件 
+    $info   =   $upload->upload();
+    if(!$info) {// 上传错误提示错误信息
+        $this->error($upload->getError());
+    }else{// 上传成功
+        $this->success('上传成功！');
+    }
+}
+
+
+<INPUT class="checkbox" type="checkbox" name="ids[]" value="$audio[id]">
+这个name="ids[]"有什么用？
+
+------解决方案--------------------
+ids[]=1;
+ids[]=2;
+传到php是个数组
+$_POST[ids]=array(1,2); 
+------解决方案--------------------
+name="ids[]",这里是复选框 checkbox,
+这里可以存储用户的id,一些批量操作,需要获取用户的id,比如批量删除,审核用户 等等
+在php页面 $_POST['ids'],可以获得多个用户的id,进而进行相应的业务.
+LZ可以把问题说的再详细点. 
+------解决方案--------------------
+$ids=$_POST['ids'];  
+

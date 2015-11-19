@@ -213,3 +213,7 @@ __call(1,2) 方法用于监视错误的方法调用。
 
 
 echo $HTTP_COOKIE_VARS["TestCookie"]; 输出所有cookie值。
+
+mktime()函数适合用来进行日期计算和校验，设定一个固定日期。
+echo date('Y-m-d H:i:s',mktime(0,0,0,12,30,1997));  //输出1997-12-30 00:00:00
+echo date('Y-m-d H:i:s',mktime(0,0,0,12,32,1997));  //输出1998-01-01 00:00:00
