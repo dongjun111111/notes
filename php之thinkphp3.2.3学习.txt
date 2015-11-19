@@ -569,6 +569,7 @@ Foreach标签相对比volist标签简洁，没有volist标签那么多的功能。
    <else />
        <a class="confirm ajax-get" href="{:U('Admindj/Help/help_status',array('cid'=>$vo['id'],'status'=>1))}" target="_self">启用</a>
 </if>
+<if>标签中的condition 中不能出现><或者=浩，必须用GT IT 或者EQ  
 
 
 视图：
