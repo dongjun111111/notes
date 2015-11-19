@@ -537,12 +537,8 @@ class MessageModel extends Model {
 namespace Admin\Controller;
 class MessageController extends AdminController {
     public function index(){
-    	$my=D('Message');
-	  $array=$my->getData();	 
-      //var_dump($array);exit;
-	 if(empty($array['data'])){
-		 $this->error('获取--模型--数据失败');
-	 }
+    	 $my=D('Message');
+	 $array=$my->getData();	 
 	 $this->assign('_page',$array['show']);
 	 $this->assign('data',$array['data']);
      $this->display();
@@ -750,20 +746,15 @@ namespace Admin\Controller;
 class MessageController extends AdminController {
     public function index(){
       
-      $my=D('Message');
-	  $data=$my->getData();
-    //   $Model=D('tel_message');
-	// $data=$Model->field(true)->select();
-	 if(empty($data)){
-		 $this->error('获取--模型--数据失败');
-	 }
+     $my=D('Message');
+     $data=$my->getData();
      $this->assign('data',$data);
      $this->display();
     }
     
 }
 
-视图代码（主要）：
+视图代码（主要的不多）：
 
 <volist name="data" id="vo" offset="0" length="5" empty="暂时没有数据">
 <tr>
