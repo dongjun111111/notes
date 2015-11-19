@@ -672,3 +672,53 @@ LZ可以把问题说的再详细点.
 ------解决方案--------------------
 $ids=$_POST['ids'];  
 
+
+模型--》控制器--》视图：
+模型代码：
+<?php
+namespace Admin\Model;
+use Think\Model;
+class MessageModel extends Model {
+
+	public function getData(){
+     $Model=D('tel_message');
+	 $data=$Model->field(true)->select();
+	 if(empty($data)){
+		 $this->error('获取--数据库--数据失败');
+	 }
+	 else{
+	 return $data;
+	 }
+
+	}
+}
+ 控制器代码：
+<?php 
+namespace Admin\Controller;
+class MessageController extends AdminController {
+    public function index(){
+      
+      $my=D('Message');
+	  $data=$my->getData();
+    //   $Model=D('tel_message');
+	// $data=$Model->field(true)->select();
+	 if(empty($data)){
+		 $this->error('获取--模型--数据失败');
+	 }
+     $this->assign('data',$data);
+     $this->display();
+    }
+    
+}
+
+视图代码（主要）：
+
+<volist name="data" id="vo" offset="0" length="5" empty="暂时没有数据">
+<tr>
+<td><input class="ids" type="checkbox" name="ids[]" value="{$vo.id}" /></td>
+<td>{$vo['tel']}</td>
+<td>{$vo['message']} </td>
+<td>{$vo['request']}</td>
+<td>{$vo['ctime']}</td>
+<td>{$vo['status']}</td>
+</volist> 
