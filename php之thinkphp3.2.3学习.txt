@@ -488,6 +488,7 @@ class MessageAction extends Action{
    在thinkphp中,$this可以赋值: 在控制器中写上 $this->meta_title = '模型管理';在视图文件中用{$meta_title}接收显示
 复杂的U()写法：
    <a href="{:U('model/setstatus?ids='.$vo['id'].'&status='.abs(1-$vo['status']))}" class="ajax-get">{$vo.status|show_status_op}</a>
+   <a href="{:U('model/edit?id='.$vo['id'])}">编辑</a>
 
 某网站后台的分页操作实例：
 Controller文件中：
@@ -600,3 +601,31 @@ Defined标签：判断常量是否已定义<defined name="NAME">NAME常量已经定义<else /> NAM
 视图使用PHP代码：<php>echo 'Hello,world!';</php>或者<?php echo 'Hello,world!'; ?>两个格式都可以。php标签或者php代码里面就不能再使用标签（包括普通标签和XML标签）了。
 
 ！！！
+
+
+
+列表多选框代码：
+视图代码：
+
+<button class="btn ajax-post" target-form="ids" url="{:U('Model/setStatus',array('status'=>1))}">启 用</button>
+<button class="btn ajax-post" target-form="ids" url="{:U('Model/setStatus',array('status'=>0))}">禁 用</button>
+
+ <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th class="">编号</th>
+		<th class="">标识</th>
+		<th class="">名称</th>
+		<th class="">创建时间</th>
+		<th class="">状态</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+	<notempty name="_list">
+		<volist name="_list" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="ids[]" value="{$vo.id}" /></td>
+
+
+控制器代码无：

@@ -211,3 +211,5 @@ final 关键字用于定义类和方法，该关键字表示该类或方法为最终版本，即该类不能被继承
 13>
 __call(1,2) 方法用于监视错误的方法调用。
 
+
+echo $HTTP_COOKIE_VARS["TestCookie"]; 输出所有cookie值。

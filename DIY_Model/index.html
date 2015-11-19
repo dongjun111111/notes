@@ -4,13 +4,20 @@
 	<div class="main-title">
 		<h2>分类管理</h2>
 	</div>
-	<!-- 表格列表 -->
-	<div class="tb-unit posr">
-		<div class="tb-unit-bar">
-			<a class="btn" href="{:U('add')}">新 增</a>
-		</div>
-	<br>
+	<!-- 表格列表 
+<switch name='testst' >
+<case value="1">1正常</case>
+<case value="0">0禁用</case>
+</switch>
 
+<gt name="testst" value="0">大于</gt>
+
+<in name="testst" value="1,2,3">在里面<else />不在里面</in>
+
+<empty name="testst">空的吧<else />不是空的</empty>
+
+<defined name="teststs">NAME常量已经定义<else /> NAME常量未定义</defined>
+-->
 	 <div class="data-table">
         <div class="data-table table-striped">
 <table class="">
@@ -32,21 +39,30 @@
 <tr><td>分类名称</td><td>上级分类</td><td>注释</td><td>排序</td><td>状态</td><td>修改</td><td>删除</td></tr>
 </thead>  -->
 <tbody>  
-</td>
-<volist name="data" id="vo">
+</td>                        <!--offset从第0位开始，length显示5条，empty没有提示信息-->
+  <volist name="data" id="vo" offset="0" length="5" empty="暂时没有数据">
 <tr>
 <td><input class="ids" type="checkbox" name="ids[]" value="{$vo.id}" /></td>
 <td>{$vo['categoryname']}</td>
 <td>{$vo['highlevel']} </td>
 <td>{$vo['categorymessage']}</td>
 <td>{$vo['categorysort']}</td>
-<td>{$vo['categorystatus']}</td>
+<td><span style="color:red;"><if condition='$vo["categorystatus"] gt 0'>
+禁用<else />正常
+</if></span>
+<if condition='$vo["categorystatus"] gt 0'>
+<a href='{:U("dochange?id=$vo[id]&categorystatus=0")}'>正常</a><else /><a href='{:U("dochange?id=$vo[id]&categorystatus=1")}'>禁用</a>
+</if>
+</td>
 <td><a href='{:U("edit?id=$vo[id]")}'>修改</a></td>
 <td><a href='{:U("delete?id=$vo[id]")}'>删除</a></td>
 </volist>
 </tbody>
 </table>
-
+<div class="page">
+        {$_page}
+    </div>
+共{$count}条数据
 </block>
 
 
@@ -68,9 +84,12 @@
 						});
 					}
 				});
+
 			/* 三级分类删除新增按钮 */
 			$(".category dd dd .add-sub").remove();
-
+     /*输入框显示时间*/
+ 
+     /*输入框显示时间*/
 			/* 实时更新分类信息 */
 			$(".category")
 				.on("submit", "form", function(){
