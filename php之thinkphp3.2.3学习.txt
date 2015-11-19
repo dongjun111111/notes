@@ -510,8 +510,55 @@ use \Think\Page;
     </div>
 
 
+---MVC--- 中的分页实例：
+模型文件中：
+<?php
+namespace Admin\Model;
+use Think\Model;
+use \Think\Page;
+class MessageModel extends Model {
 
-自己写的两个：
+	public function getData(){
+      import('ORG.Util.Page');
+      $Model=D('tel_message');
+      $data = $Model->field(true)->page($_GET['p'].',5')->select();
+      $count=$Model->count();
+      $Page=new Page($count,5);
+      $show=$Page->show();
+      $array=array();
+      $array['data']=$data;
+      $array['show']=$show;
+      return $array;
+	}
+}
+
+控制器文件中：
+<?php 
+namespace Admin\Controller;
+class MessageController extends AdminController {
+    public function index(){
+    	$my=D('Message');
+	  $array=$my->getData();	 
+      //var_dump($array);exit;
+	 if(empty($array['data'])){
+		 $this->error('获取--模型--数据失败');
+	 }
+	 $this->assign('_page',$array['show']);
+	 $this->assign('data',$array['data']);
+     $this->display();
+    }
+    
+}
+
+
+视图文件中依旧是：
+<div class="Page">
+ {$_page}
+</div>
+
+
+
+自己写的两个分页小例子（非MVC）：
 1--》控制器：
 $Model=D('addcategory'); 
 $result=$Model->field('*')->limit(5)->page($_GET['p'])->select();
@@ -540,6 +587,7 @@ $this->assign('pagecount',$pagecount);
   <a href="{:U('index?p='.$i)}">{$i}</a>
   </for> 
   </div>
+
 
 
 
@@ -651,6 +699,10 @@ public function upload(){
     if(!$info) {// 上传错误提示错误信息
         $this->error($upload->getError());
     }else{// 上传成功
+      foreach($info as $file)
+      {
+        echo $file['savepath'].$file['savename'];//图片存储路径
+       }
         $this->success('上传成功！');
     }
 }
@@ -674,8 +726,8 @@ $ids=$_POST['ids'];
 
 
 模型--》控制器--》视图：
-模型代码：
-<?php
+模型代码：                              //模型中的方法中有数据交互的必须要写ReturnReturnReturnReturnReturnReturnReturn
+<?php   
 namespace Admin\Model;
 use Think\Model;
 class MessageModel extends Model {
@@ -721,4 +773,5 @@ class MessageController extends AdminController {
 <td>{$vo['request']}</td>
 <td>{$vo['ctime']}</td>
 <td>{$vo['status']}</td>
-</volist> 
+</volist>
+
