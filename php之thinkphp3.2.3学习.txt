@@ -550,7 +550,7 @@ window.open('/Designer/autologin/?uid={$vo.id}&role=3')">伪登录</a>   （打开新页
 <a href="{:U('Admindj/seller/edit',array('sid'=>$vo['id']))}" target="_self">编辑</a>（在本页面框架内打开）
 
 
-视图
+视图  （视图标签中大部分是name属性不需要加$,value属性则需要加$，谨记谨记谨记）
 
 
 
@@ -563,6 +563,7 @@ Foreach标签相对比volist标签简洁，没有volist标签那么多的功能。
 优势是可以对对象进行遍历输出，而volist标签通常是用于输出数组。
 
 
+if判断
 视图中条件判断状态改变：
 <if condition = "$vo['status']">
        <a class="confirm ajax-get" href="{:U('Admindj/Help/help_status',array('cid'=>$vo['id'],'status'=>0))}" target="_self">禁用</a>
@@ -572,7 +573,6 @@ Foreach标签相对比volist标签简洁，没有volist标签那么多的功能。
 <if>标签中的condition 中不能出现><或者=浩，必须用GT IT 或者EQ  
 
 
-视图：
 switch判断
 <switch name="变量" >               //此处的变量名称不用加$或者{}，直接写上变量名称就行了
  <case value="值1" break="0或1">输出内容1</case>
@@ -586,7 +586,6 @@ switch判断
     <default />default
  </switch>
 
-以下几个都是name属性不需要加$,value属性则需要加$，谨记谨记谨记
 <eq name="cate.id" value="$Think.get.cid">111<else />222</eq> 
 上面标签就等于是$cate.id变量与$Think.get.cid变量的比较
 $testst的值是1，
