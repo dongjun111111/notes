@@ -598,3 +598,5 @@ Empty±êÇ©£º<empty name="testst">¿ÕµÄ°É<else />²»ÊÇ¿ÕµÄ</empty> //Êä³ö½á¹ûÎª²»ÊÇ¿
 Defined±êÇ©£ºÅÐ¶Ï³£Á¿ÊÇ·ñÒÑ¶¨Òå<defined name="NAME">NAME³£Á¿ÒÑ¾­¶¨Òå<else /> NAME³£Á¿Î´¶¨Òå</defined>
 ÊµÀý£º<defined name="testst">NAME³£Á¿ÒÑ¾­¶¨Òå<else />  //Êä³ö½á¹ûÎª£ºNAME³£Á¿Î´¶¨Òå
 ÊÓÍ¼Ê¹ÓÃPHP´úÂë£º<php>echo 'Hello,world!';</php>»òÕß<?php echo 'Hello,world!'; ?>Á½¸ö¸ñÊ½¶¼¿ÉÒÔ¡£php±êÇ©»òÕßphp´úÂëÀïÃæ¾Í²»ÄÜÔÙÊ¹ÓÃ±êÇ©£¨°üÀ¨ÆÕÍ¨±êÇ©ºÍXML±êÇ©£©ÁË¡£
+
+£¡£¡£¡
