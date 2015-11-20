@@ -521,6 +521,9 @@ class MessageModel extends Model {
 	public function getData(){
       import('ORG.Util.Page');
       $Model=D('tel_message');
+      if(empty($_GET['p'])){           //如果刚加载$_GET['p']为空，给它默认值1
+      	$_GET['p']=1;
+      }
       $data = $Model->field(true)->page($_GET['p'].',5')->select();
       $count=$Model->count();
       $Page=new Page($count,5);
@@ -729,7 +732,7 @@ use Think\Model;
 class MessageModel extends Model {
 
 	public function getData(){
-     $Model=D('tel_message');
+         $Model=D('tel_message');
 	 $data=$Model->field(true)->select();
 	 if(empty($data)){
 		 $this->error('获取--数据库--数据失败');
