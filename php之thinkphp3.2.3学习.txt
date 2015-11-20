@@ -786,3 +786,7 @@ $start=0：开始位置，默认从0开始
 $length：截取长度
 $charset=”utf-8″：字符编码，默认UTF－8
 $suffix=true：是否在截取后的字符后面显示省略号，默认true显示，false为不显示
+
+
+thinkphp 中模糊查询
+http://www.jb51.net/article/56846.htm
