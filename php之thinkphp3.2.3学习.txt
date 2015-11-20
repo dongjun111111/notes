@@ -769,3 +769,20 @@ class MessageController extends AdminController {
 <td>{$vo['status']}</td>
 </volist>
 
+
+
+thinkphp内置字符串截取函数 msubstr();   效果会是这样-->姓名：张*****
+{$vo.title|msubstr=0,10}    截取title前十个字符
+msubstr($str, $start=0, $length, $charset=”utf-8″,
+$suffix=true)
+$str:要截取的字符串
+$start=0：开始位置，默认从0开始
+$length：截取长度
+$charset=”utf-8″：字符编码，默认UTF－8
+$suffix=true：是否在截取后的字符后面显示省略号，默认true显示，false为不显示msubstr($str, $start=0, $length, $charset=”utf-8″,
+$suffix=true)
+$str:要截取的字符串
+$start=0：开始位置，默认从0开始
+$length：截取长度
+$charset=”utf-8″：字符编码，默认UTF－8
+$suffix=true：是否在截取后的字符后面显示省略号，默认true显示，false为不显示
