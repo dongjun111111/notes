@@ -504,7 +504,7 @@ use \Think\Page;
 	$this->assign('_page',$show);// 赋值分页输出
 	$this->display(); // 输出模板
 
-视图文件中：
+视图文件中：           //好像除了if标签里的变量需要加$,其他的标签都不需要   -》有待考证
 <div class="page">
         {$_page}
     </div>
@@ -790,3 +790,12 @@ $suffix=true：是否在截取后的字符后面显示省略号，默认true显示，false为不显示
 
 thinkphp 中模糊查询
 http://www.jb51.net/article/56846.htm
+
+notempty标签的使用：
+<notempty name="list">
+		<volist name="list" id="config">
+					// 有值的话就输出
+		</volist>
+		<else/> // 没有值得话输出
+		<td colspan="6" class="text-center"> aOh! 暂时还没有内容! </td>
+</notempty>
