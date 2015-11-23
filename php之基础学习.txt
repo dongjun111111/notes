@@ -333,6 +333,22 @@ echo "<br>";
 define('COPYRIGHT','Copyright');
 echo COPYRIGHT;
 
+$testa=array('0'=>array('id'=>14),'1'=>array('id'=>23),'3'=>array('id'=>32));
+array_slice($testa,1-1,'id');
+var_dump($testa);exit;
+用array_slice()可以更换数组的键名，不过如果键名相同，数组会自动添加新的键名，结果会是这样；
+array (size=3)
+  0 => 
+    array (size=1)
+      'id' => int 14
+  1 => 
+    array (size=1)
+      'id' => int 23
+  3 => 
+    array (size=1)
+      'id' => int 32
+
+
 
 php近1000个系统函数：
 Abs: 取得绝对值。
