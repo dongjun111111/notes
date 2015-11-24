@@ -359,6 +359,81 @@ alert($("ul li:eq(1)").attr("title"));
 $("ul li:eq(1)").removeAttr ("title");
 </script>
 
+urlencode()函数：
+本函数将字符串以 URL 编码。例如空格就会变成加号。
+Homepage 中 form 资料传送就是用 urlencode 编码后再送出。
+
+array_multisort()这个函数：
+有时候我们需要对二维数组的某个键的值进行排序，这里就是讨论这个问题。
+我们可以使用array_multisort()这个函数。array_multisort() 函数对多个数组或多维数组进行排序。
+
+list() 函数:
+list() 函数用数组中的元素为一组变量赋值。
+注意，与 array() 类似，list() 实际上是一种语言结构，不是函数。
+<?php
+	$my_array = array("Dog","Cat","Horse");
+	list($a, , $c) = $my_array;
+	echo "Here I only use the $a and $c variables.";
+?>  
+运行结果： Here I only use the Dog and Horse variables.
+
+number_format() 函数:
+number_format() 函数通过千位分组来格式化数字。
+<?php
+$num = 500000;
+
+echo number_format($num);
+// 500,000
+
+echo number_format($num, 2);
+// 500,000.00
+
+echo number_format($num, 3, ".", ",");
+// 500,000.000
+?>
+
+parse_url()函数:
+parse_url() 函数可以解析 URL，返回其组成部分。它的用法如下：
+array = parse_url( string url );
+<?php 
+  $url="http://www.nowmagic.net/welcome/";
+  $parts=parse_url($url);
+  print_r($parts);
+?>
+结果是：Array ( [scheme] => http [host] => www.nowmagic.net [path] => /welcome/ )  ;
+
+strip_tags()函数:
+strip_tags() 函数剥去 HTML、XML 以及 PHP 的标签
+<?php
+echo strip_tags("Hello <b>NowaMagic!</b>");
+?>
+结果是：Hello NowaMagic!
+
+is_numeric函数：
+is_numeric检测变量是否为数字或数字字符串
+
+shuffle（）函数：将数组随机打乱
+<?php 
+  $data=array('111','222','333','444','555','666');
+  shuffle($data);
+  print_r($data);
+  结果是：Array ( [0] => 222 [1] => 555 [2] => 333 [3] => 111 [4] => 444 [5] => 666 ) 
+?>
+
+http_bluid_query()函数：将数组变成url
+<?php 
+  $data = array(
+   'site'=>'www.nowamagic.net', 
+	'foo'=>'bar', 
+	'baz'=>'boom', 	
+	'name'=>'nowamagic'); 
+  echo http_build_query($data); 
+?>
+结果为：site=www.nowamagic.net&foo=bar&baz=boom&name=nowamagic
+
+stream_context_create()函数：
+stream_context_create() 作用：创建并返回一个文本数据流并应用各种选项，
+可用于fopen(),file_get_contents()等过程的超时设置、代理服务器、请求方式、头信息设置的特殊过程。
 
 
 php近1000个系统函数：
