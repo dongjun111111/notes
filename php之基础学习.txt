@@ -703,14 +703,14 @@ return $result;
 MyISAM 与Innodb
 简单的表达。  
 MyISAM 是非事务的存储引擎。  
-innodb是支持事务的存储引擎。  
+innodb 是支持事务的存储引擎。  
   
-innodb的引擎比较适合于插入和更新操作比较多的应用  
-而MyISAM 则适合用于频繁查询的应用  
+innodb    的引擎比较适合于插入和更新操作比较多的应用  
+而MyISAM  则适合用于频繁查询的应用  
   
-MyISAM --表锁。  
-innodb--设计合理的话是行锁。  
-MyISAM 不会出现死锁。  
+MyISAM    --表锁。  
+innodb    --设计合理的话是行锁。  
+MyISAM    不会出现死锁。  
   
 最大的区别就是MYISAM适合小数据，小并发；INNODB 适合大数据，大并发。最大的区别就是在锁的级别上。  
   
@@ -765,7 +765,34 @@ firefox,IE下的前端js/css调试工具。
 
 
 
-
+ public function search(){
+            $map['tel'] = array('LIKE' , '%'.$_GET['tel'].'%');//模糊          
+              if(empty($map['ctime'])){
+                    if (isset($_GET['ctimes'])) {
+                          $map['ctime'][] = array('EGT',strtotime($_GET['ctimes']));
+                          $pamap['ctimes'] = $_GET['ctimes'];
+                    }
+                    if (isset($_GET['ctimee'])) {
+                          $map['ctime'][] = array('ELT',strtotime($_GET['ctimee']));
+                          $pamap['ctimee'] = $_GET['ctimee'];
+                     }
+              }
+            $list = paging('tel_message', $map, true, '30', 'id desc',$pamap);              
+            foreach ($list['list'] as $k => $val) {
+            $arr[] = $val;
+            }
+            $Model=D('Telmessage');
+            $array=$Model->getData();
+            foreach($arr as $num=>$value){
+                    $arr[$num]['ctime']=date('Y-m-d H:i:s',$arr[$num]['ctime']);
+                 }       
+            $this->assign('count',$array['count']); 
+            $this->assign('_page', $list['show']);           
+            $this->assign('arrcount', $arrcount);
+            $this->assign('data',$arr);
+            $this->display('index');
+     }
+    
 php近1000个系统函数：
 Abs: 取得绝对值。
 Acos: 取得反余弦值。
