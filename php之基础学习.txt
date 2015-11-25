@@ -90,6 +90,7 @@ uasort()	使用用户自定义的比较函数对数组中的值进行排序并�
 uksort()	使用用户自定义的比较函数对数组中的键名进行排序。	
 usort()	使用用户自定义的比较函数对数组中的值进行排序。
 
+PHP函数microtime()返回当前 Unix 时间戳和微秒数。
 
 5》》》》strpos()
 在使用该函数的时候。里面的位置一定要分清楚，strpos(原字符串，“需要查找的字符串片段”);
@@ -714,10 +715,21 @@ MyISAM    不会出现死锁。
   
 最大的区别就是MYISAM适合小数据，小并发；INNODB 适合大数据，大并发。最大的区别就是在锁的级别上。  
   
-MyISAM类型不支持事务处理等高级处理，而InnoDB类型支持。 MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持已经外部键等高级数据库功能。综述，就可以根据数据表不同的用处是用不同的存储类型。而且MyISAM是文件存储的，可以进行直接在不同操作系统间拷贝使用。  
+MyISAM类型不支持事务处理等高级处理，而InnoDB类型支持。 MyISAM类型的表强调的是性能，
+其执行数度比InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持已经外部键等
+高级数据库功能。综述，就可以根据数据表不同的用处是用不同的存储类型。而且MyISAM是文件存储
+的，可以进行直接在不同操作系统间拷贝使用。  
    
 InnoDB：  
-InnoDB 给 MySQL 提供了具有事务(commit)、回滚(rollback)和崩溃修复能力(crash recovery capabilities)的事务安全(transaction-safe (ACID compliant))型表。InnoDB 提供了行锁(locking on row level)，提供与 Oracle 类型一致的不加锁读取(non-locking read in SELECTs)。这些特性均提高了多用户并发操作的性能表现。在InnoDB表中不需要扩大锁定(lock escalation)，因为 InnoDB 的列锁定(row level locks)适宜非常小的空间。InnoDB 是 MySQL 上第一个提供外键约束(FOREIGN KEY constraints)的表引擎。InnoDB 的设计目标是处理大容量数据库系统，它的 CPU 利用率是其它基于磁盘的关系数据库引擎所不能比的。在技术上，InnoDB 是一套放在 MySQL 后台的完整数据库系统，InnoDB 在主内存中建立其专用的缓冲池用于高速缓冲数据和索引。 InnoDB 把数据和索引存放在表空间里，可能包含多个文件，这与其它的不一样，举例来说，在 MyISAM 中，表被存放在单独的文件中。InnoDB 表的大小只受限于操作系统的文件大小，一般为 2 GB。InnoDB所有的表都保存在同一个数据文件 ibdata1 中（也可能是多个文件，或者是独立的表空间文件），相对来说比较不好备份，可以拷贝文件或用navicat for mysql。  
+InnoDB 给 MySQL 提供了具有事务(commit)、回滚(rollback)和崩溃修复能力(crash recovery capabilities)的事务安全(transaction-safe (ACID compliant))型表。
+InnoDB 提供了行锁(locking on row level)，提供与 Oracle 类型一致的不加锁读取(non-locking read in SELECTs)。
+这些特性均提高了多用户并发操作的性能表现。在InnoDB表中不需要扩大锁定(lock escalation)，
+因为 InnoDB 的列锁定(row level locks)适宜非常小的空间。InnoDB 是 MySQL 上第一个提供外键约束(FOREIGN KEY constraints)的表引擎。
+InnoDB 的设计目标是处理大容量数据库系统，它的 CPU 利用率是其它基于磁盘的关系数据库引擎所不能比的。
+在技术上，InnoDB 是一套放在 MySQL 后台的完整数据库系统，InnoDB 在主内存中建立其专用的缓冲池用于高速缓冲数据和索引。
+ InnoDB 把数据和索引存放在表空间里，可能包含多个文件，这与其它的不一样，举例来说，在 MyISAM 中，表被存放在单独的文件中。
+InnoDB 表的大小只受限于操作系统的文件大小，一般为 2 GB。
+InnoDB所有的表都保存在同一个数据文件 ibdata1 中（也可能是多个文件，或者是独立的表空间文件），相对来说比较不好备份，可以拷贝文件或用navicat for mysql。  
    
 MyISAM  
 每张MyISAM 表被存放在三个文件 ：frm 文件存放表格定义。 数据文件是MYD (MYData) 。 索引文件是MYI (MYIndex) 引伸。  
@@ -726,21 +738,326 @@ MyISAM表是保存成文件的形式,在跨平台的数据转移中使用MyISAM�
 
 2.web 架构，安全,项目经验
 
-介绍xdebug,apc,eAccelerator,Xcache,Zend opt的使用经验。
-使用mod_rewrite,在服务器上没有/archivers/567.html这个物理文件时，重定向到index.php?id=567 ,请先打开mod_rewrite.
-MySQL数据库作发布系统的存储，一天五万条以上的增量，预计运维三年,怎么优化？
-写出一种排序算法（原理），并说出优化它的方法。
-请简单阐述您最得意的开发之作
-对于大流量的网站,您采用什么样的方法来解决各页面访问量统计问题
-您是否用过模板引擎? 如果有您用的模板引擎的名字是?
-请介绍Session的原理,大型网站中Session方面应注意什么?
-测试php性能和mysql数据库性能的工具,和找出瓶颈的方法。
-正则提出一个网页中的所有链接.
-介绍一下常见的SSO(单点登陆)方案(比如dedecms整合discuz的passport)的原理。
-您写过的PHP框架的特点，主要解决什么问题，与其他框架的不同点。
-大型的论坛/新闻文章系统/SNS网站在性能优化上有什么区别?
-相册类应用:要求在浏览器中能同时选中并上传多个文件，图片要求能剪裁，压缩包在服务器端解压。能上传单个达50M的文件。上传过程中有进度条显示。每个图片能生成四种大小缩略图，视频文件要转成flv供flash播放。叙述要涉及的各类开源软件和简单用途。
-一 群猴子排成一圈，按1，2，…，n依次编号。然后从第1只开始数，数到第m只,把它踢出圈，从它后面再开始数，再数到第m只，在把它踢出去…，如此不停的 进行下去，直到最后只剩下一只猴子为止，那只猴子就叫做大王。要求编程模拟此过程，输入m、n, 输出最后那个大王的编号。用程序模拟该过程。
+++++++++++介绍xdebug,apc,eAccelerator,Xcache,Zend opt的使用经验++++++++++++
+Xdebug是一个开放源代码的PHP程序调试器(即一个Debug工具)，可以用来跟踪，调试和分析PHP程序的运行状况
+。
+eAccelerator是一个自由开放源码php加速器，优化和动态内容缓存，提高了php脚本的缓存性能，
+使得PHP脚本在编译的状态下，对服务器的开销几乎完全消除。它还有对脚本起优化作用，以加快其执行效率。
+使您的PHP程序代码执效率能提高1-10倍；
+XCache 是一个开源的 opcode 缓存器/优化器, 这意味着他能够提高您服务器上的 PHP 性能. 他通过把编译 
+PHP 后的数据缓冲到共享内存从而避免重复的编译过程, 能够直接使用缓冲区已编译的代码从而提高速度. 
+通常能够提高您的页面生成速率 2 到5 倍, 降低服务器负载.
+Zend Optimizer(以下简称ZO)用优化代码的方法来提高php应用程序的执行速度。实现的原理是对那些在被最终
+执行之前由运行编译器(Run-TimeCompiler)产生的代码进行优化。
+一、PHP加速器介绍
+
+        PHP加速器是一个为了提高PHP执行效率，从而缓存起PHP的操作码，这样PHP后面执行就不用解析转换了，可以直接调用PHP操作码，这样速度上就提高了不少。
+
+        Apache中使用mod_php的请求、响应执行流程：
+
+　　1、Apache接收请求。
+2、Apache传递请求给mod_php。
+3、mod_php定位磁盘文件，并加载到内存中。
+4、mod_php编译源代码成为opcode树。
+5、mod_php执行opcode树。
+
+       PHP加速器相应的就是第四步，它的目的就是防止PHP每次请求都重复编译PHP代码，因为在高访问量的网站上，大量的编译往往没有执行速度快呢？所以这里面有个瓶颈就是PHP的重复编译既影响了速度又加载了服务器负载，为了解决此问题，PHP加速器就这样诞生了。
+
+二、PHP加速器安装与配置
+
+        1、安装配置APC
+
+             APC全称是Alternative PHP Cache,官方翻译叫”可选PHP缓存”,它是PHP PECL中的一个扩展，好像是facebook在使用它，下面开始安装（ubuntu环境）： 
+$wget http://pecl.php.net/get/APC-3.0.19.tgz
+$tar xvzf APC-3.0.19.tgz
+$cd APC-3.0.19/APC-3.0.19
+$/usr/local/php/bin/phpize
+$./configure –enable-apc –enable-apc-mmap –with-php-config=/usr/local/php/bin/php-config
+$make
+$sudo make install
+
+下面我们再配置APC,因为我的PECL扩展路径改变了，所以我得移动下编译好的文件：
+$sudo mv /usr/local/php/lib/php/extensions/no-debug-non-zts-20060613/apc.so /usr/local/php/lib/php/extensions/PECL
+
+然后我们再编辑php.ini文件进行配置，请把下面的代码加入到php.ini中即可：
+extension_dir = "/usr/local/php/lib/php/extensions/PECL"
+extension = apc.so
+; APC
+apc.enabled = 1
+apc.shm_segments = 1
+apc.shm_size = 64
+apc.optimization = 1
+apc.num_files_hint = 0
+apc.ttl = 0
+apc.gc_ttl = 3600
+apc.cache_by_default = on
+
+     这样重启apache就会在phpinfo()信息中显示。
+
+       2、安装配置eAccelerator
+
+          eAccelerator的前身其实是truck-mmcache，因为开发truk-mmcache的人被Zend给招安了，所以开发eAccelerator的人继承了truk-mmcache的一些特性，设计出eAccelerator加速器。安装如下：
+$wget http://jaist.dl.sourceforge.net/sourceforge/eaccelerator/eaccelerator-0.9.5.tar.bz2
+$tar -jxf eaccelerator-0.9.5.tar.bz2
+$cd eaccelerator-0.9.5
+$/usr/local/php/bin/phpize
+$./configure –enable-eaccelerator=shared –with-php-config=/usr/local/php/bin/php-config
+$make
+$sudo make install
+$sudo mv /usr/local/php/lib/php/extensions/no-debug-non-zts-20060613/eaccelerator.so /usr/local/php/lib/php/extensions/PECL
+
+将下面代码加入php.ini文件中
+extension = eaccelerator.so
+; eAccelerator
+eaccelerator.shm_size = "16"
+eaccelerator.cache_dir = "/tmp/eaccelerator"
+eaccelerator.enable = "1"
+eaccelerator.optimizer = "1"
+eaccelerator.check_mtime = "1"
+eaccelerator.debug = "0"
+eaccelerator.filter = ""
+eaccelerator.shm_max = "0"
+eaccelerator.shm_ttl = "0"
+eaccelerator.prune_period = "0"
+eaccelerator.shm_only = "0"
+eaccelerator.compress = "1"
+eaccelerator.compress_level = "9"
+
+创建缓存目录,重启apache
+
+$sudo mkdir /tmp/eaccelerator
+$sudo chmod 777 /tmp/eaccelerator
+$sudo /usr/local/apache/apachectl restart
+
+在phpinfo()检查是否安装成功.
+
+3、安装配置XCache
+
+XCache作为国人自己开发的东西，做小菜鸟的我也感到骄傲，而且XCache无论在速度还是性能上都做的不错。下面就赶紧让我们品尝它吧！
+
+$wget http://xcache.lighttpd.net/pub/Releases/1.2.2/xcache-1.2.2.tar.gz
+$tar xvzf xcache-1.2.2.tar.gz
+$cd xcache-1.2.2
+$/usr/local/php/bin/phpize
+$./configure –enable-xcache –enable-xcache-coverager –with-php-config=/usr/local/php/php-config
+$make
+$sudo make install
+$sudo mv /usr/local/php/lib/php/extensions/no-debug-non-zts-20060613/xcache.so /usr/local/php/lib/php/extensions/PECL
+
+在php.ini添加配置信息：
+
+extension = xcache.so
+; xcache
+xcache.admin.user = "admin"
+xcache.admin.pass = "(执行) echo ’(你的密码)’|md5sum(得出的密文)"
+;
+xcache.size = 24M
+xcache.shm_scheme = "mmap"
+xcache.count = 2
+xcache.slots = 8k
+xcache.ttl = 0
+xcache.gc_interval = 0
+
+xcache.var_size = 8M
+xcache.var_count = 1
+xcache.var_slots = 8k
+xcache.var_ttl = 0
+xcache.var_maxttl = 0
+xcache.var_gc_interval = 300
+xcache.test = Off
+xcache.readonly_protection = On
+xcache.mmap_path = "/tmp/xcache"
+xcache.coredump_directory = ""
+xcache.cacher = On
+xcache.stat = On
+xcache.optimizer = Off
+;
+xcache.coverager = On
+xcache.coveragedump_directory = ""
+
+创建缓存目录，重启apache
+
+$sudo mkdir /tmp/xcache
+$sudo chmod 777 /tmp/xcache
+$sudo /usr/local/apache/bin/apachectl restart
+去查看phpinfo()信息吧！
+   1、通过测试得出eAccelerator在请求时间和内存占用综合方面是最好的。
+
+   2、通过测试得出使用加速器比无加速器在请求时间快了3倍左右。
+
+   3、通过各个官方观察，XCache是更新最快的，这也说明最有发展的。
+
+ 以上是总结结果，你也许会问我到底用那个加速器好呢？我只能告诉你，首先，用一定比不用好，
+其次每个加速器还有一些可以调优的参数，所以要根据你的系统环境而定，然后，我个人觉得你可以详细研
+究下eAccelerator和XCache，这两款潜力还是很大的.
+
+
+++++++++++++使用mod_rewrite,在服务器上没有/archivers/567.html这个物理文件时，重定向到index.php?id=567 ,请先打开mod_rewrite++++++++++++
+
+++++++++++++MySQL数据库作发布系统的存储，一天五万条以上的增量，预计运维三年,怎么优化？++++++++++++
+
+++++++++++++写出一种排序算法（原理），并说出优化它的方法。++++++++++++
+php冒泡排序：
+function bubble_sort($array)  
+{  
+    $count = count($array);  
+    if($count <= 0)  
+    {  
+        return false;  
+    }  
+    for($i=0; $i<$count; $i++)  
+    {  
+        for($k=$count-1; $k>$i; $k--)  
+        {  
+            if($array[$k] < $array[$k-1])  
+            {  
+                $tmp = $array[$k];  
+                $array[$k] = $array[$k-1];  
+                $array[$k-1] = $tmp;  
+            }  
+        }  
+    }  
+    return $array;  
+}  
+冒泡原理：两两比较待排序数据元素的大小，发现两个数据元素的次序相反时即进行交换，直到没有反序的数据元素为止。
+
+php快排算法：
+function quick_sort($arr){
+	$length=count($arr);
+	if($length<=1){
+		return $arr;
+	}
+	$base_num=$arr[0];
+        //遍历 除了标尺外的所有元素，按照大小关系放入两个数组内，初始化两个数组
+	$left_array=array();   //这是小于标准的
+	$right_array=array();  //这是大于标准的
+	for($i=1;$i<$length;$i++){
+		if($base_num>$arr[$i]){
+				$left_array[]=$arr[$i];//放入左边数组
+			}
+			else{
+       			     $right_array[]=$arr[$i];  //放入右边数组
+				}
+	}
+  //再分别对左边和右边的数组进行相同的排序处理方式
+  //递归调用这个函数,并记录结果
+  $left_array=quick_sort($left_array);
+  $right_array=quick_sort($right_array);
+  //合并左边标尺右边
+  return array_merge($left_array,array($base_num),$right_array);
+}
+
+
+插入排序算法：
+function insert_sort($arr){
+ for($i=1,$len=count($arr);$i<$len;$i++){
+      $tmp=$arr[$i];
+      for($j=$i-1;$j>=0;$j--){
+           if($tmp<$arr[$j])  {
+                $arr[$j+1]=$arr[$j];
+                 $arr[$j]=$tmp;
+           }
+         else{
+              break;
+              }
+      }
+  }
+return $arr;
+}
+
+
++++++++++++对于大流量的网站,您采用什么样的方法来解决各页面访问量统计问题+++++++++++
+确认服务器硬件是否足够支持当前的流量,数据库读写分离,优化数据表, 
+程序功能规则,禁止外部的盗链,控制大文件的下载,使用不同主机分流主要流量
++++++++++++请介绍Session的原理,大型网站中Session方面应注意什么?+++++++++++
+运行机制:客户端将session id传递到服务器，服务器根据session id找到对应的文件，读取的时候对文件内容
+进行反序列化就得到session的值，保存的时候先序列化再写入。
+注意:1,session在大访问量网站上确实影响系统性能，影响性能的原因之一由文件系统设计造成，
+在同一个目录下超过10000个文件时，文件的定位将非常耗时,可以通过修改php.ini中session.save_path设置
+两级子目录 ,session将存储在两级子目录中，每个目录有16个子目录[0~f]，不过好像PHP session不支持创
+建目录，你需要事先把那么些目录创建好 。
+2,还有一个问题就是小文件的效率问题,可以通过存储方式中的memcache来解决I/O效率低下的问题
+3,session同步问题,session同步有很多种，如果你是存储在memcached或者MySQL中，那就很容易了，
+指定到同样的位置即可,还有一种方法就是在负载均衡那一层保持会话，把访问者绑定在某个服务器上，
+他的所有访问都在那个服务器上就不需要session同步了
++++++++++++测试php性能和mysql数据库性能的工具,和找出瓶颈的方法。+++++++++++
+xhprof  PHP性能测试工具。   MySQL 的企业监控器（Enterprise Monitor）也是值得考虑的工具之一
++++++++++++正则提出一个网页中的所有链接.+++++++++++
+/(http:\/\/\[^" ']+)/gm ;
+/href *= *['"]*(\S+)["']* */gm ;
+preg_match_all('/a href=[\"\']|/src=[\"\']([^\"\' ]+)/i',$var,$match);
++++++++++++介绍一下常见的SSO(单点登陆)方案(比如dedecms整合discuz的passport)的原理。+++++++++++
+单点登录SSO（Single Sign On）说得简单点就是在一个多系统共存的环境下，用户在一处登录后，就不用在
+其他系统中登录，也就是用户的一次登录能得到其他所有系统的信任。单点登录在大型网站里使用得非常频繁，
+例如像阿里巴巴这样的网站，在网站的背后是成百上千的子系统，用户一次操作或交易可能涉及到几十个子系
+统的协作，如果每个子系统都需要用户认证，不仅用户会疯掉，各子系统也会为这种重复认证授权的逻辑搞疯
+掉。实现单点登录说到底就是要解决如何产生和存储那个信任，再就是其他系统如何验证这个信任的有效性，
+因此要点也就以下几个：
+存储信任
+验证信任
+如何高效存储大量临时性的信任数据
+如何防止信息传递过程被篡改
+如何让SSO系统信任登录系统和免登系统
+对于第一个问题，一般可以采用类似与memcached的分布式缓存的方案，既能提供可扩展数据量的机制，也能
+提供高效访问。对于第二个问题，一般采取数字签名的方法，要么通过数字证书签名，要么通过像md5的方式，
+这就需要SSO系统返回免登URL的时候对需验证的参数进行md5加密，并带上token一起返回，最后需免登的系统
+进行验证信任关系的时候，需把这个token传给SSO系统，SSO系统通过对token的验证就可以辨别信息是否被
+改过。对于最后一个问题，可以通过白名单来处理，说简单点只有在白名单上的系统才能请求生产信任关系，
+同理只有在白名单上的系统才能被免登录。
++++++++++++您写过的PHP框架的特点，主要解决什么问题，与其他框架的不同点。+++++++++++
++++++++++++大型的论坛/新闻文章系统/SNS网站在性能优化上有什么区别?+++++++++++
+新闻媒体注意细览页的性能优化，比如图片、结构，保持清爽；
+SNS注意交互、页面JS、ajxa、动态内容大小；
+严格控制大小、减少定向、压缩图片、降低CSS加载速度，利用好缓存，这是通的
++++++++++++相册类应用:要求在浏览器中能同时选中并上传多个文件，图片要求能剪裁，压缩包在服务器端解压。能上传单个达50M的文件。上传过程中有进度条显示。+++++++++++
++++++++++++每个图片能生成四种大小缩略图，视频文件要转成flv供flash播放。叙述要涉及的各类开源软件和简单用途。+++++++++++
++++++++++++一 群猴子排成一圈，按1，2，…，n依次编号。然后从第1只开始数，数到第m只,把它踢出圈，从它后面再开始数，再数到第m只，
+在把它踢出去…，如此不停的 进行下去，直到最后只剩下一只猴子为止，那只猴子就叫做大王。
+要求编程模拟此过程，输入m、n, 输出最后那个大王的编号。用程序模拟该过程。+++++++++++
++++++++++++MySQL数据库，怎么优化？+++++++++++
+(1)配置优化（服务器配置）   (2)建表优化（表、字段设置） (3)查询优化（sql语句） 答： 1、选取最适用
+的字段属性,尽可能减少定义字段长度,尽量把字段设置NOT NULL,例如’省份,性别’,最好设置为ENUM 2、
+使用连接（JOIN）来代替子查询: 3、使用联合(UNION)来代替手动创建的临时表 4、事务处理: 5、锁定表,
+优化事务处理: 6、使用外键,优化锁定表 7、建立索引: 8、优化查询语句
++++++++++++写一个函数，能够遍历一个文件夹下的所有文件和子文件夹。（目录操作）+++++++++++
+$d = dir(dirname(__file__));
+
+echo "Handle: " . $d->handle . "\n";
+
+echo "Path: " . $d->path . "\n";
+
+while ( false !== ($entry = $d->read ()) ) {
+
+echo $entry . "";
+
+}
+
+$d->close ();
++++++++++++怎么防止sql注入？+++++++++++
+答：①、过滤用户提交的内容，比如update、insert、select、delete、*等数据库操作的关键字。
+    ②、使用函数addslashes()转义提交的内容。
+③、Php配置文件中开启magic_quotes_gpc=on;将自动转换用户查询的sql语句，对防sql注入有重大作用。
+④、在php配置文件中将register_globals设置为off，关闭全局变量注册。
+⑤、在php配置文件中开启安全模式safe_mode=on;
+⑥、Sql语句的书写尽量不要省略小引号和单引号。
+⑦、提高数据库表和字段的命名技巧，对一些重要的字段根据程序的特点命名，取不易被猜到的名称。
+⑧、控制错误信息，关闭错误信息的输出，将错误信息写到日志文件中，不要在网站暴漏错误信息。
++++++++++++数据库索引有几类，分别是什么？什么时候该用索引？+++++++++++
+答：①主键索引，它用于根据主键自身的唯一性来唯一标识每条记录。因此，该键必须是该记录所表示实体唯一拥有的值，或者是数据库生成的唯一值，例如自增加整数值。这样，无论以后是否删除以前存在的记录，每条记录都有唯一的主键索引。
+②与主键索引一样，唯一索引可以防止重建重复的值。但是，不同之处在于，每个表只能有一个主键索引，但可以有多个唯一索引。
+     ③常规索引。经常希望对非主键甚至并非唯一的字段上的搜索进行优化。（1）如果表中的某个列将成为大量选择查询的焦点，就应当使用单列常规索引。并且一般指定列的前N个字符对于确保唯一性已经足够，如：INDEX(lastname(5))。（2）如果指定列会经常在获取查询中一起使用，则推荐使用多列索引。Mysql的多列索引方法基于一种称为最左前缀的策略。
+     ④全文索引。提供了一种高效的方法来搜索存储在CHAR、VARCHAR或者TEXT类型中的文本。Mysql默认会忽略少于4个字符的关键字。Boolean全文搜索对搜索查询提供了更细粒度的控制，允许显示的标识结果中应当或不应当出现哪些单词。
+索引最佳实践
+只对where和order by子句中需要的列添加索引。多余的索引会导致不必要的硬盘空间消耗，在修改表信息的时候会降低性能。有索引的表在性能会降低，这是由于每次修改记录都必须更新索引。
+如果创建诸如INDEX(firstname,lastname)的索引，不要再创建INDEX(firstname),因为mysql能搜索索引前缀。不过，要记住只有前缀有索引，这个多列索引不能应用于对lastname的搜索。
+对于准备索引的列要使用属性NOT NULL，这样就永远不会存在存储NULL值。
+对不使用索引的查询，使用选项—log-long-format来记录日志。然后可以检查日志文件，对查询进行相应的调整。
+EXPLAIN语句有助于确定mysql如何执行查询，展示表是如何连接的，以及按怎样的顺序连接。
++++++++++++引用传值和非引用传值的区别，什么时候该用引用传值，什么时候该用非引用传值+++++++++++
+答：按值传递：函数内对值的任何改变在函数外都被忽略。
+引用传值：函数内对值的任何改变在函数外也将反映出这些修改。
+按值传递时php必须复制值，操作大型对象和字符串这将是代价很大的操作。按引用传值不需要复制值，对性能的提高有好处。
+当需要在函数内改变原变量的值时用引用传值，如果不想改变原变量的值时用传值。
 
 3. unix/linux 基本使用
 
@@ -792,7 +1109,45 @@ firefox,IE下的前端js/css调试工具。
             $this->assign('data',$arr);
             $this->display('index');
      }
+  
+
+
+  
+必须背下来的函数
+答：trim（）去除两侧空格
+     ltrim（）去除左侧空格
+     rtrim（）去除右侧空格
+     还可去除其他字符：如trim($str,"#")//去除两侧"#"字符
+     str_pad 字符串填充函数
+     strtolower--字符串小写转换
+     strtoupper--字符串大写转换
+     ucfirst-- 将首字母大写
+     ucwords-- 将每个单词首字母大写
+ 
+     nl2br--将字串中\n换成<br/>标签，实现换行输出。
+     htmlspecialchars--格式换字串中的html标签
+     htmlentities-- 却会转化所有的html代码，连同里面的它无法识别的中文字符也给转化了。
+ 
+     strrev-- 将字串颠倒返回
+     strlen-- 求字串长度
+     number_format-- 格式化数字的
+     md5-- 单向加密的（不可逆的（不能解密的））。
     
+     strcmp-- 整个比较是否相同
+     strncmp--指定长度的比较
+     strcasecmp-- 不区分大小写比较
+     strnatcmp-- 按自然顺序比较
+     similar_text-- 模糊比较
+ 
+     *explode-- 字符串拆分函数
+     *implode-- 字符串组合函数
+     *substr-- 截取字串
+     *strstr-- 字串查找并截取
+     strchr -- 是上面的strstr的别名找并截取
+     strrchr-- 从后面做字串查找。找并截取
+     *strpos--寻早一个字符出现位置（从前开始。第三个参数为查找起始位置）
+     strrpos--寻早一个字符出现位置（从后面开始找。）
+     换成字串str_replace(被换字串，换成的字串，原字串,[数量])；字符串替换
 php近1000个系统函数：
 Abs: 取得绝对值。
 Acos: 取得反余弦值。
