@@ -99,7 +99,8 @@ class TelmessageController extends AdminController {
 		$this->display('index');	
 	  }
 	}
-	function myPaging($mod,$map,$field=true,$limit='10',$order='id desc',$pamap,$stime,$etime) {
+	//原版Paging方法            默认值            默认值        默认值
+	function Paging($mod,$map,$field=true,$limit='10',$order='id desc',$pamap) {
         $model=M($mod);
         $count = $model->where($map)->count();
         $Page = new \Think\Page($count,$limit);
@@ -111,13 +112,12 @@ class TelmessageController extends AdminController {
             $Page->parameter[$key] = urlencode($val); //urlencode 将字符串以URL编码 不支持数组
         }
         $show = $Page->show();// 分页显示输出
-        empty($map['ctime'])?0:array('between','$stime,$etime');
         // 进行分页数据查询 注意limit方法的参数要使用Page类的属性
         $list = $model->where($map)->order($order)->limit($Page->firstRow.','.$Page->listRows)->select();
         $arr=array();
         $arr['list']=$list;
         $arr['show']=$show;
-                $arr['tolnum'] = $count;
+        $arr['tolnum'] = $count;
         return $arr;
          
      }

@@ -227,7 +227,10 @@ if (preg_match("^[a-zA-Z0-9]{4,16}$", $str)) {
 echo "验证成功";} else { 
 echo "验证失敗";}?>
 
-
+SQL中DateDiff函数
+返回两个日期之间的间隔。
+SELECT datediff( month, '1999/07/19', '1999/08/23' )；
+结果是：1；
 TCP / IP长连接&连接池的应用
 Reboot | 2015-11-20 15:28
 我们知道TCP是基于连接的协议，其实这个“连接”只是一个逻辑上的概念。在IP层看来， TCP和UDP仅仅是内容上稍有差别而已。
@@ -1216,6 +1219,14 @@ EXPLAIN语句有助于确定mysql如何执行查询，展示表是如何连接�
 页面输出
 $nameJones, you are a good \t\tguy 
 JackJones, you are a good guy
+
+ +++++++++++开机顺序 +++++++++++
+1) BIOS: BIOS是写在主板上的程序，他负责查找硬盘的MBR。
+2) MBR: 主引导分区，内包含Boot Loader
+3) Boot Loader: 按用户选择读取操作系统内核程序
+4) Kernel: 内核程序运行，开机
+Tips ： 安装Windows和Linux双系统，应该先安装Windows再安装Linux，因为先安装Linux，在Windows安装时会覆盖MBR，重写Boot Loader程序，这样会导致Loader无法查找到Linux。而Linux在安装时可以手动选择安装Loader程序的启动扇区，或者设置Loader程序的启动菜单，而不会破坏Windows的loader。当然如果先装了Linux，MBR被覆盖后也可以用其他方式来修复MBR
+
 
 
 3. unix/linux 基本使用
