@@ -898,6 +898,17 @@ $sudo /usr/local/apache/bin/apachectl restart
 
 ++++++++++++写出一种排序算法（原理），并说出优化它的方法。++++++++++++
 php冒泡排序：
+
+原理：
+依次比较相邻的两个数，将小数放在前面，大数放在后面。即首先比较第1个和第2个数，
+将小数放前，大数放后。然后比较第2个数和第3个数，将小数放前，大数放后，如此继续，
+直至比较最后两个数，将小数放前，大数放后。重复以上过程，仍从第一对数开始比较
+（因为可能由于第2个数和第3个数的交换，使得第1个数不再小于第2个数），将小数放前，
+大数放后，一直比较到最大数前的一对相邻数，将小数放前，大数放后，第二趟结束，
+在倒数第二个数中得到一个新的最大数。如此下去，直至最终完成排序。
+在许多程序设计中，我们需要将一个数列进行排序，以方便统计，常见的排序方法有冒泡排序，
+二叉树排序，选择排序等等。而冒泡排序一直由于其简洁的思想方法和比较高的效率而倍受青睐。
+由于在排序过程中总是小数往前放，大数往后放，相当于气泡往上升，所以称作冒泡排序。
 function bubble_sort($array)  
 {  
     $count = count($array);  
@@ -966,6 +977,104 @@ return $arr;
 }
 
 
+二叉树排序算法：
+    <?php
+ 2     //二叉树的广度优先遍历
+ 3     //使用一个队列实现
+ 4  
+ 5      class Node {
+ 6          public $data = null;
+ 7          public $left = null;
+ 8          public $right = null;
+ 9      }
+10  
+11      //@param $btree 二叉树根节点
+12      function breadth_first_traverse($btree) {
+13          $traverse_data = array();
+14          $queue = array();
+15          array_unshift($queue, $btree); #根节点入队
+16          
+17          while (!empty($queue)) { #持续输出节点，直到队列为空
+18              $cnode = array_pop($queue); #队尾元素出队
+19              $traverse_data[] = $cnode->data;
+20  
+21              #左节点先入队，然后右节点入队
+22              if ($cnode->left != null) array_unshift($queue, $cnode->left);
+23              if ($cnode->right != null) array_unshift($queue, $cnode->right);
+24          }
+25  
+26          return $traverse_data;
+27      }
+28 
+29      #深度优先遍历,使用一个栈实现
+30      function depth_first_traverse($btree) {
+31         $traverse_data = array();
+32         $stack = array();
+33         array_push($stack, $btree);
+34 
+35         while (!empty($stack)) {
+36             $cnode = array_pop($stack);
+37             $traverse_data[] = $cnode->data;
+38 
+39             if ($cnode->right != null) array_push($stack, $cnode->right);
+40             if ($cnode->left != null) array_push($stack, $cnode->left);
+41         }
+42 
+43         return $traverse_data;
+44      }
+45  
+46      $root = new Node();
+47      $node1 = new Node();
+48      $node2 = new Node();
+49      $node3 = new Node();
+50      $node4 = new Node();
+51      $node5 = new Node();
+52      $node6 = new Node();
+53  
+54      $root->data = 1;
+55      $node1->data = 2;
+56      $node2->data = 3;
+57      $node3->data = 4;
+58      $node4->data = 5;
+59      $node5->data = 6;
+60      $node6->data = 7;
+61  
+62      $root->left = $node1;
+63      $root->right = $node2;
+64      $node1->left = $node3;
+65      $node1->right = $node4;
+66      $node2->left = $node5;
+67      $node2->right = $node6;
+68  
+69      $traverse = breadth_first_traverse($root);
+70      print_r($traverse);
+71      echo "<br>";
+72      $traverse = depth_first_traverse($root);
+73      print_r($traverse);
+74  ?>
+ 
+
+++++++++++mysql_connect 与 memcache_connect 应该哪个在在前，哪个在后++++++++++
+答案应该是先 memcache_connect 再 mysql_connect,因为memcache存在不稳定因素，容易发生阻塞，
+一旦memcache发生阻塞，如果是先mysql_connect,就会造成生成大量mysql空链接而无法释放
+一个类似的问题是 echo $html 和 mysql_connect应该哪个在前
+按照网上看到的以为叫caoz的朋友的说法，应该是mysql_connect在前，echo $html会等待网络传输，
+并发量高的时候会造成数据库链接的阻塞
+++++++++++Apache可以被配置为正向(forward)和反向(reverse)代理。++++++++++ 
+正向代理是一个位于客户端和原始服务器之间的服务器，为了从原始服务器取得内容，客户端向代理发送一个
+请求并指定目标(原始服务器)，然后代理向原始服务器转交请求并将获得的内容返回给客户端。客户端必须要
+进行一些特别的设置才能使用正向代理。 
+    正向代理的典型用途是为在防火墙内的局域网客户端提供访问Internet的途径。正向代理还可以使用
+缓冲特性(由mod_cache提供)减少网络使用率。 使用ProxyRequests指令即可激活正向代理。因为正向代理
+允许客户端通过它访问任意网站并且隐藏客户端自身，因此你必须采取安全措施以确保仅为经过授权的客户端
+提供服务.
+   反向代理正好相反，对于客户端而言它就像是原始服务器，并且客户端不需要进行任何特别的设置。
+客户端向反向代理的命名空间(name-space)中的内容发送普通请求，接着反向代理将判断向何处(原始服务器)
+转交请求，并将获得的内容返回给客户端，就像这些内容原本就是它自己的一样。
+    反向代理的典型用途是将防火墙后面的服务器提供给Internet用户访问。反向代理还可以为后端的多
+台服务器提供负载平衡，或为后端较慢的服务器提供缓冲服务。另外，还可以启用高级URL策略和管理技术，
+从而使处于不同web服务器系统的web页面同时存在于同一个URL空间下。 可以使用ProxyPass指令激活反向
+代理。配置反向代理并不需要打开ProxyRequests指令
 +++++++++++对于大流量的网站,您采用什么样的方法来解决各页面访问量统计问题+++++++++++
 确认服务器硬件是否足够支持当前的流量,数据库读写分离,优化数据表, 
 程序功能规则,禁止外部的盗链,控制大文件的下载,使用不同主机分流主要流量
@@ -1014,6 +1123,21 @@ SNS注意交互、页面JS、ajxa、动态内容大小；
 +++++++++++一 群猴子排成一圈，按1，2，…，n依次编号。然后从第1只开始数，数到第m只,把它踢出圈，从它后面再开始数，再数到第m只，
 在把它踢出去…，如此不停的 进行下去，直到最后只剩下一只猴子为止，那只猴子就叫做大王。
 要求编程模拟此过程，输入m、n, 输出最后那个大王的编号。用程序模拟该过程。+++++++++++
+1 <html>
+ 2     <body>        
+ 3         <?php
+ 4             function monkeyKing($n, $m) {    //$n为猴子总数,$m为剔除猴子步长
+ 5                 $s = 0;    //$s为大王坐标,只有一只猴子时,大王坐标为0
+ 6                 for($i = 2; $i <= $n; $i++) {    //依次向后递推,求到共有$n只猴子,剔除步长为$m时的大王坐标
+ 7                     $s = ($s + $m) % $i;    //大王坐标递推公式
+ 8                 }
+ 9                 return $s;
+10             }
+11             
+12             echo monkeyKing(6, 2);
+13         ?>
+14     </body>
+15 </html>
 +++++++++++MySQL数据库，怎么优化？+++++++++++
 (1)配置优化（服务器配置）   (2)建表优化（表、字段设置） (3)查询优化（sql语句） 答： 1、选取最适用
 的字段属性,尽可能减少定义字段长度,尽量把字段设置NOT NULL,例如’省份,性别’,最好设置为ENUM 2、
@@ -1058,6 +1182,41 @@ EXPLAIN语句有助于确定mysql如何执行查询，展示表是如何连接�
 引用传值：函数内对值的任何改变在函数外也将反映出这些修改。
 按值传递时php必须复制值，操作大型对象和字符串这将是代价很大的操作。按引用传值不需要复制值，对性能的提高有好处。
 当需要在函数内改变原变量的值时用引用传值，如果不想改变原变量的值时用传值。
++++++++++++PHP遍历文件夹及子文件夹所有文件 +++++++++++
+1 <html>
+ 2     <body>
+ 3         <?php
+ 4             function traverse($path = '.') {
+ 5                 $current_dir = opendir($path);    //opendir()返回一个目录句柄,失败返回false
+ 6                 while(($file = readdir($current_dir)) !== false) {    //readdir()返回打开目录句柄中的一个条目
+ 7                     $sub_dir = $path . DIRECTORY_SEPARATOR . $file;    //构建子目录路径
+ 8                     if($file == '.' || $file == '..') {
+ 9                         continue;
+10                     } else if(is_dir($sub_dir)) {    //如果是目录,进行递归
+11                         echo 'Directory ' . $file . ':<br>';
+12                         traverse($sub_dir);
+13                     } else {    //如果是文件,直接输出
+14                         echo 'File in Directory ' . $path . ': ' . $file . '<br>';
+15                     }
+16                 }
+17             }
+18             
+19             traverse('xxtt');
+20         ?>
+21     </body>
+22 </html>
+ +++++++++++PHP中单引号双引号的区别 +++++++++++
+1.双引号可以解析变量表达式,单引号不能
+2.双引号会对换行符等转义字符进行解析,而单引号不能
+1  <?php
+2     $name = "Jack";
+3     echo '$nameJones, you are a good \t\tguy <br>';
+4     echo "{$name}Jones, you are a good \t\tguy";
+5  ?>
+页面输出
+$nameJones, you are a good \t\tguy 
+JackJones, you are a good guy
+
 
 3. unix/linux 基本使用
 
