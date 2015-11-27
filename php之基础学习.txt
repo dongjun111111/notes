@@ -236,6 +236,11 @@ $str=file_get_contents('http://www.93jiang.com');
   }
 自己调试一下。
 
+php取出网页中所有图片链接
+   preg_match_all("/<img([^>]*)\s*src=('|\")([^'\"]+)('|\")/",$str,$aarr);
+   var_dump($aarr[0]);
+
+
 SQL中DateDiff函数
 返回两个日期之间的间隔。
 SELECT datediff( month, '1999/07/19', '1999/08/23' )；
@@ -405,7 +410,12 @@ echo number_format($num, 3, ".", ",");
 // 500,000.000
 ?>
 
-parse_url()函数:
++++++++++file_put_contents()函数+++++++++
+file_put_contents(文件名，要加的内容，) 函数把一个字符串写入文件中。
+与依次调用 fopen()，fwrite() 以及 fclose() 功能一样。
+而file_put_contents(,,FILE_APPEND)则是追加效果，适合用来写日志文件。
+
++++++++++parse_url()函数:+++++++++
 parse_url() 函数可以解析 URL，返回其组成部分。它的用法如下：
 array = parse_url( string url );
 <?php 
