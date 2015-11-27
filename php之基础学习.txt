@@ -14,6 +14,95 @@ echo "<br>";
 echo setlocale(LC_ALL,NULL);
 ?>
 
+parse_str()函数	
+将字符串解析成变量	
+parse_str("id=23&name=John%20Adams",$myArray);
+print_r($myArray);
+结果为：
+Array ( [id] => 23 [name] => John Adams )
+
+chr()函数
+返回指定ASCII值对应的字符
+echo chr(077);
+结果为：?
+ord()函数
+返回字符串对应的ASCII值
+echo ord('H');
+结果为：72
+strtr()函数
+echo strtr('Hello World','la','lo');
+结果是：
+Hello world
+
+
+++++++++++一主三从服务器课堂笔记总结++++++++++
+2014年03月05日 ⁄ PHP, 数据库, 编程开发 ⁄ 共 3074字	⁄ 字号 小 中 大 ⁄ 暂无评论
+data_user_0
+data_user_1
+data_user_2
+data_user_3
+.....
+data_user_9
+data_user_10
+d_product_bj
+d_product_tj
+d_produtc_ts
+md5($id)
+得到32位字符串
+取得32位字符串最后2位
+2位字符串转换为10进制数值
+唯一一个id经过我们的计算可以得到唯一的数值
+数值对我们分表的张数取模
+数据库主从配置
+开启远程连接
+grant all privileges on *.* to 'migrate'@'%' identified by 'migrate';
+防火墙
+(1) 确定自己想给这两个 MySQL 服务器分配什么样的 ID 值并把它们记录到 MySL 服务器在启动 时会去读取的某个选项文件里。主从服务器的 ID 值应该是 1 到 232?1 之间的一个正整数并且必须彼此 不同。在启动主、从服务器的时候,你必须用 server_id 启动选项给出其 ID 值。在此基础上,一定 要启用主服务器上的二进制日志功能——如果以前没有启用过它。要想在主、从服务器上启用二进制 日志,最省心的办法是在相应的选项组里加上如下所示的代码:
+[mysqld] server-id=master_server_id log-bin=binlog_name
+[mysqld] server-id=slave_server_id
+重新启动两个服务器,让改动生效。
+(2) 在主服务器上,创建一个账户供从服务器连接主服务器并请求修改信息:
+CREATE USER 'slave_user'@'slave_host' IDENTIFIED BY 'slave_pass'; GRANT REPLICATION SLAVE ON *.* TO 'slave_user'@'slave_host';
+请记住 slave_user 和 slave_pass 值,因为稍后还需要使用它们来告诉从服务器如何连接主服 务器。如果这个账户的用途只用于复制,就用不着再向它授予任何其他的权限了。不过,为了对复制 机制进行测试,你通常要在从服务器上用 mysql 程序以“手动方式”去连接主服务器,所以你往往还 应该再给这个账户多授予几项权限以方便自己能够多做一些事情。(比如说,如果这个账户仅有 REPLICATION SLAVE 权限的话,你甚至无法在从服务器上使用 SHOW DATABASES 语句去查看主服务 器上的数据库名称。)
+(3) 连接到主服务器并通过执行 SHOW MASTER STATUS 语句确定当前的复制坐标:
+mysql> FLUSH TABLES; SHOW MASTER STATUS;
+请记住 File 和 Position 值,因为稍后还需要使用它们来告诉从服务器从哪个位置开始去读取 主服务器的二进制日志里的事件。
+重要注意事项 在主服务器上,在从确定其复制坐标到制作出将被传输到从服务器的初始复制的这 段时间里,一定要保证主服务器上的数据库里的数据没有发生任何修改。
+(4) 在从服务器上为将被复制的数据库建立一份完备的副本。把主服务器上的数据库复制到从服 务器以完成主、从服务器之间最初的同步。一种办法是先在主服务器主机上制作一份备份,再把这个 备份加载到从服务器上去;另一种办法是通过网络把各数据库从主服务器全部复制到从服务器。对数据库备份技术和复制技术的讨论见本章的其他小节。 如果你还没有在主服务器上创建过任何数据库或数据表,可以省略这一步,因为它现在还没有任何需要复制的东西。
+(5) 连接到从服务器并使用 CHANGE MASTER 语句来配置它,这包括把用来连接主服务器的参数和
+初始复制坐标告诉从服务器:
+CHANGE MASTER TO
+MASTER_HOST = 'master_host', MASTER_USER = 'slave_user', MASTER_PASSWORD = 'slave_pass', MASTER_LOG_FILE = 'log_file_name', MASTER_LOG_POS = log_file_pos;
+'master_host'是主服务器的主机名。'slave_user'和'slave_pass'值是刚才在主服务器创建 的那个账户的用户名和口令,从服务器将使用这个账户来连接主服务器并请求主服务器修改信息。 'log_file_name'和'log_file_pos'是刚才用 SHOW MASTER STATUS 语句查出来的值。
+在 Unix 系统上,使用 localhost 作为主机名将使用一个套接字文件去连接主服务器,但复制机 制不支持经套接字文件建立的连接。因此,如果主服务器和从服务器将运行在同一台主机上,就必须 把这个主机名写成 127.0.0.1 而不是 localhost,这样才能确保从服务器将使用 TCP/IP 连接。
+如果主服务器所监听的网络端口不是默认端口,可以在 CHANGE 语句里包括一个 MASTER_PORT 选 项以明确地给出一个端口号。
+(6) 让从服务器开始复制。
+START SLAVE;
+从服务器将连接主服务器并开始复制。你可以在从服务器上使用 SHOW SALVE STATUS 语句来查 看它的工作状态。
+从服务器把 CHANGE MASTER 语句所给出的参数保存在其数据目录中的一个名为 master.info 的 文件里以记录初始复制状态,并随着镜象工作的进展而刷新那个文件。等以后需要改变复制参数的时 候,只要连接到从服务器并通过 CHANGE MASTER 语句给出新的设置,从服务器就会根据新的设置自 动刷新 master.info 文件。
+保存在 master.info 文件里的信息包括用来连接主服务器的用户名和口令。这些信息应该是保 密的,所以应该把这个文件设置为只允许从服务器上的 MySQL 管理员的登录账户才能访问。
+可以把 mysql 数据库排除在复制机制外,这需要做两件事情。
+(1) 在把数据库的初始数据从主服务器传输到从服务器的时候,不要把 mysql 数据库也包括在 内。另一个办法是在传输之前先备份从服务器的 mysql 数据库,等传输工作完成后再恢复它。
+(2) 在从服务器的选项文件里加上以下代码,让它不要执行来自主服务器的对 mysql 数据库的任 何修改:
+[mysqld]
+replicate-ignore-db=mysql
+如果想让从服务器忽略多个数据库,需要多次使用 replication_ignore_db 选项——每个数据
+库一次。
+还有一个办法是在主服务器端(注意,不是从服务器端)使用--binlog-ignore-db 选项排除数
+据库。这个办法的优点是可以减少从主服务器传输到从服务器的信息量,缺点是主服务器上的二进制
+日志文件将不包含那些被排除在外的数据库的任何信息,而这些信息对主服务器在发生崩溃后的数据
+恢复工作往往至关重要。因此,在从服务器端把数据库排除在外的做法更值得选择。
+重要命令
+SHOW SLAVE STATUS语句。在从服务器上查看其复制机制是否在工作以及当前的复制坐标。
+复制坐标可以用来判断主服务器上的哪几个二进制日志文件已经不再会被用到了。
+PURGE MASTER语句。在主服务器上对二进制日志文件进行失效处理。在每一个从服务器上都
+通过SHOW SLAVE STATUS语句确定了哪些日志文件不会再用之后,你可以在主服务器上用这
+条语句把那些二进制日志文件删除掉。
+STOP SLAVE和START SLAVE语句。用来挂起和重新开始从服务器上的复制活动。比如说,当
+你制作备份时,可以用这些语句让从服务器暂时停止复制活动。
+可以通过在 SLAVE STOP 或 SLAVE START 语句的末尾加上 IO_THREAD
+或 SQL_THREAD 关键字的办法分别挂起或者重新开始这两个线程中的任何一个。
+
 4》》》》》数组函数
 array()	创建数组。	
 array_change_key_case()	返回其键均为大写或小写的数组。 	
