@@ -240,6 +240,9 @@ php取出网页中所有图片链接
    preg_match_all("/<img([^>]*)\s*src=('|\")([^'\"]+)('|\")/",$str,$aarr);
    var_dump($aarr[0]);
 
+php取出网页中所有邮箱
+preg_match_all("/([a-z0-9\-_\.]+@[a-z0-9]+\.[a-z0-9\-_\.]+)/",$str,$mail);
+   var_dump($mail);
 
 SQL中DateDiff函数
 返回两个日期之间的间隔。
