@@ -227,6 +227,15 @@ if (preg_match("^[a-zA-Z0-9]{4,16}$", $str)) {
 echo "验证成功";} else { 
 echo "验证失敗";}?>
 
+
+php获取页面中的所有链接地址：（以www.93jiang,com为例）
+$str=file_get_contents('http://www.93jiang.com');
+  preg_match_all('/<a .*?href="(.*?)".*?>/is',$str,$arrat);
+  foreach($arrat[0] as $key=>$value){
+  echo $key.'-------'.htmlspecialchars($value).'<br>';
+  }
+自己调试一下。
+
 SQL中DateDiff函数
 返回两个日期之间的间隔。
 SELECT datediff( month, '1999/07/19', '1999/08/23' )；
@@ -470,6 +479,15 @@ print_r($file);
 结果为：
 Array ( [0] => . [1] => .. [2] => test.jpg [3] => test2.jpg ) 
 
+
+数组比较函数 array_diff()与array_diff_assoc()函数
+array_diff_assoc() 函数返回两个数组的差集数组。该数组包括了所有在被比较的数组中，但是不在任何其他参数数组中的键和值。
+和 array_diff()函数不同，本函数要求键名和键值都进行比较。返回的数组中键名保持不变。
+array_diff() 能比较key和value，而实际上它只比较了value，而不关心key，如果关心key的话，可以使用函数array_diff_assoc().
+
+php数组求交集的array_intersect()函数与array_intersecct_assoc()函数：
+array_intersect        计算数组的交集，只关心value，不关心key；
+array_intersect_assoc  带索引检查计算数组的交集。
 
 序列化与反序列化
 序列化是将变量转换为可保存或传输的字符串的过程；反序列化就是在适当的时候把这个字符串再转化成原来的变量使用。这
