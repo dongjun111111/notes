@@ -384,6 +384,13 @@ urlencode()函数：
 本函数将字符串以 URL 编码。例如空格就会变成加号。
 Homepage 中 form 资料传送就是用 urlencode 编码后再送出。
 
+bool array_walk ( array &array, callback funcname [, mixed userdata] ) 对数组中的每个成员应用用户函数
+array array_map ( callback callback, array arr1 [, array ...] )将回调函数作用到给定数组的单元上
+array array_fill ( int start_index, int num, mixed value ) 用给定的值填充数组
+array_fill(5, 3, 'a')-->array(5=>'a',6=>'a',7=>'a')
+array array_chunk ( array input, int size [, bool preserve_keys] )将一个数组分割成多个
+
+
 array_multisort()这个函数：
 有时候我们需要对二维数组的某个键的值进行排序，这里就是讨论这个问题。
 我们可以使用array_multisort()这个函数。array_multisort() 函数对多个数组或多维数组进行排序。
@@ -413,10 +420,109 @@ echo number_format($num, 3, ".", ",");
 // 500,000.000
 ?>
 
++++++php5++++++
+PHP5常用函数之connection_status() 函数返回当前的连接状态。
+　　connection_aborted() 函数检查是否断开客户机。
+　　zip_read() 函数读取打开的 zip 档案中的下一个文件。
+　　zip_open() 函数打开 ZIP 文件以供读取。
+　　zip_entry_read() 函数从打开的 zip 档案项目中获取内容。
+　　zip_entry_open() 函数打开一个 ZIP 档案项目以供读取。
+　　PHP5常用函数之zip_entry_name() 函数返回 zip 档案项目的名称。
+　　zip_entry_filesize() 函数返回 zip 档案项目的原始大小(在压缩之前)。
+　　zip_entry_compressionmethod() 函数返回 zip 档案项目的压缩方法。
+　　zip_entry_compressedsize() 函数返回 zip 档案项目的压缩文件尺寸。
+　　zip_entry_close() 函数关闭由 zip_entry_open() 函数打开的 zip 档案文件。
+　　zip_close() 函数关闭由 zip_open() 函数打开的 zip 档案文件。
+
+file_exists($file)    判断文件是否存在
+gettype();            获取数据类型
+
 +++++++++file_put_contents()函数+++++++++
 file_put_contents(文件名，要加的内容，) 函数把一个字符串写入文件中。
 与依次调用 fopen()，fwrite() 以及 fclose() 功能一样。
 而file_put_contents(,,FILE_APPEND)则是追加效果，适合用来写日志文件。
+
+//顺序查找算法（数组里查找某个元素）
+function seq_sch($array,$n,$k)//在某个位置之前查找某元素(不包括指定位置)
+{
+$array[$n]=$k;
+for($i=0;$i<$n;$i++)
+{
+if($array[$i]==$k)
+break;
+}
+if($i<$n)
+return $i;
+else
+return -1;
+}
+$array=array(‘a’,'b’,'c’);
+echo seq_sch($array,2,’b');
+?>
+
+
++++++++++二分查找-递归+++++++++
+function bin_search($arr,$low,$high,$value) {
+    if($low>$high)
+        return false;
+    else {
+        $mid=floor(($low+$high)/2);
+        if($value==$arr[$mid])
+            return $mid;
+        elseif($value<$arr[$mid])
+            return bin_search($arr,$low,$mid-1,$value);
+        else
+            return bin_search($arr,$mid+1,$high,$value);
+    }
+}
+
++++++++++二分查找-非递归+++++++++
+function bin_search($arr,$low,$high,$value) {
+    while($low<=$high) {
+        $mid=floor(($low+$high)/2);
+        if($value==$arr[$mid])
+            return $mid;
+        elseif($value<$arr[$mid])
+            $high=$mid-1;
+        else
+            $low=$mid+1;
+    }
+    return false;
+}
+
++++++++++归并排序+++++++++
+function Merge(&$arr, $left, $mid, $right) {
+  $i = $left;
+  $j = $mid + 1;
+  $k = 0;
+  $temp = array();
+  while ($i <= $mid && $j <= $right)
+  {
+    if ($arr[$i] <= $arr[$j])
+      $temp[$k++] = $arr[$i++];
+    else
+      $temp[$k++] = $arr[$j++];
+  }
+  while ($i <= $mid)
+    $temp[$k++] = $arr[$i++];
+  while ($j <= $right)
+    $temp[$k++] = $arr[$j++];
+  for ($i = $left, $j = 0; $i <= $right; $i++, $j++)
+    $arr[$i] = $temp[$j];
+}
+ 
+function MergeSort(&$arr, $left, $right)
+{
+  if ($left < $right)
+  {
+    $mid = floor(($left + $right) / 2);
+    MergeSort($arr, $left, $mid);
+    MergeSort($arr, $mid + 1, $right);
+    Merge($arr, $left, $mid, $right);
+  }
+}
+
+
 
 +++++++++parse_url()函数:+++++++++
 parse_url() 函数可以解析 URL，返回其组成部分。它的用法如下：
