@@ -61,6 +61,7 @@ mb_convert_encoding($str,'UTF-8','GBK')；将UTF-8格式的转为GBK
 不管怎么样，这个”—”都无法转换成功，无法输出。 另外mb_convert_encoding没有这个bug. 
 一般情况下用 iconv，只有当遇到无法确定原编码是何种编码，或者iconv转化后无法正常显示时才用mb_convert_encoding 函数. 
 $content = iconv("GBK", "UTF-8", $str); (以上俩个函数会产生同样效果)
+在使用iconv()时候，请不要转成"GB2312"的格式，因为这是iconv的一个bug，可以直接把gb2312写成gbk就OK了。
 
 ++++++++ stream_context_create()++++++++
 作用：创建并返回一个文本数据流并应用各种选项，可用于fopen(),file_get_contents()等过程的超时设置、代理服务器、请求方式、头信息设置的特殊过程。 
@@ -262,6 +263,55 @@ var_dump(array_flip($arr));
   'a' => int 1
   'b' => int 2
   'c' => int 3
+
+++++++array_key_exists()与in_array()函数+++++++
+检查值、键：
+array_key_exists($key,$array);//检查数组键
+in_array($value,$array);//检查值于数组
+
+++++++++array_slice()函数+++++++++
+array_slice()函数
+$arr=array(1=>'ffd',2=>'tgrt',3=>'rghd',4=>'erhh',5=>'fffsv');
+var_dump(array_slice($arr,1,1));
+结果是：
+array (size=1)
+0 => string 'tgrt' (length=4)
+array_splice()函数
+$arr=array(1=>'ffd',2=>'tgrt',3=>'rghd',4=>'erhh',5=>'fffsv');
+array_splice($arr,4);
+var_dump($arr);
+结果是：
+array (size=4)
+  0 => string 'ffd' (length=3)
+  1 => string 'tgrt' (length=4)
+  2 => string 'rghd' (length=4)
+  3 => string 'erhh' (length=4)
+
++++++++++PHP将微博短地址还原为实际网址+++++++++
+$url = "http://163.fm/1QLJ8U";
+echo unshorten($url);
+function unshorten($url)
+{
+    $url = trim($url);
+    $headers = get_headers($url);
+    $location = $url;
+    $short = false;
+    foreach($headers as $head)
+    {
+        if($head=="HTTP/1.1 302 Found")
+            $short = true;
+        if($short && startwith($head,"Location: "))
+        {
+            $location = substr($head,10);
+        }
+    }
+    return $location;
+}
+function startwith($Haystack, $Needle)
+{
+    return strpos($Haystack, $Needle) === 0;
+}
+自己测试一下。
 
 
 ++++++++++一主三从服务器课堂笔记总结++++++++++
