@@ -54,6 +54,200 @@ public function escapeJsonString($value) {
     return $result;
 }
 
+++++++PHP生成一个可阅读随机字符串+++++++
+function readable_random_string($length = 6){
+    $conso=array("b","c","d","f","g","h","j","k","l",
+    "m","n","p","r","s","t","v","w","x","y","z");    $vocal=array("a","e","i","o","u");
+    $password="";
+    srand ((double)microtime()*1000000);
+    $max = $length/2;
+    for($i=1; $i<=$max; $i++)
+    {
+    $password.=$conso[rand(0,19)];
+    $password.=$vocal[rand(0,4)];
+    }
+    return $password;
+}
+var_dump(readable_random_string(7));
+其中一个结果为：
+string 'wopunu' (length=6)
+
+++++PHP编码电子邮件地址++++++
+使用此代码，可以将任何电子邮件地址编码为 html 字符实体，以防止被垃圾邮件程序收集。
+function encode_email($email='info@domain.com', $linkText='Contact Us', $attrs ='class="emailencoder"' )
+{
+    $email = str_replace('@', '@', $email);
+    $email = str_replace('.', '.', $email);
+    $email = str_split($email, 5);  
+    $linkText = str_replace('@', '@', $linkText);
+    $linkText = str_replace('.', '.', $linkText);
+    $linkText = str_split($linkText, 5);  
+    $part1 = '<a href="ma';
+    $part2 = 'ilto:';
+    $part3 = '" '. $attrs .' >';
+    $part4 = '</a>';  
+  
+    $encoded = '<script type="text/javascript">';
+    $encoded .= "document.write('$part1');";
+    $encoded .= "document.write('$part2');";
+    foreach($email as $e)
+    {
+            $encoded .= "document.write('$e');";
+    }
+    $encoded .= "document.write('$part3');";
+    foreach($linkText as $l)
+    {
+            $encoded .= "document.write('$l');";
+    }
+    $encoded .= "document.write('$part4');";
+    $encoded .= '</script>';  
+    return $encoded;
+}
+var_dump(encode_email('thff@dfgf.com','dbgdbd','grrg'));
+结果为：
+string '<script type="text/javascript">document.write('<a href="ma');document.write
+('ilto:');document.write('thff@');document.write('dfgf.');document.write('com');
+document.write('" grrg >');document.write('dbgdb');document.write('d');document.write('</a>');</script>' (length=2)
+
+++++++php删除一个目录+++++++++++
+删除一个目录，包括它的内容。
+/*****
+*@dir - Directory to destroy
+*@virtual[optional]- whether a virtual directory
+*/
+function destroyDir($dir, $virtual = false)
+{
+    $ds = DIRECTORY_SEPARATOR;
+    $dir = $virtual ? realpath($dir) : $dir;
+    $dir = substr($dir, -1) == $ds ? substr($dir, 0, -1) : $dir;
+    if (is_dir($dir) && $handle = opendir($dir))
+    {
+        while ($file = readdir($handle))
+        {
+            if ($file == '.' || $file == '..')
+            {
+             continue;
+            }
+            elseif (is_dir($dir.$ds.$file))
+            {
+                destroyDir($dir.$ds.$file);
+            }
+            else
+            {
+                unlink($dir.$ds.$file);
+            }
+        }
+        closedir($handle);
+        rmdir($dir);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+++++++php解析XML+++++++++
+$xml_string="<?xml version='1.0'?>
+<users>
+<user id='398'>
+<name>Foo</name>
+<email>foo@bar.com</name>
+</user>
+<user id='867'>
+<name>Foobar</name>
+<email>foobar@foo.com</name>
+</user>
+</users>"; 
+//load the xml string using simplexml
+$xml = simplexml_load_string($xml_string); 
+//loop through the each node of user
+foreach ($xml->user as $user)
+{
+    //access attribute
+    echo $user['id'], ' ';
+    //subnodes are accessed by -> operator
+    echo $user->name, ' ';
+    echo $user->email, '<br />';
+}
+
+
+++++++PHP创建日志缩略名++++++
+创建用户友好的日志缩略名
+function create_slug($string){
+    $slug=preg_replace('/[^A-Za-z0-9-]+/', '-', $string);
+    return $slug;
+}
+
+++++++++ PHP获取客户端真实 IP 地址++++++++++
+该函数将获取用户的真实 IP 地址，即便他使用代理服务器。
+function getRealIpAddr()
+{
+    if (!emptyempty($_SERVER['HTTP_CLIENT_IP']))
+    {
+        $ip=$_SERVER['HTTP_CLIENT_IP'];
+    }
+    elseif (!emptyempty($_SERVER['HTTP_X_FORWARDED_FOR']))
+    //to check ip is pass from proxy
+    {
+        $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else
+    {
+        $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+
++++++++PHP强制性文件下载++++++++
+为用户提供强制性的文件下载功能
+function force_download($file)
+{
+    if ((isset($file))&&(file_exists($file))) {
+        header("Content-length: ".filesize($file));
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $file . '"');
+        readfile("$file");
+    }
+    else {
+        echo "No file selected";
+    }
+}
+
+
++++++PHP创建标签云+++++++
+function getCloud( $data = array(), $minFontSize = 12, $maxFontSize = 30 )
+{
+    $minimumCount = min( array_values( $data ) );
+    $maximumCount = max( array_values( $data ) );
+    $spread = $maximumCount - $minimumCount;
+    $cloudHTML = '';
+    $cloudTags = array(); 
+    $spread == 0 && $spread = 1; 
+    foreach( $data as $tag => $count )
+    {
+        $size = $minFontSize + ( $count - $minimumCount )
+        * ( $maxFontSize - $minFontSize ) / $spread;
+       $cloudTags[] = '<a style="font-size: ' . floor( $size ) . 'px'
+        . '" href="#" title="\'' . $tag .
+        '\' returned a count of ' . $count . '">'
+        . htmlspecialchars( stripslashes( $tag ) ) . '</a>';
+    } 
+    return join( "\n", $cloudTags ) . "\n";
+}
+/**************************
+**** Sample usage ***/
+$arr = Array('Actionscript' => 35, 'Adobe' => 22, 'Array' => 44, 'Background' => 43,
+'Blur' => 18, 'Canvas' => 33, 'Class' => 15, 'Color Palette' => 11, 'Crop' => 42,
+'Delimiter' => 13, 'Depth' => 34, 'Design' => 8, 'Encode' => 12, 'Encryption' => 30,
+'Extract' => 28, 'Filters' => 42);
+echo getCloud($arr, 12, 36);
+
+++++++PHP寻找两个字符串的相似性similar_text()+++++++
+PHP 提供了一个极少使用的 similar_text 函数，但此函数非常有用，用于比较两个字符串并返回相似程度的百分比
+similar_text($string1, $string2, $percent);
+
+
 转码字符串格式+++++++++++ mb_convert_encoding()函数++++++++
 mb_convert_encoding($str,'UTF-8','GBK')；将UTF-8格式的转为GBK
 另外一个转码函数iconv()函数：
