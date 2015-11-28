@@ -210,4 +210,13 @@ SSH: 22
 Telnet: 23
 HTTPS: 443
 
-
+使用心得：
+SQL语句用双引号，其中的值都用单引号，例如"INSERT INTO gril SET money='{$iMaxMoney}',age='18′"
+用mysqli扩展代替mysql扩展
+用mysqli_real_escape_string和mysqli_escape_string处理传出sql语句中的变量
+用mysqli_set_charset(mysqli->set_charset)代替 query "SET NAMES"
+联合查询(JOIN)之前，考虑下各个表的数据量，不合适的话应该分开查，尤其是有缓存可用的时候
+很多地方需要记录发生时间，但不是每一个表都需要，同样，不是每一个表都需要一个自增量作主键
+很多时候为integer类型加上unsigned是很好的
+INERT DELEYED、INSERT IGNORE、SELECT DISTINCT…这种语句通常有意想不到的好效果
+varchar类型并不是不能超过255长度，而是超过了255，这个字段就不能建立索引了，所以，看你的实际需要了
