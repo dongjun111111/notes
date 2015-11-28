@@ -103,6 +103,78 @@ echo strstr('Hello','o');      返回 o
 echo strstr('Hello','o',true); 返回 Hell
 echo strstr('Hello','22');     不返回任何内容
 
++++++array_unique()函数+++++++
+array_unique()可以去除一个一维数组中相同的元素，但是它不适用于多维数组，下面的方法可以解决。
+function array_unique_fb($array2D)
+{
+    foreach ($array2D as $v)
+    {
+        $v = join(",",$v);  //降维,也可以用implode,将一维数组转换为用逗号连接的字符串
+        $temp[] = $v;
+    }
+    $temp = array_unique($temp);    //去掉重复的字符串,也就是重复的一维数组
+    foreach ($temp as $k => $v)
+    {
+        $temp[$k] = explode(",",$v);   //再将拆开的数组重新组装
+    }
+    return $temp;
+}
+
++++++++PHP截取中英混合的字符串++++++++++
+function get_word($string, $length, $dot = '..',$charset='gbk') {
+    if(strlen($string) <= $length) {
+        return $string;
+    }
+    $string = str_replace(array('　',' ', '&', '"', '<', '>'), array('','','&', '"', '<', '>'), $string);
+    $strcut = '';
+    if(strtolower($charset) == 'utf-8') {
+        $n = $tn = $noc = 0;
+        while($n < strlen($string)) {
+            $t = ord($string[$n]);
+            if($t == 9 || $t == 10 || (32 <= $t && $t <= 126)) {
+                $tn = 1; $n++; $noc++;
+            } elseif(194 <= $t && $t <= 223) {
+                $tn = 2; $n += 2; $noc += 2;
+            } elseif(224 <= $t && $t < 239) {
+                $tn = 3; $n += 3; $noc += 2;
+            } elseif(240 <= $t && $t <= 247) {
+                $tn = 4; $n += 4; $noc += 2;
+            } elseif(248 <= $t && $t <= 251) {
+                $tn = 5; $n += 5; $noc += 2;
+            } elseif($t == 252 || $t == 253) {
+                $tn = 6; $n += 6; $noc += 2;
+            } else {
+                $n++;
+            }
+            if($noc >= $length) {
+                break;
+           }
+        }
+        if($noc > $length) {
+            $n -= $tn;
+        }
+        $strcut = substr($string, 0, $n);
+    } else {
+        for($i = 0; $i < $length; $i++) {
+            $strcut .= ord($string[$i]) > 127 ? $string[$i].$string[++$i] : $string[$i];
+        }
+    }
+    return $strcut.$dot;
+}
+$str = "欢迎 visit 简明 nowamagic";
+$str_result = get_word($str, 12);
+echo $str_result;
+
+
+
++++++++array_flip()函数++++++++++
+交换键名与键值
+$arr=array('1'=>'a','2'=>'b','3'=>'c');
+var_dump(array_flip($arr));
+结果为：array (size=3)
+  'a' => int 1
+  'b' => int 2
+  'c' => int 3
 
 
 ++++++++++一主三从服务器课堂笔记总结++++++++++
