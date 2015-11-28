@@ -166,6 +166,93 @@ $str_result = get_word($str, 12);
 echo $str_result;
 
 
+++++++4个数字得出24的方法+++++++
+传说中的24点的游戏：
+<?php
+set_time_limit(0);
+$values = array(5, 5, 5, 1);
+$result = 24;
+$list = array();
+echo "<pre>";
+makeValue($values);
+print_r($list);
+function makeValue($values, $set=array())
+{
+    $words = array("+", "-", "*", "/");
+    if(sizeof($values)==1)
+    {
+        $set[] = array_shift($values);
+        return makeSpecial($set);
+    }
+    foreach($values as $key=>$value)
+    {
+        $tmpValues = $values;
+        unset($tmpValues[$key]);
+        foreach($words as $word)
+        {
+            makeValue($tmpValues, array_merge($set, array($value, $word)));
+        }
+    }
+}
+function makeSpecial($set)
+{
+    $size = sizeof($set);
+    if($size<=3 || !in_array("/", $set) && !in_array("*", $set))
+    {
+        return makeResult($set);
+    }
+    for($len=3; $len<$size-1; $len+=2)
+    {
+        for($start=0; $start<$size-1; $start+=2)
+      {         
+            if(!($set[$start-1]=="*" || $set[$start-1]=="/" || $set[$start+$len]=="*" || $set[$start+$len]=="/"))
+                continue;
+            $subSet = array_slice($set, $start, $len);
+            if(!in_array("+", $subSet) && !in_array("-", $subSet))
+                continue;
+            $tmpSet = $set;
+            array_splice($tmpSet, $start, $len-1);
+            $tmpSet[$start] = "(".implode("", $subSet).")";
+            makeSpecial($tmpSet);
+        }
+    }
+}
+function makeResult($set)
+{
+    global $result, $list;
+    $str = implode("", $set);
+    @eval("$num=$str;");
+    if($num==$result && !in_array($str, $list))
+    $list[] = $str;
+}
+?>
+
+
++++++++str_repeat()函数+++++++
+重复字符串：
+$arr='12';
+echo str_repeat($arr,4);
+结果为：
+12121212
+
+
+++++str_word_count()函数+++++++++++++
+str_word_count()函数，可以确定一个字符串中某个单词的出现次数。
+$arr='gg rfg rghh ';
+var_dump(str_word_count($arr,1,'g'));
+结果为：
+array (size=3)
+  0 => string 'gg' (length=2)
+  1 => string 'rfg' (length=3)
+  2 => string 'rghh' (length=4)
+
+++++++++substr_count()函数++++++++++++
+substr_count()函数：可以确定一个字符串在所提供的字符串中有多少个
+$arr="fghyjffgyhjdsthshgvgfhds";
+var_dump(substr_count($arr,'g'));
+结果为：
+int 4
+
 
 +++++++array_flip()函数++++++++++
 交换键名与键值
