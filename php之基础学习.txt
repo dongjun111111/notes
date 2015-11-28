@@ -34,6 +34,76 @@ echo strtr('Hello World','la','lo');
 结果是：
 Hello world
 
++++++++++phpstr_replace()函数与preg_replace()函数+++++++++
+str_replace(修改后的内容，希望替换的内容，原字符串或数组，替换的数目);
+<?php
+$arr = array("blue","red","green","yellow");
+print_r(str_replace("red","pink",$arr,$i));
+echo "替换数：$i";
+?>
+结果为：
+Array ( [0] => blue [1] => pink [2] => green [3] => yellow ) 替换数：1
+同样功能的函数有preg_replace()函数
+preg_replace(修改后的内容，希望替换的内容，原字符串或数组）
+
+转义字符串，json中常用。php》5。2有一个系统函数json_encode()自带转义效果
+public function escapeJsonString($value) {
+    $escapers = array("\\", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+    $replacements = array("\\\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
+    $result = str_replace($escapers, $replacements, $value);
+    return $result;
+}
+
+转码字符串格式+++++++++++ mb_convert_encoding()函数++++++++
+mb_convert_encoding($str,'UTF-8','GBK')；将UTF-8格式的转为GBK
+另外一个转码函数iconv()函数：
+发现iconv在转换字符”—”到gb2312时会出错，如果没有ignore参数，所有该字符后面的字符串都无法被保存。
+不管怎么样，这个”—”都无法转换成功，无法输出。 另外mb_convert_encoding没有这个bug. 
+一般情况下用 iconv，只有当遇到无法确定原编码是何种编码，或者iconv转化后无法正常显示时才用mb_convert_encoding 函数. 
+$content = iconv("GBK", "UTF-8", $str); (以上俩个函数会产生同样效果)
+
+++++++++ stream_context_create()++++++++
+作用：创建并返回一个文本数据流并应用各种选项，可用于fopen(),file_get_contents()等过程的超时设置、代理服务器、请求方式、头信息设置的特殊过程。 
+函数原型：resource stream_context_create ([ array $options [, array $params ]] ) 
+function Post($url, $post = null){
+     $context = array();
+     if (is_array($post)) {
+         ksort($post);
+         $context['http'] = array (
+             'timeout'=>60,
+             'method' => 'POST',
+             'content' => http_build_query($post, '', '&'),
+         );
+     }
+return file_get_contents($url, false,stream_context_create($context));
+}
+
+$data = array(
+     'name' => 'test',
+     'email' => 'test@gmail.com',
+     'submit' => 'submit',
+);
+$str=Post('http://www.ej38.com', $data);
+echo mb_convert_encoding($str,'UTF-8','GBK');
+
++++++++http_build_query()函数+++++++
+将数组返回成一个url格式字符串
+$data = array('foo'=>'bar',
+              'baz'=>'boom',
+              'cow'=>'milk',
+              'php'=>'hypertext processor'
+             );
+echo http_build_query($data);
+结果为：
+foo=bar&baz=boom&cow=milk&php=hypertext+processor
+
++++++strstr()函数++++++++
+检测一个字符串是否存在另一个字符串中，如果存在则返回检测原样（不加true）或者返回剩下部分
+echo strstr('Hello','o');      返回 o
+echo strstr('Hello','o',true); 返回 Hell
+echo strstr('Hello','22');     不返回任何内容
+
+
 
 ++++++++++一主三从服务器课堂笔记总结++++++++++
 2014年03月05日 ⁄ PHP, 数据库, 编程开发 ⁄ 共 3074字	⁄ 字号 小 中 大 ⁄ 暂无评论
