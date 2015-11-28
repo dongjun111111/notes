@@ -246,6 +246,242 @@ echo getCloud($arr, 12, 36);
 ++++++PHP寻找两个字符串的相似性similar_text()+++++++
 PHP 提供了一个极少使用的 similar_text 函数，但此函数非常有用，用于比较两个字符串并返回相似程度的百分比
 similar_text($string1, $string2, $percent);
+实例：
+similar_text('hhllo','hello',$percent);
+echo $percent."%";
+结果为：80%
+
++++++PHP为URL地址预设 http字符串++++++++
+有时需要接受一些表单中的网址输入，但用户很少添加 http:// 字段，此代码将为网址添加该字段。
+if (!preg_match("/^(http|ftp):/", $_POST['url'])) {
+   $_POST['url'] = 'http://'.$_POST['url'];
+   } 
+
+++++++++PHP将网址字符串转换成超级链接+++++++++
+该函数将 URL 和 E-mail 地址字符串转换为可点击的超级链接。
+function makeClickableLinks($text) {
+	    $text = eregi_replace('(((f|ht){1}tp://)[-a-zA-Z0-9@:%_+.~#?&//=]+)',
+	    '<a href="\1">\1</a>', $text);
+	    $text = eregi_replace('([[:space:]()[{}])(www.[-a-zA-Z0-9@:%_+.~#?&//=]+)',
+	    '\1<a href="http://\2">\2</a>', $text);
+	    $text = eregi_replace('([_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,3})',
+	    '<a href="mailto:\1">\1</a>', $text); 
+	    return $text;
+} 
+
+++++++PHP调整图像尺寸++++++
+创建图像缩略图需要许多时间，此代码将有助于了解缩略图的逻辑。
+function resize_image($filename, $tmpname, $xmax, $ymax)
+	{
+	    $ext = explode(".", $filename);
+	    $ext = $ext[count($ext)-1];  
+	    if($ext == "jpg" || $ext == "jpeg")
+	        $im = imagecreatefromjpeg($tmpname);
+	    elseif($ext == "png")
+	        $im = imagecreatefrompng($tmpname);
+	    elseif($ext == "gif")
+	        $im = imagecreatefromgif($tmpname); 
+	    $x = imagesx($im);
+	    $y = imagesy($im);   
+	    if($x <= $xmax && $y <= $ymax)
+	        return $im;  
+	    if($x >= $y) {
+	        $newx = $xmax;
+	        $newy = $newx * $y / $x;
+	    }
+	    else {
+	        $newy = $ymax;
+	        $newx = $x / $y * $newy;
+	    }  
+	  
+	    $im2 = imagecreatetruecolor($newx, $newy);
+	    imagecopyresized($im2, $im, 0, 0, 0, 0, floor($newx), floor($newy), $x, $y);
+	    return $im2;
+	} 
+
+
++++++++用php访问http与https的转换+++++++
+http直接跳转为https，重定向一下就可以了。
+<?php
+	header("Location:https://www.nowamagic.com");
+?>
+当访问 http 时，跳 https：
+<?php
+//http转化为https   
+if ($_SERVER["HTTPS"] <> "on")
+{
+	$xredir="https://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+	header("Location: ".$xredir);
+}
+?>  
+当访问 https 时，跳 http：
+<?php
+//https转化为http   
+if ($_SERVER["HTTPS"] == "on")  
+{  
+	$xredir="http://".$_SERVER["SERVER_NAME"]. $_SERVER["REQUEST_URI"];  
+	header("Location: ".$xredir);  
+}   
+?>
+在网页开头包含上面代码即可。
+
++++++php截取GB2312中文字符串++++++++
+function mysubstr($str, $start, $len) {
+    $tmpstr = "";
+    $strlen = $start + $len;
+    for($i = 0; $i < $strlen; $i++) {
+        if(ord(substr($str, $i, 1)) > 0xa0) {
+            $tmpstr .= substr($str, $i, 2);
+            $i++;
+        } else
+            $tmpstr .= substr($str, $i, 1);
+    }
+    return $tmpstr;
+}
+
++++++++PHP“相关文章推荐”功能的简易实现+++++++++++
+$demo_title = "简明现代魔法";
+$demo_arr_title = array("简单易懂的现代魔法","简单明了的现代魔法","简明扼要的古代魔法","不简单的现代魔法","很难懂的现代魔法");
+$new_array = getSimilar($demo_title,$demo_arr_title);
+//print_r($new_array);
+echo "与[$demo_title]最相关的前三个文章是：<br/>";
+for($j=0; $j<=2; $j++)
+{ 
+	echo ($j+1).":".$new_array[$j]."<br/>";
+}
+
+//$title当前标题，$arrayTitle为需要查找的数组
+function getSimilar($title,$arr_title)
+{
+	$arr_len = count($arr_title);
+	for($i=0; $i<=($arr_len-1); $i++)
+	{
+		//取得两个字符串相似的字节数
+		$arr_similar[$i] = similar_text($arr_title[$i],$title);
+	}
+	arsort($arr_similar);	//按照相似的字节数由高到低排序
+	reset($arr_similar);	//将指针移到数组的第一单元
+	$index = 0;
+	foreach($arr_similar as $old_index=>$similar)
+	{
+		$new_title_array[$index] = $arr_title[$old_index];
+		$index++;
+	}
+	return $new_title_array;
+}
+运行结果是：
+与[简明现代魔法]最相关的前三个文章是：
+1:简单明了的现代魔法
+2:简单易懂的现代魔法
+3:简明扼要的古代魔法
+
++++++++php分拆数组元素的函数效率比较与分析++++++++
+有这么一个需求，一个数组$data = array(12, 43, 87, 45)，要求写一个自定义函数，
+将其数组元素的数字单个拆开，最后形成的数组如下：$data = array(1, 2, 4, 3, 8, 7, 4, 5)。
+答案一：
+function splitStrToArray_mine($array)
+{
+	$new_array = array();
+	foreach($array as $value)
+	{
+		$value = (string)$value;
+		$len = strlen($value);
+		for($i = 0; $i < $len; $i ++){
+			array_push($new_array, $value{$i});
+		}
+	}
+	return $new_array;
+}
+或者是这一种
+答案二：
+function splitStrToArray($array)
+{
+	return str_split(implode("", $array));
+}
+
++++++++++PHP发送邮件+++++++++
+PHP发送邮件的小程序很简单，不过有些需要注意的地方。先上代码：
+<?php    
+    $to = "gonnsai@163.com";  
+	$user = "Gonn";
+	$date = date("Y年m月d日");
+	
+	$headers  = 'MIME-Version: 1.0' . "rn";
+	$headers .= 'Content-type: text/html; charset=utf-8' . "rn";
+	$headers .= "To: $to rn"; 
+	$headers .= "Cc: 252211974@qq.com rn"; 
+	$headers .= 'From: gonnsai@163.com' . "rn";
+    $subject = "珠海生活圈";  
+	$subject = "=?UTF-8?B?".base64_encode($subject)."?=";
+ 
+    $content = '亲爱的'."$user".'：'.'<br />';  
+	$content .= '<br />';  
+	$content .= "感谢您注册珠海生活圈，精彩的生活从珠海生活圈开始！".'<br />';  
+    $content .= "在珠海生活圈，您可以：".'<br />';  
+	$content .= "查询珠海的商家情况，方便您生活与娱乐。".'<br />';  
+	$content .= "了解最近珠海举行的活动，让您的生活更加丰富。".'<br />';  
+	$content .= "浏览新闻热点，扩展知识面。".'<br />';  
+	$content .= '<br />';  
+	$content .= "珠海生活圈 -- 为建成珠海最大的商家数据库而不断努力着。 ".'<a href="http://www.zhuhailife.net" target="_blank">www.zhuhailife.net</a>'.'<br />'; 
+	$content .= '<br />';  
+	$content .= "珠海生活圈团队".'<br />'; 
+	$content .= "$date".'<br />';  
+    $result = mail($to, $subject, $content, $headers);  
+	
+	if($result)
+	{
+		echo '邮件发送成功！';
+	}
+	
+?>  
+
+++++++htmlspecialchars()函数++++++++
+echo htmlspecialchars($str, ENT_COMPAT); // 只转换双引号
+echo "<br>";
+echo htmlspecialchars($str, ENT_QUOTES); // 转换双引号和单引号  ，更加安全
+
+
+++++++商品秒杀计时的PHP实现+++++++
+注：秒杀时间从早上点到晚上10点。
+<?php
+//php的时间是以秒算。js的时间以毫秒算
+date_default_timezone_set('PRC');  
+//date_default_timezone_set("Asia/Hong_Kong");//地区
+//配置每天的活动时间段
+$starttimestr = "08:00:00";
+$endtimestr = "22:00:00";
+$starttime = strtotime($starttimestr);
+$endtime = strtotime($endtimestr);
+$nowtime = time();
+if ($nowtime<$starttime){
+die("活动还没开始,活动时间是：{$starttimestr}至{$endtimestr}");
+}
+$lefttime = $endtime-$nowtime; //实际剩下的时间（秒）
+?>
+<script language="JavaScript">
+<!-- //
+var runtimes = 0;
+function GetRTime(){
+var nMS = <?=$lefttime?>*1000-runtimes*1000;
+var nH=Math.floor(nMS/(1000*60*60))%24;
+var nM=Math.floor(nMS/(1000*60)) % 60;
+var nS=Math.floor(nMS/1000) % 60;
+document.getElementById("RemainH").innerHTML=nH;
+document.getElementById("RemainM").innerHTML=nM;
+document.getElementById("RemainS").innerHTML=nS;
+if(nMS>5*59*1000&&nMS<=5*60*1000)
+{
+alert("还有最后五分钟！");
+}
+runtimes++;
+setTimeout("GetRTime()",1000);
+}
+window.onload=GetRTime;
+// -->
+</script>
+<h4><strong id="RemainH">XX</strong>:<strong id="RemainM">XX</strong>:<strong id="RemainS">XX</h4>
+
+
 
 
 转码字符串格式+++++++++++ mb_convert_encoding()函数++++++++
