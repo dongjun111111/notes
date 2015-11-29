@@ -2843,6 +2843,25 @@ Array(
   [top_domain] => http://justflyhigh.com:8080
 )
 
+++++++get_headers()函数++++++++++
+get_headers()获取所有的，由服务器发送的响应一个HTTP请求的头信息
+$url='http://www.example.com';
+print_r(get_headers($url));
+结果为：
+Array(
+ [0] => HTTP/1.1 200 OK 
+ [1] => Date: Sat, 29 May 2004 12:28:13 GMT 
+ [2] => Server: Apache/1.3.27 (Unix) (Red-Hat/Linux)
+ [3] => Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT
+ [4] => ETag: "3f80f-1b6-3e1cb03b"
+ [5] => Accept-Ranges: bytes
+ [6] => Content-Length: 438
+ [7] => Connection: close
+ [8] => Content-Type: text/html 
+) 
+
+ 
+
 
 ++++++php手机号中间几位替换成星号+++++++
 $string = '王经理：13241262019，李经理：13841261234';

@@ -1,0 +1,17 @@
+
+++++++++Linux操作系统初学者的学习线路图++++++++
+如果你正在学习Linux操作系统，不知从哪里入手，可以参考下面给出的9点建议，还有一点是本人附加的，Linux程序工程师非常吃香，以后肯定是个火红职业。不管怎样，只要努力的学，后果很美好。
+1.掌握至少50个以上的常用命令。
+比如：安装和登录命令：login、 shutdown、 halt、 reboot 、mount、umount 、chsh
+文件处理命令：file、 mkdir、 grep、dd、 find、 mv 、ls 、diff、 cat、 ln
+系统管理相关命令： df、 top、 free、 quota 、at、 lp、 adduser、 groupadd kill、 crontab、 tar、 unzip、 gunzip 、last
+网络操作命令：ifconfig、 ip 、ping 、 netstat 、telnet、 ftp、 route、 rlogin rcp 、finger 、mail 、nslookup
+系统安全相关命令： passwd 、su、 umask 、chgrp、 chmod、chown、chattr、sudo、 pswho
+2.熟悉Gnome/KDE等X-windows桌面环境操作。
+3.掌握.tgz、.rpm等软件包的常用安装方法。
+4.学习添加外设，安装设备驱动程序(比如网卡）。
+5.熟悉Grub/Lilo引导其及简单的修复操作。
+6.熟悉Linux文件系统和目录结构。
+7.掌握vi，gcc,gdb等常用编辑器，编译器，调试器。
+8.理解shell别名、管道、I/O重定向、输入和输出以及shell脚本编程。
+9.学习Linux环境下的组网。
