@@ -787,6 +787,50 @@ function array_unique_fb($array2D)
     return $temp;
 }
 
++++++php生成随机时间日期的两种方法++++++++
+可以自定义时间段。
+1---》
+function rand_time($a,$b)
+{
+$a=strtotime($a);
+$b=strtotime($b);
+return date( "Y-m-d H:m:s", mt_rand($a,$b));
+}
+$date1="2014-07-26 09:03:01";
+$date2="2014-10-26 18:21:32";
+$num = 15;
+$i=0;
+while ($i < $num){
+ $date = rand_time($date1,$date2);
+ $datea[]= $date;
+ $i++;
+}
+sort($datea);
+foreach ($datea as $values)
+{
+echo $values."<br>";
+}
+
+2---》
+/**
+ *   生成某个范围内的随机时间
+ * @param <type> $begintime  起始时间 格式为 Y-m-d H:i:s
+ * @param <type> $endtime    结束时间 格式为 Y-m-d H:i:s  
+ */
+function randomDate($begintime, $endtime="") {
+    $begin = strtotime($begintime);
+    $end = $endtime == "" ? mktime() : strtotime($endtime);
+    $timestamp = rand($begin, $end);
+    return date("Y-m-d H:i:s", $timestamp);
+}
+for($i = 0; $i <= 20; $i++){
+echo randomDate("2014-06-27 09:03:01","2014-06-27 18:21:32");echo "<br />";
+}
+
+
+
+
+
 +++++++PHP截取中英混合的字符串++++++++++
 function get_word($string, $length, $dot = '..',$charset='gbk') {
     if(strlen($string) <= $length) {
