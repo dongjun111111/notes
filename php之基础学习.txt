@@ -1651,6 +1651,15 @@ $data = file($file);
 $line = $data[count($data)-1];
 echo $line;
 
++++++PHP两种方法生成强密码+++++++++
+$totalChar = 8; // 密码中字符串的个数
+// salt to select chars from
+$salt = "abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ123456789"; 
+srand((double)microtime()*1000000); // 启动随机产生器
+$Spass=""; // 设置初始值
+for ($i=0;$i<$totalChar;$i++) // 循环创建密码
+	$Spass = $Spass . substr ($salt, rand() % strlen($salt), 1);
+echo $Spass;	
 
 
 
