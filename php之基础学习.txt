@@ -2810,6 +2810,46 @@ IE/firefox常用hack.
 firefox,IE下的前端js/css调试工具。
 
 
+++++++++php分析当前url的域名和顶级域名++++++++++
+function parseDomain($url){
+    $url = strtolower(trim($url));
+    if(empty($url)) return '';
+    $regx1 = '/(https?:\/\/)(([^\/\?#]+\.)?([^\/\?#-\.]+\.)(com\.cn|org\.cn|net\.cn|com\.jp|co\.jp|com\.kr|com\.tw)(\:[0-9]+)?)/i';
+    $regx2 = '/(https?:\/\/)(([^\/\?#]+\.)?([^\/\?#-\.]+\.)(cn|com|org|net|cc|biz|hk|jp|kr|name|me|tw|la)(\:[0-9]+)?)/i';
+    $domain = $topDomain = '';
+    if(preg_match($regx1, $url, $matches)){
+        $domain = $matches[0];
+    }elseif(preg_match($regx2, $url, $matches)){
+        $domain = $matches[0];
+    }
+    if($matches){
+        if($matches[3] == 'www.'){
+            $topDomain = $domain;
+        }else{
+            foreach($matches as $key => $value){
+                if($key!=1 && $key<4) continue;
+                $topDomain .= $value;
+            }
+        }
+    }
+    return array('domain' => $domain, 'top_domain' => $topDomain);
+}
+//测试代码
+$url = 'http://www.justflyhigh.com:8080';
+printf('<pre>%s</pre>', print_r(parseDomain($url), true));
+结果为：
+Array(
+  [domain] => http://www.justflyhigh.com:8080
+  [top_domain] => http://justflyhigh.com:8080
+)
+
+
+++++++php手机号中间几位替换成星号+++++++
+$string = '王经理：13241262019，李经理：13841261234';
+echo preg_replace('/(\d{3})\d{4}/', '$1****', $string);
+或者
+$phone = '13241262019';
+echo substr_replace($phone, '****', 3, 4);
 
 
  public function search(){
@@ -2840,6 +2880,138 @@ firefox,IE下的前端js/css调试工具。
             $this->display('index');
      }
   
-
++++++++++php采集图片程序+++++++++++++
+/**
+*  采集图片php程序
+*/
+set_time_limit(0);
+/**
+* 写文件
+* @param    string  $file   文件路径
+* @param    string  $str    写入内容
+* @param    char    $mode   写入模式
+*/
+function wfile($file,$str,$mode='w')
+{
+    $oldmask = @umask(0);
+    $fp = @fopen($file,$mode);
+    @flock($fp, 3);
+    if(!$fp)
+    {
+        Return false;
+    }
+    else
+    {
+        @fwrite($fp,$str);
+        @fclose($fp);
+        @umask($oldmask);
+        Return true;
+    }
+}
+function savetofile($path_get,$path_save)
+{
+        @$hdl_read = fopen($path_get,'rb');
+        if($hdl_read == false)
+        {
+                echo("<span style='color:red'>$path_get can not get</span>");
+                Return ;
+        }
+        if($hdl_read)
+        {
+                @$hdl_write = fopen($path_save,'wb');
+                if($hdl_write)
+                {
+                        while(!feof($hdl_read))
+                        {
+                                fwrite($hdl_write,fread($hdl_read,8192));
+                        }
+                        fclose($hdl_write);
+                        fclose($hdl_read);
+                        return 1;
+                }
+                else
+                        return 0;
+        }
+        else
+                return -1;
+}
+function getExt($path)
+{
+        $path = pathinfo($path);
+        return strtolower($path['extension']);
+}
+/**
+* 按指定路径生成目录
+*
+* @param    string     $path    路径
+*/
+function mkDirs($path)
+{
+    $adir = explode('/',$path);
+    $dirlist = '';
+    $rootdir = array_shift($adir);
+    if(($rootdir!='.'||$rootdir!='..')&&!file_exists($rootdir))
+    {
+        @mkdir($rootdir);
+    }
+    foreach($adir as $key=>$val)
+    {
+        if($val!='.'&&$val!='..')
+        {
+            $dirlist .= "/".$val;
+            $dirpath = $rootdir.$dirlist;
+            if(!file_exists($dirpath))
+            {
+                @mkdir($dirpath);
+                @chmod($dirpath,0777);
+            }
+        }
+    }
+}
+/**
+* 从文本中取得一维数组
+*
+* @param    string     $file_path    文本路径
+*/
+function getFileListData($file_path)
+{
+    $arr = @file($file_path);
+    $data = array();
+    if(is_array($arr) && !empty($arr))
+    {
+        foreach($arr as $val)
+        {
+            $item = trim($val);
+            if(!empty($item))
+            {
+                $data[] = $item;
+            }
+        }
+    }
+    Return $data;
+}
+//采集开始
+//传入自己的需要采集的图片url列表文本文件 每个图片url写一行
+$url_file = isset($_GET['file'])&&!empty($_GET['file'])?$_GET['file']:null;
+$txt_url = "txt/".$url_file;
+$urls = array_unique(getFileListData($txt_url));
+if(empty($urls))
+{
+        echo('<div style="color:red">无链接地址</div>');
+        die();
+}
+$save_url = "images/".date("y_m_d",time())."/";
+mkDirs($save_url);  //按日期建立文件夹
+$i = 1;
+if(is_array($urls)&&count($urls))
+{
+        foreach($urls as $val)
+        {
+                savetofile($val,$save_url.date("His",time())."_".$i.".".getExt($val));
+                echo($i.".".getExt($val)." got\n");
+                $i++;
+        }
+}
+echo('<div style="color:green">finish</div>');
 
   
