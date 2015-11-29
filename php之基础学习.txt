@@ -300,6 +300,9 @@ function resize_image($filename, $tmpname, $xmax, $ymax)
 	} 
 
 
+
+
+
 +++++++用php访问http与https的转换+++++++
 http直接跳转为https，重定向一下就可以了。
 <?php
@@ -435,10 +438,139 @@ PHP发送邮件的小程序很简单，不过有些需要注意的地方。先�
 	
 ?>  
 
+
++++++php通过json传值给前端，javascript接收++++++++
+json.php内容是：
+<?php
+$arr=array(
+'name'=>'Bob','nick'=>'Yes',
+'contact'=>array(
+	'email'=>'json@admin.com',
+	'tel'=>'12323314567',
+     )
+);
+$json_string=json_encode($arr);
+echo "getProfile($json_string)";
+?>
+
+html内容是：
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8'>
+</head>
+<script type="text/javascript">  
+	function getProfile(str){
+	var arr=str;
+	document.getElementById('name').innerHTML=arr.name;
+	document.getElementById('nick').innerHTML=arr.nick;
+	document.getElementById('email').innerHTML=arr.contact.email;
+	document.getElementById('tel').innerHTML=arr.contact.tel;
+	
+}
+</script>
+<body>
+<h2>
+测试json
+</h2>
+<div id="name"></div>
+<div id="nick"></div>
+<div id="email"></div>
+<div id="tel"></div>
+</body>
+<script type="text/javascript" src="json.php"></script>   <!--我擦，这个引用js还只能放在这个位置，也是醉了-->
+</html>
+
+
++++++++前端javascript通过json传值给php++++++++
+JavaScript 向 PHP 传值
+json_encode.html
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>json:From javascript To php</title>
+<script src="json2.js" type="text/javascript"></script>
+<script type="text/javascript">
+function JSON_test(o)
+{
+    var user = {
+        name:document.getElementById('txt_name').value,
+        email:document.getElementById('txt_email').value,
+        password:document.getElementById('txt_password').value
+    }
+    var json_string = JSON.stringify(user);
+    document.getElementById('txt_json').value=json_string;
+    alert("点击确定后将提交表单");
+    o.submit();
+}
+</script>
+</head>
+<body>
+    <form id="form1" name="form1" method="post" action="json_encode.php" onsubmit="JSON_test(this);return flase;">
+        <label for="txt_name">姓名</label>
+        <p><input type="text" name="txt_name" id="txt_name" /></p>
+        <label for="txt_email">邮箱</label>
+        <p><input type="text" name="txt_email" id="txt_email" /></p>
+        <p><label for="txt_password">密码</label></p>
+        <p><input type="text" name="txt_password" id="txt_password" /></p>
+        <p><input type="text" name="txt_json" id="txt_json" />
+            <label for="button"></label>
+            <input type="submit" name="button" id="button" value="JSON" />
+        </p>
+    </form>
+</body>
+</html>
+这里javascript扁平化需要一个插件：http://www.json.org/json2.js，通过JSON.stringify(str)将对象扁平化然后传送给php。
+注：另有一个http://www.json.org/json.js，对应的是toJSONString方法。
+var last=obj.toJSONString(); //针对json.js
+var last=JSON.stringify(obj); //针对json2.js
+
+json_encode.php
+<?php
+    header('Content-Type: text/html; charset=utf-8');
+    $json_string = $_POST["txt_json"];
+    //echo $json_string;
+    if(ini_get("magic_quotes_gpc")=="1")
+    {
+        $json_string=stripslashes($json_string);
+    }
+    $user = json_decode($json_string);
+    echo var_dump($user);
+    echo '<br /><br /><br /><br />';
+    echo $user->name.'<br />';
+    echo $user->email.'<br />';
+    echo $user->password.'<br />';
+?>
+这里就需要用到json_decode()这个函数，然后调用其中数据用 $obj->属性即可。
+
+++++++php检验是不是win32平台+++++++
+$is_win = DIRECTORY_SEPARATOR == '\\';
+echo 一下，如果是win32平台就会输出1；
+
+
+
 ++++++htmlspecialchars()函数++++++++
 echo htmlspecialchars($str, ENT_COMPAT); // 只转换双引号
 echo "<br>";
 echo htmlspecialchars($str, ENT_QUOTES); // 转换双引号和单引号  ，更加安全
+
+
+++++++PHP返回insert操作产生的id+++++++
+<?php
+$con = mysql_connect("localhost", "hello", "321");
+if (!$con)
+{
+    die('Could not connect: ' . mysql_error());
+}
+$db_selected = mysql_select_db("test_db",$con);
+$sql = "INSERT INTO person VALUES ('Carter','Thomas','Beijing')";
+$result = mysql_query($sql,$con);
+echo "ID of last inserted record is: " . mysql_insert_id();
+mysql_close($con);
+?>
+
 
 
 ++++++商品秒杀计时的PHP实现+++++++
