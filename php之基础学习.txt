@@ -1661,6 +1661,32 @@ for ($i=0;$i<$totalChar;$i++) // 循环创建密码
 	$Spass = $Spass . substr ($salt, rand() % strlen($salt), 1);
 echo $Spass;	
 
+++++$_SERVER['HTTP_REFERER']++++++
+<?php echo $_SERVER['HTTP_REFERER'];?>可以得到链接/提交当前页的父页面URL
+如果返回“找不到文件”的提示，则可用 header 函数，header("HTTP/1.0 404 Not Found").
+写出一个正则表达式，过虑网页上的所有JS/VBS脚本（即把标记及其内容都去掉）.
+/<[^>].*?>.*?<\/>/si
+
+
+++++php数组中对键名与键值的操作+++++++
+arra_keys()获得数组键名
+$arr=array('1'=>'gg','2'=>'sd','3'=>'rg');
+$ee=array_keys($arr);
+var_dump($ee);
+结果为：
+array (size=3)
+  0 => int 1
+  1 => int 2
+  2 => int 3
+array_values()获得数组键值
+$arr=array('1'=>'gg','2'=>'sd','3'=>'rg');
+$ee=array_values($arr);
+var_dump($ee);
+结果为：
+array (size=3)
+  0 => string 'gg' (length=2)
+  1 => string 'sd' (length=2)
+  2 => string 'rg' (length=2)
 
 
 +++++++++parse_url()函数:+++++++++
@@ -1672,6 +1698,189 @@ array = parse_url( string url );
   print_r($parts);
 ?>
 结果是：Array ( [scheme] => http [host] => www.nowmagic.net [path] => /welcome/ )  ;
+
++++++++php实现论坛中无限分类++++++++++
+<?php
+/*
+数据表结构如下:
+CREATE TABLE `category` (
+`categoryID` smallint(5) unsigned NOT NULL auto_increment,
+`categoryParentID` smallint(5) unsigned NOT NULL default '0',
+`categoryName` varchar(50) NOT NULL default '',
+PRIMARY KEY (`categoryID`)
+) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+INSERT INTO `category` ( `categoryParentID`, `categoryName`) VALUES
+(0, '一级类别'),
+(1, '二级类别'),
+(1, '二级类别'),
+(1, '二级类别'),
+(2, '三级类别'),
+(2, '333332'),
+(2, '234234'),
+(3, 'aqqqqqd'),
+(4, '哈哈'),
+(5, '66333666');
+*/
+//指定分类id变量$category_id,然后返回该分类的所有子类
+//$default_category为默认的选中的分类
+function Get_Category($category_id = 0,$level = 0, $default_category =0)
+{
+global $DB;
+$sql = "SELECT * FROM category ORDER BY categoryID DESC";
+$result = $DB->query( $sql );
+while ($rows = $DB->fetch_array($result))
+{
+$category_array[$rows[categoryParentID]][$rows[categoryID]] = array('id'=> $rows[categoryID], 'parent' => $rows[categoryParentID], 'name' =>$rows
+[categoryName]);
+}
+if (!isset($category_array[$category_id]))
+{
+return "";
+}
+foreach($category_array[$category_id] AS $key => $category)
+{
+if ($category['id'] == $default_category)
+{
+echo "<option selectedvalue=".$category['id']."";
+}else
+{
+echo "<option value=".$category['id']."";
+}
+if ($level > 0)
+{
+echo ">" . str_repeat( " ", $level ) . "" . $category['name'] . "</option>/n";
+}
+else
+{
+echo ">" . $category['name'] ."</option>/n";
+}
+Get_Category($key, $level + 1, $default_category);
+}
+unset($category_array[$category_id]);
+}
+/*
+函数返回的数组格式如下所示:
+Array
+(
+[1] => Array ( [id] => 1 [name] => 一级类别[level] => 0 [ParentID] => 0 )
+[4] => Array ( [id] => 4 [name] => 二级类别[level] => 1 [ParentID] => 1 )
+[9] => Array ( [id] => 9 [name] => 哈哈[level] => 2 [ParentID] => 4 )
+[3] => Array ( [id] => 3 [name] => 二级类别[level] => 1 [ParentID] => 1 )
+[8] => Array ( [id] => 8 [name] => aqqqqqd [level] => 2[ParentID] => 3 )
+[2] => Array ( [id] => 2 [name] => 二级类别[level] => 1 [ParentID] => 1 )
+[7] => Array ( [id] => 7 [name] => 234234 [level] => 2[ParentID] => 2 )
+[6] => Array ( [id] => 6 [name] => 333332 [level] => 2[ParentID] => 2 )
+[5] => Array ( [id] => 5 [name] => 三级类别[level] => 2 [ParentID] => 2 )
+[10] => Array ( [id] => 10 [name] => 66333666 [level] => 3[ParentID] => 5 )
+)
+*/
+//指定分类id,然后返回数组
+function Category_array($category_id = 0,$level=0)
+{
+global $DB;
+$sql = "SELECT * FROM category ORDER BY categoryID DESC";
+$result = $DB->query($sql);
+while ($rows = $DB->fetch_array($result))
+{
+$category_array[$rows['categoryParentID']][$rows['categoryID']] = $rows;
+}
+foreach ($category_array AS $key=>$val)
+{
+if ($key == $category_id)
+{
+foreach ($val AS $k=> $v)
+{
+$options[$k] =
+array(
+'id' => $v['categoryID'], 'name' => $v['categoryName'], 'level'=> $level, 'ParentID'=>$v['categoryParentID']
+);
+$children = Category_array($k, $level+1);
+if (count($children) > 0)
+{
+$options = $options + $children;
+}
+}
+}
+}
+unset($category_array[$category_id]);
+return $options;
+}
+?>
+
+<?php
+class cate
+{
+       function Get_Category($category_id= 0,$level = 0, $default_category = 0)
+       {
+            echo$category_id;
+            $arr= array(
+            '0' => array(
+                           '1' => array('id' => 1, 'parent' => 0, 'name' => '1111'),
+                           '2' => array('id' => 2, 'parent' => 0, 'name' => '2222'),
+                          '4' => array('id' => 4, 'parent' => 0, 'name' =>'4444')    
+                        ),
+            '1' => array(
+                            '3' => array('id' => 3, 'parent' => 1, 'name' => '333333'),
+                          '5' => array('id' => 5, 'parent' => 1, 'name' => '555555')    
+                          ),
+                        
+            '3' => array(
+                          '6' => array('id' => 6, 'parent' => 3, 'name' => '66666'),
+                          '7' => array('id' => 7, 'parent' => 3, 'name' => '77777')
+                          ),
+            '4' => array(
+                          '8' => array('id' => 8, 'parent' => 4, 'name' => '8888'),
+                          '9' => array('id' => 9, 'parent' => 4, 'name' => '9999')
+                          )    
+            );
+            if(!isset($arr[$category_id]))
+            {
+              return "";
+            }
+    
+           foreach($arr[$category_id] AS $key => $cate)
+            {
+               if ($cate['id'] == $default_category)
+               {
+                   $txt = "<option selected value=".$cate['id']."";
+               }else{
+                   $txt = "<option value=".$cate['id']."";
+               }
+           
+               if ($level > 0)
+               {
+                  $txt1 = ">" . str_repeat( "-", $level ) . " ". $cate['name'] . "</option>/n";
+               }else{
+                   $txt1 = ">" . $cate['name'] . "</option>/n";
+               }
+               $val = $txt.$txt1;
+               echo $val;
+               self::Get_Category($key, $level + 1, $default_category);
+            }
+           
+       }
+       
+       
+       function getFlush($category_id =0,$level = 0, $default_category = 0)
+       {
+           
+           ob_start();
+          self::Get_Category($category_id ,$level, $default_category);
+           $out =ob_get_contents();
+          ob_end_clean();
+           return$out;
+       }    
+}
+$id =$_GET['id'];
+echo "<select>";
+$c = new cate();
+//$c->Get_Category();
+$ttt=  $c->getFlush($id,'0','3');
+echo $ttt;
+echo "</select>";
+?>
+
+
 
 strip_tags()函数:
 strip_tags() 函数剥去 HTML、XML 以及 PHP 的标签
