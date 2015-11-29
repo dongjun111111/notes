@@ -44,6 +44,18 @@ function getext($url){
 echo getext('http://blog.phpha.com/archives/1670.html?id=1670');
 //结果：'html'
 
++++++php输出从A到Z++++++
+我本来以为下面这一种可以
+for($i = 'A'; $i <= 'Z'; ++$i) {
+    echo $i.'<br>';}
+结果不是自己想要的，最后不得不考虑用他们的ascii码值，而这一种却可以。
+如下：
+for ($i = ord('A'); $i <= ord('Z'); ++$i)
+{
+    echo chr($i);
+}
+
+
 
 +++++++++phpstr_replace()函数与preg_replace()函数+++++++++
 str_replace(修改后的内容，希望替换的内容，原字符串或数组，替换的数目);
