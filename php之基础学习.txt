@@ -34,6 +34,17 @@ echo strtr('Hello World','la','lo');
 结果是：
 Hello world
 
+++++++PHP计算URL的文件后缀名++++++
+function getext($url){
+    $data = parse_url($url);
+    $path = $data['path'];
+    $info = pathinfo($path);
+    return $info['extension'];
+}
+echo getext('http://blog.phpha.com/archives/1670.html?id=1670');
+//结果：'html'
+
+
 +++++++++phpstr_replace()函数与preg_replace()函数+++++++++
 str_replace(修改后的内容，希望替换的内容，原字符串或数组，替换的数目);
 <?php

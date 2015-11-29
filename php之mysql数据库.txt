@@ -257,7 +257,13 @@ where (select count(b.EMPLOYEE_NAME) from EMPLOYEES as b where b.SALARY<a.SALARY
 ++++++取出数据库后10条数据++++++++
 一种方法是数据库记录倒序排序，然后用limit 10子句获取10条。
  SELECT title AS TITLE FROM news ORDER BY id DESC LIMIT 10;
+也可以取得最大记录的id，然后在WHERE子句减去10。
+SELECT temp.title as 标题 FROM news AS temp WHERE news_id > (SELECT MAX(id) FROM news) - 10;
 
+
++++++++mysql_real_escape_string() 函数+++++++++++
+mysql_real_escape_string() 函数转义 SQL 语句中使用的字符串中的特殊字符。
+保护数据库的安全——对即将运行于数据库的SQL语句进行安全性预处理.
 
 常见数据库端口号 
 MySQL: 3306
