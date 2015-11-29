@@ -571,6 +571,99 @@ echo "ID of last inserted record is: " . mysql_insert_id();
 mysql_close($con);
 ?>
 
+++++++++简单的PHP伪缓存并定时抓取某页面内容++++++++++++
+需求：要抓取某个页面的一部分内容，然后iframe到别的页面去。
+iframe的时候，不需求每次都访问源页面，而是每天只读取源页面一次，
+并生成文件，iframe的时候只访问该暂时文件，也就是伪缓存啦。这么做适合访问量不大的页面
+，降低数据库访问压力。
+<?php
+function get_page_content()
+{
+	$url = "http://www.nowamagic.net/";
+	$contents = file_get_contents($url);
+	//如果出现中文乱码使用下面代码
+	//$getcontent = iconv("gb2312″, "utf-8″,$contents);
+	//echo $contents;
+	//$pos = strstr($contents, '<div class="hot_news">');
+	//print_r($pos);
+	$array = explode('<div class="hot_news">', $contents);
+	$htmlarray = explode('<div class="car_tab border4">', $array[0]); // HTML部分
+	$cssarray = explode('<div class="hometop">', $htmlarray[0]);
+	$css_rem_inner = explode('<!--[if !IE]>导航<![endif]-->', $cssarray[0]);
+	$css_min = explode('<script type="text/javascript" src="http://www.nowamagic.net/ad_comm_t.js">', $css_rem_inner[0]);
+	$str_css = $css_min[0];
+	$head = '<base target="_blank"></base></head> ';
+	$str_1 = '<div class="car_tab border4">';
+	$str_html = $htmlarray[1]; 
+	$content = $str_css.$head.$str_1.$str_html;
+	return $content;
+}
+$cache_file = "tmp.html";
+$cache_time = 60*60*24;
+/**
+ob_start();
+echo $content;
+file_put_contents($cacheFile,ob_get_contents());
+ob_end_flush();
+**/
+echo date("Y-m-d H:i:s", time());
+echo '<br />';
+echo date("Y-m-d H:i:s", floor(@filemtime($cache_file)));
+if(time() - $cache_time > floor(@filemtime($cache_file)) )
+{
+	$content = get_page_content();
+	file_put_contents($cacheFile, $content);
+	header('Location: http://www.nowamagic.net/tmp.html');
+}
+else
+{
+	header('Location: http://www.nowamagic.net/tmp.html');
+}
+?>
+
+++++++++gmdate()函数++++++++++++
+echo gmdate('Y-m-d H:i:s', time() + 3600 * 8);
+这样不管在Linux+Apache下还是Windows下都得到了正确的结果，当然这样写还有一个好处，
+当网站是面向全世界的时候，那么网站用户只要设置所在的时区，程序自动根据用户设置的时区
+进行时间计算，数据库中信息发布时间只存当前的time()所生成的时间，那么在中国+8时区看到的
+发布时间是：2007-03-14 12:15:27，那么在欧洲+2时区用户看到这个信息的发布时间是：
+2007-03-14 06:15:27，这样信息的时间就全部对应正确了。
+
++++++++PHP用strstr()函数阻止垃圾评论+++++++
+strstr()函数简单演示
+<?php
+2
+echo strstr("Hello NowaMagic!", "NowaMagic");
+3
+?>
+程序运行结果：
+NowaMagic!
+则阻止垃圾评论的代码为：
+<?php
+$content = $_POST['content'];
+$garbage = strstr($content, "<a");
+if($garbage == false)
+{
+    //评论正常插入数据库
+}
+else
+{
+    echo "<script>alert('你的评论不能带有链接'); history.go(-1);</script>";
+}
+?>
+
+++++bin2hex()函数++++++++++
+bin2hex 将二进位转成十六进位
+语法：string bin2hex(string str);
+
++++++++strip_tags()函数+++++++++
+strip_tags()函数剥去 HTML、XML 以及 PHP 的标签。
+<?php
+echo strip_tags("Hello <b>NowaMagic!</b>");
+?>
+结果为：
+Hello NowaMagic!
+
 
 
 ++++++商品秒杀计时的PHP实现+++++++
@@ -1451,6 +1544,113 @@ function MergeSort(&$arr, $left, $right)
     Merge($arr, $left, $mid, $right);
   }
 }
+
++++++PHP获得入站的搜索引擎与关键字++++++++
+有时候，当我们从搜索引擎进入某个网站，他会有一行小字，“欢迎来自Google/百度，通过检索
+“XXX”关键字来到本站”之类的东西。那么这个功能是怎么实现的呢？其实不难，大概思路就是，
+获得入站URL，再正则我们需要的数据就行了
+<?php
+$url=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';//获取入站url。
+$search_1 = "google.com"; //q=
+$search_2 = "baidu.com"; //wd=
+$google = preg_match("/\b{$search_1}\b/",$url);//记录匹配情况，用于入站判断。
+$baidu = preg_match("/\b{$search_2}\b/",$url);
+$s_s_keyword="";
+if ($google)
+{
+    //来自google
+    $s_s_keyword=get_keyword($url,'q=');//关键词前的字符为“q=”。
+    $s_s_keyword=urldecode($s_s_keyword);
+    //$s_s_keyword=iconv("GBK","UTF-8",$s_s_keyword);//引擎为gbk
+}
+else if($baidu)
+{
+    //来自百度
+    $s_s_keyword=get_keyword($url,'wd=');//关键词前的字符为“wd=”。
+    $s_s_keyword=urldecode($s_s_keyword);
+    $s_s_keyword=iconv("GBK","UTF-8",$s_s_keyword);//引擎为gbk
+}
+echo '$s_s_keyword';
+/*
+获取来自搜索引擎入站时的关键词。
+*/
+// 函数作用：从url中提取关键词。参数说明：url及关键词前的字符。
+function get_keyword($url,$kw_start)
+{
+    $start=stripos($url,$kw_start);
+    $url=substr($url,$start+strlen($kw_start));
+    $start=stripos($url,'&');
+    if ($start>0)
+    {
+        $start=stripos($url,'&');
+        $s_s_keyword=substr($url,0,$start);
+    }
+    else
+    {
+        $s_s_keyword=substr($url,0);
+    }
+    return $s_s_keyword;
+}
+?>
+
+
++++++PHP对大文件的处理思路++++++++
+需求：现有一个1G左右的日志文件，大约有500多万行， 用php返回最后几行的内容。
+使用一些诸如file、file_get_contents之类的函数，这些函数可能就显的力不从心。
+这种方式是最为普遍的方式,它不需要将文件的内容全部读入内存,而是直接通过指针来操作,
+所以效率是相当高效的.在使用fseek来对文件进行操作时,也有多种不同的方法,
+效率可能也是略有差别的,下面是常用的两种方法.
+1-->
+首先通过fseek找到文件的最后一位EOF，然后找最后一行的起始位置，取这一行的数据，
+再找次一行的起始位置，再取这一行的位置，依次类推，直到找到了$num行。
+function tail($fp,$n,$base=5)
+{
+    assert($n>0);
+    $pos = $n+1;
+    $lines = array();
+    while(count($lines)< =$n){
+        try{
+            fseek($fp,-$pos,SEEK_END);
+        } catch (Exception $e){
+            fseek(0);
+            break;
+        }
+        $pos *= $base;
+        while(!feof($fp)){
+            array_unshift($lines,fgets($fp));
+        }
+    }
+    return array_slice($lines,0,$n);
+}
+var_dump(tail(fopen("access.log","r+"),10));
+2-->
+还是采用fseek的方式从文件最后开始读,但这时不是一位一位的读,而是一块一块的读,
+每读一块数据时,就将读取后的数据放在一个buf里,然后通过换行符(\n)的个数来判断
+是否已经读完最后$num行数据.
+$fp = fopen($file, "r");
+$line = 10;
+$pos = -2;
+$t = " ";
+$data = "";
+while ($line > 0) {
+    while ($t != "\n") {
+        fseek($fp, $pos, SEEK_END);
+        $t = fgetc($fp);
+        $pos --;
+    }
+    $t = " ";
+    $data .= fgets($fp);
+    $line --;
+}
+fclose ($fp);
+echo $data;
+还有一种，使用file方法。
+ini_set('memory_limit','-1');
+$file = 'access.log';
+$data = file($file);
+$line = $data[count($data)-1];
+echo $line;
+
 
 
 
