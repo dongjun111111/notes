@@ -197,6 +197,67 @@ return $result;
 ?> 
 
 
++++++++++MySQL CAST与CONVERT 函数的用法+++++++++++
+MySQL 的CAST()和CONVERT()函数可用来获取一个类型的值，
+并产生另一个类型的值。两者具体的语法如下：
+CAST(value as type);
+CONVERT(value, type);
+
+++++++SQL笔试题：公司员工与部门查询++++++++++++
+建表：
+DEPARTMENTS:
+DEPARTMENT_ID(primary key),
+DEPARTMENT_NAME,
+LOCATION
+EMPLOYEES:
+EMPLOYEE_ID(primary key),
+EMPLOYEE_NAME,
+EMPLOYEE_JOB,
+MANAGER,
+SALARY,
+DEPARTMENT_ID
+列出EMPLOYEES表中各部门的部门号，最高工资，最低工资
+select max(SALARY) as 最高工资,min(SALARY) as 最低工资,DEPARTMENT_ID from EMPLOYEES group by DEPARTMENT_ID;
+列出EMPLOYEES表中各部门EMPLOYEE_JOB为'CLERK'的员工的最低工资，最高工资
+select max(SALARY) as 最高工资,min(SALARY) as 最低工资,DEPARTMENT_ID as 部门号 from EMPLOYEES where EMPLOYEE_JOB = 'CLERK' group by DEPARTMENT_ID;
+对于EMPLOYEES中最低工资小于1000的部门，列出EMPLOYEE_JOB为'CLERK'的员工的部门号，最低工资，最高工资
+view sourceprint?
+select max(SALARY) as 最高工资,min(SALARY) as 最低工资,DEPARTMENT_ID as 部门号 from EMPLOYEES as b
+where EMPLOYEE_JOB ='CLERK' and 1000>(select min(SALARY) from EMPLOYEES as a where a.DEPARTMENT_ID = b.DEPARTMENT_ID) group by b.DEPARTMENT_ID
+根据部门号由高而低，工资有低而高列出每个员工的姓名，部门号，工资
+select DEPARTMENT_ID as 部门号,EMPLOYEE_NAME as 姓名,SALARY as 工资 from EMPLOYEES order by DEPARTMENT_ID desc,SALARY asc
+写出对上题的另一解决方法
+还没想到，如果你又答案，请联系www.nowamagic.net，我的联系方式在网站首页。
+列出'张三'所在部门中每个员工的姓名与部门号
+select EMPLOYEE_NAME,DEPARTMENT_ID from EMPLOYEES where DEPARTMENT_ID = (select DEPARTMENT_ID from EMPLOYEES where EMPLOYEE_NAME = '张三')
+列出每个员工的姓名，工作，部门号，部门名
+select EMPLOYEE_NAME,EMPLOYEE_JOB,EMPLOYEES.DEPARTMENT_ID,DEPARTMENTS.DEPARTMENT_NAME from EMPLOYEES,DEPARTMENTS where EMPLOYEES.DEPARTMENT_ID = DEPARTMENTS.DEPARTMENT_ID
+列出EMPLOYEES中工作为'CLERK'的员工的姓名，工作，部门号，部门名
+select EMPLOYEE_NAME,EMPLOYEE_JOB,DEPARTMENTS.DEPARTMENT_ID,DEPARTMENT_NAME from EMPLOYEES,DEPARTMENTS where DEPARTMENTS.DEPARTMENT_ID = EMPLOYEES.DEPARTMENT_ID and DEPARTMENT_JOB = 'CLERK'
+对于EMPLOYEES中有管理者的员工，列出姓名，管理者姓名（管理者外键为MANAGER）
+select a.EMPLOYEE_NAME as 姓名,b.EMPLOYEE_NAME as 管理者 from EMPLOYEES as a,EMPLOYEES as b where a.MANAGER is not null and a.MANAGER = b.EMPLOYEE_ID
+对于DEPARTMENTS表中，列出所有部门名，部门号，同时列出各部门工作为'CLERK'的员工名与工作
+select DEPARTMENT_NAME as 部门名,DEPARTMENTS.DEPARTMENT_ID as 部门号,EMPLOYEE_NAME as 员工名,EMPLOYEE_JOB as 工作 from DEPARTMENTS,EMPLOYEES
+where DEPARTMENTS.DEPARTMENT_ID *= EMPLOYEES.DEPARTMENT_ID and EMPLOYEE_JOB = 'CLERK'
+对于工资高于本部门平均水平的员工，列出部门号，姓名，工资，按部门号排序
+select a.DEPARTMENT_ID as 部门号,a.EMPLOYEE_NAME as 姓名,a.SALARY as 工资 from EMPLOYEES as a
+where a.SALARY>(select avg(SALARY) from EMPLOYEES as b where a.DEPARTMENT_ID = b.DEPARTMENT_ID) order by a.DEPARTMENT_ID
+对于EMPLOYEES，列出各个部门中平均工资高于本部门平均水平的员工数和部门号，按部门号排序
+select count(a.SALARY) as 员工数,a.DEPARTMENT_ID as 部门号 from EMPLOYEES as a
+where a.SALARY>(select avg(SALARY) from EMPLOYEES as b where a.DEPARTMENT_ID = b.DEPARTMENT_ID) group by a.DEPARTMENT_ID order by a.DEPARTMENT_ID
+对于EMPLOYEES中工资高于本部门平均水平，人数多与1人的，列出部门号，人数，按部门号排序
+select count(a.EMPLOYEE_ID) as 员工数,a.DEPARTMENT_ID as 部门号,avg(SALARY) as 平均工资 from EMPLOYEES as a
+where (select count(c.EMPLOYEE_ID) from EMPLOYEES as c where c.DEPARTMENT_ID = a.DEPARTMENT_ID and c.SALARY>(select avg(SALARY) from EMPLOYEES as b where c.DEPARTMENT_ID = b.DEPARTMENT_ID))>1
+group by a.DEPARTMENT_ID order by a.DEPARTMENT_ID
+对于EMPLOYEES中低于自己工资至少5人的员工，列出其部门号，姓名，工资，以及工资少于自己的人数
+view sourceprint?
+select a.DEPARTMENT_ID,a.EMPLOYEE_NAME,a.SALARY,(select count(b.EMPLOYEE_NAME) from EMPLOYEES as b where b.SALARY < a.SALARY) as 人数 from EMPLOYEES as a
+where (select count(b.EMPLOYEE_NAME) from EMPLOYEES as b where b.SALARY<a.SALARY)>5
+
+++++++取出数据库后10条数据++++++++
+一种方法是数据库记录倒序排序，然后用limit 10子句获取10条。
+ SELECT title AS TITLE FROM news ORDER BY id DESC LIMIT 10;
+
 
 常见数据库端口号 
 MySQL: 3306
