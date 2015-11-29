@@ -55,6 +55,9 @@ for ($i = ord('A'); $i <= ord('Z'); ++$i)
     echo chr($i);
 }
 
++++++php匹配中文+++++
+$str = '中华人民共和国';
+preg_match('/^[\x{4e00}-\x{9fa5}]+$/u',$str);
 
 
 +++++++++phpstr_replace()函数与preg_replace()函数+++++++++
@@ -76,6 +79,13 @@ public function escapeJsonString($value) {
     $result = str_replace($escapers, $replacements, $value);
     return $result;
 }
+
+++++++php计算字符串表达式的值+++++
+直接用eval()函数，并没有返回值或者保存变量。因为在退出eval后，该函数中的变量会保存其值，
+但这种方法使用了两条语句，所有不可取。最好的方法是加上return,如下所示。
+echo eval('return 1*2+3-4+67*4;');
+结果为：269
+
 
 ++++++PHP生成一个可阅读随机字符串+++++++
 function readable_random_string($length = 6){
