@@ -108,3 +108,15 @@ $str='1';
 $isok=mysql_query("update ks_link set link = concat( link ,'$str'  ) where id =2 ");
 结果为：
 -http://www.wdgj.com/111111111111111111111111111111111111111111111111111111111111-1438758949-
+
+
+inner join(等值连接)  只返回两个表中联结字段相等的行；
+left join(左联接)     返回包括左表中的所有记录和右表中联结字段相等的记录；
+right join(右联接)    返回包括右表中的所有记录和左表中联结字段相等的记录。
+
+
+利用HAVING语句过滤分组数据
+HAVING子句用于指定组或聚合的搜索条件，HAVING通常与GROUP BY 语句一起使用，如果SQL语句中不含GROUP BY子句，则HAVING的行为与WHERE子句一样.
+e.x:SELECT name,math FROM tb_demo083 GROUP BY id HAVING math > '95'
+由IN引入的关联子查询
+e.x:SELECT * FROM tb_demo083 WHERE code IN(SELECT code FROM tb_demo083 WHERE code = '$_POST[text]')
