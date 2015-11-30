@@ -46,6 +46,56 @@ echo strtr("Hilla Warld","ia","eo");
 结果是：
 Hello World;   (strtr 将字符串中出现的所有i替换成e,a替换成o)
 
++++++++php高效过滤敏感词汇+++++++++
+$badword = array(    
+    '张三','张三丰','张三丰田'    
+);    
+$badword1 = array_combine($badword,array_fill(0,count($badword),'*'));    
+$bb = '我今天开着张三丰田上班';    
+$str = strtr($bb, $badword1);    
+echo $str;  
+
+++++++php查找字符串中的特定字符++++++++
+$hei=array(    
+'中国',    
+'日本'    
+);    
+$blacklist="/".implode("|",$hei)."/i";    
+$str="中国一是一个很好的国家";    
+if(preg_match($blacklist, $str, $matches)){    
+    print "found:". $matches[0];    
+  } else {    
+    print "not found.";    
+  }    
+
+
+++++++php用Curl抓取远程图片/文件++++++++++
+header('Contents-Type:text/html;charset=utf-8');  
+$curl = curl_init();  
+$a =  '<img src="http://p0.so.qhimg.com/sdr/200_200_/t013663df1bf55ce250.jpg"  /> ';  
+if(!preg_match_all("/(href|src)=([\"|']?)([^\"'>]+\\.(gif|jpg|jpeg|bmp|png))\\2/i",$a,$result)) {  
+    exit('没有匹配到图');  
+}  
+  // 设置你需要抓取的URL  
+curl_setopt($curl, CURLOPT_URL, $result[3][0]);  
+// 设置header  
+curl_setopt($curl, CURLOPT_HEADER, 0);  
+// 设置cURL 参数，要求结果保存到字符串中还是输出到屏幕上。  
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);  
+//超时设置  
+curl_setopt($curl, CURLOPT_TIMEOUT, 10);  
+// 运行cURL，请求网页  
+$filedata = curl_exec($curl);  
+//如果curl没启用 就用原始的  
+//$filedata = file_get_contents($result[3][0]);  
+header('Content-Type: image/jpeg');  
+//输出这个图片  
+var_dump($filedata);
+//本地保存  
+file_put_contents('a.jpeg',$filedata); 
+
+
+
 
 ++++++PHP计算URL的文件后缀名++++++
 function getext($url){
