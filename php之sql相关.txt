@@ -1,7 +1,7 @@
-SQL笔试题集锦 
+SQL笔试题
 1.一道SQL语句面试题，关于group by表内容：
 info 表
-date result
+date     result
 2005-05-09 win
 2005-05-09 lose
 2005-05-09 lose
@@ -10,13 +10,11 @@ date result
 2005-05-10 lose
 2005-05-10 lose
 
- 
-
 如果要生成下列结果, 该如何写sql语句?
-   　　         win lose
+   　    win lose
 
-2005-05-09 2 2
-2005-05-10 1 2
+2005-05-09 2   2
+2005-05-10 1   2
 
 答案：
 (1) select date, sum(case when result = "win" then 1 else 0 end) as "win", sum(case when result = "lose" then 1 else 0 end) as "lose" from info group by date;
@@ -59,7 +57,6 @@ select (case when chinese >= 80 then "excellent" when chinese >= 60 then "pass" 
 如使用存储过程也可以。
 
 table1
-
 月份mon 部门dep 业绩yj
 
 -------------------------------
@@ -69,9 +66,8 @@ table1
 二月份      02      8
 二月份      04      9
 三月份      03      8
+
 table2
-
-
 部门dep      部门名称dname
 --------------------------------
       01      国内业务一部
@@ -82,7 +78,6 @@ table2
  
 
 table3 （result）
-
 部门dep 一月份      二月份      三月份
 --------------------------------------
       01      10        null      null
@@ -111,11 +106,11 @@ $isok=mysql_query("update ks_link set link = concat( link ,'$str'  ) where id =2
 
 
 inner join(等值连接)  只返回两个表中联结字段相等的行；
-left join(左联接)     返回包括左表中的所有记录和右表中联结字段相等的记录；
+left  join(左联接)     返回包括左表中的所有记录和右表中联结字段相等的记录；
 right join(右联接)    返回包括右表中的所有记录和左表中联结字段相等的记录。
 
 
-利用HAVING语句过滤分组数据
+++++++利用HAVING语句过滤分组数据++++++
 HAVING子句用于指定组或聚合的搜索条件，HAVING通常与GROUP BY 语句一起使用，如果SQL语句中不含GROUP BY子句，则HAVING的行为与WHERE子句一样.
 e.x:SELECT name,math FROM tb_demo083 GROUP BY id HAVING math > '95'
 由IN引入的关联子查询

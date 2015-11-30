@@ -1,4 +1,4 @@
-     主网站：   www.kancloud.cn/manual/thinkphp
+主网站：   www.kancloud.cn/manual/thinkphp
 
 1.  use Think\Controller   ----/1686
 表示的是引入Think\Controller类库便于直接使用。
@@ -799,3 +799,81 @@ notempty标签的使用：
 		<else/> // 没有值得话输出
 		<td colspan="6" class="text-center"> aOh! 暂时还没有内容! </td>
 </notempty>
+
+
+1》》》》U方法
+U方法用于完成对URL地址的组装，特点在于可以自动根据当前的URL模式和设置生成对应的URL地址，格式为：
+U('地址','参数','伪静态','是否跳转','显示域名');
+在模板中使用U方法而不是固定写死URL地址的好处在于，一旦你的环境变化或者参数设置改变，你不需要更改模板中的任何代码。
+在模板中的调用格式需要采用 {:U('地址', '参数'…)} 的方式；
+2》》》》I函数
+养成使用I函数获取输入变量的好习惯；
+3》》》》C方法
+无论何种配置文件，定义了配置文件之后，都统一使用系统提供的C方法（可以借助Config单词来帮助记忆）来读取已有的配置。
+获取已经设置的参数值：C('参数名称')
+4》》》》M方法
+thinkphp的M方法,意思就创建一个Model类
+
+5》》》》
+在Controller文件下创建TestController.class.php文件，内容为
+<?php
+namespace Admin\Controller;  //本类文件所在位置的上级目录,即TestController.class.php在Admin/Controller下面
+class TestController extends AdminController {
+	public function test()
+	{
+    $this->display();
+        }
+}
+在View目录下创建Test/test.html,内容为
+{:U{'Blog/read?id=1'}}
+?>
+6》》》》MVC传递变量
+
+public function test()
+        {
+		$value="Bob";
+		$this->assign('name',$value);
+		$this->display();
+	}
+模板赋值通过在模板中设定值，视图页面用{$name}即可接收。
+assign方法必须在display和show方法之前调用，并且系统只会输出设定的变量，
+其它变量不会输出（系统变量例外），一定程度上保证了变量的安全性。
+display方法
+如果没有按照模板定义规则来定义模板文件（或者需要调用其他控制器下面的某个模板），可以使用：
+// 指定模板输出
+$this->display('edit'); 
+
+7》》》》T方法
+为了更方便的输出模板文件，新版封装了一个T函数用于生成模板文件名。
+T函数的返回值是一个完整的模板文件名，可以直接用于display和fetch方法进行渲染输出。
+T('Public/menu');
+// 返回 当前模块/View/Public/menu.html
+8》》》》show方法
+如果你没有定义任何模板文件，或者把模板内容存储到数据库中的话，你就需要使用show方法来渲染输出了，show方法的调用格式：
+show('渲染内容'[,'字符编码'][,'输出类型'])
+例如，$this->show($content);
+也可以指定编码和类型： $this->show($content, 'utf-8', 'text/xml');
+
+9》》》》 wb强制以二进制方式写入
+$file = fopen("/home/test/test.gif","wb");
+
+10》》》》fputcvs()
+fputcsv() 函数将行格式化为 CSV 并写入一个打开的文件中。
+该函数返回写入字符串的长度。如果失败，则返回 FALSE。
+<?php
+$list = array
+(
+"Peter,Griffin,Oslo,Norway",
+"Glenn,Quagmire,Oslo,Norway",
+);
+$file = fopen("contacts.csv","w");
+foreach ($list as $line)
+{
+fputcsv($file,split(',',$line));
+}
+fclose($file); ?>
+上面代码执行后，CSV 文件将如下所示：
+Peter,Griffin,Oslo,Norway
+Glenn,Quagmire,Oslo,Norway
+
+
