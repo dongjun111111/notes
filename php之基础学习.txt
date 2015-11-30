@@ -34,6 +34,19 @@ echo strtr('Hello World','la','lo');
 结果是：
 Hello world
 
++++strpbrk()函数+++++++++
+该函数返回指定字符第一次出现的位置开始的剩余部分，如果失败，返回false。
+echo strpbrk('i love hz','ve');
+结果是：
+ve hz
+
+++++++strtr()函数+++++++  效果相当于str_replace()
+该函数替换原字符串中出现过的所有相同元素。
+echo strtr("Hilla Warld","ia","eo");
+结果是：
+Hello World;   (strtr 将字符串中出现的所有i替换成e,a替换成o)
+
+
 ++++++PHP计算URL的文件后缀名++++++
 function getext($url){
     $data = parse_url($url);
