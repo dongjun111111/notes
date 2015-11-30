@@ -79,3 +79,55 @@ IE和firefox事件冒泡的不同。
 DTD的定义
 IE/firefox常用hack.
 firefox,IE下的前端js/css调试工具。
+
++++++手机触摸屏的JS事件++++++++
+作者 管理员  发布时间 2013-06-13 17:38  文章分类 JavaScript  文章评论 1条评论  阅读次数 
+处理Touch事件能让你跟踪用户的每一根手指的位置。你可以绑定以下四种Touch事件：
+一、
+touchstart:// 手指放到屏幕上的时候触发
+touchmove:// 手指在屏幕上移动的时候触发
+touchend:// 手指从屏幕上拿起的时候触发
+touchcancel:// 系统取消touch事件的时候触发。至于系统什么时候会取消，不详
+二、
+client / clientY：// 触摸点相对于浏览器窗口viewport的位置
+pageX / pageY：// 触摸点相对于页面的位置
+screenX /screenY：// 触摸点相对于屏幕的位置
+identifier：>// touch对象的unique ID
+
+
+++++++js判断浏览器版本+++++
+var Sys = {};
+var ua = navigator.userAgent.toLowerCase();
+if (window.ActiveXObject)
+Sys.ie = ua.match(/msie ([\d.]+)/)[1]
+else if (document.getBoxObjectFor)
+Sys.firefox = ua.match(/firefox\/([\d.]+)/)[1]
+else if (window.MessageEvent && !document.getBoxObjectFor)
+Sys.chrome = ua.match(/chrome\/([\d.]+)/)[1]
+else if (window.opera)
+Sys.opera = ua.match(/opera.([\d.]+)/)[1]
+else if (window.openDatabase)
+Sys.safari = ua.match(/version\/([\d.]+)/)[1];
+//以下进行测试
+if(Sys.ie) document.write('IE: '+Sys.ie);
+if(Sys.firefox) document.write('Firefox: '+Sys.firefox);
+if(Sys.chrome) document.write('Chrome: '+Sys.chrome);
+if(Sys.opera) document.write('Opera: '+Sys.opera);
+if(Sys.safari) document.write('Safari: '+Sys.safari);
+还可以写成下面这种：
+var Sys = {};
+var ua = navigator.userAgent.toLowerCase();
+window.ActiveXObject ? Sys.ie = ua.match(/msie ([\d.]+)/)[1] :
+document.getBoxObjectFor ? Sys.firefox = ua.match(/firefox\/([\d.]+)/)[1] :
+window.MessageEvent && !document.getBoxObjectFor ? Sys.chrome = ua.match(/chrome\/([\d.]+)/)[1] :
+window.opera ? Sys.opera = ua.match(/opera.([\d.]+)/)[1] :
+window.openDatabase ? Sys.safari = ua.match(/version\/([\d.]+)/)[1] : 0;
+//以下进行测试
+if(Sys.ie) document.write('IE: '+Sys.ie);
+if(Sys.firefox) document.write('Firefox: '+Sys.firefox);
+if(Sys.chrome) document.write('Chrome: '+Sys.chrome);
+if(Sys.opera) document.write('Opera: '+Sys.opera);
+if(Sys.safari) document.write('Safari: '+Sys.safari);
+
+JS各种弹窗效果：
+http://www.web92.net/dom/2012-06-04-XY_Tips/
