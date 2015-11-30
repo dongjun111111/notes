@@ -1,169 +1,110 @@
 SQL笔试题集锦 
 1.一道SQL语句面试题，关于group by表内容：
-
 info 表
-
 date result
-
 2005-05-09 win
-
 2005-05-09 lose
-
 2005-05-09 lose
-
 2005-05-09 lose
-
 2005-05-10 win
-
 2005-05-10 lose
-
 2005-05-10 lose
 
  
 
 如果要生成下列结果, 该如何写sql语句?
-
- 
-
    　　         win lose
 
 2005-05-09 2 2
-
 2005-05-10 1 2
 
 答案：
-
 (1) select date, sum(case when result = "win" then 1 else 0 end) as "win", sum(case when result = "lose" then 1 else 0 end) as "lose" from info group by date;
-
 (2) select a.date, a.result as win, b.result as lose
-
 　　from
-
 　　(select date, count(result) as result from info where result = "win" group by date) as a
-
 　　join
-
 　　(select date, count(result) as result from info where result = "lose" group by date) as b
-
 　　on a.date = b.date;
 
  
 
 2.表中有A B C三列,用SQL语句实现：当A列大于B列时选择A列否则选择B列，当B列大于C列时选择B列否则选择C列
-
 select (case when a > b then a else b end), (case when b > c then b else c end) from table;
 
- 
 
 3.请取出tb_send表中日期(SendTime字段)为当天的所有记录? (SendTime字段为datetime型，包含日期与时间)
-
 ------------------------------------------
-
 select * from tb where datediff(dd,SendTime,getdate())=0
 
  
 
 4.有一张表，里面有3个字段：chinese，math，english。其中有一条记录chinese 70分，math 80分，english 58分，请用一条sql语句查询出所有记录并按以下条件显示出来（并写出您的思路）： 
-
    大于或等于80表示excellent，大于或等于60表示pass，小于60分表示fail。 
-
        显示格式： 以上面的chinese 70分，math 80分，english 58分
-
        chinese              math                english 
-
        pass                  excellent           fail
 
  
 
 select (case when chinese >= 80 then "excellent" when chinese >= 60 then "pass" else "fail" end) as chinese,
-
 　　(case when math >= 80 then "excellent" when math >= 60 then "pass" else "fail" end) as math,
-
 　　(case when english >= 80 then "excellent" when english >= 60 then "pass" else "fail" end) as english
-
 　　from grade;
 
  
 
 5.请用一个sql语句得出结果
-
 从table1,table2中取出如table3所列格式数据，注意提供的数据及结果不准确，只是作为一个格式向大家请教。
-
 如使用存储过程也可以。
 
- 
-
 table1
-
- 
 
 月份mon 部门dep 业绩yj
 
 -------------------------------
-
 一月份      01      10
-
 一月份      02      10
-
 一月份      03      5
-
 二月份      02      8
-
 二月份      04      9
-
 三月份      03      8
-
- 
-
 table2
 
- 
 
 部门dep      部门名称dname
-
 --------------------------------
-
       01      国内业务一部
-
       02      国内业务二部
-
       03      国内业务三部
-
       04      国际业务部
 
  
 
 table3 （result）
 
- 
-
 部门dep 一月份      二月份      三月份
-
 --------------------------------------
-
       01      10        null      null
-
       02      10         8        null
-
       03      null       5        8
-
       04      null      null      9
 
-------------------------------------------
-
+-----------------------------------------
  
 
 select t1.dep,
-
 sum(case when mon = 1 then yj else 0 end) as jun,
-
 sum(case when mon = 2 then yj else 0 end) as feb,
-
 sum(case when mon = 3 then yj else 0 end) as mar
-
 from
-
 t1 right join t2 on t1.dep = t2.dep
-
 group by t1.dep;
 
+
+
+向mysql数据库某一字段中 追加 内容 ，请用concat()；实例：
+$str='1';
+$isok=mysql_query("update ks_link set link = concat( link ,'$str'  ) where id =2 ");
+结果为：
+-http://www.wdgj.com/111111111111111111111111111111111111111111111111111111111111-1438758949-
