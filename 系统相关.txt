@@ -15,3 +15,19 @@
 7.掌握vi，gcc,gdb等常用编辑器，编译器，调试器。
 8.理解shell别名、管道、I/O重定向、输入和输出以及shell脚本编程。
 9.学习Linux环境下的组网。
+
+ +++++++++++开机顺序 +++++++++++
+1) BIOS: BIOS是写在主板上的程序，他负责查找硬盘的MBR。
+2) MBR: 主引导分区，内包含Boot Loader
+3) Boot Loader: 按用户选择读取操作系统内核程序
+4) Kernel: 内核程序运行，开机
+Tips ： 安装Windows和Linux双系统，应该先安装Windows再安装Linux，因为先安装Linux，在Windows安装时会覆盖MBR，重写Boot Loader程序，这样会导致Loader无法查找到Linux。而Linux在安装时可以手动选择安装Loader程序的启动扇区，或者设置Loader程序的启动菜单，而不会破坏Windows的loader。当然如果先装了Linux，MBR被覆盖后也可以用其他方式来修复MBR
+
+++++++unix/linux 基本使用++++++++
+linux下查看当前系统负载信息的一些方法。
+vim的基本快捷键。
+ssh 安全增强方法;密码方式和rsa key 方式的配置。
+rpm/apt/yum/ports 装包，查询，删除的基本命令。
+Makefile的基本格式，gcc 编译，连接的命令,-O0 和-O3区别。
+gdb,strace,valgrind的基本使用.
+

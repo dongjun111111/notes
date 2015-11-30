@@ -60,4 +60,22 @@ myBody.appendChild(myP);
 }  
 </script>  
 
+++++++++jquery中attr()使用++++++++
+<script>                                  //用attr设置属性值
+$("ul li:eq(1)").attr("title","不吃橘子");
+alert($("ul li:eq(1)").attr("title"));
+</script>
+                                          //用attr删除属性值
+<script>
+$("ul li:eq(1)").removeAttr ("title");
+</script>
 
+++++需要掌握的前端,HTML,JS知识点++++++++
+css盒模型。
+javascript中的prototype。
+javascript中this对象的作用域。
+IE和firefox事件冒泡的不同。
+什么是怪异模式,标准模式，近标准模式。
+DTD的定义
+IE/firefox常用hack.
+firefox,IE下的前端js/css调试工具。

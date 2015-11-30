@@ -1,0 +1,2119 @@
+++++++php用Curl抓取远程图片/文件++++++++++
+header('Contents-Type:text/html;charset=utf-8');  
+$curl = curl_init();  
+$a =  '<img src="http://p0.so.qhimg.com/sdr/200_200_/t013663df1bf55ce250.jpg"  /> ';  
+if(!preg_match_all("/(href|src)=([\"|']?)([^\"'>]+\\.(gif|jpg|jpeg|bmp|png))\\2/i",$a,$result)) {  
+    exit('没有匹配到图');  
+}  
+  // 设置你需要抓取的URL  
+curl_setopt($curl, CURLOPT_URL, $result[3][0]);  
+// 设置header  
+curl_setopt($curl, CURLOPT_HEADER, 0);  
+// 设置cURL 参数，要求结果保存到字符串中还是输出到屏幕上。  
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);  
+//超时设置  
+curl_setopt($curl, CURLOPT_TIMEOUT, 10);  
+// 运行cURL，请求网页  
+$filedata = curl_exec($curl);  
+//如果curl没启用 就用原始的  
+//$filedata = file_get_contents($result[3][0]);  
+header('Content-Type: image/jpeg');  
+//输出这个图片  
+var_dump($filedata);
+//本地保存  
+file_put_contents('a.jpeg',$filedata); 
+
+
++++++++php高效过滤敏感词汇+++++++++
+$badword = array(    
+    '张三','张三丰','张三丰田'    
+);    
+$badword1 = array_combine($badword,array_fill(0,count($badword),'*'));    
+$bb = '我今天开着张三丰田上班';    
+$str = strtr($bb, $badword1);    
+echo $str;  
+
+
+++++++php查找字符串中的特定字符++++++++
+$hei=array(    
+'中国',    
+'日本'    
+);    
+$blacklist="/".implode("|",$hei)."/i";    
+$str="中国一是一个很好的国家";    
+if(preg_match($blacklist, $str, $matches)){    
+    print "found:". $matches[0];    
+  } else {    
+    print "not found.";    
+  }    
+
+  ++++++PHP计算URL的文件后缀名++++++
+function getext($url){
+    $data = parse_url($url);
+    $path = $data['path'];
+    $info = pathinfo($path);
+    return $info['extension'];
+}
+echo getext('http://blog.phpha.com/archives/1670.html?id=1670');
+//结果：'html'
+
++++++php输出从A到Z++++++
+我本来以为下面这一种可以
+for($i = 'A'; $i <= 'Z'; ++$i) {
+    echo $i.'<br>';}
+结果不是自己想要的，最后不得不考虑用他们的ascii码值，而这一种却可以。
+如下：
+for ($i = ord('A'); $i <= ord('Z'); ++$i)
+{
+    echo chr($i);
+}
+
++++++php匹配中文+++++
+$str = '中华人民共和国';
+preg_match('/^[\x{4e00}-\x{9fa5}]+$/u',$str);
+
+++++++php计算字符串表达式的值+++++
+直接用eval()函数，并没有返回值或者保存变量。因为在退出eval后，该函数中的变量会保存其值，
+但这种方法使用了两条语句，所有不可取。最好的方法是加上return,如下所示。
+echo eval('return 1*2+3-4+67*4;');
+结果为：269
+
+
+++++++PHP生成一个可阅读随机字符串+++++++
+function readable_random_string($length = 6){
+    $conso=array("b","c","d","f","g","h","j","k","l",
+    "m","n","p","r","s","t","v","w","x","y","z");    $vocal=array("a","e","i","o","u");
+    $password="";
+    srand ((double)microtime()*1000000);
+    $max = $length/2;
+    for($i=1; $i<=$max; $i++)
+    {
+    $password.=$conso[rand(0,19)];
+    $password.=$vocal[rand(0,4)];
+    }
+    return $password;
+}
+var_dump(readable_random_string(7));
+其中一个结果为：
+string 'wopunu' (length=6)
+
+++++PHP编码电子邮件地址++++++
+使用此代码，可以将任何电子邮件地址编码为 html 字符实体，以防止被垃圾邮件程序收集。
+function encode_email($email='info@domain.com', $linkText='Contact Us', $attrs ='class="emailencoder"' )
+{
+    $email = str_replace('@', '@', $email);
+    $email = str_replace('.', '.', $email);
+    $email = str_split($email, 5);  
+    $linkText = str_replace('@', '@', $linkText);
+    $linkText = str_replace('.', '.', $linkText);
+    $linkText = str_split($linkText, 5);  
+    $part1 = '<a href="ma';
+    $part2 = 'ilto:';
+    $part3 = '" '. $attrs .' >';
+    $part4 = '</a>';  
+  
+    $encoded = '<script type="text/javascript">';
+    $encoded .= "document.write('$part1');";
+    $encoded .= "document.write('$part2');";
+    foreach($email as $e)
+    {
+            $encoded .= "document.write('$e');";
+    }
+    $encoded .= "document.write('$part3');";
+    foreach($linkText as $l)
+    {
+            $encoded .= "document.write('$l');";
+    }
+    $encoded .= "document.write('$part4');";
+    $encoded .= '</script>';  
+    return $encoded;
+}
+var_dump(encode_email('thff@dfgf.com','dbgdbd','grrg'));
+结果为：
+string '<script type="text/javascript">document.write('<a href="ma');document.write
+('ilto:');document.write('thff@');document.write('dfgf.');document.write('com');
+document.write('" grrg >');document.write('dbgdb');document.write('d');document.write('</a>');</script>' (length=2)
+
+++++++php删除一个目录+++++++++++
+删除一个目录，包括它的内容。
+/*****
+*@dir - Directory to destroy
+*@virtual[optional]- whether a virtual directory
+*/
+function destroyDir($dir, $virtual = false)
+{
+    $ds = DIRECTORY_SEPARATOR;
+    $dir = $virtual ? realpath($dir) : $dir;
+    $dir = substr($dir, -1) == $ds ? substr($dir, 0, -1) : $dir;
+    if (is_dir($dir) && $handle = opendir($dir))
+    {
+        while ($file = readdir($handle))
+        {
+            if ($file == '.' || $file == '..')
+            {
+             continue;
+            }
+            elseif (is_dir($dir.$ds.$file))
+            {
+                destroyDir($dir.$ds.$file);
+            }
+            else
+            {
+                unlink($dir.$ds.$file);
+            }
+        }
+        closedir($handle);
+        rmdir($dir);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+++++++php解析XML+++++++++
+$xml_string="<?xml version='1.0'?>
+<users>
+<user id='398'>
+<name>Foo</name>
+<email>foo@bar.com</name>
+</user>
+<user id='867'>
+<name>Foobar</name>
+<email>foobar@foo.com</name>
+</user>
+</users>"; 
+//load the xml string using simplexml
+$xml = simplexml_load_string($xml_string); 
+//loop through the each node of user
+foreach ($xml->user as $user)
+{
+    //access attribute
+    echo $user['id'], ' ';
+    //subnodes are accessed by -> operator
+    echo $user->name, ' ';
+    echo $user->email, '<br />';
+}
+
+++++++PHP创建日志缩略名++++++
+创建用户友好的日志缩略名
+function create_slug($string){
+    $slug=preg_replace('/[^A-Za-z0-9-]+/', '-', $string);
+    return $slug;
+}
+
+++++++++ PHP获取客户端真实 IP 地址++++++++++
+该函数将获取用户的真实 IP 地址，即便他使用代理服务器。
+function getRealIpAddr()
+{
+    if (!emptyempty($_SERVER['HTTP_CLIENT_IP']))
+    {
+        $ip=$_SERVER['HTTP_CLIENT_IP'];
+    }
+    elseif (!emptyempty($_SERVER['HTTP_X_FORWARDED_FOR']))
+    //to check ip is pass from proxy
+    {
+        $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else
+    {
+        $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+
++++++++PHP强制性文件下载++++++++
+为用户提供强制性的文件下载功能
+function force_download($file)
+{
+    if ((isset($file))&&(file_exists($file))) {
+        header("Content-length: ".filesize($file));
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $file . '"');
+        readfile("$file");
+    }
+    else {
+        echo "No file selected";
+    }
+}
+
++++++PHP创建标签云+++++++
+function getCloud( $data = array(), $minFontSize = 12, $maxFontSize = 30 )
+{
+    $minimumCount = min( array_values( $data ) );
+    $maximumCount = max( array_values( $data ) );
+    $spread = $maximumCount - $minimumCount;
+    $cloudHTML = '';
+    $cloudTags = array(); 
+    $spread == 0 && $spread = 1; 
+    foreach( $data as $tag => $count )
+    {
+        $size = $minFontSize + ( $count - $minimumCount )
+        * ( $maxFontSize - $minFontSize ) / $spread;
+       $cloudTags[] = '<a style="font-size: ' . floor( $size ) . 'px'
+        . '" href="#" title="\'' . $tag .
+        '\' returned a count of ' . $count . '">'
+        . htmlspecialchars( stripslashes( $tag ) ) . '</a>';
+    } 
+    return join( "\n", $cloudTags ) . "\n";
+}
+$arr = Array('Actionscript' => 35, 'Adobe' => 22, 'Array' => 44, 'Background' => 43,
+'Blur' => 18, 'Canvas' => 33, 'Class' => 15, 'Color Palette' => 11, 'Crop' => 42,
+'Delimiter' => 13, 'Depth' => 34, 'Design' => 8, 'Encode' => 12, 'Encryption' => 30,
+'Extract' => 28, 'Filters' => 42);
+echo getCloud($arr, 12, 36);
+
++++++PHP为URL地址预设 http字符串++++++++
+有时需要接受一些表单中的网址输入，但用户很少添加 http:// 字段，此代码将为网址添加该字段。
+if (!preg_match("/^(http|ftp):/", $_POST['url'])) {
+   $_POST['url'] = 'http://'.$_POST['url'];
+   } 
+
+++++++++PHP将网址字符串转换成超级链接+++++++++
+该函数将 URL 和 E-mail 地址字符串转换为可点击的超级链接。
+function makeClickableLinks($text) {
+	    $text = eregi_replace('(((f|ht){1}tp://)[-a-zA-Z0-9@:%_+.~#?&//=]+)',
+	    '<a href="\1">\1</a>', $text);
+	    $text = eregi_replace('([[:space:]()[{}])(www.[-a-zA-Z0-9@:%_+.~#?&//=]+)',
+	    '\1<a href="http://\2">\2</a>', $text);
+	    $text = eregi_replace('([_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,3})',
+	    '<a href="mailto:\1">\1</a>', $text); 
+	    return $text;
+} 
+
+++++++PHP调整图像尺寸++++++
+创建图像缩略图需要许多时间，此代码将有助于了解缩略图的逻辑。
+function resize_image($filename, $tmpname, $xmax, $ymax)
+	{
+	    $ext = explode(".", $filename);
+	    $ext = $ext[count($ext)-1];  
+	    if($ext == "jpg" || $ext == "jpeg")
+	        $im = imagecreatefromjpeg($tmpname);
+	    elseif($ext == "png")
+	        $im = imagecreatefrompng($tmpname);
+	    elseif($ext == "gif")
+	        $im = imagecreatefromgif($tmpname); 
+	    $x = imagesx($im);
+	    $y = imagesy($im);   
+	    if($x <= $xmax && $y <= $ymax)
+	        return $im;  
+	    if($x >= $y) {
+	        $newx = $xmax;
+	        $newy = $newx * $y / $x;
+	    }
+	    else {
+	        $newy = $ymax;
+	        $newx = $x / $y * $newy;
+	    }  
+	  
+	    $im2 = imagecreatetruecolor($newx, $newy);
+	    imagecopyresized($im2, $im, 0, 0, 0, 0, floor($newx), floor($newy), $x, $y);
+	    return $im2;
+	} 
+
+
+
+
+
++++++++用php访问http与https的转换+++++++
+http直接跳转为https，重定向一下就可以了。
+<?php
+	header("Location:https://www.nowamagic.com");
+?>
+当访问 http 时，跳 https：
+<?php
+//http转化为https   
+if ($_SERVER["HTTPS"] <> "on")
+{
+	$xredir="https://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+	header("Location: ".$xredir);
+}
+?>  
+当访问 https 时，跳 http：
+<?php
+//https转化为http   
+if ($_SERVER["HTTPS"] == "on")  
+{  
+	$xredir="http://".$_SERVER["SERVER_NAME"]. $_SERVER["REQUEST_URI"];  
+	header("Location: ".$xredir);  
+}   
+?>
+在网页开头包含上面代码即可。
+
++++++php截取GB2312中文字符串++++++++
+function mysubstr($str, $start, $len) {
+    $tmpstr = "";
+    $strlen = $start + $len;
+    for($i = 0; $i < $strlen; $i++) {
+        if(ord(substr($str, $i, 1)) > 0xa0) {
+            $tmpstr .= substr($str, $i, 2);
+            $i++;
+        } else
+            $tmpstr .= substr($str, $i, 1);
+    }
+    return $tmpstr;
+}
+
++++++++PHP“相关文章推荐”功能的简易实现+++++++++++
+$demo_title = "简明现代魔法";
+$demo_arr_title = array("简单易懂的现代魔法","简单明了的现代魔法","简明扼要的古代魔法","不简单的现代魔法","很难懂的现代魔法");
+$new_array = getSimilar($demo_title,$demo_arr_title);
+//print_r($new_array);
+echo "与[$demo_title]最相关的前三个文章是：<br/>";
+for($j=0; $j<=2; $j++)
+{ 
+	echo ($j+1).":".$new_array[$j]."<br/>";
+}
+//$title当前标题，$arrayTitle为需要查找的数组
+function getSimilar($title,$arr_title)
+{
+	$arr_len = count($arr_title);
+	for($i=0; $i<=($arr_len-1); $i++)
+	{
+		//取得两个字符串相似的字节数
+		$arr_similar[$i] = similar_text($arr_title[$i],$title);
+	}
+	arsort($arr_similar);	//按照相似的字节数由高到低排序
+	reset($arr_similar);	//将指针移到数组的第一单元
+	$index = 0;
+	foreach($arr_similar as $old_index=>$similar)
+	{
+		$new_title_array[$index] = $arr_title[$old_index];
+		$index++;
+	}
+	return $new_title_array;
+}
+运行结果是：
+与[简明现代魔法]最相关的前三个文章是：
+1:简单明了的现代魔法
+2:简单易懂的现代魔法
+3:简明扼要的古代魔法
+
++++++++php分拆数组元素的函数效率比较与分析++++++++
+有这么一个需求，一个数组$data = array(12, 43, 87, 45)，要求写一个自定义函数，
+将其数组元素的数字单个拆开，最后形成的数组如下：$data = array(1, 2, 4, 3, 8, 7, 4, 5)。
+答案一：
+function splitStrToArray_mine($array)
+{
+	$new_array = array();
+	foreach($array as $value)
+	{
+		$value = (string)$value;
+		$len = strlen($value);
+		for($i = 0; $i < $len; $i ++){
+			array_push($new_array, $value{$i});
+		}
+	}
+	return $new_array;
+}
+或者是这一种
+答案二：
+function splitStrToArray($array)
+{
+	return str_split(implode("", $array));
+}
+
++++++++++PHP发送邮件+++++++++
+PHP发送邮件的小程序很简单，不过有些需要注意的地方。先上代码：
+<?php    
+    $to = "gonnsai@163.com";  
+	$user = "Gonn";
+	$date = date("Y年m月d日");
+	
+	$headers  = 'MIME-Version: 1.0' . "rn";
+	$headers .= 'Content-type: text/html; charset=utf-8' . "rn";
+	$headers .= "To: $to rn"; 
+	$headers .= "Cc: 252211974@qq.com rn"; 
+	$headers .= 'From: gonnsai@163.com' . "rn";
+    $subject = "珠海生活圈";  
+	$subject = "=?UTF-8?B?".base64_encode($subject)."?=";
+ 
+    $content = '亲爱的'."$user".'：'.'<br />';  
+	$content .= '<br />';  
+	$content .= "感谢您注册珠海生活圈，精彩的生活从珠海生活圈开始！".'<br />';  
+    $content .= "在珠海生活圈，您可以：".'<br />';  
+	$content .= "查询珠海的商家情况，方便您生活与娱乐。".'<br />';  
+	$content .= "了解最近珠海举行的活动，让您的生活更加丰富。".'<br />';  
+	$content .= "浏览新闻热点，扩展知识面。".'<br />';  
+	$content .= '<br />';  
+	$content .= "珠海生活圈 -- 为建成珠海最大的商家数据库而不断努力着。 ".'<a href="http://www.zhuhailife.net" target="_blank">www.zhuhailife.net</a>'.'<br />'; 
+	$content .= '<br />';  
+	$content .= "珠海生活圈团队".'<br />'; 
+	$content .= "$date".'<br />';  
+    $result = mail($to, $subject, $content, $headers);  
+	
+	if($result)
+	{
+		echo '邮件发送成功！';
+	}
+	
+?>  
+
+
++++++php通过json传值给前端，javascript接收++++++++
+json.php内容是：
+<?php
+$arr=array(
+'name'=>'Bob','nick'=>'Yes',
+'contact'=>array(
+	'email'=>'json@admin.com',
+	'tel'=>'12323314567',
+     )
+);
+$json_string=json_encode($arr);
+echo "getProfile($json_string)";
+?>
+html内容是：
+<!doctype html>
+<html>
+<head>
+<meta charset='utf-8'>
+</head>
+<script type="text/javascript">  
+	function getProfile(str){
+	var arr=str;
+	document.getElementById('name').innerHTML=arr.name;
+	document.getElementById('nick').innerHTML=arr.nick;
+	document.getElementById('email').innerHTML=arr.contact.email;
+	document.getElementById('tel').innerHTML=arr.contact.tel;
+	
+}
+</script>
+<body>
+<h2>
+测试json
+</h2>
+<div id="name"></div>
+<div id="nick"></div>
+<div id="email"></div>
+<div id="tel"></div>
+</body>
+<script type="text/javascript" src="json.php"></script>   <!--我擦，这个引用js还只能放在这个位置，也是醉了-->
+</html>
+
+
++++++++前端javascript通过json传值给php++++++++
+JavaScript 向 PHP 传值
+json_encode.html
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>json:From javascript To php</title>
+<script src="json2.js" type="text/javascript"></script>
+<script type="text/javascript">
+function JSON_test(o)
+{
+    var user = {
+        name:document.getElementById('txt_name').value,
+        email:document.getElementById('txt_email').value,
+        password:document.getElementById('txt_password').value
+    }
+    var json_string = JSON.stringify(user);
+    document.getElementById('txt_json').value=json_string;
+    alert("点击确定后将提交表单");
+    o.submit();
+}
+</script>
+</head>
+<body>
+    <form id="form1" name="form1" method="post" action="json_encode.php" onsubmit="JSON_test(this);return flase;">
+        <label for="txt_name">姓名</label>
+        <p><input type="text" name="txt_name" id="txt_name" /></p>
+        <label for="txt_email">邮箱</label>
+        <p><input type="text" name="txt_email" id="txt_email" /></p>
+        <p><label for="txt_password">密码</label></p>
+        <p><input type="text" name="txt_password" id="txt_password" /></p>
+        <p><input type="text" name="txt_json" id="txt_json" />
+            <label for="button"></label>
+            <input type="submit" name="button" id="button" value="JSON" />
+        </p>
+    </form>
+</body>
+</html>
+这里javascript扁平化需要一个插件：http://www.json.org/json2.js，通过JSON.stringify(str)将对象扁平化然后传送给php。
+注：另有一个http://www.json.org/json.js，对应的是toJSONString方法。
+var last=obj.toJSONString(); //针对json.js
+var last=JSON.stringify(obj); //针对json2.js
+json_encode.php
+<?php
+    header('Content-Type: text/html; charset=utf-8');
+    $json_string = $_POST["txt_json"];
+    //echo $json_string;
+    if(ini_get("magic_quotes_gpc")=="1")
+    {
+        $json_string=stripslashes($json_string);
+    }
+    $user = json_decode($json_string);
+    echo var_dump($user);
+    echo '<br /><br /><br /><br />';
+    echo $user->name.'<br />';
+    echo $user->email.'<br />';
+    echo $user->password.'<br />';
+?>
+这里就需要用到json_decode()这个函数，然后调用其中数据用 $obj->属性即可。
+
+
+++++++php检验是不是win32平台++++++++++++
+$is_win = DIRECTORY_SEPARATOR == '\\';
+echo 一下，如果是win32平台就会输出1；
+
+
+++++++PHP返回insert操作产生的id+++++++
+<?php
+$con = mysql_connect("localhost", "hello", "321");
+if (!$con)
+{
+    die('Could not connect: ' . mysql_error());
+}
+$db_selected = mysql_select_db("test_db",$con);
+$sql = "INSERT INTO person VALUES ('Carter','Thomas','Beijing')";
+$result = mysql_query($sql,$con);
+echo "ID of last inserted record is: " . mysql_insert_id();
+mysql_close($con);
+?>
+
+++++++++简单的PHP伪缓存并定时抓取某页面内容++++++++++++
+需求：要抓取某个页面的一部分内容，然后iframe到别的页面去。
+iframe的时候，不需求每次都访问源页面，而是每天只读取源页面一次，
+并生成文件，iframe的时候只访问该暂时文件，也就是伪缓存啦。这么做适合访问量不大的页面
+，降低数据库访问压力。
+<?php
+function get_page_content()
+{
+	$url = "http://www.nowamagic.net/";
+	$contents = file_get_contents($url);
+	//如果出现中文乱码使用下面代码
+	//$getcontent = iconv("gb2312″, "utf-8″,$contents);
+	//echo $contents;
+	//$pos = strstr($contents, '<div class="hot_news">');
+	//print_r($pos);
+	$array = explode('<div class="hot_news">', $contents);
+	$htmlarray = explode('<div class="car_tab border4">', $array[0]); // HTML部分
+	$cssarray = explode('<div class="hometop">', $htmlarray[0]);
+	$css_rem_inner = explode('<!--[if !IE]>导航<![endif]-->', $cssarray[0]);
+	$css_min = explode('<script type="text/javascript" src="http://www.nowamagic.net/ad_comm_t.js">', $css_rem_inner[0]);
+	$str_css = $css_min[0];
+	$head = '<base target="_blank"></base></head> ';
+	$str_1 = '<div class="car_tab border4">';
+	$str_html = $htmlarray[1]; 
+	$content = $str_css.$head.$str_1.$str_html;
+	return $content;
+}
+$cache_file = "tmp.html";
+$cache_time = 60*60*24;
+/**
+ob_start();
+echo $content;
+file_put_contents($cacheFile,ob_get_contents());
+ob_end_flush();
+**/
+echo date("Y-m-d H:i:s", time());
+echo '<br />';
+echo date("Y-m-d H:i:s", floor(@filemtime($cache_file)));
+if(time() - $cache_time > floor(@filemtime($cache_file)) )
+{
+	$content = get_page_content();
+	file_put_contents($cacheFile, $content);
+	header('Location: http://www.nowamagic.net/tmp.html');
+}
+else
+{
+	header('Location: http://www.nowamagic.net/tmp.html');
+}
+?>
+
+
+++++++++gmdate()函数统一时间问题++++++++++++
+echo gmdate('Y-m-d H:i:s', time() + 3600 * 8);
+这样不管在Linux+Apache下还是Windows下都得到了正确的结果，当然这样写还有一个好处，
+当网站是面向全世界的时候，那么网站用户只要设置所在的时区，程序自动根据用户设置的时区
+进行时间计算，数据库中信息发布时间只存当前的time()所生成的时间，那么在中国+8时区看到的
+发布时间是：2007-03-14 12:15:27，那么在欧洲+2时区用户看到这个信息的发布时间是：
+2007-03-14 06:15:27，这样信息的时间就全部对应正确了。
+
+
++++++++PHP用strstr()函数阻止垃圾评论+++++++
+strstr()函数简单演示
+<?php
+2
+echo strstr("Hello NowaMagic!", "NowaMagic");
+3
+?>
+程序运行结果：
+NowaMagic!
+则阻止垃圾评论的代码为：
+<?php
+$content = $_POST['content'];
+$garbage = strstr($content, "<a");
+if($garbage == false)
+{
+    //评论正常插入数据库
+}
+else
+{
+    echo "<script>alert('你的评论不能带有链接'); history.go(-1);</script>";
+}
+?>
+
+
+++++++商品秒杀计时的PHP实现+++++++
+注：秒杀时间从早上点到晚上10点。
+<?php
+//php的时间是以秒算。js的时间以毫秒算
+date_default_timezone_set('PRC');  
+//date_default_timezone_set("Asia/Hong_Kong");//地区
+//配置每天的活动时间段
+$starttimestr = "08:00:00";
+$endtimestr = "22:00:00";
+$starttime = strtotime($starttimestr);
+$endtime = strtotime($endtimestr);
+$nowtime = time();
+if ($nowtime<$starttime){
+die("活动还没开始,活动时间是：{$starttimestr}至{$endtimestr}");
+}
+$lefttime = $endtime-$nowtime; //实际剩下的时间（秒）
+?>
+<script language="JavaScript">
+<!-- //
+var runtimes = 0;
+function GetRTime(){
+var nMS = <?=$lefttime?>*1000-runtimes*1000;
+var nH=Math.floor(nMS/(1000*60*60))%24;
+var nM=Math.floor(nMS/(1000*60)) % 60;
+var nS=Math.floor(nMS/1000) % 60;
+document.getElementById("RemainH").innerHTML=nH;
+document.getElementById("RemainM").innerHTML=nM;
+document.getElementById("RemainS").innerHTML=nS;
+if(nMS>5*59*1000&&nMS<=5*60*1000)
+{
+alert("还有最后五分钟！");
+}
+runtimes++;
+setTimeout("GetRTime()",1000);
+}
+window.onload=GetRTime;
+// -->
+</script>
+<h4><strong id="RemainH">XX</strong>:<strong id="RemainM">XX</strong>:<strong id="RemainS">XX</h4>
+
++++++php生成随机时间日期的两种方法++++++++
+可以自定义时间段。
+1---》
+function rand_time($a,$b)
+{
+$a=strtotime($a);
+$b=strtotime($b);
+return date( "Y-m-d H:m:s", mt_rand($a,$b));
+}
+$date1="2014-07-26 09:03:01";
+$date2="2014-10-26 18:21:32";
+$num = 15;
+$i=0;
+while ($i < $num){
+ $date = rand_time($date1,$date2);
+ $datea[]= $date;
+ $i++;
+}
+sort($datea);
+foreach ($datea as $values)
+{
+echo $values."<br>";
+}
+2---》
+/**
+ *   生成某个范围内的随机时间
+ * @param <type> $begintime  起始时间 格式为 Y-m-d H:i:s
+ * @param <type> $endtime    结束时间 格式为 Y-m-d H:i:s  
+ */
+function randomDate($begintime, $endtime="") {
+    $begin = strtotime($begintime);
+    $end = $endtime == "" ? mktime() : strtotime($endtime);
+    $timestamp = rand($begin, $end);
+    return date("Y-m-d H:i:s", $timestamp);
+}
+for($i = 0; $i <= 20; $i++){
+echo randomDate("2014-06-27 09:03:01","2014-06-27 18:21:32");echo "<br />";
+}
+
+
+
+
+
++++++++PHP截取中英混合的字符串++++++++++
+function get_word($string, $length, $dot = '..',$charset='gbk') {
+    if(strlen($string) <= $length) {
+        return $string;
+    }
+    $string = str_replace(array('　',' ', '&', '"', '<', '>'), array('','','&', '"', '<', '>'), $string);
+    $strcut = '';
+    if(strtolower($charset) == 'utf-8') {
+        $n = $tn = $noc = 0;
+        while($n < strlen($string)) {
+            $t = ord($string[$n]);
+            if($t == 9 || $t == 10 || (32 <= $t && $t <= 126)) {
+                $tn = 1; $n++; $noc++;
+            } elseif(194 <= $t && $t <= 223) {
+                $tn = 2; $n += 2; $noc += 2;
+            } elseif(224 <= $t && $t < 239) {
+                $tn = 3; $n += 3; $noc += 2;
+            } elseif(240 <= $t && $t <= 247) {
+                $tn = 4; $n += 4; $noc += 2;
+            } elseif(248 <= $t && $t <= 251) {
+                $tn = 5; $n += 5; $noc += 2;
+            } elseif($t == 252 || $t == 253) {
+                $tn = 6; $n += 6; $noc += 2;
+            } else {
+                $n++;
+            }
+            if($noc >= $length) {
+                break;
+           }
+        }
+        if($noc > $length) {
+            $n -= $tn;
+        }
+        $strcut = substr($string, 0, $n);
+    } else {
+        for($i = 0; $i < $length; $i++) {
+            $strcut .= ord($string[$i]) > 127 ? $string[$i].$string[++$i] : $string[$i];
+        }
+    }
+    return $strcut.$dot;
+}
+$str = "欢迎 visit 简明 nowamagic";
+$str_result = get_word($str, 12);
+echo $str_result;
+
+
+++++++4个数字得出24的方法+++++++
+传说中的24点的游戏：
+<?php
+set_time_limit(0);
+$values = array(5, 5, 5, 1);
+$result = 24;
+$list = array();
+echo "<pre>";
+makeValue($values);
+print_r($list);
+function makeValue($values, $set=array())
+{
+    $words = array("+", "-", "*", "/");
+    if(sizeof($values)==1)
+    {
+        $set[] = array_shift($values);
+        return makeSpecial($set);
+    }
+    foreach($values as $key=>$value)
+    {
+        $tmpValues = $values;
+        unset($tmpValues[$key]);
+        foreach($words as $word)
+        {
+            makeValue($tmpValues, array_merge($set, array($value, $word)));
+        }
+    }
+}
+function makeSpecial($set)
+{
+    $size = sizeof($set);
+    if($size<=3 || !in_array("/", $set) && !in_array("*", $set))
+    {
+        return makeResult($set);
+    }
+    for($len=3; $len<$size-1; $len+=2)
+    {
+        for($start=0; $start<$size-1; $start+=2)
+      {         
+            if(!($set[$start-1]=="*" || $set[$start-1]=="/" || $set[$start+$len]=="*" || $set[$start+$len]=="/"))
+                continue;
+            $subSet = array_slice($set, $start, $len);
+            if(!in_array("+", $subSet) && !in_array("-", $subSet))
+                continue;
+            $tmpSet = $set;
+            array_splice($tmpSet, $start, $len-1);
+            $tmpSet[$start] = "(".implode("", $subSet).")";
+            makeSpecial($tmpSet);
+        }
+    }
+}
+function makeResult($set)
+{
+    global $result, $list;
+    $str = implode("", $set);
+    @eval("$num=$str;");
+    if($num==$result && !in_array($str, $list))
+    $list[] = $str;
+}
+?>
+
++++++++++PHP将微博短地址还原为实际网址+++++++++
+$url = "http://163.fm/1QLJ8U";
+echo unshorten($url);
+function unshorten($url)
+{
+    $url = trim($url);
+    $headers = get_headers($url);
+    $location = $url;
+    $short = false;
+    foreach($headers as $head)
+    {
+        if($head=="HTTP/1.1 302 Found")
+            $short = true;
+        if($short && startwith($head,"Location: "))
+        {
+            $location = substr($head,10);
+        }
+    }
+    return $location;
+}
+function startwith($Haystack, $Needle)
+{
+    return strpos($Haystack, $Needle) === 0;
+}
+自己测试一下。
+
+
+++++++++++一主三从服务器课堂笔记总结++++++++++
+2014年03月05日 ⁄ PHP, 数据库, 编程开发 ⁄ 共 3074字	⁄ 字号 小 中 大 ⁄ 暂无评论
+data_user_0
+data_user_1
+data_user_2
+data_user_3
+.....
+data_user_9
+data_user_10
+d_product_bj
+d_product_tj
+d_produtc_ts
+md5($id)
+得到32位字符串
+取得32位字符串最后2位
+2位字符串转换为10进制数值
+唯一一个id经过我们的计算可以得到唯一的数值
+数值对我们分表的张数取模
+数据库主从配置
+开启远程连接
+grant all privileges on *.* to 'migrate'@'%' identified by 'migrate';
+防火墙
+(1) 确定自己想给这两个 MySQL 服务器分配什么样的 ID 值并把它们记录到 MySL 服务器在启动 时会去读取的某个选项文件里。主从服务器的 ID 值应该是 1 到 232?1 之间的一个正整数并且必须彼此 不同。在启动主、从服务器的时候,你必须用 server_id 启动选项给出其 ID 值。在此基础上,一定 要启用主服务器上的二进制日志功能——如果以前没有启用过它。要想在主、从服务器上启用二进制 日志,最省心的办法是在相应的选项组里加上如下所示的代码:
+[mysqld] server-id=master_server_id log-bin=binlog_name
+[mysqld] server-id=slave_server_id
+重新启动两个服务器,让改动生效。
+(2) 在主服务器上,创建一个账户供从服务器连接主服务器并请求修改信息:
+CREATE USER 'slave_user'@'slave_host' IDENTIFIED BY 'slave_pass'; GRANT REPLICATION SLAVE ON *.* TO 'slave_user'@'slave_host';
+请记住 slave_user 和 slave_pass 值,因为稍后还需要使用它们来告诉从服务器如何连接主服 务器。如果这个账户的用途只用于复制,就用不着再向它授予任何其他的权限了。不过,为了对复制 机制进行测试,你通常要在从服务器上用 mysql 程序以“手动方式”去连接主服务器,所以你往往还 应该再给这个账户多授予几项权限以方便自己能够多做一些事情。(比如说,如果这个账户仅有 REPLICATION SLAVE 权限的话,你甚至无法在从服务器上使用 SHOW DATABASES 语句去查看主服务 器上的数据库名称。)
+(3) 连接到主服务器并通过执行 SHOW MASTER STATUS 语句确定当前的复制坐标:
+mysql> FLUSH TABLES; SHOW MASTER STATUS;
+请记住 File 和 Position 值,因为稍后还需要使用它们来告诉从服务器从哪个位置开始去读取 主服务器的二进制日志里的事件。
+重要注意事项 在主服务器上,在从确定其复制坐标到制作出将被传输到从服务器的初始复制的这 段时间里,一定要保证主服务器上的数据库里的数据没有发生任何修改。
+(4) 在从服务器上为将被复制的数据库建立一份完备的副本。把主服务器上的数据库复制到从服 务器以完成主、从服务器之间最初的同步。一种办法是先在主服务器主机上制作一份备份,再把这个 备份加载到从服务器上去;另一种办法是通过网络把各数据库从主服务器全部复制到从服务器。对数据库备份技术和复制技术的讨论见本章的其他小节。 如果你还没有在主服务器上创建过任何数据库或数据表,可以省略这一步,因为它现在还没有任何需要复制的东西。
+(5) 连接到从服务器并使用 CHANGE MASTER 语句来配置它,这包括把用来连接主服务器的参数和
+初始复制坐标告诉从服务器:
+CHANGE MASTER TO
+MASTER_HOST = 'master_host', MASTER_USER = 'slave_user', MASTER_PASSWORD = 'slave_pass', MASTER_LOG_FILE = 'log_file_name', MASTER_LOG_POS = log_file_pos;
+'master_host'是主服务器的主机名。'slave_user'和'slave_pass'值是刚才在主服务器创建 的那个账户的用户名和口令,从服务器将使用这个账户来连接主服务器并请求主服务器修改信息。 'log_file_name'和'log_file_pos'是刚才用 SHOW MASTER STATUS 语句查出来的值。
+在 Unix 系统上,使用 localhost 作为主机名将使用一个套接字文件去连接主服务器,但复制机 制不支持经套接字文件建立的连接。因此,如果主服务器和从服务器将运行在同一台主机上,就必须 把这个主机名写成 127.0.0.1 而不是 localhost,这样才能确保从服务器将使用 TCP/IP 连接。
+如果主服务器所监听的网络端口不是默认端口,可以在 CHANGE 语句里包括一个 MASTER_PORT 选 项以明确地给出一个端口号。
+(6) 让从服务器开始复制。
+START SLAVE;
+从服务器将连接主服务器并开始复制。你可以在从服务器上使用 SHOW SALVE STATUS 语句来查 看它的工作状态。
+从服务器把 CHANGE MASTER 语句所给出的参数保存在其数据目录中的一个名为 master.info 的 文件里以记录初始复制状态,并随着镜象工作的进展而刷新那个文件。等以后需要改变复制参数的时 候,只要连接到从服务器并通过 CHANGE MASTER 语句给出新的设置,从服务器就会根据新的设置自 动刷新 master.info 文件。
+保存在 master.info 文件里的信息包括用来连接主服务器的用户名和口令。这些信息应该是保 密的,所以应该把这个文件设置为只允许从服务器上的 MySQL 管理员的登录账户才能访问。
+可以把 mysql 数据库排除在复制机制外,这需要做两件事情。
+(1) 在把数据库的初始数据从主服务器传输到从服务器的时候,不要把 mysql 数据库也包括在 内。另一个办法是在传输之前先备份从服务器的 mysql 数据库,等传输工作完成后再恢复它。
+(2) 在从服务器的选项文件里加上以下代码,让它不要执行来自主服务器的对 mysql 数据库的任 何修改:
+[mysqld]
+replicate-ignore-db=mysql
+如果想让从服务器忽略多个数据库,需要多次使用 replication_ignore_db 选项——每个数据
+库一次。
+还有一个办法是在主服务器端(注意,不是从服务器端)使用--binlog-ignore-db 选项排除数
+据库。这个办法的优点是可以减少从主服务器传输到从服务器的信息量,缺点是主服务器上的二进制
+日志文件将不包含那些被排除在外的数据库的任何信息,而这些信息对主服务器在发生崩溃后的数据
+恢复工作往往至关重要。因此,在从服务器端把数据库排除在外的做法更值得选择。
+重要命令
+SHOW SLAVE STATUS语句。在从服务器上查看其复制机制是否在工作以及当前的复制坐标。
+复制坐标可以用来判断主服务器上的哪几个二进制日志文件已经不再会被用到了。
+PURGE MASTER语句。在主服务器上对二进制日志文件进行失效处理。在每一个从服务器上都
+通过SHOW SLAVE STATUS语句确定了哪些日志文件不会再用之后,你可以在主服务器上用这
+条语句把那些二进制日志文件删除掉。
+STOP SLAVE和START SLAVE语句。用来挂起和重新开始从服务器上的复制活动。比如说,当
+你制作备份时,可以用这些语句让从服务器暂时停止复制活动。
+可以通过在 SLAVE STOP 或 SLAVE START 语句的末尾加上 IO_THREAD
+或 SQL_THREAD 关键字的办法分别挂起或者重新开始这两个线程中的任何一个。
+
++++++++++验证字符串是否只含数字与英文，字符串长度并在4~16个字符之间：+++++++++
+<?php 
+$str = 'a1234'; 
+if (preg_match("^[a-zA-Z0-9]{4,16}$", $str)) { 
+echo "验证成功";} else { 
+echo "验证失敗";}?>
+
+
++++++++++php获取页面中的所有链接地址：（以www.93jiang,com为例）+++++++++
+$str=file_get_contents('http://www.93jiang.com');
+  preg_match_all('/<a .*?href="(.*?)".*?>/is',$str,$arrat);
+  foreach($arrat[0] as $key=>$value){
+  echo $key.'-------'.htmlspecialchars($value).'<br>';
+  }
+
++++++++++php取出网页中所有图片链接+++++++++
+   preg_match_all("/<img([^>]*)\s*src=('|\")([^'\"]+)('|\")/",$str,$aarr);
+   var_dump($aarr[0]);
+
++++++++++php取出网页中所有邮箱++++++
+preg_match_all("/([a-z0-9\-_\.]+@[a-z0-9]+\.[a-z0-9\-_\.]+)/",$str,$mail);
+   var_dump($mail);
+
++++++++顺序查找算法（数组里查找某个元素）++++++++
+function seq_sch($array,$n,$k)//在某个位置之前查找某元素(不包括指定位置)
+{
+$array[$n]=$k;
+for($i=0;$i<$n;$i++)
+{
+if($array[$i]==$k)
+break;
+}
+if($i<$n)
+return $i;
+else
+return -1;
+}
+$array=array(‘a’,'b’,'c’);
+echo seq_sch($array,2,’b');
+?>
+
+
++++++++++二分查找-递归+++++++++
+function bin_search($arr,$low,$high,$value) {
+    if($low>$high)
+        return false;
+    else {
+        $mid=floor(($low+$high)/2);
+        if($value==$arr[$mid])
+            return $mid;
+        elseif($value<$arr[$mid])
+            return bin_search($arr,$low,$mid-1,$value);
+        else
+            return bin_search($arr,$mid+1,$high,$value);
+    }
+}
+
++++++++++二分查找-非递归+++++++++
+function bin_search($arr,$low,$high,$value) {
+    while($low<=$high) {
+        $mid=floor(($low+$high)/2);
+        if($value==$arr[$mid])
+            return $mid;
+        elseif($value<$arr[$mid])
+            $high=$mid-1;
+        else
+            $low=$mid+1;
+    }
+    return false;
+}
+
++++++++++归并排序+++++++++
+function Merge(&$arr, $left, $mid, $right) {
+  $i = $left;
+  $j = $mid + 1;
+  $k = 0;
+  $temp = array();
+  while ($i <= $mid && $j <= $right)
+  {
+    if ($arr[$i] <= $arr[$j])
+      $temp[$k++] = $arr[$i++];
+    else
+      $temp[$k++] = $arr[$j++];
+  }
+  while ($i <= $mid)
+    $temp[$k++] = $arr[$i++];
+  while ($j <= $right)
+    $temp[$k++] = $arr[$j++];
+  for ($i = $left, $j = 0; $i <= $right; $i++, $j++)
+    $arr[$i] = $temp[$j];
+}
+ 
+function MergeSort(&$arr, $left, $right)
+{
+  if ($left < $right)
+  {
+    $mid = floor(($left + $right) / 2);
+    MergeSort($arr, $left, $mid);
+    MergeSort($arr, $mid + 1, $right);
+    Merge($arr, $left, $mid, $right);
+  }
+}
+
+++++++++++PHP实现等差数列求和(不使用乘法,循环,递归) ++++++++++
+<html>
+     <body>
+         <?php
+            function sum_n($a1, $d, $an) {    //$a1为首项,$d为公差,$an为最大项
+                $sum = 0;
+                $i = $a1;
+                a:
+                $sum += $i;
+                $i += $d;
+                if($i <= $an) goto a;
+                return $sum;
+            }
+            
+            echo sum_n(1, 1, 10);
+         ?>
+     </body>
+ </html>
+
+
+++++++++++php冒泡排序++++++++++
+原理：
+依次比较相邻的两个数，将小数放在前面，大数放在后面。即首先比较第1个和第2个数，
+将小数放前，大数放后。然后比较第2个数和第3个数，将小数放前，大数放后，如此继续，
+直至比较最后两个数，将小数放前，大数放后。重复以上过程，仍从第一对数开始比较
+（因为可能由于第2个数和第3个数的交换，使得第1个数不再小于第2个数），将小数放前，
+大数放后，一直比较到最大数前的一对相邻数，将小数放前，大数放后，第二趟结束，
+在倒数第二个数中得到一个新的最大数。如此下去，直至最终完成排序。
+在许多程序设计中，我们需要将一个数列进行排序，以方便统计，常见的排序方法有冒泡排序，
+二叉树排序，选择排序等等。而冒泡排序一直由于其简洁的思想方法和比较高的效率而倍受青睐。
+由于在排序过程中总是小数往前放，大数往后放，相当于气泡往上升，所以称作冒泡排序。
+function bubble_sort($array)  
+{  
+    $count = count($array);  
+    if($count <= 0)  
+    {  
+        return false;  
+    }  
+    for($i=0; $i<$count; $i++)  
+    {  
+        for($k=$count-1; $k>$i; $k--)  
+        {  
+            if($array[$k] < $array[$k-1])  
+            {  
+                $tmp = $array[$k];  
+                $array[$k] = $array[$k-1];  
+                $array[$k-1] = $tmp;  
+            }  
+        }  
+    }  
+    return $array;  
+}  
+冒泡原理：两两比较待排序数据元素的大小，发现两个数据元素的次序相反时即进行交换，直到没有反序的数据元素为止。
+
+++++++php快排算法++++++
+function quick_sort($arr){
+	$length=count($arr);
+	if($length<=1){
+		return $arr;
+	}
+	$base_num=$arr[0];
+        //遍历 除了标尺外的所有元素，按照大小关系放入两个数组内，初始化两个数组
+	$left_array=array();   //这是小于标准的
+	$right_array=array();  //这是大于标准的
+	for($i=1;$i<$length;$i++){
+		if($base_num>$arr[$i]){
+				$left_array[]=$arr[$i];//放入左边数组
+			}
+			else{
+       			     $right_array[]=$arr[$i];  //放入右边数组
+				}
+	}
+  //再分别对左边和右边的数组进行相同的排序处理方式
+  //递归调用这个函数,并记录结果
+  $left_array=quick_sort($left_array);
+  $right_array=quick_sort($right_array);
+  //合并左边标尺右边
+  return array_merge($left_array,array($base_num),$right_array);
+}
+
+++++++插入排序算法++++++
+function insert_sort($arr){
+ for($i=1,$len=count($arr);$i<$len;$i++){
+      $tmp=$arr[$i];
+      for($j=$i-1;$j>=0;$j--){
+           if($tmp<$arr[$j])  {
+                $arr[$j+1]=$arr[$j];
+                 $arr[$j]=$tmp;
+           }
+         else{
+              break;
+              }
+      }
+  }
+return $arr;
+}
+
+
+++++++二叉树排序算法++++++
+    <?php
+     //二叉树的广度优先遍历
+     //使用一个队列实现
+  
+       class Node {
+         public $data = null;
+         public $left = null;
+         public $right = null;
+      }
+  
+      //@param $btree 二叉树根节点
+      function breadth_first_traverse($btree) {
+          $traverse_data = array();
+          $queue = array();
+         array_unshift($queue, $btree); #根节点入队          
+          while (!empty($queue)) { #持续输出节点，直到队列为空
+              $cnode = array_pop($queue); #队尾元素出队
+              $traverse_data[] = $cnode->data;
+  
+              #左节点先入队，然后右节点入队
+              if ($cnode->left != null) array_unshift($queue, $cnode->left);
+             if ($cnode->right != null) array_unshift($queue, $cnode->right);
+          }
+  
+          return $traverse_data;
+      } 
+      #深度优先遍历,使用一个栈实现
+      function depth_first_traverse($btree) {
+         $traverse_data = array();
+         $stack = array();
+         array_push($stack, $btree); 
+           while (!empty($stack)) {
+             $cnode = array_pop($stack);
+             $traverse_data[] = $cnode->data; 
+             if ($cnode->right != null) array_push($stack, $cnode->right);
+             if ($cnode->left != null) array_push($stack, $cnode->left);
+         }
+ 
+         return $traverse_data;
+      }  
+      $root = new Node();
+      $node1 = new Node();
+      $node2 = new Node();
+      $node3 = new Node();
+      $node4 = new Node();
+      $node5 = new Node();
+      $node6 = new Node();
+      $root->data = 1;
+      $node1->data = 2;
+      $node2->data = 3;
+      $node3->data = 4;
+      $node4->data = 5;
+      $node5->data = 6;
+     $node6->data = 7;
+  
+     $root->left = $node1;
+     $root->right = $node2;
+     $node1->left = $node3;
+     $node1->right = $node4;
+     $node2->left = $node5;
+     $node2->right = $node6; 
+
+     $traverse = breadth_first_traverse($root);
+      print_r($traverse);
+      echo "<br>";
+     $traverse = depth_first_traverse($root);
+    print_r($traverse);
+  ?>
+ 
+
++++++PHP获得入站的搜索引擎与关键字++++++++
+有时候，当我们从搜索引擎进入某个网站，他会有一行小字，“欢迎来自Google/百度，通过检索
+“XXX”关键字来到本站”之类的东西。那么这个功能是怎么实现的呢？其实不难，大概思路就是，
+获得入站URL，再正则我们需要的数据就行了
+<?php
+$url=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';//获取入站url。
+$search_1 = "google.com"; //q=
+$search_2 = "baidu.com"; //wd=
+$google = preg_match("/\b{$search_1}\b/",$url);//记录匹配情况，用于入站判断。
+$baidu = preg_match("/\b{$search_2}\b/",$url);
+$s_s_keyword="";
+if ($google)
+{
+    //来自google
+    $s_s_keyword=get_keyword($url,'q=');//关键词前的字符为“q=”。
+    $s_s_keyword=urldecode($s_s_keyword);
+    //$s_s_keyword=iconv("GBK","UTF-8",$s_s_keyword);//引擎为gbk
+}
+else if($baidu)
+{
+    //来自百度
+    $s_s_keyword=get_keyword($url,'wd=');//关键词前的字符为“wd=”。
+    $s_s_keyword=urldecode($s_s_keyword);
+    $s_s_keyword=iconv("GBK","UTF-8",$s_s_keyword);//引擎为gbk
+}
+echo '$s_s_keyword';
+/*
+获取来自搜索引擎入站时的关键词。
+*/
+// 函数作用：从url中提取关键词。参数说明：url及关键词前的字符。
+function get_keyword($url,$kw_start)
+{
+    $start=stripos($url,$kw_start);
+    $url=substr($url,$start+strlen($kw_start));
+    $start=stripos($url,'&');
+    if ($start>0)
+    {
+        $start=stripos($url,'&');
+        $s_s_keyword=substr($url,0,$start);
+    }
+    else
+    {
+        $s_s_keyword=substr($url,0);
+    }
+    return $s_s_keyword;
+}
+?>
+
+
++++++PHP对大文件的处理思路++++++++
+需求：现有一个1G左右的日志文件，大约有500多万行， 用php返回最后几行的内容。
+使用一些诸如file、file_get_contents之类的函数，这些函数可能就显的力不从心。
+这种方式是最为普遍的方式,它不需要将文件的内容全部读入内存,而是直接通过指针来操作,
+所以效率是相当高效的.在使用fseek来对文件进行操作时,也有多种不同的方法,
+效率可能也是略有差别的,下面是常用的两种方法.
+1-->
+首先通过fseek找到文件的最后一位EOF，然后找最后一行的起始位置，取这一行的数据，
+再找次一行的起始位置，再取这一行的位置，依次类推，直到找到了$num行。
+function tail($fp,$n,$base=5)
+{
+    assert($n>0);
+    $pos = $n+1;
+    $lines = array();
+    while(count($lines)< =$n){
+        try{
+            fseek($fp,-$pos,SEEK_END);
+        } catch (Exception $e){
+            fseek(0);
+            break;
+        }
+        $pos *= $base;
+        while(!feof($fp)){
+            array_unshift($lines,fgets($fp));
+        }
+    }
+    return array_slice($lines,0,$n);
+}
+var_dump(tail(fopen("access.log","r+"),10));
+
+2-->
+还是采用fseek的方式从文件最后开始读,但这时不是一位一位的读,而是一块一块的读,
+每读一块数据时,就将读取后的数据放在一个buf里,然后通过换行符(\n)的个数来判断
+是否已经读完最后$num行数据.
+$fp = fopen($file, "r");
+$line = 10;
+$pos = -2;
+$t = " ";
+$data = "";
+while ($line > 0) {
+    while ($t != "\n") {
+        fseek($fp, $pos, SEEK_END);
+        $t = fgetc($fp);
+        $pos --;
+    }
+    $t = " ";
+    $data .= fgets($fp);
+    $line --;
+}
+fclose ($fp);
+echo $data;
+还有一种，使用file方法。
+ini_set('memory_limit','-1');
+$file = 'access.log';
+$data = file($file);
+$line = $data[count($data)-1];
+echo $line;
+
++++++PHP两种方法生成强密码+++++++++
+$totalChar = 8; // 密码中字符串的个数
+// salt to select chars from
+$salt = "abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ123456789"; 
+srand((double)microtime()*1000000); // 启动随机产生器
+$Spass=""; // 设置初始值
+for ($i=0;$i<$totalChar;$i++) // 循环创建密码
+	$Spass = $Spass . substr ($salt, rand() % strlen($salt), 1);
+echo $Spass;
+
+
++++++++php实现论坛中无限分类++++++++++
+<?php
+/*
+数据表结构如下:
+CREATE TABLE `category` (
+`categoryID` smallint(5) unsigned NOT NULL auto_increment,
+`categoryParentID` smallint(5) unsigned NOT NULL default '0',
+`categoryName` varchar(50) NOT NULL default '',
+PRIMARY KEY (`categoryID`)
+) ENGINE=MyISAM DEFAULT CHARSET=gbk;
+INSERT INTO `category` ( `categoryParentID`, `categoryName`) VALUES
+(0, '一级类别'),
+(1, '二级类别'),
+(1, '二级类别'),
+(1, '二级类别'),
+(2, '三级类别'),
+(2, '333332'),
+(2, '234234'),
+(3, 'aqqqqqd'),
+(4, '哈哈'),
+(5, '66333666');
+*/
+//指定分类id变量$category_id,然后返回该分类的所有子类
+//$default_category为默认的选中的分类
+function Get_Category($category_id = 0,$level = 0, $default_category =0)
+{
+global $DB;
+$sql = "SELECT * FROM category ORDER BY categoryID DESC";
+$result = $DB->query( $sql );
+while ($rows = $DB->fetch_array($result))
+{
+$category_array[$rows[categoryParentID]][$rows[categoryID]] = array('id'=> $rows[categoryID], 'parent' => $rows[categoryParentID], 'name' =>$rows
+[categoryName]);
+}
+if (!isset($category_array[$category_id]))
+{
+return "";
+}
+foreach($category_array[$category_id] AS $key => $category)
+{
+if ($category['id'] == $default_category)
+{
+echo "<option selectedvalue=".$category['id']."";
+}else
+{
+echo "<option value=".$category['id']."";
+}
+if ($level > 0)
+{
+echo ">" . str_repeat( " ", $level ) . "" . $category['name'] . "</option>/n";
+}
+else
+{
+echo ">" . $category['name'] ."</option>/n";
+}
+Get_Category($key, $level + 1, $default_category);
+}
+unset($category_array[$category_id]);
+}
+/*
+函数返回的数组格式如下所示:
+Array
+(
+[1] => Array ( [id] => 1 [name] => 一级类别[level] => 0 [ParentID] => 0 )
+[4] => Array ( [id] => 4 [name] => 二级类别[level] => 1 [ParentID] => 1 )
+[9] => Array ( [id] => 9 [name] => 哈哈[level] => 2 [ParentID] => 4 )
+[3] => Array ( [id] => 3 [name] => 二级类别[level] => 1 [ParentID] => 1 )
+[8] => Array ( [id] => 8 [name] => aqqqqqd [level] => 2[ParentID] => 3 )
+[2] => Array ( [id] => 2 [name] => 二级类别[level] => 1 [ParentID] => 1 )
+[7] => Array ( [id] => 7 [name] => 234234 [level] => 2[ParentID] => 2 )
+[6] => Array ( [id] => 6 [name] => 333332 [level] => 2[ParentID] => 2 )
+[5] => Array ( [id] => 5 [name] => 三级类别[level] => 2 [ParentID] => 2 )
+[10] => Array ( [id] => 10 [name] => 66333666 [level] => 3[ParentID] => 5 )
+)
+*/
+//指定分类id,然后返回数组
+function Category_array($category_id = 0,$level=0)
+{
+global $DB;
+$sql = "SELECT * FROM category ORDER BY categoryID DESC";
+$result = $DB->query($sql);
+while ($rows = $DB->fetch_array($result))
+{
+$category_array[$rows['categoryParentID']][$rows['categoryID']] = $rows;
+}
+foreach ($category_array AS $key=>$val)
+{
+if ($key == $category_id)
+{
+foreach ($val AS $k=> $v)
+{
+$options[$k] =
+array(
+'id' => $v['categoryID'], 'name' => $v['categoryName'], 'level'=> $level, 'ParentID'=>$v['categoryParentID']
+);
+$children = Category_array($k, $level+1);
+if (count($children) > 0)
+{
+$options = $options + $children;
+}
+}
+}
+}
+unset($category_array[$category_id]);
+return $options;
+}
+?>
+
+<?php
+class cate
+{
+       function Get_Category($category_id= 0,$level = 0, $default_category = 0)
+       {
+            echo$category_id;
+            $arr= array(
+            '0' => array(
+                           '1' => array('id' => 1, 'parent' => 0, 'name' => '1111'),
+                           '2' => array('id' => 2, 'parent' => 0, 'name' => '2222'),
+                          '4' => array('id' => 4, 'parent' => 0, 'name' =>'4444')    
+                        ),
+            '1' => array(
+                            '3' => array('id' => 3, 'parent' => 1, 'name' => '333333'),
+                          '5' => array('id' => 5, 'parent' => 1, 'name' => '555555')    
+                          ),
+                        
+            '3' => array(
+                          '6' => array('id' => 6, 'parent' => 3, 'name' => '66666'),
+                          '7' => array('id' => 7, 'parent' => 3, 'name' => '77777')
+                          ),
+            '4' => array(
+                          '8' => array('id' => 8, 'parent' => 4, 'name' => '8888'),
+                          '9' => array('id' => 9, 'parent' => 4, 'name' => '9999')
+                          )    
+            );
+            if(!isset($arr[$category_id]))
+            {
+              return "";
+            }
+    
+           foreach($arr[$category_id] AS $key => $cate)
+            {
+               if ($cate['id'] == $default_category)
+               {
+                   $txt = "<option selected value=".$cate['id']."";
+               }else{
+                   $txt = "<option value=".$cate['id']."";
+               }
+           
+               if ($level > 0)
+               {
+                  $txt1 = ">" . str_repeat( "-", $level ) . " ". $cate['name'] . "</option>/n";
+               }else{
+                   $txt1 = ">" . $cate['name'] . "</option>/n";
+               }
+               $val = $txt.$txt1;
+               echo $val;
+               self::Get_Category($key, $level + 1, $default_category);
+            }
+           
+       }
+       
+       
+       function getFlush($category_id =0,$level = 0, $default_category = 0)
+       {
+           
+           ob_start();
+          self::Get_Category($category_id ,$level, $default_category);
+           $out =ob_get_contents();
+          ob_end_clean();
+           return$out;
+       }    
+}
+$id =$_GET['id'];
+echo "<select>";
+$c = new cate();
+//$c->Get_Category();
+$ttt=  $c->getFlush($id,'0','3');
+echo $ttt;
+echo "</select>";
+?>
+
++++++序列化与反序列化+++++
+序列化是将变量转换为可保存或传输的字符串的过程；反序列化就是在适当的时候把这个字符串再转化成原来的变量使用。这
+两个过程结合起来，可以轻松地存储和传输数据，使程序更具维护性。 
+PHP中的序列化和反序列化分别通过函数serialize()和unserialize()即可实现。
+serialize()的参数可以是resource类型外的所有变量类型，最常见的是用来序列化对象，unseialize()将serialize的返回结果作为参数，进行反序列化，得到原对象。
+
++++++文件压缩的原理+++++
+电脑是采用二进制的，所以就全是1和0两个数字。那么难免的有的时候会重复出现，比如：10101010101010101010101010101010，那么就是16个10于是压缩的时候就记做16个10。
+然后我们把16换算为二进制的，就是1000。那么电脑就会写成100010。当然，这其中一定还会有一些记号。只是我不太清楚而已。然后在解压的时候就可以把100010还原为10101010101010101010101010101010。
+那么一算，就把本来的32位的数字变为了6位。所以就达到了压缩的目的！
+php字符串压缩与解压缩：
+
++++++php扫描本地目录与文件+++++
+header('content-type:text/html; charset=utf-8');
+   $dirname='Public'; //要遍历的目录名字
+   $dir_handle=opendir($dirname);
+    echo '<table border="1" align="center" width="960px" cellspacing="0" cellpadding="0">';
+   echo '<caption><h2>目录'.$dirname.'下面的内容</h2></caption>';
+   echo '<tr align="left" bgcolor="#cccccc">';
+   echo '<th>文件名</th><th>文件大小</th><th>文件类型</th><th>修改时间</th><th>完整路径</th><th>test1</th><th>test2</th></tr>';
+   while($file=readdir($dir_handle))
+   {
+     if($file!="."&&$file!="..")
+     {
+        $dirFile=$dirname."/".$file;	
+        echo '<td>'.$file.'</td>';
+        echo '<td>'.filesize($dirFile).'</td>';
+        echo '<td>'.filetype($dirFile).'</td>';
+        echo '<td>'.date("Y/n/t",filemtime($dirFile)).'</td>';
+		echo '<td>'.$dirFile.'</td>';
+		echo '<td>'.date('Y-m-d H:i:s',filectime($dirFile)).'</td>';
+		echo '<td>'.date('Y-m-d H:i:s',filemtime($dirFile)).'</td>';
+        echo '</tr>';
+     }
+   }
+   echo '</table>';
+   closedir($dir_handle);
+
+++++php版本的进化史+++++++
+PHP/Mysql中几个版本的进化史，比如mysql4.0到4.1，PHP 4.x到5.1的重大改进等等：
+MySQL：  
+一、从 4.0 到 4.1 的主要变化  
+如果在4.1.0到4.1.3版本的MySQL中创建了包含 TIMESTAMP 字段的 InnoDB表。则在升级到4.1.4及更高时需要重建表，因为存储格式发生变化了。   
+字符串根据标准SQL来比较：比较之前不删除末尾的空格，以前用末尾空格扩展了比较短的字符串。现在的结果是  
+'a' > 'a\t'，以前则不这样。可以用 mysqlcheck 来检查一下数据表。  
+TIMESTAMP 返回 'YYYY-MM-DD HH:MM:SS' 格式的字符串。在MySQL 4.0中，可以增加选项 --new 来获得ySQL 4.1中这方面的特性。  
+在MySQL4.1.1前，语句解析器不是那么严格，它在处理字符串转时间转换时会忽略第一个数字前的其他字符。在4.1.1之后，就比较严格了，返回结果是 DATE, DATETIME, 或 TIME 类型的函数的结果会被转换成时间型  
+二、再看从 4.1 到 5.0 的主要变化  
+◆InnoDB 和 MyISAM 表中空格结尾的 TEXT 字段索引顺序改变了。因此需要运行"CHECK TABLE" 语句修复数据表，如果出现错误，就运行 "OPTIMIZE TABLE" 或 "REPAIR TABLE" 语句修复，甚至重新转储(用mysqldump)。  
+◆MySQL 5.0.15开始，如何处理 BINARY 字段中填充的值已经改变了。填充的值现在是0x00 而非空格了，并且在取值的时候不会去除末尾的空格。  
+◆从MySQL 5.0.3开始，DECIMAL 的实现方式已经改变了，5.0对 DECIMAL的格式限制严格多了。在MySQL 5.0.3到5.0.5之间版本的 MyISAM 和 InnoDB 表中创建的 DECIMAL字段升级到5.0.6之后会发生崩溃。从5.0.3开始，DECIMAL 用更有效的格式来存储。5.0.3开始，在计算 DECIMAL 值和舍入精确值的时候采用精确数学。  
+◆在以前，等待超时的锁会导致 InnoDB回滚当前全部事务，从5.0.13开始，就只回滚最近的SQL语句了。  
+◆在4.1.13/5.0.8以前，DATETIME 的加0后就转换成 YYYYMMDDHHMMSS 格式，现在变为YYYYMMDDHHMMSS.000000 格式了  
+◆4.1中，FLOAT 或 DOUBLE 之间的比较碰巧没问题，但在5.0中可能就不行了  
+◆从5.0.3开始，VARCHAR 和 VARBINARY 字段中末尾的空格不再删除  
+◆增加了一个新的启动选项 innodb_table_locks，它导致 LOCK TABLE 时也可以请求InnoDB 表锁。这个选项默认打开，不过可能在 AUTOCOMMIT=1 和 LOCK TABLES应用中会导致死锁。看来，我只需主要关注 时间(TIMESTAMP, DATETIME< DATE, TIME) 和数值型(FLOAD, DOUBLE, DECIMAL) 这两种类型的变化;另外，我升级过程中暂时还不需要涉及到字符集问题，因此相对轻松一些。  
+升级步骤如下：  
+执行  
+FLUSH TABLES WITH READ LOCK;  
+直接拷贝 MyISAM 表文件  
+用 mysqldump 导出 Innodb 类型的表  
+整个过程都很顺利，新系统启动之后，发现如下2个问题：  
+新增了关键字 INOUT，因此需要检查表结构中还有其他什么字段使用关键字了  
+DATE_FORMAT 函数要求严谨多了，  
+DATE_FORMAT('2006/11/24 09:14:00', '%Y-%m-%d %T')   
+和DATE_FORMAT('2006/11/2409:14:00', '%Y-%m-%d %T')   
+的结果完全不一样，在 4.0 中，能兼容这两种格式，而在 5.0 中，只能正确的使用前者了，后者则会有问题。这也应该是上面提到的时间类型发生的变化所致。 
+PHP5以下几个改进值得关注：  
+1、极大地提高了面向对象能力；  
+2、支持try/catch异常处理；  
+3、改进了字符串地处理；  
+4、改经了xml和web服务支持；  
+5、对SQlite内置支持。 
+
+
++++++++++解决多进程/线程同时读写一个文件++++++
+大家都知道，PHP是没有多线程概念的，尽管如此我们仍然可以用“不完美”的方法来模拟多线程。简单的说，就是队列处理。通过对文件进行加锁和解锁，来实现。当一个文件被一个用户操作时，该文件是被锁定的，其他用户只能等待，确实不够完美，但是也可以满足一些要求不高的应用。  
+function T_put($filename,$string){  
+$fp = fopen($filename,’a'); //追加方式打开  
+if (flock($fp, LOCK_EX)){ //加写锁  
+fputs($fp,$string); //写文件  
+flock($fp, LOCK_UN); //解锁  
+}  
+fclose($fp);  
+}  
+function T_get($filename,$length){  
+$fp = fopen($filename,’r'); //追加方式打开  
+if (flock($fp, LOCK_SH)){ //加读锁  
+$result = fgets($fp,$length); //读取文件  
+flock($fp, LOCK_UN); //解锁  
+}  
+fclose($fp);  
+return $result;  
+}  
+
+++++++MyISAM与Innodb++++++++
+简单的表达。  
+MyISAM 是非事务的存储引擎。  
+innodb 是支持事务的存储引擎。  
+innodb    的引擎比较适合于插入和更新操作比较多的应用  
+而MyISAM  则适合用于频繁查询的应用  
+MyISAM    --表锁。  
+innodb    --设计合理的话是行锁。  
+MyISAM    不会出现死锁。  
+最大的区别就是MYISAM适合小数据，小并发；INNODB 适合大数据，大并发。最大的区别就是在锁的级别上。  
+MyISAM类型不支持事务处理等高级处理，而InnoDB类型支持。 MyISAM类型的表强调的是性能，
+其执行数度比InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持已经外部键等
+高级数据库功能。综述，就可以根据数据表不同的用处是用不同的存储类型。而且MyISAM是文件存储
+的，可以进行直接在不同操作系统间拷贝使用。  
+InnoDB：  
+InnoDB 给 MySQL 提供了具有事务(commit)、回滚(rollback)和崩溃修复能力(crash recovery capabilities)的事务安全(transaction-safe (ACID compliant))型表。
+InnoDB 提供了行锁(locking on row level)，提供与 Oracle 类型一致的不加锁读取(non-locking read in SELECTs)。
+这些特性均提高了多用户并发操作的性能表现。在InnoDB表中不需要扩大锁定(lock escalation)，
+因为 InnoDB 的列锁定(row level locks)适宜非常小的空间。InnoDB 是 MySQL 上第一个提供外键约束(FOREIGN KEY constraints)的表引擎。
+InnoDB 的设计目标是处理大容量数据库系统，它的 CPU 利用率是其它基于磁盘的关系数据库引擎所不能比的。
+在技术上，InnoDB 是一套放在 MySQL 后台的完整数据库系统，InnoDB 在主内存中建立其专用的缓冲池用于高速缓冲数据和索引。
+ InnoDB 把数据和索引存放在表空间里，可能包含多个文件，这与其它的不一样，举例来说，在 MyISAM 中，表被存放在单独的文件中。
+InnoDB 表的大小只受限于操作系统的文件大小，一般为 2 GB。
+InnoDB所有的表都保存在同一个数据文件 ibdata1 中（也可能是多个文件，或者是独立的表空间文件），相对来说比较不好备份，可以拷贝文件或用navicat for mysql。  
+MyISAM  
+每张MyISAM 表被存放在三个文件 ：frm 文件存放表格定义。 数据文件是MYD (MYData) 。 索引文件是MYI (MYIndex) 引伸。  
+因为MyISAM相对简单所以在效率上要优于InnoDB，小型应用使用MyISAM是不错的选择。  
+MyISAM表是保存成文件的形式,在跨平台的数据转移中使用MyISAM存储会省去不少的麻烦  
+2.web 架构，安全,项目经验
+
+++++++++++介绍xdebug,apc,eAccelerator,Xcache,Zend opt的使用经验++++++++++++
+Xdebug是一个开放源代码的PHP程序调试器(即一个Debug工具)，可以用来跟踪，调试和分析PHP程序的运行状况
+。
+eAccelerator是一个自由开放源码php加速器，优化和动态内容缓存，提高了php脚本的缓存性能，
+使得PHP脚本在编译的状态下，对服务器的开销几乎完全消除。它还有对脚本起优化作用，以加快其执行效率。
+使您的PHP程序代码执效率能提高1-10倍；
+XCache 是一个开源的 opcode 缓存器/优化器, 这意味着他能够提高您服务器上的 PHP 性能. 他通过把编译 
+PHP 后的数据缓冲到共享内存从而避免重复的编译过程, 能够直接使用缓冲区已编译的代码从而提高速度. 
+通常能够提高您的页面生成速率 2 到5 倍, 降低服务器负载.
+Zend Optimizer(以下简称ZO)用优化代码的方法来提高php应用程序的执行速度。实现的原理是对那些在被最终
+执行之前由运行编译器(Run-TimeCompiler)产生的代码进行优化。
+一、PHP加速器介绍
+        PHP加速器是一个为了提高PHP执行效率，从而缓存起PHP的操作码，这样PHP后面执行就不用解析转换了，可以直接调用PHP操作码，这样速度上就提高了不少。
+        Apache中使用mod_php的请求、响应执行流程：
+　　1、Apache接收请求。
+2、Apache传递请求给mod_php。
+3、mod_php定位磁盘文件，并加载到内存中。
+4、mod_php编译源代码成为opcode树。
+5、mod_php执行opcode树。
+       PHP加速器相应的就是第四步，它的目的就是防止PHP每次请求都重复编译PHP代码，因为在高访问量的网站上，大量的编译往往没有执行速度快呢？所以这里面有个瓶颈就是PHP的重复编译既影响了速度又加载了服务器负载，为了解决此问题，PHP加速器就这样诞生了。
+二、PHP加速器安装与配置
+        1、安装配置APC
+             APC全称是Alternative PHP Cache,官方翻译叫”可选PHP缓存”,它是PHP PECL中的一个扩展，好像是facebook在使用它，下面开始安装（ubuntu环境）： 
+$wget http://pecl.php.net/get/APC-3.0.19.tgz
+$tar xvzf APC-3.0.19.tgz
+$cd APC-3.0.19/APC-3.0.19
+$/usr/local/php/bin/phpize
+$./configure –enable-apc –enable-apc-mmap –with-php-config=/usr/local/php/bin/php-config
+$make
+$sudo make install
+下面我们再配置APC,因为我的PECL扩展路径改变了，所以我得移动下编译好的文件：
+$sudo mv /usr/local/php/lib/php/extensions/no-debug-non-zts-20060613/apc.so /usr/local/php/lib/php/extensions/PECL
+然后我们再编辑php.ini文件进行配置，请把下面的代码加入到php.ini中即可：
+extension_dir = "/usr/local/php/lib/php/extensions/PECL"
+extension = apc.so
+; APC
+apc.enabled = 1
+apc.shm_segments = 1
+apc.shm_size = 64
+apc.optimization = 1
+apc.num_files_hint = 0
+apc.ttl = 0
+apc.gc_ttl = 3600
+apc.cache_by_default = on
+     这样重启apache就会在phpinfo()信息中显示。
+       2、安装配置eAccelerator
+          eAccelerator的前身其实是truck-mmcache，因为开发truk-mmcache的人被Zend给招安了，所以开发eAccelerator的人继承了truk-mmcache的一些特性，设计出eAccelerator加速器。安装如下：
+$wget http://jaist.dl.sourceforge.net/sourceforge/eaccelerator/eaccelerator-0.9.5.tar.bz2
+$tar -jxf eaccelerator-0.9.5.tar.bz2
+$cd eaccelerator-0.9.5
+$/usr/local/php/bin/phpize
+$./configure –enable-eaccelerator=shared –with-php-config=/usr/local/php/bin/php-config
+$make
+$sudo make install
+$sudo mv /usr/local/php/lib/php/extensions/no-debug-non-zts-20060613/eaccelerator.so /usr/local/php/lib/php/extensions/PECL
+将下面代码加入php.ini文件中
+extension = eaccelerator.so
+; eAccelerator
+eaccelerator.shm_size = "16"
+eaccelerator.cache_dir = "/tmp/eaccelerator"
+eaccelerator.enable = "1"
+eaccelerator.optimizer = "1"
+eaccelerator.check_mtime = "1"
+eaccelerator.debug = "0"
+eaccelerator.filter = ""
+eaccelerator.shm_max = "0"
+eaccelerator.shm_ttl = "0"
+eaccelerator.prune_period = "0"
+eaccelerator.shm_only = "0"
+eaccelerator.compress = "1"
+eaccelerator.compress_level = "9"
+创建缓存目录,重启apache
+$sudo mkdir /tmp/eaccelerator
+$sudo chmod 777 /tmp/eaccelerator
+$sudo /usr/local/apache/apachectl restart
+在phpinfo()检查是否安装成功.
+3、安装配置XCache
+XCache作为国人自己开发的东西，做小菜鸟的我也感到骄傲，而且XCache无论在速度还是性能上都做的不错。下面就赶紧让我们品尝它吧！
+$wget http://xcache.lighttpd.net/pub/Releases/1.2.2/xcache-1.2.2.tar.gz
+$tar xvzf xcache-1.2.2.tar.gz
+$cd xcache-1.2.2
+$/usr/local/php/bin/phpize
+$./configure –enable-xcache –enable-xcache-coverager –with-php-config=/usr/local/php/php-config
+$make
+$sudo make install
+$sudo mv /usr/local/php/lib/php/extensions/no-debug-non-zts-20060613/xcache.so /usr/local/php/lib/php/extensions/PECL
+在php.ini添加配置信息：
+extension = xcache.so
+; xcache
+xcache.admin.user = "admin"
+xcache.admin.pass = "(执行) echo ’(你的密码)’|md5sum(得出的密文)"
+;
+xcache.size = 24M
+xcache.shm_scheme = "mmap"
+xcache.count = 2
+xcache.slots = 8k
+xcache.ttl = 0
+xcache.gc_interval = 0
+xcache.var_size = 8M
+xcache.var_count = 1
+xcache.var_slots = 8k
+xcache.var_ttl = 0
+xcache.var_maxttl = 0
+xcache.var_gc_interval = 300
+xcache.test = Off
+xcache.readonly_protection = On
+xcache.mmap_path = "/tmp/xcache"
+xcache.coredump_directory = ""
+xcache.cacher = On
+xcache.stat = On
+xcache.optimizer = Off
+;
+xcache.coverager = On
+xcache.coveragedump_directory = ""
+创建缓存目录，重启apache
+$sudo mkdir /tmp/xcache
+$sudo chmod 777 /tmp/xcache
+$sudo /usr/local/apache/bin/apachectl restart
+去查看phpinfo()信息吧！
+   1、通过测试得出eAccelerator在请求时间和内存占用综合方面是最好的。
+   2、通过测试得出使用加速器比无加速器在请求时间快了3倍左右。
+   3、通过各个官方观察，XCache是更新最快的，这也说明最有发展的。
+ 以上是总结结果，你也许会问我到底用那个加速器好呢？我只能告诉你，首先，用一定比不用好，
+其次每个加速器还有一些可以调优的参数，所以要根据你的系统环境而定，然后，我个人觉得你可以详细研
+究下eAccelerator和XCache，这两款潜力还是很大的.
+
+++++++++++mysql_connect 与 memcache_connect 应该哪个在在前，哪个在后++++++++++
+答案应该是先 memcache_connect 再 mysql_connect,因为memcache存在不稳定因素，容易发生阻塞，
+一旦memcache发生阻塞，如果是先mysql_connect,就会造成生成大量mysql空链接而无法释放
+一个类似的问题是 echo $html 和 mysql_connect应该哪个在前
+按照网上看到的以为叫caoz的朋友的说法，应该是mysql_connect在前，echo $html会等待网络传输，
+并发量高的时候会造成数据库链接的阻塞
+
+++++++++++Apache可以被配置为正向(forward)和反向(reverse)代理。++++++++++ 
+正向代理是一个位于客户端和原始服务器之间的服务器，为了从原始服务器取得内容，客户端向代理发送一个
+请求并指定目标(原始服务器)，然后代理向原始服务器转交请求并将获得的内容返回给客户端。客户端必须要
+进行一些特别的设置才能使用正向代理。 
+    正向代理的典型用途是为在防火墙内的局域网客户端提供访问Internet的途径。正向代理还可以使用
+缓冲特性(由mod_cache提供)减少网络使用率。 使用ProxyRequests指令即可激活正向代理。因为正向代理
+允许客户端通过它访问任意网站并且隐藏客户端自身，因此你必须采取安全措施以确保仅为经过授权的客户端
+提供服务.
+   反向代理正好相反，对于客户端而言它就像是原始服务器，并且客户端不需要进行任何特别的设置。
+客户端向反向代理的命名空间(name-space)中的内容发送普通请求，接着反向代理将判断向何处(原始服务器)
+转交请求，并将获得的内容返回给客户端，就像这些内容原本就是它自己的一样。
+    反向代理的典型用途是将防火墙后面的服务器提供给Internet用户访问。反向代理还可以为后端的多
+台服务器提供负载平衡，或为后端较慢的服务器提供缓冲服务。另外，还可以启用高级URL策略和管理技术，
+从而使处于不同web服务器系统的web页面同时存在于同一个URL空间下。 可以使用ProxyPass指令激活反向
+代理。配置反向代理并不需要打开ProxyRequests指令
+
++++++++++++对于大流量的网站,您采用什么样的方法来解决各页面访问量统计问题+++++++++++
+确认服务器硬件是否足够支持当前的流量,数据库读写分离,优化数据表, 
+程序功能规则,禁止外部的盗链,控制大文件的下载,使用不同主机分流主要流量
+
++++++++++++请介绍Session的原理,大型网站中Session方面应注意什么?+++++++++++
+运行机制:客户端将session id传递到服务器，服务器根据session id找到对应的文件，读取的时候对文件内容
+进行反序列化就得到session的值，保存的时候先序列化再写入。
+注意:1,session在大访问量网站上确实影响系统性能，影响性能的原因之一由文件系统设计造成，
+在同一个目录下超过10000个文件时，文件的定位将非常耗时,可以通过修改php.ini中session.save_path设置
+两级子目录 ,session将存储在两级子目录中，每个目录有16个子目录[0~f]，不过好像PHP session不支持创
+建目录，你需要事先把那么些目录创建好 。
+2,还有一个问题就是小文件的效率问题,可以通过存储方式中的memcache来解决I/O效率低下的问题
+3,session同步问题,session同步有很多种，如果你是存储在memcached或者MySQL中，那就很容易了，
+指定到同样的位置即可,还有一种方法就是在负载均衡那一层保持会话，把访问者绑定在某个服务器上，
+他的所有访问都在那个服务器上就不需要session同步了
+
+
++++++++++++测试php性能和mysql数据库性能的工具,和找出瓶颈的方法。+++++++++++
+xhprof  PHP性能测试工具。   MySQL 的企业监控器（Enterprise Monitor）也是值得考虑的工具之一
+
++++++++++++正则提出一个网页中的所有链接.+++++++++++
+/(http:\/\/\[^" ']+)/gm ;
+/href *= *['"]*(\S+)["']* */gm ;
+preg_match_all('/a href=[\"\']|/src=[\"\']([^\"\' ]+)/i',$var,$match);
+
+
++++++++++++介绍一下常见的SSO(单点登陆)方案(比如dedecms整合discuz的passport)的原理。+++++++++++
+单点登录SSO（Single Sign On）说得简单点就是在一个多系统共存的环境下，用户在一处登录后，就不用在
+其他系统中登录，也就是用户的一次登录能得到其他所有系统的信任。单点登录在大型网站里使用得非常频繁，
+例如像阿里巴巴这样的网站，在网站的背后是成百上千的子系统，用户一次操作或交易可能涉及到几十个子系
+统的协作，如果每个子系统都需要用户认证，不仅用户会疯掉，各子系统也会为这种重复认证授权的逻辑搞疯
+掉。实现单点登录说到底就是要解决如何产生和存储那个信任，再就是其他系统如何验证这个信任的有效性，
+因此要点也就以下几个：
+存储信任
+验证信任
+如何高效存储大量临时性的信任数据
+如何防止信息传递过程被篡改
+如何让SSO系统信任登录系统和免登系统
+对于第一个问题，一般可以采用类似与memcached的分布式缓存的方案，既能提供可扩展数据量的机制，也能
+提供高效访问。对于第二个问题，一般采取数字签名的方法，要么通过数字证书签名，要么通过像md5的方式，
+这就需要SSO系统返回免登URL的时候对需验证的参数进行md5加密，并带上token一起返回，最后需免登的系统
+进行验证信任关系的时候，需把这个token传给SSO系统，SSO系统通过对token的验证就可以辨别信息是否被
+改过。对于最后一个问题，可以通过白名单来处理，说简单点只有在白名单上的系统才能请求生产信任关系，
+同理只有在白名单上的系统才能被免登录。
+
++++++++++++一 群猴子排成一圈，按1，2，…，n依次编号。然后从第1只开始数，数到第m只,把它踢出圈，从它后面再开始数，再数到第m只，
+在把它踢出去…，如此不停的 进行下去，直到最后只剩下一只猴子为止，那只猴子就叫做大王。
+要求编程模拟此过程，输入m、n, 输出最后那个大王的编号。用程序模拟该过程。+++++++++++
+ <html>
+      <body>        
+          <?php
+              function monkeyKing($n, $m) {    //$n为猴子总数,$m为剔除猴子步长
+                  $s = 0;    //$s为大王坐标,只有一只猴子时,大王坐标为0
+                  for($i = 2; $i <= $n; $i++) {    //依次向后递推,求到共有$n只猴子,剔除步长为$m时的大王坐标
+                     $s = ($s + $m) % $i;    //大王坐标递推公式
+                 }
+                  return $s;
+            }             
+             echo monkeyKing(6, 2);
+         ?>
+     </body>
+ </html>
+
+
++++++++++++MySQL数据库，怎么优化？+++++++++++
+(1)配置优化（服务器配置）   (2)建表优化（表、字段设置） (3)查询优化（sql语句） 答： 1、选取最适用
+的字段属性,尽可能减少定义字段长度,尽量把字段设置NOT NULL,例如’省份,性别’,最好设置为ENUM 2、
+使用连接（JOIN）来代替子查询: 3、使用联合(UNION)来代替手动创建的临时表 4、事务处理: 5、锁定表,
+优化事务处理: 6、使用外键,优化锁定表 7、建立索引: 8、优化查询语句
+
+
++++++++++++写一个函数，能够遍历一个文件夹下的所有文件和子文件夹。（目录操作）+++++++++++
+$d = dir(dirname(__file__));
+echo "Handle: " . $d->handle . "\n";
+echo "Path: " . $d->path . "\n";
+while ( false !== ($entry = $d->read ()) ) {
+echo $entry . "";
+}
+$d->close ();
+
++++++++++++怎么防止sql注入？+++++++++++
+答：①、过滤用户提交的内容，比如update、insert、select、delete、*等数据库操作的关键字。
+    ②、使用函数addslashes()转义提交的内容。
+③、Php配置文件中开启magic_quotes_gpc=on;将自动转换用户查询的sql语句，对防sql注入有重大作用。
+④、在php配置文件中将register_globals设置为off，关闭全局变量注册。
+⑤、在php配置文件中开启安全模式safe_mode=on;
+⑥、Sql语句的书写尽量不要省略小引号和单引号。
+⑦、提高数据库表和字段的命名技巧，对一些重要的字段根据程序的特点命名，取不易被猜到的名称。
+⑧、控制错误信息，关闭错误信息的输出，将错误信息写到日志文件中，不要在网站暴漏错误信息。
+
+
++++++++++++数据库索引有几类，分别是什么？什么时候该用索引？+++++++++++
+答：①主键索引，它用于根据主键自身的唯一性来唯一标识每条记录。因此，该键必须是该记录所表示实体唯一拥有的值，或者是数据库生成的唯一值，例如自增加整数值。这样，无论以后是否删除以前存在的记录，每条记录都有唯一的主键索引。
+②与主键索引一样，唯一索引可以防止重建重复的值。但是，不同之处在于，每个表只能有一个主键索引，但可以有多个唯一索引。
+     ③常规索引。经常希望对非主键甚至并非唯一的字段上的搜索进行优化。（1）如果表中的某个列将成为大量选择查询的焦点，就应当使用单列常规索引。并且一般指定列的前N个字符对于确保唯一性已经足够，如：INDEX(lastname(5))。（2）如果指定列会经常在获取查询中一起使用，则推荐使用多列索引。Mysql的多列索引方法基于一种称为最左前缀的策略。
+     ④全文索引。提供了一种高效的方法来搜索存储在CHAR、VARCHAR或者TEXT类型中的文本。Mysql默认会忽略少于4个字符的关键字。Boolean全文搜索对搜索查询提供了更细粒度的控制，允许显示的标识结果中应当或不应当出现哪些单词。
+索引最佳实践
+只对where和order by子句中需要的列添加索引。多余的索引会导致不必要的硬盘空间消耗，在修改表信息的时候会降低性能。有索引的表在性能会降低，这是由于每次修改记录都必须更新索引。
+如果创建诸如INDEX(firstname,lastname)的索引，不要再创建INDEX(firstname),因为mysql能搜索索引前缀。不过，要记住只有前缀有索引，这个多列索引不能应用于对lastname的搜索。
+对于准备索引的列要使用属性NOT NULL，这样就永远不会存在存储NULL值。
+对不使用索引的查询，使用选项—log-long-format来记录日志。然后可以检查日志文件，对查询进行相应的调整。
+EXPLAIN语句有助于确定mysql如何执行查询，展示表是如何连接的，以及按怎样的顺序连接。
+
+
++++++++++++引用传值和非引用传值的区别，什么时候该用引用传值，什么时候该用非引用传值+++++++++++
+答：按值传递：函数内对值的任何改变在函数外都被忽略。
+引用传值：函数内对值的任何改变在函数外也将反映出这些修改。
+按值传递时php必须复制值，操作大型对象和字符串这将是代价很大的操作。按引用传值不需要复制值，对性能的提高有好处。
+当需要在函数内改变原变量的值时用引用传值，如果不想改变原变量的值时用传值。
+
+
++++++++++++PHP遍历文件夹及子文件夹所有文件 +++++++++++
+ <html>
+      <body>
+         <?php
+             function traverse($path = '.') {
+                  $current_dir = opendir($path);    //opendir()返回一个目录句柄,失败返回false
+                 while(($file = readdir($current_dir)) !== false) {    //readdir()返回打开目录句柄中的一个条目
+                      $sub_dir = $path . DIRECTORY_SEPARATOR . $file;    //构建子目录路径
+                     if($file == '.' || $file == '..') {
+                          continue;
+                     } else if(is_dir($sub_dir)) {    //如果是目录,进行递归
+                         echo 'Directory ' . $file . ':<br>';
+                         traverse($sub_dir);
+                     } else {    //如果是文件,直接输出
+                         echo 'File in Directory ' . $path . ': ' . $file . '<br>';
+                     }
+                 }
+             }             
+             traverse('xxtt');
+         ?>
+ </html>
+
+
+ +++++++++++PHP中单引号双引号的区别 +++++++++++
+1.双引号可以解析变量表达式,单引号不能
+2.双引号会对换行符等转义字符进行解析,而单引号不能
+1  <?php
+2     $name = "Jack";
+3     echo '$nameJones, you are a good \t\tguy <br>';
+4     echo "{$name}Jones, you are a good \t\tguy";
+5  ?>
+页面输出
+$nameJones, you are a good \t\tguy 
+JackJones, you are a good guy
+
+
+++++++++php分析当前url的域名和顶级域名++++++++++
+function parseDomain($url){
+    $url = strtolower(trim($url));
+    if(empty($url)) return '';
+    $regx1 = '/(https?:\/\/)(([^\/\?#]+\.)?([^\/\?#-\.]+\.)(com\.cn|org\.cn|net\.cn|com\.jp|co\.jp|com\.kr|com\.tw)(\:[0-9]+)?)/i';
+    $regx2 = '/(https?:\/\/)(([^\/\?#]+\.)?([^\/\?#-\.]+\.)(cn|com|org|net|cc|biz|hk|jp|kr|name|me|tw|la)(\:[0-9]+)?)/i';
+    $domain = $topDomain = '';
+    if(preg_match($regx1, $url, $matches)){
+        $domain = $matches[0];
+    }elseif(preg_match($regx2, $url, $matches)){
+        $domain = $matches[0];
+    }
+    if($matches){
+        if($matches[3] == 'www.'){
+            $topDomain = $domain;
+        }else{
+            foreach($matches as $key => $value){
+                if($key!=1 && $key<4) continue;
+                $topDomain .= $value;
+            }
+        }
+    }
+    return array('domain' => $domain, 'top_domain' => $topDomain);
+}
+//测试代码
+$url = 'http://www.justflyhigh.com:8080';
+printf('<pre>%s</pre>', print_r(parseDomain($url), true));
+结果为：
+Array(
+  [domain] => http://www.justflyhigh.com:8080
+  [top_domain] => http://justflyhigh.com:8080
+)
+
+
+++++++php手机号中间几位替换成星号+++++++
+$string = '王经理：13241262019，李经理：13841261234';
+echo preg_replace('/(\d{3})\d{4}/', '$1****', $string);
+或者
+$phone = '13241262019';
+echo substr_replace($phone, '****', 3, 4);
+
+
++++++++++php采集图片程序+++++++++++++
+/**
+*  采集图片php程序
+*/
+set_time_limit(0);
+/**
+* 写文件
+* @param    string  $file   文件路径
+* @param    string  $str    写入内容
+* @param    char    $mode   写入模式
+*/
+function wfile($file,$str,$mode='w')
+{
+    $oldmask = @umask(0);
+    $fp = @fopen($file,$mode);
+    @flock($fp, 3);
+    if(!$fp)
+    {
+        Return false;
+    }
+    else
+    {
+        @fwrite($fp,$str);
+        @fclose($fp);
+        @umask($oldmask);
+        Return true;
+    }
+}
+function savetofile($path_get,$path_save)
+{
+        @$hdl_read = fopen($path_get,'rb');
+        if($hdl_read == false)
+        {
+                echo("<span style='color:red'>$path_get can not get</span>");
+                Return ;
+        }
+        if($hdl_read)
+        {
+                @$hdl_write = fopen($path_save,'wb');
+                if($hdl_write)
+                {
+                        while(!feof($hdl_read))
+                        {
+                                fwrite($hdl_write,fread($hdl_read,8192));
+                        }
+                        fclose($hdl_write);
+                        fclose($hdl_read);
+                        return 1;
+                }
+                else
+                        return 0;
+        }
+        else
+                return -1;
+}
+function getExt($path)
+{
+        $path = pathinfo($path);
+        return strtolower($path['extension']);
+}
+/**
+* 按指定路径生成目录
+*
+* @param    string     $path    路径
+*/
+function mkDirs($path)
+{
+    $adir = explode('/',$path);
+    $dirlist = '';
+    $rootdir = array_shift($adir);
+    if(($rootdir!='.'||$rootdir!='..')&&!file_exists($rootdir))
+    {
+        @mkdir($rootdir);
+    }
+    foreach($adir as $key=>$val)
+    {
+        if($val!='.'&&$val!='..')
+        {
+            $dirlist .= "/".$val;
+            $dirpath = $rootdir.$dirlist;
+            if(!file_exists($dirpath))
+            {
+                @mkdir($dirpath);
+                @chmod($dirpath,0777);
+            }
+        }
+    }
+}
+/**
+* 从文本中取得一维数组
+*
+* @param    string     $file_path    文本路径
+*/
+function getFileListData($file_path)
+{
+    $arr = @file($file_path);
+    $data = array();
+    if(is_array($arr) && !empty($arr))
+    {
+        foreach($arr as $val)
+        {
+            $item = trim($val);
+            if(!empty($item))
+            {
+                $data[] = $item;
+            }
+        }
+    }
+    Return $data;
+}
+//采集开始
+//传入自己的需要采集的图片url列表文本文件 每个图片url写一行
+$url_file = isset($_GET['file'])&&!empty($_GET['file'])?$_GET['file']:null;
+$txt_url = "txt/".$url_file;
+$urls = array_unique(getFileListData($txt_url));
+if(empty($urls))
+{
+        echo('<div style="color:red">无链接地址</div>');
+        die();
+}
+$save_url = "images/".date("y_m_d",time())."/";
+mkDirs($save_url);  //按日期建立文件夹
+$i = 1;
+if(is_array($urls)&&count($urls))
+{
+        foreach($urls as $val)
+        {
+                savetofile($val,$save_url.date("His",time())."_".$i.".".getExt($val));
+                echo($i.".".getExt($val)." got\n");
+                $i++;
+        }
+}
+echo('<div style="color:green">finish</div>');
+
++++++++++++大型的论坛/新闻文章系统/SNS网站在性能优化上有什么区别?+++++++++++
+新闻媒体注意细览页的性能优化，比如图片、结构，保持清爽；
+SNS注意交互、页面JS、ajxa、动态内容大小；
+严格控制大小、减少定向、压缩图片、降低CSS加载速度，利用好缓存，这是通的。
+

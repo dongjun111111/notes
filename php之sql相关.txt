@@ -120,3 +120,8 @@ HAVING子句用于指定组或聚合的搜索条件，HAVING通常与GROUP BY 语句一起使用，如果SQL
 e.x:SELECT name,math FROM tb_demo083 GROUP BY id HAVING math > '95'
 由IN引入的关联子查询
 e.x:SELECT * FROM tb_demo083 WHERE code IN(SELECT code FROM tb_demo083 WHERE code = '$_POST[text]')
+
+++++++SQL中DateDiff函数++++++
+返回两个日期之间的间隔。
+SELECT datediff( month, '1999/07/19', '1999/08/23' )；
+结果是：1；
