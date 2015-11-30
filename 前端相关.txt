@@ -9,3 +9,55 @@ html{
     filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);   -webkit-filter: grayscale(1);
 }
 将上述代码放入head中的style即可。
+
+
+这篇日志主要是写  javascript、DOM 的一些 属性 和 方法 。
+DOM
+document.createElement(li);   创建一个元素
+document.createTextNode();    创建一个文本
+.appendChild();   在父DOM里面插入一个子节点
+.insertBefore(子节点，在谁之前)
+removeChild()    删除子元素
+cloneNode      复制节点
+replaceChild    替换节点
+hasChildNodes   判断给定元素节点是否有子元素
+parentNode     上级元素节点
+childNodes     子节点集合
+nodeName   属性含有某个节点的名称。
+nodeType    3 文本节点  1 元素节点
+children     取元素
+offsetParent    此元素的上级定位元素    
+firstChild     第一个子节点    FF 下面 是  firstElementChild
+lastChild     最后一个子节点   FF  下面是    lastElementChild
+nextSibling    下面的兄弟元素  FF下面是   nextElementSibling
+previousSibling   上面的兄弟元素   FF下面是     previousElementSibling
+a.value ==  a['value']
+nodeValue     元素内容
+setAttribute(名称，值)    设置元素属性
+getAttribute(名称)    获取元素属性
+removeAttribute(名称)    删除元素属性
+.style.proprtype   设置元素的css
+className    改变元素的class 
+
+
+js获取一个页面中的所有a元素和title元素，然后创造新的P元素，并把a的title和内容附加到p元素中。
+<script type="text/javascript">  
+window.onload = function(){  
+ var mya = document.getElementsByTagName('a');  
+ var tmp = Array();  
+ for(var i = 0; i<mya.length; i++){  
+    var mytit = mya[i].getAttribute('title');  
+tmp[mytit] = mya[i].lastChild.nodeValue;  
+ }  
+ var myBody = document.getElementsByTagName('body')[0];  
+ for (key in tmp){  
+     var myP = document.createElement('p');  
+myP.title = key;  
+var myTxt = document.createTextNode(tmp[key]);  
+myP.appendChild(myTxt);  
+myBody.appendChild(myP);  
+ }  
+}  
+</script>  
+
+
