@@ -287,3 +287,9 @@ SQL语句用双引号，其中的值都用单引号，例如"INSERT INTO gril SET money='{$iMaxMone
 很多时候为integer类型加上unsigned是很好的
 INERT DELEYED、INSERT IGNORE、SELECT DISTINCT…这种语句通常有意想不到的好效果
 varchar类型并不是不能超过255长度，而是超过了255，这个字段就不能建立索引了，所以，看你的实际需要了
+
+
+使用ip2long() 和long2ip()函数来把IP地址转化成整型存储到数据库里。
+这种方法把存储空间降到了接近四分之一(char(15)的15个字节对整形的4个字节)，
+计算一个特定的地址是不是在一个区段内页更简单了， 而且加快了搜索和排序的速度
+(虽然有时仅仅是快了一点)。

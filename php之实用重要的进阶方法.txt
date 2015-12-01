@@ -2502,3 +2502,93 @@ $items = array(
 );  
 print_r(generateTree($items));  
 
+
++++++++php文件下载++++++++++
+  $file_name = "test.jpg";  
+    $file_dir = "./";  
+    //检查文件是否存在  
+    if(!file_exists($file_dir . $file_name)){
+	  echo "没有文件";exit;
+	}
+    else   
+    {  
+        $file = fopen($file_dir . $file_name,"r"); // 打开文件   
+        Header("Content-type: application/octet-stream");  
+        Header("Accept-Ranges: bytes");  
+        Header("Accept-Length: ".filesize($file_dir . $file_name));  
+        Header("Content-Disposition: attachment; filename=" . $file_name);  // 输出文件内容          
+        echo fread($file,filesize($file_dir . $file_name));  
+        fclose($file);  
+    }  
+
+
+++++php反盗链类++++++++
+<?php  
+$ADMIN[defaulturl] = "test.gif";//盗链返回的地址  
+$okaysites = array("http://www.deographics.com/","http://deographics.com/");  //白名单    
+$ADMIN[url_1] = "http://deographics.com/";//下载地点1  
+$ADMIN[url_2] = ""; //下载地点2，以此类推  
+   
+$reffer = $HTTP_REFERER;  
+  
+if($reffer) {  
+    $yes = 0;  
+    while(list($domain, $subarray) = each($okaysites)) {  
+        if (ereg($subarray,"$reffer")) {  
+            $yes = 1;  
+        }  
+    }  
+  
+    $theu = "url"."_"."$site";  
+  
+    if ($ADMIN[$theu] AND $yes == 1) {  
+        header("Location: $ADMIN[$theu]/$file");  
+    } else {  
+        header("Location: $ADMIN[defaulturl]");  
+    }  
+} else {  
+    header("Location: $ADMIN[defaulturl]");  
+}  
+
+
++++++PHP生成网页快照+++++++
+<?php  
+$url = 'http://www.baidu.com/'; //抓取百度  
+echo snapshot($url);  //输出结果为图片地址  
+echo snapshot($url, './baidu.png'); //将图片保存至本地baidu.png, 输出内容图片大小  
+  
+/** 
+ * 生成网页快照 
+ * @param   string  $site   目标地址 
+ * @param   string  $path   保存地址, 为空则不保存 
+ * @param   integer $dealy  延迟 
+ * @return  mixed   根据参数返回 
+ */  
+function snapshot($site, $path = '', $dealy = 0)  
+{  
+    $url   = 'http://ppt.cc/yo2/catch.php';  
+    $query = 'url=' . $site . '&delay=' . $dealy . '&rnd=' . mt_rand(1, 9);  
+    $ch    = curl_init($url);  
+    curl_setopt($ch, CURLOPT_POST, true);  
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $query);  
+    curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);  
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
+    $data = curl_exec($ch);  
+    curl_close($ch);  
+  
+  
+    if (strlen($data) != 32) {  
+        exit('无效网址');  
+    }  
+  
+  
+    $file = $data{0} . '/' . $data{1} . '/' . $data{2} . '/';  
+    $file = 'http://cache.ppt.cc/' . $file . 'src_' . $data . '.png';  
+  
+  
+    if (!emptyempty($path)) {  
+        $data = file_get_contents($file);  
+        return file_put_contents($path, $data);  
+    }  
+    return $file;  
+}  
