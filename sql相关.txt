@@ -125,3 +125,31 @@ SELECT datediff( month, '1999/07/19', '1999/08/23' )；
 为了找出包含正好5个字符的名字，使用“_”模式字符：
 mysql> SELECT * FROM pet WHERE name LIKE "_____";
 
+
+++++LOWER(str)++++++++
+SELECT LOWER('QUADRATICALLY');
++------------------------+
+| LOWER('QUADRATICALLY') |
++------------------------+
+| quadratically           |
++------------------------+
+
+
+++++LEFT(str,len)++++
+mysql> ? left
+mysql> SELECT LEFT('foobarbar', 5);
++----------------------+
+| LEFT('foobarbar', 5) |
++----------------------+
+| fooba                 |
++----------------------+
+
+
+++++ABS(X) 取绝对值函数++++
+mysql> ? abs
+mysql> SELECT ABS(-32);
++----------+
+| ABS(-32) |
++----------+
+|        32 |
++----------+
