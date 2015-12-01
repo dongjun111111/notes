@@ -2469,3 +2469,13 @@ $card_pre = '756';     //改这里
 $card_vc = substr(md5($card_pre.$card_no),0,2);   
 $card_vc = strtoupper($card_vc);   
 echo $card_pre.$card_no.$card_vc;   
+
+
+++++++php制作二维码++++++   该文件在 -》工具包 -》phpqrcode
+include "./phpqrcode/phpqrcode.php"; 
+$value="Jason"; 
+$errorCorrectionLevel = "L"; 
+$matrixPointSize = "4"; 
+QRcode::png($value, false, $errorCorrectionLevel, $matrixPointSize); 
+exit; 
+
