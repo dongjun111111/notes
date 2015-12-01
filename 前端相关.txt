@@ -131,3 +131,14 @@ if(Sys.safari) document.write('Safari: '+Sys.safari);
 
 JS各种弹窗效果：
 http://www.web92.net/dom/2012-06-04-XY_Tips/
+
+++++++对于input输入框+++++
+readonly说明此域的值不可修改，只可与 type="text" 配合使用，可复制，
+可选择,可接收焦点，后台会接收到传值。
+<input type="text" name="www.xxx" readonly="readonly" />
+disabled表示禁用input元素，不可编辑，不可复制，不可选择，
+不能接收焦点,后台也不会接收到传值
+<input type="text" name="www.xxx.com" disabled="disabled" />
+最后介绍一个标签，浏览器通常会记录input输入框的记录，所以你在输入的时候，经常会下拉很多内容，
+如果你想去掉的话，最好加上autocomplete="off"，使用方法如下：autocomplete="off"
+<input type="text" autocomplete="off" id="number"/>
