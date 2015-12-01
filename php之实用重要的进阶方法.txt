@@ -2299,9 +2299,173 @@ http://justcoding.iteye.com/blog/2186554
 
 ++++++php中extract()函数++++++
 将数组中的键名作为变量，键值作为值的转换方法！
+对于数组中的每个元素，键名用于变量名，键值用于变量值
 $a = 'Original';  
 $my_array = array("a" => "Cat","b" => "Dog", "c" => "Horse");  
 extract($my_array);  
 echo "\$a = $a; \$b = $b; \$c = $c"; 
 结果是：
 $a = Cat; $b = Dog; $c = Horse
+
+
++++++++++哈希算法加密+++++++
+$pwd = "123456";  
+$hash = password_hash($pwd, PASSWORD_DEFAULT);  
+echo $hash; 
+
+
+
+++++++++PHP把阿拉伯数字转化为中文汉字(大、小写)++++++++
+function number2Chinese($num, $m = 1) {  
+    switch($m) {  
+        case 0:  
+            $CNum = array(  
+                        array('零','壹','贰','叁','肆','伍','陆','柒','捌','玖'),  
+                        array('','拾','佰','仟'),  
+                        array('','萬','億','萬億')  
+                    );  
+            break;  
+        default:  
+            $CNum = array(  
+                    array('零','一','二','三','四','五','六','七','八','九'),  
+                    array('','十','百','千'),  
+                    array('','万','亿','万亿')  
+            );  
+            break;  
+    }  
+        
+    // $cNum = array('零','一','二','三','四','五','六','七','八','九');  
+   
+    if (is_integer($num)) {  
+        $int = (string)$num;  
+    } else if (is_numeric($num)) {  
+        $num = explode('.', (string)floatval($num));  
+        $int = $num[0];  
+        $fl  = isset($num[1]) ? $num[1] : FALSE;  
+    }  
+        
+    // 长度  
+    $len = strlen($int);  
+        
+    // <a href="http://www.sharetk.com/" target="_blank"><u>中文</u></a>  
+    $chinese = array();  
+   
+    // 反转的<a href="http://www.sharetk.com/" target="_blank"><u>数字</u></a>  
+    $str = strrev($int);  
+        
+    for($i = 0; $i<$len; $i+=4 ) {  
+        $s = array(0=>$str[$i], 1=>$str[$i+1], 2=>$str[$i+2], 3=>$str[$i+3]);  
+            
+        $j = '';  
+        // 千位  
+        if ($s[3] !== '') {  
+            $s[3] = (int) $s[3];  
+            if ($s[3] !== 0) {  
+                $j .= $CNum[0][$s[3]].$CNum[1][3];  
+            } else {  
+                if ($s[2] != 0 || $s[1] != 0 || $s[0]!=0) {  
+                    $j .= $CNum[0][0];  
+                }  
+            }  
+        }  
+        // 百位  
+        if ($s[2] !== '') {  
+            $s[2] = (int) $s[2];  
+            if ($s[2] !== 0) {  
+                $j .= $CNum[0][$s[2]].$CNum[1][2];  
+            } else {  
+                if ($s[3]!=0 && ($s[1] != 0 || $s[0]!=0) ) {  
+                    $j .= $CNum[0][0];  
+                }  
+            }  
+        }  
+        // 十位  
+        if ($s[1] !== '') {  
+            $s[1] = (int) $s[1];  
+            if ($s[1] !== 0) {  
+                $j .= $CNum[0][$s[1]].$CNum[1][1];  
+            } else {  
+                if ($s[0]!=0 && $s[2] != 0) {  
+                    $j .= $CNum[0][$s[1]];  
+                }  
+            }  
+        }  
+        // 个位  
+        if ($s[0] !== '') {  
+            $s[0] = (int) $s[0];  
+            if ($s[0] !== 0) {  
+                $j .= $CNum[0][$s[0]].$CNum[1][0];  
+            } else {  
+                    
+                // $j .= $CNum[0][0];  
+                    
+            }  
+        }  
+            
+        $j.=$CNum[2][$i/4];  
+        array_unshift($chinese, $j);  
+    }  
+        
+    $chs = implode('', $chinese);  
+        
+    if ($fl) {  
+        $chs .= '点';  
+        for($i=0,$j=strlen($fl); $i<$j; $i++) {  
+            $t = (int)$fl[$i];  
+            $chs.= $str[0][$t];  
+        }  
+    }          
+    return $chs;  
+}   
+
+
+++++php生成唯一会员卡号+++++++
+class Code {           //进行进制转换，10进制转36进制
+    //密码字典   
+    private $dic = array(   
+        0=>'0',    1=>'1', 2=>'2', 3=>'3', 4=>'4', 5=>'5', 6=>'6', 7=>'7', 8=>'8',       
+        9=>'9', 10=>'A',  11=>'B', 12=>'C', 13=>'D', 14=>'E', 15=>'F',  16=>'G',  17=>'H',       
+        18=>'I',19=>'J',  20=>'K', 21=>'L',  22=>'M',  23=>'N', 24=>'O', 25=>'P', 26=>'Q',       
+    27=>'R',28=>'S',  29=>'T',  30=>'U', 31=>'V',  32=>'W',  33=>'X', 34=>'Y', 35=>'Z'   
+    );   
+    public function encodeID($int, $format=8) {   
+        $dics = $this->dic;   
+        $dnum = 36; //进制数   
+        $arr = array ();   
+        $loop = true;   
+        while ($loop) {   
+            $arr[] = $dics[bcmod($int, $dnum)];   
+            $int = bcdiv($int, $dnum, 0);   
+            if ($int == '0') {   
+                $loop = false;   
+            }   
+        }   
+        if (count($arr) < $format)   
+            $arr = array_pad($arr, $format, $dics[0]);   
+   
+        return implode('', array_reverse($arr));   
+    }      
+    public function decodeID($ids) {   
+        $dics = $this->dic;   
+        $dnum = 36; //进制数   
+        //键值交换   
+        $dedic = array_flip($dics);   
+        //去零   
+        $id = ltrim($ids, $dics[0]);   
+        //反转   
+        $id = strrev($id);   
+        $v = 0;   
+        for ($i = 0, $j = strlen($id); $i < $j; $i++) {   
+            $v = bcadd(bcmul($dedic[$id {   
+                $i }   
+            ], bcpow($dnum, $i, 0), 0), $v, 0);   
+        }   
+        return $v;   
+    }   
+}  
+$code = new Code();   
+$card_no = $code->encodeID(888888,5); 
+$card_pre = '756';     //改这里
+$card_vc = substr(md5($card_pre.$card_no),0,2);   
+$card_vc = strtoupper($card_vc);   
+echo $card_pre.$card_no.$card_vc;   
