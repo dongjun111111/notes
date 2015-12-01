@@ -51,6 +51,15 @@ echo strpbrk('i love hz','ve');
 结果是：
 ve hz
 
+++++exif_imagetype()函数++++++
+exif_imagetype判断一个图像的类型
+if (exif_imagetype("image.gif") != IMAGETYPE_GIF) {  
+    echo "The picture is not a gif";  
+}  
+if (in_array(exif_imagetype("path/to/file"), array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG , IMAGETYPE_BMP))) {  
+    echo "This is a picture ";  
+}  
+
 
 +++++echo()函数+++++++
 //PHP是先连接字符串再进行加法计算了.按照从左向右的方向进行的。
