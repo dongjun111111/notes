@@ -884,4 +884,16 @@ $intval=60;
   }while(true);
 
 
++++++flush()与ob_flush()函数+++++++
+实现php定时执行功能。
+header("Content-Type: text/html");
+set_time_limit(0);
+$infoString = "Hello World";
+while( isset($infoString) )
+{
+echo $infoString;
+flush();  //把不在缓冲中的或者说是被释放出来的数据发送到浏览器
+ob_flush(); //把数据从PHP的缓冲中释放出来，必须配合flush()使用
+sleep(5);
+}
 
