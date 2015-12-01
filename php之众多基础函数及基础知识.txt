@@ -906,3 +906,62 @@ flush();  //把不在缓冲中的或者说是被释放出来的数据发送到�
 ob_flush(); //把数据从PHP的缓冲中释放出来，必须配合flush()使用
 sleep(5);
 }
+
+
+++++个人电脑文件目录变更日志小程序+++++
+实现功能：
+实现子文件的文件读取，只写了两级，多级的话循环调就可以了
+文件目录生成（使用序列化的格式，可以当作文件日志，当然你可以可以生成好看的排版格式）
+文件变更对比，（本以为使用array_diff很容易实现，结果不知道返回值总是空，蛋疼，希望高手尝试一下）
+
+<?php
+/*扫描指定目录下文件 返回数组
+ 
+*/
+    function mydir($dir){
+        $myfile = scandir($dir,1);
+        foreach($myfile as $k=>$v){
+         
+        if(is_dir($dir."/".$v)==true&&$dir."/".$v !=$dir."/"."."&&$dir."/".$v !=$dir."/".".."){
+            $sondir = $dir."/".$v;
+            $sonfile = scandir($sondir);
+             
+            foreach($sonfile as $kk=>$vv)
+            $result[$k][$kk]['filename'] = $vv;
+            // $result[$k][$kk]['filesize'] = filesize($vv);//文件大小 单位字节
+            $result[$k][$kk]['filectime'] = date("Y-m-d H:i:s",filectime($sondir."/".$vv));
+            $result[$k][$kk]['fileatime'] = date("Y-m-d H:i:s",fileatime($sondir."/".$vv));//上次访问时间
+        }else{
+            $result[$k]['filename'] = $v;//文件名称
+            // $result[$k]['filesize'] = filesize($v);//文件大小 单位字节
+            // $result[$k]['fileowner'] = fileowner($v);//文件属于者         
+            $result[$k]['filectime'] = date("Y-m-d H:i:s",filectime($dir."/".$v));//创建时间
+            $result[$k]['fileatime'] = date("Y-m-d H:i:s",fileatime($dir."/".$v));//上次访问时间
+        }
+         
+    }
+        return $result;
+     
+    }
+    //测试
+    $mydir = mydir("F:\电影\Youku视频");
+     
+    $array = serialize($mydir);//序列化存储
+    $fp = fopen("data.txt","a");//每次变化都追加到文件尾端写入（相当于日志）
+    if(fwrite($fp,$array)){
+        echo "文件日志生成ok";
+        fclose($fp);
+    }
+
+++++PHP判断远程url是否有效的几种方法+++++
+
+<?php 
+$url = "http://cn.php.net/images/php.gif"; 
+$array = get_headers($url,1); 
+if(preg_match('/200/',$array[0])){ 
+    echo "<pre/>"; 
+    print_r($array); 
+}else{ 
+    echo "无效url资源！"; 
+}
+
