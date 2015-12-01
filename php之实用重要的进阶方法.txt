@@ -1,4 +1,4 @@
-++++++php用Curl抓取远程图片/文件++++++++++
+﻿++++++php用Curl抓取远程图片/文件++++++++++
 header('Contents-Type:text/html;charset=utf-8');  
 $curl = curl_init();  
 $a =  '<img src="http://p0.so.qhimg.com/sdr/200_200_/t013663df1bf55ce250.jpg"  /> ';  
@@ -413,6 +413,19 @@ function splitStrToArray($array)
 {
 	return str_split(implode("", $array));
 }
+
+++++php判断数组中存不存在大于或者小于或者等于某个值的一项+++++++
+$arr=array(1,45,6,67,57,5,45,64,99,66,666);
+foreach($arr as $k=>$v){
+	if($v>=100){
+		$dd='存在';
+		break;
+	}
+}
+$dd=empty($dd)?'无内容':$dd;
+echo $dd;
+
+
 
 +++++++++PHP发送邮件+++++++++
 PHP发送邮件的小程序很简单，不过有些需要注意的地方。先上代码：
