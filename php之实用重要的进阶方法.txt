@@ -2217,5 +2217,76 @@ var_dump($result_bonus);
 //ksort($arr);  
 //var_dump($arr);  
 
++++++++PHP生成静态页面实例代码++++++
+<?  
+ob_start();  
+echo "<html>".  
+"<head>".  
+"<title>PHP网站静态化教程</title>".  
+"</head>".  
+"<body>欢迎访问PHP网站开发教程网www.leapsoul.cn，本文主要介绍PHP网站页面静态化的方法</body>".  
+"</html>";  
+$out1 = ob_get_contents();  
+ob_end_clean();  
+$fp = fopen("leapsoulcn.html","w");  
+if(!$fp)  
+{  
+echo "System Error";  
+exit();  
+}  
+else  
+{  
+fwrite($fp,$out1);  
+fclose($fp);  
+echo "Success";  
+}  
+?>  
 
 
+++++++php自己写的红包算法+++++
+header("Content-Type: text/html;charset=utf-8");  
+$total=10;//红包总额  
+$num=8;// 分成8个红包，支持8人随机领取  
+$min=0.01;//每个人最少能收到0.01元  
+  
+for ($i=1;$i<$num;$i++)  
+{  
+    $safe_total=$total-($num-$i)*$min;//随机安全上限  
+    $money=mt_rand($min*100,$safe_total*100)/100;  
+    $total=$total-$money;  
+    echo '第'.$i.'个红包：'.$money.' 元，余额：'.$total.' 元 <br/>';  
+}  
+echo '第'.$num.'个红包：'.$total.' 元，余额：0 元'; 
+
+结果为：
+第1个红包：0.19 元，余额：9.81 元 
+第2个红包：5.5 元，余额：4.31 元 
+第3个红包：0.81 元，余额：3.5 元 
+第4个红包：0.89 元，余额：2.61 元 
+第5个红包：1.15 元，余额：1.46 元 
+第6个红包：1.2 元，余额：0.26 元 
+第7个红包：0.03 元，余额：0.23 元 
+第8个红包：0.23 元，余额：0 元
+----》》》》改良一下，将平均值作为随机安全上限来控制波动差
+header("Content-Type: text/html;charset=utf-8");  
+$total=10;//红包总额  
+$num=8;// 分成8个红包，支持8人随机领取  
+$min=0.01;//每个人最少能收到0.01元  
+for ($i=1;$i<$num;$i++)  
+{  
+    $safe_total=($total-($num-$i)*$min)/($num-$i);//随机安全上限  
+    $money=mt_rand($min*100,$safe_total*100)/100;  
+    $total=$total-$money;  
+    echo '第'.$i.'个红包：'.$money.' 元，余额：'.$total.' 元 <br/>';  
+}  
+echo '第'.$num.'个红包：'.$total.' 元，余额：0 元';
+
+结果为：
+第1个红包：0.77 元，余额：9.23 元 
+第2个红包：0.3 元，余额：8.93 元 
+第3个红包：1.41 元，余额：7.52 元 
+第4个红包：1.42 元，余额：6.1 元 
+第5个红包：0.55 元，余额：5.55 元 
+第6个红包：2.45 元，余额：3.1 元 
+第7个红包：1.08 元，余额：2.02 元 
+第8个红包：2.02 元，余额：0 元
