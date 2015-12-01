@@ -868,3 +868,20 @@ echo $json_Class->{'a'};     //看这里，两者访问方法不一样
  访问数组类型$json_Array的a的值
 echo $json_Array['a'];       //看这里，两者访问方法不一样
         程序输出：php   
+
+
+++++++sleep()函数++++++死循环
+无限执行程序，容易导致浏览器或电脑崩溃哟
+ignore_user_abort();//关闭浏览器后，继续执行php代码
+set_time_limit(0); //程序执行时间无限制
+$intval=60; 
+   do{
+     $msg=date("Y-m-d H:i:s");
+     echo date('Y-m-d H:i:s',time());
+     file_put_contents("log.log",$msg,FILE_APPEND);//记录日志
+    sleep($interval);//等待时间，进行下一次操作。
+	
+  }while(true);
+
+
+
