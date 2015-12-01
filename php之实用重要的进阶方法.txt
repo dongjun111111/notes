@@ -2295,3 +2295,13 @@ echo '第'.$num.'个红包：'.$total.' 元，余额：0 元';
 
 很多牛逼的工具，就在这里：
 http://justcoding.iteye.com/blog/2186554
+
+
+++++++php中extract()函数++++++
+将数组中的键名作为变量，键值作为值的转换方法！
+$a = 'Original';  
+$my_array = array("a" => "Cat","b" => "Dog", "c" => "Horse");  
+extract($my_array);  
+echo "\$a = $a; \$b = $b; \$c = $c"; 
+结果是：
+$a = Cat; $b = Dog; $c = Horse
