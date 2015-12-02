@@ -2313,3 +2313,175 @@ which.style.top=0
 <style>.shakeimage {POSITION: relative} 
 </style> 
 <img src="图片的路径" onmouseout=stoprattle(this) onmouseover=init(this);rattleimage() class="shakeimage">
+
+
++++JS数学函数+++++
+
+Math对象 
+  1. Math.abs(num) : 返回num的绝对值 
+  2. Math.acos(num) : 返回num的反余弦值 
+  3. Math.asin(num) : 返回num的反正弦值 
+  4. Math.atan(num) : 返回num的反正切值 
+  5. Math.atan2(y,x) : 返回y除以x的商的反正切值 
+  6. Math.ceil(num) : 返回大于num的最小整数 
+  7. Math.cos(num) : 返回num的余弦值 
+  8. Math.exp(x) : 返回以自然数为底,x次幂的数 
+  9. Math.floor(num) : 返回小于num的最大整数 
+  10.Math.log(num) : 返回num的自然对数 
+  11.Math.max(num1,num2) : 返回num1和num2中较大的一个 
+  12.Math.min(num1,num2) : 返回num1和num2中较小的一个 
+  13.Math.pow(x,y) : 返回x的y次方的值 
+  14.Math.random() : 返回0到1之间的一个随机数 
+  15.Math.round(num) : 返回num四舍五入后的值 
+  16.Math.sin(num) : 返回num的正弦值 
+  17.Math.sqrt(num) : 返回num的平方根 
+  18.Math.tan(num) : 返回num的正切值 
+  19.Math.E : 自然数(2.718281828459045) 
+  20.Math.LN2 : 2的自然对数(0.6931471805599453) 
+  21.Math.LN10 : 10的自然对数(2.302585092994046) 
+  22.Math.LOG2E : log 2 为底的自然数(1.4426950408889634) 
+  23.Math.LOG10E : log 10 为底的自然数(0.4342944819032518) 
+  24.Math.PI : π(3.141592653589793) 
+  25.Math.SQRT1_2 : 1/2的平方根(0.7071067811865476) 
+  26.Math.SQRT2 : 2的平方根(1.4142135623730951)
+
+
+
+
+
++++++++++JS字符串(String) ++++++++
+  1.声明 
+    var myString = new String("Every good boy does fine."); 
+    var myString = "Every good boy does fine."; 
+  2.字符串连接 
+    var myString = "Every " + "good boy " + "does fine."; 
+    var myString = "Every ";  myString += "good boy does fine."; 
+  3.截取字符串
+    //截取第 6 位开始的字符 
+    var myString = "Every good boy does fine."; 
+    var section = myString.substring(6);    //结果: "good boy does fine."      
+    //截取第 0 位开始至第 10 位为止的字符 
+    var myString = "Every good boy does fine."; 
+    var section = myString.substring(0,10); //结果: "Every good"   
+    //截取从第 11 位到倒数第 6 位为止的字符 
+    var myString = "Every good boy does fine."; 
+    var section = myString.slice(11,-6);    //结果: "boy does" 
+    //从第 6 位开始截取长度为 4 的字符 
+    var myString = "Every good boy does fine."; 
+    var section = myString.substr(6,4);     //结果: "good" 
+  4.转换大小写 
+    var myString = "Hello"; 
+    var lcString = myString.toLowerCase();  //结果: "hello" 
+    var ucString = myString.toUpperCase();  //结果: "HELLO" 
+  5.字符串比较 
+    var aString = "Hello!"; 
+    var bString = new String("Hello!"); 
+    if( aString == "Hello!" ){ }    //结果: true 
+    if( aString == bString ){ }     //结果: true 
+    if( aString === bString ){ }    //结果: false (两个对象不同,尽管它们的值相同) 
+  6.检索字符串 
+    var myString = "hello everybody."; 
+    // 如果检索不到会返回-1,检索到的话返回在该串中的起始位置 
+    if( myString.indexOf("every") > -1 ){ } //结果: true 
+  7.查找替换字符串 
+    var myString = "I is your father."; 
+    var result = myString.replace("is","am");   //结果: "I am your father." 
+  8.特殊字符: 
+    \b : 后退符         \t : 水平制表符 
+    \n : 换行符         \v : 垂直制表符 
+    \f : 分页符         \r : 回车符 
+    \" : 双引号         \' : 单引号 
+    \\ : 反斜杆  
+  9.将字符转换成Unicode编码 
+    var myString = "hello"; 
+    var code = myString.charCodeAt(3);  //返回"l"的Unicode编码(整型) 
+    var char = String.fromCharCode(66); //返回Unicode为66的字符  
+  10.将字符串转换成URL编码 
+    var myString = "hello all"; 
+    var code = encodeURI(myString);     //结果: "hello%20all" 
+    var str = decodeURI(code);          //结果: "hello all" 
+    //相应的还有:  encodeURIComponent()  decodeURIComponent() 
+
+
+
+
+
++++++++JS日期型(Date) +++++++++
+  1.声明 
+    var myDate = new Date();    //系统当前时间  
+    var myDate = new Date(yyyy, mm, dd, hh, mm, ss); 
+    var myDate = new Date(yyyy, mm, dd); 
+    var myDate = new Date("monthName dd, yyyy hh:mm:ss"); 
+    var myDate = new Date("monthName dd, yyyy"); 
+    var myDate = new Date(epochMilliseconds); 
+  2.获取时间的某部份 
+    var myDate = new Date(); 
+    myDate.getYear();       //获取当前年份(2位) 
+    myDate.getFullYear();   //获取完整的年份(4位,1970-????) 
+    myDate.getMonth();      //获取当前月份(0-11,0代表1月) 
+    myDate.getDate();       //获取当前日(1-31) 
+    myDate.getDay();        //获取当前星期X(0-6,0代表星期天)   
+    myDate.getTime();       //获取当前时间(从1970.1.1开始的毫秒数)   时间戳！！
+    myDate.getHours();      //获取当前小时数(0-23) 
+    myDate.getMinutes();    //获取当前分钟数(0-59) 
+    myDate.getSeconds();    //获取当前秒数(0-59) 
+    myDate.getMilliseconds();   //获取当前毫秒数(0-999) 
+    myDate.toLocaleDateString();    //获取当前日期 
+    myDate.toLocaleTimeString();    //获取当前时间 
+    myDate.toLocaleString( );       //获取日期与时间 
+  3.计算之前或未来的时间 
+    var myDate = new Date(); 
+    myDate.setDate(myDate.getDate() + 10);  //当前时间加10天 
+    //类似的方法都基本相同,以set开头,具体参考第2点 
+  4.计算两个日期的偏移量 
+    var i = daysBetween(beginDate,endDate); //返回天数 
+    var i = beginDate.getTimezoneOffset(endDate); //返回分钟数 
+  5.检查有效日期 
+    //checkDate() 只允许"mm-dd-yyyy"或"mm/dd/yyyy"两种格式的日期 
+    if( checkDate("2006-01-01") ){ }      
+    //正则表达式(自己写的检查 yyyy-mm-dd, yy-mm-dd, yyyy/mm/dd, yy/mm/dd 四种) 
+    var r = /^(\d{2}|\d{4})[\/-]\d{1,2}[\/-]\d{1,2}$/; 
+    if( r.test( myString ) ){ }
+
+
++++++javascript的数组的操作+++++
+//定义数组
+        var pageIds = new Array();
+        pageIds.push('A');
+        数组长度
+        pageIds.length;
+//shift：删除原数组第一项，并返回删除元素的值；如果数组为空则返回undefined 
+var a = [1,2,3,4,5]; 
+var b = a.shift(); //a：[2,3,4,5]   b：1 
+//unshift：将参数添加到原数组开头，并返回数组的长度 
+var a = [1,2,3,4,5]; 
+var b = a.unshift(-2,-1); //a：[-2,-1,1,2,3,4,5]   b：7 
+//注：在IE6.0下测试返回值总为undefined，FF2.0下测试返回值为7，所以这个方法的返回值不可靠，需要用返回值时可用splice代替本方法来使用。 
+//pop：删除原数组最后一项，并返回删除元素的值；如果数组为空则返回undefined 
+var a = [1,2,3,4,5]; 
+var b = a.pop(); //a：[1,2,3,4]   b：5 
+//push：将参数添加到原数组末尾，并返回数组的长度 
+var a = [1,2,3,4,5]; 
+var b = a.push(6,7); //a：[1,2,3,4,5,6,7]   b：7 
+//concat：返回一个新数组，是将参数添加到原数组中构成的 
+var a = [1,2,3,4,5]; 
+var b = a.concat(6,7); //a：[1,2,3,4,5]   b：[1,2,3,4,5,6,7] 
+//splice(start,deleteCount,val1,val2,)：从start位置开始删除deleteCount项，并从该位置起插入val1,val2, 
+var a = [1,2,3,4,5]; 
+var b = a.splice(2,2,7,8,9); //a：[1,2,7,8,9,5]   b：[3,4] 
+var b = a.splice(0,1); //同shift 
+a.splice(0,0,-2,-1); var b = a.length; //同unshift 
+var b = a.splice(a.length-1,1); //同pop 
+a.splice(a.length,0,6,7); var b = a.length; //同push 
+//reverse：将数组反序 
+var a = [1,2,3,4,5]; 
+var b = a.reverse(); //a：[5,4,3,2,1]   b：[5,4,3,2,1] 
+//sort(orderfunction)：按指定的参数对数组进行排序 
+var a = [1,2,3,4,5]; 
+var b = a.sort(); //a：[1,2,3,4,5]   b：[1,2,3,4,5] 
+//slice(start,end)：返回从原数组中指定开始下标到结束下标之间的项组成的新数组 
+var a = [1,2,3,4,5]; 
+var b = a.slice(2,5); //a：[1,2,3,4,5]   b：[3,4,5] 
+//join(separator)：将数组的元素组起一个字符串，以separator为分隔符，省略的话则用默认用逗号为分隔符 
+var a = [1,2,3,4,5]; 
+var b = a.join("|"); //a：[1,2,3,4,5]   b："1|2|3|4|5" 
