@@ -174,3 +174,19 @@ update tableName set [Title]=Right([Title],(len([Title])-1)) where Title like '´
 update tableName set [Title]=left([Title],(len([Title])-1)) where Title like '%´å'
 
 
+++++++SQL·ÀÖ¹×¢Èë+++++++
+mysql_real_escape_string ×ªÒå SQL Óï¾äÖĞÊ¹ÓÃµÄ×Ö·û´®ÖĞµÄÌØÊâ×Ö·û£¬²¢¿¼ÂÇµ½Á¬½ÓµÄµ±Ç°×Ö·û¼¯¡£
+$sql = "select count(*) as ctr from users where username='".mysql_real_escape_string($username)."' and password='".mysql_real_escape_string($pw)."' limit 1";
+
+
++++++MysqlÓÃsqlÓï¾ä²éÑ¯µ±ÌìÃ¿Ò»Ğ¡Ê±µÄ¼ÇÂ¼+++++
+look_time µÄ¸ñÊ½Îª 2013-08-06 11:24:57 ÆäÊµ¾ÍÊÇ mysql NOW() º¯Êı
+sql="select count(*) as total,hour(look_time) as date
+from tabname
+where to_days(look_time) = to_days(now())
+group by hour(look_time) "
+È¡³öÇ°Ò»ÌìÊı¾İµÄ sql Óï¾ä
+sql="select count(*) as total,hour(look_time) as date
+from tabname
+where  to_days(now()) - to_days(look_time)  < = -1
+group by hour(look_time) "

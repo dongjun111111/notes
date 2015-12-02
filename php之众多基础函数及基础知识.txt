@@ -978,7 +978,7 @@ if(preg_match('/200/',$array[0])){
 echo ( date('w') == 0 || date('w') == 6 ) ? '是周末' : '不是周末';
 
 
-+++++php最完整时间日期星期+++++
++++++php最完整时间日期星期年月日+++++
 echo date("Y-m-d",strtotime("now")), "<br />";
 echo date("Y-m-d",strtotime("-1 week Monday")), "离现在最近的周一<br />"; //离现在最近的周一
 echo date("Y-m-d",strtotime("-1 week Sunday")), "离现在最近的周末<br />"; //离现在最近的周末
@@ -1009,7 +1009,18 @@ for($i=0-$offset; $i<7-$offset; $i++){
     $date = strtotime($i.' days');
     echo('<th>'.date('D', $date).'/'.date('n-j', $date).'</th>');
 }
-
++++++本月月初月末的详细时间，距离此时此刻+++++
+$y=date("Y",time());
+$m=date("m",time());
+$d=date("d",time());
+$t0=date('t'); // 本月一共有几天
+$t1=mktime(0,0,0,$m,1,$y); // 创建本月开始时间
+$t2=mktime(23,59,59,$m,$t0,$y); // 创建本月结束时间
+echo "今天时间\t".date("Y-m-d",time());
+echo "本月开始\t".date("Y-m-d H:i:s",$t1);
+echo "本月结束\t".date("Y-m-d H:i:s",$t2);
+echo "时间差：";
+echo $t2-$t1;
 
 ++++mb_substr()与mb_strcut()切割带有中文字符串的表现+++++++
 <?php
