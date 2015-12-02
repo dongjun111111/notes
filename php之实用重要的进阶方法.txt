@@ -2132,7 +2132,7 @@ SNS注意交互、页面JS、ajxa、动态内容大小；
 
 
 
-++++++php红包算法方法+++++++
+++++++php红包算法+++++++
 /** 
 * 生产min和max之间的随机数，但是概率不是平均的，从min到max方向概率逐渐加大。 
 * 先平方，然后产生一个平方值范围内的随机数，再开方，这样就产生了一种“膨胀”再“收缩”的效果。 
@@ -2216,6 +2216,30 @@ var_dump($result_bonus);
 //统计每个钱数的红包数量，检查是否接近正态分布  
 //ksort($arr);  
 //var_dump($arr);  
+
+
+++++++较为简单的红包算法+++++++
+$n = 200; //红包个数
+$amount = 5000; //红包总金额
+$s = 2.00*100; //最小金额 精确到分
+$b = 48.00*100; //最大金额 精确到分
+getPacket($n,$amount,$s,$b);
+function getPacket($n,$amount,$s,$b){
+	$arr = array();
+	for($i=0;$i< $n-1;$i++){
+		$arr[$i] = rand($s,$b)/100;
+	}
+	$last = ($amount - array_sum($arr))/100;
+	$arr[$n-1] = sprintf("%.2f",$last);
+	if($arr[$n-1]>$s/100 && $arr[$n-1]< $b/100){
+		echo "<pre>";
+		print_r($arr);
+	}else{
+		getPacket($n,$amount,$s,$b);
+	}
+}
+
+
 
 +++++++PHP生成静态页面实例代码++++++
 <?  
