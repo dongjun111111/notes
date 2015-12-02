@@ -1022,3 +1022,83 @@ var typeParem = getAddressURLParam(type);
 </html></td>  
       </tr>  
     </table> 
+
+
+
+++++CSS3中-moz、-ms、-webkit和-o+++++++
+1、-moz-：代表FireFox浏览器私有属性
+2、-ms-：代表IE浏览器私有属性
+3、-webkit-：代表safari、chrome浏览器私有属性
+4、-o-：代表opera浏览器私有属性
+
+
+++++++请描述一下 cookies，sessionStorage 和 localStorage 的区别？++++++
+sessionStorage 和 localStorage 是HTML5 Web Storage API 提供的，可以方便的在web请求之间保存
+数据。有了本地数据，就可以避免数据在浏览器和服务器间不必要地来回传递。
+sessionStorage、localStorage、cookie都是在浏览器端存储的数据，其中sessionStorage的概念很特别，
+引入了一个“浏览器窗口”的概念。sessionStorage是在同源的同窗口（或tab）中，始终存在的数据。
+也就是说只要这个浏览器窗口没有关闭，即使刷新页面或进入同源另一页面，数据仍然存在。
+关闭窗口后，sessionStorage即被销毁。同时“独立”打开的不同窗口，
+即使是同一页面，sessionStorage对象也是不同的。
+共同点：都是保存在浏览器端，且同源的。
+区别：
+cookie数据始终在同源的http请求中携带（即使不需要），即cookie在浏览器和服务器间来回传递。
+而sessionStorage和localStorage不会自动把数据发给服务器，仅在本地保存。cookie数据还有路径
+（path）的概念，可以限制cookie只属于某个路径下。
+存储大小限制也不同，cookie数据不能超过4k，同时因为每次http请求都会携带cookie，所以cookie只
+适合保存很小的数据，如会话标识。sessionStorage和localStorage 虽然也有存储大小的限制
+，但比cookie大得多，可以达到5M或更大。
+数据有效期不同，sessionStorage：仅在当前浏览器窗口关闭前有效，自然也就不可能持久保持；
+localStorage：始终有效，窗口或浏览器关闭也一直保存，因此用作持久数据；cookie只在设置
+的cookie过期时间之前一直有效，即使窗口或浏览器关闭。
+作用域不同，sessionStorage不在不同的浏览器窗口中共享，即使是同一个页面；localStorage 在所有同源窗口中都是共享的；cookie也是在所有同源窗口中都是共享的。
+Web Storage 支持事件通知机制，可以将数据更新的通知发送给监听者。
+Web Storage 的 api 接口使用更方便。
+
+
+
+++++++++HTML5和HTML4之间的区别++++++++
+1、HTML头部
+（1）HTML5：
+        <!doctype html>
+（2）HTML4：
+<!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.01//EN”
+ “http://www.w3.org/TR/html4/strict.dtd”>
+2、HTML编码
+（1）HTML5：
+	<meta charset=“utf-8”>
+（2）HTML4：
+	<meta http-equiv=”content-type”content=”text/html;charset=UTF-8”>
+3、引入CSS样式文件
+（1）HTML5：
+       <link rel=”stylesheet” href=”demo.css”>
+（2）HTML4：
+	<link type=”text/css” rel=”stylesheet” href="demo.css”>
+4、引入JS文件
+（1）HTML5：
+	<script src=”demo.js”></script>
+（2）HTML4：
+	<script type=”text/javascrpt” src="demo.js”></script>
+
+
++++++HTML中设置背景图的两种方式+++++
+1、background
+   background:url(images/search.png) no-repeat top;
+2、background-image
+   background-image：url(images/search.png)；
+   background-repeat:no-repeat;
+
+
+++++border-style的值及其作用+++++
+border-style:dashed; /*虚线*/
+border-style:dotted; /*点线*/
+border-style:double; /*双线边框*/
+border-style:groove; /*根据border-color的值画3D凹槽*/
+border-style:hidden; /*隐藏边框*/
+border-style:inherit; /*根据border-color的值画菱形边框*/
+border-style:inset;  /*根据border-color的值画3D凹边*/
+border-style:none;   /*不显示边框*/
+border-style:outset;  /*根据border-color的值画3D凸边*/
+border-style:ridge;  /*根据border-color的值画菱形边框*/
+border-style:solid;  /*实线边框*/
+border-style:!important;
