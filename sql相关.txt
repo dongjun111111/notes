@@ -153,3 +153,24 @@ mysql> SELECT ABS(-32);
 +----------+
 |        32 |
 +----------+
+
+
+++++查找表中多余的重复记录+++++++
+select * from people where peopleId in (select peopleId from people group by peopleId having count(peopleId) > 1) 
+
++++++删除表中多余的重复记录，重复记录是根据单个字段（peopleId）来判断，只留有rowid最小的记录++++
+delete from people 
+where peopleName in (select peopleName from people group by peopleName having count(peopleName) > 1) 
+and peopleId not in (select min(peopleId) from people group by peopleName having count(peopleName)>1) 
+
++++++查找表中多余的重复记录（多个字段）+++++++
+select * from vitae a 
+where (a.peopleId,a.seq) in (select peopleId,seq from vitae group by peopleId,seq having count(*) > 1) 
+
++++消除一个字段的左边的第一位++++
+update tableName set [Title]=Right([Title],(len([Title])-1)) where Title like '村%'
+
++++++消除一个字段的右边的第一位++++
+update tableName set [Title]=left([Title],(len([Title])-1)) where Title like '%村'
+
+
