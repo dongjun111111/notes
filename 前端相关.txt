@@ -620,4 +620,405 @@ var dayTime = $("#endTime").val();
 </html>  
 
 
++++++如何利用JavaScript遍历JSON数组+++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>利用JavaScript遍历JSON数组</title>  
+<script type="text/javascript">  
+     function traJsonArray()  
+     {  
+         var jsonArray = [{"id":"100","name":"zhangsan","age":"23","sex":"man"},{"id":"101","name":"lisi","age":"21","sex":"woman"},{"id":"102","name":"wangwu","age":"22","sex":"man"}];  
+         var inputText = "";  
+         for(var json in jsonArray)  
+         {  
+             for(var key in jsonArray[json])  
+             {  
+                inputText += jsonArray[json][key]+",";   
+             }  
+         }  
+           
+         document.getElementById("areaText").innerText = inputText;  
+     }  
+</script>  
+</head>  
+  
+<body>  
+   <div>  
+      <input type="button" id="btn" onclick="traJsonArray()" value="利用JavaScript遍历JSON数组"/>  
+      <textarea id="areaText" cols="80" rows="30"></textarea>  
+   </div>  
+</body>  
+</html>  
 
+
+++++++JavaScript控制输入框中只能输入中文、数字和英文++++++
+  function  checkUsername()
+  {
+        //正则表达式
+        var reg = new RegExp("^[a-zA-Z\d\u4E00-\u9FA5]+$");
+        //获取输入框中的值
+        var username = document.getElementById("username").value.trim();
+        //判断输入框中有内容
+       if(username.length >0)
+       {
+              alert("请输入中文、数字和英文！");
+              //输入非法字符，清空输入框
+              $("#username").val("");
+       }
+  }
+
+++++JavaScript向select下拉框中添加和删除元素++++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>JavaScript向select下拉框中添加和删除元素</title>  
+<script type="text/javascript" src="jquery-1.11.1.js"></script>  
+<script type="text/javascript">  
+      /**  
+       * 向select下拉框中添加子元素  
+       */  
+     function addElement()  
+     {      
+         //保证不重复添加  
+         $("#select_div").empty();  
+         //添加子元素  
+         $("#select_div").append("<option value='0'>---请选择---</option><option value='1'>男</option><option value='2'>女</option>");  
+     }  
+       
+     /**  
+      * 删除下拉框中最后一个元素  
+      */  
+     function removeLast()  
+     {  
+         //删除最后一个子元素  
+         $("#select_div option:last").remove();  
+     }  
+</script>  
+</head>  
+  
+<body>  
+</body>  
+    <div id="select_span">  
+         <select id="select_div" style="width:145px;">  
+               
+         </select>  
+    </div>  
+    <input type="button" value="添加元素" onclick="addElement()"/>  
+    <input type="button" value="删除元素" onclick="removeLast()"/>  
+</html> 
+
+
+++++++++JavaScript获取某年某月的最后一天++++++++
+<!DOCTYPE html>  
+<!--  
+To change this license header, choose License Headers in Project Properties.  
+To change this template file, choose Tools | Templates  
+and open the template in the editor.  
+-->  
+<html>  
+    <head>  
+        <title>JavaScript获取某年某月的最后一天</title>  
+        <meta charset="UTF-8">  
+        <meta name="viewport" content="width=device-width">  
+        <script type="text/javascript">  
+              /**  
+               * 获取某年某月的最后一天  
+               */  
+              function getLastDayOfMonth(year,month)  
+              {  
+                  //获取本年本月的第一天日期  
+                  var date = new Date(year,month-1,'01');  
+                  //设置日期  
+                  date.setDate(1);  
+                  //设置月份  
+                  date.setMonth(date.getMonth() + 1);  
+                  //获取本月的最后一天  
+                  cdate = new Date(date.getTime() - 1000*60*60*24);  
+                  //打印某年某月的最后一天  
+                  alert(cdate.getFullYear()+"年"+(Number(cdate.getMonth())+1)+"月最后一天的日期:"+cdate.getDate()+"日");   
+                  //返回结果  
+                  return cdate.getDate();  
+              }  
+        </script>  
+    </head>  
+    <body>  
+        <input type="button" value="获取某年某月的最后一天" onclick="getLastDayOfMonth(2014,6)"/>  
+    </body>  
+</html>  
+
+
++++++JavaScript获取地址栏中的参数+++++
+function getAddressURLParam(paramName)  
+{  
+     //构造一个含有目标参数的正则表达式的对象  
+     var reg = new RegExp("(^|&)" + paramName + "=([^&]*)(&|$)");  
+     //匹配目标参数  
+     var url = window.location.search.substr(1).match(reg);  
+    //返回参数值  
+    if(url != null)  
+     return unescape(url[2]);  
+    return null;  
+}  
+获取type参数值：
+var typeParem = getAddressURLParam(type);
+
+
+++++JavaScript获取路径+++++
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>  
+  
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">  
+<html>  
+  <head>  
+      
+    <title>JavaScript获取路径</title>  
+      
+    <meta http-equiv="pragma" content="no-cache">  
+    <meta http-equiv="cache-control" content="no-cache">  
+    <meta http-equiv="expires" content="0">      
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">  
+    <meta http-equiv="description" content="This is my page">  
+    <script type="text/javascript">  
+         function findPath()  
+         {  
+              //获取当前网址  
+              var curNetAddr = window.document.location.href;  
+              alert("获取当前网址:" + curNetAddr);  
+                
+              //获取主机地址之后的目录  
+              var hostPath = window.document.location.pathname;  
+              alert("获取主机地址之后的目录：" + hostPath);  
+                
+              //返回某个指定的字符串值在字符串中首次出现的位置  
+              var count = curNetAddr.indexOf(hostPath);  
+              alert("返回某个指定的字符串值在字符串中首次出现的位置：" + count);  
+                
+              //获取主机地址  
+              var hostAddr = curNetAddr.substring(0,count);  
+              alert("获取主机地址：" + hostAddr);  
+                
+              //获取带“/”的项目名  
+              var projectName = hostPath.substring(0,hostPath.substr(1).indexOf('/')+1);  
+              alert("获取带“/”的项目名：" + projectName);  
+                
+              //获取项目路径  
+              var path = hostAddr + projectName;  
+              alert("获取项目路径：" + path);  
+         }  
+    </script>  
+  
+  </head>  
+    
+  <body>  
+     <div id="body_div">  
+         <input type="button" id="btn" value="获取路径" onclick="findPath()"/>  
+     </div>  
+  </body>  
+</html>  
+
+
++++++JavaScript获取当前日期++++++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>JavaScript获取当前日期</title>  
+<script type="text/javascript">  
+    /**  
+      *获取日期  
+      *  
+     **/  
+    function findDate()  
+    {  
+        //实例化一个对象date  
+        var date = new Date();  
+        //获取年份  
+        var year = date.getFullYear();  
+        //获取月份  
+        var month = date.getMonth() + 1;  
+        //获取日子  
+        var day = date.getDate();  
+        //拼接日期  
+        var thisDate = year + "-" + (month<10 ? "0" + month : month) + "-" + (day<10 ? "0" + day : day);  
+        //打印日期  
+        alert("当前日期：" + thisDate);    
+    }  
+</script>  
+</head>  
+  
+<body>  
+   <input type="button" value="获取日期" onclick="findDate()"/>  
+</body>  
+</html>  
+
+
++++++JavaScript获取屏幕和页面的宽度和高度+++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>宽度和高度</title>  
+<script type="text/javascript">  
+    function widthAndHeight()  
+    {  
+        //网页可见区域宽  
+        var clientWidth = document.body.clientWidth;  
+        //网页可见区域高  
+        var clientHeight = document.body.clientHeight;  
+        //网页正文全文宽  
+        var scrollWidth = document.body.scrollWidth;  
+        //网页正文全文高  
+        var scrollHeight = document.body.scrollHeight;  
+        //网页可见区域宽(包括边线的宽)  
+        var offWidth = document.body.offsetWidth;  
+        //网页可见区域高(包括边线的宽)  
+        var offHeight = document.body.offsetHeight;  
+        //屏幕分辨率的宽  
+        var screenWidth = window.screen.width;  
+        //屏幕分辨率的高  
+        var screenHeight = window.screen.height;  
+        //屏幕可用工作区宽度  
+        var avaWidth = window.screen.availWidth;  
+        //屏幕可用工作区高度  
+        var avaHeight = window.screen.availHeight;            
+        document.writeln("网页可见区域宽：" + clientWidth + "<br>");  
+        document.writeln("网页可见区域高：" + clientHeight + "<br>");  
+        document.writeln("网页正文全文宽：" + scrollWidth + "<br>");  
+        document.writeln("网页正文全文高：" + scrollHeight + "<br>");  
+        document.writeln("网页可见区域宽(包括边线的宽)：" + offWidth + "<br>");  
+        document.writeln("网页可见区域高(包括边线的宽)：" + offHeight + "<br>");  
+        document.writeln("屏幕分辨率的宽：" + screenWidth + "<br>");  
+        document.writeln("屏幕分辨率的高：" + screenHeight + "<br>");  
+        document.writeln("屏幕可用工作区宽度：" + avaWidth + "<br>");  
+        document.writeln("屏幕可用工作区高度：" + avaHeight + "<br>");            
+    }  
+</script>  
+</head>  
+  
+<body>  
+   <input type="button" id="btn" value="宽度和高度" onclick="widthAndHeight()"/>  
+</body>  
+</html> 
+
+
++++++JavaScript过滤特殊字符+++++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>JavaScript过滤特殊字符</title>  
+<style type="text/css">  
+    body{  
+        width:80%;  
+        background-color:#FFC;  
+        height:100px;  
+        font-size:14px;  
+        font-family:"Times New Roman", Times, serif;  
+        font-stretch:expanded;  
+        font-style:inherit;  
+        font-variant:inherit;  
+        font-weight:bold;  
+    }  
+    #div1{  
+        text-align:center;  
+        width:100%;  
+        height:100%;  
+        line-height:inherit;  
+    }  
+    #btn{  
+        font:Georgia, "Times New Roman", Times, serif;  
+        font-size-adjust:inherit;  
+        font-weight:bold;  
+        background-color:#C96;  
+        alignment-adjust:after-edge;  
+        alignment-baseline:baseline;  
+        word-break:break-all;  
+        width:120px;  
+        height:30px;  
+        font-size:16px;  
+        animation:ease;  
+    }  
+</style>  
+<script type="text/javascript">  
+    /**  
+      * 过滤字符串函数  
+      **/  
+    function filterStr(str)  
+    {  
+        var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%+_]");  
+        var specialStr = "";  
+        for(var i=0;i<str.length;i++)  
+        {  
+             specialStr += str.substr(i, 1).replace(pattern, '');   
+        }  
+        return specialStr;  
+    }  
+      
+    /**  
+      * 检测过滤字符串函数  
+      **/  
+    function checkStr()  
+    {  
+        var str = document.getElementById("pContent").innerHTML;  
+        alert("过滤之前的字符串：" + str);  
+        str = filterStr(str);  
+        alert("过滤之后的字符串：" + str);  
+    }  
+</script>  
+</head>  
+  
+<body>  
+   <div id="div1">  
+      <p id="pContent">张三huhnjhj$%$^%^%&^*&<>?{}{{[]()_+|@~`$378748hyfgtyt35451fdhjdsh&%^^&$#%%&^^*&(*%$%$f4857485</p>  
+      <input type="button" id="btn" name="btn" value="过滤" onclick="checkStr()"/>  
+   </div>  
+</body>  
+</html>  
+
+
+
++++++ JavaScript实现页面跳转++++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">  
+<html>  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">  
+<title>404 Not Found</title>  
+</head>  
+<body>  
+ <h1>找不到指定的页面</h1>  
+ <span id="totalSecond">3</span>秒后自动返回  
+</body>  
+<script language="javascript" type="text/javascript">  
+<!--  
+    var second = document.getElementById('totalSecond').textContent;  
+    if (navigator.appName.indexOf("Explorer") > -1)  //判断是IE浏览器还是Firefox浏览器，采用相应措施取得秒数  
+    {  
+        second = document.getElementById('totalSecond').innerText;  
+    } else  
+    {  
+        second = document.getElementById('totalSecond').textContent;  
+    }  
+    setInterval("redirect()", 1000);  //每1秒钟调用redirect()方法一次  
+    function redirect()  
+    {  
+        if (second < 0)  
+        {  
+            location.href = 'http://www.baidu.com';  
+        } else  
+        {  
+            if (navigator.appName.indexOf("Explorer") > -1)  
+            {  
+                document.getElementById('totalSecond').innerText = second--;  
+            } else  
+            {  
+                document.getElementById('totalSecond').textContent = second--;  
+            }  
+        }  
+    }  
+-->  
+</script>  
+</html></td>  
+      </tr>  
+    </table> 
