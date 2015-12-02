@@ -39,6 +39,8 @@ removeAttribute(名称)    删除元素属性
 .style.proprtype   设置元素的css
 className    改变元素的class 
 
+js闭包：
+子函数可以使用父函数的局部变量。
 
 js获取一个页面中的所有a元素和title元素，然后创造新的P元素，并把a的title和内容附加到p元素中。
 <script type="text/javascript">  
