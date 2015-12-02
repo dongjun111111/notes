@@ -436,3 +436,80 @@ xhr.send();
 同时需要注意的是，不要同时发起多个XMLHttpRequests请求。
 
 
+++++++++javascript获取css样式++++++++
+1.获取行间样式就不说了，基本就是obj.style.fontSize obj.style.left   obj.style.mozUserSelect等等
+2、JavaScript获取行外部<style></style>里的样式
+（1）firefox中用getComputedStyle()方法
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>JS获取行外部样式</title>  
+<style type="text/css">  
+    #body_div{  
+        font-size:14px;  
+        width:400px;  
+        height:500px;  
+    }  
+</style>  
+<script type="text/javascript">  
+    function getStyle()  
+    {  
+        var div = document.getElementById("body_div");  
+        var whole = document.defaultView.getComputedStyle(div,null);  
+        alert(whole.fontSize);  
+        alert(whole.width);  
+        alert(whole.height);  
+    }  
+</script>  
+</head>  
+  
+<body onload="getStyle();">  
+   <div id="body_div" style="font-weight:bolder;">JS获取行外部样式</div>  
+</body>  
+</html>  
+（2）IE浏览器用obj.currentStyle方法
+
+
+列出display的值。
+display:block;
+display:compact;
+display:inherit;
+display:inline;
+display:inline-block;
+display:inline-table;
+display:list-item;
+display:marker;
+display:none;
+display:run-in;
+display:table;
+display:table-caption;
+display:table-cell;
+display:table-column;
+display:table-column-group;
+display:table-footer-group;
+display:table-header-group;
+display:table-row;
+display:table-row-group;
+display:!important;
+
+
++++++JavaScript字符串数值比较问题++++++
+字符串比较是根据ASCII码，由于8的ASCII码比2的ASCII码大，导致出现了8.4大于21.3的情况。
+解决办法
+将字符串转换成数值
+function compareData()  
+    {  
+        var data1 = document.getElementById("inval").value;  
+        var data2 = document.getElementById("typev").value;  
+        if(Number(data1) > Number(data2))  
+        {  
+            alert(data1+"大于"+data2);      
+        }  
+        else  
+        {  
+            alert(data1+"小于或等于"+data2);  
+        }  
+    }  
+
+
