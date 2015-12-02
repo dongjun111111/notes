@@ -513,3 +513,111 @@ function compareData()
     }  
 
 
++++++++JavaScript替换字符串中最后一个字符+++++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>JavaScript替换字符串中最后一个字符</title>  
+<script type="text/javascript">  
+    function replaceStr()  
+    {  
+        var e = event || window.event || arguments.callee.caller.arguments[0];  
+        var input_str = document.getElementById("input_str").value;  
+        var newStr = input_str.substring(0,11);  
+        if(e && e.keyCode>=48 && e.keyCode <= 57)  
+        {   
+            newStr += (e.keyCode-48);     
+        }  
+        document.getElementById("input_str").value = newStr;  
+    }  
+</script>  
+</head>  
+  
+<body>  
+    <input type="text" id="input_str" maxlength="12" onkeyup="replaceStr();"/>  
+</body>  
+</html>  
+
+
+
++++++++JS显示标准时间格式+++++++
+利用常规方法，直接拼接日期时间：
+var dayTime = $("#endTime").val();  
+        var dtime = new Date(dayTime);  
+        dtime.setTime(dtime.getTime()+365*100);  
+        var date = new Date(dtime.getTime());  
+        var year = date.getFullYear();  
+        var month = date.getMonth()+1;  
+        var day = date.getDate();  
+        var hour = date.getHours();  
+        var minute = date.getMinutes();  
+        var second = date.getSeconds();  
+        var date1 = year+"-"+(month<10?"0"+month:month)+"-"+(day<10?"0"+day:day)+" "+(hour<10?"0"+hour:hour)+":"+(minute<10?"0"+minute:minute)+":"+(second<10?"0"+second:second);  
+        $("#endDate").val(date1);  
+
+
+++++++JavaScript常用对象有哪些++++++
+1、String
+2、Date
+3、Math
+4、Array
+5、Number
+6、Boolean
+
+++++++form表单中的input有哪些类型++++++
+1、button
+    <input type="button"/>
+2、checkbox
+     <input type="checkbox"/>
+3、file
+     <input type="file"/>
+4、hidden
+    <input type="hidden"/>
+5、image
+    <input type="image"/>
+6、password
+    <input type="password"/>
+7、radio
+    <input type="radio"/>
+8、reset
+    <input type="reset"/>
+9、submit
+     <input type="submit"/>
+10、text
+      <input type="text"/>
+
+++++++JavaScript禁止浏览器默认行为++++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>JavaScript禁止浏览器默认行为</title>  
+<script type="text/javascript">  
+     function linkClick()  
+     {  
+         var divTag = document.getElementById("atag");  
+         divTag.onclick = function(e){  
+             if(e.preventDefault)  
+             {  
+                 e.preventDefault();  
+             }  
+             else  
+             {  
+                 window.event.returnValue == false;   //（IE浏览器）
+             }  
+         }  
+     }  
+</script>  
+  
+</head>  
+  
+<body>  
+   <div id="div_atag">  
+       <a href="http://www.baidu.com" id="atag">百度</a>  
+   </div>  
+</body>  
+</html>  
+
+
+
