@@ -1,4 +1,4 @@
-++++++ÍøÕ¾È«Ò³±ä»Òcss´úÂë++++++++++
+ï»¿++++++ç½‘ç«™å…¨é¡µå˜ç°cssä»£ç ++++++++++
 html{   
     filter: grayscale(100%);    
     -webkit-filter: grayscale(100%);    
@@ -8,39 +8,39 @@ html{
     filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");  
     filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);   -webkit-filter: grayscale(1);
 }
-½«ÉÏÊö´úÂë·ÅÈëheadÖĞµÄstyle¼´¿É¡£
+å°†ä¸Šè¿°ä»£ç æ”¾å…¥headä¸­çš„styleå³å¯ã€‚
 
 
-ÕâÆªÈÕÖ¾Ö÷ÒªÊÇĞ´  javascript¡¢DOM µÄÒ»Ğ© ÊôĞÔ ºÍ ·½·¨ ¡£
+è¿™ç¯‡æ—¥å¿—ä¸»è¦æ˜¯å†™  javascriptã€DOM çš„ä¸€äº› å±æ€§ å’Œ æ–¹æ³• ã€‚
 DOM
-document.createElement(li);   ´´½¨Ò»¸öÔªËØ
-document.createTextNode();    ´´½¨Ò»¸öÎÄ±¾
-.appendChild();   ÔÚ¸¸DOMÀïÃæ²åÈëÒ»¸ö×Ó½Úµã
-.insertBefore(×Ó½Úµã£¬ÔÚË­Ö®Ç°)
-removeChild()    É¾³ı×ÓÔªËØ
-cloneNode      ¸´ÖÆ½Úµã
-replaceChild    Ìæ»»½Úµã
-hasChildNodes   ÅĞ¶Ï¸ø¶¨ÔªËØ½ÚµãÊÇ·ñÓĞ×ÓÔªËØ
-parentNode     ÉÏ¼¶ÔªËØ½Úµã
-childNodes     ×Ó½Úµã¼¯ºÏ
-nodeName   ÊôĞÔº¬ÓĞÄ³¸ö½ÚµãµÄÃû³Æ¡£
-nodeType    3 ÎÄ±¾½Úµã  1 ÔªËØ½Úµã
-children     È¡ÔªËØ
-offsetParent    ´ËÔªËØµÄÉÏ¼¶¶¨Î»ÔªËØ    
-firstChild     µÚÒ»¸ö×Ó½Úµã    FF ÏÂÃæ ÊÇ  firstElementChild
-lastChild     ×îºóÒ»¸ö×Ó½Úµã   FF  ÏÂÃæÊÇ    lastElementChild
-nextSibling    ÏÂÃæµÄĞÖµÜÔªËØ  FFÏÂÃæÊÇ   nextElementSibling
-previousSibling   ÉÏÃæµÄĞÖµÜÔªËØ   FFÏÂÃæÊÇ     previousElementSibling
+document.createElement(li);   åˆ›å»ºä¸€ä¸ªå…ƒç´ 
+document.createTextNode();    åˆ›å»ºä¸€ä¸ªæ–‡æœ¬
+.appendChild();   åœ¨çˆ¶DOMé‡Œé¢æ’å…¥ä¸€ä¸ªå­èŠ‚ç‚¹
+.insertBefore(å­èŠ‚ç‚¹ï¼Œåœ¨è°ä¹‹å‰)
+removeChild()    åˆ é™¤å­å…ƒç´ 
+cloneNode      å¤åˆ¶èŠ‚ç‚¹
+replaceChild    æ›¿æ¢èŠ‚ç‚¹
+hasChildNodes   åˆ¤æ–­ç»™å®šå…ƒç´ èŠ‚ç‚¹æ˜¯å¦æœ‰å­å…ƒç´ 
+parentNode     ä¸Šçº§å…ƒç´ èŠ‚ç‚¹
+childNodes     å­èŠ‚ç‚¹é›†åˆ
+nodeName   å±æ€§å«æœ‰æŸä¸ªèŠ‚ç‚¹çš„åç§°ã€‚
+nodeType    3 æ–‡æœ¬èŠ‚ç‚¹  1 å…ƒç´ èŠ‚ç‚¹
+children     å–å…ƒç´ 
+offsetParent    æ­¤å…ƒç´ çš„ä¸Šçº§å®šä½å…ƒç´     
+firstChild     ç¬¬ä¸€ä¸ªå­èŠ‚ç‚¹    FF ä¸‹é¢ æ˜¯  firstElementChild
+lastChild     æœ€åä¸€ä¸ªå­èŠ‚ç‚¹   FF  ä¸‹é¢æ˜¯    lastElementChild
+nextSibling    ä¸‹é¢çš„å…„å¼Ÿå…ƒç´   FFä¸‹é¢æ˜¯   nextElementSibling
+previousSibling   ä¸Šé¢çš„å…„å¼Ÿå…ƒç´    FFä¸‹é¢æ˜¯     previousElementSibling
 a.value ==  a['value']
-nodeValue     ÔªËØÄÚÈİ
-setAttribute(Ãû³Æ£¬Öµ)    ÉèÖÃÔªËØÊôĞÔ
-getAttribute(Ãû³Æ)    »ñÈ¡ÔªËØÊôĞÔ
-removeAttribute(Ãû³Æ)    É¾³ıÔªËØÊôĞÔ
-.style.proprtype   ÉèÖÃÔªËØµÄcss
-className    ¸Ä±äÔªËØµÄclass 
+nodeValue     å…ƒç´ å†…å®¹
+setAttribute(åç§°ï¼Œå€¼)    è®¾ç½®å…ƒç´ å±æ€§
+getAttribute(åç§°)    è·å–å…ƒç´ å±æ€§
+removeAttribute(åç§°)    åˆ é™¤å…ƒç´ å±æ€§
+.style.proprtype   è®¾ç½®å…ƒç´ çš„css
+className    æ”¹å˜å…ƒç´ çš„class 
 
 
-js»ñÈ¡Ò»¸öÒ³ÃæÖĞµÄËùÓĞaÔªËØºÍtitleÔªËØ£¬È»ºó´´ÔìĞÂµÄPÔªËØ£¬²¢°ÑaµÄtitleºÍÄÚÈİ¸½¼Óµ½pÔªËØÖĞ¡£
+jsè·å–ä¸€ä¸ªé¡µé¢ä¸­çš„æ‰€æœ‰aå…ƒç´ å’Œtitleå…ƒç´ ï¼Œç„¶ååˆ›é€ æ–°çš„På…ƒç´ ï¼Œå¹¶æŠŠaçš„titleå’Œå†…å®¹é™„åŠ åˆ°på…ƒç´ ä¸­ã€‚
 <script type="text/javascript">  
 window.onload = function(){  
  var mya = document.getElementsByTagName('a');  
@@ -60,42 +60,42 @@ myBody.appendChild(myP);
 }  
 </script>  
 
-++++++++jqueryÖĞattr()Ê¹ÓÃ++++++++
-<script>                                  //ÓÃattrÉèÖÃÊôĞÔÖµ
-$("ul li:eq(1)").attr("title","²»³ÔéÙ×Ó");
+++++++++jqueryä¸­attr()ä½¿ç”¨++++++++
+<script>                                  //ç”¨attrè®¾ç½®å±æ€§å€¼
+$("ul li:eq(1)").attr("title","ä¸åƒæ©˜å­");
 alert($("ul li:eq(1)").attr("title"));
 </script>
-                                          //ÓÃattrÉ¾³ıÊôĞÔÖµ
+                                          //ç”¨attråˆ é™¤å±æ€§å€¼
 <script>
 $("ul li:eq(1)").removeAttr ("title");
 </script>
 
-++++ĞèÒªÕÆÎÕµÄÇ°¶Ë,HTML,JSÖªÊ¶µã++++++++
-cssºĞÄ£ĞÍ¡£
-javascriptÖĞµÄprototype¡£
-javascriptÖĞthis¶ÔÏóµÄ×÷ÓÃÓò¡£
-IEºÍfirefoxÊÂ¼şÃ°ÅİµÄ²»Í¬¡£
-Ê²Ã´ÊÇ¹ÖÒìÄ£Ê½,±ê×¼Ä£Ê½£¬½ü±ê×¼Ä£Ê½¡£
-DTDµÄ¶¨Òå
-IE/firefox³£ÓÃhack.
-firefox,IEÏÂµÄÇ°¶Ëjs/cssµ÷ÊÔ¹¤¾ß¡£
+++++éœ€è¦æŒæ¡çš„å‰ç«¯,HTML,JSçŸ¥è¯†ç‚¹++++++++
+cssç›’æ¨¡å‹ã€‚
+javascriptä¸­çš„prototypeã€‚
+javascriptä¸­thiså¯¹è±¡çš„ä½œç”¨åŸŸã€‚
+IEå’Œfirefoxäº‹ä»¶å†’æ³¡çš„ä¸åŒã€‚
+ä»€ä¹ˆæ˜¯æ€ªå¼‚æ¨¡å¼,æ ‡å‡†æ¨¡å¼ï¼Œè¿‘æ ‡å‡†æ¨¡å¼ã€‚
+DTDçš„å®šä¹‰
+IE/firefoxå¸¸ç”¨hack.
+firefox,IEä¸‹çš„å‰ç«¯js/cssè°ƒè¯•å·¥å…·ã€‚
 
-+++++ÊÖ»ú´¥ÃşÆÁµÄJSÊÂ¼ş++++++++
-×÷Õß ¹ÜÀíÔ±  ·¢²¼Ê±¼ä 2013-06-13 17:38  ÎÄÕÂ·ÖÀà JavaScript  ÎÄÕÂÆÀÂÛ 1ÌõÆÀÂÛ  ÔÄ¶Á´ÎÊı 
-´¦ÀíTouchÊÂ¼şÄÜÈÃÄã¸ú×ÙÓÃ»§µÄÃ¿Ò»¸ùÊÖÖ¸µÄÎ»ÖÃ¡£Äã¿ÉÒÔ°ó¶¨ÒÔÏÂËÄÖÖTouchÊÂ¼ş£º
-Ò»¡¢
-touchstart:// ÊÖÖ¸·Åµ½ÆÁÄ»ÉÏµÄÊ±ºò´¥·¢
-touchmove:// ÊÖÖ¸ÔÚÆÁÄ»ÉÏÒÆ¶¯µÄÊ±ºò´¥·¢
-touchend:// ÊÖÖ¸´ÓÆÁÄ»ÉÏÄÃÆğµÄÊ±ºò´¥·¢
-touchcancel:// ÏµÍ³È¡ÏûtouchÊÂ¼şµÄÊ±ºò´¥·¢¡£ÖÁÓÚÏµÍ³Ê²Ã´Ê±ºò»áÈ¡Ïû£¬²»Ïê
-¶ş¡¢
-client / clientY£º// ´¥ÃşµãÏà¶ÔÓÚä¯ÀÀÆ÷´°¿ÚviewportµÄÎ»ÖÃ
-pageX / pageY£º// ´¥ÃşµãÏà¶ÔÓÚÒ³ÃæµÄÎ»ÖÃ
-screenX /screenY£º// ´¥ÃşµãÏà¶ÔÓÚÆÁÄ»µÄÎ»ÖÃ
-identifier£º>// touch¶ÔÏóµÄunique ID
++++++æ‰‹æœºè§¦æ‘¸å±çš„JSäº‹ä»¶++++++++
+ä½œè€… ç®¡ç†å‘˜  å‘å¸ƒæ—¶é—´ 2013-06-13 17:38  æ–‡ç« åˆ†ç±» JavaScript  æ–‡ç« è¯„è®º 1æ¡è¯„è®º  é˜…è¯»æ¬¡æ•° 
+å¤„ç†Touchäº‹ä»¶èƒ½è®©ä½ è·Ÿè¸ªç”¨æˆ·çš„æ¯ä¸€æ ¹æ‰‹æŒ‡çš„ä½ç½®ã€‚ä½ å¯ä»¥ç»‘å®šä»¥ä¸‹å››ç§Touchäº‹ä»¶ï¼š
+ä¸€ã€
+touchstart:// æ‰‹æŒ‡æ”¾åˆ°å±å¹•ä¸Šçš„æ—¶å€™è§¦å‘
+touchmove:// æ‰‹æŒ‡åœ¨å±å¹•ä¸Šç§»åŠ¨çš„æ—¶å€™è§¦å‘
+touchend:// æ‰‹æŒ‡ä»å±å¹•ä¸Šæ‹¿èµ·çš„æ—¶å€™è§¦å‘
+touchcancel:// ç³»ç»Ÿå–æ¶ˆtouchäº‹ä»¶çš„æ—¶å€™è§¦å‘ã€‚è‡³äºç³»ç»Ÿä»€ä¹ˆæ—¶å€™ä¼šå–æ¶ˆï¼Œä¸è¯¦
+äºŒã€
+client / clientYï¼š// è§¦æ‘¸ç‚¹ç›¸å¯¹äºæµè§ˆå™¨çª—å£viewportçš„ä½ç½®
+pageX / pageYï¼š// è§¦æ‘¸ç‚¹ç›¸å¯¹äºé¡µé¢çš„ä½ç½®
+screenX /screenYï¼š// è§¦æ‘¸ç‚¹ç›¸å¯¹äºå±å¹•çš„ä½ç½®
+identifierï¼š>// touchå¯¹è±¡çš„unique ID
 
 
-++++++jsÅĞ¶Ïä¯ÀÀÆ÷°æ±¾+++++
+++++++jsåˆ¤æ–­æµè§ˆå™¨ç‰ˆæœ¬+++++
 var Sys = {};
 var ua = navigator.userAgent.toLowerCase();
 if (window.ActiveXObject)
@@ -108,13 +108,13 @@ else if (window.opera)
 Sys.opera = ua.match(/opera.([\d.]+)/)[1]
 else if (window.openDatabase)
 Sys.safari = ua.match(/version\/([\d.]+)/)[1];
-//ÒÔÏÂ½øĞĞ²âÊÔ
+//ä»¥ä¸‹è¿›è¡Œæµ‹è¯•
 if(Sys.ie) document.write('IE: '+Sys.ie);
 if(Sys.firefox) document.write('Firefox: '+Sys.firefox);
 if(Sys.chrome) document.write('Chrome: '+Sys.chrome);
 if(Sys.opera) document.write('Opera: '+Sys.opera);
 if(Sys.safari) document.write('Safari: '+Sys.safari);
-»¹¿ÉÒÔĞ´³ÉÏÂÃæÕâÖÖ£º
+è¿˜å¯ä»¥å†™æˆä¸‹é¢è¿™ç§ï¼š
 var Sys = {};
 var ua = navigator.userAgent.toLowerCase();
 window.ActiveXObject ? Sys.ie = ua.match(/msie ([\d.]+)/)[1] :
@@ -122,61 +122,61 @@ document.getBoxObjectFor ? Sys.firefox = ua.match(/firefox\/([\d.]+)/)[1] :
 window.MessageEvent && !document.getBoxObjectFor ? Sys.chrome = ua.match(/chrome\/([\d.]+)/)[1] :
 window.opera ? Sys.opera = ua.match(/opera.([\d.]+)/)[1] :
 window.openDatabase ? Sys.safari = ua.match(/version\/([\d.]+)/)[1] : 0;
-//ÒÔÏÂ½øĞĞ²âÊÔ
+//ä»¥ä¸‹è¿›è¡Œæµ‹è¯•
 if(Sys.ie) document.write('IE: '+Sys.ie);
 if(Sys.firefox) document.write('Firefox: '+Sys.firefox);
 if(Sys.chrome) document.write('Chrome: '+Sys.chrome);
 if(Sys.opera) document.write('Opera: '+Sys.opera);
 if(Sys.safari) document.write('Safari: '+Sys.safari);
 
-JS¸÷ÖÖµ¯´°Ğ§¹û£º
+JSå„ç§å¼¹çª—æ•ˆæœï¼š
 http://www.web92.net/dom/2012-06-04-XY_Tips/
 
-++++++¶ÔÓÚinputÊäÈë¿ò+++++
-readonlyËµÃ÷´ËÓòµÄÖµ²»¿ÉĞŞ¸Ä£¬Ö»¿ÉÓë type="text" ÅäºÏÊ¹ÓÃ£¬¿É¸´ÖÆ£¬
-¿ÉÑ¡Ôñ,¿É½ÓÊÕ½¹µã£¬ºóÌ¨»á½ÓÊÕµ½´«Öµ¡£
+++++++å¯¹äºinputè¾“å…¥æ¡†+++++
+readonlyè¯´æ˜æ­¤åŸŸçš„å€¼ä¸å¯ä¿®æ”¹ï¼Œåªå¯ä¸ type="text" é…åˆä½¿ç”¨ï¼Œå¯å¤åˆ¶ï¼Œ
+å¯é€‰æ‹©,å¯æ¥æ”¶ç„¦ç‚¹ï¼Œåå°ä¼šæ¥æ”¶åˆ°ä¼ å€¼ã€‚
 <input type="text" name="www.xxx" readonly="readonly" />
-disabled±íÊ¾½ûÓÃinputÔªËØ£¬²»¿É±à¼­£¬²»¿É¸´ÖÆ£¬²»¿ÉÑ¡Ôñ£¬
-²»ÄÜ½ÓÊÕ½¹µã,ºóÌ¨Ò²²»»á½ÓÊÕµ½´«Öµ
+disabledè¡¨ç¤ºç¦ç”¨inputå…ƒç´ ï¼Œä¸å¯ç¼–è¾‘ï¼Œä¸å¯å¤åˆ¶ï¼Œä¸å¯é€‰æ‹©ï¼Œ
+ä¸èƒ½æ¥æ”¶ç„¦ç‚¹,åå°ä¹Ÿä¸ä¼šæ¥æ”¶åˆ°ä¼ å€¼
 <input type="text" name="www.xxx.com" disabled="disabled" />
-×îºó½éÉÜÒ»¸ö±êÇ©£¬ä¯ÀÀÆ÷Í¨³£»á¼ÇÂ¼inputÊäÈë¿òµÄ¼ÇÂ¼£¬ËùÒÔÄãÔÚÊäÈëµÄÊ±ºò£¬¾­³£»áÏÂÀ­ºÜ¶àÄÚÈİ£¬
-Èç¹ûÄãÏëÈ¥µôµÄ»°£¬×îºÃ¼ÓÉÏautocomplete="off"£¬Ê¹ÓÃ·½·¨ÈçÏÂ£ºautocomplete="off"
+æœ€åä»‹ç»ä¸€ä¸ªæ ‡ç­¾ï¼Œæµè§ˆå™¨é€šå¸¸ä¼šè®°å½•inputè¾“å…¥æ¡†çš„è®°å½•ï¼Œæ‰€ä»¥ä½ åœ¨è¾“å…¥çš„æ—¶å€™ï¼Œç»å¸¸ä¼šä¸‹æ‹‰å¾ˆå¤šå†…å®¹ï¼Œ
+å¦‚æœä½ æƒ³å»æ‰çš„è¯ï¼Œæœ€å¥½åŠ ä¸Šautocomplete="off"ï¼Œä½¿ç”¨æ–¹æ³•å¦‚ä¸‹ï¼šautocomplete="off"
 <input type="text" autocomplete="off" id="number"/>
 
 
 
-++++jsÔÚÊÖ»úÉÏµÄ±íÏÖ+++++
-Ò»¡¢ÊÖ»úÉÏµÄ´¥ÃşÊÂ¼ş
-»ù±¾ÊÂ¼ş£º
-touchstart   //ÊÖÖ¸¸Õ½Ó´¥ÆÁÄ»Ê±´¥·¢
-touchmove    //ÊÖÖ¸ÔÚÆÁÄ»ÉÏÒÆ¶¯Ê±´¥·¢
-touchend     //ÊÖÖ¸´ÓÆÁÄ»ÉÏÒÆ¿ªÊ±´¥·¢
-ÏÂÃæÕâ¸ö±È½ÏÉÙÓÃ£º
-touchcancel  //´¥Ãş¹ı³Ì±»ÏµÍ³È¡ÏûÊ±´¥·¢
-Ã¿¸öÊÂ¼ş¶¼ÓĞÒÔÏÂÁĞ±í£¬±ÈÈçtouchendµÄtargetTouchesµ±È»ÊÇ 0 ¿©£º
-touches         //Î»ÓÚÆÁÄ»ÉÏµÄËùÓĞÊÖÖ¸µÄÁĞ±í
-targetTouches   //Î»ÓÚ¸ÃÔªËØÉÏµÄËùÓĞÊÖÖ¸µÄÁĞ±í
-changedTouches  //Éæ¼°µ±Ç°ÊÂ¼şµÄËùÓĞÊÖÖ¸µÄÁĞ±í
-Ã¿¸öÊÂ¼şÓĞÁĞ±í£¬Ã¿¸öÁĞ±í»¹ÓĞÒÔÏÂÊôĞÔ£º
-¸´ÖÆ´úÂë
-ÆäÖĞ×ø±ê³£ÓÃpageX,pageY£º
-pageX    //Ïà¶ÔÓÚÒ³ÃæµÄ X ×ø±ê
-pageY    //Ïà¶ÔÓÚÒ³ÃæµÄ Y ×ø±ê
-clientX  //Ïà¶ÔÓÚÊÓÇøµÄ X ×ø±ê
-clientY  //Ïà¶ÔÓÚÊÓÇøµÄ Y ×ø±ê
-screenX  //Ïà¶ÔÓÚÆÁÄ»µÄ X ×ø±ê
-screenY  //Ïà¶ÔÓÚÆÁÄ»µÄ Y ×ø±ê
-identifier // µ±Ç°´¥ÃşµãµÄÎ©Ò»±àºÅ
-target   //ÊÖÖ¸Ëù´¥ÃşµÄ DOM ÔªËØ
-¸´ÖÆ´úÂë
-ÆäËûÏà¹ØÊÂ¼ş£º
-event.preventDefault£¨£©   //×èÖ¹´¥ÃşÊ±ä¯ÀÀÆ÷µÄËõ·Å¡¢¹ö¶¯Ìõ¹ö¶¯
-var supportTouch = "createTouch" in document  //ÅĞ¶ÏÊÇ·ñÖ§³Ö´¥ÃşÊÂ¼ş
-¶ş¡¢Ê¾Àı
-ÒÔÏÂÊÇ»ñÈ¡²»Í¬ÀàĞÍ»¬¶¯µÄ´úÂë¾ßÌå×ö·¨£¬½áºÏÇ°ÈËµÄË¼Ïë£¬·â×°ºÃÁË£¬¿ÉÒÔ½è¼øÑ§Ï°£º
-¸´ÖÆ´úÂë
+++++jsåœ¨æ‰‹æœºä¸Šçš„è¡¨ç°+++++
+ä¸€ã€æ‰‹æœºä¸Šçš„è§¦æ‘¸äº‹ä»¶
+åŸºæœ¬äº‹ä»¶ï¼š
+touchstart   //æ‰‹æŒ‡åˆšæ¥è§¦å±å¹•æ—¶è§¦å‘
+touchmove    //æ‰‹æŒ‡åœ¨å±å¹•ä¸Šç§»åŠ¨æ—¶è§¦å‘
+touchend     //æ‰‹æŒ‡ä»å±å¹•ä¸Šç§»å¼€æ—¶è§¦å‘
+ä¸‹é¢è¿™ä¸ªæ¯”è¾ƒå°‘ç”¨ï¼š
+touchcancel  //è§¦æ‘¸è¿‡ç¨‹è¢«ç³»ç»Ÿå–æ¶ˆæ—¶è§¦å‘
+æ¯ä¸ªäº‹ä»¶éƒ½æœ‰ä»¥ä¸‹åˆ—è¡¨ï¼Œæ¯”å¦‚touchendçš„targetToucheså½“ç„¶æ˜¯ 0 å’¯ï¼š
+touches         //ä½äºå±å¹•ä¸Šçš„æ‰€æœ‰æ‰‹æŒ‡çš„åˆ—è¡¨
+targetTouches   //ä½äºè¯¥å…ƒç´ ä¸Šçš„æ‰€æœ‰æ‰‹æŒ‡çš„åˆ—è¡¨
+changedTouches  //æ¶‰åŠå½“å‰äº‹ä»¶çš„æ‰€æœ‰æ‰‹æŒ‡çš„åˆ—è¡¨
+æ¯ä¸ªäº‹ä»¶æœ‰åˆ—è¡¨ï¼Œæ¯ä¸ªåˆ—è¡¨è¿˜æœ‰ä»¥ä¸‹å±æ€§ï¼š
+å¤åˆ¶ä»£ç 
+å…¶ä¸­åæ ‡å¸¸ç”¨pageX,pageYï¼š
+pageX    //ç›¸å¯¹äºé¡µé¢çš„ X åæ ‡
+pageY    //ç›¸å¯¹äºé¡µé¢çš„ Y åæ ‡
+clientX  //ç›¸å¯¹äºè§†åŒºçš„ X åæ ‡
+clientY  //ç›¸å¯¹äºè§†åŒºçš„ Y åæ ‡
+screenX  //ç›¸å¯¹äºå±å¹•çš„ X åæ ‡
+screenY  //ç›¸å¯¹äºå±å¹•çš„ Y åæ ‡
+identifier // å½“å‰è§¦æ‘¸ç‚¹çš„æƒŸä¸€ç¼–å·
+target   //æ‰‹æŒ‡æ‰€è§¦æ‘¸çš„ DOM å…ƒç´ 
+å¤åˆ¶ä»£ç 
+å…¶ä»–ç›¸å…³äº‹ä»¶ï¼š
+event.preventDefaultï¼ˆï¼‰   //é˜»æ­¢è§¦æ‘¸æ—¶æµè§ˆå™¨çš„ç¼©æ”¾ã€æ»šåŠ¨æ¡æ»šåŠ¨
+var supportTouch = "createTouch" in document  //åˆ¤æ–­æ˜¯å¦æ”¯æŒè§¦æ‘¸äº‹ä»¶
+äºŒã€ç¤ºä¾‹
+ä»¥ä¸‹æ˜¯è·å–ä¸åŒç±»å‹æ»‘åŠ¨çš„ä»£ç å…·ä½“åšæ³•ï¼Œç»“åˆå‰äººçš„æ€æƒ³ï¼Œå°è£…å¥½äº†ï¼Œå¯ä»¥å€Ÿé‰´å­¦ä¹ ï¼š
+å¤åˆ¶ä»£ç 
 var touchFunc = function(obj,type,func) {
-    //»¬¶¯·¶Î§ÔÚ5x5ÄÚÔò×öµã»÷´¦Àí£¬sÊÇ¿ªÊ¼£¬eÊÇ½áÊø
+    //æ»‘åŠ¨èŒƒå›´åœ¨5x5å†…åˆ™åšç‚¹å‡»å¤„ç†ï¼Œsæ˜¯å¼€å§‹ï¼Œeæ˜¯ç»“æŸ
     var init = {x:5,y:5,sx:0,sy:0,ex:0,ey:0};
     var sTime = 0, eTime = 0;
     type = type.toLowerCase();
@@ -191,7 +191,7 @@ var touchFunc = function(obj,type,func) {
     }, false);
  
     obj.addEventListener("touchmove",function() {
-        event.preventDefault();//×èÖ¹´¥ÃşÊ±ä¯ÀÀÆ÷µÄËõ·Å¡¢¹ö¶¯Ìõ¹ö¶¯
+        event.preventDefault();//é˜»æ­¢è§¦æ‘¸æ—¶æµè§ˆå™¨çš„ç¼©æ”¾ã€æ»šåŠ¨æ¡æ»šåŠ¨
         init.ex = event.targetTouches[0].pageX;
         init.ey = event.targetTouches[0].pageY;
         if(type.indexOf("move")!=-1) func();
@@ -201,7 +201,7 @@ var touchFunc = function(obj,type,func) {
         var changeX = init.sx - init.ex;
         var changeY = init.sy - init.ey;
         if(Math.abs(changeX)>Math.abs(changeY)&&Math.abs(changeY)>init.y) {
-            //×óÓÒÊÂ¼ş
+            //å·¦å³äº‹ä»¶
             if(changeX > 0) {
                 if(type.indexOf("left")!=-1) func();
             }else{
@@ -209,7 +209,7 @@ var touchFunc = function(obj,type,func) {
             }
         }
         else if(Math.abs(changeY)>Math.abs(changeX)&&Math.abs(changeX)>init.x){
-            //ÉÏÏÂÊÂ¼ş
+            //ä¸Šä¸‹äº‹ä»¶
             if(changeY > 0) {
                 if(type.indexOf("top")!=-1) func();
             }else{
@@ -218,12 +218,12 @@ var touchFunc = function(obj,type,func) {
         }
         else if(Math.abs(changeX)<init.x && Math.abs(changeY)<init.y){
             eTime = new Date().getTime();
-            //µã»÷ÊÂ¼ş£¬´Ë´¦¸ù¾İÊ±¼ä²îÏ¸·ÖÏÂ
+            //ç‚¹å‡»äº‹ä»¶ï¼Œæ­¤å¤„æ ¹æ®æ—¶é—´å·®ç»†åˆ†ä¸‹
             if((eTime - sTime) > 300) {
-                if(type.indexOf("long")!=-1) func(); //³¤°´
+                if(type.indexOf("long")!=-1) func(); //é•¿æŒ‰
             }
             else {
-                if(type.indexOf("click")!=-1) func(); //µ±µã»÷´¦Àí
+                if(type.indexOf("click")!=-1) func(); //å½“ç‚¹å‡»å¤„ç†
             }
         }
         if(type.indexOf("end")!=-1) func();
@@ -231,196 +231,196 @@ var touchFunc = function(obj,type,func) {
 };
 
 
-++++++ÊÖ»ú´¥ÃşÆÁµÄJSÊÂ¼ş +++++++
-´¦ÀíTouchÊÂ¼şÄÜÈÃÄã¸ú×ÙÓÃ»§µÄÃ¿Ò»¸ùÊÖÖ¸µÄÎ»ÖÃ¡£Äã¿ÉÒÔ°ó¶¨ÒÔÏÂËÄÖÖTouchÊÂ¼ş£º
-    1.touchstart:  // ÊÖÖ¸·Åµ½ÆÁÄ»ÉÏµÄÊ±ºò´¥·¢ 
-    2.touchmove:  // ÊÖÖ¸ÔÚÆÁÄ»ÉÏÒÆ¶¯µÄÊ±ºò´¥·¢ 
-    3.touchend:  // ÊÖÖ¸´ÓÆÁÄ»ÉÏÄÃÆğµÄÊ±ºò´¥·¢ 
-    4touchcancel:  // ÏµÍ³È¡ÏûtouchÊÂ¼şµÄÊ±ºò´¥·¢¡£ÖÁÓÚÏµÍ³Ê²Ã´Ê±ºò»áÈ¡Ïû£¬²»Ïê
-ÊôĞÔ
-    1.client / clientY£º// ´¥ÃşµãÏà¶ÔÓÚä¯ÀÀÆ÷´°¿ÚviewportµÄÎ»ÖÃ 
-    2.pageX / pageY£º// ´¥ÃşµãÏà¶ÔÓÚÒ³ÃæµÄÎ»ÖÃ 
-    3.screenX /screenY£º// ´¥ÃşµãÏà¶ÔÓÚÆÁÄ»µÄÎ»ÖÃ 
-    4.identifier£º // touch¶ÔÏóµÄunique ID 
-//touchstartÊÂ¼ş  
+++++++æ‰‹æœºè§¦æ‘¸å±çš„JSäº‹ä»¶ +++++++
+å¤„ç†Touchäº‹ä»¶èƒ½è®©ä½ è·Ÿè¸ªç”¨æˆ·çš„æ¯ä¸€æ ¹æ‰‹æŒ‡çš„ä½ç½®ã€‚ä½ å¯ä»¥ç»‘å®šä»¥ä¸‹å››ç§Touchäº‹ä»¶ï¼š
+    1.touchstart:  // æ‰‹æŒ‡æ”¾åˆ°å±å¹•ä¸Šçš„æ—¶å€™è§¦å‘ 
+    2.touchmove:  // æ‰‹æŒ‡åœ¨å±å¹•ä¸Šç§»åŠ¨çš„æ—¶å€™è§¦å‘ 
+    3.touchend:  // æ‰‹æŒ‡ä»å±å¹•ä¸Šæ‹¿èµ·çš„æ—¶å€™è§¦å‘ 
+    4touchcancel:  // ç³»ç»Ÿå–æ¶ˆtouchäº‹ä»¶çš„æ—¶å€™è§¦å‘ã€‚è‡³äºç³»ç»Ÿä»€ä¹ˆæ—¶å€™ä¼šå–æ¶ˆï¼Œä¸è¯¦
+å±æ€§
+    1.client / clientYï¼š// è§¦æ‘¸ç‚¹ç›¸å¯¹äºæµè§ˆå™¨çª—å£viewportçš„ä½ç½® 
+    2.pageX / pageYï¼š// è§¦æ‘¸ç‚¹ç›¸å¯¹äºé¡µé¢çš„ä½ç½® 
+    3.screenX /screenYï¼š// è§¦æ‘¸ç‚¹ç›¸å¯¹äºå±å¹•çš„ä½ç½® 
+    4.identifierï¼š // touchå¯¹è±¡çš„unique ID 
+//touchstartäº‹ä»¶  
 function touchSatrtFunc(e) {  
-    //evt.preventDefault(); //×èÖ¹´¥ÃşÊ±ä¯ÀÀÆ÷µÄËõ·Å¡¢¹ö¶¯Ìõ¹ö¶¯µÈ  
-    var touch = e.touches[0]; //»ñÈ¡µÚÒ»¸ö´¥µã  
-    var x = Number(touch.pageX); //Ò³Ãæ´¥µãX×ø±ê  
-    var y = Number(touch.pageY); //Ò³Ãæ´¥µãY×ø±ê  
-    //¼ÇÂ¼´¥µã³õÊ¼Î»ÖÃ  
+    //evt.preventDefault(); //é˜»æ­¢è§¦æ‘¸æ—¶æµè§ˆå™¨çš„ç¼©æ”¾ã€æ»šåŠ¨æ¡æ»šåŠ¨ç­‰  
+    var touch = e.touches[0]; //è·å–ç¬¬ä¸€ä¸ªè§¦ç‚¹  
+    var x = Number(touch.pageX); //é¡µé¢è§¦ç‚¹Xåæ ‡  
+    var y = Number(touch.pageY); //é¡µé¢è§¦ç‚¹Yåæ ‡  
+    //è®°å½•è§¦ç‚¹åˆå§‹ä½ç½®  
     startX = x;  
     startY = y;  
 }  
-//touchmoveÊÂ¼ş 
+//touchmoveäº‹ä»¶ 
 function touchMoveFunc(e) {  
-    //evt.preventDefault(); //×èÖ¹´¥ÃşÊ±ä¯ÀÀÆ÷µÄËõ·Å¡¢¹ö¶¯Ìõ¹ö¶¯µÈ  
-    var touch = evt.touches[0]; //»ñÈ¡µÚÒ»¸ö´¥µã  
-    var x = Number(touch.pageX); //Ò³Ãæ´¥µãX×ø±ê  
-    var y = Number(touch.pageY); //Ò³Ãæ´¥µãY×ø±ê  
-    var text = 'TouchMoveÊÂ¼ş´¥·¢£º£¨' + x + ', ' + y + '£©';  
-    //ÅĞ¶Ï»¬¶¯·½Ïò  
+    //evt.preventDefault(); //é˜»æ­¢è§¦æ‘¸æ—¶æµè§ˆå™¨çš„ç¼©æ”¾ã€æ»šåŠ¨æ¡æ»šåŠ¨ç­‰  
+    var touch = evt.touches[0]; //è·å–ç¬¬ä¸€ä¸ªè§¦ç‚¹  
+    var x = Number(touch.pageX); //é¡µé¢è§¦ç‚¹Xåæ ‡  
+    var y = Number(touch.pageY); //é¡µé¢è§¦ç‚¹Yåæ ‡  
+    var text = 'TouchMoveäº‹ä»¶è§¦å‘ï¼šï¼ˆ' + x + ', ' + y + 'ï¼‰';  
+    //åˆ¤æ–­æ»‘åŠ¨æ–¹å‘  
     if (x - startX != 0) {  
-        //×óÓÒ»¬¶¯  
+        //å·¦å³æ»‘åŠ¨  
     }  
     if (y - startY != 0) {  
-        //ÉÏÏÂ»¬¶¯  
+        //ä¸Šä¸‹æ»‘åŠ¨  
     }  
 }  
 
-++++++++Mobile WebÇ°¶Ë¿ª·¢ÏµÁĞ:ÊÂ¼ş´¦Àí£¨¶ş£©++++++++  
-ÉÏÆªÎÄÕÂÎÒÃÇ½²ÁËhtmlµÄ»ù±¾ÊÂ¼ş£¬ÕâÆªÎÄÕÂÎÒÃÇ×ÅÖØ½²½âÏÂ´¥ÃşÊÂ¼ş£¬´¥ÃşÊÂ¼ş´¥·¢µÄÌõ¼şÊÇÊÖÖ¸½Ó´¥ÆÁÄ»¡¢ÊÖÖ¸ÔÚÆÁÄ»ÉÏÒÆ¶¯»òÕß´ÓÆÁÄ»ÉÏÀë¿ª¡£ ÊÂ¼şÊÇ´¥ÃşµÄ¼¯ºÏ£¬ËüÆğÊ¼ÓÚÊÖÖ¸³õ´Î·ÅÖÃÔÚÆÁÄ»ÉÏ£¬ÖÕÖ¹ÓÚ×îºóÒ»¸öÊÖÖ¸Àë¿ªÆÁÄ»¡£ÊÂ¼ş´Ó¿ªÊ¼µ½½áÊø¹ı³ÌÖĞµÄËùÓĞ´¥Ãş²Ù×÷¶¼´æ´¢ÔÚÏàÍ¬ÊÂ¼şµÄ¼ÇÂ¼ÖĞ¡£
-touchÊÂ¼ş
-touchÊÂ¼ş¿ÉÒÔ·ÖÎªµ¥µã´¥ÃşºÍ¶àµã´¥ÃşÁ½ÖÖ£¬µ¥µã´¥Ãş¸ß¶Ë»úÒ»°ã¶¼Ö§³Ö£¬Safari2.0¡¢Android3.0ÒÔÉÏµÄ°æ±¾Ö§³Ö¶àµã´¥Ãş£¬Ö§³Ö×î¶à5¸öÊÖÖ¸Í¬Ê±´¥ÃşÆÁÄ»£¬ipad×î¶àÖ§³Ö11¸öÊÖÖ¸Í¬Ê±´¥ÃşÆÁÄ»£¬ ÎÒÃÇ¿ÉÒÔ²ÉÓÃÒÔÏÂµÄÊÂ¼şÄ£ĞÍ²¶»ñÕâĞ©ÊÂ¼ş£¬
+++++++++Mobile Webå‰ç«¯å¼€å‘ç³»åˆ—:äº‹ä»¶å¤„ç†ï¼ˆäºŒï¼‰++++++++  
+ä¸Šç¯‡æ–‡ç« æˆ‘ä»¬è®²äº†htmlçš„åŸºæœ¬äº‹ä»¶ï¼Œè¿™ç¯‡æ–‡ç« æˆ‘ä»¬ç€é‡è®²è§£ä¸‹è§¦æ‘¸äº‹ä»¶ï¼Œè§¦æ‘¸äº‹ä»¶è§¦å‘çš„æ¡ä»¶æ˜¯æ‰‹æŒ‡æ¥è§¦å±å¹•ã€æ‰‹æŒ‡åœ¨å±å¹•ä¸Šç§»åŠ¨æˆ–è€…ä»å±å¹•ä¸Šç¦»å¼€ã€‚ äº‹ä»¶æ˜¯è§¦æ‘¸çš„é›†åˆï¼Œå®ƒèµ·å§‹äºæ‰‹æŒ‡åˆæ¬¡æ”¾ç½®åœ¨å±å¹•ä¸Šï¼Œç»ˆæ­¢äºæœ€åä¸€ä¸ªæ‰‹æŒ‡ç¦»å¼€å±å¹•ã€‚äº‹ä»¶ä»å¼€å§‹åˆ°ç»“æŸè¿‡ç¨‹ä¸­çš„æ‰€æœ‰è§¦æ‘¸æ“ä½œéƒ½å­˜å‚¨åœ¨ç›¸åŒäº‹ä»¶çš„è®°å½•ä¸­ã€‚
+touchäº‹ä»¶
+touchäº‹ä»¶å¯ä»¥åˆ†ä¸ºå•ç‚¹è§¦æ‘¸å’Œå¤šç‚¹è§¦æ‘¸ä¸¤ç§ï¼Œå•ç‚¹è§¦æ‘¸é«˜ç«¯æœºä¸€èˆ¬éƒ½æ”¯æŒï¼ŒSafari2.0ã€Android3.0ä»¥ä¸Šçš„ç‰ˆæœ¬æ”¯æŒå¤šç‚¹è§¦æ‘¸ï¼Œæ”¯æŒæœ€å¤š5ä¸ªæ‰‹æŒ‡åŒæ—¶è§¦æ‘¸å±å¹•ï¼Œipadæœ€å¤šæ”¯æŒ11ä¸ªæ‰‹æŒ‡åŒæ—¶è§¦æ‘¸å±å¹•ï¼Œ æˆ‘ä»¬å¯ä»¥é‡‡ç”¨ä»¥ä¸‹çš„äº‹ä»¶æ¨¡å‹æ•è·è¿™äº›äº‹ä»¶ï¼Œ
 ontouchstart ontouchmove ontouchend ontouchcancel
-µ±ÓÃ»§°´ÏÂÊÖÖ¸ÔÚÆÁÄ»ÉÏ£¬ontouchstart»á±»´¥·¢£¬µ±ÓÃ»§ÒÆ¶¯Ò»¸ö»ò¶à¸öÊÖÖ¸µÄÊ±ºò£¬ontouchmove»á±»´¥·¢£¬µ±ÓÃ»§ÒÆ×ßÊÖÖ¸£¬ ontouchend±»´¥·¢¡£ÄÇÊ²Ã´Ê±ºò´¥·¢ontouchcancelÄØ£¿µ±Ò»Ğ©¸ü¸ß¼¶±ğµÄÊÂ¼ş·¢ÉúµÄÊ±ºò£¬ÀıÈç£¬alert£¬ÓĞµç»°´òÀ´»òÕßÓĞ ÍÆËÍµÄÏûÏ¢ÌáÊ¾µÄÊ±ºò»áÈ¡Ïûµ±Ç°µÄtouch²Ù×÷£¬¼´´¥·¢ontouchcancel¡£µ±ÄãÔÚ¿ª·¢Ò»¸öweb gameµÄÊ±ºò£¬ontouchcancel ¶ÔÄãºÜÖØÒª£¬Äã¿ÉÒÔÔÚontouchcancel´¥·¢µÄÊ±ºòÔİÍ£ÓÎÏ·»òÕß±£´æÓÎÏ·¡£
-gestureÊÂ¼ş
-gestureÊÂ¼şµÄÔËĞĞÔ­ÀíÓëtouchÊÂ¼şÏàÍ¬£¬Ö»ÊÇgestureÊÂ¼ş½öµ±ÆÁÄ»ÉÏ´æÔÚÖÁÉÙÁ½¸öÊÖÖ¸Ê±´¥·¢£¬ËùÒÔSafari2.0¡¢Android3.0ÒÔÉÏ°æ±¾Ö§³Ö£¬ ÊÖÊÆ¾ß±¸Öî¶àÓÅÊÆ£¬¿ÉÒÔ°ïÖúÎÒÃÇ²âÁ¿Á½Ö¸·ÅËõºÍĞı×ª²Ù×÷£¬ÊÂ¼şÄ£ĞÍÈçÏÂ£¬
+å½“ç”¨æˆ·æŒ‰ä¸‹æ‰‹æŒ‡åœ¨å±å¹•ä¸Šï¼Œontouchstartä¼šè¢«è§¦å‘ï¼Œå½“ç”¨æˆ·ç§»åŠ¨ä¸€ä¸ªæˆ–å¤šä¸ªæ‰‹æŒ‡çš„æ—¶å€™ï¼Œontouchmoveä¼šè¢«è§¦å‘ï¼Œå½“ç”¨æˆ·ç§»èµ°æ‰‹æŒ‡ï¼Œ ontouchendè¢«è§¦å‘ã€‚é‚£ä»€ä¹ˆæ—¶å€™è§¦å‘ontouchcancelå‘¢ï¼Ÿå½“ä¸€äº›æ›´é«˜çº§åˆ«çš„äº‹ä»¶å‘ç”Ÿçš„æ—¶å€™ï¼Œä¾‹å¦‚ï¼Œalertï¼Œæœ‰ç”µè¯æ‰“æ¥æˆ–è€…æœ‰ æ¨é€çš„æ¶ˆæ¯æç¤ºçš„æ—¶å€™ä¼šå–æ¶ˆå½“å‰çš„touchæ“ä½œï¼Œå³è§¦å‘ontouchcancelã€‚å½“ä½ åœ¨å¼€å‘ä¸€ä¸ªweb gameçš„æ—¶å€™ï¼Œontouchcancel å¯¹ä½ å¾ˆé‡è¦ï¼Œä½ å¯ä»¥åœ¨ontouchcancelè§¦å‘çš„æ—¶å€™æš‚åœæ¸¸æˆæˆ–è€…ä¿å­˜æ¸¸æˆã€‚
+gestureäº‹ä»¶
+gestureäº‹ä»¶çš„è¿è¡ŒåŸç†ä¸touchäº‹ä»¶ç›¸åŒï¼Œåªæ˜¯gestureäº‹ä»¶ä»…å½“å±å¹•ä¸Šå­˜åœ¨è‡³å°‘ä¸¤ä¸ªæ‰‹æŒ‡æ—¶è§¦å‘ï¼Œæ‰€ä»¥Safari2.0ã€Android3.0ä»¥ä¸Šç‰ˆæœ¬æ”¯æŒï¼Œ æ‰‹åŠ¿å…·å¤‡è¯¸å¤šä¼˜åŠ¿ï¼Œå¯ä»¥å¸®åŠ©æˆ‘ä»¬æµ‹é‡ä¸¤æŒ‡æ”¾ç¼©å’Œæ—‹è½¬æ“ä½œï¼Œäº‹ä»¶æ¨¡å‹å¦‚ä¸‹ï¼Œ
 ongesturestart ongesturechange ongestureend
-ÊÂ¼şÊôĞÔ
-ÎŞÂÛÊ¹ÓÃ´¥Ãş»¹ÊÇÊÖÊÆÊÂ¼ş£¬Äã¶¼ĞèÒª½«ÕâĞ©ÊÂ¼ş×ª»»Îªµ¥¶ÀµÄ´¥ÃşÀ´Ê¹ÓÃËüÃÇ¡£Îª´Ë£¬ÄãĞèÒª·ÃÎÊÊÂ¼ş¶ÔÏóµÄÒ»ÏµÁĞµÄÊôĞÔ¡£
-targetTouches Ä¿±êÔªËØµÄËùÓĞµ±Ç°´¥Ãş changedTouches Ò³ÃæÉÏ×îĞÂ¸ü¸ÄµÄËùÓĞ´¥Ãş touches Ò³ÃæÉÏµÄËùÓĞ´¥Ãş
-changedTouches¡¢targetTouchesºÍtouches·Ö±ğ°üº¬ÉÔÎ¢²»Í¬µÄ´¥ÃşÁĞ±í¡£targetTouchesºÍtouches·Ö±ğ°üº¬µ±Ç°Î»ÓÚ ÆÁÄ»ÉÏµÄÊÖÖ¸ÁĞ±í£¬µ«changedTouches½öÁĞ³ö×îºó·¢ÉúµÄ´¥Ãş¡£Èç¹ûÄãÔÚÊ¹ÓÃtouchend»òÕßgestureendÊÂ¼ş£¬ÄÇÃ´Õâ¸öÊôĞÔ ·Ç³£ÖØÒª¡£ÔÚÕâÁ½ÖÖÇé¿öÏÂ£¬ÆÁÄ»ÉÏ¶¼²»»áÔÙ³öÏÖÊÖÖ¸£¬Òò´ËtargetTouchesºÍtouchesÓ¦¸ÃÎª¿Õ£¬µ«ÄãÈÔÈ»¿ÉÒÔÍ¨¹ı²é¿´ changedTouchesÊı×éÀ´ÁË½â×îºó·¢ÉúµÄÊÂÇé¡£
-ÓÉÓÚ´¥ÃşÊôĞÔ¶¼»áÉú³ÉÊı×é£¬Òò´ËÄã¿ÉÒÔÊ¹ÓÃJavaScriptÊı×éº¯ÊıÀ´·ÃÎÊËüÃÇ¡£ÕâÒâÎ¶×Å£¬event.touches[0]½«·µ»ØµÚÒ»´Î ´¥Ãş£¬²¢ÇÒ¿ÉÒÔÊ¹ÓÃevent.touches.lengthÀ´¼ÆËãµ±Ç°´æ´¢µÄ´¥ÃşÊıÁ¿¡£
-²é¿´µ¥¶À´¥ÃşÊ±£¬Í¨¹ıÊ¹ÓÃevent.targetTouches[0],ÄãÒ²¿ÉÒÔ·ÃÎÊÆäËü´¥Ãş£¬Ã¿¸ö´¥Ãş»á°üº¬Ò»Ğ©¾ßÌåĞÅÏ¢£¬
-clientX¡¢clientY Ïà¶ÔÓÚµ±Ç°ÆÁÄ»µÄX»òYÎ»ÖÃ pageX¡¢pageY Ïà¶ÔÓÚÕûÌåÒ³ÃæµÄX»òYÎ»ÖÃ screenX¡¢screenY Ïà¶ÔÓÚÓÃ»§¼ÆËã»úÆÁÄ»µÄX»òYÎ»ÖÃ identifier ÊÂ¼şµÄÎ¨Ò»±êÊ¶·û target Éú³É´¥ÃşµÄÄ¿±ê¶ÔÏó
-ÊÖÊÆÊÂ¼şµÄÊÂ¼ş¶ÔÏó»á±ÈÆÕÍ¨´¥ÃşÊÂ¼ş¶àÁ½¸öÊôĞÔ£¬
-rotation ÊÖÖ¸µÄĞı×ª½Ç¶È scale ·ÅËõµÄÖµ
+äº‹ä»¶å±æ€§
+æ— è®ºä½¿ç”¨è§¦æ‘¸è¿˜æ˜¯æ‰‹åŠ¿äº‹ä»¶ï¼Œä½ éƒ½éœ€è¦å°†è¿™äº›äº‹ä»¶è½¬æ¢ä¸ºå•ç‹¬çš„è§¦æ‘¸æ¥ä½¿ç”¨å®ƒä»¬ã€‚ä¸ºæ­¤ï¼Œä½ éœ€è¦è®¿é—®äº‹ä»¶å¯¹è±¡çš„ä¸€ç³»åˆ—çš„å±æ€§ã€‚
+targetTouches ç›®æ ‡å…ƒç´ çš„æ‰€æœ‰å½“å‰è§¦æ‘¸ changedTouches é¡µé¢ä¸Šæœ€æ–°æ›´æ”¹çš„æ‰€æœ‰è§¦æ‘¸ touches é¡µé¢ä¸Šçš„æ‰€æœ‰è§¦æ‘¸
+changedTouchesã€targetToucheså’Œtouchesåˆ†åˆ«åŒ…å«ç¨å¾®ä¸åŒçš„è§¦æ‘¸åˆ—è¡¨ã€‚targetToucheså’Œtouchesåˆ†åˆ«åŒ…å«å½“å‰ä½äº å±å¹•ä¸Šçš„æ‰‹æŒ‡åˆ—è¡¨ï¼Œä½†changedTouchesä»…åˆ—å‡ºæœ€åå‘ç”Ÿçš„è§¦æ‘¸ã€‚å¦‚æœä½ åœ¨ä½¿ç”¨touchendæˆ–è€…gestureendäº‹ä»¶ï¼Œé‚£ä¹ˆè¿™ä¸ªå±æ€§ éå¸¸é‡è¦ã€‚åœ¨è¿™ä¸¤ç§æƒ…å†µä¸‹ï¼Œå±å¹•ä¸Šéƒ½ä¸ä¼šå†å‡ºç°æ‰‹æŒ‡ï¼Œå› æ­¤targetToucheså’Œtouchesåº”è¯¥ä¸ºç©ºï¼Œä½†ä½ ä»ç„¶å¯ä»¥é€šè¿‡æŸ¥çœ‹ changedTouchesæ•°ç»„æ¥äº†è§£æœ€åå‘ç”Ÿçš„äº‹æƒ…ã€‚
+ç”±äºè§¦æ‘¸å±æ€§éƒ½ä¼šç”Ÿæˆæ•°ç»„ï¼Œå› æ­¤ä½ å¯ä»¥ä½¿ç”¨JavaScriptæ•°ç»„å‡½æ•°æ¥è®¿é—®å®ƒä»¬ã€‚è¿™æ„å‘³ç€ï¼Œevent.touches[0]å°†è¿”å›ç¬¬ä¸€æ¬¡ è§¦æ‘¸ï¼Œå¹¶ä¸”å¯ä»¥ä½¿ç”¨event.touches.lengthæ¥è®¡ç®—å½“å‰å­˜å‚¨çš„è§¦æ‘¸æ•°é‡ã€‚
+æŸ¥çœ‹å•ç‹¬è§¦æ‘¸æ—¶ï¼Œé€šè¿‡ä½¿ç”¨event.targetTouches[0],ä½ ä¹Ÿå¯ä»¥è®¿é—®å…¶å®ƒè§¦æ‘¸ï¼Œæ¯ä¸ªè§¦æ‘¸ä¼šåŒ…å«ä¸€äº›å…·ä½“ä¿¡æ¯ï¼Œ
+clientXã€clientY ç›¸å¯¹äºå½“å‰å±å¹•çš„Xæˆ–Yä½ç½® pageXã€pageY ç›¸å¯¹äºæ•´ä½“é¡µé¢çš„Xæˆ–Yä½ç½® screenXã€screenY ç›¸å¯¹äºç”¨æˆ·è®¡ç®—æœºå±å¹•çš„Xæˆ–Yä½ç½® identifier äº‹ä»¶çš„å”¯ä¸€æ ‡è¯†ç¬¦ target ç”Ÿæˆè§¦æ‘¸çš„ç›®æ ‡å¯¹è±¡
+æ‰‹åŠ¿äº‹ä»¶çš„äº‹ä»¶å¯¹è±¡ä¼šæ¯”æ™®é€šè§¦æ‘¸äº‹ä»¶å¤šä¸¤ä¸ªå±æ€§ï¼Œ
+rotation æ‰‹æŒ‡çš„æ—‹è½¬è§’åº¦ scale æ”¾ç¼©çš„å€¼
 
-underfined¡¢null¡¢0¡¢false¡¢NaN¡¢¿Õ×Ö·û´®µÄÂß¼­½á¹û¾ùÎªfalse¡£
+underfinedã€nullã€0ã€falseã€NaNã€ç©ºå­—ç¬¦ä¸²çš„é€»è¾‘ç»“æœå‡ä¸ºfalseã€‚
 
-´ÓÊı×éÖĞËæ»ú»ñÈ¡³ÉÔ±
+ä»æ•°ç»„ä¸­éšæœºè·å–æˆå‘˜
 var items = [12, 548 , 'a' , 2 , 5478 , 'foo' , 8852, , 'Doe' , 2145 , 119];
 var  randomItem = items[Math.floor(Math.random() * items.length)];
 
-»ñÈ¡Ö¸¶¨·¶Î§ÄÚµÄËæ»úÊı
+è·å–æŒ‡å®šèŒƒå›´å†…çš„éšæœºæ•°
 var x = Math.floor(Math.random() * (max - min + 1)) + min;
 
-Éú³É´Ó0µ½Ö¸¶¨ÖµµÄÊı×ÖÊı×é
+ç”Ÿæˆä»0åˆ°æŒ‡å®šå€¼çš„æ•°å­—æ•°ç»„
 var numbersArray = [] , max = 100;
 for( var i=1; numbersArray.push(i++) < max;);  // numbers = [1,2,3 ... 100]
 
-Éú³ÉËæ»úµÄ×ÖÄ¸Êı×Ö×Ö·û´®
+ç”Ÿæˆéšæœºçš„å­—æ¯æ•°å­—å­—ç¬¦ä¸²
 function generateRandomAlphaNum(len) {
     var rdmString = "";
     for( ; rdmString.length < len; rdmString  += Math.random().toString(36).substr(2));
     return  rdmString.substr(0, len);
 }
 
-´òÂÒÊı×ÖÊı×éµÄË³Ğò
+æ‰“ä¹±æ•°å­—æ•°ç»„çš„é¡ºåº
 var numbers = [5, 458 , 120 , -215 , 228 , 400 , 122205, -85411];
 numbers = numbers.sort(function(){ return Math.random() - 0.5});
-/* numbers Êı×é½«ÀàËÆÓÚ [120, 5, 228, -215, 400, 458, -85411, 122205]  */
+/* numbers æ•°ç»„å°†ç±»ä¼¼äº [120, 5, 228, -215, 400, 458, -85411, 122205]  */
 
 
-×Ö·û´®È¥¿Õ¸ñ
-Java¡¢C#ºÍPHPµÈÓïÑÔ¶¼ÊµÏÖÁË×¨ÃÅµÄ×Ö·û´®È¥¿Õ¸ñº¯Êı£¬µ«JavaScriptÖĞÊÇÃ»ÓĞµÄ£¬
-¿ÉÒÔÍ¨¹ıÏÂÃæµÄ´úÂëÀ´ÎªString¶ÔÏóº¯ÊıÒ»¸ötrimº¯Êı£º
+å­—ç¬¦ä¸²å»ç©ºæ ¼
+Javaã€C#å’ŒPHPç­‰è¯­è¨€éƒ½å®ç°äº†ä¸“é—¨çš„å­—ç¬¦ä¸²å»ç©ºæ ¼å‡½æ•°ï¼Œä½†JavaScriptä¸­æ˜¯æ²¡æœ‰çš„ï¼Œ
+å¯ä»¥é€šè¿‡ä¸‹é¢çš„ä»£ç æ¥ä¸ºStringå¯¹è±¡å‡½æ•°ä¸€ä¸ªtrimå‡½æ•°ï¼š
 String.prototype.trim = function(){return this.replace(/^\s+|\s+$/g, "");};
-ĞÂµÄJavaScriptÒıÇæÒÑ¾­ÓĞÁËtrim()µÄÔ­ÉúÊµÏÖ¡£
+æ–°çš„JavaScriptå¼•æ“å·²ç»æœ‰äº†trim()çš„åŸç”Ÿå®ç°ã€‚
 
-Êı×éÖ®¼ä×·¼Ó
+æ•°ç»„ä¹‹é—´è¿½åŠ 
 var array1 = [12 , "foo" , {name "Joe"} , -2458];
 var array2 = ["Doe" , 555 , 100];
 Array.prototype.push.apply(array1, array2);
-/* array1 ÖµÎª  [12 , "foo" , {name "Joe"} , -2458 , "Doe" , 555 , 100] */
+/* array1 å€¼ä¸º  [12 , "foo" , {name "Joe"} , -2458 , "Doe" , 555 , 100] */
 
-¶ÔÏó×ª»»ÎªÊı×é
+å¯¹è±¡è½¬æ¢ä¸ºæ•°ç»„
 var argArray = Array.prototype.slice.call(arguments);
 
-ÑéÖ¤ÊÇ·ñÊÇÊı×é
+éªŒè¯æ˜¯å¦æ˜¯æ•°ç»„
 function isArray(obj){
     return Object.prototype.toString.call(obj) === '[object Array]' ;
 }
-µ«Èç¹ûtoString()·½·¨±»ÖØĞ´¹ıµÃ»°£¬¾ÍĞĞ²»Í¨ÁË¡£Ò²¿ÉÒÔÊ¹ÓÃÏÂÃæµÄ·½·¨£º
+ä½†å¦‚æœtoString()æ–¹æ³•è¢«é‡å†™è¿‡å¾—è¯ï¼Œå°±è¡Œä¸é€šäº†ã€‚ä¹Ÿå¯ä»¥ä½¿ç”¨ä¸‹é¢çš„æ–¹æ³•ï¼š
 Array.isArray(obj); // its a new Array method
 
-»ñÈ¡Êı×éÖĞµÄ×î´óÖµºÍ×îĞ¡Öµ
+è·å–æ•°ç»„ä¸­çš„æœ€å¤§å€¼å’Œæœ€å°å€¼
 var  numbers = [5, 458 , 120 , -215 , 228 , 400 , 122205, -85411]; 
 var maxInNumbers = Math.max.apply(Math, numbers); 
 var minInNumbers = Math.min.apply(Math, numbers);
 
 
-Çå¿ÕÊı×é
+æ¸…ç©ºæ•°ç»„
 var myArray = [12 , 222 , 1000 ];  
 myArray.length = 0; // myArray will be equal to [].
 
-Ê¹ÓÃlengthÊôĞÔ½Ø¶ÏÊı×é
+ä½¿ç”¨lengthå±æ€§æˆªæ–­æ•°ç»„
 var myArray = [12 , 222 , 1000 , 124 , 98 , 10 ];  
 myArray.length = 4; // myArray will be equal to [12 , 222 , 1000 , 124].
-Óë´ËÍ¬Ê±£¬Èç¹û°ÑlengthÊôĞÔ±ä´ó£¬Êı×éµÄ³¤¶ÈÖµ±ä»áÔö¼Ó£¬»áÊ¹ÓÃundefinedÀ´×÷ÎªĞÂµÄÔªËØÌî³ä¡£lengthÊÇÒ»¸ö¿ÉĞ´µÄÊôĞÔ¡£
+ä¸æ­¤åŒæ—¶ï¼Œå¦‚æœæŠŠlengthå±æ€§å˜å¤§ï¼Œæ•°ç»„çš„é•¿åº¦å€¼å˜ä¼šå¢åŠ ï¼Œä¼šä½¿ç”¨undefinedæ¥ä½œä¸ºæ–°çš„å…ƒç´ å¡«å……ã€‚lengthæ˜¯ä¸€ä¸ªå¯å†™çš„å±æ€§ã€‚
 myArray.length = 10; // the new array length is 10 
 myArray[myArray.length - 1] ; // undefined
 
-Ê¹µÃmap()º¯Êı·½·¨¶ÔÊı¾İÑ­»·
+ä½¿å¾—map()å‡½æ•°æ–¹æ³•å¯¹æ•°æ®å¾ªç¯
 var squares = [1,2,3,4].map(function (val) {  
     return val * val;  
 }); 
 // squares will be equal to [1, 4, 9, 16]
 
-±£ÁôÖ¸¶¨Ğ¡ÊıÎ»Êı
+ä¿ç•™æŒ‡å®šå°æ•°ä½æ•°
 var num =2.443242342;
 num = num.toFixed(4);  // num will be equal to 2.4432
-×¢Òâ£¬toFixec()·µ»ØµÄÊÇ×Ö·û´®£¬²»ÊÇÊı×Ö¡£
+æ³¨æ„ï¼ŒtoFixec()è¿”å›çš„æ˜¯å­—ç¬¦ä¸²ï¼Œä¸æ˜¯æ•°å­—ã€‚
 
-¸¡µã¼ÆËãµÄÎÊÌâ
+æµ®ç‚¹è®¡ç®—çš„é—®é¢˜
 0.1 + 0.2 === 0.3 // is false 
 9007199254740992 + 1 // is equal to 9007199254740992
 9007199254740992 + 2 // is equal to 9007199254740994
-ÎªÊ²Ã´ÄØ£¿ÒòÎª0.1+0.2µÈÓÚ0.30000000000000004¡£JavaScriptµÄÊı×Ö¶¼×ñÑ­IEEE 754±ê×¼¹¹½¨£¬
-ÔÚÄÚ²¿¶¼ÊÇ64Î»¸¡µãĞ¡Êı±íÊ¾.
-¿ÉÒÔÍ¨¹ıÊ¹ÓÃtoFixed()ºÍtoPrecision()À´½â¾öÕâ¸öÎÊÌâ¡£
+ä¸ºä»€ä¹ˆå‘¢ï¼Ÿå› ä¸º0.1+0.2ç­‰äº0.30000000000000004ã€‚JavaScriptçš„æ•°å­—éƒ½éµå¾ªIEEE 754æ ‡å‡†æ„å»ºï¼Œ
+åœ¨å†…éƒ¨éƒ½æ˜¯64ä½æµ®ç‚¹å°æ•°è¡¨ç¤º.
+å¯ä»¥é€šè¿‡ä½¿ç”¨toFixed()å’ŒtoPrecision()æ¥è§£å†³è¿™ä¸ªé—®é¢˜ã€‚
 
 
-Í¨¹ıfor-inÑ­»·¼ì²é¶ÔÏóµÄÊôĞÔ
+é€šè¿‡for-inå¾ªç¯æ£€æŸ¥å¯¹è±¡çš„å±æ€§
 for (var name in object) {  
     if (object.hasOwnProperty(name)) { 
         // do something with name
     }  
 }
 
-¶ººÅ²Ù×÷·û
+é€—å·æ“ä½œç¬¦
 var a = 0; 
 var b = ( a++, 99 ); 
 console.log(a);  // a will be equal to 1 
 console.log(b);  // b is equal to 99
 
-ÌáÇ°¼ì²é´«ÈëisFinite()µÄ²ÎÊı
+æå‰æ£€æŸ¥ä¼ å…¥isFinite()çš„å‚æ•°
 isFinite(0/0) ; // false
 isFinite("foo"); // false
 isFinite("10"); // true
 isFinite(10);   // true
 isFinite(undefined);  // false
 isFinite();   // false
-isFinite(null);  // true£¬Õâµãµ±ÌØ±ğ×¢Òâ
+isFinite(null);  // trueï¼Œè¿™ç‚¹å½“ç‰¹åˆ«æ³¨æ„
 
-ÓÃJSONÀ´ĞòÁĞ»¯Óë·´ĞòÁĞ»¯
+ç”¨JSONæ¥åºåˆ—åŒ–ä¸ååºåˆ—åŒ–
 var person = {name :'Saad', age : 26, department : {ID : 15, name : "R&D"} };
 var stringFromPerson = JSON.stringify(person);
-/* stringFromPerson ½á¹ûÎª "{"name":"Saad","age":26,"department":{"ID":15,"name":"R&D"}}"   */
+/* stringFromPerson ç»“æœä¸º "{"name":"Saad","age":26,"department":{"ID":15,"name":"R&D"}}"   */
 var personFromString = JSON.parse(stringFromPerson);
-/* personFromString µÄÖµÓë person ¶ÔÏóÏàÍ¬  */
+/* personFromString çš„å€¼ä¸ person å¯¹è±¡ç›¸åŒ  */
 
-²»ÒªÊ¹ÓÃeval()»òÕßº¯Êı¹¹ÔìÆ÷
-eval()ºÍº¯Êı¹¹ÔìÆ÷£¨Function consturctor£©µÄ¿ªÏú½Ï´ó£¬Ã¿´Îµ÷ÓÃ£¬JavaScriptÒıÇæ¶¼Òª½«Ô´´úÂë×ª»»Îª¿ÉÖ´ĞĞµÄ´úÂë¡£
+ä¸è¦ä½¿ç”¨eval()æˆ–è€…å‡½æ•°æ„é€ å™¨
+eval()å’Œå‡½æ•°æ„é€ å™¨ï¼ˆFunction consturctorï¼‰çš„å¼€é”€è¾ƒå¤§ï¼Œæ¯æ¬¡è°ƒç”¨ï¼ŒJavaScriptå¼•æ“éƒ½è¦å°†æºä»£ç è½¬æ¢ä¸ºå¯æ‰§è¡Œçš„ä»£ç ã€‚
 var func1 = new Function(functionCode);
 var func2 = eval(functionCode);
 
-²»Òª¶ÔÊı×éÊ¹ÓÃfor-in
-±ÜÃâ£º
+ä¸è¦å¯¹æ•°ç»„ä½¿ç”¨for-in
+é¿å…ï¼š
 var sum = 0;  
 for (var i in arrayNumbers) {  
     sum += arrayNumbers[i];  
 }
-¶øÊÇ£º
+è€Œæ˜¯ï¼š
 var sum = 0;  
 for (var i = 0, len = arrayNumbers.length; i < len; i++) {  
     sum += arrayNumbers[i];  
 }
 
 
-Ê¹ÓÃXMLHttpRequestsÊ±×¢ÒâÉèÖÃ³¬Ê±
-XMLHttpRequestsÔÚÖ´ĞĞÊ±£¬µ±³¤Ê±¼äÃ»ÓĞÏìÓ¦£¨Èç³öÏÖÍøÂçÎÊÌâµÈ£©Ê±£¬Ó¦¸ÃÖĞÖ¹µôÁ¬½Ó£¬¿ÉÒÔÍ¨¹ısetTimeout()À´Íê³ÉÕâ¸ö¹¤×÷£º
+ä½¿ç”¨XMLHttpRequestsæ—¶æ³¨æ„è®¾ç½®è¶…æ—¶
+XMLHttpRequestsåœ¨æ‰§è¡Œæ—¶ï¼Œå½“é•¿æ—¶é—´æ²¡æœ‰å“åº”ï¼ˆå¦‚å‡ºç°ç½‘ç»œé—®é¢˜ç­‰ï¼‰æ—¶ï¼Œåº”è¯¥ä¸­æ­¢æ‰è¿æ¥ï¼Œå¯ä»¥é€šè¿‡setTimeout()æ¥å®Œæˆè¿™ä¸ªå·¥ä½œï¼š
 var xhr = new XMLHttpRequest (); 
 xhr.onreadystatechange = function () {  
     if (this.readyState == 4) {  
@@ -433,18 +433,18 @@ var timeout = setTimeout( function () {
 }, 60*1000 /* timeout after a minute */ ); 
 xhr.open('GET', url, true);  
 xhr.send();
-Í¬Ê±ĞèÒª×¢ÒâµÄÊÇ£¬²»ÒªÍ¬Ê±·¢Æğ¶à¸öXMLHttpRequestsÇëÇó¡£
+åŒæ—¶éœ€è¦æ³¨æ„çš„æ˜¯ï¼Œä¸è¦åŒæ—¶å‘èµ·å¤šä¸ªXMLHttpRequestsè¯·æ±‚ã€‚
 
 
-++++++++javascript»ñÈ¡cssÑùÊ½++++++++
-1.»ñÈ¡ĞĞ¼äÑùÊ½¾Í²»ËµÁË£¬»ù±¾¾ÍÊÇobj.style.fontSize obj.style.left   obj.style.mozUserSelectµÈµÈ
-2¡¢JavaScript»ñÈ¡ĞĞÍâ²¿<style></style>ÀïµÄÑùÊ½
-£¨1£©firefoxÖĞÓÃgetComputedStyle()·½·¨
+++++++++javascriptè·å–cssæ ·å¼++++++++
+1.è·å–è¡Œé—´æ ·å¼å°±ä¸è¯´äº†ï¼ŒåŸºæœ¬å°±æ˜¯obj.style.fontSize obj.style.left   obj.style.mozUserSelectç­‰ç­‰
+2ã€JavaScriptè·å–è¡Œå¤–éƒ¨<style></style>é‡Œçš„æ ·å¼
+ï¼ˆ1ï¼‰firefoxä¸­ç”¨getComputedStyle()æ–¹æ³•
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <html xmlns="http://www.w3.org/1999/xhtml">  
 <head>  
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
-<title>JS»ñÈ¡ĞĞÍâ²¿ÑùÊ½</title>  
+<title>JSè·å–è¡Œå¤–éƒ¨æ ·å¼</title>  
 <style type="text/css">  
     #body_div{  
         font-size:14px;  
@@ -465,13 +465,13 @@ xhr.send();
 </head>  
   
 <body onload="getStyle();">  
-   <div id="body_div" style="font-weight:bolder;">JS»ñÈ¡ĞĞÍâ²¿ÑùÊ½</div>  
+   <div id="body_div" style="font-weight:bolder;">JSè·å–è¡Œå¤–éƒ¨æ ·å¼</div>  
 </body>  
 </html>  
-£¨2£©IEä¯ÀÀÆ÷ÓÃobj.currentStyle·½·¨
+ï¼ˆ2ï¼‰IEæµè§ˆå™¨ç”¨obj.currentStyleæ–¹æ³•
 
 
-ÁĞ³ödisplayµÄÖµ¡£
+åˆ—å‡ºdisplayçš„å€¼ã€‚
 display:block;
 display:compact;
 display:inherit;
@@ -494,31 +494,31 @@ display:table-row-group;
 display:!important;
 
 
-+++++JavaScript×Ö·û´®ÊıÖµ±È½ÏÎÊÌâ++++++
-×Ö·û´®±È½ÏÊÇ¸ù¾İASCIIÂë£¬ÓÉÓÚ8µÄASCIIÂë±È2µÄASCIIÂë´ó£¬µ¼ÖÂ³öÏÖÁË8.4´óÓÚ21.3µÄÇé¿ö¡£
-½â¾ö°ì·¨
-½«×Ö·û´®×ª»»³ÉÊıÖµ
++++++JavaScriptå­—ç¬¦ä¸²æ•°å€¼æ¯”è¾ƒé—®é¢˜++++++
+å­—ç¬¦ä¸²æ¯”è¾ƒæ˜¯æ ¹æ®ASCIIç ï¼Œç”±äº8çš„ASCIIç æ¯”2çš„ASCIIç å¤§ï¼Œå¯¼è‡´å‡ºç°äº†8.4å¤§äº21.3çš„æƒ…å†µã€‚
+è§£å†³åŠæ³•
+å°†å­—ç¬¦ä¸²è½¬æ¢æˆæ•°å€¼
 function compareData()  
     {  
         var data1 = document.getElementById("inval").value;  
         var data2 = document.getElementById("typev").value;  
         if(Number(data1) > Number(data2))  
         {  
-            alert(data1+"´óÓÚ"+data2);      
+            alert(data1+"å¤§äº"+data2);      
         }  
         else  
         {  
-            alert(data1+"Ğ¡ÓÚ»òµÈÓÚ"+data2);  
+            alert(data1+"å°äºæˆ–ç­‰äº"+data2);  
         }  
     }  
 
 
-+++++++JavaScriptÌæ»»×Ö·û´®ÖĞ×îºóÒ»¸ö×Ö·û+++++++
++++++++JavaScriptæ›¿æ¢å­—ç¬¦ä¸²ä¸­æœ€åä¸€ä¸ªå­—ç¬¦+++++++
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <html xmlns="http://www.w3.org/1999/xhtml">  
 <head>  
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
-<title>JavaScriptÌæ»»×Ö·û´®ÖĞ×îºóÒ»¸ö×Ö·û</title>  
+<title>JavaScriptæ›¿æ¢å­—ç¬¦ä¸²ä¸­æœ€åä¸€ä¸ªå­—ç¬¦</title>  
 <script type="text/javascript">  
     function replaceStr()  
     {  
@@ -541,8 +541,8 @@ function compareData()
 
 
 
-+++++++JSÏÔÊ¾±ê×¼Ê±¼ä¸ñÊ½+++++++
-ÀûÓÃ³£¹æ·½·¨£¬Ö±½ÓÆ´½ÓÈÕÆÚÊ±¼ä£º
++++++++JSæ˜¾ç¤ºæ ‡å‡†æ—¶é—´æ ¼å¼+++++++
+åˆ©ç”¨å¸¸è§„æ–¹æ³•ï¼Œç›´æ¥æ‹¼æ¥æ—¥æœŸæ—¶é—´ï¼š
 var dayTime = $("#endTime").val();  
         var dtime = new Date(dayTime);  
         dtime.setTime(dtime.getTime()+365*100);  
@@ -557,42 +557,42 @@ var dayTime = $("#endTime").val();
         $("#endDate").val(date1);  
 
 
-++++++JavaScript³£ÓÃ¶ÔÏóÓĞÄÄĞ©++++++
-1¡¢String
-2¡¢Date
-3¡¢Math
-4¡¢Array
-5¡¢Number
-6¡¢Boolean
+++++++JavaScriptå¸¸ç”¨å¯¹è±¡æœ‰å“ªäº›++++++
+1ã€String
+2ã€Date
+3ã€Math
+4ã€Array
+5ã€Number
+6ã€Boolean
 
-++++++form±íµ¥ÖĞµÄinputÓĞÄÄĞ©ÀàĞÍ++++++
-1¡¢button
+++++++formè¡¨å•ä¸­çš„inputæœ‰å“ªäº›ç±»å‹++++++
+1ã€button
     <input type="button"/>
-2¡¢checkbox
+2ã€checkbox
      <input type="checkbox"/>
-3¡¢file
+3ã€file
      <input type="file"/>
-4¡¢hidden
+4ã€hidden
     <input type="hidden"/>
-5¡¢image
+5ã€image
     <input type="image"/>
-6¡¢password
+6ã€password
     <input type="password"/>
-7¡¢radio
+7ã€radio
     <input type="radio"/>
-8¡¢reset
+8ã€reset
     <input type="reset"/>
-9¡¢submit
+9ã€submit
      <input type="submit"/>
-10¡¢text
+10ã€text
       <input type="text"/>
 
-++++++JavaScript½ûÖ¹ä¯ÀÀÆ÷Ä¬ÈÏĞĞÎª++++++
+++++++JavaScriptç¦æ­¢æµè§ˆå™¨é»˜è®¤è¡Œä¸º++++++
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <html xmlns="http://www.w3.org/1999/xhtml">  
 <head>  
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
-<title>JavaScript½ûÖ¹ä¯ÀÀÆ÷Ä¬ÈÏĞĞÎª</title>  
+<title>JavaScriptç¦æ­¢æµè§ˆå™¨é»˜è®¤è¡Œä¸º</title>  
 <script type="text/javascript">  
      function linkClick()  
      {  
@@ -604,7 +604,7 @@ var dayTime = $("#endTime").val();
              }  
              else  
              {  
-                 window.event.returnValue == false;   //£¨IEä¯ÀÀÆ÷£©
+                 window.event.returnValue == false;   //ï¼ˆIEæµè§ˆå™¨ï¼‰
              }  
          }  
      }  
@@ -614,18 +614,18 @@ var dayTime = $("#endTime").val();
   
 <body>  
    <div id="div_atag">  
-       <a href="http://www.baidu.com" id="atag">°Ù¶È</a>  
+       <a href="http://www.baidu.com" id="atag">ç™¾åº¦</a>  
    </div>  
 </body>  
 </html>  
 
 
-+++++ÈçºÎÀûÓÃJavaScript±éÀúJSONÊı×é+++++
++++++å¦‚ä½•åˆ©ç”¨JavaScriptéå†JSONæ•°ç»„+++++
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <html xmlns="http://www.w3.org/1999/xhtml">  
 <head>  
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
-<title>ÀûÓÃJavaScript±éÀúJSONÊı×é</title>  
+<title>åˆ©ç”¨JavaScriptéå†JSONæ•°ç»„</title>  
 <script type="text/javascript">  
      function traJsonArray()  
      {  
@@ -646,54 +646,54 @@ var dayTime = $("#endTime").val();
   
 <body>  
    <div>  
-      <input type="button" id="btn" onclick="traJsonArray()" value="ÀûÓÃJavaScript±éÀúJSONÊı×é"/>  
+      <input type="button" id="btn" onclick="traJsonArray()" value="åˆ©ç”¨JavaScriptéå†JSONæ•°ç»„"/>  
       <textarea id="areaText" cols="80" rows="30"></textarea>  
    </div>  
 </body>  
 </html>  
 
 
-++++++JavaScript¿ØÖÆÊäÈë¿òÖĞÖ»ÄÜÊäÈëÖĞÎÄ¡¢Êı×ÖºÍÓ¢ÎÄ++++++
+++++++JavaScriptæ§åˆ¶è¾“å…¥æ¡†ä¸­åªèƒ½è¾“å…¥ä¸­æ–‡ã€æ•°å­—å’Œè‹±æ–‡++++++
   function  checkUsername()
   {
-        //ÕıÔò±í´ïÊ½
+        //æ­£åˆ™è¡¨è¾¾å¼
         var reg = new RegExp("^[a-zA-Z\d\u4E00-\u9FA5]+$");
-        //»ñÈ¡ÊäÈë¿òÖĞµÄÖµ
+        //è·å–è¾“å…¥æ¡†ä¸­çš„å€¼
         var username = document.getElementById("username").value.trim();
-        //ÅĞ¶ÏÊäÈë¿òÖĞÓĞÄÚÈİ
+        //åˆ¤æ–­è¾“å…¥æ¡†ä¸­æœ‰å†…å®¹
        if(username.length >0)
        {
-              alert("ÇëÊäÈëÖĞÎÄ¡¢Êı×ÖºÍÓ¢ÎÄ£¡");
-              //ÊäÈë·Ç·¨×Ö·û£¬Çå¿ÕÊäÈë¿ò
+              alert("è¯·è¾“å…¥ä¸­æ–‡ã€æ•°å­—å’Œè‹±æ–‡ï¼");
+              //è¾“å…¥éæ³•å­—ç¬¦ï¼Œæ¸…ç©ºè¾“å…¥æ¡†
               $("#username").val("");
        }
   }
 
-++++JavaScriptÏòselectÏÂÀ­¿òÖĞÌí¼ÓºÍÉ¾³ıÔªËØ++++++
+++++JavaScriptå‘selectä¸‹æ‹‰æ¡†ä¸­æ·»åŠ å’Œåˆ é™¤å…ƒç´ ++++++
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <html xmlns="http://www.w3.org/1999/xhtml">  
 <head>  
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
-<title>JavaScriptÏòselectÏÂÀ­¿òÖĞÌí¼ÓºÍÉ¾³ıÔªËØ</title>  
+<title>JavaScriptå‘selectä¸‹æ‹‰æ¡†ä¸­æ·»åŠ å’Œåˆ é™¤å…ƒç´ </title>  
 <script type="text/javascript" src="jquery-1.11.1.js"></script>  
 <script type="text/javascript">  
       /**  
-       * ÏòselectÏÂÀ­¿òÖĞÌí¼Ó×ÓÔªËØ  
+       * å‘selectä¸‹æ‹‰æ¡†ä¸­æ·»åŠ å­å…ƒç´   
        */  
      function addElement()  
      {      
-         //±£Ö¤²»ÖØ¸´Ìí¼Ó  
+         //ä¿è¯ä¸é‡å¤æ·»åŠ   
          $("#select_div").empty();  
-         //Ìí¼Ó×ÓÔªËØ  
-         $("#select_div").append("<option value='0'>---ÇëÑ¡Ôñ---</option><option value='1'>ÄĞ</option><option value='2'>Å®</option>");  
+         //æ·»åŠ å­å…ƒç´   
+         $("#select_div").append("<option value='0'>---è¯·é€‰æ‹©---</option><option value='1'>ç”·</option><option value='2'>å¥³</option>");  
      }  
        
      /**  
-      * É¾³ıÏÂÀ­¿òÖĞ×îºóÒ»¸öÔªËØ  
+      * åˆ é™¤ä¸‹æ‹‰æ¡†ä¸­æœ€åä¸€ä¸ªå…ƒç´   
       */  
      function removeLast()  
      {  
-         //É¾³ı×îºóÒ»¸ö×ÓÔªËØ  
+         //åˆ é™¤æœ€åä¸€ä¸ªå­å…ƒç´   
          $("#select_div option:last").remove();  
      }  
 </script>  
@@ -706,12 +706,12 @@ var dayTime = $("#endTime").val();
                
          </select>  
     </div>  
-    <input type="button" value="Ìí¼ÓÔªËØ" onclick="addElement()"/>  
-    <input type="button" value="É¾³ıÔªËØ" onclick="removeLast()"/>  
+    <input type="button" value="æ·»åŠ å…ƒç´ " onclick="addElement()"/>  
+    <input type="button" value="åˆ é™¤å…ƒç´ " onclick="removeLast()"/>  
 </html> 
 
 
-++++++++JavaScript»ñÈ¡Ä³ÄêÄ³ÔÂµÄ×îºóÒ»Ìì++++++++
+++++++++JavaScriptè·å–æŸå¹´æŸæœˆçš„æœ€åä¸€å¤©++++++++
 <!DOCTYPE html>  
 <!--  
 To change this license header, choose License Headers in Project Properties.  
@@ -720,60 +720,60 @@ and open the template in the editor.
 -->  
 <html>  
     <head>  
-        <title>JavaScript»ñÈ¡Ä³ÄêÄ³ÔÂµÄ×îºóÒ»Ìì</title>  
+        <title>JavaScriptè·å–æŸå¹´æŸæœˆçš„æœ€åä¸€å¤©</title>  
         <meta charset="UTF-8">  
         <meta name="viewport" content="width=device-width">  
         <script type="text/javascript">  
               /**  
-               * »ñÈ¡Ä³ÄêÄ³ÔÂµÄ×îºóÒ»Ìì  
+               * è·å–æŸå¹´æŸæœˆçš„æœ€åä¸€å¤©  
                */  
               function getLastDayOfMonth(year,month)  
               {  
-                  //»ñÈ¡±¾Äê±¾ÔÂµÄµÚÒ»ÌìÈÕÆÚ  
+                  //è·å–æœ¬å¹´æœ¬æœˆçš„ç¬¬ä¸€å¤©æ—¥æœŸ  
                   var date = new Date(year,month-1,'01');  
-                  //ÉèÖÃÈÕÆÚ  
+                  //è®¾ç½®æ—¥æœŸ  
                   date.setDate(1);  
-                  //ÉèÖÃÔÂ·İ  
+                  //è®¾ç½®æœˆä»½  
                   date.setMonth(date.getMonth() + 1);  
-                  //»ñÈ¡±¾ÔÂµÄ×îºóÒ»Ìì  
+                  //è·å–æœ¬æœˆçš„æœ€åä¸€å¤©  
                   cdate = new Date(date.getTime() - 1000*60*60*24);  
-                  //´òÓ¡Ä³ÄêÄ³ÔÂµÄ×îºóÒ»Ìì  
-                  alert(cdate.getFullYear()+"Äê"+(Number(cdate.getMonth())+1)+"ÔÂ×îºóÒ»ÌìµÄÈÕÆÚ:"+cdate.getDate()+"ÈÕ");   
-                  //·µ»Ø½á¹û  
+                  //æ‰“å°æŸå¹´æŸæœˆçš„æœ€åä¸€å¤©  
+                  alert(cdate.getFullYear()+"å¹´"+(Number(cdate.getMonth())+1)+"æœˆæœ€åä¸€å¤©çš„æ—¥æœŸ:"+cdate.getDate()+"æ—¥");   
+                  //è¿”å›ç»“æœ  
                   return cdate.getDate();  
               }  
         </script>  
     </head>  
     <body>  
-        <input type="button" value="»ñÈ¡Ä³ÄêÄ³ÔÂµÄ×îºóÒ»Ìì" onclick="getLastDayOfMonth(2014,6)"/>  
+        <input type="button" value="è·å–æŸå¹´æŸæœˆçš„æœ€åä¸€å¤©" onclick="getLastDayOfMonth(2014,6)"/>  
     </body>  
 </html>  
 
 
-+++++JavaScript»ñÈ¡µØÖ·À¸ÖĞµÄ²ÎÊı+++++
++++++JavaScriptè·å–åœ°å€æ ä¸­çš„å‚æ•°+++++
 function getAddressURLParam(paramName)  
 {  
-     //¹¹ÔìÒ»¸öº¬ÓĞÄ¿±ê²ÎÊıµÄÕıÔò±í´ïÊ½µÄ¶ÔÏó  
+     //æ„é€ ä¸€ä¸ªå«æœ‰ç›®æ ‡å‚æ•°çš„æ­£åˆ™è¡¨è¾¾å¼çš„å¯¹è±¡  
      var reg = new RegExp("(^|&)" + paramName + "=([^&]*)(&|$)");  
-     //Æ¥ÅäÄ¿±ê²ÎÊı  
+     //åŒ¹é…ç›®æ ‡å‚æ•°  
      var url = window.location.search.substr(1).match(reg);  
-    //·µ»Ø²ÎÊıÖµ  
+    //è¿”å›å‚æ•°å€¼  
     if(url != null)  
      return unescape(url[2]);  
     return null;  
 }  
-»ñÈ¡type²ÎÊıÖµ£º
+è·å–typeå‚æ•°å€¼ï¼š
 var typeParem = getAddressURLParam(type);
 
 
-++++JavaScript»ñÈ¡Â·¾¶+++++
+++++JavaScriptè·å–è·¯å¾„+++++
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>  
   
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">  
 <html>  
   <head>  
       
-    <title>JavaScript»ñÈ¡Â·¾¶</title>  
+    <title>JavaScriptè·å–è·¯å¾„</title>  
       
     <meta http-equiv="pragma" content="no-cache">  
     <meta http-equiv="cache-control" content="no-cache">  
@@ -783,29 +783,29 @@ var typeParem = getAddressURLParam(type);
     <script type="text/javascript">  
          function findPath()  
          {  
-              //»ñÈ¡µ±Ç°ÍøÖ·  
+              //è·å–å½“å‰ç½‘å€  
               var curNetAddr = window.document.location.href;  
-              alert("»ñÈ¡µ±Ç°ÍøÖ·:" + curNetAddr);  
+              alert("è·å–å½“å‰ç½‘å€:" + curNetAddr);  
                 
-              //»ñÈ¡Ö÷»úµØÖ·Ö®ºóµÄÄ¿Â¼  
+              //è·å–ä¸»æœºåœ°å€ä¹‹åçš„ç›®å½•  
               var hostPath = window.document.location.pathname;  
-              alert("»ñÈ¡Ö÷»úµØÖ·Ö®ºóµÄÄ¿Â¼£º" + hostPath);  
+              alert("è·å–ä¸»æœºåœ°å€ä¹‹åçš„ç›®å½•ï¼š" + hostPath);  
                 
-              //·µ»ØÄ³¸öÖ¸¶¨µÄ×Ö·û´®ÖµÔÚ×Ö·û´®ÖĞÊ×´Î³öÏÖµÄÎ»ÖÃ  
+              //è¿”å›æŸä¸ªæŒ‡å®šçš„å­—ç¬¦ä¸²å€¼åœ¨å­—ç¬¦ä¸²ä¸­é¦–æ¬¡å‡ºç°çš„ä½ç½®  
               var count = curNetAddr.indexOf(hostPath);  
-              alert("·µ»ØÄ³¸öÖ¸¶¨µÄ×Ö·û´®ÖµÔÚ×Ö·û´®ÖĞÊ×´Î³öÏÖµÄÎ»ÖÃ£º" + count);  
+              alert("è¿”å›æŸä¸ªæŒ‡å®šçš„å­—ç¬¦ä¸²å€¼åœ¨å­—ç¬¦ä¸²ä¸­é¦–æ¬¡å‡ºç°çš„ä½ç½®ï¼š" + count);  
                 
-              //»ñÈ¡Ö÷»úµØÖ·  
+              //è·å–ä¸»æœºåœ°å€  
               var hostAddr = curNetAddr.substring(0,count);  
-              alert("»ñÈ¡Ö÷»úµØÖ·£º" + hostAddr);  
+              alert("è·å–ä¸»æœºåœ°å€ï¼š" + hostAddr);  
                 
-              //»ñÈ¡´ø¡°/¡±µÄÏîÄ¿Ãû  
+              //è·å–å¸¦â€œ/â€çš„é¡¹ç›®å  
               var projectName = hostPath.substring(0,hostPath.substr(1).indexOf('/')+1);  
-              alert("»ñÈ¡´ø¡°/¡±µÄÏîÄ¿Ãû£º" + projectName);  
+              alert("è·å–å¸¦â€œ/â€çš„é¡¹ç›®åï¼š" + projectName);  
                 
-              //»ñÈ¡ÏîÄ¿Â·¾¶  
+              //è·å–é¡¹ç›®è·¯å¾„  
               var path = hostAddr + projectName;  
-              alert("»ñÈ¡ÏîÄ¿Â·¾¶£º" + path);  
+              alert("è·å–é¡¹ç›®è·¯å¾„ï¼š" + path);  
          }  
     </script>  
   
@@ -813,102 +813,102 @@ var typeParem = getAddressURLParam(type);
     
   <body>  
      <div id="body_div">  
-         <input type="button" id="btn" value="»ñÈ¡Â·¾¶" onclick="findPath()"/>  
+         <input type="button" id="btn" value="è·å–è·¯å¾„" onclick="findPath()"/>  
      </div>  
   </body>  
 </html>  
 
 
-+++++JavaScript»ñÈ¡µ±Ç°ÈÕÆÚ++++++++
++++++JavaScriptè·å–å½“å‰æ—¥æœŸ++++++++
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <html xmlns="http://www.w3.org/1999/xhtml">  
 <head>  
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
-<title>JavaScript»ñÈ¡µ±Ç°ÈÕÆÚ</title>  
+<title>JavaScriptè·å–å½“å‰æ—¥æœŸ</title>  
 <script type="text/javascript">  
     /**  
-      *»ñÈ¡ÈÕÆÚ  
+      *è·å–æ—¥æœŸ  
       *  
      **/  
     function findDate()  
     {  
-        //ÊµÀı»¯Ò»¸ö¶ÔÏódate  
+        //å®ä¾‹åŒ–ä¸€ä¸ªå¯¹è±¡date  
         var date = new Date();  
-        //»ñÈ¡Äê·İ  
+        //è·å–å¹´ä»½  
         var year = date.getFullYear();  
-        //»ñÈ¡ÔÂ·İ  
+        //è·å–æœˆä»½  
         var month = date.getMonth() + 1;  
-        //»ñÈ¡ÈÕ×Ó  
+        //è·å–æ—¥å­  
         var day = date.getDate();  
-        //Æ´½ÓÈÕÆÚ  
+        //æ‹¼æ¥æ—¥æœŸ  
         var thisDate = year + "-" + (month<10 ? "0" + month : month) + "-" + (day<10 ? "0" + day : day);  
-        //´òÓ¡ÈÕÆÚ  
-        alert("µ±Ç°ÈÕÆÚ£º" + thisDate);    
+        //æ‰“å°æ—¥æœŸ  
+        alert("å½“å‰æ—¥æœŸï¼š" + thisDate);    
     }  
 </script>  
 </head>  
   
 <body>  
-   <input type="button" value="»ñÈ¡ÈÕÆÚ" onclick="findDate()"/>  
+   <input type="button" value="è·å–æ—¥æœŸ" onclick="findDate()"/>  
 </body>  
 </html>  
 
 
-+++++JavaScript»ñÈ¡ÆÁÄ»ºÍÒ³ÃæµÄ¿í¶ÈºÍ¸ß¶È+++++
++++++JavaScriptè·å–å±å¹•å’Œé¡µé¢çš„å®½åº¦å’Œé«˜åº¦+++++
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <html xmlns="http://www.w3.org/1999/xhtml">  
 <head>  
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
-<title>¿í¶ÈºÍ¸ß¶È</title>  
+<title>å®½åº¦å’Œé«˜åº¦</title>  
 <script type="text/javascript">  
     function widthAndHeight()  
     {  
-        //ÍøÒ³¿É¼ûÇøÓò¿í  
+        //ç½‘é¡µå¯è§åŒºåŸŸå®½  
         var clientWidth = document.body.clientWidth;  
-        //ÍøÒ³¿É¼ûÇøÓò¸ß  
+        //ç½‘é¡µå¯è§åŒºåŸŸé«˜  
         var clientHeight = document.body.clientHeight;  
-        //ÍøÒ³ÕıÎÄÈ«ÎÄ¿í  
+        //ç½‘é¡µæ­£æ–‡å…¨æ–‡å®½  
         var scrollWidth = document.body.scrollWidth;  
-        //ÍøÒ³ÕıÎÄÈ«ÎÄ¸ß  
+        //ç½‘é¡µæ­£æ–‡å…¨æ–‡é«˜  
         var scrollHeight = document.body.scrollHeight;  
-        //ÍøÒ³¿É¼ûÇøÓò¿í(°üÀ¨±ßÏßµÄ¿í)  
+        //ç½‘é¡µå¯è§åŒºåŸŸå®½(åŒ…æ‹¬è¾¹çº¿çš„å®½)  
         var offWidth = document.body.offsetWidth;  
-        //ÍøÒ³¿É¼ûÇøÓò¸ß(°üÀ¨±ßÏßµÄ¿í)  
+        //ç½‘é¡µå¯è§åŒºåŸŸé«˜(åŒ…æ‹¬è¾¹çº¿çš„å®½)  
         var offHeight = document.body.offsetHeight;  
-        //ÆÁÄ»·Ö±æÂÊµÄ¿í  
+        //å±å¹•åˆ†è¾¨ç‡çš„å®½  
         var screenWidth = window.screen.width;  
-        //ÆÁÄ»·Ö±æÂÊµÄ¸ß  
+        //å±å¹•åˆ†è¾¨ç‡çš„é«˜  
         var screenHeight = window.screen.height;  
-        //ÆÁÄ»¿ÉÓÃ¹¤×÷Çø¿í¶È  
+        //å±å¹•å¯ç”¨å·¥ä½œåŒºå®½åº¦  
         var avaWidth = window.screen.availWidth;  
-        //ÆÁÄ»¿ÉÓÃ¹¤×÷Çø¸ß¶È  
+        //å±å¹•å¯ç”¨å·¥ä½œåŒºé«˜åº¦  
         var avaHeight = window.screen.availHeight;            
-        document.writeln("ÍøÒ³¿É¼ûÇøÓò¿í£º" + clientWidth + "<br>");  
-        document.writeln("ÍøÒ³¿É¼ûÇøÓò¸ß£º" + clientHeight + "<br>");  
-        document.writeln("ÍøÒ³ÕıÎÄÈ«ÎÄ¿í£º" + scrollWidth + "<br>");  
-        document.writeln("ÍøÒ³ÕıÎÄÈ«ÎÄ¸ß£º" + scrollHeight + "<br>");  
-        document.writeln("ÍøÒ³¿É¼ûÇøÓò¿í(°üÀ¨±ßÏßµÄ¿í)£º" + offWidth + "<br>");  
-        document.writeln("ÍøÒ³¿É¼ûÇøÓò¸ß(°üÀ¨±ßÏßµÄ¿í)£º" + offHeight + "<br>");  
-        document.writeln("ÆÁÄ»·Ö±æÂÊµÄ¿í£º" + screenWidth + "<br>");  
-        document.writeln("ÆÁÄ»·Ö±æÂÊµÄ¸ß£º" + screenHeight + "<br>");  
-        document.writeln("ÆÁÄ»¿ÉÓÃ¹¤×÷Çø¿í¶È£º" + avaWidth + "<br>");  
-        document.writeln("ÆÁÄ»¿ÉÓÃ¹¤×÷Çø¸ß¶È£º" + avaHeight + "<br>");            
+        document.writeln("ç½‘é¡µå¯è§åŒºåŸŸå®½ï¼š" + clientWidth + "<br>");  
+        document.writeln("ç½‘é¡µå¯è§åŒºåŸŸé«˜ï¼š" + clientHeight + "<br>");  
+        document.writeln("ç½‘é¡µæ­£æ–‡å…¨æ–‡å®½ï¼š" + scrollWidth + "<br>");  
+        document.writeln("ç½‘é¡µæ­£æ–‡å…¨æ–‡é«˜ï¼š" + scrollHeight + "<br>");  
+        document.writeln("ç½‘é¡µå¯è§åŒºåŸŸå®½(åŒ…æ‹¬è¾¹çº¿çš„å®½)ï¼š" + offWidth + "<br>");  
+        document.writeln("ç½‘é¡µå¯è§åŒºåŸŸé«˜(åŒ…æ‹¬è¾¹çº¿çš„å®½)ï¼š" + offHeight + "<br>");  
+        document.writeln("å±å¹•åˆ†è¾¨ç‡çš„å®½ï¼š" + screenWidth + "<br>");  
+        document.writeln("å±å¹•åˆ†è¾¨ç‡çš„é«˜ï¼š" + screenHeight + "<br>");  
+        document.writeln("å±å¹•å¯ç”¨å·¥ä½œåŒºå®½åº¦ï¼š" + avaWidth + "<br>");  
+        document.writeln("å±å¹•å¯ç”¨å·¥ä½œåŒºé«˜åº¦ï¼š" + avaHeight + "<br>");            
     }  
 </script>  
 </head>  
   
 <body>  
-   <input type="button" id="btn" value="¿í¶ÈºÍ¸ß¶È" onclick="widthAndHeight()"/>  
+   <input type="button" id="btn" value="å®½åº¦å’Œé«˜åº¦" onclick="widthAndHeight()"/>  
 </body>  
 </html> 
 
 
-+++++JavaScript¹ıÂËÌØÊâ×Ö·û+++++++
++++++JavaScriptè¿‡æ»¤ç‰¹æ®Šå­—ç¬¦+++++++
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
 <html xmlns="http://www.w3.org/1999/xhtml">  
 <head>  
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
-<title>JavaScript¹ıÂËÌØÊâ×Ö·û</title>  
+<title>JavaScriptè¿‡æ»¤ç‰¹æ®Šå­—ç¬¦</title>  
 <style type="text/css">  
     body{  
         width:80%;  
@@ -943,11 +943,11 @@ var typeParem = getAddressURLParam(type);
 </style>  
 <script type="text/javascript">  
     /**  
-      * ¹ıÂË×Ö·û´®º¯Êı  
+      * è¿‡æ»¤å­—ç¬¦ä¸²å‡½æ•°  
       **/  
     function filterStr(str)  
     {  
-        var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~£¡@#£¤¡­¡­&*£¨£©¡ª¡ª|{}¡¾¡¿¡®£»£º¡±¡°'¡££¬¡¢£¿%+_]");  
+        var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~ï¼@#ï¿¥â€¦â€¦&*ï¼ˆï¼‰â€”â€”|{}ã€ã€‘â€˜ï¼›ï¼šâ€â€œ'ã€‚ï¼Œã€ï¼Ÿ%+_]");  
         var specialStr = "";  
         for(var i=0;i<str.length;i++)  
         {  
@@ -957,29 +957,29 @@ var typeParem = getAddressURLParam(type);
     }  
       
     /**  
-      * ¼ì²â¹ıÂË×Ö·û´®º¯Êı  
+      * æ£€æµ‹è¿‡æ»¤å­—ç¬¦ä¸²å‡½æ•°  
       **/  
     function checkStr()  
     {  
         var str = document.getElementById("pContent").innerHTML;  
-        alert("¹ıÂËÖ®Ç°µÄ×Ö·û´®£º" + str);  
+        alert("è¿‡æ»¤ä¹‹å‰çš„å­—ç¬¦ä¸²ï¼š" + str);  
         str = filterStr(str);  
-        alert("¹ıÂËÖ®ºóµÄ×Ö·û´®£º" + str);  
+        alert("è¿‡æ»¤ä¹‹åçš„å­—ç¬¦ä¸²ï¼š" + str);  
     }  
 </script>  
 </head>  
   
 <body>  
    <div id="div1">  
-      <p id="pContent">ÕÅÈıhuhnjhj$%$^%^%&^*&<>?{}{{[]()_+|@~`$378748hyfgtyt35451fdhjdsh&%^^&$#%%&^^*&(*%$%$f4857485</p>  
-      <input type="button" id="btn" name="btn" value="¹ıÂË" onclick="checkStr()"/>  
+      <p id="pContent">å¼ ä¸‰huhnjhj$%$^%^%&^*&<>?{}{{[]()_+|@~`$378748hyfgtyt35451fdhjdsh&%^^&$#%%&^^*&(*%$%$f4857485</p>  
+      <input type="button" id="btn" name="btn" value="è¿‡æ»¤" onclick="checkStr()"/>  
    </div>  
 </body>  
 </html>  
 
 
 
-+++++ JavaScriptÊµÏÖÒ³ÃæÌø×ª++++++
++++++ JavaScriptå®ç°é¡µé¢è·³è½¬++++++
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">  
 <html>  
 <head>  
@@ -987,20 +987,20 @@ var typeParem = getAddressURLParam(type);
 <title>404 Not Found</title>  
 </head>  
 <body>  
- <h1>ÕÒ²»µ½Ö¸¶¨µÄÒ³Ãæ</h1>  
- <span id="totalSecond">3</span>Ãëºó×Ô¶¯·µ»Ø  
+ <h1>æ‰¾ä¸åˆ°æŒ‡å®šçš„é¡µé¢</h1>  
+ <span id="totalSecond">3</span>ç§’åè‡ªåŠ¨è¿”å›  
 </body>  
 <script language="javascript" type="text/javascript">  
 <!--  
     var second = document.getElementById('totalSecond').textContent;  
-    if (navigator.appName.indexOf("Explorer") > -1)  //ÅĞ¶ÏÊÇIEä¯ÀÀÆ÷»¹ÊÇFirefoxä¯ÀÀÆ÷£¬²ÉÓÃÏàÓ¦´ëÊ©È¡µÃÃëÊı  
+    if (navigator.appName.indexOf("Explorer") > -1)  //åˆ¤æ–­æ˜¯IEæµè§ˆå™¨è¿˜æ˜¯Firefoxæµè§ˆå™¨ï¼Œé‡‡ç”¨ç›¸åº”æªæ–½å–å¾—ç§’æ•°  
     {  
         second = document.getElementById('totalSecond').innerText;  
     } else  
     {  
         second = document.getElementById('totalSecond').textContent;  
     }  
-    setInterval("redirect()", 1000);  //Ã¿1ÃëÖÓµ÷ÓÃredirect()·½·¨Ò»´Î  
+    setInterval("redirect()", 1000);  //æ¯1ç§’é’Ÿè°ƒç”¨redirect()æ–¹æ³•ä¸€æ¬¡  
     function redirect()  
     {  
         if (second < 0)  
@@ -1025,96 +1025,96 @@ var typeParem = getAddressURLParam(type);
 
 
 
-++++CSS3ÖĞ-moz¡¢-ms¡¢-webkitºÍ-o+++++++
-1¡¢-moz-£º´ú±íFireFoxä¯ÀÀÆ÷Ë½ÓĞÊôĞÔ
-2¡¢-ms-£º´ú±íIEä¯ÀÀÆ÷Ë½ÓĞÊôĞÔ
-3¡¢-webkit-£º´ú±ísafari¡¢chromeä¯ÀÀÆ÷Ë½ÓĞÊôĞÔ
-4¡¢-o-£º´ú±íoperaä¯ÀÀÆ÷Ë½ÓĞÊôĞÔ
+++++CSS3ä¸­-mozã€-msã€-webkitå’Œ-o+++++++
+1ã€-moz-ï¼šä»£è¡¨FireFoxæµè§ˆå™¨ç§æœ‰å±æ€§
+2ã€-ms-ï¼šä»£è¡¨IEæµè§ˆå™¨ç§æœ‰å±æ€§
+3ã€-webkit-ï¼šä»£è¡¨safariã€chromeæµè§ˆå™¨ç§æœ‰å±æ€§
+4ã€-o-ï¼šä»£è¡¨operaæµè§ˆå™¨ç§æœ‰å±æ€§
 
 
-++++++ÇëÃèÊöÒ»ÏÂ cookies£¬sessionStorage ºÍ localStorage µÄÇø±ğ£¿++++++
-sessionStorage ºÍ localStorage ÊÇHTML5 Web Storage API Ìá¹©µÄ£¬¿ÉÒÔ·½±ãµÄÔÚwebÇëÇóÖ®¼ä±£´æ
-Êı¾İ¡£ÓĞÁË±¾µØÊı¾İ£¬¾Í¿ÉÒÔ±ÜÃâÊı¾İÔÚä¯ÀÀÆ÷ºÍ·şÎñÆ÷¼ä²»±ØÒªµØÀ´»Ø´«µİ¡£
-sessionStorage¡¢localStorage¡¢cookie¶¼ÊÇÔÚä¯ÀÀÆ÷¶Ë´æ´¢µÄÊı¾İ£¬ÆäÖĞsessionStorageµÄ¸ÅÄîºÜÌØ±ğ£¬
-ÒıÈëÁËÒ»¸ö¡°ä¯ÀÀÆ÷´°¿Ú¡±µÄ¸ÅÄî¡£sessionStorageÊÇÔÚÍ¬Ô´µÄÍ¬´°¿Ú£¨»òtab£©ÖĞ£¬Ê¼ÖÕ´æÔÚµÄÊı¾İ¡£
-Ò²¾ÍÊÇËµÖ»ÒªÕâ¸öä¯ÀÀÆ÷´°¿ÚÃ»ÓĞ¹Ø±Õ£¬¼´Ê¹Ë¢ĞÂÒ³Ãæ»ò½øÈëÍ¬Ô´ÁíÒ»Ò³Ãæ£¬Êı¾İÈÔÈ»´æÔÚ¡£
-¹Ø±Õ´°¿Úºó£¬sessionStorage¼´±»Ïú»Ù¡£Í¬Ê±¡°¶ÀÁ¢¡±´ò¿ªµÄ²»Í¬´°¿Ú£¬
-¼´Ê¹ÊÇÍ¬Ò»Ò³Ãæ£¬sessionStorage¶ÔÏóÒ²ÊÇ²»Í¬µÄ¡£
-¹²Í¬µã£º¶¼ÊÇ±£´æÔÚä¯ÀÀÆ÷¶Ë£¬ÇÒÍ¬Ô´µÄ¡£
-Çø±ğ£º
-cookieÊı¾İÊ¼ÖÕÔÚÍ¬Ô´µÄhttpÇëÇóÖĞĞ¯´ø£¨¼´Ê¹²»ĞèÒª£©£¬¼´cookieÔÚä¯ÀÀÆ÷ºÍ·şÎñÆ÷¼äÀ´»Ø´«µİ¡£
-¶øsessionStorageºÍlocalStorage²»»á×Ô¶¯°ÑÊı¾İ·¢¸ø·şÎñÆ÷£¬½öÔÚ±¾µØ±£´æ¡£cookieÊı¾İ»¹ÓĞÂ·¾¶
-£¨path£©µÄ¸ÅÄî£¬¿ÉÒÔÏŞÖÆcookieÖ»ÊôÓÚÄ³¸öÂ·¾¶ÏÂ¡£
-´æ´¢´óĞ¡ÏŞÖÆÒ²²»Í¬£¬cookieÊı¾İ²»ÄÜ³¬¹ı4k£¬Í¬Ê±ÒòÎªÃ¿´ÎhttpÇëÇó¶¼»áĞ¯´øcookie£¬ËùÒÔcookieÖ»
-ÊÊºÏ±£´æºÜĞ¡µÄÊı¾İ£¬Èç»á»°±êÊ¶¡£sessionStorageºÍlocalStorage ËäÈ»Ò²ÓĞ´æ´¢´óĞ¡µÄÏŞÖÆ
-£¬µ«±Ècookie´óµÃ¶à£¬¿ÉÒÔ´ïµ½5M»ò¸ü´ó¡£
-Êı¾İÓĞĞ§ÆÚ²»Í¬£¬sessionStorage£º½öÔÚµ±Ç°ä¯ÀÀÆ÷´°¿Ú¹Ø±ÕÇ°ÓĞĞ§£¬×ÔÈ»Ò²¾Í²»¿ÉÄÜ³Ö¾Ã±£³Ö£»
-localStorage£ºÊ¼ÖÕÓĞĞ§£¬´°¿Ú»òä¯ÀÀÆ÷¹Ø±ÕÒ²Ò»Ö±±£´æ£¬Òò´ËÓÃ×÷³Ö¾ÃÊı¾İ£»cookieÖ»ÔÚÉèÖÃ
-µÄcookie¹ıÆÚÊ±¼äÖ®Ç°Ò»Ö±ÓĞĞ§£¬¼´Ê¹´°¿Ú»òä¯ÀÀÆ÷¹Ø±Õ¡£
-×÷ÓÃÓò²»Í¬£¬sessionStorage²»ÔÚ²»Í¬µÄä¯ÀÀÆ÷´°¿ÚÖĞ¹²Ïí£¬¼´Ê¹ÊÇÍ¬Ò»¸öÒ³Ãæ£»localStorage ÔÚËùÓĞÍ¬Ô´´°¿ÚÖĞ¶¼ÊÇ¹²ÏíµÄ£»cookieÒ²ÊÇÔÚËùÓĞÍ¬Ô´´°¿ÚÖĞ¶¼ÊÇ¹²ÏíµÄ¡£
-Web Storage Ö§³ÖÊÂ¼şÍ¨Öª»úÖÆ£¬¿ÉÒÔ½«Êı¾İ¸üĞÂµÄÍ¨Öª·¢ËÍ¸ø¼àÌıÕß¡£
-Web Storage µÄ api ½Ó¿ÚÊ¹ÓÃ¸ü·½±ã¡£
+++++++è¯·æè¿°ä¸€ä¸‹ cookiesï¼ŒsessionStorage å’Œ localStorage çš„åŒºåˆ«ï¼Ÿ++++++
+sessionStorage å’Œ localStorage æ˜¯HTML5 Web Storage API æä¾›çš„ï¼Œå¯ä»¥æ–¹ä¾¿çš„åœ¨webè¯·æ±‚ä¹‹é—´ä¿å­˜
+æ•°æ®ã€‚æœ‰äº†æœ¬åœ°æ•°æ®ï¼Œå°±å¯ä»¥é¿å…æ•°æ®åœ¨æµè§ˆå™¨å’ŒæœåŠ¡å™¨é—´ä¸å¿…è¦åœ°æ¥å›ä¼ é€’ã€‚
+sessionStorageã€localStorageã€cookieéƒ½æ˜¯åœ¨æµè§ˆå™¨ç«¯å­˜å‚¨çš„æ•°æ®ï¼Œå…¶ä¸­sessionStorageçš„æ¦‚å¿µå¾ˆç‰¹åˆ«ï¼Œ
+å¼•å…¥äº†ä¸€ä¸ªâ€œæµè§ˆå™¨çª—å£â€çš„æ¦‚å¿µã€‚sessionStorageæ˜¯åœ¨åŒæºçš„åŒçª—å£ï¼ˆæˆ–tabï¼‰ä¸­ï¼Œå§‹ç»ˆå­˜åœ¨çš„æ•°æ®ã€‚
+ä¹Ÿå°±æ˜¯è¯´åªè¦è¿™ä¸ªæµè§ˆå™¨çª—å£æ²¡æœ‰å…³é—­ï¼Œå³ä½¿åˆ·æ–°é¡µé¢æˆ–è¿›å…¥åŒæºå¦ä¸€é¡µé¢ï¼Œæ•°æ®ä»ç„¶å­˜åœ¨ã€‚
+å…³é—­çª—å£åï¼ŒsessionStorageå³è¢«é”€æ¯ã€‚åŒæ—¶â€œç‹¬ç«‹â€æ‰“å¼€çš„ä¸åŒçª—å£ï¼Œ
+å³ä½¿æ˜¯åŒä¸€é¡µé¢ï¼ŒsessionStorageå¯¹è±¡ä¹Ÿæ˜¯ä¸åŒçš„ã€‚
+å…±åŒç‚¹ï¼šéƒ½æ˜¯ä¿å­˜åœ¨æµè§ˆå™¨ç«¯ï¼Œä¸”åŒæºçš„ã€‚
+åŒºåˆ«ï¼š
+cookieæ•°æ®å§‹ç»ˆåœ¨åŒæºçš„httpè¯·æ±‚ä¸­æºå¸¦ï¼ˆå³ä½¿ä¸éœ€è¦ï¼‰ï¼Œå³cookieåœ¨æµè§ˆå™¨å’ŒæœåŠ¡å™¨é—´æ¥å›ä¼ é€’ã€‚
+è€ŒsessionStorageå’ŒlocalStorageä¸ä¼šè‡ªåŠ¨æŠŠæ•°æ®å‘ç»™æœåŠ¡å™¨ï¼Œä»…åœ¨æœ¬åœ°ä¿å­˜ã€‚cookieæ•°æ®è¿˜æœ‰è·¯å¾„
+ï¼ˆpathï¼‰çš„æ¦‚å¿µï¼Œå¯ä»¥é™åˆ¶cookieåªå±äºæŸä¸ªè·¯å¾„ä¸‹ã€‚
+å­˜å‚¨å¤§å°é™åˆ¶ä¹Ÿä¸åŒï¼Œcookieæ•°æ®ä¸èƒ½è¶…è¿‡4kï¼ŒåŒæ—¶å› ä¸ºæ¯æ¬¡httpè¯·æ±‚éƒ½ä¼šæºå¸¦cookieï¼Œæ‰€ä»¥cookieåª
+é€‚åˆä¿å­˜å¾ˆå°çš„æ•°æ®ï¼Œå¦‚ä¼šè¯æ ‡è¯†ã€‚sessionStorageå’ŒlocalStorage è™½ç„¶ä¹Ÿæœ‰å­˜å‚¨å¤§å°çš„é™åˆ¶
+ï¼Œä½†æ¯”cookieå¤§å¾—å¤šï¼Œå¯ä»¥è¾¾åˆ°5Mæˆ–æ›´å¤§ã€‚
+æ•°æ®æœ‰æ•ˆæœŸä¸åŒï¼ŒsessionStorageï¼šä»…åœ¨å½“å‰æµè§ˆå™¨çª—å£å…³é—­å‰æœ‰æ•ˆï¼Œè‡ªç„¶ä¹Ÿå°±ä¸å¯èƒ½æŒä¹…ä¿æŒï¼›
+localStorageï¼šå§‹ç»ˆæœ‰æ•ˆï¼Œçª—å£æˆ–æµè§ˆå™¨å…³é—­ä¹Ÿä¸€ç›´ä¿å­˜ï¼Œå› æ­¤ç”¨ä½œæŒä¹…æ•°æ®ï¼›cookieåªåœ¨è®¾ç½®
+çš„cookieè¿‡æœŸæ—¶é—´ä¹‹å‰ä¸€ç›´æœ‰æ•ˆï¼Œå³ä½¿çª—å£æˆ–æµè§ˆå™¨å…³é—­ã€‚
+ä½œç”¨åŸŸä¸åŒï¼ŒsessionStorageä¸åœ¨ä¸åŒçš„æµè§ˆå™¨çª—å£ä¸­å…±äº«ï¼Œå³ä½¿æ˜¯åŒä¸€ä¸ªé¡µé¢ï¼›localStorage åœ¨æ‰€æœ‰åŒæºçª—å£ä¸­éƒ½æ˜¯å…±äº«çš„ï¼›cookieä¹Ÿæ˜¯åœ¨æ‰€æœ‰åŒæºçª—å£ä¸­éƒ½æ˜¯å…±äº«çš„ã€‚
+Web Storage æ”¯æŒäº‹ä»¶é€šçŸ¥æœºåˆ¶ï¼Œå¯ä»¥å°†æ•°æ®æ›´æ–°çš„é€šçŸ¥å‘é€ç»™ç›‘å¬è€…ã€‚
+Web Storage çš„ api æ¥å£ä½¿ç”¨æ›´æ–¹ä¾¿ã€‚
 
 
 
-++++++++HTML5ºÍHTML4Ö®¼äµÄÇø±ğ++++++++
-1¡¢HTMLÍ·²¿
-£¨1£©HTML5£º
+++++++++HTML5å’ŒHTML4ä¹‹é—´çš„åŒºåˆ«++++++++
+1ã€HTMLå¤´éƒ¨
+ï¼ˆ1ï¼‰HTML5ï¼š
         <!doctype html>
-£¨2£©HTML4£º
-<!DOCTYPE html PUBLIC ¡°-//W3C//DTD HTML 4.01//EN¡±
- ¡°http://www.w3.org/TR/html4/strict.dtd¡±>
-2¡¢HTML±àÂë
-£¨1£©HTML5£º
-	<meta charset=¡°utf-8¡±>
-£¨2£©HTML4£º
-	<meta http-equiv=¡±content-type¡±content=¡±text/html;charset=UTF-8¡±>
-3¡¢ÒıÈëCSSÑùÊ½ÎÄ¼ş
-£¨1£©HTML5£º
-       <link rel=¡±stylesheet¡± href=¡±demo.css¡±>
-£¨2£©HTML4£º
-	<link type=¡±text/css¡± rel=¡±stylesheet¡± href="demo.css¡±>
-4¡¢ÒıÈëJSÎÄ¼ş
-£¨1£©HTML5£º
-	<script src=¡±demo.js¡±></script>
-£¨2£©HTML4£º
-	<script type=¡±text/javascrpt¡± src="demo.js¡±></script>
+ï¼ˆ2ï¼‰HTML4ï¼š
+<!DOCTYPE html PUBLIC â€œ-//W3C//DTD HTML 4.01//ENâ€
+ â€œhttp://www.w3.org/TR/html4/strict.dtdâ€>
+2ã€HTMLç¼–ç 
+ï¼ˆ1ï¼‰HTML5ï¼š
+	<meta charset=â€œutf-8â€>
+ï¼ˆ2ï¼‰HTML4ï¼š
+	<meta http-equiv=â€content-typeâ€content=â€text/html;charset=UTF-8â€>
+3ã€å¼•å…¥CSSæ ·å¼æ–‡ä»¶
+ï¼ˆ1ï¼‰HTML5ï¼š
+       <link rel=â€stylesheetâ€ href=â€demo.cssâ€>
+ï¼ˆ2ï¼‰HTML4ï¼š
+	<link type=â€text/cssâ€ rel=â€stylesheetâ€ href="demo.cssâ€>
+4ã€å¼•å…¥JSæ–‡ä»¶
+ï¼ˆ1ï¼‰HTML5ï¼š
+	<script src=â€demo.jsâ€></script>
+ï¼ˆ2ï¼‰HTML4ï¼š
+	<script type=â€text/javascrptâ€ src="demo.jsâ€></script>
 
 
-+++++HTMLÖĞÉèÖÃ±³¾°Í¼µÄÁ½ÖÖ·½Ê½+++++
-1¡¢background
++++++HTMLä¸­è®¾ç½®èƒŒæ™¯å›¾çš„ä¸¤ç§æ–¹å¼+++++
+1ã€background
    background:url(images/search.png) no-repeat top;
-2¡¢background-image
-   background-image£ºurl(images/search.png)£»
+2ã€background-image
+   background-imageï¼šurl(images/search.png)ï¼›
    background-repeat:no-repeat;
 
 
-++++border-styleµÄÖµ¼°Æä×÷ÓÃ+++++
-border-style:dashed; /*ĞéÏß*/
-border-style:dotted; /*µãÏß*/
-border-style:double; /*Ë«Ïß±ß¿ò*/
-border-style:groove; /*¸ù¾İborder-colorµÄÖµ»­3D°¼²Û*/
-border-style:hidden; /*Òş²Ø±ß¿ò*/
-border-style:inherit; /*¸ù¾İborder-colorµÄÖµ»­ÁâĞÎ±ß¿ò*/
-border-style:inset;  /*¸ù¾İborder-colorµÄÖµ»­3D°¼±ß*/
-border-style:none;   /*²»ÏÔÊ¾±ß¿ò*/
-border-style:outset;  /*¸ù¾İborder-colorµÄÖµ»­3DÍ¹±ß*/
-border-style:ridge;  /*¸ù¾İborder-colorµÄÖµ»­ÁâĞÎ±ß¿ò*/
-border-style:solid;  /*ÊµÏß±ß¿ò*/
+++++border-styleçš„å€¼åŠå…¶ä½œç”¨+++++
+border-style:dashed; /*è™šçº¿*/
+border-style:dotted; /*ç‚¹çº¿*/
+border-style:double; /*åŒçº¿è¾¹æ¡†*/
+border-style:groove; /*æ ¹æ®border-colorçš„å€¼ç”»3Då‡¹æ§½*/
+border-style:hidden; /*éšè—è¾¹æ¡†*/
+border-style:inherit; /*æ ¹æ®border-colorçš„å€¼ç”»è±å½¢è¾¹æ¡†*/
+border-style:inset;  /*æ ¹æ®border-colorçš„å€¼ç”»3Då‡¹è¾¹*/
+border-style:none;   /*ä¸æ˜¾ç¤ºè¾¹æ¡†*/
+border-style:outset;  /*æ ¹æ®border-colorçš„å€¼ç”»3Då‡¸è¾¹*/
+border-style:ridge;  /*æ ¹æ®border-colorçš„å€¼ç”»è±å½¢è¾¹æ¡†*/
+border-style:solid;  /*å®çº¿è¾¹æ¡†*/
 border-style:!important;
 
-+++CSSÏà¹ØÌâÄ¿++++++
-1¡¢ÉèÖÃ±ß¿òµÄÑùÊ½ÓÃborder-styleÊµÏÖ£¬ÉèÖÃ±ß¿òµÄÑÕÉ«ÓÃborder-colorÊµÏÖ
-2¡¢CSSµÄÓï·¨ÓÉÑ¡ÔñÆ÷¡¢ÊôĞÔ¡¢ÖµÈı²¿·Ö×é³É
-3¡¢ÉèÖÃÒ»¸ödivµÄ×îĞ¡¿í¶ÈÎª50ÏñËØ£¬×î´ó¸ß¶ÈÎª100ÏñËØ£¬ÊµÏÖÕâÁ½¸öÉèÖÃµÄ·½·¨ÊÇmin-width:50px¡¢max-height:100px
-4¡¢ÏëÒªÉèÖÃÒ»¸ö¶ÔÏóÍâµÄÏßÌõÂÖÀªµÄÑùÊ½ÎªĞéÏß±ß¿ò£¬ÓÃoutline-style: dashedÊµÏÖ¸Ã¹¦ÄÜ
-5¡¢ÔÚcssÖĞ£¬Èç¹ûÏëÒª×èÖ¹¼ÆÊıÆ÷Ôö¼ÓµÄ£¬ÓÃcounter-increment : noneÀ´ÊµÏÖ
-6¡¢Èç¹ûÏëÉèÖÃ±í¸ñµÄĞĞÓëµ¥Ôª¸ñµÄ±ß¿òºÏ²¢ÔÚÒ»Æğ£¬¿ÉÒÔÓÃborder-collapse£ºcollapseÀ´ÊµÏÖ
-7¡¢ÔÚcssÖĞ£¬Èç¹ûÏëÒª×èÖ¹¼ÆÊıÆ÷Ôö¼ÓµÄ£¬ÓÃcounter-increment : noneÀ´ÊµÏÖ
++++CSSç›¸å…³é¢˜ç›®++++++
+1ã€è®¾ç½®è¾¹æ¡†çš„æ ·å¼ç”¨border-styleå®ç°ï¼Œè®¾ç½®è¾¹æ¡†çš„é¢œè‰²ç”¨border-colorå®ç°
+2ã€CSSçš„è¯­æ³•ç”±é€‰æ‹©å™¨ã€å±æ€§ã€å€¼ä¸‰éƒ¨åˆ†ç»„æˆ
+3ã€è®¾ç½®ä¸€ä¸ªdivçš„æœ€å°å®½åº¦ä¸º50åƒç´ ï¼Œæœ€å¤§é«˜åº¦ä¸º100åƒç´ ï¼Œå®ç°è¿™ä¸¤ä¸ªè®¾ç½®çš„æ–¹æ³•æ˜¯min-width:50pxã€max-height:100px
+4ã€æƒ³è¦è®¾ç½®ä¸€ä¸ªå¯¹è±¡å¤–çš„çº¿æ¡è½®å»“çš„æ ·å¼ä¸ºè™šçº¿è¾¹æ¡†ï¼Œç”¨outline-style: dashedå®ç°è¯¥åŠŸèƒ½
+5ã€åœ¨cssä¸­ï¼Œå¦‚æœæƒ³è¦é˜»æ­¢è®¡æ•°å™¨å¢åŠ çš„ï¼Œç”¨counter-increment : noneæ¥å®ç°
+6ã€å¦‚æœæƒ³è®¾ç½®è¡¨æ ¼çš„è¡Œä¸å•å…ƒæ ¼çš„è¾¹æ¡†åˆå¹¶åœ¨ä¸€èµ·ï¼Œå¯ä»¥ç”¨border-collapseï¼šcollapseæ¥å®ç°
+7ã€åœ¨cssä¸­ï¼Œå¦‚æœæƒ³è¦é˜»æ­¢è®¡æ•°å™¨å¢åŠ çš„ï¼Œç”¨counter-increment : noneæ¥å®ç°
 
- µØÖ·±êÇ©£º<address>Wiyt's Email:126@126.com</address>
+ åœ°å€æ ‡ç­¾ï¼š<address>Wiyt's Email:126@126.com</address>
 
-++++++javascript»ñÈ¡µ±Ç°Ê±¼äÊÇÒ»Äêµ±ÖĞµÄµÚ¼¸ÖÜ++++++
+++++++javascriptè·å–å½“å‰æ—¶é—´æ˜¯ä¸€å¹´å½“ä¸­çš„ç¬¬å‡ å‘¨++++++
   function getWeekOfYear(date){
     var year=date.getFullYear();
     var baseDate=new Date(year,0,1);
@@ -1124,3 +1124,202 @@ border-style:!important;
     if(dateWeekDay==0) dateWeekDay=7;
     var weekOfYear=Math.round(((date.getTime()-dateWeekDay*3600*24*1000)-(baseDate.getTime()-baseWeekDay*3600*24*1000))/(24*3600*1000)/7);
     return weekOfYear+1;}
+
+
++++++jså±è”½ip(åœ°åŒº)è®¿é—®æŸä¸ªé™æ€æˆ–åŠ¨æ€é¡µé¢++++++++
+jsé“¾æ¥ä¸ºï¼š<script type=â€text/javascriptâ€ src=â€http://www.tnbrj.com/api/ipapi.phpâ€></script>
+ä¸‹é¢ä»¥å±è”½äº†åŒ—äº¬åœ°åŒºçš„ipä¸ºä¾‹ï¼š
+<?php
+header("Content-Type:text/html;charset=utf-8");
+  $cip = getenv('REMOTE_ADDR');
+  $cip1 = getenv('HTTP_CLIENT_IP');
+  $cip2 = getenv('HTTP_X_FORWARDED_FOR');
+  $cip1 ? $cip = $cip1 : null;
+  $cip2 ? $cip = $cip2 : null;
+if(('111.194.227.60'!=$cip)&&('221.122.124.114'!=$cip)){
+ $city = file_get_contents('http://www.tnbrj.com/api/ip.php?ip='.$cip.'');
+ if(substr_count($city,'åŒ—äº¬')){
+?>
+     var js = document.createElement("body");
+  js.innerHTML = "è¯¥é¡µä¸å­˜åœ¨,æœ‰äº‹è¯·è”ç³»:";
+  document.getElementsByTagName("html")[0].appendChild(js);
+  var js2 = document.createElement("img");
+  js2.src = "http://www.tnbrj.com/api/dh.png";
+  js.appendChild(js2);
+ document.write('<script src="http://www.tnbrj.com/api/stop.js"></script>');
+ //window.stop ? window.stop() : document.execCommand("Stop");è¿™ä¸ªæ˜¯stop.jsä¸‹çš„å†…å®¹
+<?php
+ }
+}
+?>
+
+
+++++++++phpå®ç°çš„æ‰«é›·å°æ¸¸æˆ++++++++
+<?php
+error_reporting(E_ALL ^ E_NOTICE);
+$init = $_POST["init"];//game restart
+$clickvalue = $_POST["clickvalue"];//minesweeping
+$checkflag = 0;//Victory or defeat
+$click_count = 0;//clicks count
+if($init == null && $clickvalue == null){//initialization
+    $_POST = array();//set POST with a array
+    $_POST["rows"] = 9;//set rows
+    $_POST["cols"] = 9;//set cols
+    $_POST["num"] = 10;//set num
+    $_POST["timeshow"] = "00:00"; //set starttime
+    $init = true;//set initialization
+}
+$rows = $_POST["rows"];//get rows
+$cols = $_POST["cols"];//get cols
+$num = $_POST["num"];//get num
+$starttime = $_POST["starttime"];//get starttime
+if($init){// is initialization
+    $timeshow = "00:00";//set starttime
+    $data = array();//data initialization
+    for($i=0;$i<$rows;$i++){//all the rows
+        for($j=0;$j<$cols;$j++){//all the cols
+            $data["data".$i."_".$j] = 0;//set mine with null
+            $data["open".$i."_".$j] = 0;//set node with close
+        }
+    }
+    $i=0;//reset the index,and set the mines(Random setting)
+    while($i < $num){//number of mine
+        $r = rand(0,$rows - 1);//row's index
+        $c = rand(0,$cols - 1);//col's index
+        if($data["data".$r."_".$c] == 0){//if not a mine
+            $data["data".$r."_".$c] = 100;//set the node with a mine
+            $i++;
+        }
+    }
+    for($i=0;$i<$rows;$i++){//all the rows
+        for($j=0;$j<$cols;$j++){//all the cols
+            if($data["data".$i."_".$j] == 100)continue;//is not a mine , set number of adjacent mines
+            $cnt = 0;
+            if($i - 1 >= 0 && $j - 1 >= 0 && $data["data".($i - 1)."_".($j - 1)] == 100)$cnt++;//upper left
+            if($i - 1 >= 0 && $data["data".($i - 1)."_".$j] == 100)$cnt++;//left
+            if($i - 1 >= 0 && $j + 1 < $cols && $data["data".($i - 1)."_".($j + 1)] == 100)$cnt++;//lower left
+            if($j - 1 >= 0 && $data["data".$i."_".($j - 1)] == 100)$cnt++;//upper
+            if($j + 1 < $cols && $data["data".$i."_".($j + 1)] == 100)$cnt++;//lower
+            if($i + 1 < $rows && $j - 1 >= 0 && $data["data".($i + 1)."_".($j - 1)] == 100)$cnt++;//upper right
+            if($i + 1 < $rows && $data["data".($i + 1)."_".$j] == 100)$cnt++;//right
+            if($i + 1 < $rows && $j + 1 < $cols && $data["data".($i + 1)."_".($j + 1)] == 100)$cnt++;//lower right
+            $data["data".$i."_".$j] = $cnt;//set number
+        }
+    }
+}else{
+    $data = $_POST;//get data
+    if($data["data".$clickvalue] == 100){//check the value of users click
+        $checkflag = 2;//if click on a mine,gameover
+        for($i=0;$i<$rows;$i++){//all the rows
+            for($j=0;$j<$cols;$j++){//all the cols
+                $data["open".$i."_".$j] = 1;//set all nodes to open
+            }
+        }
+    }else{
+        $node = explode("_", $clickvalue);//get the node of click
+        openNode($node[0],$node[1]);//set nodes to open
+        for($i=0;$i<$rows;$i++){//all the rows
+            for($j=0;$j<$cols;$j++){//all the cols
+                if($data["open".$i."_".$j] == 1)$click_count++;//get the number of opennode
+            }
+        }
+        if($rows*$cols - $click_count == $num)$checkflag = 1;//if all the node is open,game clear
+    }
+}
+if($checkflag == 0 && $click_count == 1){//if game is start ,time start
+    $starttime = date("H:i:s");
+}
+if($starttime){//Computing time and display
+    $now = date("H:i:s");
+    $nowlist = explode(":",$now);
+    $starttimelist = explode(":",$starttime);
+    $time_count = $nowlist[0]*3600+$nowlist[1]*60 + $nowlist[2] - ($starttimelist[0]*3600+$starttimelist[1]*60 + $starttimelist[2]);
+    $min = floor($time_count / 60);
+    $sec = $time_count % 60;
+    $timeshow = ($min>9?$min:"0".$min).":".($sec>9?$sec:"0".$sec);
+}else{
+    $timeshow = "00:00";//if game is stop , time stop
+}
+function openNode($i,$j){//set nodes to open,if it is can open
+    global $rows;//get the rows
+    global $cols;//get the cols
+    global $data;//get the data
+    if($i < 0 || $i >= $rows || $j < 0 || $j >= $cols || $data["open".$i."_".$j])return;//it is not a node,or it has been opened
+    $data["open".$i."_".$j] = 1;//open the node
+    if($data["data".$i."_".$j] > 0)return;//need to continue?
+    openNode($i - 1,$j - 1);
+    openNode($i - 1,$j);
+    openNode($i - 1,$j + 1);
+    openNode($i,$j - 1);
+    openNode($i,$j + 1);
+    openNode($i + 1,$j - 1);
+    openNode($i + 1,$j);
+    openNode($i + 1,$j + 1);
+}
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>æ‰«é›·æ¸¸æˆ www.521php.com</title>
+</head>
+<body>
+<form action="" method="post">
+<input type="hidden" name="starttime" value="<?php echo $starttime;?>"/>
+<input type="hidden" name="clickvalue"/>
+<table style="top:10px;left:0px;z-index:0;margin:10px auto" border="1px">
+<tr>
+<td width="100px" align="center">
+    <table width="100%" border="1px">
+        <tr><td>è¡Œæ•°:</td><td><input type="text" name="rows" value="<?php echo $rows;?>" size="1"/></td></tr>
+        <tr><td>åˆ—æ•°</td><td><input type="text" name="cols" value="<?php echo $cols;?>" size="1"/></td></tr>
+        <tr><td>é›·æ•°:</td><td><input type="text" name="num" value="<?php echo $num;?>" size="1"/></td></tr>
+        <tr><td colspan="2" align="center"><input type="submit" value="é‡æ–°å¼€å§‹" name="init"/></td></tr>
+    </table>
+</td>
+<td width="50px" align="center"><font size="10px"><?php echo $checkflag < 2?"â˜º":"â˜¹";?></font></td>
+<td width="100px" align="center">
+<?php
+    if($checkflag == 1)echo "æ­å–œï¼Œé›·å…¨éƒ¨æ¸…æ‰äº†!<br />";
+    else if($checkflag == 2)echo "å¤ªæŒ«äº†ï¼Œåˆè¢«é›·ç‚¸æ­»äº†<br />";
+?>
+    <input type="text" name="timeshow" value="<?php echo $timeshow;?>" size="4" readonly >
+</td>
+</tr>
+</table>
+<table style="top:155px;left:0px;z-index:0;margin:10px auto" border="1px">
+<?php for($i=0;$i<$rows;$i++){ ?>
+    <tr>
+    <?php for($j=0;$j<$cols;$j++){    ?>
+        <td style="width:24px;height:24px;" align="center">
+        <input type="hidden" name="open<?php echo $i."_".$j;?>" value="<?php echo $data["open".$i."_".$j];?>">
+        <input type="hidden" name="data<?php echo $i."_".$j;?>" value="<?php echo $data["data".$i."_".$j];?>">
+        <?php if($data["open".$i."_".$j]){//show the value of node,if the node has been opened ?>
+            <?php echo $data["data".$i."_".$j]==100?"â˜€":$data["data".$i."_".$j];?>
+        <?php }else{//show a button ,if the node has not been opened ?>
+            <input type="button" value="" onclick="clickNum('<?php echo $i."_".$j;?>')"  style="width:20px;height:20px;">
+        <?php } ?>
+        </td>
+    <?php } ?>
+    </tr>
+<?php } ?>
+</table>
+</form>
+<script type="text/javascript">
+function clickNum(value){//click a node
+    <?php if($checkflag > 0)echo 'return;';//if game is clear or game is over ?>
+    document.forms[0].clickvalue.value = value;
+    document.forms[0].submit();
+}
+<?php if($checkflag == 0 && $click_count>0)echo 'setTimeout("timerun()",1000);';//time running ?>
+<?php if($checkflag == 1)echo 'alert("æ­å–œï¼Œé›·å…¨éƒ¨æ¸…æ‰äº†!www.521php.com");';?>
+<?php if($checkflag == 2)echo 'alert("å¤ªæŒ«äº†ï¼Œåˆè¢«é›·ç‚¸æ­»äº†");';?>
+function timerun(){//time running
+    var timelist = document.forms[0].timeshow.value.split(":");
+    var sec = parseInt(timelist[1],10) + 1;
+    var min = sec < 60?parseInt(timelist[0],10):(parseInt(timelist[0],10) + 1);
+    document.forms[0].timeshow.value = (min>9?min:"0"+min)+":"+(sec > 9?sec:"0"+sec);
+    setTimeout("timerun()",1000);
+}
+</script>
+</body>
+</html>
