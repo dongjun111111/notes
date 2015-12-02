@@ -977,3 +977,68 @@ if(preg_match('/200/',$array[0])){
 ++++php判断是不是周末是不是工作日+++++
 echo ( date('w') == 0 || date('w') == 6 ) ? '是周末' : '不是周末';
 
+
++++++php最完整时间日期星期+++++
+echo date("Y-m-d",strtotime("now")), "<br />";
+echo date("Y-m-d",strtotime("-1 week Monday")), "离现在最近的周一<br />"; //离现在最近的周一
+echo date("Y-m-d",strtotime("-1 week Sunday")), "离现在最近的周末<br />"; //离现在最近的周末
+echo date("Y-m-d",strtotime("+0 week Monday")), "将要到来的周一<br />"; //将要到来的周一
+echo date("Y-m-d",strtotime("+0 week Sunday")), "将要到来的周末<br />"; //将要到来的周末
+echo date("n").'第几个月<br>';// 第几个月
+echo date("w").'本周周几<br>';//本周周几
+echo date("t").'本月天数<br>';// 本月天数
+echo "<br />上周:<br />";
+echo date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),date("d")-date("w")+1-7,date("Y"))),"<br />";
+echo date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("d")-date("w")+7-7,date("Y"))),"<br />";
+echo "<br>本周:<br>";
+echo date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),date("d")-date("w")+1,date("Y"))),"<br />";
+echo date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("d")-date("w")+7,date("Y"))),"<br />";
+echo "<br>上月:<br>";
+echo date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m")-1,1,date("Y"))),"<br />";
+echo date("Y-m-d H:i:s",mktime(23,59,59,date("m") ,0,date("Y"))),"<br />";
+echo "<br>本月:<br>";
+echo date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),1,date("Y"))),"<br />";
+echo date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("t"),date("Y"))),"<br />";
+$getMonthDays = date("t",mktime(0, 0 , 0,date("n")+(date("n")-1)%3,1,date("Y")));//本季度未最后一月天数
+echo "<br>本季度:<br>";
+echo date('Y-m-d H:i:s', mktime(0, 0, 0,date('n')-(date('n')-1)%3,1,date('Y'))),"<br />";
+echo date('Y-m-d H:i:s', mktime(23,59,59,date('n')+(date('n')-1)%3,$getMonthDays,date('Y'))),"<br />";
+$jdtoday = gregoriantojd(date('n'), date('j'), date('y'));
+$offset = jddayofweek($jdtoday)-1;
+for($i=0-$offset; $i<7-$offset; $i++){
+    $date = strtotime($i.' days');
+    echo('<th>'.date('D', $date).'/'.date('n-j', $date).'</th>');
+}
+
+
+++++mb_substr()与mb_strcut()切割带有中文字符串的表现+++++++
+<?php
+echo mb_substr('这样一来我的字符串就不会有乱码^_^', 0, 7, 'utf-8');
+?>
+输出：这样一来我的字
+<?php
+echo mb_strcut('这样一来我的字符串就不会有乱码^_^', 0, 7, 'utf-8');
+?>
+输出：这样
+
+
++++php获取服务器详细信息++++++
+获取系统类型及版本号：php_uname()(例：Windows&nbsp;NT&nbsp;COMPUTER&nbsp;5.1&nbsp;build&nbsp;2600)
+只获取系统类型：php_uname('s')  (或：PHP_OS，例：Windows&nbsp;NT)
+只获取系统版本号：;php_uname('r')&nbsp;&nbsp;(例：5.1)
+获取PHP运行方式：php_sapi_name()&nbsp;(PHP&nbsp;run&nbsp;mode：apache2handler)
+获取前进程用户名：Get_Current_User()
+获取PHP版本：;PHP_VERSION
+获取PHP安装路径：;DEFAULT_INCLUDE_PATH
+获取当前文件绝对路径：p;__FILE__
+获取Http请求中Host值：;$_SERVER["HTTP_HOST"];(返回值为域名或IP)
+获取服务器IP:GetHostByName($_SERVER['SERVER_NAME'])
+接受请求的服务器IP：$_SERVER["SERVER_ADDR"](有时候获取不到，推荐用：GetHostByName($_SERVER['SERVER_NAME']))
+获取客户端IP：$_SERVER['REMOTE_ADDR']
+获取服务器解译引擎：$_SERVER['SERVER_SOFTWARE']
+获取服务器CPU数量：$_SERVER['PROCESSOR_IDENTIFIER']
+获取服务器系统目录：$_SERVER['SystemRoot']
+获取服务器域名：$_SERVER['SERVER_NAME'](建议使用：$_SERVER["HTTP_HOST"])
+获取用户域名：$_SERVER['USERDOMAIN']
+获取服务器语言：$_SERVER['HTTP_ACCEPT_LANGUAGE']
+获取服务器Web端口：$_SERVER['SERVER_PORT']
