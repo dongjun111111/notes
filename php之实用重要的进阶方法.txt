@@ -2636,3 +2636,108 @@ function yuesefu($n,$m) {
 }  
 echo yuesefu(10,3)."是猴王";
 
+
+++++++php按每日时间段生成固定随机数小功能+++++
+//获取指定日期直接的天数
+function numday($e='',$s=''){
+	$startdate=strtotime($s);
+	$enddate=strtotime($e);
+	$days=round(($enddate-$startdate)/3600/24)+1;
+	return $days;
+}
+//获取前一天的日期
+function qiant($t){
+	$s = date('Y-m-d',strtotime($t)-(3600*24));
+	return $s;
+}
+//根据日期产生固定随机数
+function suiji($a,$t){
+	$num = date('j',strtotime($t));
+	if(is_even($num)){
+		if($num>($a/3)){
+		$n = round($num/3) + $a;
+		}else{
+			$n = $num + $a;
+		}
+	}else{
+		if($num>($a/3)){
+			$n = $a - round($num/3);
+		}else{
+			$n = $a - $num;
+		}
+	}
+	return $n;
+}
+//判断是否为偶数
+function is_even($num){
+     return (is_numeric($num)&(!($num&1)));
+ }
+$num       = 1000;//总数
+$startTime = '2015-12-01';
+$endTime   = '2015-12-09';
+$onceNum   ='';//每天限制多少左右，不写，按总数除以天生的平均值左右
+//$time = date('Y-m-d',time());
+$time = '2015-12-02';
+$sy = 0;//剩余
+$jr = 0;//今日
+$zr = 0;//昨日
+if(''==$onceNum){
+	$numday = numday($endTime,$startTime);
+	$onceNum = round($num/$numday);
+}
+if($time<$startTime){
+	$sy = $num;
+	$jr = 0;
+	$zr = 0;
+}elseif($startTime==$time){
+	$jr = suiji($onceNum,$time);
+	$sy = $num - $jr;
+	$zr = 0;
+}elseif($startTime==qiant($time)){
+	$jr = suiji($onceNum,$time);
+	$zr = suiji($onceNum,qiant($time));
+	$sy = $num-$jr-$zr;
+}elseif($time<=$endTime){
+	!empty($numday)?$numday=$numday:$numday =numday($endTime,$startTime);
+	$sy = $num-round($num/$numday)*(numday($time,$startTime))+suiji(10,$time);
+	$jr = suiji($onceNum,$time);
+	$zr = suiji($onceNum,qiant($time));
+}elseif($endTime==qiant($time)){
+	$sy = 0;
+	$jr = 0;
+	$zr = suiji($onceNum,qiant($time));
+}else{
+	$sy = $jr =$zr=0;
+}
+$sy<0?$sy=60:$sy=$sy;
+echo '<br />剩余'.$sy.'-今日'.$jr.'-昨日'.$zr;
+
+
++++php字符加密算法++++++
+function caesar_encode($s, $k) {
+  $k = "$k";
+  for($i=0; $i<strlen($k); $i++) {
+    $d = base_convert($k{$i}, 36, 10);
+    $t = '';
+    for($j=0; $j<strlen($s); $j++)
+      $t .= base_convert((base_convert($s{$j}, 36, 10)+$d)%36, 10, 36);
+    $s = $t;
+  }
+  return $t;
+ }
+function caesar_decode($s, $k) {
+  $k = "$k";
+  for($i=0; $i<strlen($k); $i++) {
+    $d = 36 - base_convert($k{$i}, 36, 10);
+    $t = '';
+    for($j=0; $j<strlen($s); $j++)
+      $t .= base_convert((base_convert($s{$j}, 36, 10)+$d)%36, 10, 36);
+    $s = $t;
+  }
+  return $t;
+}
+$key = '12345';
+$s = caesar_encode('test', $key);
+echo "$s\n";
+echo caesar_decode($s, $key);
+
