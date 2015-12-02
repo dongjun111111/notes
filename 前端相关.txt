@@ -1439,7 +1439,50 @@ function change_num($num)
 }
 
 
-
-
++++++JS打开新窗口显示另外一个页面++++++
+window.open()支持环境：
+JavaScript1.0+/JScript1.0+/Nav2+/IE3+/Opera3+
+<SCRIPT>
+window.open ('http://www.qq.com','newwindow','height=100,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no');
+</SCRIPT>
+【同时弹出2个窗口】 
+对源代码稍微改动下：
+<script LANGUAGE="JavaScript">
+<!--
+function openwin()
+{ window.open ("page.html", "newwindow", "height=100, width=100, top=0,left=0,toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no")
+//写成一行
+window.open ("page2.html", "newwindow2", "height=100, width=100, top=100, left=100,toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, status=no")
+//写成一行
+}
+//-->
+</script>
+为避免弹出的2个窗口覆盖，用top和left控制一下弹出的位置不要相互覆盖即可。最后用上面说过的四种方法调用即可。
+注意：2个窗口的name(newwindows和newwindow2)不要相同，或者干脆全部为空。OK？
+【内包含的弹出窗口-一个页面两个窗口】
+上面的例子都包含两个窗口，一个是主窗口，另一个是弹出的小窗口。
+通过下面的例子，你可以在一个页面内完成上面的效果。
+<html>
+<head>
+<SCRIPT LANGUAGE="JavaScript">
+function openwin()
+{OpenWindow=window.open("", "newwin", "height=250, width=250,toolbar=no,scrollbars="+scroll+",menubar=no");
+//写成一行
+OpenWindow.document.write("<TITLE>例子</TITLE>")
+OpenWindow.document.write("<BODY BGCOLOR=#ffffff>")
+OpenWindow.document.write("<h1>Hello!</h1>")
+OpenWindow.document.write("New window opened!")
+OpenWindow.document.write("</BODY>")
+OpenWindow.document.write("</HTML>")
+OpenWindow.document.close()}
+</SCRIPT>
+</head>
+<body>
+<a href="#" onclick="openwin()">打开一个窗口</a>
+<input type="button" onclick="openwin()" value="打开窗口">
+</body>
+</html>
+看看 OpenWindow.document.write()里面的代码不就是标准的HTML吗？只要按照格式写更多的行即可。
+千万注意多一个标签或少一个标签就会出现错误。记得用OpenWindow.document.close()结束啊。
 
 
