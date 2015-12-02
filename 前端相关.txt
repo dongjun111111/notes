@@ -1102,3 +1102,13 @@ border-style:outset;  /*根据border-color的值画3D凸边*/
 border-style:ridge;  /*根据border-color的值画菱形边框*/
 border-style:solid;  /*实线边框*/
 border-style:!important;
+
++++CSS相关题目++++++
+1、设置边框的样式用border-style实现，设置边框的颜色用border-color实现
+2、CSS的语法由选择器、属性、值三部分组成
+3、设置一个div的最小宽度为50像素，最大高度为100像素，实现这两个设置的方法是min-width:50px、max-height:100px
+4、想要设置一个对象外的线条轮廓的样式为虚线边框，用outline-style: dashed实现该功能
+5、在css中，如果想要阻止计数器增加的，用counter-increment : none来实现
+6、如果想设置表格的行与单元格的边框合并在一起，可以用border-collapse：collapse来实现
+7、在css中，如果想要阻止计数器增加的，用counter-increment : none来实现
+
