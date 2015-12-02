@@ -41,6 +41,7 @@ className    改变元素的class
 
 js闭包：
 子函数可以使用父函数的局部变量。
+json 没有长度概念，如果想要输出它们，就要用for in 循环输出。
 
 js获取一个页面中的所有a元素和title元素，然后创造新的P元素，并把a的title和内容附加到p元素中。
 <script type="text/javascript">  
