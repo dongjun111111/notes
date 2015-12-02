@@ -142,3 +142,148 @@ disabled表示禁用input元素，不可编辑，不可复制，不可选择，
 最后介绍一个标签，浏览器通常会记录input输入框的记录，所以你在输入的时候，经常会下拉很多内容，
 如果你想去掉的话，最好加上autocomplete="off"，使用方法如下：autocomplete="off"
 <input type="text" autocomplete="off" id="number"/>
+
+
+
+++++js在手机上的表现+++++
+一、手机上的触摸事件
+基本事件：
+touchstart   //手指刚接触屏幕时触发
+touchmove    //手指在屏幕上移动时触发
+touchend     //手指从屏幕上移开时触发
+下面这个比较少用：
+touchcancel  //触摸过程被系统取消时触发
+每个事件都有以下列表，比如touchend的targetTouches当然是 0 咯：
+touches         //位于屏幕上的所有手指的列表
+targetTouches   //位于该元素上的所有手指的列表
+changedTouches  //涉及当前事件的所有手指的列表
+每个事件有列表，每个列表还有以下属性：
+复制代码
+其中坐标常用pageX,pageY：
+pageX    //相对于页面的 X 坐标
+pageY    //相对于页面的 Y 坐标
+clientX  //相对于视区的 X 坐标
+clientY  //相对于视区的 Y 坐标
+screenX  //相对于屏幕的 X 坐标
+screenY  //相对于屏幕的 Y 坐标
+identifier // 当前触摸点的惟一编号
+target   //手指所触摸的 DOM 元素
+复制代码
+其他相关事件：
+event.preventDefault（）   //阻止触摸时浏览器的缩放、滚动条滚动
+var supportTouch = "createTouch" in document  //判断是否支持触摸事件
+二、示例
+以下是获取不同类型滑动的代码具体做法，结合前人的思想，封装好了，可以借鉴学习：
+复制代码
+var touchFunc = function(obj,type,func) {
+    //滑动范围在5x5内则做点击处理，s是开始，e是结束
+    var init = {x:5,y:5,sx:0,sy:0,ex:0,ey:0};
+    var sTime = 0, eTime = 0;
+    type = type.toLowerCase();
+ 
+    obj.addEventListener("touchstart",function(){
+        sTime = new Date().getTime();
+        init.sx = event.targetTouches[0].pageX;
+        init.sy = event.targetTouches[0].pageY;
+        init.ex = init.sx;
+        init.ey = init.sy;
+        if(type.indexOf("start") != -1) func();
+    }, false);
+ 
+    obj.addEventListener("touchmove",function() {
+        event.preventDefault();//阻止触摸时浏览器的缩放、滚动条滚动
+        init.ex = event.targetTouches[0].pageX;
+        init.ey = event.targetTouches[0].pageY;
+        if(type.indexOf("move")!=-1) func();
+    }, false);
+ 
+    obj.addEventListener("touchend",function() {
+        var changeX = init.sx - init.ex;
+        var changeY = init.sy - init.ey;
+        if(Math.abs(changeX)>Math.abs(changeY)&&Math.abs(changeY)>init.y) {
+            //左右事件
+            if(changeX > 0) {
+                if(type.indexOf("left")!=-1) func();
+            }else{
+                if(type.indexOf("right")!=-1) func();
+            }
+        }
+        else if(Math.abs(changeY)>Math.abs(changeX)&&Math.abs(changeX)>init.x){
+            //上下事件
+            if(changeY > 0) {
+                if(type.indexOf("top")!=-1) func();
+            }else{
+                if(type.indexOf("down")!=-1) func();
+            }
+        }
+        else if(Math.abs(changeX)<init.x && Math.abs(changeY)<init.y){
+            eTime = new Date().getTime();
+            //点击事件，此处根据时间差细分下
+            if((eTime - sTime) > 300) {
+                if(type.indexOf("long")!=-1) func(); //长按
+            }
+            else {
+                if(type.indexOf("click")!=-1) func(); //当点击处理
+            }
+        }
+        if(type.indexOf("end")!=-1) func();
+    }, false);
+};
+
+
+++++++手机触摸屏的JS事件 +++++++
+处理Touch事件能让你跟踪用户的每一根手指的位置。你可以绑定以下四种Touch事件：
+    1.touchstart:  // 手指放到屏幕上的时候触发 
+    2.touchmove:  // 手指在屏幕上移动的时候触发 
+    3.touchend:  // 手指从屏幕上拿起的时候触发 
+    4touchcancel:  // 系统取消touch事件的时候触发。至于系统什么时候会取消，不详
+属性
+    1.client / clientY：// 触摸点相对于浏览器窗口viewport的位置 
+    2.pageX / pageY：// 触摸点相对于页面的位置 
+    3.screenX /screenY：// 触摸点相对于屏幕的位置 
+    4.identifier： // touch对象的unique ID 
+//touchstart事件  
+function touchSatrtFunc(e) {  
+    //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等  
+    var touch = e.touches[0]; //获取第一个触点  
+    var x = Number(touch.pageX); //页面触点X坐标  
+    var y = Number(touch.pageY); //页面触点Y坐标  
+    //记录触点初始位置  
+    startX = x;  
+    startY = y;  
+}  
+//touchmove事件 
+function touchMoveFunc(e) {  
+    //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等  
+    var touch = evt.touches[0]; //获取第一个触点  
+    var x = Number(touch.pageX); //页面触点X坐标  
+    var y = Number(touch.pageY); //页面触点Y坐标  
+    var text = 'TouchMove事件触发：（' + x + ', ' + y + '）';  
+    //判断滑动方向  
+    if (x - startX != 0) {  
+        //左右滑动  
+    }  
+    if (y - startY != 0) {  
+        //上下滑动  
+    }  
+}  
+
+++++++++Mobile Web前端开发系列:事件处理（二）++++++++  
+上篇文章我们讲了html的基本事件，这篇文章我们着重讲解下触摸事件，触摸事件触发的条件是手指接触屏幕、手指在屏幕上移动或者从屏幕上离开。 事件是触摸的集合，它起始于手指初次放置在屏幕上，终止于最后一个手指离开屏幕。事件从开始到结束过程中的所有触摸操作都存储在相同事件的记录中。
+touch事件
+touch事件可以分为单点触摸和多点触摸两种，单点触摸高端机一般都支持，Safari2.0、Android3.0以上的版本支持多点触摸，支持最多5个手指同时触摸屏幕，ipad最多支持11个手指同时触摸屏幕， 我们可以采用以下的事件模型捕获这些事件，
+ontouchstart ontouchmove ontouchend ontouchcancel
+当用户按下手指在屏幕上，ontouchstart会被触发，当用户移动一个或多个手指的时候，ontouchmove会被触发，当用户移走手指， ontouchend被触发。那什么时候触发ontouchcancel呢？当一些更高级别的事件发生的时候，例如，alert，有电话打来或者有 推送的消息提示的时候会取消当前的touch操作，即触发ontouchcancel。当你在开发一个web game的时候，ontouchcancel 对你很重要，你可以在ontouchcancel触发的时候暂停游戏或者保存游戏。
+gesture事件
+gesture事件的运行原理与touch事件相同，只是gesture事件仅当屏幕上存在至少两个手指时触发，所以Safari2.0、Android3.0以上版本支持， 手势具备诸多优势，可以帮助我们测量两指放缩和旋转操作，事件模型如下，
+ongesturestart ongesturechange ongestureend
+事件属性
+无论使用触摸还是手势事件，你都需要将这些事件转换为单独的触摸来使用它们。为此，你需要访问事件对象的一系列的属性。
+targetTouches 目标元素的所有当前触摸 changedTouches 页面上最新更改的所有触摸 touches 页面上的所有触摸
+changedTouches、targetTouches和touches分别包含稍微不同的触摸列表。targetTouches和touches分别包含当前位于 屏幕上的手指列表，但changedTouches仅列出最后发生的触摸。如果你在使用touchend或者gestureend事件，那么这个属性 非常重要。在这两种情况下，屏幕上都不会再出现手指，因此targetTouches和touches应该为空，但你仍然可以通过查看 changedTouches数组来了解最后发生的事情。
+由于触摸属性都会生成数组，因此你可以使用JavaScript数组函数来访问它们。这意味着，event.touches[0]将返回第一次 触摸，并且可以使用event.touches.length来计算当前存储的触摸数量。
+查看单独触摸时，通过使用event.targetTouches[0],你也可以访问其它触摸，每个触摸会包含一些具体信息，
+clientX、clientY 相对于当前屏幕的X或Y位置 pageX、pageY 相对于整体页面的X或Y位置 screenX、screenY 相对于用户计算机屏幕的X或Y位置 identifier 事件的唯一标识符 target 生成触摸的目标对象
+手势事件的事件对象会比普通触摸事件多两个属性，
+rotation 手指的旋转角度 scale 放缩的值
+
