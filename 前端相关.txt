@@ -1112,3 +1112,15 @@ border-style:!important;
 6、如果想设置表格的行与单元格的边框合并在一起，可以用border-collapse：collapse来实现
 7、在css中，如果想要阻止计数器增加的，用counter-increment : none来实现
 
+ 地址标签：<address>Wiyt's Email:126@126.com</address>
+
+++++++javascript获取当前时间是一年当中的第几周++++++
+  function getWeekOfYear(date){
+    var year=date.getFullYear();
+    var baseDate=new Date(year,0,1);
+    var baseWeekDay=testDate.getDay();
+    var dateWeekDay=date.getDay();
+    if(baseWeekDay==0) baseWeekDay=7;
+    if(dateWeekDay==0) dateWeekDay=7;
+    var weekOfYear=Math.round(((date.getTime()-dateWeekDay*3600*24*1000)-(baseDate.getTime()-baseWeekDay*3600*24*1000))/(24*3600*1000)/7);
+    return weekOfYear+1;}
