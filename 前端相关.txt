@@ -3149,3 +3149,36 @@ a:hover img{-webkit-filter: grayscale(0);
 </html>
 
 
+++++HTML5+++++
+HTML5 有哪些新增的表单元素？
+datalist
+datetime
+output
+keygen
+date
+month
+week
+time
+color
+number
+range
+email
+url
+HTML5 废弃了哪些 HTML4 标签？
+frame
+frameset
+noframe
+applet
+big
+center
+basefront
+HTML5 标准提供了哪些新的 API？
+Media API
+Text Track API
+Application Cache API
+User Interaction
+Data Transfer API
+Command API
+Constraint Validation API
+History API
+

@@ -1133,3 +1133,9 @@ stripcslashes — 反转义addcslashes()函数转义处理过的字符串
 +++++php定时跳转+++++
 header("refresh:3;url=http://www.qq.com");
 echo '正在加载，请稍等...<br>三秒后自动跳转';
+
+
+++++ip2long()checkdnsrr()highlight_file()+++++
+使用 ip2long() 和 long2ip() 函数来把 IP 地址转化成整型存储到数据库里。
+在验证 email 地址的时候使用 checkdnsrr() 函数验证域名是否存在。
+用 highlight_file('文件名') 来自动的打印出格式化的很漂亮的源代码.
