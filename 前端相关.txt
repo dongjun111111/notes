@@ -2627,3 +2627,39 @@ function icall(obj){
 <script type="text/javascript" src="http://www.phpernote.com/web_tools/js/noIe6.js"></script>
 <![endif]-->
 
+
++++++++JS禁止浏览器直接选择复制文章内容+++++
+1--》全局不可复制：
+针对IE：
+<script language="javascript">
+document.onselectstart=new Function("event.returnValue=false;"); //禁止选择,也就是无法复制
+</script>
+针对firefox：
+<style type="text/css">body{-moz-user-select:none;}</style>
+所有浏览器兼容：
+<style type="text/css">  
+body {  
+    -webkit-touch-callout: none;  
+    -webkit-user-select: none;  
+    -khtml-user-select: none;  
+    -moz-user-select: none;  
+    -ms-user-select: none;  
+    user-select: none;  
+}  
+</style> 
+
+2--》设置局部不可复制：
+<style type="text/css">  
+.unselectable {  
+   -moz-user-select: -moz-none;  
+   -khtml-user-select: none;  
+   -webkit-user-select: none;  
+   /*  
+     Introduced in IE 10.  
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/  
+   */  
+   -ms-user-select: none;  
+   user-select: none;  
+}  
+</style>  
+
