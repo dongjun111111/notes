@@ -1107,3 +1107,24 @@ phpDocumentor是一个很不错的自动文档工具，可以帮助我们创建�
 PHP DB Class是一个伟大的PHP库，可以帮助开发PHP和MySQL。该工具可轻松方便地访问一个数据库，并减少执行任务所
 需的代码数量。此外，此PHP库提供各种调试功能。例如，开发人员可以使用调试功能来显示请求和结果表，还可以通过
 添加参数到它的类的方法来执行此任务。
+
+
+{}大括号就是告诉PHP，括起来的部分要当成变量处理。如下例子：
+<?php
+$array=array('www','name'=>'phpernote','com');
+echo "$array['name']";//用此句会报语法错误
+echo "{$array['name']}";//此句正常，大括号内的字符将作为变量来处理
+
+
+++++php字符串处理函数+++++
+convert_uudecode — 解密一个字符串
+convert_uuencode — 加密一个字符串
+md5_file — 将一个文件进行MD5算法加密
+sha1_file — 将一个文件进行SHA1算法加密
+sha1 — 将一个字符串进行SHA1算法加密
+str_rot13 — 将字符串进行ROT13加密处理
+str_word_count — 获取字符串里面的英文段落的个数
+strip_tags — 去除一个字符串里面的HTML和PHP代码
+addslashes — 用指定的方式对字符串里面的字符进行转义
+addcslashes — 为字符串里面的部分字符添加反斜线转义字符
+stripcslashes — 反转义addcslashes()函数转义处理过的字符串

@@ -2912,3 +2912,5 @@ var_dump($person1);
 //person2通过weight的数字升序进行排序，如果想按照从大到小排序，这里增加一个SORT_DESC参数即可，即：my_sort($person,'weight','SORT_DESC')此方法模式是升序（SORT_ASC）
 $person2= my_sort($person,'weight');
 var_dump($person2);
+
+

@@ -307,3 +307,37 @@ max_allowed_packet=500M;//根据情况选择
 mysql -uroot -P3308 -p123456 - -default-character-set=utf8 (-P是指指定端口号)
 3、导入sql：最后通过source命令，即可成功导入:
 source  E:ydj\test.sql
+
+
++++++++9个MySQL面试题++++++
+1、如何确定 MySQL 是否处于运行状态？
+Debian 上运行命令 service mysql status，在RedHat 上运行命令 service mysqld status。
+然后看看输出即可。
+2、如何开启或停止 MySQL 服务？
+运行命令 service mysqld start 开启服务；运行命令 service mysqld stop 停止服务。
+3、如何通过 Shell 登入 MySQL？
+运行命令 mysql -u root -p
+4、如何列出所有数据库？
+运行命令 show databases;
+5、如何切换到某个数据库并在上面工作？
+运行命令 use database_name; 键入名为 database_name 的数据库。
+6、如何列出某个数据库内所有表？
+在当前数据库运行命令 show tables;
+7、如何获取表内所有 Field 对象的名称和类型？
+运行命令 describe table_name;
+8、如何删除表？
+运行命令 drop table table_name;
+9、如何删除数据库？
+运行命令 drop database database-name;
+10、如何修改Root密码？
+修改root密码对于某些特定设置是必不可少的，修改命令如下：
+// 使用mysqladmin的password命令来修改（4.1格式）
+$mysqladmin -u root password [新口令]
+// 旧的修改口令的方法
+$mysqladmin -u root -p [旧口令] 新口令 [敲回车后输入新口令，然后回车]
+// 使用mysql的命令
+$mysql -u root -p
+mysql> use mysql;
+mysql> update user set password=新口令 where User = ‘用户名’;
+mysql> flush privileges;
+mysql> quit
