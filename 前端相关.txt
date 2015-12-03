@@ -2663,3 +2663,141 @@ body {
 }  
 </style>  
 
+
+++++屏蔽js错误报错+++++
+<script language="javascript">
+<!--
+/*屏蔽js错误*/
+function killerrors(){
+   return true;
+}
+window.onerror=killerrors;
+//-->
+</script>
+
+
+++++js控制文字大中小显示++++++
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>js控制文字大中小显示</title>
+</head>
+<body>
+<script language="javascript">
+function setFontSize(objID,size){
+    document.getElementById(objID).style.fontSize=size+'px';
+}
+</script>
+<div id="content">
+<p>学习笔记和生活经验积累!</p>
+</div>
+<a onclick="setFontSize('content',20)">大</a>
+<a onclick="setFontSize('content',14)">中</a>
+<a onclick="setFontSize('content',12)">小</a>
+</body>
+</html>
+
+
+
++++++JS如何判断鼠标向上还是向下滚动+++++++
+<label for="wheelDelta">滚动值:</label>(IE/Opera)<input type="text" id="wheelDelta"/>
+<label for="detail">滚动值:(Firefox)</label><input type="text" id="detail"/>
+<script type="text/javascript">
+var scrollFunc=function(e){
+    e=e || window.event;
+    var t1=document.getElementById("wheelDelta");
+    var t2=document.getElementById("detail");
+    if(e.wheelDelta){//IE/Opera/Chrome
+        t1.value=e.wheelDelta;
+    }else if(e.detail){//Firefox
+        t2.value=e.detail;
+    }
+}
+/*注册事件*/
+if(document.addEventListener){
+    document.addEventListener('DOMMouseScroll',scrollFunc,false);
+}//W3C
+window.onmousewheel=document.onmousewheel=scrollFunc;//IE/Opera/Chrome
+</script>
+
+
+
+++++++鼠标移动到文字上出现提示文字特效+++++++
+<html>
+<head>
+<title>鼠标移动到文字上出现提示特效</title>
+</head>
+<body>
+<script>
+function $(id){
+    return document.getElementById(id);
+}
+document.write("<div id=\"ts\" style=\"position:absolute;background-color:#FFFFE6;font-size: 12px;padding: 3px;  border: 1px solid #FFCC99;display:none\"></div>");
+function mmove(o,s){
+    var evt=event||window.event;
+    var x=evt.clientX+5;
+    var y=evt.clientY+20;
+    $('ts').style.left=x+'px';
+    $('ts').style.top=y+'px';
+    if(s==''||typeof(s)=='undefined'){
+        $('ts').innerHTML=o.innerHTML;
+    }else{
+        $('ts').innerHTML=s;
+    }
+    $('ts').style.display='';
+}
+function mout(){
+    $('ts').style.display='none';
+}
+</script>
+<p>
+<a href="#" onMouseMove="mmove(this)" onMouseOut="mout();">aaaaaaaaa<br><font color=red>aaaaaaa></font></a>
+</p>
+<p>
+<a href="#" onMouseMove="mmove(this,'哈哈')" onMouseOut="mout();">bbbbbbbbbbb</a>
+</p>
+<p>
+<a href="#" onMouseMove="mmove(this)" onMouseOut="mout();">cccccccccccc</a>
+</p>
+<p>
+<img src="http://bbs.blueidea.com/images/default/logo.gif"  onmousemove="mmove(this,' 蓝色理想<br><font color=red>实现梦想</font>')" onMouseOut="mout();">
+</p>
+<p>
+<a href="#" onMouseMove="mmove(this)" onMouseOut="mout();">eeeeeeeeeeeee</a>
+</p>
+<p>
+<a href="#" onMouseMove="mmove(this)" onMouseOut="mout();">想做个特效就是移到文字上面或是图片上面出现提示，title能够定义属性吗？如换行，文字色彩等<br />
+<br />
+在坛内看到一个移<span><font color=blue>到小图片上出现大图片的效果，效果不错</font></span>，感觉挺复杂，不知道有没有更简单一点的。
+</a>
+</p>
+<p>
+<a href="#" onMouseMove="mmove(this)" onMouseOut="mout();">ggggggggggggggggggggggggggg</a>
+</p>
+<p>
+<a href="#" onMouseMove="mmove(this)" onMouseOut="mout();">hhhhhhhhhhhhhhhhhhhhhhhhh</a>
+</p>
+<p>
+<a href="#" onMouseMove="mmove(this)" onMouseOut="mout();">想做个特效就是移到文字上面或是图片上面出现提示，title能够定义属性吗？如换行，文字色彩等<br />
+<br />
+在坛内看到一个移<span><font color="#CC0000">到小图片上出现大图片的效果，效果不错</font></span>，感觉挺复杂，不知道有没有更简单一点的。
+</a>
+</p>
+</body>
+</html>
+
+
+
++++++++JS用户复制网页文章自动添加版权信息++++++
+<script type="text/javascript">
+document.body.oncopy = function(){
+    setTimeout(
+        function (){
+        var text = clipboardData.getData("text");
+        if(text){
+            text = text + "\r\n本文来自:Jason 详细出处参考："+location.href; clipboardData.setData("text", text);
+        }
+    },100)
+}
+</script>
+
