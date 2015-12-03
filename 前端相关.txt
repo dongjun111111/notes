@@ -2545,3 +2545,37 @@ function CheckDateTime(str){
     return true;
 }
 
+
++++++js限制只能输入英文字母和数字+++++
+<html xmlns="http://www.phpernote.com/javascript-function/742.html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>js限制只能输入英文字母和数字,不能输入中文和其他特殊字符的办法</title>
+</head>
+<body>
+<input type="text" name="username" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" />
+<p>以上文本框中仅允许输入英文字母，小数点，数字，禁止输入中文字符以及其他特殊字符！</p>
+</body>
+</html>
+
+
++++++定时跳转页面+++++
+（1）使用setTimeout函数实现定时跳转（如下代码要写在body区域内）
+<script type="text/javascript">
+//3秒钟之后跳转到指定的页面
+setTimeout(window.location.href='http://www.phpernote.com/div-css/354.html',3);
+</script>
+（2）html代码实现，在页面的head区域块内加上如下代码
+<!--5秒钟后跳转到指定的页面-->
+<meta http-equiv="refresh" content="5;url=http://www.phpernote.com/php-function/241.html" />
+
+++++js大小写转换+++++
+toLocaleUpperCase 将字符串中所有的字母字符都将被转换为大写的，同时适应宿主环境的当前区域设置。
+toUpperCase 将字符串中的所有字母都被转化为大写字母。
+toLocaleLowerCase 将字符串所有的字母字符都被转换为小写，同时考虑到宿主环境的当前区域设置。
+toLowerCase 将字符串中的字母被转换为小写字母。
+
+
+++++js地址栏特效代码++++++
+可以在淘宝网试试看，有趣（用下面的代码覆网址）。
+javascript:R=0;x1=.1;y1=.05;x2=.25;y2=.24;x3=1.6;y3=.24;x4=300;y4=200;x5=300;y5=200;DI=document.getElementsByTagName("img");DIL=DI.length;function A(){for(i=0;i-DIL;i++){DIS=DI[i].style;DIS.position='absolute';DIS.left=(Math.sin(R*x1+i*x2+x3)*x4+x5)+"px";DIS.top=(Math.cos(R*y1+i*y2+y3)*y4+y5)+"px"}R++}setInterval('A()',5);void(0);

@@ -1128,3 +1128,8 @@ strip_tags — 去除一个字符串里面的HTML和PHP代码
 addslashes — 用指定的方式对字符串里面的字符进行转义
 addcslashes — 为字符串里面的部分字符添加反斜线转义字符
 stripcslashes — 反转义addcslashes()函数转义处理过的字符串
+
+
++++++php定时跳转+++++
+header("refresh:3;url=http://www.qq.com");
+echo '正在加载，请稍等...<br>三秒后自动跳转';
