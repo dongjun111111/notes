@@ -2914,3 +2914,20 @@ $person2= my_sort($person,'weight');
 var_dump($person2);
 
 
++++++PHP的echo输出内容过多会很慢++++++
+早在2003年就有前辈认为通过echo输出大字符串到客户端会引起服务器的性能问题，据我测试，
+在这个场景下使用print其实也是一样的慢。建议的解决办法是把字符串切割成更小的字符串输出，
+展现速度会有提升，输出函数如下：
+<?php
+//对大字节字符串进行分割保存到数组中，然后循环输出
+function echoBigChar($string,$bufferSize=8192){
+    $splitString=str_split($string,$bufferSize);
+    foreach($splitString as $chunk){
+        echo $chunk;
+    }
+}
+但是上面的处方不太对症，整个echobig的输出时间仍然在400毫秒左右，没有太大改善。考虑到是输出
+大量内容到客户端比较慢，于是检查了apache的配置，原来还没打开deflate进行压缩，遂启用之。
+再次使用xhprof进行检查，这条echo的输出时间降低到5ms左右。400ms到5ms
+，一个配置问题会产生80倍的差距，还真是省老钱了。
+
