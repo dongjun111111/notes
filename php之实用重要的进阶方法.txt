@@ -2930,4 +2930,3 @@ function echoBigChar($string,$bufferSize=8192){
 大量内容到客户端比较慢，于是检查了apache的配置，原来还没打开deflate进行压缩，遂启用之。
 再次使用xhprof进行检查，这条echo的输出时间降低到5ms左右。400ms到5ms
 ，一个配置问题会产生80倍的差距，还真是省老钱了。
-

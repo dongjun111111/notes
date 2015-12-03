@@ -341,3 +341,29 @@ mysql> use mysql;
 mysql> update user set password=新口令 where User = ‘用户名’;
 mysql> flush privileges;
 mysql> quit
+
+
+++++MYSQL数据库查询当天的信息(以ks_action_log表为例，时间字段是create_time,值是时间戳格式)++++++
+select * from `ks_action_log` where date_format(from_UNIXTIME(`create_time`),'%Y-%m-%d') = date_format(now(),'%Y-%m-%d')
+或者是：
+select * from `ks_action_log` where to_days(date_format(from_UNIXTIME(`create_time`),'%Y-%m-%d')) = to_days(now())
+如果该表里面的时间字段类型是DATETIME或TIMESTAMP,可以用一下几个sql语句：
+select * from ks_action where to_days(`create_time`) = to_days(now());//查询今天
+select * from `article` where to_days(now()) – to_days(`add_time`) <= 1; //查询昨天
+select * from `article` where date_sub(curdate(), INTERVAL 7 DAY) <= date(`add_time`);//查询近7天
+select * from `article` where date_format(`add_time`, ‘%Y%m') = date_format(curdate() , ‘%Y%m'); //查询本月
+select * from `article` where period_diff(date_format(now() , ‘%Y%m') , date_format(`add_time`, ‘%Y%m')) =1; // 查询上一个月
+对上面几个针对datetime类型的sql语句分析:
+（1）to_days() 它是将具体的某一个日期或时间字符串转换到某一天所对应的unix时间戳。但是，
+转换之后的数增加了1，这个粒度的查询是比较粗糙的，有时可能不能满足我们的查询要求，那么就需要使用细粒度的查询方法str_to_date函数了，下面将分析这个函数的用法。
+（2）str_to_date()可以把字符串时间完全的翻译过来。
+mysql> select str_to_date("2010-11-23 14:39:51",'%Y-%m-%d %H:%i:%s');
++--------------------------------------------------------+
+| str_to_date("2010-11-23 14:39:51",'%Y-%m-%d %H:%i:%s') |
++--------------------------------------------------------+
+| 2010-11-23 14:39:51                                    |
++--------------------------------------------------------+
+具体案例：
+select str_to_date(article.`add_time`,'%Y-%m-%d %H:%i:%s')
+from article
+where str_to_date(article.`add_time`,'%Y-%m-%d %H:%i:%s')>='2012-06-28 08:00:00' and str_to_date(article.`add_time`,'%Y-%m-%d %H:%i:%s')<='2012-06-28 09:59:59';
