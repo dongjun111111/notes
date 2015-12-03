@@ -425,3 +425,8 @@ MySQL参数中log_slow_queries参数在my.cnf文件中设置它，将其设置为on，默认情况下，M
 3、log_queries_not_using_indexes
 开启这个选项是个不错的主意，它真实地记录了返回所有行的查询。
 如果在增长请密切注意创建的线程，让你的线程缓存更大，对于2550或100的thread_cache_size，内存占用也不多。
+
++++++用rand()来实现随机查找+++++
+在表tt_dvjobs中随机查询10条数据：
+select * from `tt_dvjobs` ORDER BY rand() LIMIT 0 , 10;
+实践证明改函数会导致查询性能非常低下，请慎用此函数！
