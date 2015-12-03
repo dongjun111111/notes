@@ -876,4 +876,7 @@ fclose($file); ?>
 Peter,Griffin,Oslo,Norway
 Glenn,Quagmire,Oslo,Norway
 
-
+++++thinkphp获得所有分类+++++
+include("Common/Category.class.php");
+$Category = new Category("ArticleCategory",array('id','pid','name','fullname'));
+$categoryList = $Category->getList();
