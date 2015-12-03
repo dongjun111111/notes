@@ -2801,3 +2801,45 @@ document.body.oncopy = function(){
 }
 </script>
 
+
+++++++兼容IE和firefox的设置首页和加入收藏的JavaScript代码+++++++
+适合IE内核的浏览器：
+<a href="#" onclick="this.style.behavior='url(#default#homepage)';this.setHomePage('http://phpernote.com')">设为首页</a>
+<a href="javascript:window.external.AddFavorite('http://phpernote.com','PHP程序员的笔记')">添加收藏</a>
+兼容IE和火狐浏览器的方案：
+//加入收藏
+function AddFavorite(URL,Title){
+    URL=URL||window.location.href;
+    Title=Title||document.title;
+    try{
+        window.external.addFavorite(URL,Title);
+    }catch(e){
+        try{
+            window.sidebar.addPanel(Title,URL,"");
+        }catch(e){
+            alert("加入收藏失败，请使用Ctrl+D进行添加");
+        }
+    }
+}
+//设为首页
+function setHomepage(URL){
+    URL=URL||window.location.href;
+    if(document.all){//IE类浏览器
+        document.body.style.behavior='url(#default#homepage)';
+        document.body.setHomePage(URL);
+    }else if(window.sidebar){//火狐类浏览器
+        if(window.netscape){
+            try{
+                netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+            }catch(e){
+                alert("该操作被浏览器拒绝，如果想启用该功能，请在地址栏内输入 about:config,然后将项 signed.applets.codebase_principal_support 值该为true");
+            }
+        }
+        var prefs=Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch);
+        prefs.setCharPref('browser.startup.homepage',URL);
+    }
+}
+然后就是页面中的调用方式：
+<a href ="javascript:void(0)" onclick ="setHomepage()">设为首页</a>
+<a href="javascript:void(0)" onclick ="AddFavorite()">加入收藏</a>
+<a href="javascript:void(0)" onclick ="AddFavorite('http://www.qq.com/','腾讯')">加入收藏</a>
