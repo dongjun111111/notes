@@ -1,0 +1,151 @@
+<html xmlns="http://www.phpernote.com/javascript-function/833.html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>JavaScript实现可最小化/关闭的右下角浮动广告窗_<a href="http://www.phpernote.com">php程序员的笔记</a></title>
+<style type="text/css">
+#msg_win{position:absolute;right:0px;top:503px;width:250px;font-size:12px;display:block;overflow:hidden;z-index:99;border:1px solid #000;background:#FFF;visibility:visible;opacity:1;}
+#msg_title{background:#EB1D1D;border:0px solid #000;border-width:0 0 1px 0;color:#FFFFFF;width:100%;height:26px;line-height:26px;font-weight:bold;text-indent:5px;}
+#msg_win .icos{position:absolute;top:0px;*top:0px;right:3px;z-index:9;}
+.icos a{float:left;color:#FFFFFF;margin:1px;text-align:center;font-weight:bold;width:14px;height:22px;line-height:22px;padding:1px;text-decoration:none;font-family:webdings;}
+.icos a:hover{color:#FFCC00;}
+#msg_content{margin:0px 0px;padding:5px 5px;width:100%;height:220px;overflow:hidden;}
+</style>
+</head>
+<body>
+<div style="height:2000px;"></div>
+<div id="msg_win">
+  <div class="icos"><a id="msg_min" title="最小化" href="javascript:void(0);">-</a><a id="msg_close" title="关闭" href="javascript:void(0);">×</a></div>
+  <div id="msg_title">右下角漂浮广告效果</div>
+  <div id="msg_content">本站是一个php程序员的工作生活笔记,本站包含了php网络编程学习教程,数据库(主要是MySQL和Access数据库)教程,javascript,jquery,div+css,html,windows系统,linux系统以及健康养生方面的学习笔记和生活经验的积累!</div>
+</div>
+<script language="javascript">
+var Message = {
+	set: function() {
+		var set = this.minbtn.status == 1 ? [0, 1, 'block', this.char[0], '最小化'] : [1, 0, 'none', this.char[1], '恢复'];
+		this.minbtn.status = set[0];
+		this.win.style.borderBottomWidth = set[1];
+		this.content.style.display = set[2];
+		this.minbtn.innerHTML = set[3];
+		this.minbtn.title = set[4];
+		this.win.style.top = this.getY().top;
+	},
+	close: function() {
+		this.win.style.display = 'none';
+		window.onscroll = null;
+	},
+	setOpacity: function(x) {
+		var v = x >= 100 ? '': 'Alpha(opacity=' + x + ')';
+		this.win.style.visibility = x <= 0 ? 'hidden': 'visible';
+		this.win.style.filter = v;
+		this.win.style.opacity = x / 100;
+	},
+	show: function() {
+		clearInterval(this.timer2);
+		var me = this,
+		fx = this.fx(0, 100, 0.1),
+		t = 0;
+		this.timer2 = setInterval(function() {
+			t = fx();
+			me.setOpacity(t[0]);
+			if (t[1] == 0) {
+				clearInterval(me.timer2);
+			}
+		},
+		6);
+	},
+	fx: function(a, b, c) {
+		var cMath = Math[(a - b) > 0 ? "floor": "ceil"],
+		c = c || 0.1;
+		return function() {
+			return [a += cMath((b - a) * c), a - b];
+		}
+	},
+	getY: function() {
+		var d = document,
+		b = document.body,
+		e = document.documentElement;
+		var s = Math.max(b.scrollTop, e.scrollTop);
+		var h = /BackCompat/i.test(document.compatMode) ? b.clientHeight: e.clientHeight;
+		var h2 = this.win.offsetHeight;
+		return {
+			foot: s + h + h2 + 2 + 'px',
+			top: s + h - h2 - 2 + 'px'
+		}
+	},
+	moveTo: function(y) {
+		clearInterval(this.timer);
+		var me = this,
+		a = parseInt(this.win.style.top) || 0;
+		var fx = this.fx(a, parseInt(y));
+		var t = 0;
+		this.timer = setInterval(function() {
+			t = fx();
+			me.win.style.top = t[0] + 'px';
+			if (t[1] == 0) {
+				clearInterval(me.timer);
+				me.bind();
+			}
+		},
+		6);
+	},
+	bind: function() {
+		var me = this,
+		st, rt;
+		window.onscroll = function() {
+			clearTimeout(st);
+			clearTimeout(me.timer2);
+			me.setOpacity(0);
+			st = setTimeout(function() {
+				me.win.style.top = me.getY().top;
+				me.show();
+			},
+			100);
+		};
+		window.onresize = function() {
+			clearTimeout(rt);
+			rt = setTimeout(function() {
+				me.win.style.top = me.getY().top
+			},
+			100);
+		}
+	},
+	init: function() {
+		function $(id) {
+			return document.getElementById(id)
+		};
+		this.win = $('msg_win');
+		var set = {
+			minbtn: 'msg_min',
+			closebtn: 'msg_close',
+			title: 'msg_title',
+			content: 'msg_content'
+		};
+		for (var Id in set) {
+			this[Id] = $(set[Id])
+		};
+		var me = this;
+		this.minbtn.onclick = function() {
+			me.set();
+			this.blur()
+		};
+		this.closebtn.onclick = function() {
+			me.close()
+		};
+		this.char = navigator.userAgent.toLowerCase().indexOf('firefox') + 1 ? ['-', '□', '×'] : ['0', '2', 'r'];
+		this.minbtn.innerHTML = this.char[0];
+		this.closebtn.innerHTML = this.char[2];
+		setTimeout(function() {
+			me.win.style.display = 'block';
+			me.win.style.top = me.getY().foot;
+			me.moveTo(me.getY().top);
+		},
+		0);
+		return this;
+	}
+};
+Message.init();
+</script>
+<br />
+<p><a href="http://www.phpernote.com">php程序员的笔记</a> - 最专业的php教程网站 - 致力为中国php程序员们提供有质量的经验教程！</p>
+</body>
+</html>
