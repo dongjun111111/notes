@@ -3069,3 +3069,83 @@ div{
 }
 </style>
 其结果是我在IE6中看到是红色的，在firefox中看到是绿色的。
+
+
++++在网页中使用Favicon.ico++++++
+<link rel="icon" href="/dir/favicon.ico" mce_href="/dir/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="/dir/favicon.ico" mce_href="/dir/favicon.ico" type="image/x-icon">
+(一个在线制作favicon.ico的网站：http://www.chami.com/html-kit/services/favicon/)
+
+
+
++++++纯CSS制作的下拉菜单++++++
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>纯CSS下拉菜单</title>
+</head>
+<style type="text/css">
+#menu_yhm ul{margin:0px; padding:0px;}
+#menu_yhm ul li{float:left; display:inline; font:12px 宋体; height:30px; width:100px; list-style-type:none;}
+#menu_yhm ul li a{color:#FFF; text-decoration:none; line-height:29px; width:91px; margin:0px; padding:0px 0px 0px 8px; display:block; border-right:solid 1px #ccc; border-bottom:solid 1px #ccc; background:#808080;}
+#menu_yhm ul li ul li{height:25px;}
+#menu_yhm ul li ul li a{background:#666; line-height:24px;}
+#menu_yhm ul li a:hover{background:#666;}
+#menu_yhm ul li ul{visibility:hidden;}
+#menu_yhm ul li:hover ul{visibility:visible;}
+#menu_yhm ul li ul li a:hover{background:#333;}
+</style>
+<body>
+<div id="menu_yhm">
+      <ul>
+        <li><a href="#">菜单一</a></li>
+        <li><a href="#">菜单二</a>
+            <ul>
+                <li><a href="#">子菜单一</a></li>
+                <li><a href="#">子菜单二</a></li>
+                <li><a href="#">子菜单三</a></li>
+            </ul>
+        </li>
+        <li><a href="#">菜单三</a></li>
+        <li><a href="#">菜单四</a>
+            <ul>
+                <li><a href="#">子菜单一</a></li>
+                <li><a href="#">子菜单二</a></li>
+                <li><a href="#">子菜单三</a></li>
+            </ul>
+        </li>
+        <li><a href="#">菜单五</a></li>
+    </ul>
+</div>
+</body>
+</html>
+
+
+++++++使用CSS将图片转换成黑白(灰色、置灰)++++++
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style type="text/css">
+a img{ -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+	filter:gray;}
+a:hover img{-webkit-filter: grayscale(0);
+    -moz-filter: grayscale(0);
+    -ms-filter: grayscale(0);
+    -o-filter: grayscale(0);
+    filter: grayscale(0);
+    filter:;}
+</style>
+</head>
+<body>
+<a href="#"><img src="logo.png" border="0"></a>
+<a href="#"><img src="test.jpg" border="0"></a>
+</body>
+</html>
+
+
