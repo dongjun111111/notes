@@ -2959,3 +2959,78 @@ function countTime(){
 </html>
 
 
+
++++++JS地址栏代码显示页面内所有加链接的图片的大小++++++
+javascript:a=document.images;d=document;for(i=0;i<a.length;i++){t=a[i];p=t.parentNode;if(p.tagName == "A"){p.style.position="relative";p.style.display="block";p.style.width=t.width+"px";p.style.height=t.height+"px";s=d.createElement("span");s.style.position="absolute";s.style.color = "white";s.style.backgroundColor = "red";s.style.right="0px";s.style.bottom="0px";s.innerHTML=t.width+"x"+t.height;p.appendChild(s);}}void(0);
+
+
+
+++++禁止网页右键、复制、另存为、查看源文件等功能实现网页源代码保护++++
+1、禁止右键菜单
+<script type="text/javascrpt" language="javascript">
+//方法一
+function noMenuOne()
+{
+alert('禁止右键菜单!');
+return false;
+}
+document.oncontextmenu = noMenuOne;
+//方法二
+function noMenuTwo()
+{
+if(event.button == 2)
+{
+alert('禁止右键菜单!');
+return false;
+}
+}
+document.onmousedown = noMenuTwo;
+</script>
+2、禁止复制(Ctrl+C)
+<script type="text/javascript" language="javascript">
+function noCopy()
+{
+alert("禁止使用Ctrl+C进行复制操作!");
+event.returnValue = false;
+}
+</script>
+//<body oncopy = "noCopy()">
+3、禁止另存为
+<!--在<body></body>之间加入代码 -->
+<noscript><iframe src='*.htm'></iframe></noscript>
+4、禁止缓存 
+禁止缓存 在页面中使用如下HTML标记:
+<HEAD>
+<META http-equiv=Pragma content=no-cache>
+<META http-equiv=Cache-Control content=no-cache>
+<META http-equiv=Expires content=0>
+</HEAD>
+
+
+
++++++JavaScript操作cookie的相关函数++++++
+//设置cookie函数，三个参数，一个是cookie的名子，一个是值，一个是设置cookie保存时间，单位：天
+function SetCookie(name,value,days){
+    var days=arguments[2]?arguments[2]:30; //此 cookie 将被保存 30 天
+    var exp=new Date();    //new Date("December 31, 9998");
+    exp.setTime(exp.getTime() + days*86400000);
+    document.cookie=name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+}
+//取cookies函数
+function getCookie(name){
+    var arr=document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+    if(arr!=null){
+        return unescape(arr[2]);
+    }
+    return null;
+}
+//删除cookie函数
+function delCookie(name){
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval=getCookie(name);
+    if(cval!=null){
+        document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+    }
+}
+
