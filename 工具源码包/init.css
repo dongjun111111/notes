@@ -1,0 +1,32 @@
+@charset “utf-8″;
+/*———-通用，兼容各大浏览器，没有理由不重视———-*/
+
+ul,ol,li,p,h1,h2,h3,h4,h5,form,table,td,img,div,a,dl,dt,dd{margin:0;padding:0;border:0;}
+
+body,select,input{padding:0;margin:0;text-align:left;font-size:12px;font-family:”宋体”,”Arial”;}
+
+body{color:#000;}
+
+ul,li,ol{list-style-type:none;}
+
+input{outline:none;}
+
+img{vertical-align:bottom;}
+
+table{border-collapse:collapse;}
+
+a img{border:none;}
+
+a{color:#000;text-decoration:none;}
+
+a:hover{text-decoration:underline;}
+
+.clear{ clear:both;}
+
+.cl:after{ content:””; display:block;visibility:hidden; height:0; clear:both;}
+
+.cl {zoom:1;}
+
+.fl{float:left; display:inline;}
+
+.fr{float:right; display:inline;}
