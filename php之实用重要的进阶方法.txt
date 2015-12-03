@@ -2880,3 +2880,35 @@ echo $str;
 ?>
 通过clean_xss()就过滤了恶意内容！
 
+
++++++array_multisort()函数多维数组排序+++++++
+function my_sort($arrays,$sort_key,$sort_order=SORT_ASC,$sort_type=SORT_NUMERIC ){
+ if(is_array($arrays)){
+ foreach ($arrays as $array){
+ if(is_array($array)){
+ $key_arrays[] = $array[$sort_key];
+ }else{
+ return false;
+ }
+ }
+ }else{
+ return false;
+ }
+ array_multisort($key_arrays,$sort_order,$sort_type,$arrays);
+ return $arrays;
+ }
+ $person = array(
+ array('id'=>1,'name'=>'fj','weight'=>180,'height'=>110),
+ array('id'=>2,'name'=>'tom','weight'=>53,'height'=>150),
+ array('id'=>3,'name'=>'jerry','weight'=>120,'height'=>156),
+ array('id'=>4,'name'=>'bill','weight'=>110,'height'=>190),
+ array('id'=>5,'name'=>'linken','weight'=>80,'height'=>200),
+ array('id'=>6,'name'=>'adana','weight'=>95,'height'=>110),
+ array('id'=>7,'name'=>'jordan','weight'=>70,'height'=>170)
+ );
+//person1通过对name值按照a、b、c升序的方法进行排序
+$person1= my_sort($person,'name',SORT_ASC,SORT_STRING);
+var_dump($person1);
+//person2通过weight的数字升序进行排序，如果想按照从大到小排序，这里增加一个SORT_DESC参数即可，即：my_sort($person,'weight','SORT_DESC')此方法模式是升序（SORT_ASC）
+$person2= my_sort($person,'weight');
+var_dump($person2);
