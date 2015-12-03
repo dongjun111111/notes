@@ -3034,3 +3034,38 @@ function delCookie(name){
     }
 }
 
++++++css上角标与下角标++++
+<p>数学公式 ： (x+y)<sup>2</sup> = x<sup>2</sup> + 2xy + y<sup>2</sup></p>
+<p>化学方程式 ： H<sub>2</sub>O = 2H + O</p>
+
+
+++++兼容所有浏览器的层的透明度++++++
+.transparent{
+    filter:alpha(opacity=50);
+    -moz-opacity:0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+}
+
+
++++++css解决IE6的双倍边距bug+++++
+在网页制作中经常遇到IE6双倍边距的bug，解决这个问题只需增加如下一个如下的css属性即达成目的：
+display:inline
+
+
+
++++++CSS中的css hack+++++
+针对不同的浏览器写不同的CSS code的过程，就叫CSS hack,也叫写CSS hack。
+CSS Hack的原理是什么？
+　　由于不同的浏览器对CSS的支持及解析结果不一样，还由于CSS中的优先级的关系。我们就可以根据这个来针对不同的浏览器来写不同的CSS。
+　　比如 IE6能识别下划线"_"和星号" * "，IE7能识别星号" * "，但不能识别下划线"_"，而firefox两个都不能认识。等等
+　　书写顺序，一般是将识别能力强的浏览器的CSS写在后面。下面如何写里面说得更详细些。
+如何写CSS Hack？
+　比如要分辨IE6和firefox两种浏览器，可以这样写：
+<style>
+div{
+　　background:green; /* for firefox */
+　　*background:red; /* for IE6 */
+}
+</style>
+其结果是我在IE6中看到是红色的，在firefox中看到是绿色的。
