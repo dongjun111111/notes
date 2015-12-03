@@ -2586,3 +2586,44 @@ javascript:R=0;x1=.1;y1=.05;x2=.25;y2=.24;x3=1.6;y3=.24;x4=300;y4=200;x5=300;y5=
         return 'hello';
     }
 </script>
+
+
+++++++JS判断图片是否加载完毕++++++
+<script language="javascript">
+function SImage(callback){
+    var img=new Image();
+    this.img=img;
+    var appname=navigator.appName.toLowerCase();
+    if(appname.indexOf("netscape")==-1){
+        //ie，在 ie 下面使用 onreadystatechange 事件
+        img.onreadystatechange=function(){
+            if(img.readyState=="complete"){
+                callback(img);
+            }
+        };
+    }else{
+        //firefox
+        img.onload=function(){
+            if(img.complete==true){
+                callback(img);
+            }
+        }
+    }
+}
+SImage.prototype.get=function(url){
+    this.img.src=url;
+}
+//使用案例
+var img=new SImage(icall);
+img.get("http://space.cnblogs.com/images/logo.gif");
+function icall(obj){
+    alert(obj.width);
+}
+</script>
+
+
++++++检测IE6工具，如果是IE6则会跳出这个警告+++++
+<!--[if lte IE 6]>
+<script type="text/javascript" src="http://www.phpernote.com/web_tools/js/noIe6.js"></script>
+<![endif]-->
+
