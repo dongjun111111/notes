@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jsÈ«ÆÁbannerÍ¼Æ¬ÂÖ²¥²å¼þ</title>
+<script type="text/javascript" src="http://www.daixiaorui.com/Public/js/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	/*Ê×Ò³»ÃµÆ*/
+  C_banner($("#banner"), $("#banner_dl"), 6000);
+});
+//banner
+function C_banner(obj, obj1, t) {
+    var items = obj.find(".banner-item");
+    var bd_html = "", cfq = null, auto = null;
+    var items_length = items.length;
+    for (var i = 0; i < items_length; i++) {
+        var pic_src = items.find("img").eq(i).attr("src");
+        items.eq(i).css('background','url(' + pic_src + ') center center no-repeat');
+        bd_html += '<a href="javascript:void(0)"></a>';
+    }
+    /*daixiaorui.com*/
+    obj1.html(bd_html);
+    var tool_items = obj1.find("a");
+    
+    show_item(0);
+    tool_items.mouseover(function() {
+        clearTimeout(cfq);
+        var _this = $(this);
+        cfq = setTimeout(function() {
+            clearTimeout(auto);
+            show_item(_this.prevAll().length);
+        }, 100);
+    });
+    tool_items.mouseout(function() {
+        clearTimeout(cfq);
+    });
+    function show_item(j) {
+        items.fadeOut("slow");
+        tool_items.removeClass("cur");
+        items.eq(j).fadeIn("slow");
+        tool_items.eq(j).addClass("cur");
+        auto_run();
+    };
+    function auto_run() {
+        auto = setTimeout(function() {
+            var x = obj1.find("a.cur").eq(0).prevAll().length;
+            if ((x + 1) < tool_items.length) {
+                show_item(x + 1);
+            } else {
+                show_item(0);
+            }
+        }, t);
+    };
+};
+</script>
+<style>
+/*banner*/
+#banner{position:relative;height:400px;width:100%;border-top:1px solid #fff}
+.banner-item{position:absolute;top:0;left:0;height:400px;width:100%;display:none}
+.banner-item a{width:100%;height:400px;display:block;overflow:hidden}
+.banner-item img{display:none}
+.banner_dl_room{position:absolute;width:100%;height:20px;left:0;bottom:0;z-index:99}
+#banner_dl{width:1000px;text-align:right;padding-right:35px;margin:0 auto}
+#banner_dl a{width:27px;height:6px;background:#fff;display:inline-block;overflow:hidden;margin:0 0 0 5px}
+#banner_dl a.cur{background:#0067d0}
+</style>
+</head>
+
+<body>
+<div class="banner" id="banner">
+  <div class="banner-item">
+  <a href='#this'><img src='http://www.daixiaorui.com/Public/uploads/201406/daixiaorui2.jpg' border='0' /></a>
+  </div>
+  <div class="banner-item">
+  <a href='#this'><img src='http://www.daixiaorui.com/Public/uploads/201406/daixiaorui.jpg' border='0' /></a>
+  </div>
+  <div class="banner_dl_room">
+    <div id="banner_dl"></div>
+  </div> 
+</div>
+</body>
+</html>

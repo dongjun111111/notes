@@ -3116,3 +3116,239 @@ else if($_GET['act'] == 'b') {
 b();
 }
 ?>
+
+
++++++PHP不用第三个变量交换两个变量的值的几种方法+++++
+方法一：使用字符串截取
+<?php
+$a = "fsdfds";
+$b = "xiaorui";
+$a = $a.$b;
+$b = substr($a,0,strlen($a)-strlen($b));
+$a = substr($a,strlen($b));
+echo $a."-".$b;
+?>
+方法二：使用list()
+<?php
+$a = "fsdfds";
+$b = "xiaorui";
+list($a,$b) = array($b,$a);
+echo $a."-".$b;
+?>
+方法三：使用数组分割
+<?php
+$a = "fsdfds";
+$b = "xiaorui";
+$b = $a."#$".$b;
+$b = explode("#$",$b);
+$a = $b[1];
+$b = $b[0];
+echo $a."-".$b;
+?>
+方法四：使用异或运算
+<?php
+$a = "fsdfds";
+$b = "xiaorui";
+$a = $a^$b;
+$b = $b^$a;
+$a = $a^$b;
+echo $a."-".$b;
+?>
+
+
+++++++php将数据表中的数据导出到excel表++++++
+<?php
+	header("Content-type:application/vnd.ms-excel");
+	header("Content-Disposition:filename=xls_region.xls");
+	$cfg_dbhost = 'localhost';
+	$cfg_dbname = 'testdb';
+	$cfg_dbuser = 'root';
+	$cfg_dbpwd = 'root';
+	$cfg_db_language = 'utf8';
+	// END 配置
+	//链接数据库
+	$link = mysql_connect($cfg_dbhost,$cfg_dbuser,$cfg_dbpwd);
+	mysql_select_db($cfg_dbname);
+	//选择编码
+	mysql_query("set names ".$cfg_db_language);
+	//users表
+	$sql = "desc users";
+	
+	$res = mysql_query($sql);
+	echo "<table><tr>";
+	//导出表头（也就是表中拥有的字段）
+	while($row = mysql_fetch_array($res)){
+		$t_field[] = $row['Field'];	//Field中的F要大写，否则没有结果
+		echo "<th>".$row['Field']."</th>";
+	}
+	echo "</tr>";
+	//导出100条数据
+	$sql = "select * from users limit 100";
+	$res = mysql_query($sql);
+	while($row = mysql_fetch_array($res)){
+		echo "<tr>";
+		foreach($t_field as $f_key){
+			echo "<td>".$row[$f_key]."</td>";
+		}
+		echo "</tr>";
+	}
+	echo "</table>";
+?>
+
+
+
+++++php文件查找器源码查找本地文件+++++
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>php版文件查找（file search）</title>
+	</head>
+	<body>
+		<form action="" method="post">
+		<p> 文件查找（注：区分大小写）</p>
+		<p>路径：<input type="text" name="path" /></p>
+		<p>查找：<input type="text" name="key" /></p>
+		<p><input type="submit" name="sub" value=" 开 始 " /></p>
+		</form>
+	</body>
+</html>
+<?php
+/*
+ * 注：区分大小写
+ * by: http://www.daixiaorui.com
+ */
+if(!empty($_POST['path'])&&!empty($_POST['key'])){
+	echo "在路径 ".$_POST['path']."/ 中查找 ".$_POST['key']." 的结果为：<hr/>";
+	$file_num = $dir_num = 0;
+	$r_file_num = $r_dir_num= 0;
+	$findFile = $_POST['key'];
+	function delDirAndFile( $dirName ){	
+		if ( $handle = @opendir( "$dirName" ) ) {
+			while ( false !== ( $item = readdir( $handle ) ) ) {  
+				if ( $item != "." && $item != ".." ) {  
+					if ( is_dir( "$dirName/$item" ) ) {  
+						delDirAndFile( "$dirName/$item" );
+					} else {  
+						$GLOBALS['file_num']++;
+						if(strstr($item,$GLOBALS['findFile'])){
+							echo " <span><b> $dirName/$item </b></span><br />\n";
+							$GLOBALS['r_file_num']++;
+						}
+					}  
+				}
+			}
+			closedir( $handle );  
+			$GLOBALS['dir_num']++;
+			if(strstr($dirName,$GLOBALS['findFile'])){
+				$loop = explode($GLOBALS['findFile'],$dirName);
+				$countArr = count($loop)-1;
+				if(empty($loop[$countArr])){
+					echo " <span style='color:#297C79;'><b> $dirName </b></span><br />\n";
+					$GLOBALS['r_dir_num']++;
+				}
+			}
+		}else{
+			die("没有此路径！");
+		}
+	}
+
+	delDirAndFile($_POST['path']);
+	echo "<hr/>本次共搜索到".$file_num."个文件，文件夹".$dir_num."个<br/>";
+	echo "<hr/>符合结果的共".$r_file_num."个文件，文件夹".$r_dir_num."个<br/>";
+}
+?>
+ 
+
+
++++++php实现数据库备份导出成sql+++++++
+<?php
+	header("Content-type:text/html;charset=utf-8");
+	//配置信息
+	$cfg_dbhost = 'localhost';
+	$cfg_dbname = 'ftdm';
+	$cfg_dbuser = 'root';
+	$cfg_dbpwd = 'root';
+	$cfg_db_language = 'utf8';
+	$to_file_name = "ftdm.sql";
+	// END 配置
+	//链接数据库
+	$link = mysql_connect($cfg_dbhost,$cfg_dbuser,$cfg_dbpwd);
+	mysql_select_db($cfg_dbname);
+	//选择编码
+	mysql_query("set names ".$cfg_db_language);
+	//数据库中有哪些表
+	$tables = mysql_list_tables($cfg_dbname);
+	//将这些表记录到一个数组
+	$tabList = array();
+	while($row = mysql_fetch_row($tables)){
+		$tabList[] = $row[0];
+	}
+	echo "运行中，请耐心等待...<br/>";
+	$info = "-- ----------------------------\r\n";
+	$info .= "-- 日期：".date("Y-m-d H:i:s",time())."\r\n";
+	$info .= "-- Power by 代潇瑞博客(http://www.daixiaorui.com/read/34.html)\r\n";
+	$info .= "-- 仅用于测试和学习,本程序不适合处理超大量数据\r\n";
+	$info .= "-- ----------------------------\r\n\r\n";
+	file_put_contents($to_file_name,$info,FILE_APPEND);
+	//将每个表的表结构导出到文件
+	foreach($tabList as $val){
+		$sql = "show create table ".$val;
+		$res = mysql_query($sql,$link);
+		$row = mysql_fetch_array($res);
+		$info = "-- ----------------------------\r\n";
+		$info .= "-- Table structure for `".$val."`\r\n";
+		$info .= "-- ----------------------------\r\n";
+		$info .= "DROP TABLE IF EXISTS `".$val."`;\r\n";
+		$sqlStr = $info.$row[1].";\r\n\r\n";
+		//追加到文件
+		file_put_contents($to_file_name,$sqlStr,FILE_APPEND);
+		//释放资源
+		mysql_free_result($res);
+	}
+	//将每个表的数据导出到文件
+	foreach($tabList as $val){
+		$sql = "select * from ".$val;
+		$res = mysql_query($sql,$link);
+		//如果表中没有数据，则继续下一张表
+		if(mysql_num_rows($res)<1) continue;
+		//
+		$info = "-- ----------------------------\r\n";
+		$info .= "-- Records for `".$val."`\r\n";
+		$info .= "-- ----------------------------\r\n";
+		file_put_contents($to_file_name,$info,FILE_APPEND);
+		//读取数据
+		while($row = mysql_fetch_row($res)){
+			$sqlStr = "INSERT INTO `".$val."` VALUES (";
+			foreach($row as $zd){
+				$sqlStr .= "'".$zd."', ";
+			}
+			//去掉最后一个逗号和空格
+			$sqlStr = substr($sqlStr,0,strlen($sqlStr)-2);
+			$sqlStr .= ");\r\n";
+			file_put_contents($to_file_name,$sqlStr,FILE_APPEND);
+		}
+		//释放资源
+		mysql_free_result($res);
+		file_put_contents($to_file_name,"\r\n",FILE_APPEND);
+	}
+	echo "OK!";
+?>
+
+
+
++++php计算程序网页的运行时间++++++
+<?php		
+	//程序运行时间
+	$starttime = explode(' ',microtime());
+	echo microtime();
+	/*········以下是代码区·········*/
+	for($i=0;$i<1000000;$i++){
+		$i;
+	}
+	/*········以上是代码区·········*/
+	//程序运行时间
+	$endtime = explode(' ',microtime());
+	$thistime = $endtime[0]+$endtime[1]-($starttime[0]+$starttime[1]);
+	$thistime = round($thistime,3);
+	echo "本网页执行耗时：".$thistime." 秒。".time();
+?>

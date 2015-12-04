@@ -1149,3 +1149,17 @@ select lxtel from ks_preheat_remind where lxtel in( select lxtel from ks_seller)
 foreach($reszz as $k=>$v){
 $kkk[$v['lxtel']].=$v['id'];
 }
+
+
+++++PHP左边用0填充补齐生成类似学号++++
+<?php
+	$num = 3;
+	$bit = 7;//产生7位数的数字编号
+	$num_len = strlen($num);
+	$zero = '';
+	for($i=$num_len; $i<$bit; $i++){
+		$zero .= "0";
+	}
+	$real_num = "d".$zero.$num;
+	echo $real_num;
+?>
