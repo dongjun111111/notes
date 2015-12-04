@@ -1163,3 +1163,7 @@ $kkk[$v['lxtel']].=$v['id'];
 	$real_num = "d".$zero.$num;
 	echo $real_num;
 ?>
+
+
+++++$_SERVER[‘REQUEST_TIME’]+++++
+想知道脚本开始执行(译注：即服务器端收到客户端请求)的时刻，使用$_SERVER[‘REQUEST_TIME’]要好于time()。

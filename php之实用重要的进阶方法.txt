@@ -3531,3 +3531,16 @@ header('Content-type: text/html; charset=utf-8');
     file_put_contents($file,$str);
 
 
++++++PHP根据设备类型自动跳转相应页面+++++
+<?php
+    $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+    $iphone = (strpos($agent, 'iphone')) ? true : false;
+    $ipad = (strpos($agent, 'ipad')) ? true : false;
+    $android = (strpos($agent, 'android')) ? true : false;
+    if($iphone || $ipad){
+        echo "<script>window.location.href='http://www.php520.cn'</script>";
+    }
+    if($android){
+        echo "<script>window.location.href='http://www.php520.cn/php'</script>";
+    }
+
