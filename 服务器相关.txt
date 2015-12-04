@@ -1,0 +1,60 @@
+++++Centos下搭建FTP上传下载服务器++++
+1、首先判断你服务器上是否安装了vsftpd
+rpm -q vsftpd
+2、安装完成之后就要重启vsftpd服务
+service vsftpd restart
+3、到vsftpd的主配置文件里面
+vi /etc/vsftpd/vsftpd.conf
+anonymous_enable=NO
+把这个改为NO 默认是YES （改为NO 就是禁止匿名用户登录，不需要注释）
+不可以让ftp用户跳出自己的家目录，否则太危险了。需要做限制
+chroot_local_user=YES
+默认是注释掉的，把#号去掉  然后重启vsftpd
+4、创建ftp用户
+useradd -s /sbin/nologin -d /var/www/XXXX(指定文件名） admin（自定义用户名）
+（admin这个用户智能连接ftp无法登录系统，默认家目录在/var/www/XXXX  文件夹下面）
+5、给admin这个用户设置密码
+passwd admin
+6、然后给家目录文件修改权限，否则你无法你无法上传文件
+chmod o+w /var/www/XXXX
+7、然后修改selinux
+（查看selinux状态：/usr/sbin/sestatus -v 或 getenforce）
+修改文件/etc/selinux/config  文件
+将SELINUX=enforcing改为SELINUX=disabled
+重启机器即可
+8、重启vsftpd服务，并且下次自动启动
+service vsftpd restart
+9、关闭防火墙
+service iptables stop
+
+
+++++服务器维护中常用dos命令+++++
+1.ping命令
+用法：ping+空格+域名
+作用：ping命令可以用来检查网络是否通畅、域名解析是正否正确以及是否丢包等等，而在服务器维护
+中ping命令是第一个必须掌握的DOS命令。
+2.telnet命令
+用法：telnet+空格+域名+端口号 （默认情况IIS的端口号是80,Apache的端口号是8080）
+作用：测试服务器端口是否连通。
+3.tracert命令(路由跟踪)
+用法：tracert+空格+域名
+作用：网络是一个节点连接一个节点，而每个节点都有路由，通过tracert命令可以知道自己家到服务器
+所在机房有多少节点，以及知道每个节点是否通畅。（一般情况节点越少，服务器打开越快）
+
+
++++++Linux系统查看和修改IP的方法++++++
+1.显示当前启动的网络接口命令:
+ifconfig
+2.查看当前所有网络接口命令:
+ifconfig -a
+3.查看指定网络接口命令:
+ifconfig eth0
+在LINUX下修改IP分为二种情况
+1.调试时修改IP,仅在当前生效,重启后恢复为原有IP
+ifconfig eth0 192.168.63.27 netmask 255.255.255.0 route add default gw 192.168.63.1 up
+2.永久生效(即重启后也能生效)
+方法1:配置网卡的配置文件 
+修改/etc/sysconfig/network-scripts/ifcfg-eth0
+然后重启服务service network restart生效,或者/etc/init.d/network restart生效
+方法2:
+将ifconfig eth0 192.168.63.27 netmask 255.255.255.0 route add default gw 192.168.63.1 保存在/etc/init.d/rc.local文件中
