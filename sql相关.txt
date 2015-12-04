@@ -190,3 +190,33 @@ sql="select count(*) as total,hour(look_time) as date
 from tabname
 where  to_days(now()) - to_days(look_time)  < = -1
 group by hour(look_time) "
+
+
++++++MySQL中case when语句的用法+++++
+mysql数据库中case when语句，用于计算条件列表并返回多个可能结果表达式之一。代码如下:
+select subject,sum(case when score<60 then 1 else 0 end) as NO,sum(case when score>=60 
+then 1 else 0 end) YES from score group by subject;
+通上以上MySQL语句,查询出科目及格人数和不及格人数:
++---------+------+------+
+
+ subject | NO   | YES  |
+
++---------+------+------+
+
+ linux   |    0 |    2 |
+
+ mysql   |    0 |    2 |
+
+ php     |    1 |    1 |
++---------+------+------+
+
+
+++++++MySQL中concat和trim的用法+++++
+concat向表中某字段后追加一段字符串：
+update table_name set field=CONCAT(field,'',str);
+向表中某字段前加字符串：
+update table_name set field=CONCAT('str',field);
+干掉两侧指定字符串并更新：
+1）给每个字段的尾部加上字母w,用|链接
+2）在连接后干掉左右多余的|连接符,避免字段是空时多与的连接符
+update test2 set name=trim(BOTH '|' FROM CONCAT(name,'|','w'));
