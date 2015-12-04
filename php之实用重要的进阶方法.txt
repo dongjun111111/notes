@@ -3948,3 +3948,8 @@ $myFile=file("license.txt");
 for($index=0;$index<count($myFile);$index++){
     print($myFile[$index]."<br>");
 }
+
++++++php正则分析是否是纯中文++++++
+echo preg_match("/^[".chr(0xa1)."-".chr(0xff)."]+$/","123")?"<br>纯中文":"<br>非纯中文";
+echo preg_match("/^[".chr(0xa1)."-".chr(0xff)."]+$/","啊aaa")?"<br>纯中文":"<br>非纯中文";
+echo preg_match("/^[".chr(0xa1)."-".chr(0xff)."]+$/","啊啊")?"<br>纯中文":"<br>非纯中文";
