@@ -507,3 +507,70 @@ Hash 索引结构的特殊性，其检索效率非常高，索引的检索可以一次定位，不像B-Tree 索引
 15. [oldboy_c64 ~]# tail -1 /etc/profile
 16. alias mysql='mysql -U'
 结论：在mysql命令加上选项-U后，当发出没有WHERE或LIMIT关键字的UPDATE或DELETE时，mysql程序拒绝执行。
+
+
++++++MySQL设置允许远程登录数据库方法++++++
+ 开启 MySQL 的远程登陆帐号有两大步：
+1、确定服务器上的防火墙没有阻止 3306 端口
+ MySQL 默认的端口是 3306 ，需要确定防火墙没有阻止 3306 端口，否则远程是无法通过 3306 端口连接到 MySQL 的。
+如果您在安装 MySQL 时指定了其他端口，请在防火墙中开启您指定的 MySQL 使用的端口号。
+2、增加允许远程连接 MySQL 用户并授权
+a.首先以 root 帐户登陆 MySQL
+b.创建远程登陆用户并授权
+> grant all PRIVILEGES on discuz.* to ted@'123.123.123.123' identified by '123456';
+上面的语句表示将 discuz 数据库的所有权限授权给 ted 这个用户，允许 ted 用户在 123.123.123.123 这个 IP 进行远程登陆，并设置 ted 用户的密码为 123456 。
+下面逐一分析所有的参数：
+all PRIVILEGES 表示赋予所有的权限给指定用户，这里也可以替换为赋予某一具体的权限，例 如：select,insert,update,delete,create,drop 等，具体权限间用“,”半角逗号分隔。
+discuz.* 表示上面的权限是针对于哪个表的，discuz 指的是数据库，后面的 * 表示对于所有的表，
+由此可以推理出：对于全部数据库的全部表授权为“*.*”，对于某一数据库的全部表授权为
+“数据库名.*”，对于某一数据库的某一表授 权为“数据库名.表名”。
+ted 表示你要给哪个用户授权，这个用户可以是存在的用户，也可以是不存在的用户。
+123.123.123.123 表示允许远程连接的 IP 地址，如果想不限制链接的 IP 则设置为“%”即可。
+123456 为用户的密码。
+执行了上面的语句后，再执行下面的语句，方可立即生效。
+> flush privileges;
+3.远程登陆MySql数据库
+假设ip 为123.123.123.124的主机创建远程登陆用户并授权：
+> grant all PRIVILEGES on discuz.* to ted@'123.123.123.123' identified by '123456';
+在ip为123.123.123.123的主机上用 cmd打开终端，在终端上输入：
+MySql -h123.123.123.124 -uted -p123456  
+然后就登陆了ip 为123.123.123.124的数据库。
+
+
+++++MySQL不同数据库不同数据表导入数据++++++
+背景
+现在有这么一个需求：
+数据库A的user表需要导入到数据库B的account表
+user表字段：uid,username,email,password,regdate,salt
+account表字段：id,name,email,password,type,salt
+导入的字段只有username,email,password,salt，并且regdate需要符合某个条件
+下面分几种情况来写sql，主要区分insert into和replace into
+情况
+导入的数据在B库的表中完全不存在
+直接insert into就好，使用replace into效果一样
+INSERT INTO `B`.`account`(NAME,PASSWORD,email,salt)
+SELECT username,PASSWORD,email,salt
+FROM `A`.`users`
+WHERE regdate>1418313600
+导入的数据部分存在
+数据部分存在为了区分需要在两个表添加唯一索引，这个唯一索引(UNIQUE)必须是导入的字段里面的值
+我在两个表中分别为username和name字段添加唯一索引
+直接替换
+replace into在操作的时候如果两表数据重复（必须定义UNIQUE），会先删掉那一行（注意是一整行），然后再执行insert into
+造成的后果就是，account表中的type字段如果原来有值，会直接删掉，并重新插入，即变成默认值了
+REPLACE INTO `B`.`account`(NAME,PASSWORD,email,salt)
+SELECT username,PASSWORD,email,salt
+FROM `A`.`users`
+WHERE regdate>1418313600
+忽略重复
+用IGNORE关键字，如果遇到重复，不会操作当前行
+INSERT IGNORE INTO `B`.`account`(NAME,PASSWORD,email,salt)
+SELECT username,PASSWORD,email,salt
+FROM `A`.`users`
+WHERE regdate>1418313600
+部分更新
+比如果只想更新password和salt字段，可以用ON DUPLICATE KEY UPDATE
+INSERT INTO `B`.`u_account`(NAME,PASSWORD,email,salt)
+SELECT username,PASSWORD,email,salt
+FROM `A`.`bbs_ucenter_members`
+WHERE regdate>1418313600 ON DUPLICATE KEY UPDATE PASSWORD=VALUES(PASSWORD),salt=VALUES(salt)
