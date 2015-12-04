@@ -3544,3 +3544,70 @@ header('Content-type: text/html; charset=utf-8');
         echo "<script>window.location.href='http://www.php520.cn/php'</script>";
     }
 
+
+
+++++++PHP计算数组中重复出现的数据的个数+++++++
+$array=array(1,2,3,4,5,6,8,5,2,3,6,3,5,2,3,6,5,2,2);
+print_r($array);
+echo'<hr>';
+$b=array_count_values($array);//统计重复值
+foreach($b as $key=>$value){
+if($value>1){
+echo'重复值'.'<font color=red>'.$key.'</font>'.'---------'.'重复次数'.$value.'<br>';
+}
+}
+
+
++++++++PHP字符串进行编码的类++++++
+PHP这个类可对字符串进行编码，这样就可以在所有的计算机上读取该字符串。
+javascript中的escape()函数有类似功能。
+classcoding
+{
+    //模仿JAVASCRIPT的ESCAPE和UNESCAPE函数的功能 
+    functionunescape($str)
+    {
+        $text=preg_replace_callback("/%u[0-9A-Za-z]{4}/",array(
+            &$this,
+            'toUtf8'
+        ),$str);
+        returnmb_convert_encoding($text,"gb2312","utf-8");
+    }
+    
+    functiontoUtf8($ar)
+    {
+        foreach($aras$val){
+            $val=intval(substr($val,2),16);
+            if($val<0x7F){// 0000-007F 
+                $c.=chr($val);
+            }elseif($val<0x800){// 0080-0800 
+                $c.=chr(0xC0|($val/64));
+                $c.=chr(0x80|($val%64));
+            }else{// 0800-FFFF 
+                $c.=chr(0xE0|(($val/64)/64));
+                $c.=chr(0x80|(($val/64)%64));
+                $c.=chr(0x80|($val%64));
+            }
+        }
+        return$c;
+    }
+    
+    functionescape($string,$encoding='gb2312')
+    {
+        $return='';
+        for($x=0;$x<mb_strlen($string,$encoding);$x++){
+            $str=mb_substr($string,$x,1,$encoding);
+            if(strlen($str)>1){// 多字节字符 
+                $return.='%u'.strtoupper(bin2hex(mb_convert_encoding($str,'UCS-2',$encoding)));
+            }else{
+                $return.='%'.strtoupper(bin2hex($str));
+            }
+        }
+        return$return;
+    }
+    
+    functiongb2utf8($string,$encoding='utf-8',$from_encode='gb2312')
+    {
+        returnmb_convert_encoding($string,$encoding,$from_encode);
+    }
+    
+}

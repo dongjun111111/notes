@@ -3254,3 +3254,96 @@ else
 <body onLoad="checkCookie()">
 </body>
 </html>
+
+
++++++JS标题定时闪动+++++++
+varblinkTitle=function(option){
+    vartitle=null;
+    varnewTitle=null;
+    varhandle=null;
+    varstate=false;
+    varinterval=null;
+ 
+    if(option){
+        newTitle=option.newTitle?option.newTitle:'';
+        title=option.title?option.title:document.title;
+        interval=option.interval?option.interval:600;
+    }else{
+        newTitle='';
+        title=document.title;
+        interval=600;
+    }
+ 
+    functionstart(){
+        if(state===true){
+            document.title=newTitle;
+            state=false;
+        }else{
+            document.title=title;
+            state=true;
+        }
+        handle=setTimeout(arguments.callee,interval);
+    }
+ 
+    functionstop(option){
+        clearTimeout(handle);
+        setTimeout(function(){
+            console.log(option)
+            if(typeofoption==="string"){
+                document.title=option;
+            }else{
+                document.title=title;
+            }
+        },200);
+    }
+ 
+    return{
+        start:start,
+        stop:stop
+    }
+}();
+ 
+/**
+ * 开始标题闪烁
+ */
+blinkTitle.start();
+//可以传入几个可选的参数
+blinkTitle.start({
+    title:'设置新的文档默认标题内容',
+    newTitle:'设置新的闪动标题内容',
+    interval:1000
+});
+ 
+/**
+ * 停止标题闪烁
+ */
+blinkTitle.stop();
+//如果你想让页面标题为一个新的内容的话，可以传入一个字符串
+blinkTitle.stop('新的标题内容');
+
+
+
++++++IE兼容问题回顾++++++
+1.制作页面的时候因为是从标准到非标,从高到低的过程,所以需要在做的时候思考到底那些低版本不合适,简单的来说有各种比较潮的属性(对于古董浏览器来说),或者是常见的透明度(包含图片),以及display属性支持度等。
+2.始终记得给你的元素一个触发hasLayout的属性,对于兼容的时候,可以省很多事情。
+3.由于两种盒模型的计算差异在边框,所以在标准浏览器下写死的高度或者宽度需要在给IE做处理的时候使用备用高度以及宽度,所谓备用宽度和高度就是比原始的标准宽高小那么一点点。
+4.浮动这个事情,其实蛮好解决,只要你不滥用浮动去布局,记得随手清理和闭合包含浮动元素的父元素,那么兼容基本不用考虑这个问题,跨浏览器清除浮动之前的总结中有写.
+5.关于透明度,如果很细节的,建议使用带背景不透明的图片做替换, 如果非很细节的可以使用gif将就一下.这里涉及到sprite,需要权衡一下.
+6.关于图片缩放使用,不建议使用,或者强制使用脚本以及缺省css规则限制最大尺寸为某数值,防止无限制状况的展示.
+7.鉴于IE某些低版本的下载线程有限,所以尽量合并文件.
+8.如果你的样式是基于脚本来做的,请让脚本尽早执行,或者分离成单独的样式,提前加载,免得页面抖动.
+接着写一下脚本吧,脚本差异的话其实蛮大的,尤其是从ie6-mozilla-chrome最新,简直痛不欲生:
+1.设计脚本的时候,请尽量不耦合.
+2.ie低版本对于脚本执行不给力,所以请尽量高效的写代码,尽量缓存变量.
+3.如果你允许使用框架的话,使用流行的框架可以省掉不少事件和对常用DOM元素操作的差异.
+4.如果你的某些脚本按需加载,在处理过程中记得用in做功能性检测,防止报错,直接挂了.
+5.调试阶段不要用异常捕获,这里包括使用on error.
+6.记得使用json支持库,以及rest接口设置正确的content-type.
+7.圆角什么的,如果要求不苛刻,就优雅降级吧,如果要求严格,且不想使用滤镜解决,可以考虑用遮罩图片来干.
+8.多使用委托时间以及函数节流的思路来做,有效提高IE反映速度.
+9.多使用lazyload思路以及事件解耦方法来进行DOM操作,而不是一条龙的从头执行到尾.
+10.框架不能帮你解决所有的问题,所以请认真判断每一个重要的过程的变量的类型,防止GG思密达.
+补充内容：
+1.分隔符元素HR的设置可以用简单的text-align来搞定，而不需要浮动或者绝对定位等.
+2.某些表示区域的色块，如果在IE6下走形，很大概率是没有设置font-size, 当然，建议把line-height也设置了，即使这货是块级？
+3.使用正则表达式的时候,建议先打印出来,console也好,alert也罢,因为在标准浏览器和古董的IE6-8有一个DOM细节差异.见下面的代码说明。
