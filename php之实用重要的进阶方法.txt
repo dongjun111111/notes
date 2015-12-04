@@ -3352,3 +3352,182 @@ if(!empty($_POST['path'])&&!empty($_POST['key'])){
 	$thistime = round($thistime,3);
 	echo "本网页执行耗时：".$thistime." 秒。".time();
 ?>
+
+
++++++PHP根据经纬度计算两地距离++++++++
+<?php
+    //根据经纬度计算两地距离
+    function getDistance($lat1, $lng1, $lat2, $lng2){
+        $r = 6378.137;  //地球半径
+        //角度转为弧度
+        $radLat1 = deg2rad($lat1);
+        $radLat2 = deg2rad($lat2);
+        $radLng1 = deg2rad($lng1);
+        $radLng2 = deg2rad($lng2);     
+        //sqrt：平方根，pow(x, n)：x的n次方的幂，asin：反正弦，sin：正弦
+        $s = 2*asin(sqrt(pow(sin(($radLat1 - $radLat2)/2),2)+cos($radLat1)*cos($radLat2)*pow(sin(($radLng1-$radLng2)/2),2)))*$r;
+        return $s;
+    }
+    //根据经纬度查地址
+    function get_location($location_x,$location_y){
+            $url = "http://api.map.baidu.com/geocoder/v2/?ak=GHvfRpIKsKLAgGNacrFdG8Uy&location=$location_x,$location_y&output=json&pois=0";
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_HEADER, 0);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            $data = curl_exec($curl);
+            curl_close($curl);
+            $res = json_decode($data,true);
+            return $res;
+    }
+    //根据地址查经纬度
+    function get_loca($address){
+            $url = "http://api.map.baidu.com/geocoder/v2/?address=$address&output=json&ak=GHvfRpIKsKLAgGNacrFdG8Uy";
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_HEADER, 0);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            $data = curl_exec($curl);
+            curl_close($curl);
+            $res = json_decode($data,true);
+            return $res;
+    }
+
+
+
+
++++++PHP统计在线人数+++++++
+  $filename='online.txt';//数据文件
+    $cookiename='VGOTCN_OnLineCount';//cookie名称
+    $onlinetime=600;//在线有效时间，单位：秒 (即600等于10分钟)
+    $online=file($filename);
+    //PHP file() 函数把整个文件读入一个数组中。与 file_get_contents() 类似，不同的是 file() 将文件作为一个数组返回。数组中的每个单元都是文件中相应的一行，包括换行符在内。如果失败，则返回 false
+    $nowtime=$_SERVER['REQUEST_TIME'];
+    $nowonline=array();
+    //得到仍然有效的数据
+    foreach($online as $line){
+      $row=explode('|',$line);
+      $sesstime=trim($row[1]);
+      if(($nowtime - $sesstime)<=$onlinetime){//如果仍在有效时间内，则数据继续保存，否则被放弃不再统计
+        $nowonline[$row[0]]=$sesstime;//获取在线列表到数组，会话ID为键名，最后通信时间为键值
+      }
+    }
+    /*
+    @创建访问者通信状态
+    使用cookie通信
+    COOKIE 将在关闭浏览器时失效，但如果不关闭浏览器，此 COOKIE 将一直有效，直到程序设置的在线时间超时
+    */
+    if(isset($_COOKIE[$cookiename])){//如果有COOKIE即并非初次访问则不添加人数并更新通信时间
+      $uid=$_COOKIE[$cookiename];
+    }else{//如果没有COOKIE即是初次访问
+      $vid=0;//初始化访问者ID
+      do{//给用户一个新ID
+        $vid++;
+        $uid='U'.$vid;
+      }while(array_key_exists($uid,$nowonline));
+      setcookie($cookiename,$uid);
+    }
+    $nowonline[$uid]=$nowtime;//更新现在的时间状态  
+    //统计现在在线人数
+    $total_online=count($nowonline);
+    //写入数据
+    if($fp=@fopen($filename,'w')){
+      if(flock($fp,LOCK_EX)){
+        rewind($fp);
+        foreach($nowonline as $fuid=>$ftime){
+          $fline=$fuid.'|'.$ftime."\n";
+          @fputs($fp,$fline);
+        }
+        flock($fp,LOCK_UN);
+        fclose($fp);
+      }
+    }
+    echo '<script>document.write("'.$total_online.'");</script>';
+
+
+
+
++++++++PHP防止网站被攻击的应急代码+++++++
+通过禁止IP频繁访问防止网站被攻击。
+header('Content-type: text/html; charset=utf-8');
+    $ip=$_SERVER['REMOTE_ADDR'];//获取当前访问者的ip
+    $logFilePath='./log/';//日志记录文件保存目录
+    $fileht='.htaccess2';//被禁止的ip记录文件
+    $allowtime=60;//防刷新时间
+    $allownum=5;//防刷新次数
+    $allowRefresh=120;//在允许刷新次数之后加入禁止ip文件中
+    if(!file_exists($fileht)){
+        file_put_contents($fileht,'');
+    }
+    $filehtarr=@file($fileht);
+    if(in_array($ip."\r\n",$filehtarr)){
+        exit('警告：你的IP已经被禁止了！');
+    }
+    //加入禁止ip
+    $time=time();
+    $fileforbid=$logFilePath.'forbidchk.dat';
+    if(file_exists($fileforbid)){
+      if($time-filemtime($fileforbid)>30){
+        @unlink($fileforbid);
+      }else{
+        $fileforbidarr=@file($fileforbid);
+        if($ip==substr($fileforbidarr[0],0,strlen($ip))){
+          if($time-substr($fileforbidarr[1],0,strlen($time))>120){
+            @unlink($fileforbid);
+          }else if($fileforbidarr[2]>$allowRefresh){
+            file_put_contents($fileht,$ip."\r\n",FILE_APPEND);
+            @unlink($fileforbid);
+          }else{
+            $fileforbidarr[2]++;
+            file_put_contents($fileforbid,$fileforbidarr);
+          }
+        }
+      }
+    }
+    //防刷新
+    $str='';
+    $file=$logFilePath.'ipdate.dat';
+    if(!file_exists($logFilePath)&&!is_dir($logFilePath)){
+      mkdir($logFilePath,0777);
+    }
+    if(!file_exists($file)){
+      file_put_contents($file,'');
+    }
+    $uri=$_SERVER['REQUEST_URI'];//获取当前访问的网页文件地址
+    $checkip=md5($ip);
+    $checkuri=md5($uri);
+    $yesno=true;
+    $ipdate=@file($file);
+    foreach($ipdate as $k=>$v){
+      $iptem=substr($v,0,32);
+      $uritem=substr($v,32,32);
+      $timetem=substr($v,64,10);
+      $numtem=substr($v,74);
+      if($time-$timetem<$allowtime){
+        if($iptem!=$checkip){
+          $str.=$v;
+        }else{
+          $yesno=false;
+          if($uritem!=$checkuri){
+            $str.=$iptem.$checkuri.$time."\r\n";
+          }else if($numtem<$allownum){
+            $str.=$iptem.$uritem.$timetem.($numtem+1)."\r\n";
+          }
+          else{
+            if(!file_exists($fileforbid)){
+              $addforbidarr=array($ip."\r\n",time()."\r\n",1);
+              file_put_contents($fileforbid,$addforbidarr);
+            }
+            file_put_contents($logFilePath.'forbided_ip.log',$ip.'--'.date('Y-m-d H:i:s',time()).'--'.$uri."\r\n",FILE_APPEND);
+            $timepass=$timetem+$allowtime-$time;
+            exit('警告：不要刷新的太频繁！');
+          }
+        }
+      }
+    }
+    if($yesno){
+      $str.=$checkip.$checkuri.$time."\r\n";
+    }
+    file_put_contents($file,$str);
+
+
