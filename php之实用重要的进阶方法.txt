@@ -4948,3 +4948,122 @@ echo ("生成短网址为：<a href='http://$_POST[url]'>".url_short($_POST['url
 </form>
 </body>
 </html>
+
+
++++++php生成网站rss的方法++++++
+<?php 
+if (defined('_class_rss_php')) return; 
+define('_class_rss_php教程',1); 
+/** 
+
+ *  使用说明： 
+
+ *  $rss = new rss('redfox','http://jb51.net/',"redfox's blog"); 
+
+ *  $rss->additem('rss class',"http://www.jb51.net","xxx",date()); 
+
+ *  $rss->additem(...); 
+
+ *  $rss->savetofile(...); 
+
+ */ 
+class rss { 
+   //public 
+   $rss_ver = "2.0"; 
+
+   $channel_title = ''; 
+
+   $channel_link = ''; 
+
+   $channel_description = ''; 
+
+   $language = 'zh_cn'; 
+
+   $copyright = ''; 
+
+   $webmaster = ''; 
+
+   $pubdate = ''; 
+
+   $lastbuilddate = ''; 
+
+   $generator = 'redfox rss generator'; 
+   $content = ''; 
+   $items = array(); 
+   function rss($title, $link, $description) { 
+
+       $this->channel_title = $title; 
+
+       $this->channel_link = $link; 
+
+       $this->channel_description = $description; 
+
+       $this->pubdate = date('y-m-d h:i:s',time()); 
+
+       $this->lastbuilddate = date('y-m-d h:i:s',time()); 
+   } 
+   function additem($title, $link, $description ,$pubdate) { 
+       $this->items[] = array('titile' => $title , 
+                        'link' => $link, 
+                        'description' => $description, 
+                        'pubdate' => $pubdate); 
+   } 
+   function buildrss() { 
+       $s = "<!--l version="1.0" encoding="gb2312"--> "; 
+       // start channel 
+       $s .= " ";
+       $s .= "<link />{$this->channel_link} "; 
+       $s .= "{$this->channel_description} "; 
+       $s .= "{$this->language} "; 
+       if (!emptyempty($this->copyright)) { 
+       $s .= "{$this->copyright} "; 
+       } 
+       if (!emptyempty($this->webmaster)) { 
+          $s .= "{$this->webmaster} "; 
+       } 
+       if (!emptyempty($this->pubdate)) { 
+          $s .= "{$this->pubdate} "; 
+       } 
+       if (!emptyempty($this->lastbuilddate)) { 
+          $s .= "{$this->lastbuilddate} "; 
+       } 
+       if (!emptyempty($this->generator)) { 
+          $s .= "{$this->generator} "; 
+       } 
+       // start items 
+       for ($i=0;$iitems),$i++) { 
+           $s .= " "; 
+           $s .= " "; 
+           $s .= "<link />{$this->items[$i]['link']} "; 
+           $s .= "<!--data[{$thi-->items[$i]['description']}]]> "; 
+           $s .= "{$this->items[$i]['pubdate']} ";           
+           $s .= " "; 
+       } 
+      // close channel 
+      $s .= " "; 
+      $this->content = $s; 
+   } 
+   function show() { 
+       if (emptyempty($this->content)) $this->buildrss(); 
+
+       header('content-type:text/xml'); 
+
+       echo($this->content); 
+   } 
+   function savetofile($fname) { 
+
+       if (emptyempty($this->content)) $this->buildrss(); 
+
+       $handle = fopen($fname, 'wb'); 
+
+       if ($handle === false)  return false; 
+
+       fwrite($handle, $this->content); 
+
+       fclose($handle); 
+
+   } 
+
+} 
+
+?>
