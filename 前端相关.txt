@@ -3653,3 +3653,7 @@ for(var i=1;i<5;i++){
 <option value="4">4</option>
 </select>
 </body>
+
+
+++++禁止浏览器从本地计算机的缓存中访问页面内容,这样设定，访问者将无法脱机浏览+++++++
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE"> 

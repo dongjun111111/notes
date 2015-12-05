@@ -1177,3 +1177,67 @@ urldecode: 还原 URL 编码字符串。
 urlencode: 将字符串以 URL 编码。 
 base64_encode: 将字符串以 BASE64 编码。 
 base64_decode: 将 BASE64 编码字符串解码。 
+
+
++++++PHP获取多个同名复选框的值的处理(完整正确版本)多选框的处理程序前台后台++++++
+要获取同名的多个复选项框的值的时候,而且复选框的个数是不确定的,PHP和ASP的处理不同.ASP的REQUEST能将获取的复选框自动形成一个数组,要处理这些数值就很容易.比起ASP,PHP就麻烦些,它并没有这些功能(至少我目前未找到).
+所以,处理这个问题的时候,我们可以通过JAVASCRIPT预处理,在点击提交的时候把这些复选框的值附加到一个隐藏域去,然后PHP可以获取到这个隐藏域的值,通过explode()函数分解为数组,这样就可以批量获得复选框的值了.
+程序代码： 
+<html>
+<body>
+<form name="form3" id="form1" action="getvalues.php" method="post">
+   <input type="checkbox" name="checkbox1" value="1"><br>
+   <input type="checkbox" name="checkbox1" value="2"><br>
+   <input type="checkbox" name="checkbox1" value="3"><br>
+   <input type="checkbox" name="checkbox1" value="4"><br>
+   <input name="allcheckboxs" type="hidden" value=""><br>     <!--隐藏域,JS将会把值加在allcheckboxs-->
+  <input type="submit" name="Submit3" value="提交" onClick="return allcheckbox();">  <!--提交时会激活checkbox()函数-->
+</form>
+
+<script language="javascript">
+function allcheckbox() 
+{ 
+   
+　form3.allcheckboxs.value = ""; 
+　if ( !form3.checkbox1.length ) // 只有一个复选框，form3.checkbox1.length = undefined 
+　{ 
+　　if ( form3.checkbox1.checked ) 
+　　　form3.allcheckboxs.value = form3.checkbox1.value; 
+　} 
+　else 
+　{ 
+　　for ( i = 0 ; i < form3.checkbox1.length ; i++ ) 
+　　{ 
+　　　if ( form3.checkbox1(i).checked ) // 复选框中有选中的框 
+　　　{ 
+　　　　form3.allcheckboxs.value = form3.checkbox1(i).value; 
+　　　　for ( j = i + 1 ; j < form3.checkbox1.length ; j++ ) 
+　　　　{ 
+　　　　　if ( form3.checkbox1(j).checked ) 
+　　　　　{ 
+　　　　　　form3.allcheckboxs.value += ","; //用,做分割符 
+　　　　　　form3.allcheckboxs.value += form3.checkbox1(j).value; 
+　　　　　} 
+　　　　} 
+　　　　break; 
+　　　} 
+　　} 
+　} 
+　return true; 
+}
+
+</script>
+</body>
+</html>
+
+下面是处理程序代码：
+getvalues.php
+
+<?php
+if ((isset($_POST["allcheckboxs"])) && ($_POST["allcheckboxs"] != "")) {
+ $allcheckboxs_val= explode(",", $_POST["allcheckboxs"]); 
+  for ($i=0;$i<count($allcheckboxs_val);$i++){
+     echo $allcheckboxs_val[$i]."<br>";//arhwen.com
+}
+}
+?>
