@@ -3657,3 +3657,17 @@ for(var i=1;i<5;i++){
 
 ++++禁止浏览器从本地计算机的缓存中访问页面内容,这样设定，访问者将无法脱机浏览+++++++
 <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE"> 
+
+
++++++禁止网页查看源代码，保护源码++++++
+<html>
+<body>
+<script Language=javascript>  
+function Click(){ 
+alert('版权所有(C)2099 Jason'); 
+window.event.returnValue=false; 
+} 
+document.oncontextmenu=Click; 
+</script> 
+</body>
+</html>
