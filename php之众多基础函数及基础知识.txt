@@ -1167,5 +1167,13 @@ $kkk[$v['lxtel']].=$v['id'];
 
 ++++$_SERVER[‘REQUEST_TIME’]+++++
 想知道脚本开始执行(译注：即服务器端收到客户端请求)的时刻，使用$_SERVER[‘REQUEST_TIME’]要好于time()。
-
 echo "referer: " . $_SERVER["HTTP_REFERER"];PHP生成地址栏链接地址
+显示所有为本版本PHP做出贡献的人的名单
+echo phpcredits();
+
+++PHP处理url+++++++
+parse_url: 解析 URL 字符串。 
+urldecode: 还原 URL 编码字符串。 
+urlencode: 将字符串以 URL 编码。 
+base64_encode: 将字符串以 BASE64 编码。 
+base64_decode: 将 BASE64 编码字符串解码。 

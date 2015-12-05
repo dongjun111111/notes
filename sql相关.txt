@@ -435,3 +435,6 @@ mysql> select UNIX_TIMESTAMP('1997-10-04 22:23:00');
 -> 875996580 
 当UNIX_TIMESTAMP被用于一个TIMESTAMP列，函数将直接接受值，没有隐含的“string-to-unix-timestamp”变换。 
 26、FROM_UNIXTIME(unix_timestamp) &nbs
+
+获取新插入数据的ID：
+mysql_insert_id();

@@ -4289,3 +4289,508 @@ js返回上一页，页面过期，往往是由于session保护机制引起的
 <input type="button" name="Submit"  onClick="window.location='javascript:history.back(-1)'" value="返回" >
 可以在session_start();下面增加：
 header("Cache-control: private");
+
+
+
+++++PHP附件下载header方式详解+++++++
+// 文件目录
+define('DL_DIR', 'temp/');
+// 常见扩展名所对应的MIME类型
+$MIMETypes = array(
+    'ez'         => 'application/andrew-inset',    
+    'hqx'        => 'application/mac-binhex40',    
+    'cpt'        => 'application/mac-compactpro',    
+    'doc'        => 'application/msword',    
+    'bin'        => 'application/octet-stream',    
+    'dms'        => 'application/octet-stream',    
+    'lha'        => 'application/octet-stream',    
+    'lzh'        => 'application/octet-stream',    
+    'exe'        => 'application/octet-stream',    
+    'class'      => 'application/octet-stream',    
+    'so'         => 'application/octet-stream',    
+    'dll'        => 'application/octet-stream',    
+    'oda'        => 'application/oda',    
+    'pdf'        => 'application/pdf',    
+    'ai'         => 'application/postscrīpt',    
+    'eps'        => 'application/postscrīpt',    
+    'ps'         => 'application/postscrīpt',    
+    'smi'        => 'application/smil',    
+    'smil'       => 'application/smil',    
+    'mif'        => 'application/vnd.mif',    
+    'xls'        => 'application/vnd.ms-excel',    
+    'ppt'        => 'application/vnd.ms-powerpoint',    
+    'wbxml'      => 'application/vnd.wap.wbxml',    
+    'wmlc'       => 'application/vnd.wap.wmlc',    
+    'wmlsc'      => 'application/vnd.wap.wmlscrīptc',    
+    'bcpio'      => 'application/x-bcpio',    
+    'vcd'        => 'application/x-cdlink',    
+    'pgn'        => 'application/x-chess-pgn',    
+    'cpio'       => 'application/x-cpio',    
+    'csh'        => 'application/x-csh',    
+    'dcr'        => 'application/x-director',    
+    'dir'        => 'application/x-director',    
+    'dxr'        => 'application/x-director',    
+    'dvi'        => 'application/x-dvi',    
+    'spl'        => 'application/x-futuresplash',    
+    'gtar'       => 'application/x-gtar',    
+    'hdf'        => 'application/x-hdf',    
+    'js'         => 'application/x-javascrīpt',    
+    'skp'        => 'application/x-koan',    
+    'skd'        => 'application/x-koan',    
+    'skt'        => 'application/x-koan',    
+    'skm'        => 'application/x-koan',    
+    'latex'      => 'application/x-latex',    
+    'nc'         => 'application/x-netcdf',    
+    'cdf'        => 'application/x-netcdf',    
+    'sh'         => 'application/x-sh',    
+    'shar'       => 'application/x-shar',    
+    'swf'        => 'application/x-shockwave-flash',    
+    'sit'        => 'application/x-stuffit',    
+    'sv4cpio'    => 'application/x-sv4cpio',    
+    'sv4crc'     => 'application/x-sv4crc',    
+    'tar'        => 'application/x-tar',    
+    'tcl'        => 'application/x-tcl',    
+    'tex'        => 'application/x-tex',    
+    'texinfo'    => 'application/x-texinfo',    
+    'texi'       => 'application/x-texinfo',    
+    't'          => 'application/x-troff',    
+    'tr'         => 'application/x-troff',    
+    'roff'       => 'application/x-troff',    
+    'man'        => 'application/x-troff-man',    
+    'me'         => 'application/x-troff-me',    
+    'ms'         => 'application/x-troff-ms',    
+    'ustar'      => 'application/x-ustar',    
+    'src'        => 'application/x-wais-source',    
+    'xhtml'      => 'application/xhtml+xml',    
+    'xht'        => 'application/xhtml+xml',    
+    'zip'        => 'application/zip',    
+    'au'         => 'audio/basic',    
+    'snd'        => 'audio/basic',    
+    'mid'        => 'audio/midi',    
+    'midi'       => 'audio/midi',    
+    'kar'        => 'audio/midi',    
+    'mpga'       => 'audio/mpeg',    
+    'mp2'        => 'audio/mpeg',    
+    'mp3'        => 'audio/mpeg',    
+    'aif'        => 'audio/x-aiff',    
+    'aiff'       => 'audio/x-aiff',    
+    'aifc'       => 'audio/x-aiff',    
+    'm3u'        => 'audio/x-mpegurl',    
+    'ram'        => 'audio/x-pn-realaudio',    
+    'rm'         => 'audio/x-pn-realaudio',    
+    'rpm'        => 'audio/x-pn-realaudio-plugin',    
+    'ra'         => 'audio/x-realaudio',    
+    'wav'        => 'audio/x-wav',    
+    'pdb'        => 'chemical/x-pdb',    
+    'xyz'        => 'chemical/x-xyz',    
+    'bmp'        => 'image/bmp',    
+    'gif'        => 'image/gif',    
+    'ief'        => 'image/ief',    
+    'jpeg'       => 'image/jpeg',    
+    'jpg'        => 'image/jpeg',    
+    'jpe'        => 'image/jpeg',    
+    'png'        => 'image/png',    
+    'tiff'       => 'image/tiff',    
+    'tif'        => 'image/tiff',    
+    'djvu'       => 'image/vnd.djvu',    
+    'djv'        => 'image/vnd.djvu',    
+    'wbmp'       => 'image/vnd.wap.wbmp',    
+    'ras'        => 'image/x-cmu-raster',    
+    'pnm'        => 'image/x-portable-anymap',    
+    'pbm'        => 'image/x-portable-bitmap',    
+    'pgm'        => 'image/x-portable-graymap',    
+    'ppm'        => 'image/x-portable-pixmap',    
+    'rgb'        => 'image/x-rgb',    
+    'xbm'        => 'image/x-xbitmap',    
+    'xpm'        => 'image/x-xpixmap',    
+    'xwd'        => 'image/x-xwindowdump',    
+    'igs'        => 'model/iges',    
+    'iges'       => 'model/iges',    
+    'msh'        => 'model/mesh',    
+    'mesh'       => 'model/mesh',    
+    'silo'       => 'model/mesh',    
+    'wrl'        => 'model/vrml',    
+    'vrml'       => 'model/vrml',    
+    'css'        => 'text/css',    
+    'html'       => 'text/html',    
+    'htm'        => 'text/html',    
+    'asc'        => 'text/plain',    
+    'txt'        => 'text/plain',    
+    'rtx'        => 'text/richtext',    
+    'rtf'        => 'text/rtf',    
+    'sgml'       => 'text/sgml',    
+    'sgm'        => 'text/sgml',    
+    'tsv'        => 'text/tab-separated-values',    
+    'wml'        => 'text/vnd.wap.wml',    
+    'wmls'       => 'text/vnd.wap.wmlscrīpt',    
+    'etx'        => 'text/x-setext',    
+    'xsl'        => 'text/xml',    
+    'xml'        => 'text/xml',    
+    'mpeg'       => 'video/mpeg',    
+    'mpg'        => 'video/mpeg',    
+    'mpe'        => 'video/mpeg',    
+    'qt'         => 'video/quicktime',    
+    'mov'        => 'video/quicktime',    
+    'mxu'        => 'video/vnd.mpegurl',    
+    'avi'        => 'video/x-msvideo',    
+    'movie'      => 'video/x-sgi-movie',    
+    'ice'        => 'x-conference/x-cooltalk',    
+);
+
+// 安全性过滤
+$fileName = basename($_SERVER['QUERY_STRING']);
+$filePath = dirname(__FILE__) . '/' . DL_DIR . $fileName;
+/*
+简述: DIRECTORY_SEPARATOR(目录界定符, 目录函数库预定义常量)
+来源: Directory 目录函数(PHP手册->函数参考->Directories节点)
+说明: windows系统下为反斜杠'\', Linux系统下为'/', 
+windows下两个都正常用, linux就不知道了, 为了标准, 显得专业点, 嘿嘿.
+*/
+$filePath = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $filePath);
+
+if(!is_file($filePath)) {
+    exit('File: ' . $fileName . ' not exists!');
+} else { // 如果是一个有效的文件
+    // 文件扩展名
+    $fileExt = substr(strrchr($fileName, '.'), 1);
+    // 文件类型
+    $fileType = $MIMETypes[$fileExt] ? $MIMETypes[$fileExt] : 'application/octet-stream';
+    // 是否是图片
+    $isImage = False;
+    /*
+    简述: getimagesize(), 详见手册
+    说明: 判定某个文件是否为图片的有效手段, 常用在文件上传验证
+    */
+    $imgInfo = @getimagesize($filePath);
+    if ($imgInfo[2] && $imgInfo['bits']) {
+        $isImage = True;
+    }
+    // 显示方式
+    $attachment = $isImage ? 'inline' : 'attachment';
+
+    // 读取文件
+    if (is_readable($filePath)) {
+        /*
+        简述: ob_end_clean() 清空并关闭输出缓冲, 详见手册
+        说明: 关闭输出缓冲, 使文件片段内容读取至内存后即被送出, 减少资源消耗
+        */
+        ob_end_clean();
+        /*
+         HTTP头信息: 指示客户机可以接收生存期不大于指定时间（秒）的响应
+        */
+        header('Cache-control: max-age=31536000'); 
+        /*
+         HTTP头信息: 缓存文件过期时间(格林威治标准时)
+        */
+        header('Expires: ' . gmdate('D, d M Y H:i:s', time()+31536000) . ' GMT');
+        /*
+         HTTP头信息: 文件在服务期端最后被修改的时间
+         Cache-control,Expires,Last-Modified 都是控制浏览器缓存的头信息
+         在一些访问量巨大的门户, 合理的设置缓存能够避免过多的服务器请求, 一定程度下缓解服务器的压力
+        */
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s' , filemtime($filePath) . ' GMT'));
+        /*
+         HTTP头信息: 文档的编码(Encode)方法, 因为附件请求的文件多样化, 改变编码方式有可能损坏文件, 故为none
+        */
+        header('Content-Encoding: none');
+        /*
+         HTTP头信息: 告诉浏览器当前请求的文件类型. 
+          1.始终指定为application/octet-stream, 就代表文件是二进制流, 始终提示下载.
+          2.指定对应的类型, 如请求的是mp3文件, 对应的MIME类型是audio/mpeg, IE就会自动启动Windows Media Player进行播放.
+        */
+        header('Content-type: ' . $fileType);
+        /*
+         HTTP头信息: 如果为attachment, 则告诉浏览器, 在访问时弹出"文件下载"对话框, 并指定保存时文件的默认名称(可以与服务器的文件名不同)
+         如果要让浏览器直接显示内容, 则要指定为inline, 如图片, 文本
+        */
+        header('Content-Disposition: ' . $attachment . '; filename=' . $fileName);
+        /*
+         HTTP头信息: 告诉浏览器文件长度
+         (IE下载文件的时候不是有文件大小信息么?)
+        */
+        header('Content-Length: ' . filesize($filePath));
+        // 打开文件(二进制只读模式)
+        $fp = fopen($filePath, 'rb');
+        // 输出文件
+        fpassthru($fp);
+        // 关闭文件
+        fclose($fp);
+        exit();
+    } else {
+        exit('Read file failed!');
+    }
+}
+
+
+
+++++PHP经典函数方法++++++++
+获取IP
+   function GetIP() { //获取IP zuolo:由于防火墙的原因 REMOTE_ADDR 就是服务器外网IP
+    if ($_SERVER["HTTP_X_FORWARDED_FOR"])
+        $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+    else if ($_SERVER["HTTP_CLIENT_IP"])
+        $ip = $_SERVER["HTTP_CLIENT_IP"];
+    else if ($_SERVER["REMOTE_ADDR"])
+        $ip = $_SERVER["REMOTE_ADDR"];
+    else if (getenv("HTTP_X_FORWARDED_FOR"))
+        $ip = getenv("HTTP_X_FORWARDED_FOR");
+    else if (getenv("HTTP_CLIENT_IP"))
+        $ip = getenv("HTTP_CLIENT_IP");
+    else if (getenv("REMOTE_ADDR"))
+        $ip = getenv("REMOTE_ADDR");
+    else
+        $ip = "Unknown";
+    echo $ip;
+}
+GetIP();
+
+时间上的增加
+function DateAdd($date, $int, $unit = "d") { //时间的增加（还可以改进成时分秒都可以增加，有时间再补上）
+    $dateArr = explode("-", $date);
+    $value[$unit] = $int;
+    echo  date("Y-m-d", mktime(0,0,0, $dateArr[1] + $value['m'], $dateArr[2] + $value['d'], $dateArr[0] + $value['y']));
+}
+计算出给出的日期是星期几
+function GetWeekDay($date) { //计算出给出的日期是星期几
+    $dateArr = explode("-", $date);
+    echo  date("w", mktime(0,0,0,$dateArr[1],$dateArr[2],$dateArr[0]));
+}
+GetWeeKDay("2013-10-3");
+检查日期是否合法日期
+function check_date($date) { //检查日期是否合法日期
+    $dateArr = explode("-", $date);
+    if (is_numeric($dateArr[0]) && is_numeric($dateArr[1]) && is_numeric($dateArr[2])) {
+        return checkdate($dateArr[1],$dateArr[2],$dateArr[0]);
+    }
+    return false;
+}
+检查时间是否合法时间
+function check_time($time) { //检查时间是否合法时间
+    $timeArr = explode(":", $time);
+    if (is_numeric($timeArr[0]) && is_numeric($timeArr[1]) && is_numeric($timeArr[2])) {
+        if (($timeArr[0] >= 0 && $timeArr[0] <= 23) && ($timeArr[1] >= 0 && $timeArr[1] <= 59) && ($timeArr[2] >= 0 && $timeArr[2] <= 59))
+            return true;
+        else
+            return false;
+    }
+    return false;
+}
+时间比较函数，返回两个日期相差几秒、几分钟、几小时或几天
+function DateDiff($date1, $date2, $unit = "") { //时间比较函数，返回两个日期相差几秒、几分钟、几小时或几天
+    switch ($unit) {
+        case 's':
+            $dividend = 1;
+            break;
+        case 'i':
+            $dividend = 60;
+            break;
+        case 'h':
+            $dividend = 3600;
+            break;
+        case 'd':
+            $dividend = 86400;
+            break;
+        default:
+            $dividend = 86400;
+    }
+    $time1 = strtotime($date1);
+    $time2 = strtotime($date2);
+    if ($time1 && $time2)
+        return (float)($time1 - $time2) / $dividend;
+    return false;
+}
+重定向
+方法一：header("Location: index.php");
+方法二：echo "<scrīpt>window.location ="$PHP_SELF";</scrīpt>";
+方法三：echo "<META HTTP-EQUIV="Refresh" CONTENT="0; URL=index.php">";
+获取访问者浏览器
+function browse_infor()
+{
+    $browser="";$browserver="";
+    $Browsers =array("Lynx","MOSAIC","AOL","Opera","JAVA","MacWeb","WebExplorer","OmniWeb");
+    $Agent = $_SERVER["HTTP_USER_AGENT"];
+    for ($i=0; $i<=7; $i++)    {
+        if (strpos($Agent,$Browsers[$i]))    {
+        $browser = $Browsers[$i];
+        $browserver ="";
+        }
+    }
+    if (ereg("Mozilla",$Agent) && ereg("Chrome",$Agent))    {
+        $browserver=substr($Agent,strripos($Agent, "Chrome"));
+        $browserver=substr($browserver,7,(strripos($browserver," ")-7));
+        $browser = "Google Chrome";
+    }
+    if (ereg("Mozilla",$Agent) && ereg("Opera",$Agent))    {
+        $temp =explode("(", $Agent); $Part=$temp[1];
+        $temp =explode(")", $Part); $browserver=$temp[1];
+        $temp =explode(" ",$browserver);$browserver=$temp[2];
+        $browserver =preg_replace("/([d.]+)/","1",$browserver);
+        $browser = "Opera";
+    }
+    if (ereg("Mozilla",$Agent) && ereg("MSIE",$Agent))    {
+        $temp = explode("(", $Agent); $Part=$temp[1];
+        $temp = explode(";",$Part); $Part=$temp[1];
+        $temp = explode(" ",$Part);$browserver=$temp[2];
+        //$browserver =preg_replace("/([d.]+)/","1",$browserver); bug：在IE7中会把版本号7.0转为710
+        $browser = "Internet Explorer";
+    }
+    if ($browser!="")    {
+        $browseinfo = "$browser $browserver";
+    }
+    else    {
+        $browseinfo = "Unknown";
+    }
+    return $browseinfo;
+}
+$browser=browse_infor();
+echo $browser;
+获取访问者操作系统
+function osinfo() {
+    $os="";
+    $Agent = $_SERVER["HTTP_USER_AGENT"];
+    if (eregi('win',$Agent) && strpos($Agent, '95')) {
+        $os="Windows 95";
+    }
+    elseif (eregi('win 9x',$Agent) && strpos($Agent, '4.90')) {
+        $os="Windows ME";
+    }
+    elseif (eregi('win',$Agent) && ereg('98',$Agent)) {
+        $os="Windows 98";
+    }
+    elseif (eregi('win',$Agent) && eregi('nt 5.0',$Agent)) {
+        $os="Windows 2000";
+    }
+    elseif (eregi('win',$Agent) && eregi('nt 5.1',$Agent)) {
+        $os="Windows XP";
+    }
+    elseif (eregi('win',$Agent) && eregi('nt 6.0',$Agent)) {
+        $os="Windows Vista";
+    }
+    elseif (eregi('win',$Agent) && eregi('nt',$Agent)) {
+        $os="Windows NT";
+    }
+    elseif (eregi('win',$Agent) && ereg('32',$Agent)) {
+        $os="Windows 32";
+    }
+    elseif (eregi('linux',$Agent)) {
+        $os="Linux";
+    }
+    elseif (eregi('unix',$Agent)) {
+        $os="Unix";
+    }
+    elseif (eregi('sun',$Agent) && eregi('os',$Agent)) {
+        $os="SunOS";
+    }
+    elseif (eregi('ibm',$Agent) && eregi('os',$Agent)) {
+        $os="IBM OS/2";
+    }
+    elseif (eregi('Mac',$Agent) && eregi('PC',$Agent)) {
+        $os="Macintosh";
+    }
+    elseif (eregi('PowerPC',$Agent)) {
+        $os="PowerPC";
+    }
+    elseif (eregi('AIX',$Agent)) {
+        $os="AIX";
+    }
+    elseif (eregi('HPUX',$Agent)) {
+        $os="HPUX";
+    }
+    elseif (eregi('NetBSD',$Agent)) {
+        $os="NetBSD";
+    }
+    elseif (eregi('BSD',$Agent)) {
+        $os="BSD";
+    }
+    elseif (ereg('OSF1',$Agent)) {
+        $os="OSF1";
+    }
+    elseif (ereg('IRIX',$Agent)) {
+        $os="IRIX";
+    }
+    elseif (eregi('FreeBSD',$Agent)) {
+        $os="FreeBSD";
+    }
+    if ($os=='') $os = "Unknown";
+    return $os;
+}
+$os=osinfo();
+echo $os;
+php生成excel文档
+<?php
+header("Content-type:application/vnd.ms-excel");
+header("Content-Disposition:filename=test.xls");
+echo "test1t";
+echo "test2tn";
+echo "test1t";
+echo "test2tn";
+echo "test1t";
+echo "test2tn";
+echo "test1t";
+echo "test2tn";
+echo "test1t";
+echo "test2tn";
+echo "test1t";
+echo "test2tn";
+//改动相应文件头就可以输出.doc .xls等文件格式了
+?>
+提取页面和浏览器提交的变量，作用相当于使PHP.INI开了全局变量
+@extract($_SERVER, EXTR_SKIP);
+@extract($_SESSION, EXTR_SKIP);
+@extract($_POST, EXTR_SKIP);
+@extract($_FILES, EXTR_SKIP);
+@extract($_GET, EXTR_SKIP);
+@extract($_ENV, EXTR_SKIP);
+比较友好的页面跳转等待页
+function turntopage($url="index.php",$info = "页面转向中...",$second=2){
+print "<html><head><title>页面转向中....</title>";
+print "<meta http-equiv='refresh' content='$second;url=$url'>";
+print "<style type='text/css'><!--";
+print "td { font-family: 'Verdana', 'Arial';font-size: 12px}";
+print "A {COLOR: #000000; TEXT-DECORATION: none}";
+print "--></style>";
+print "</head><body>";
+print "<table width='100%' border='0' align='center'>";
+print " <tr>";
+print " <td height='200'> </td>";
+print " </tr>";
+print " <tr>";
+print " <td align='center'>";
+print " <table width='60%' border='0' cellpadding='8' bgcolor='#AA9FFF'>";
+print " <tr>";
+print " <td height='30' align='center'>页面转向提示信息</td>";
+print " </tr>";
+print " <tr>";
+print " <td align='center'>$info</td>";
+print " </tr>";
+print " <tr>";
+print " <td align='center'>";
+print " <a href='$url'>如果你的浏览器不支持自动跳转,请按这里</a></td>";
+print " </tr>";
+print " </tr>";
+print " </table></td>";
+print " </tr>";
+print " <tr>";
+print " <td height='200'> </td>";
+print " </tr>";
+print "</table>";
+print "</body></html>";
+exit;
+  } 
+ turntopage();
+获得当前的脚本网址或者说是文件在网络根目录的位置
+function get_php_site(){
+        if(!empty($_server["REQUEST_URI"])){
+                $scriptName = $_SERVER["REQUEST_URI"];
+                $nowsite = $scriptName;
+        }else{
+                $scriptName = $_SERVER["PHP_SELF"];
+                if(empty($_SERVER["QUERY_STRING"])) $nowsite = $scriptName;
+                else $nowsite = $scriptName."?".$_SERVER["QUERY_STRING"];
+        }
+        return $nowsite;
+}
+$site=get_php_site();
+echo $site;
+
+
