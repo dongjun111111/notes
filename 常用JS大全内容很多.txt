@@ -2072,3 +2072,107 @@ sw-resize
 　　属性值为"follow": 查询页上的链接；
 　　属性值为"noindex": 文件不检索，但可被查询链接；
 　　属性值为"nofollow": 文件不被检索，但可查询页上的链接。 
+
+
+
+++js实现浏览器下拉更新（手机可以试试，电脑试不了）++++++++
+ <html>
+ <head>
+<script>
+//lazyload方法-start
+/**
+*      lazyload.js  
+*  当滚动条到页面最底端时 自动加载数据
+ * cfg 配置参数数组
+ * { 
+ *  loadfunc:自定义加载函数的名称
+ * }
+ * doc 兼容IE FF 的网页dom对象
+ * load 触发自定义加载函数   加载内容
+ * setcfg 接受用户传入的配置参数
+ * init 给浏览器绑定滚动条事件
+ * scroll 浏览器滚动触发的回调函数
+ * 
+ * 注意 请不要将用于标记的DIV设为display:none 否则将无法得到offsetTop的值
+ */
+var lazyload = {
+ 
+     cfg:{loadfunc:null},
+          
+     load:function(){
+              if(typeof eval(this.cfg.loadfunc) == 'function'){
+                       this.destroy();//注销滚动条事件
+                       eval(this.cfg.loadfunc+'();');//调用处理函数
+                       return;
+              }
+              alert('请确认加载函数是否已经定义?');
+     },
+ 
+     setcfg:function(a){//a 为array
+           if(typeof a == 'object'){//判断a 是否为数组
+               for(var key in a){
+                    this.cfg[key] = a[key];//将配置的值赋给lazyload对象的配置参数
+               }
+               return;
+      }
+          alert('请确认配置参数格式是否正确?');
+     },
+ 
+     register:function(){//初始化 给浏览器绑定滚动事件
+          if(window.attachEvent){//IE
+                   window.attachEvent("onscroll",this.scroll,false);
+          }else{//FF
+                   window.addEventListener("scroll",this.scroll,false);
+          }
+     }
+     ,
+     scroll:function(){//滚动条 开始滚动 并计算是否到达底部
+           //判断滚动条滚到了网页最底部
+           var a = document.documentElement.scrollTop==0? document.body.clientHeight :             document.documentElement.clientHeight;
+           var b = document.documentElement.scrollTop==0? document.body.scrollTop :             document.documentElement.scrollTop;
+           var c = document.documentElement.scrollTop==0? document.body.scrollHeight :             document.documentElement.scrollHeight;
+  
+           if(a+b == c){
+                lazyload.load();//开始加载
+           }
+     }
+     ,
+     destroy:function(){//注销onscroll事件 防止加载数据的时候继续加载
+              if(window.attachEvent){//ff
+                   window.detachEvent("onscroll",this.scroll,false);  
+              }else{//ie
+                       window.removeEventListener("scroll",this.scroll,false);
+              }
+     }
+ 
+};
+//lazyload方法-end 
+
+function loadcomment(){
+     //请求加载内容
+     //加载完毕后 内容更新  重新注册事件
+     $.ajax({
+          ...
+          ...
+          ...//省略代码
+          ,
+          success:function(content){
+               /*....
+                   将得到的内容 放入要刷新的框中
+               ....*/
+               lazyload.register();
+      }
+ })
+}
+window.onload = function(){
+     lazyload.setcfg({
+              loadfunc : "loadcomment",//加载数据的方法名
+     });
+
+     lazyload.register();//注册滚动条事件
+}
+</script>
+</head>
+<body>
+</body>
+</html>
