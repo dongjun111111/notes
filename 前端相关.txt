@@ -3533,3 +3533,18 @@ window.open("/index.htm","","scrollbars=0,toolbar=0,location=0,fullscreen=1,dire
 </html>
 
 
+++++++提交表单后,点回退/返回,依然会保留表单数据++++++++
+<HTML>  
+<HEAD>  
+<META  NAME="save"  CONTENT="history">  
+<STYLE>  
+    .saveHistory  {behavior:url(#default#savehistory);}  
+</STYLE>  
+</HEAD>  
+<BODY>  
+<FORM  name=a>  
+<INPUT  class=saveHistory  type=text  id=oPersistInput>  
+<input type="submit" value="提交" />
+</FORM>  
+</BODY>  
+</HTML>  
