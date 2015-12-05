@@ -4794,3 +4794,19 @@ $site=get_php_site();
 echo $site;
 
 
+++++PHP文本数据库的搜索方法+++++
+//PHP文本数据库的搜索方法 
+searchstr=("/".preg_quote($searchstr)."/"); 
+//$searchstr是查找的关键字 
+$records=file($file);//获取所有的记录数 
+//$file是查找的数据文件 
+$search_reocrds=preg_grep ($searchstr, $records);//开始查找记录 
+//$search_reocrds为查找到的记录数 
+unset($records); 
+if($search_records){ 
+//开始显示记录，写下你自己的处理程序******************** 
+while (list ($key, $val) = each ( $search_records)) { 
+echo "$val"; 
+} 
+//**************************************************** 
+} 
