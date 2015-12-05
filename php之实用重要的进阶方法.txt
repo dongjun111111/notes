@@ -5085,3 +5085,359 @@ for($i=1 ; $i < 101 ; $i++ ){
     }
 }
 print "100次 总共命中 $_hitted 次".chr(10);
+
+
+
+++++热血拳皇留存率算法及源码 +++++
+热血拳皇之1.涉及的统计表
+| dgs_remain | CREATE TABLE `dgs_remain` (
+  `auto_id` int(11) NOT NULL AUTO_INCREMENT,
+  `reg_num` int(11) NOT NULL DEFAULT '0' COMMENT '每日新注册用户',
+  `statistics_time` int(11) NOT NULL DEFAULT '0' COMMENT '统计时间',
+  `statistics_date` int(11) NOT NULL DEFAULT '0' COMMENT '统计日期',
+  `second_day_num` smallint(6) DEFAULT NULL COMMENT '次日留存原数据(当前日期次日还在登录的人数)',
+  `third_day_num` smallint(6) DEFAULT NULL COMMENT '三日留存原数据,当前日期后三日还在登录的人数',
+  `seven_day_num` smallint(6) DEFAULT NULL COMMENT '七日留存原数据,当前日期后七日还在登录的人数',
+  `thirty_day_num` smallint(6) DEFAULT NULL COMMENT '三十日留存原数据,当前日期后三十日还在登录的人数',
+  `platform_id` int(11) NOT NULL COMMENT '平台ID',
+  `dist_id` int(11) NOT NULL COMMENT '服务器ID',
+  `fifty_day_num` smallint(6) DEFAULT NULL COMMENT '15日留存,当前日期后15日还在登录的人数',
+  PRIMARY KEY (`auto_id`),
+  UNIQUE KEY `UIndex_1` (`statistics_date`,`platform_id`,`dist_id`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 |
+
+热血拳皇之2.放在游戏服务端的守护进程：
+<?php
+/**
+ * Created by PhpStorm.
+ * User: buhuan
+ * Date: 14-4-11
+ * Time: 下午1:46
+ * 给GM端推留存率的数据
+ */
+namespace Application\Process;
+use Application\Core\ProcessBase;
+use Application\Core\Pusher;
+use Application\Interfaces\IProcess;
+
+class Retention extends ProcessBase implements IProcess{
+
+    private $diff = 60;//时间间隔 分钟
+    private $push_hour = 0;//推送的小时  0就是0点推送
+
+    /**
+     * 开始执行命令。
+     */
+    function execute()
+    {
+        print '留存统计守护进程启动[pid:'.getmypid().']@'.date('Y-m-d H:i:s').'|检测间隔为'.$this->diff.'分钟,推送间隔为1天'.chr(10);
+        $timediff = $this->diff * 60;
+        // TODO: Implement execute() method.
+        while(1){
+            $hour = intval(date('H'));
+            if($hour == $this->push_hour){//如果是$push_hour点 则开始发送数据
+                $time = time();
+                $current_time = $time-24*60*60;//计算的基准时间
+                $start_datetime = date('Y-m-d',$current_time).' 00:00:00';
+                $end_datetime = date('Y-m-d',$current_time).' 23:59:59';
+                //查询当前前一天的注册人数
+                $sql = "SELECT COUNT(user_id) as reg_num FROM user_info_ext WHERE user_active_time > '$start_datetime' AND user_active_time < '$end_datetime'";
+                $d = $this->scope->db->fetch($sql);
+                $reg_num = $d['reg_num'];
+
+                //查询当前前一天登录的用户
+                $sql = "SELECT user_id FROM user_info_ext WHERE user_last_login_time > '$start_datetime' AND user_last_login_time < '$end_datetime' ";
+                $d = $this->scope->db->fetchAll($sql);
+                $login_users = $d;
+
+                $reg_nums = array();
+                $reg_nums['day1'] = $this->nDayUsers(1,$current_time);
+                $reg_nums['day3'] = $this->nDayUsers(3,$current_time);
+                $reg_nums['day7'] = $this->nDayUsers(7,$current_time);
+                $reg_nums['day15'] = $this->nDayUsers(15,$current_time);
+                $reg_nums['day30'] = $this->nDayUsers(30,$current_time);
+
+                $data = array(
+                    'currentTime' => $time,
+                    'reg_num' => $reg_num,
+                    'reg_nums' => $reg_nums,
+                    'login_users' => $login_users
+                );
+
+                Pusher::instance($this->scope)->doPushStat(106,$data);
+            }
+            sleep($timediff);
+        }
+    }
+
+
+    /**
+     * @param int $n 1=1日 3=3日。。。
+     * @param int $current_time 基准时间
+     * @return array
+     */
+    private function nDayDate($n,$current_time){
+        $diff = 24*60*60;
+        $start_datetime = date('Y-m-d',$current_time-$n*$diff).' 00:00:00';
+        $end_datetime = date('Y-m-d',$current_time-$n*$diff).' 23:59:59';
+        $date = array();
+        $date[0] = $start_datetime;
+        $date[1] = $end_datetime;
+        return $date;
+    }
+
+    /**
+     * 得到基准日期前第n日的注册用户集合
+     * @param $n
+     * @param $current_time
+     * @return array
+     */
+    private function nDayUsers($n,$current_time){
+        $dates = $this->nDayDate($n,$current_time);
+        //查询次日注册用户
+        $sql = "SELECT user_id FROM user_info_ext WHERE user_active_time > '{$dates[0]}' AND user_active_time < '{$dates[1]}'";
+        return $this->scope->db->fetchAll($sql);
+    }
+}
+
+热血拳皇之3.综合服务端的接口 用来接收游戏端发送过来的数据如下面的&$data ：
+<?php
+/**
+ * Created by PhpStorm.
+ * User: buhuan
+ * Date: 14-4-11
+ * Time: 上午11:31
+ * 留存
+ */
+namespace Apps\Process\GearmanWorker;
+use Apps\Common\Retention;
+use Apps\Interfaces\IGearmanWorker;
+use Apps\Process\GearmanWorkerBase;
+
+class RetentionStatistics extends GearmanWorkerBase implements IGearmanWorker{
+    /**
+     * 释放资源。
+     */
+    function dispose()
+    {
+        // TODO: Implement dispose() method.
+    }
+
+    /**
+     * 处理任务数据。
+     *
+     * @param string $data 指定任务数据对象引用。
+     * @param int $p 指定平台ID。
+     * @param int $s 指定服务器ID。
+     */
+    function execute(&$data, $p, $s)
+    {
+        $currentTime = intval($data['currentTime'])-24*60*60;
+        $reg_num = $data['reg_num'];
+        $reg_nums = $data['reg_nums'];
+        $login_users = $data['login_users'];
+
+        // TODO: Implement execute() method.
+        Retention::instance($this->scope)
+                    ->setCurrentTime($currentTime)
+                    ->setDist_id($s)
+                    ->setPlatform_id($p)
+                    ->setRegNum($reg_num)
+                    ->setRegNums($reg_nums)
+                    ->setLoginUsers($login_users)
+                    ->createData()
+                    ->setRetentionData(1)
+                    ->setRetentionData(3)
+                    ->setRetentionData(7)
+                    ->setRetentionData(15)
+                    ->setRetentionData(30);
+    }
+
+}
+热血拳皇之4.以上需要用到的留存率的统计类：
+<?php
+namespace Apps\Common;
+use Application\Base\Base;
+use Application\Core\Console;
+use Application\Core\DbPdo;
+
+/**
+ * Created by PhpStorm.
+ * User: buhuan
+ * Date: 14-4-11
+ * Time: 上午10:12
+ * 留存率
+ */
+
+class Retention extends Base{
+
+    /**
+     * @var 当前基准日期时间戳
+     */
+    private $current_time = 0;
+
+    /**
+     * @var array(array('user_id'=>1),array('user_id'=>2)) 当前基准日期时间戳登录的用户（包括user_id）
+     */
+    private $login_users = NULL;
+
+    private $platform_id = 0;
+
+    private $dist_id = 0;
+
+    /**
+     * @var int 当前基准日期的注册数
+     */
+    private $reg_num = 0;
+
+    /**
+     * @var array 统计其他天数的注册用户数组
+     * @struct array(
+     *      'day1' => array(array('user_id'=>1),array('user_id'=>2)) //前一日
+     *      'day3' => array(array('user_id'=>1),array('user_id'=>2)), //前三日
+     *      'day7' => array(array('user_id'=>1),array('user_id'=>2)), //前七日
+     *      'day15' => array(array('user_id'=>1),array('user_id'=>2)), //前15日
+     *      'day30' => array(array('user_id'=>1),array('user_id'=>2))  //前三十日
+     *      ...
+     * )
+     */
+    private $reg_nums = NULL;
+
+    public static function instance($scope){
+        static $_instance;
+        if($_instance == NULL){
+            $_instance = new Retention($scope);
+        }
+        return $_instance;
+    }
+
+
+    function __construct($scope){
+       parent::__construct($scope);
+    }
+
+
+    public function setCurrentTime($param){
+        $this->current_time = $param;
+        return $this;
+    }
+
+
+    public function setLoginUsers($param){
+        $this->login_users = $param;
+        return $this;
+    }
+
+
+    public  function setPlatform_id($param){
+        $this->platform_id = $param;
+        return $this;
+    }
+
+
+    public function setDist_id($param){
+        $this->dist_id = $param;
+        return $this;
+    }
+
+    public function setRegNum($param){
+        $this->reg_num = $param;
+        return $this;
+    }
+
+    public function setRegNums($param){
+        $this->reg_nums = $param;
+        return $this;
+    }
+
+    /**
+     * 创建当天的统计数据
+     */
+    public function createData(){
+        $this->checkProperties();
+        $current_date = strtotime(date('Y-m-d',$this->current_time));
+        $sql = "INSERT INTO dgs_remain (reg_num,statistics_time,statistics_date,dist_id,platform_id)
+                VALUES ($this->reg_num,$this->current_time,$current_date,$this->dist_id,$this->platform_id)";
+        if($this->scope->db->execute($sql,NULL,DbPdo::SQL_TYPE_INSERT))
+            Console::debug('当前基准时间'.date('Y-m-d',$this->current_time).'统计数据写入成功');
+        return $this;
+    }
+
+
+    /**
+     * @param $nDay int N日留存  1日=1 3日=3 ....
+     */
+    public function setRetentionData($nDay){
+            $this->checkProperties();
+            $daytime = 24*60*60;
+            //===================================================N日留存
+            $ratio_day = 0;
+            $date = date('Y-m-d',$this->current_time-$daytime*$nDay);//N日的日期
+            $time = strtotime($date);//$nDay日的时间戳
+            //查找当前日期前$nDay日的新增注册
+            $sql = "SELECT reg_num FROM dgs_remain WHERE statistics_date = $time";
+            $d = $this->scope->db->fetch($sql);
+            $login_users_again = 0;//$nDay日还在登录的用户数
+            if(isset($d['reg_num'])){//如果dgs_remain中有当前日期前$nDay日的数据的话 则进行前$nDay日的$nDay日留存更新
+                //查找当前日期前$nDay日注册的用户数组
+                if(!empty($this->login_users) && !empty($this->reg_nums)){
+                    $active_users = $this->reg_nums['day'.$nDay];
+
+                    foreach($this->login_users as $login){
+                        foreach($active_users as $active){
+                            if($login['user_id'] == $active['user_id']){
+                                $login_users_again++;
+                                break 1;
+                            }
+                        }
+                    }
+                }
+            }
+
+            switch($nDay){
+                    case 1: $sql = "UPDATE dgs_remain SET second_day_num = $login_users_again
+                            WHERE statistics_date = $time and platform_id = $this->platform_id and dist_id = $this->dist_id";
+                            break;
+
+                    case 3: $sql = "UPDATE dgs_remain SET third_day_num = $login_users_again
+                            WHERE statistics_date = $time and platform_id = $this->platform_id and dist_id = $this->dist_id";
+                            break;
+
+                    case 7: $sql = "UPDATE dgs_remain SET seven_day_num = $login_users_again
+                            WHERE statistics_date = $time and platform_id = $this->platform_id and dist_id = $this->dist_id";
+                            break;
+
+                    case 15: $sql = "UPDATE dgs_remain SET fifty_day_num = $login_users_again
+                            WHERE statistics_date = $time and platform_id = $this->platform_id and dist_id = $this->dist_id";
+                            break;
+
+                    case 30: $sql = "UPDATE dgs_remain SET thirty_day_num = $login_users_again
+                            WHERE statistics_date = $time and platform_id = $this->platform_id and dist_id = $this->dist_id";
+                            break;
+            }
+
+            $this->scope->db->execute($sql,NULL,DbPdo::SQL_TYPE_UPDATE);
+            Console::debug("当前日期".date('Y-m-d',$this->current_time)." 的前 $nDay 日[".$date."]留存率更新成功");
+            return $this;
+    }
+
+
+    private function checkProperties(){
+        if($this->current_time == 0){
+            Console::debug("请设置基准时间戳");
+            exit;
+        }
+
+        if($this->platform_id == 0){
+            Console::debug("请设置平台ID");
+            exit;
+        }
+
+        if($this->dist_id == 0){
+            Console::debug("请设置服务器ID");
+            exit;
+        }
+    }
+
+}
+
