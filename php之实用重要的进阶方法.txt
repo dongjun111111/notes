@@ -5521,3 +5521,89 @@ declare(ticks = 1) {
 ticks；开始$x=10的循环，但这时已不满足循环条件，for循环执行结束，这个循环又是一个语句，
 这时输出第三个ticks。最后declare本身也算一条语句，所以又输出第四个ticks。
 
+
+
++++PHP画出一片叶子++++++++
+// 定义 PI 一分的角度的值
+define("PII", M_PI/180);
+// 新建图像资源，并定义其背景为 白色，前景色为 黑色
+$im    = imagecreate(670,500);
+$white = imagecolorallocate($im, 0xFF, 0xFF, 0xFF);
+$g     = imagecolorallocate($im, 0x00, 0x00, 0x00);
+// 从下面实例化的代码可以得知，初始值 $x, $y, $L, $a 别分为 300, 500, 100, 270
+function drawLeaf($g, $x, $y, $L, $a) {
+    global $im;
+    $B = 50;
+    $C = 9;
+    $s1 = 2;
+    $s2 = 3 ;
+    $s3 = 1.2;
+    if($L > $s1) {
+        // 计算叶子的定位 上面
+        $x2  = $x + $L * cos($a * PII);
+        $y2  = $y + $L * sin($a * PII);
+        $x2R = $x2 + $L / $s2 * cos(($a + $B) * PII);
+        $y2R = $y2 + $L / $s2 * sin(($a + $B) * PII);
+        $x2L = $x2 + $L / $s2 * cos(($a - $B) * PII);
+        $y2L = $y2 + $L / $s2 * sin(($a - $B) * PII);
+
+        // 计算叶子的定位 下面
+        $x1  = $x + $L / $s2 * cos($a * PII);
+        $y1  = $y + $L / $s2 * sin($a * PII);
+        $x1L = $x1 + $L / $s2 * cos(($a - $B) * PII);
+        $y1L = $y1 + $L / $s2 * sin(($a - $B) * PII);
+        $x1R = $x1 + $L / $s2 * cos(($a + $B) * PII);
+        $y1R = $y1 + $L / $s2 * sin(($a + $B) * PII);
+
+        // 别分画叶子的主干以及叶面
+        ImageLine($im, (int)$x,  (int)$y,  (int)$x2,  (int)$y2,  $g);
+        ImageLine($im, (int)$x2, (int)$y2, (int)$x2R, (int)$y2R, $g);
+        ImageLine($im, (int)$x2, (int)$y2, (int)$x2L, (int)$y2L, $g);
+        ImageLine($im, (int)$x1, (int)$y1, (int)$x1L, (int)$y1L, $g);
+        ImageLine($im, (int)$x1, (int)$y1, (int)$x1R, (int)$y1R, $g);
+
+        // 再次递归调用本身
+        drawLeaf($g, $x2,  $y2,  $L / $s3, $a + $C);
+        drawLeaf($g, $x2R, $y2R, $L / $s2, $a + $B);
+        drawLeaf($g, $x2L, $y2L, $L / $s2, $a - $B);
+        drawLeaf($g, $x1L, $y1L, $L / $s2, $a - $B);
+        drawLeaf($g, $x1R, $y1R, $L / $s2, $a + $B);
+    }
+}
+// 实例化
+drawLeaf($g, 300, 500, 100, 270);
+header("Content-type: image/png");
+imagepng($im);
+
+
+++++转换字符串至NCR++++++
+同个页面呈现不同语言字符的编码使用 UTF-8 是目前主流的应用方案。但是在一些极端的情况下，
+我们不得不在某些西方字符编码的页面上显示中文。
+原理很简单，就是把除了 ISO-8859-1 编码中前 128 个字符以外的所
+有其他的编码都用 NCR(Numeric character reference) 来表示。比如
+「汉字」这两个字，如果我们写成「&#27721;&#23383;」这种形式，
+那么它在任意字符集下都可以正确显示。
+/**
+ * nochaoscode - 转换字符串至 NCR
+ *
+ * @param  string $str     原字符串
+ * @param  string $encode  原字符串的编码，默认 UTF-8
+ * @return string 原字符串的 NCR 字符
+ * @see http://en.wikipedia.org/wiki/Numeric_character_reference
+ */
+function nochaoscode($str, $encode = "utf-8")
+{
+    if (!function_exists("iconv") || !function_exists("mb_strlen")) {
+        return $str;
+    }
+
+    $str = iconv($encode, "utf-16", $str); 
+    for ($i = 0; $i < mb_strlen($str); $i+=2) { 
+        $code = ord($str{$i}) * 256 + ord($str{$i + 1}); 
+        if ($code < 128) {
+            $output .= chr($code); 
+        } else if ($code != 65279) {
+            $output .= "&#" . $code . ";"; 
+        }
+    }
+    return $output; 

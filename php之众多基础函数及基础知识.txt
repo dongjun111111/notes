@@ -1283,3 +1283,18 @@ PHP自然排序，类似与ksort() sort()等等
 foreach (glob("*.php") as $file) {
     echo "$file<br>";
 }
+
+
+++++查看系统默认支持什么函数+++++
+$arr = get_defined_functions(); 
+Function php() {
+}
+echo   "<pre>"; 
+Echo   "这里显示系统所支持的所有函数,和自定以函数phpn";
+print_r($arr); 
+echo   "</pre>"; 
+
++++使Html/PHP格式的字符串不被解释,而是照原样显示++++
+$str="<h1>PHP</h1>";
+echo "被解释过的: ".$str."<br>经过处理的:";
+echo   htmlentities(nl2br($str));
