@@ -3548,3 +3548,15 @@ window.open("/index.htm","","scrollbars=0,toolbar=0,location=0,fullscreen=1,dire
 </FORM>  
 </BODY>  
 </HTML>  
+
+
++++++JS中F5刷新事件++++++
+<script language="javascript">
+ g_blnCheckUnload = true;
+ function RunOnBeforeUnload() {
+    if (g_blnCheckUnload) {window.event.returnValue = 'You will lose any unsaved content';   
+    }  
+ }
+</script>
+<body  onbeforeunload="RunOnBeforeUnload()">
+</body>

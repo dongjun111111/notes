@@ -4830,3 +4830,10 @@ print_r($_GET);
 连接使用方式：
 ****.php/param1|1234@param2|4321
 和****.php?param1=1234¶m2=4321一样。 
+
+
+++++php禁止网页缓存++++++
+header(”Expires: Mon, 26 Jul 1997 05:00:00 GMT”);
+header(”Cache-Control: no-cache, must-revalidate”);
+header(”Pragma: no-cache”);
+
