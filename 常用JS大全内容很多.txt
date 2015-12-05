@@ -1,0 +1,1797 @@
+1.document.write(""); 输出语句  
+2.JS中的注释为//  
+3.传统的HTML文档顺序是:document->html->(head,body)  
+4.一个浏览器窗口中的DOM顺序是:window->(navigator,screen,history,location,document)  
+5.得到表单中元素的名称和值:document.getElementById("表单中元素的ID号").name(或＆#118alue)  
+6.一个小写转大写的＆#106s: document.getElementById("output").＆#118alue = document.getElementById("input").＆#118alue.toUpperCase();  
+7.JS中的值类型:String,Number,Boolean,Null,Object,Function  
+8.JS中的字符型转换成数值型:parseInt(),parseFloat()  
+9.JS中的数字转换成字符型:(""+变量)  
+10.JS中的取字符串长度是:(length)  
+11.JS中的字符与字符相连接使用+号.  
+12.JS中的比较操作符有:==等于,!=不等于,>,>=,<.<=  
+13.JS中声明变量使用:var来进行声明  
+14.JS中的判断语句结构:if(condition){}else{}  
+15.JS中的循环结构:for([initial expression];[condition];[upadte expression]) {inside loop}  
+16.循环中止的命令是:break  
+17.JS中的函数定义:function functionName([parameter],...){statement[s]}  
+18.当文件中出现多个form表单时.可以用document.forms[0],document.forms[1]来代替.  
+19.窗口:打开窗口window.open(), 关闭一个窗口:window.close(), 窗口本身:self  
+20.状态栏的设置:window.status="字符";  
+21.弹出提示信息:window.alert("字符");  
+22.弹出确认框:window.confirm();  
+23.弹出输入提示框:window.prompt();  
+24.指定当前显示链接的位置:window.location.href="URL"  
+25.取出窗体中的所有表单的数量:document.forms.length  
+26.关闭文档的输出流:document.close();  
+27.字符串追加连接符:+=  
+28.创建一个文档元素:document.createElement(),document.createTextNode()  
+29.得到元素的方法:document.getElementById()  
+30.设置表单中所有文本型的成员的值为空:  
+var form = window.document.forms[0]  
+for (var i = 0; i<form.elements.length;i++){  
+    if (form.elements.type == "text"){  
+        form.elements.＆#118alue = "";  
+    }  
+}  
+31.复选按钮在JS中判断是否选中:document.forms[0].checkThis.checked (checked属性代表为是否选中返回TRUE或FALSE)  
+32.单选按钮组(单选按钮的名称必须相同):取单选按钮组的长度document.forms[0].groupName.length  
+33.单选按钮组判断是否被选中也是用checked.  
+34.下拉列表框的值:document.forms[0].selectName.options[n].＆#118alue (n有时用下拉列表框名称加上.selectedIndex来确定被选中的值)  
+35.字符串的定义:var myString = new String("This is lightsword");  
+36.字符串转成大写:string.toUpperCase(); 字符串转成小写:string.toLowerCase();  
+37.返回字符串2在字符串1中出现的位置:String1.indexOf("String2")!=-1则说明没找到.  
+38.取字符串中指定位置的一个字符:StringA.charAt(9);  
+39.取出字符串中指定起点和终点的子字符串:stringA.substring(2,6);  
+40.数学函数:Math.PI(返回圆周率),Math.SQRT2(返回开方),Math.max(＆#118alue1,＆#118alue2)返回两个数中的最在值,Math.pow(＆#118alue1,10)返回＆#118alue1的十次方,Math.round(＆#118alue1)四舍五入函数,Math.floor(Math.random()*(n+1))返回随机数  
+41.定义日期型变量:var today = new Date();  
+42.日期函数列表:dateObj.getTime()得到时间,dateObj.getYear()得到年份,dateObj.getFullYear()得到四位的年份,dateObj.getMonth()得到月份,dateObj.getDate()得到日,dateObj.getDay()得到日期几,dateObj.getHours()得到小时,dateObj.getMinutes()得到分,dateObj.getSeconds()得到秒,dateObj.setTime(＆#118alue)设置时间,dateObj.setYear(val)设置年,dateObj.setMonth(val)设置月,dateObj.setDate(val)设置日,dateObj.setDay(val)设置星期几,dateObj.setHours设置小时,dateObj.setMinutes(val)设置分,dateObj.setSeconds(val)设置秒  [注意:此日期时间从0开始计]  
+43.FRAME的表示方式: [window.]frames[n].ObjFuncVarName,frames["frameName"].ObjFuncVarName,frameName.ObjFuncVarName  
+44.parent代表父亲对象,top代表最顶端对象  
+45.打开子窗口的父窗口为:opener  
+46.表示当前所属的位置:this  
+47.当在超链接中调用JS函数时用:(＆#106avascript :)来开头后面加函数名  
+48.在老的浏览器中不执行此＆#106s:<!--      //-->  
+49.引用一个文件式的＆#106s:<script type="text/＆#106avascript" src="aaa.js"></script>  
+50.指定在不支持脚本的浏览器显示的HTML:<noscript></noscript>  
+51.当超链和＆#111nCLICK事件都有时,则老版本的浏览器转向a.html,否则转向b.html.例:<a href="a.html" ＆#111nclick="location.href=’b.html’;return false">dfsadf</a>  
+52.JS的内建对象有:Array,Boolean,Date,Error,EvalError,Function,Math,Number,Object,RangeError,ReferenceError,RegExp,String,SyntaxError,TypeError,URIError  
+53.JS中的换行:\n  
+54.窗口全屏大小:<script>function fullScreen(){ this.moveTo(0,0);this.outerWidth=screen.availWidth;this.outerHeight=screen.availHeight;}window.maximize=fullScreen;</script>  
+55.JS中的all代表其下层的全部元素  
+56.JS中的焦点顺序:document.getElementByid("表单元素").tabIndex = 1  
+57.innerHTML的值是表单元素的值:如<p id="para">"how are <em>you</em>"</p>,则innerHTML的值就是:how are <em>you</em>  
+58.innerTEXT的值和上面的一样,只不过不会把<em>这种标记显示出来.  
+59.contentEditable可设置元素是否可被修改,isContentEditable返回是否可修改的状态.  
+60.isDisabled判断是否为禁止状态.disabled设置禁止状态  
+61.length取得长度,返回整型数值  
+62.addBehavior()是一种JS调用的外部函数文件其扩展名为.htc  
+63.window.focus()使当前的窗口在所有窗口之前.  
+64.blur()指失去焦点.与FOCUS()相反.  
+65.select()指元素为选中状态.  
+66.防止用户对文本框中输入文本:onfocus="this.blur()"  
+67.取出该元素在页面中出现的数量:document.all.tags("div(或其它HTML标记符)").length  
+68.JS中分为两种窗体输出:模态和非模态.window.showModaldialog(),window.showModeless()  
+69.状态栏文字的设置:window.status=’文字’,默认的状态栏文字设置:window.defaultStatus = ’文字.’;  
+70.添加到收藏夹:external.AddFavorite("http://www.dannyg.com";;,"jaskdlf");  
+71.JS中遇到脚本错误时不做任何操作:window.＆#111nerror = doNothing; 指定错误句柄的语法为:window.＆#111nerror = handleError;  
+72.JS中指定当前打开窗口的父窗口:window.opener,支持opener.opener...的多重继续.  
+73.JS中的self指的是当前的窗口  
+74.JS中状态栏显示内容:window.status="内容"  
+75.JS中的top指的是框架集中最顶层的框架  
+76.JS中关闭当前的窗口:window.close();  
+77.JS中提出是否确认的框:if(confirm("Are you sure?")){alert("ok");}else{alert("Not Ok");}  
+78.JS中的窗口重定向:window.navigate("http://www.sina.com.cn";;);  
+79.JS中的打印:window.print()  
+80.JS中的提示输入框:window.prompt("message","defaultReply");  
+81.JS中的窗口滚动条:window.scroll(x,y)  
+82.JS中的窗口滚动到位置:window.scrollby  
+83.JS中设置时间间隔:setInterval("expr",msecDelay)或setInterval(funcRef,msecDelay)或setTimeout  
+84.JS中的模态显示在IE4+行,在NN中不行:showModalDialog("URL"[,arguments][,features]);  
+85.JS中的退出之前使用的句柄:function verifyClose(){event.return＆#118alue="we really like you and hope you will stay longer.";}}  window.onbeforeunload=verifyClose;  
+86.当窗体第一次调用时使用的文件句柄:onload()  
+87.当窗体关闭时调用的文件句柄:onunload()  
+88.window.location的属性: protocol(http:),hostname(www.example.com),port(80),host(www.example.com:80),pathname("/a/a.html"),hash("#giantGizmo",指跳转到相应的锚记),href(全部的信息)  
+89.window.location.reload()刷新当前页面.  
+90.window.history.back()返回上一页,window.history.forward()返回下一页,window.history.go(返回第几页,也可以使用访问过的URL)  
+91.document.write()不换行的输出,document.writeln()换行输出  
+92.document.body.noWrap=true;防止链接文字折行.  
+93.变量名.charAt(第几位),取该变量的第几位的字符.  
+94."abc".charCodeAt(第几个),返回第几个字符的ASCii码值.  
+95.字符串连接:string.concat(string2),或用+=进行连接  
+96.变量.indexOf("字符",起始位置),返回第一个出现的位置(从0开始计算)  
+97.string.lastIndexOf(searchString[,startIndex])最后一次出现的位置.  
+98.string.match(regExpression),判断字符是否匹配.  
+99.string.replace(regExpression,replaceString)替换现有字符串.  
+100.string.split(分隔符)返回一个数组存储值.  
+101.string.substr(start[,length])取从第几位到指定长度的字符串.  
+102.string.toLowerCase()使字符串全部变为小写.  
+103.string.toUpperCase()使全部字符变为大写.  
+104.parseInt(string[,radix(代表进制)])强制转换成整型.  
+105.parseFloat(string[,radix])强制转换成浮点型.  
+106.isNaN(变量):测试是否为数值型.  
+107.定义常量的关键字:const,定义变量的关键字:var  
+javascript 常用验证 - [] 
+山里的孩子 发表于 2006-04-20 
+
+
+
+
+一、验证类
+1、数字验证内
+1.1 整数
+1.2 大于0的整数 （用于传来的ID的验证)
+1.3 负整数的验证
+1.4 整数不能大于iMax
+1.5 整数不能小于iMin
+2、时间类
+2.1 短时间，形如 (13:04:06)
+2.2 短日期，形如 (2003-12-05)
+2.3 长时间，形如 (2003-12-05 13:04:06)
+2.4 只有年和月。形如(2003-05,或者2003-5)
+2.5 只有小时和分钟,形如(12:03)
+3、表单类
+3.1 所有的表单的值都不能为空
+3.2 多行文本框的值不能为空。
+3.3 多行文本框的值不能超过sMaxStrleng
+3.4 多行文本框的值不能少于sMixStrleng
+3.5 判断单选框是否选择。
+3.6 判断复选框是否选择.
+3.7 复选框的全选，多选，全不选，反选
+3.8 文件上传过程中判断文件类型
+4、字符类
+4.1 判断字符全部由a-Z或者是A-Z的字字母组成
+4.2 判断字符由字母和数字组成。
+4.3 判断字符由字母和数字，下划线,点号组成.且开头的只能是下划线和字母
+4.4 字符串替换函数.Replace();
+5、浏览器类
+5.1 判断浏览器的类型
+5.2 判断ie的版本
+5.3 判断客户端的分辨率
+
+6、结合类
+6.1 email的判断。
+6.2 手机号码的验证
+6.3 身份证的验证
+
+
+二、功能类
+
+1、时间与相关控件类
+1.1 日历
+1.2 时间控件
+1.3 万年历
+1.4 显示动态显示时钟效果（文本，如OA中时间）
+1.5 显示动态显示时钟效果 (图像，像手表) 
+2、表单类
+2.1 自动生成表单
+2.2 动态添加，修改，删除下拉框中的元素
+2.3 可以输入内容的下拉框
+2.4 多行文本框中只能输入iMax文字。如果多输入了，自动减少到iMax个文字（多用于短信发送)
+
+3、打印类
+3.1 打印控件
+4、事件类
+4.1 屏蔽右键
+4.2 屏蔽所有功能键
+4.3 --> 和<-- F5 F11,F9,F1
+4.4 屏蔽组合键ctrl+N
+5、网页设计类
+5.1 连续滚动的文字，图片（注意是连续的，两段文字和图片中没有空白出现）
+5.2 html编辑控件类
+5.3 颜色选取框控件
+5.4 下拉菜单
+5.5 两层或多层次的下拉菜单
+5.6 仿IE菜单的按钮。（效果如rongshuxa.com的导航栏目)
+5.7 状态栏，title栏的动态效果（例子很多，可以研究一下）
+5.8 双击后，网页自动滚屏
+6、树型结构。
+6.1 asp+SQL版
+6.2 asp+xml+sql版
+6.3 java+sql或者java+sql+xml
+7、无边框效果的制作
+8、连动下拉框技术
+9、文本排序
+---------------------------------------------------------------------------------------
+
+一、验证类
+1、数字验证内
+1.1 整数
+/^(-|\+)?\d+$/.test(str)
+1.2 大于0的整数 （用于传来的ID的验证)
+/^\d+$/.test(str)
+1.3 负整数的验证
+/^-\d+$/.test(str)
+2、时间类
+2.1 短时间，形如 (13:04:06)
+function isTime(str)
+{
+var a = str.match(/^(\d{1,2})(?(\d{1,2})\2(\d{1,2})$/);
+if (a == null) {alert('输入的参数不是时间格式'); return false;}
+if (a[1]>24 || a[3]>60 || a[4]>60)
+{
+alert("时间格式不对");
+return false
+}
+return true;
+}
+2.2 短日期，形如 (2003-12-05)
+function strDateTime(str)
+{
+var r = str.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/); 
+if(r==null)return false; 
+var d= new Date(r[1], r[3]-1, r[4]); 
+return (d.getFullYear()==r[1]&&(d.getMonth()+1)==r[3]&&d.getDate()==r[4]);
+}
+2.3 长时间，形如 (2003-12-05 13:04:06)
+function strDateTime(str)
+{
+var reg = /^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2})\d{1,2})\d{1,2})$/; 
+var r = str.match(reg); 
+if(r==null)return false; 
+var d= new Date(r[1], r[3]-1,r[4],r[5],r[6],r[7]); 
+return (d.getFullYear()==r[1]&&(d.getMonth()+1)==r[3]&&d.getDate()==r[4]&&d.getHours()==r[5]&&d.getMinutes()==r[6]&&d.getSeconds()==r[7]);
+}
+2.4 只有年和月。形如(2003-05,或者2003-5)
+2.5 只有小时和分钟,形如(12:03)
+3、表单类
+3.1 所有的表单的值都不能为空
+
+3.2 多行文本框的值不能为空。
+3.3 多行文本框的值不能超过sMaxStrleng
+3.4 多行文本框的值不能少于sMixStrleng
+3.5 判断单选框是否选择。
+3.6 判断复选框是否选择.
+3.7 复选框的全选，多选，全不选，反选
+3.8 文件上传过程中判断文件类型
+4、字符类
+4.1 判断字符全部由a-Z或者是A-Z的字字母组成
+
+4.2 判断字符由字母和数字组成。
+
+4.3 判断字符由字母和数字，下划线,点号组成.且开头的只能是下划线和字母
+/^([a-zA-z_]{1})([\w]*)$/g.test(str)
+4.4 字符串替换函数.Replace();
+5、浏览器类
+5.1 判断浏览器的类型
+window.navigator.appName
+5.2 判断ie的版本
+window.navigator.appVersion
+5.3 判断客户端的分辨率
+window.screen.height; window.screen.width;
+
+6、结合类
+6.1 email的判断。
+function ismail(mail)
+{
+return(new RegExp(/^\w+((-\w+)|(\.\w+))*\-AT-[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(mail));
+}
+6.2 手机号码的验证
+6.3 身份证的验证
+function isIdCardNo(num)
+{
+if (isNaN(num)) {alert("输入的不是数字！"); return false;}
+var len = num.length, re; 
+if (len == 15)
+re = new RegExp(/^(\d{6})()?(\d{2})(\d{2})(\d{2})(\d{3})$/);
+else if (len == 18)
+re = new RegExp(/^(\d{6})()?(\d{4})(\d{2})(\d{2})(\d{3})(\d)$/);
+else {alert("输入的数字位数不对！"); return false;}
+var a = num.match(re);
+if (a != null)
+{
+if (len==15)
+{
+var D = new Date("19"+a[3]+"/"+a[4]+"/"+a[5]);
+var B = D.getYear()==a[3]&&(D.getMonth()+1)==a[4]&&D.getDate()==a[5];
+}
+else
+{
+var D = new Date(a[3]+"/"+a[4]+"/"+a[5]);
+var B = D.getFullYear()==a[3]&&(D.getMonth()+1)==a[4]&&D.getDate()==a[5];
+}
+if (!B) {alert("输入的身份证号 "+ a[0] +" 里出生日期不对！"); return false;}
+}
+return true;
+}
+-------------------------------------------------------------------------------------
+
+3.7 复选框的全选，多选，全不选，反选
+
+全选
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+全选
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function checkAll(str)
+{
+var a = document.getElementsByName(str);
+var n = a.length;
+for (var i=0; ia[i].checked = window.event.srcElement.checked;
+}
+function checkItem(str)
+{
+var e = window.event.srcElement;
+var all = eval("document.hrong."+ str);
+if (e.checked)
+{
+var a = document.getElementsByName(e.name);
+all.checked = true;
+for (var i=0; i{
+if (!a[i].checked){ all.checked = false; break;}
+}
+}
+else all.checked = false;
+}
+
+
+3.8 文件上传过程中判断文件类型
+
+
+-------------------------------------------------------------------------------------
+１．身份证严格验证：
+
+
+
+２．验证ＩＰ地址
+
+function isip(s){
+var check=function(v){try{return (v<=255 && v>=0)}catch(x){return false}};
+var re=s.split(".")
+return (re.length==4)?(check(re[0]) && check(re[1]) && check(re[2]) && check(re[3])):false
+}
+
+var s="202.197.78.129";
+alert(isip(s))
+
+
+
+３．加sp1后还能用的无边框窗口！！
+
+
+
+
+
+
+/*--- Special Thanks For andot ---*/
+
+/*
+This following code are designed and writen by Windy_sk 
+You can use it freely, but u must held all the copyright items!
+/
+
+/- Thanks For andot Again ---*/
+
+var CW_width = 400;
+var CW_height = 300;
+var CW_top = 100;
+var CW_left = 100;
+var CW_url = "/";
+var New_CW = window.createPopup();
+var CW_Body = New_CW.document.body;
+var content = "";
+var CSStext = "margin:1px;color:black; border:2px outset;border-style:expression(onmouseout=onmouseup=function(){this.style.borderStyle='outset'}, onmousedown=function(){if(event.button!=2)this.style.borderStyle='inset'});background-color:buttonface;width:16px;height:14px;font-size:12px;line-height:11px;cursor:Default;";
+
+//Build Window
+include.startDownload(CW_url, function(source){content=source});
+
+function insert_content(){
+var temp = "";
+CW_Body.style.overflow = "hidden";
+CW_Body.style.backgroundColor = "white";
+CW_Body.style.border = "solid black 1px";
+content = content.replace(/]*)>/g,"");
+temp += "";
+temp += "";
+temp += "Chromeless Window For IE6 SP1";
+temp += "";
+temp += "?";
+temp += "0";
+temp += "1";
+temp += "x";
+temp += "";
+temp += "";
+temp += content;
+temp += "
+
+";
+temp += "";
+CW_Body.innerHTML = temp;
+}
+
+setTimeout("insert_content()",1000);
+
+var if_max = true;
+function show_CW(){
+window.moveTo(10000, 10000);
+if(if_max){
+New_CW.show(CW_top, CW_left, CW_width, CW_height);
+if(typeof(New_CW.document.all.include)!="undefined"){
+New_CW.document.all.include.style.width = CW_width;
+New_CW.document.all.Max.innerText = "1";
+}
+
+}else{
+New_CW.show(0, 0, screen.width, screen.height);
+New_CW.document.all.include.style.width = screen.width;
+}
+}
+
+window.onfocus = show_CW;
+window.onresize = show_CW;
+
+// Move Window
+var drag_x,drag_y,draging=false
+
+function drag_move(e){
+if (draging){
+New_CW.show(e.screenX-drag_x, e.screenY-drag_y, CW_width, CW_height);
+return false;
+}
+}
+
+function drag_down(e){
+if(e.button==2)return;
+if(New_CW.document.body.offsetWidth==screen.width && New_CW.document.body.offsetHeight==screen.height)return;
+drag_x=e.clientX;
+drag_y=e.clientY;
+draging=true;
+e.srcElement.setCapture();
+}
+
+function drag_up(e){
+draging=false;
+e.srcElement.releaseCapture();
+if(New_CW.document.body.offsetWidth==screen.width && New_CW.document.body.offsetHeight==screen.height) return;
+CW_top = e.screenX-drag_x;
+CW_left = e.screenY-drag_y;
+}
+
+
+
+电话号码的验证
+
+要求：
+　　(1)电话号码由数字、"("、")"和"-"构成
+　　(2)电话号码为3到8位
+　　(3)如果电话号码中包含有区号，那么区号为三位或四位
+　　(4)区号用"("、")"或"-"和其他部分隔开
+　　(5)移动电话号码为11或12位，如果为12位,那么第一位为0
+　　(6)11位移动电话号码的第一位和第二位为"13"
+　　(7)12位移动电话号码的第二位和第三位为"13"
+　　根据这几条规则，可以与出以下正则表达式：
+　　(^[0-9]{3,4}\-[0-9]{3,8}$)|(^[0-9]{3,8}$)|(^\([0-9]{3,4}\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)
+
+
+
+function PhoneCheck(s) {
+var str=s;
+var reg=/(^[0-9]{3,4}\-[0-9]{3,8}$)|(^[0-9]{3,8}$)|(^\([0-9]{3,4}\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)/
+alert(reg.test(str));
+}
+
+
+
+--------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------
+
+//检验法人代码
+function isCorporationCode(s){
+var patrn=/^(\d){15}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验登录名：只能输入5-20个以字母开头、可带数字、“_”、“.”的字串
+function isRegisterUserName(s)
+{
+var patrn=/^[a-zA-Z]{1}([a-zA-Z0-9._]){4,19}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+//校验用户姓名：只能输入1-30个以字母开头的字串
+function isTrueName(s)
+{
+var patrn=/^[^`~!@#$%^&*()+-=|\\\[\]\{\}:;\'\,.<>/? 0-9]{2,19}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验密码：只能输入6-15个字母、数字
+function isPasswd(s)
+{
+var patrn=/^[a-zA-Z0-9]{6,15}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//检验体重
+function isAvoirdupois(s)
+{
+var patrn=/^[1-9]{1}[0-9]{0,2}$/;
+var patrn2=/^[1-9]{1}$/;
+var intPart=s.indexOf('.');
+var decPart=s.lastIndexOf('.');
+if (intPart==-1 && patrn.exec(s) && eval(s)>=2 && eval(s)<=200) return true
+if (intPart!=decPart || intPart==0 || intPart+2!=s.length) return false
+if (!patrn.exec(s.substring(0,intPart)) || !patrn2.exec(s.substring(decPart+1))) return false
+if (eval(s)<2 || eval(s)>200) return false
+return true
+}
+
+//校验普通电话、传真号码：可以“+”开头，除数字外，可含有“-”
+function isTel(s)
+{
+var patrn=/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验手机号码：必须以数字开头，除数字外，可含有“-”
+function isMobile(s)
+{
+var patrn=/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验地区代码
+function isAreaCode(s)
+{
+var patrn=/^(\d){6}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验邮政编码
+function isPostalCode(s)
+{
+var patrn=/^[1-9]{1}(\d){5}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验搜索关键字
+function isSearch(s)
+{
+var patrn=/^[^`~!@#$%^&*()+=|\\\[\]\{\}:;\'\,.<>/? ]{1}[^`~!@$%^&()+=|\\\[\]\{\}:;\'\,.<>?]{0,19}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验是否为ip地址
+function isIP(s)
+{
+var patrn=/^[0-9.]{1,20}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//检验页码是否正确
+function isPage(s)
+{
+var patrn=/^[1-9]{1}[0-9]{0,2}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//表单输入值错误提示
+function vErr(o,s){
+alert(s);
+if (o) o.focus();
+return false;
+}
+
+//判断单选
+function chkRadio(o){
+for (i=0;iif (o[i].checked) return true;
+}
+return false;
+} 
+//====================================表单类================================
+// 文件上传过程中判断文件类型
+/*
+
+/
+
+//表单的值不能为空
+function isNull(elem){
+//var pattern=/^\s+|\s+$/;
+if(elem.replace(/(^\s+|\s$)/g, "")==""){
+return false;
+}else{
+return true;
+}
+}
+//不能超过imax字符
+function imax(elem){
+if(elem.length>imax){
+return false;
+}else{
+return true;
+}
+}
+//不能少于imix字符
+function imix(elem){
+if(elem.lengthreturn false;
+}else{
+return true;
+}
+}
+//输入为中文判断
+function isChinese(elem){
+var pattern=/[^\x00-\xff]/g;
+if(pattern.test(elem)){
+//包含中文
+return false;
+}else{
+//不包含中文
+return true;
+}
+}
+
+/ *********************************************************************************************************************
+
+
+
+
+
+
+
+.cMenu {
+FILTER: alpha(opacity=0);BACKGROUND-COLOR: #D6D3CE;BORDER-BOTTOM: #666666 2px solid; BORDER-LEFT: #E4E4E4 2px solid; BORDER-RIGHT: #666666 2px solid; BORDER-TOP: #E4E4E4 2px solid; COLOR: #000000; CURSOR: default; FONT-SIZE: 9pt; color:#000000;FONT-WEIGHT: normal; LINE-HEIGHT: 20px; POSITION: absolute; VISIBILITY: hidden; WIDTH: 110px
+}
+.menuitems {
+font-size:9pt;
+MARGIN: 2px;
+PADDING-BOTTOM: 0px;
+PADDING-LEFT: 15px;
+PADDING-RIGHT: 3px;
+PADDING-TOP: 0px;
+}
+
+
+
+
+
+
+
+<!--[if IE]>
+onmouseover=highlightie5()>
+
+电话号码的验证
+
+要求：
+　　(1)电话号码由数字、"("、")"和"-"构成
+　　(2)电话号码为3到8位
+　　(3)如果电话号码中包含有区号，那么区号为三位或四位
+　　(4)区号用"("、")"或"-"和其他部分隔开
+　　(5)移动电话号码为11或12位，如果为12位,那么第一位为0
+　　(6)11位移动电话号码的第一位和第二位为"13"
+　　(7)12位移动电话号码的第二位和第三位为"13"
+　　根据这几条规则，可以与出以下正则表达式：
+　　(^[0-9]{3,4}\-[0-9]{3,8}$)|(^[0-9]{3,8}$)|(^\([0-9]{3,4}\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)
+
+
+<script language="javascript">
+function PhoneCheck(s) {
+var str=s;
+var reg=/(^[0-9]{3,4}\-[0-9]{3,8}$)|(^[0-9]{3,8}$)|(^\([0-9]{3,4}\)[0-9]{3,8}$)|(^0{0,1}13[0-9]{9}$)/
+alert(reg.test(str));
+}
+</script>
+<input type=text name="iphone">
+<input type=button onclick="PhoneCheck(document.all.iphone.value)" value="Check">
+----------------------------------------------------------------------------------------
+
+<%
+'********************************************
+'函数功能：正则表达式校验
+'参数patrn：要校验的类型
+' "User" - 用户名
+' "Truename" - 英文姓名
+' "Passwd" - 密码
+' "Tel" - 电话/传真
+' "Mobil" - 手机
+' "Date" - 日期（格式：yyyy-mm-dd）
+' "Email" - 电子邮件
+' "Postalcode" - 邮政编码
+' "Search" - 搜索关键字
+' "Int" - 整数
+'参数strng：要校验的字串
+'返回值：校验结果，正确返回true，错误返回false
+'********************************************
+Function IsVerify(patrn,strng)
+strng=Trim(strng)
+Select Case patrn
+Case "User" '用户名
+patrn="^[a-z]{1}([a-z0-9]|[._]){2,19}$"
+Case "Truename" '英文姓名
+patrn="^[a-zA-Z]{1,30}$"
+Case "Passwd" '密码
+patrn="^(\w){6,20}$"
+Case "Tel" '电话/传真
+patrn="^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$"
+Case "Mobil" '手机
+patrn="^(\d)+[-]?(\d){6,12}$"
+Case "Date" '日期（格式：yyyy-mm-dd）
+patrn="^[12]{1}(\d){3}[-][01]?(\d){1}[-][0123]?(\d){1}$"
+Case "Email" '电子邮件
+patrn="^((\w)|[-]|[.])+@(((\w)|[-])+[.])+[a-z]{2,4}$"
+Case "Postalcode" '邮政编码
+patrn="^[a-z0-9 ]{3,12}$"
+Case "Search" '搜索关键字
+patrn="^[^`~!@#$%^&*()+=|\\\[\]\{\}:;\'\,.<>/?]{1}[^`~!@$%^&()+=|\\\[\]\{\}:;\'\,.<>?]{0,19}$"
+Case "Int" '整数
+patrn="^[1-9]{1}[0-9]{0,6}$"
+Case "Array"
+patrn="^[0-9]{1}([0-9]|[\,]){0,150}$"
+End Select
+Dim regEx
+Dim Match
+Set regEx = New RegExp
+regEx.Pattern = patrn
+regEx.IgnoreCase = True
+regEx.Global = True
+Matches = regEx.test(strng)
+IsVerify = Matches
+Set regEx = Nothing
+End Function
+
+'********************************************
+'函数功能：对输入框的特殊字串进行过滤保存
+'参数strPass：过滤前的字符串
+'返回值：过滤后的字符串
+'********************************************
+Function SQLencode(byVal strPass)
+strPass = Replace(strPass, "&", "&")
+strPass = Replace(strPass, "<", "<")
+strPass = Replace(strPass, ">", ">")
+strPass = Replace(strPass, """", """)
+strPass = Replace(strPass, "'", "'")
+strPass = Replace(strPass, " ", "　")
+strPass = Replace(strPass,chr(13)&chr(10),"<br/>")
+SQLencode = strPass
+End Function
+
+'********************************************
+'函数功能：对SQLencode函数过滤后的字符串进行还原
+'参数strPass：经过过滤后的字符串
+'返回值：还原的过滤前的字符串
+'********************************************
+Function SQLdecode(byVal strPass)
+If Not isNull(strPass) Then
+strPass = Replace(strPass, "<", "<")
+strPass = Replace(strPass, ">", ">")
+strPass = Replace(strPass, ""","""" )
+strPass = Replace(strPass, "'","'" )
+strPass = Replace(strPass,"<br/>",chr(13)&chr(10))
+End If
+SQLdecode = strPass
+End Function
+
+'********************************************
+'函数功能：生成随机密码（字符为数字与大小写字母集合）
+'参数length：密码长度
+'返回值：随机密码
+'********************************************
+Function random(length)
+Dim n,str
+rnds=""
+Randomize
+For i=1 To length
+n=Int(75*Rnd+48)
+If (n>57 and n<65) or (n>90 and n<97) Then
+i=i-1
+Else
+rnds=rnds&Chr(n)
+End If
+Next
+random=rnds
+End Function
+
+'********************************************
+'函数功能：对密码进行加密/解密（最大长度为15位）
+'********************************************
+Function Encrypt(preString)
+Dim pwds,s
+pwds=""
+s=Left(preString,15)
+For i=1 To Len(s)
+seed=170-Asc(Mid(s,i,1))-i
+pwds=pwds & Chr(seed)
+Next
+Encrypt=pwds
+End Function
+
+'********************************************
+'函数功能：格式化当前时间字串
+'参数：无
+'返回值：返回当前时间的纯数字字符串方式的表示（例如：当前时间2001-10-3 2:34:6，返回字符串"20011003023406"）
+'********************************************
+Function TheDate()
+y=year(date())
+m=month(date())
+d=day(date())
+h=Hour(time())
+n=Minute(time())
+s=Second(time())
+If Len(m)=1 Then m="0"&m
+If Len(d)=1 Then d="0"&d
+If Len(h)=1 Then h="0"&h
+If Len(n)=1 Then n="0"&n
+If Len(s)=1 Then s="0"&s
+thedate=y&m&d&h&n&s
+End Function
+
+'********************************************
+'函数功能：返回字符串的长度
+'参数：字符串
+'返回值：字符串长度
+'********************************************
+Function strLen(str)
+dim p_len
+p_len=0
+strlen=0
+if trim(str)<>"" then
+p_len=len(trim(str))
+for xx=1 to p_len
+if asc(mid(str,xx,1))<0 then
+strlen=int(strlen) + 2
+else
+strlen=int(strlen) + 1
+end if
+next
+end if
+End Function
+
+'********************************************
+'函数功能：发送邮件通知
+'参数：字符串
+'返回值：成功/失败
+'********************************************
+Function SendMail(ToAddress, Subject, Body)
+On Error Resume Next
+Set objMail = Server.CreateObject("JMail.Message")
+objMail.From = ADR_Email
+objMail.FromName = "ADR管理中心"
+objMail.Subject = Subject
+objMail.AddRecipient ToAddress
+objMail.Body = Body
+If objMail.Send("") Then
+SendMail = True
+Else
+SendMail = False
+End If
+If Err.Number<> 0 Then SendMail = False
+Set objMail = Nothing
+On Error Goto 0
+End Function
+%>
+-----------------------------------------------------------------------------------
+
+//检验法人代码
+function isCorporationCode(s){
+var patrn=/^(\d){15}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验登录名：只能输入5-20个以字母开头、可带数字、“_”、“.”的字串
+function isRegisterUserName(s)
+{
+var patrn=/^[a-zA-Z]{1}([a-zA-Z0-9._]){4,19}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+//校验用户姓名：只能输入1-30个以字母开头的字串
+function isTrueName(s)
+{
+var patrn=/^[^`~!@#$%^&*()+-=|\\\[\]\{\}:;\'\,.<>/? 0-9]{2,19}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验密码：只能输入6-15个字母、数字
+function isPasswd(s)
+{
+var patrn=/^[a-zA-Z0-9]{6,15}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//检验体重
+function isAvoirdupois(s)
+{
+var patrn=/^[1-9]{1}[0-9]{0,2}$/;
+var patrn2=/^[1-9]{1}$/;
+var intPart=s.indexOf('.');
+var decPart=s.lastIndexOf('.');
+if (intPart==-1 && patrn.exec(s) && eval(s)>=2 && eval(s)<=200) return true
+if (intPart!=decPart || intPart==0 || intPart+2!=s.length) return false
+if (!patrn.exec(s.substring(0,intPart)) || !patrn2.exec(s.substring(decPart+1))) return false
+if (eval(s)<2 || eval(s)>200) return false
+return true
+}
+
+//校验普通电话、传真号码：可以“+”开头，除数字外，可含有“-”
+function isTel(s)
+{
+var patrn=/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验手机号码：必须以数字开头，除数字外，可含有“-”
+function isMobile(s)
+{
+var patrn=/^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验地区代码
+function isAreaCode(s)
+{
+var patrn=/^(\d){6}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验邮政编码
+function isPostalCode(s)
+{
+var patrn=/^[1-9]{1}(\d){5}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验搜索关键字
+function isSearch(s)
+{
+var patrn=/^[^`~!@#$%^&*()+=|\\\[\]\{\}:;\'\,.<>/? ]{1}[^`~!@$%^&()+=|\\\[\]\{\}:;\'\,.<>?]{0,19}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//校验是否为ip地址
+function isIP(s)
+{
+var patrn=/^[0-9.]{1,20}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//检验页码是否正确
+function isPage(s)
+{
+var patrn=/^[1-9]{1}[0-9]{0,2}$/;
+if (!patrn.exec(s)) return false
+return true
+}
+
+//表单输入值错误提示
+function vErr(o,s){
+alert(s);
+if (o) o.focus();
+return false;
+}
+
+//判断单选
+function chkRadio(o){
+for (i=0;i<o.length;i++){
+if (o[i].checked) return true;
+}
+return false;
+} 
+
+
+
+发表于 @ 2006年10月06日 21:56:00 | 评论 (0)
+
+
+网页设计常用代码
+
+
+1、禁止页面正文内容被选取 
+<body oncontextmenu="return false" ondragstart="return false" onselectstart ="return false" onselect="document.selection.empty()" oncopy="document.selection.empty()" onbeforecopy="return 
+false"onmouseup="document.selection.empty()"> 
+
+2、消除ie6自动出现的图像工具栏，设置 GALLERYIMG属性为false或no . 
+<IMG SRC="mypicture.jpg" HEIGHT="100px" WIDTH="100px" GALLERYIMG="no"> 
+
+3、防止点击空链接时，页面往往重置到页首端。 
+代码"javascript :void(null)"代替原来的"#"标记 
+
+4、如何避免别人把你的网页放在框架中 
+<script language="javascript"><!--if (self!=top) -->< /script> 
+
+5、页面定时刷新 
+<meta http-equiv="Refresh" content="秒" > 
+
+6、页面定时转向新的地址 
+<meta http-equiv="refresh" content="秒;URL=url"> 
+
+7、关闭窗口，这个是不会弹出提示直接关的： 
+把如下代码加入<body>区域中 
+<OBJECT id=closes type="application/x-oleobject" classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"> 
+<param name="Command" value="Close"> 
+</object> 
+<script language="javascript">function shutwin()</script> 
+<a href="javascript :shutwin();">关闭本窗口</a> 
+
+
+
+
+网页设计常用代码(二) 
+
+      有时候好不容易写出来的程序代码被别人抄去，心里一定不好受。这还是小事，但如果在我们的源代码中有一些不希望让别人知道的内容，比如密码、Action的指向等，这些一旦被人利用，那后果有时是不堪设想的。而网页加密就是我们现在需要解决的问题。下面就我在网页制作中的一些经验向大家介绍一些简单的防范方法。 
+1、禁止右键 
+看到这里大家一定会想，这招有很多人介绍过了，而且破解的方法也有很多。但我这里要说的是另一种方法，而且我试了很多方法都没有能破解。具体如下： 
+<html> 
+<head> 
+<script> 
+function stop(){ 
+alert("试试能破解吗？"); 
+return false; 
+} 
+document.oncontextmenu=stop; 
+</script> 
+<boyd>你可以按右键、shift+F10和右ctrl左边的那个键试试！看能不能解。^_^</body> 
+
+大家试试，看能不能破解！你可以将alert("试试能破解吗？");这句去掉，这样当按右键时就什么反应也没有了，就好像没有右键功能一样。 
+
+2、禁示查看源代码 
+我们已经禁了右键，但从"查看"菜单下的"源文件"中同样可以看到源代码，下面我们就来解决这个问题： 
+其实这只要使用一个含有<frame></frame>标记的网页便可以达到目的。 
+<frameset> 
+<frame src="你要保密的文件的URL"> 
+</frameset> 
+这样当有人使用"查看"下的"源文件"的时候，看到的将是上面的那段代码，而你真正的文件又躲过一劫。 
+
+3、禁示另存为 
+通过上面的两步好像你的源代码已经安全了，但别忘了，别人还可以将你的页面保存下来，再慢慢分析。不过别担心，下面我们来解决这个问题。 
+在你要保密的网页中加入以下代码： 
+<noscript><iframe src="/*.htm"></iframe></noscript> 
+
+4、彻底屏蔽右键方法。<body oncontextmenu="return false"> 
+
+--------------------------------------------------------------------------- 
+SCRIPT language=javascript> 
+//双击页面后自动滚屏，单击后停止。 
+var currentpos,timer; 
+function initialize() 
+{ timer=setInterval("scrollwindow()",16); } 
+function sc(){ 
+clearInterval(timer); 
+} 
+function scrollwindow() 
+{currentpos=document.body.scrollTop; 
+window.scroll(0,++currentpos); 
+if (currentpos != document.body.scrollTop) 
+sc(); 
+} 
+document.onmousedown=sc 
+document.ondblclick=initialize 
+
+</script> 
+
+____________________________________________________________________ 
+
+<!--"禁示另存为"开始---> 
+
+<noscript> 
+<iframe src="/*.htm"></iframe> 
+</noscript> 
+
+<!--"禁示另存为"结束---> 
+
+
+<script language="javascript"> 
+
+//设定脚本出错能继续运行 
+
+function KillError() 
+{ 
+return false; 
+
+} 
+
+window.onerror=KillError; 
+
+</script> 
+------------------------------------------------------------------ 
+　 
+
+网页制作实用技巧 
+1. oncontextmenu="window.event.returnvalue=false" 
+将彻底屏蔽鼠标右键 
+
+<table border oncontextmenu=return(false)><td>no</table> 
+可用于Table 
+
+2. <body onselectstart="return false"> 
+取消选取、防止复制 
+
+3. onpaste="return false" 
+不准粘贴 
+
+4. oncopy="return false;" oncut="return false;" 
+防止复制 
+
+5. <link rel="Shortcut Icon" href="favicon.ico"> 
+IE地址栏前换成自己的图标 
+
+6. <link rel="Bookmark" href="favicon.ico"> 
+可以在收藏夹中显示出你的图标 
+
+7. <input style="ime-mode:disabled"> 
+关闭输入法 
+
+8. 永远都会带着框架 
+<script language="javascript"><!-- 
+if (window == top)top.location.href = "frames.htm"; 
+
+//frames.htm为框架网页 
+// --></script> 
+
+9. 防止被人frame 
+<SCRIPT LANGUAGE=javascript><!-- 
+if (top.location != 
+
+self.location)top.location=self.location; 
+// --></SCRIPT> 
+
+10. <noscript><iframe src="/*.html>";</iframe></noscript> 
+网页将不能被另存为 
+
+11. <input type=button value=查看网页源代码 
+onclick="window.location = 'view-source:'+ 
+
+'http://www.csdn.net/'"> 
+
+12. 怎样通过asp的手段来检查来访者是否用了代理 
+<% if Request.ServerVariables("HTTP_X_FORWARDED_FOR")<>"" 
+
+then 
+response.write "<font color=#FF0000>您通过了代理服务器，"& 
+
+_ 
+"真实的IP为 
+
+"&Request.ServerVariables("HTTP_X_FORWARDED_FOR") 
+end if 
+%> 
+
+13. 取得控件的绝对位置 
+
+//javascript 
+<script language="javascript"> 
+function getIE(e){ 
+var t=e.offsetTop; 
+var l=e.offsetLeft; 
+while(e=e.offsetParent){ 
+t+=e.offsetTop; 
+l+=e.offsetLeft; 
+} 
+alert("top="+t+"nleft="+l); 
+} 
+</script> 
+
+//VBScript 
+<script language="VBScript"><!-- 
+function getIE() 
+dim t,l,a,b 
+set a=document.all.img1 
+t=document.all.img1.offsetTop 
+l=document.all.img1.offsetLeft 
+while a.tagName<>"BODY" 
+set a = a.offsetParent 
+t=t+a.offsetTop 
+l=l+a.offsetLeft 
+wend 
+msgbox "top="&t&chr(13)&"left="&l,64,"得到控件的位置" 
+end function 
+--></script> 
+
+14. 光标是停在文本框文字的最后 
+<script language="javascript"> 
+function cc() 
+{ 
+var e = event.srcElement; 
+var r =e.createTextRange(); 
+r.moveStart('character',e.value.length); 
+r.collapse(true); 
+r.select(); 
+} 
+</script> 
+<input type=text name=text1 value="123" onfocus="cc()"> 
+
+15. 判断上一页的来源 
+asp: 
+request.servervariables("HTTP_REFERER") 
+
+javascript : 
+document.referrer 
+
+16. 最小化、最大化、关闭窗口 
+<object id=hh1 
+
+classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"> 
+<param name="Command" value="Minimize"></object> 
+<object id=hh2 
+
+classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"> 
+<param name="Command" value="Maximize"></object> 
+<OBJECT id=hh3 
+
+classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11"> 
+<PARAM NAME="Command" value="Close"></OBJECT> 
+
+<input type=button value=最小化 onclick=hh1.Click()> 
+<input type=button value=最大化 onclick=hh2.Click()> 
+<input type=button value=关闭 onclick=hh3.Click()> 
+本例适用于IE 
+
+------------------------------------------------------------------------ 
+
+网页常用特效整理：初级篇 
+
+　　初级篇 
+
+　　1．让文字不停地滚动 
+
+　　＜MARQUEE＞滚动文字＜/MARQUEE＞ 
+
+　　2．记录并显示网页的最后修改时间 
+
+　　＜script language=javascript＞ 
+　　document.write("最后更新时间: " + document.lastModified + "") 
+　　＜/script＞ 
+
+　　3．关闭当前窗口 
+
+　　＜a href="/"onClick="javascript :window.close();return false;"＞关闭窗口＜/a＞ 
+
+　　4．2秒后关闭当前页 
+
+　　＜script language="javascript"＞ 
+　　＜!-- 
+　　setTimeout('window.close();',2000); 
+　　--＞ 
+　　＜/script＞ 
+
+　　5．2秒后载入指定网页 
+
+　　＜head＞ 
+　　＜meta http-equiv="refresh" content="2;URL=http://你的网址"＞ 
+　　＜/head＞ 
+
+　　6．添加到收藏夹 
+
+　　＜Script Language="javascript"＞ 
+　　function bookmarkit() 
+　　{ 
+　　window.external.addFavorite('http://你的网址','你的网站名称') 
+　　} 
+　　if (document.all)document.write('＜a href="#" onClick="bookmarkit()"＞加入收藏夹＜/a＞') 
+　　＜/Script＞ 
+
+　　7．让超链接不显示下划线 
+
+　　＜style type="text/css"＞ 
+　　＜!- 
+　　a:link 
+　　a:hover 
+　　a:visited 
+　　-＞ 
+　　＜/style＞ 
+
+　　8．禁止鼠标右键的动作 
+
+　　＜Script Language = "javascript"＞ 
+　　function click() { if (event.button==2||event.button==3) 
+　　{ 
+　　alert('禁止鼠标右键'); 
+　　} 
+　　document.onmousedown=click // --＞ 
+　　＜/Script＞ 
+
+      或：<script language="javascript"> 
+function click() { if (event.button==2) 
+{alert('*^_^*'); } } document.onmousedown=click // --> 
+</script> 
+
+　　9．设置该页为首页 
+
+　　＜body bgcolor="#FFFFFF" text="#000000"＞ 
+　　＜!-- 网址：http://你的网址--＞ 
+　　＜a class="chlnk" style="cursor:hand" HREF 
+　　onClick="this.style.behavior='url(#default#homepage)'; 
+　　this.setHomePage('你的网站名称);"＞＜font color="000000" size="2" face="宋体"＞设为首页＜/font＞＜/a＞ 
+　　＜/body＞ 
+------------------------------------------------------------------------ 
+
+网页常用特效整理：中级篇 
+
+
+
+　　中级篇 
+
+　　1．节日倒计时 
+
+　　＜Script Language="javascript"＞ 
+　　var timedate= new Date("October 1,2002"); 
+　　var times="国庆节"; 
+　　var now = new Date(); 
+　　var date = timedate.getTime() - now.getTime(); 
+　　var time = Math.floor(date / (1000 * 60 * 60 * 24)); 
+　　if (time ＞= 0) 
+　　document.write("现在离"+times+"还有: "+time +"天")＜/Script＞ 
+
+　　2．单击按钮打印出当前页 
+
+　　＜Script Language="javascript"＞ 
+　　＜!-- Begin 
+　　if (window.print) { 
+　　document.write('＜form＞' 
+　　+ '＜input type=button name=print value="打印本页" ' 
+　　+ 'onClick="javascript :window.print()"＞＜/form＞'); 
+　　} 
+　　// End --＞ 
+　　＜/Script＞ 
+
+　　3．单击按钮‘另存为'当前页 
+
+　　＜input type="button" name="Button" value="保存本页" 
+　　onClick="document.all.button.ExecWB(4,1)"＞ 
+　　＜object id="button" 
+　　width=0 
+　　height=0 
+　　classid="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"＞ 
+　　＜embed width="0" height="0"＞＜/embed＞ 
+　　＜/object＞ 
+
+　　4．显示系统当前日期 
+
+　　＜script language=javascript＞ 
+　　today=new Date(); 
+　　function date(){ 
+　　this.length=date.arguments.length 
+　　for(var i=0;i＜this.length;i++) 
+　　this[i+1]=date.arguments } 
+　　var d=new date("星期日","星期一","星期二","星期三","星期四","星期五","星期六"); 
+　　document.write( 
+　　"＜font color=##000000 style='font-size:9pt;font-family: 宋体'＞ ", 
+　　today.getYear(),"年",today.getMonth()+1,"月",today.getDate(),"日", 
+　　d[today.getDay()+1],"＜/font＞" ); 
+　　＜/script＞ 
+--------------------------------------------------------------- 
+
+高级篇 
+
+　　1．不同时间段显示不同问候语 
+
+　　＜Script Language="javascript"＞ 
+　　＜!-- 
+　　var text=""; day = new Date( ); time = day.getHours( ); 
+　　if (( time＞=0) && (time ＜ 7 )) 
+　　　　text="夜猫子，要注意身体哦！ " 
+　　if (( time ＞= 7 ) && (time ＜ 12)) 
+　　　　text="今天的阳光真灿烂啊，你那个朋友呢？" 
+　　if (( time ＞= 12) && (time ＜ 14)) 
+　　　　text="午休时间。您要保持睡眠哦！" 
+　　if (( time ＞=14) && (time ＜ 18)) 
+　　　　text="祝您下午工作愉快！ " 
+　　if ((time ＞= 18) && (time ＜= 22)) 
+　　　　text="您又来了，可别和MM聊太久哦！" 
+　　if ((time ＞= 22) && (time ＜ 24)) 
+　　　　text="您应该休息了！" 
+　　document.write(text) 
+　　//---＞ 
+　　＜/Script＞ 
+
+　　2．水中倒影效果 
+
+　　＜img id="reflect" src="你自己的图片文件名" width="175" height="59"＞ 
+　　＜script language="javascript"＞ 
+　　function f1() 
+　　{ 
+　　　　setInterval("mdiv.filters.wave.phase+=10",100); 
+　　} 
+　　if (document.all) 
+　　{ 
+　　　　document.write('＜img id=mdiv src="'+document.all.reflect.src+'" 
+　　　　style="filter:wave(strength=3,freq=3,phase=0,lightstrength=30) blur() flipv()"＞') 
+　　　　window.onload=f1 
+　　} 
+　　＜/script＞ 
+
+　　3．慢慢变大的窗口 
+
+　　＜Script Language="javascript"＞ 
+　　＜!-- 
+　　var Windowsheight=100 
+　　var Windowswidth=100 
+　　var numx=5 
+　　function openwindow(thelocation){ 
+　　temploc=thelocation 
+　　if 
+　　(!(window.resizeTo&&document.all)&&!(window.resizeTo&&document.getElementById)) 
+　　{ 
+　　　　window.open(thelocation) 
+　　　　return 
+　　} 
+　　windowsize=window.open("","","scrollbars") 
+　　windowsize.moveTo(0,0) 
+　　windowsize.resizeTo(100,100) 
+　　tenumxt() 
+　　} 
+　　function tenumxt(){ 
+　　if (Windowsheight＞=screen.availHeight-3) 
+　　　　numx=0 
+　　windowsize.resizeBy(5,numx) 
+　　Windowsheight+=5 
+　　Windowswidth+=5 
+　　if (Windowswidth＞=screen.width-5) 
+　　{ 
+　　　　windowsize.location=temploc 
+　　　　Windowsheight=100 
+　　　　Windowswidth=100 
+　　　　numx=5 
+　　　　return 
+　　} 
+　　setTimeout("tenumxt()",50) 
+　　} 
+　　//--＞ 
+　　＜/script＞ 
+　　＜p＞＜a href="javascript :openwindow('http://www.ccjol.com')"＞进入＜/a＞ 
+
+　　4．改变IE地址栏的IE图标 
+
+　　我们要先做一个16*16的icon（图标文件），保存为index.ico。把这个图标文件上传到根目录下并在首页＜head＞＜/head＞之间加上如下代码： 
+
+　　＜link REL = "Shortcut Icon" href="/index.ico"＞ 
+
+5．让网页随意后退 
+
+　　＜a href="javascript :history.go(-X)"＞X＜/a＞ //把X换成你想要后退在页数 
+　　 //把"-"变成"+"就为前进 
+
+　　6．鼠标指向时弹出信息框 
+
+　　在＜body＞＜/body＞之间加上如下代码： 
+
+　　＜a href onmouseover="alert('弹出信息！')"＞显示的链接文字＜/a＞ 
+
+　　7．单击鼠标右键弹出添加收藏夹对话框 
+
+　　在＜body＞＜/body＞之间加上如下代码： 
+
+　　＜Script Language=javascript＞ 
+　　if (document.all) 
+　　document.body.onmousedown=new Function("if (event.button==2||event.button==3) 
+　　window.external.addFavorite('您的网址','您的网站名称)") 
+　　＜/Script＞ 
+
+　　8．随机变换背景图象（一个可以刷新心情的特效） 
+
+　　在＜head＞＜/head＞之间加上如下代码： 
+
+　　＜Script Language="javascript"＞ 
+　　image = new Array(4); //定义image为图片数量的数组 
+　　image [0] = 'tu0.gif' //背景图象的路径 
+　　image [1] = 'tu1.gif' 
+　　image [2] = 'tu2.gif' 
+　　image [3] = 'tu3.gif' 
+　　image [4] = 'tu4.gif' 
+　　number = Math.floor(Math.random() * image.length); 
+　　document.write("＜BODY background="/+image[number]+"＞"); 
+　　＜/Script＞ 
+
+　　9．鼠标一碰就给颜色看的链接 
+
+　　在＜body＞＜/body＞之间加上如下代码： 
+
+　　＜p onMouseMove="anniu()"＞你敢碰我，我就给点颜色你看！＜/p＞ 
+　　＜Script Language = "VBScript"＞ 
+　　sub anniu 
+　　document.fgColor=int(256*256*256*rnd) 
+　　end sub 
+　　＜/Script＞ 
+
+　　10．从天而降并有幻影效果的窗口 
+
+　　＜head＞ 
+　　＜Script language="javascript"＞ 
+　　function move(x) { 
+　　if(self.moveBy){ 
+　　self.moveBy (0,-800); 
+　　for(i = x; i ＞ 0; i--) 
+　　{ 
+　　self.moveBy(0,3); 
+　　} 
+　　for(j = 200; j ＞ 0; j--){ //如果你认为窗口抖动厉害，就200换成个位数 
+　　self.moveBy(0,j); 
+　　self.moveBy(j,0); 
+　　self.moveBy(0,-j); 
+　　self.moveBy(-j,0); 
+　　} 
+　　} 
+　　} 
+　　＜/Scrip＞ 
+　　＜body bgColor=#ffffff onload=move(280)＞ 
+　　＜/body＞ 
+　　＜/head＞ 
+
+　　11．表格的半透明显示效果 
+
+　　在＜head＞＜/head＞之间加上如下代码： 
+
+　　＜style＞ 
+　　.alpha{filter: Alpha(Opacity=50)} //50表示50%的透明度 
+　　＜/style＞ 
+
+　　在＜body＞＜/body＞之间加上如下代码： 
+　　＜table border="1" width="100" height="62" class="alpha" bgcolor="#F2A664" ＞ 
+　　＜tr＞ 
+　　＜td width="100%" height="62"＞ 
+　　＜div align="center"＞很酷吧!＜/div＞ 
+　　＜/td＞ 
+　　＜/tr＞ 
+　　＜/table＞ 
+
+------------------------------------------------------------------ 
+
+1、禁止另存为 
+<NOs cript><IFRAME src="/-.html>";</IFRAME></NOs cript> 
+加入HEAD里 
+
+2、禁止右键 
+<body oncontextmenu="return false"> 
+或 
+<s cript language="Javas cript"> 
+<!-- 
+
+if (window.Event) 
+document.captureEvents(Event.MOUSEUP); 
+
+function nocontextmenu() 
+{ 
+event.cancelBubble = true 
+event.returnvalue = false; 
+
+return false; 
+} 
+
+function norightclick(e) 
+{ 
+if (window.Event) 
+{ 
+if (e.which == 2 || e.which == 3) 
+return false; 
+} 
+else 
+if (event.button == 2 || event.button == 3) 
+{ 
+event.cancelBubble = true 
+event.returnvalue = false; 
+return false; 
+} 
+
+} 
+
+document.oncontextmenu = nocontextmenu; // for IE5+ 
+document.onmousedown = norightclick; // for all others 
+//--> 
+</s cript> 
+
+3、让页面文字不被选中和复制 
+<body onselectstart="return false"> 
+或 
+<body oncopy=alert('对不起，禁止复制！');event.returnvalue=false;> 
+
+4、锁定状态栏文字防止显示地址 
+<body onmouseover="self.status='文字';return true"> 
+
+
+7、禁止图片下载 
+在<body......>这里的最后加入： 
+oncontextmenu="return false" ondragstart="return false" onselectstart="return false" scroll="auto" 
+
+5、禁止缓存 
+<meta http-equiv="Expires" CONTENT="0"> 
+<meta http-equiv="Cache-Control" CONTENT="no-cache"> 
+<meta http-equiv="Pragma" CONTENT="no-cache"> 
+加在HEAD里 
+
+6、使用包含页面 
+加密所包含页面地址，使用工具 htmlguardian5.3.5 
+目前功能最强的html代码加密软件,可以保护连接和html代码被盗。1.锁右键。2.禁鼠标圈选。3.不允许离线使用。4.密码保护。5.不显示状态栏url地址。6.全代码 或 局部代码保护。7.链接跟踪。8.禁止打印(IE5+)。9.压缩代码( 未加密前)。10.可加密*.html *.js *.asp *.vbs。11.两种不同加密算法。12.加密 frameset 结构。13.某些功能支持几个不同版本的浏览器。 
+　 
+
+------------------------------------------------------------------------- 
+
+01.下载flash我的三种方法： 
+--查看源文件，找出flash的绝对路径，复制，在flashget（或蚂蚁）中点任务 
+，然后点新建下载任务即可。 
+--在IE的临时文件夹Temporary Internet Files里把所有的东西都删掉，然后 
+
+刷新你想要下载flash的网页，即可得到你所要的flash 
+--使用外部软件，推荐使用Flash Catcher,安装后只需在你所要下载的flash上右键，save即可。 
+
+
+02.让你的网页无法另存为 
+<noscript><iframe src="/*>";</iframe></noscript> 
+
+03.让IFRAME框架内的文档的背景透明 
+<iframe src="about:<body style='background:transparent'>" 
+
+allowtransparency></iframe> 
+
+04.禁止右键： 
+<body oncontextmenu="return false" ondragstart="return false" 
+
+onselectstart ="return false" onselect="document.selection.empty()" 
+
+oncopy="document.selection.empty()" onbeforecopy="return 
+false"onmouseup="document.selection.empty()"> 
+
+05.进入页面后立即自动刷新？ 
+<meta http-equiv="refresh" 
+
+content="120;url=http://www.wodutom.com/cn083"> 
+http://www.wodutom.com/cn083,这是你自己的网址。 
+
+06.打开窗口即最大化 
+<script language="javascript"> 
+<!-- Begin 
+self.moveTo(0,0) 
+self.resizeTo(screen.availWidth,screen.availHeight) 
+// End --> 
+</script> 
+
+07.能隐藏IFRAME的滚动条吗？我知道的三种方法: 
+1. 设置iframe scrolling="no" 
+2. 被包含页body应用overflow:hidden 
+3. 被包含页的body标签加scroll="no" 
+
+08.加入背景音乐 
+<bgsound src="mid/windblue[1].mid" loop="-1"> 只适用于IE 
+
+<embed src="music.mid" autostart="true" loop="true" hidden="true"> 
+
+对Netscape ,IE 都适用 
+
+09.嵌入网页 
+<iframe name="tt" src="/01a.html" width="450" height="287" 
+
+scrolling="Auto" frameborder="0"></iframe> 
+
+10.跳转 
+<meta http-equiv="refresh" content="3;URL=list.htm"> 
+
+11.滚动 
+<MARQUEE direction=up height=146 onmouseout=start() 
+
+onmouseover=stop() 
+scrollAmount=4></marquee> 
+
+12.细线分隔线 
+<hr noshade size=0 color=#C0C0C0> 
+
+13.过度方式 
+<meta http-equiv="Page-Exit" 
+
+content="revealTrans(Duration=3,Transition=5)"> 
+Duration的值为网页动态过渡的时间，单位为秒。 
+Transition是过渡方式，它的值为0到23，分别对应24种过渡方式。如下表： 
+0 盒状收缩 1 盒状放射 
+2 圆形收缩 3 圆形放射 
+4 由下往上 5 由上往下 
+6 从左至右 7 从右至左 
+8 垂直百叶窗 9 水平百叶窗 
+10 水平格状百叶窗 11垂直格状百叶窗 
+12 随意溶解 13从左右两端向中间展开 
+14从中间向左右两端展开 15从上下两端向中间展开 
+16从中间向上下两端展开 17 从右上角向左下角展开 
+18 从右下角向左上角展开 19 从左上角向右下角展开 
+20 从左下角向右上角展开 21 水平线状展开 
+22 垂直线状展开 23 随机产生一种过渡方式 
+
+
+15.如何控制横向和纵向滚动条的显隐？ 
+<body style="overflow-y:hidden"> 去掉x轴 
+<body style="overflow-x:hidden"> 去掉y轴 
+<body scroll="no">不显 
+
+16.怎样在 FrontPage2000 中加入 Flash 动画? 
+在 FrontPage2000 中,点击[插入]->[高级]->[插件]，在弹出的窗口中，设置 
+
+一下 Flash 文件的大小及其它信息，确定即可。 
+
+17.加入注释的格式是： 　　　 
+〈!-［注释内容...］--〉 
+
+
+18.怎样在网页中加入 E-mail 链接并显示预定的主题? 
+〈A href="mailto:Emailhost@263.net?subject=主题"〉......〈/a〉 
+
+
+19.定义本网页关键字，可以在〈Head〉〈/Head〉中加入如下代码： 　 
+〈meta name="Keywords" content="china,enterprise,business,net"〉 　　 
+Content 中所包含的就是关键字,你可以自行设置。 　　 
+这里有个技巧,你可以重复某一个单词,这样可以提高自己网站的排行位置,如： 
+〈meta name="Keywords" content="china,china,china,china"〉 
+
+20.IE5.0 的部分快捷键： 
+A:打开查找功能：Ctrl+F 
+关闭浏览器窗口：Ctrl+W 
+打开地址栏下拉列表框：F4 
+刷 新：F5 
+将当前Web页保存到收藏夹列表：Ctrl+D 
+打开当前 IE 窗口的一个拷贝：Ctrl+N 
+停止下载当前网页：Esc 
+光标迅速移动到网页的开头：Home 
+光标迅速移动到网页的尾部：End 
+打开新的地址键入窗口：Ctrl+O 
+打开收藏夹：Ctrl+I 
+打开历史记录文件夹：Ctrl+H 
+打开浏览器设定的默认主页：Alt+HOME 
+
+
+21.添加到收藏夹： 
+〈a href="javascript :window.external.addFavorite('http://链接','说明 
+
+');"〉添加到收藏夹〈/a〉 
+
+22.设为首页： 
+〈a href=# 
+
+onclick=this.style.behavior='url(#default#homepage)';this.setHomePage 
+
+('http://链接');〉设为首页〈/a〉 
+
+23.定制浏览器地址栏前的小图标： 
+A:在网页的〈head〉〈/head〉间加入以下语句：〈link rel="shortcuticon" 
+
+href="http://.../icon.ico"〉即可。其中 icon.ico 为 16x16 的图标文件， 
+
+颜色不要超过 16 色。 
+
+24.把滚动条放在浏览器窗口的左边 
+A:在 <body> 中加 dir=RTL，即 <body dir=RTL>。 
+
+25.让背景图不滚动 
+IE浏览器支持一个 Body 属性 bgproperties，它可以让背景不滚动: 
+<Body Background="图片文件" bgproperties="fixed">  
+
+

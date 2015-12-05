@@ -4810,3 +4810,23 @@ echo "$val";
 } 
 //**************************************************** 
 } 
+
+
++++++不需要mod_rewrite直接使用php实现伪静态化页面+++++
+在程序初始化时使用如下代码：
+<?php
+$Php2Html_FileUrl = $_SERVER["REQUEST_URI"];
+$Php2Html_UrlString = str_replace("/", "", strrchr($Php2Html_FileUrl, "/"));
+$Php2Html_UrlQueryStrList = explode("@", $Php2Html_UrlString);
+foreach($Php2Html_UrlQueryStrList as $Php2Html_UrlQueryStr)
+{
+  $Php2Html_TmpArray = explode("|", $Php2Html_UrlQueryStr);
+  $_GET[$Php2Html_TmpArray[0]] = $Php2Html_TmpArray[1];
+}
+echo '假静态：$_GET变量<br />';
+print_r($_GET);
+?>
+然后php中调用$_GET变量就像平常一样。
+连接使用方式：
+****.php/param1|1234@param2|4321
+和****.php?param1=1234¶m2=4321一样。 
