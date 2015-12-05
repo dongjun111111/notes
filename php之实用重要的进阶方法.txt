@@ -5499,5 +5499,25 @@ $(function(){
 </head>
 <body>
 </body>
-
 </html>
+
+
++++++php之ticks+++
+我们常用tick来进行调试，性能测试，实现简单的多任务，或者做一些后台的I/O操作等等。
+function doTicks ()
+{
+    echo 'Ticks';
+}
+register_tick_function('doTicks');
+declare(ticks = 1) {
+    for ($x = 1; $x < 10; ++ $x) {
+        echo $x * $x . '<br />';
+    }
+}
+首先完整的for循环算一个语句，但必须要等循环结束才算，因此在编译时for循环里面的echo 算
+第一个语句。所以第一个doTicks是在第一个echo后执行的，也就是1输出后才发生第一个tick事件。
+在$x 从1到9的循环中，每个循环包括两个语句，一个echo, 一个for循环。在81输出后，因为echo是
+一条语句，因此输出第一个ticks. 同时$x=9的这个for循环也结束了，这又是一条语句,输出第二个
+ticks；开始$x=10的循环，但这时已不满足循环条件，for循环执行结束，这个循环又是一个语句，
+这时输出第三个ticks。最后declare本身也算一条语句，所以又输出第四个ticks。
+

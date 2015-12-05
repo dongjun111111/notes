@@ -1276,4 +1276,10 @@ echo gettext("Hi!");//_()是gettext()函数的简写形式
 步骤四：配置文件的生成
 太多，见http://www.cnblogs.com/lost-1987/articles/3309693.html
 
++++natsort()++
+PHP自然排序，类似与ksort() sort()等等
 
++++global()+++++取出目录中的特定文件
+foreach (glob("*.php") as $file) {
+    echo "$file<br>";
+}
