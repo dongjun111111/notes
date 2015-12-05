@@ -1241,3 +1241,8 @@ if ((isset($_POST["allcheckboxs"])) && ($_POST["allcheckboxs"] != "")) {
 }
 }
 ?>
+
+
+++++PHP百分数转小数++++
+$a = "20.544545%";  
+echo (float)$a/100;
