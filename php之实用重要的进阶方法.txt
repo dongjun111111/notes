@@ -4837,3 +4837,71 @@ header(”Expires: Mon, 26 Jul 1997 05:00:00 GMT”);
 header(”Cache-Control: no-cache, must-revalidate”);
 header(”Pragma: no-cache”);
 
+
+
+++++PHP断点续传 HTTP学习笔记+++++
+HTTP断点续传原理是这样的：
+1. 客户端需要告诉服务器端从哪里开始。
+2.服务端收到请求,返回206状态。并标识续传的起始点及结束点
+如下实例
+1. 客户端传递请求信息给web服务器，要求从200070字节开始。。
+GET /down.zip HTTP/1.1
+User-Agent：NetFox
+RANGE: bytes = 200070-
+Accept：text/html，image/gif，image/jpeg，*；q=.2，*/*；q=.2
+2.服务端收到这个请求以后，返回信息
+206
+Content-Length = 100222222
+Content-Range = bytes 200070 – 100222221/100222222
+Content-Type=application/octet-stream
+注意：服务端状态 206； Content-Range = bytes （客户端请求续传起始点） – （下载文件大小-1）/（下载文件大小）
+在PHP中，是利用$_SERVER['HTTP-RANGE']来取得客户端请求的续传起始点。所以其实现代码如下:
+view plainprint?
+<?php  
+/** 
+ *  PHP-HTTP断点续传实现 
+ *  @param string $path: 文件所在路径 
+ *  @param string $file: 文件名 
+ *  @return void 
+ */  
+function download($path,$file) {  
+    $real = $path.'/'.$file;  
+    if(!file_exists($real)) {  
+        return false;  
+    }  
+    $size = filesize($real);  
+    $size2 = $size-1;  
+    $range = 0;  
+    if(isset($_SERVER['HTTP_RANGE'])) {  
+        header('HTTP /1.1 206 Partial Content');  
+        $range = str_replace('=','-',$_SERVER['HTTP_RANGE']);  
+        $range = explode('-',$range);  
+        $range = trim($range[1]);  
+       header('Content-Length:'.$size);  
+       header('Content-Range: bytes '.$range.'-'.$size2.'/'.$size);  
+    } else {  
+        header('Content-Length:'.$size);  
+        header('Content-Range: bytes 0-'.$size2.'/'.$size);  
+    }  
+    header('Accenpt-Ranges: bytes');  
+    header('application/octet-stream');  
+    header("Cache-control: public");  
+    header("Pragma: public");  
+    $ua = $_SERVER['HTTP_USER_AGENT'];  
+    if(preg_match('/MISE/',$ua)) {  
+        $ie_filename = str_replace('+','%20',urlencode($file));  
+        header('Content-Dispositon:attachment; filename='.$ie_filename);  
+    }  else {  
+        header('Content-Dispositon:attachment; filename='.$file);  
+    }  
+    $fp = fopen($real,'rb+'); 
+    fseek($fp,$range);   
+    while(!feof($fp)) {  
+        set_time_limit(0);  
+        print(fread($fp,1024));  
+        flush();  
+        ob_flush();  
+    }  
+    fclose($fp);  
+}  
+?> 

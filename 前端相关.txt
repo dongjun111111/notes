@@ -3704,3 +3704,33 @@ onload(窗口启动)
 onfocus(窗口获得焦点) 
 onblur(窗口失去焦点) 
 onerror(窗口中出现错误)  
+
+
+
++++++js几秒后再获取验证码按钮+++++
+ <HTML>
+ <body>  
+<input type="button" id="getCode" value="Test" />  
+<script type="text/javascript">  
+function $ (o){  
+  return document.getElementById(o);  
+}  
+var T = 6;  
+var handle = null;  
+$('getCode').onclick = countDown;  
+  
+function countDown() {  
+    if(T == 0){  
+        clearTimeout(handle);  
+  handle = null;  
+        $('getCode').value = '重新获取';  
+    }  
+    else{  
+        $('getCode').value = (T + '秒后可重新获取');  
+        T --;  
+  handle = handle ? handle : setInterval(arguments.callee, 1000);  
+    }  
+}  
+</script>  
+</body>
+</HTML>
