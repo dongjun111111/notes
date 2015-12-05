@@ -1299,5 +1299,40 @@ $str="<h1>PHP</h1>";
 echo "被解释过的: ".$str."<br>经过处理的:";
 echo   htmlentities(nl2br($str));
 
+$_SERVER['DOCUMENT_ROOT'];运行脚本的文档根目录
+$_SERVER['HTTP_HOST']; 头部的内容
+$_SERVER['HTTP_REFERER'];前一个页面的IP
+求3个值中最大值得函数：
+function maxmun($a,$b,$c){
+	return $a>$b?($a>$c?$a:$c):($b>$c?$b:$c);
+}
+POST传输的最大容量默认是8M;
+GET是2kb;
 
-++++++++++
+对字符进行编码，保证编码可逆：
+$a='hello';
+$b="world";
+$a=base64_encode($a);
+$b=base64_encode($b);
+$a=$a.'&'.$b;
+$b=explode('&',$a);
+$a=base64_decode($b[1]);
+$b=base64_decode($b[0]);
+echo $a,$b;
+
+
+1234567890转换成1,234,567,890.
+$str='1234567890';
+function str($str){
+	$str=strrev($str);
+	$str=chunk_split($str,3,',');
+	$str=strrev($str);
+	$str=ltrim($str,',');
+	return $str;
+}
+
+如何实现字符串翻转。(strtev会报错)
+function strrev_utf8($str){
+	return join("",array_reverse(preg_split("//u",$str)));
+}
+
