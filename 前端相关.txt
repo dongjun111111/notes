@@ -1442,6 +1442,31 @@ function change_num($num)
 }
 
 
++++按钮弹出层js++++++
+<html >
+<head>
+<title></title>
+</style>
+</head>
+<body>
+<a href="javascript:showMenu();void(0);">Menu1</a>
+<div onblur="hideMenu();" style="border:#555 2px outset;padding:10px;display:none;" id="menu1" tabIndex=0>
+<div style="height:110px; background:#ccc">点击这里 层 一样隐藏</div>
+</div>
+<script>
+function showMenu(){
+document.getElementById("menu1").style.display="";
+document.getElementById("menu1").focus();
+}
+
+function hideMenu(){
+document.getElementById("menu1").style.display="none";
+}
+</script>
+</body>
+</html>
+
+
 +++++JS打开新窗口显示另外一个页面++++++
 window.open()支持环境：
 JavaScript1.0+/JScript1.0+/Nav2+/IE3+/Opera3+
@@ -3559,4 +3584,72 @@ window.open("/index.htm","","scrollbars=0,toolbar=0,location=0,fullscreen=1,dire
  }
 </script>
 <body  onbeforeunload="RunOnBeforeUnload()">
+</body>
+
+
+++++++JS关闭页面提示++++++
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>Confirm Before Leave</title>
+<script language="javascript" type="text/javascript">
+
+<!--
+var pb_strConfirmCloseMessage;
+var pb_blnCloseWindow = false;
+pb_strConfirmCloseMessage ="您真的要离开本页吗?";
+function ConfirmClose() {
+    window.event.returnValue = pb_strConfirmCloseMessage;
+    pb_blnCloseWindow = true;
+}
+function ShowConfirmClose(blnValue) {
+    if(blnValue) {
+        document.body.onbeforeunload = ConfirmClose;
+    } else {
+        document.body.onbeforeunload = null;
+    }
+}
+//--></script>
+</head>
+<body onload="ShowConfirmClose(true);">
+<input type=button value="提示" onclick="ShowConfirmClose(true);">
+<input type=button value="不提示" onclick="ShowConfirmClose(false);">
+<input type=button value="测试刷新" onclick="window.location.reload();">
+</body>
+</html>
+
+
++++js删除前确认+++++++
+<a href="delete.php?ID=1" onclick="return confirm('确定删除磁记录？');">删除</a>
+
+
++++++js中onchange()事件动态改变显示内容+++++
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>DIV-3</title>
+<SCRIPT language=JavaScript>
+function Change(id)
+{
+ div1.style.display==''; 
+}
+function a(x){
+for(var i=1;i<5;i++){
+ if(i==x)document.getElementById("div"+i).style.visibility="visible";
+ else document.getElementById("div"+i).style.visibility="hidden";
+}
+}
+</SCRIPT>
+</head>
+<body>
+<div id="div1">此处显示 id "div1" 的内容</div><br>
+<div id="div2">此处显示 id "div2" 的内容</div><br>
+<div id="div3">此处显示 id "div3" 的内容</div><br>
+<div id="div4">此处显示 id "div4" 的内容</div><br>
+<select onChange="a(this.selectedIndex+1)">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+</select>
 </body>

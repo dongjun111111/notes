@@ -438,3 +438,11 @@ mysql> select UNIX_TIMESTAMP('1997-10-04 22:23:00');
 
 获取新插入数据的ID：
 mysql_insert_id();
+
+++++++sql中三目运算符+++++
+String sql = " SELECT * FORM student WHERE " + 
+                    " ID = " + (ID.equals("")?"ID":ID) + 
+                    " AND GENDER = " + (GENDER.equals("")?"GENDER":GENDER) + 
+                    " AND NAME = " + (NAME.equals("")?"NAME":NAME) + 
+                    " AND NUM = " + (NUM.equals("")?"NUM":NUM) + 
+                    " AND CLASSID = " + (CLASSID.equals("")?"CLASSID":CLASSID);
