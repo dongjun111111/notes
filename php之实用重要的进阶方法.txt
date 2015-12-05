@@ -5607,3 +5607,28 @@ function nochaoscode($str, $encode = "utf-8")
         }
     }
     return $output; 
+
+
+
++++++计算数组的差集，不使用array_diff++++++
+function array_diff($array_1, $array_2) {
+    foreach ($array_1 as $key => $item) {
+        if (in_array($item, $array_2, true)) {
+            unset($array_1[$key]);
+        }
+    }
+    return $array_1;
+}
+这个效率跟array_diff差不多，优化版在下面：
+function array_diff($array_1, $array_2) {
+    $array_2 = array_flip($array_2);
+    foreach ($array_1 as $key => $item) {
+        if (isset($array_2[$item])) {
+            unset($array_1[$key]);
+        }
+     }
+    return $array_1;
+}
+这个效率更高，因为键是进行 HASH 组织的，查找很快；
+而 Value 只是由 Key 组织存放，本身没有索引，每次查找都是遍历。
+

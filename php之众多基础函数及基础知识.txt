@@ -1298,3 +1298,6 @@ echo   "</pre>";
 $str="<h1>PHP</h1>";
 echo "被解释过的: ".$str."<br>经过处理的:";
 echo   htmlentities(nl2br($str));
+
+
+++++++++++
