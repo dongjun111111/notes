@@ -5441,3 +5441,63 @@ class Retention extends Base{
 
 }
 
+
+
+
+++++php+jquery实现推送数据很6啊++++++++++
+<?php
+set_time_limit(0);
+$timeout = 30;
+$starttime = time();
+$randnum = 30;
+while(true){
+ $curtime = time();
+ if(  ($curtime - $starttime) > $timeout   ){
+  echo 'system is timeout!';
+  break;
+ }else{
+  $n = mt_rand(0, 100);
+  if($n < $randnum){
+   /*
+    * code here 请求数据库或者memcached
+    */
+   echo '数据更新,推送成功-'.date('Y-m-d H:i:s',strtotime('+7 Hour'));
+   break;
+  }
+ }
+ sleep(1);
+}
+ ?>
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
+<head>
+ <meta http-equiv="content-type" content="text/html;charset=gbk"/>
+<script src ="http://code.jquery.com/jquery-1.4.1.js">
+</script>
+<script>
+var comnet = {
+ send:function(){
+    var t = Date.parse(new Date());
+    $.ajax({
+     url:"test.php",
+     data:"t="+t,
+     dataType:"html",
+     type:"POST",
+     success:function(data){
+      $('body').append(data+'<br/>');
+     },
+     complete:function(){
+      setTimeout("comnet.send()",30000);
+     }
+    });
+ }
+}
+$(function(){
+ comnet.send();
+})
+</script>
+</head>
+<body>
+</body>
+
+</html>
