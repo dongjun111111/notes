@@ -1246,3 +1246,34 @@ if ((isset($_POST["allcheckboxs"])) && ($_POST["allcheckboxs"] != "")) {
 ++++PHP百分数转小数++++
 $a = "20.544545%";  
 echo (float)$a/100;
+
+
+++++PHP中pack()和unpack()函数++++
+pack 对应的还有个函数为 unpack ，用于压缩二进制串，能减少串存储空间。
+$pass_hash = pack("H*", md5("my-password"));
+echo $pass_hash;
+
++++++cal_days_in_month() 函数+++++
+cal_days_in_month() 函数针对指定的年份和日历，返回一个月中的天数。
+语法：cal_days_in_month(calendar,month,year)。
+案例：
+$days = cal_days_in_month(CAL_GREGORIAN, 2, 2015); 
+echo $days;
+
+++gettext()也就是_()+++++
+利用gettext实现多国语系支持！
+搭建环境
+1，首先查看你的php扩展目录下是否有php_gettext.dll这个文件，如果没有，这就需要你下载一个或是从其他地方拷贝一个，然后放到php扩展目录。
+2，打开php.ini，查找”;extension=php_gettext.dll“ ，然后去除注释，重启apache。
+步骤二:原理讲解
+假如你的没有国际化的程序里有这样的代码，echo "你好";,而国际化的程序你要写成 echo gettext("你好");，然后再在配置文件里添加“你好”相对应的英文“Hi”。
+步骤三：编码测试
+ <?php 
+$domain = 'test';
+bindtextdomain($domain, "locale/");//设置某个域的mo文件路径
+textdomain($domain);//设置gettext()函数从哪个域去找mo文件
+echo gettext("Hi!");//_()是gettext()函数的简写形式
+步骤四：配置文件的生成
+太多，见http://www.cnblogs.com/lost-1987/articles/3309693.html
+
+

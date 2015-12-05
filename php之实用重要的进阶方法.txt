@@ -5045,25 +5045,43 @@ class rss {
    } 
    function show() { 
        if (emptyempty($this->content)) $this->buildrss(); 
-
        header('content-type:text/xml'); 
-
        echo($this->content); 
    } 
    function savetofile($fname) { 
-
        if (emptyempty($this->content)) $this->buildrss(); 
-
        $handle = fopen($fname, 'wb'); 
-
        if ($handle === false)  return false; 
-
        fwrite($handle, $this->content); 
-
        fclose($handle); 
-
    } 
-
 } 
-
 ?>
+
+
+++++PHP命中算法（其实就是概率的东西，无限接近于平均数）++++
+function hitted($rate,&$num){
+    if (is_string($rate))
+        $rate = ( float ) $rate;
+    if ($rate > 1)
+        throw new ArgumentException('传入的概率值 $rate 必须是 0~1 之间的浮点数或整数(0|1)。', -1);
+    $r = 100 * $rate;
+    $v = mt_rand(1, 100);
+    $num = $v;
+    if ($v <= $r)
+        return true;
+    return false;
+}
+$i = 0;
+$ratio = 0.5;
+$_hitted = 0;
+for($i=1 ; $i < 101 ; $i++ ){
+    $num = 0;
+    if(hitted($ratio,$num)){
+        print "第 $i 次 随机数 $num 已命中".chr(10);
+        $_hitted++;
+    }else{
+        print "第 $i 次 随机数 $num 未命中".chr(10);
+    }
+}
+print "100次 总共命中 $_hitted 次".chr(10);
