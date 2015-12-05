@@ -3671,3 +3671,36 @@ document.oncontextmenu=Click;
 </script> 
 </body>
 </html>
+
+
++++++滚动条设计改变颜色等等+++++++
+//在chrome下测试无效
+<html>
+<head> 
+ <style type="text/css">
+body 
+{
+ scrollbar-face-color: #b5daff;
+ scrollbar-highlight-color: #ffffff;
+ scrollbar-shadow-color: #000000;
+ scrollbar-arrow-color: #0000ff;
+ scrollbar-base-color: #6699ff;
+ scrollbar-dark-shadow-color: #6699ff;
+}
+</style>
+</head> 
+<body> 
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body> 
+</html>
+
+++++点击关闭浏览器窗口+++++
+<a href="javascript:window.close()"><br> 
+关闭窗口</a> 
+
+++++JS监听事件++++
+onUnload(窗口关闭) 
+onload(窗口启动) 
+onfocus(窗口获得焦点) 
+onblur(窗口失去焦点) 
+onerror(窗口中出现错误)  
