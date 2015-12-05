@@ -574,3 +574,9 @@ INSERT INTO `B`.`u_account`(NAME,PASSWORD,email,salt)
 SELECT username,PASSWORD,email,salt
 FROM `A`.`bbs_ucenter_members`
 WHERE regdate>1418313600 ON DUPLICATE KEY UPDATE PASSWORD=VALUES(PASSWORD),salt=VALUES(salt)
+
+++++myisam表转换为innodb表++++++
+请确保InnoDB开启，MySQL命令行下SHOW ENGINES命令查看
+mysql> ALTER TABLE  boblog_history   ENGINE=InnoDB;
+Query OK, 2808 rows affected (0.76 sec)
+Records: 2808  Duplicates: 0  Warnings: 0
