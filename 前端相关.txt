@@ -3734,3 +3734,62 @@ function countDown() {
 </script>  
 </body>
 </HTML>
+
+
+++++几条经典的css技巧++++++
+使用 line-height 垂直居中
+line-height:24px;
+使用固定宽度的容器并且需要一行垂直居中时，使用 line-height 即可（高度与父层容器一致），更多的垂直居中总结可以 看这里 。
+
+清除容器浮动
+#main {
+    overflow:hidden;
+}
+期前也提到过这样的问题 ，更多信息可以看 这里 。
+
+不让链接折行
+a {
+    white-space:nowrap;
+}
+上面的设定就能避免链接折行，不过个人建议长链接会有相应的这行（有关换行方面的讨论， 参看圆心的记录 ）。
+
+始终让 Firefox 显示滚动条
+html {
+    overflow:-moz-scrollbars-vertical;
+}
+更多的 Mozilla/Firefox 私有 CSS 属性可以 参考这里 。需跨浏览器的支持，也可以使用
+
+body, html {
+    min-height:101%;
+}
+使块元素水平居中
+margin:0 auto;
+其实就是
+margin-left: auto;
+margin-right: auto;
+这个技巧基本上所有的 CSS 教科书都会有说明，别忘记给它加上个宽度。Exploer 下也可以使用
+body{
+    text-align: center;
+}
+然后定义内层容器
+
+text-align: left;
+恢复。
+
+隐藏 Exploer textarea 的滚动条
+textarea {
+    overflow:auto;
+}
+Exploer 默认情况下 textarea 会有垂直滚动条（不要问我为什么）。
+
+设置打印分页
+h2 {
+    page-break-before:always;
+}
+page-break-before 属性能设置打印网页时的分页。
+
+删除链接上的虚线框
+a:active, a:focus {
+    outline:none;
+}
+Firefox 默认会在链接获得焦点（或者点击时）加上条虚线框，使用上面的属性可以删除。
