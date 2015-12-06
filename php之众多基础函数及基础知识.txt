@@ -1352,3 +1352,5 @@ $arr=array('hello','world');
 $arr=array_map('ucfirst',$arr);
 var_dump($arr);
 Hello World
+
+rsort()与array_reverse()效果相同。
