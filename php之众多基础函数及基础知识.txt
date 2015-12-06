@@ -1361,3 +1361,22 @@ echo date("Y-m-d H:i:s",time());
 
 计算某字符串中某个字符出现的次数：
 echo substr_count('tbsbstbbsrb','t');
+
+array_unshift将元素添加到数组开头。
+$arrr=array('james','tom','symfony');
+array_unshift($arrr,'jack');
+var_dump($arrr);
+
+$arrr=array('james','tom','symfony');
+1.如果没有指定个数，则返回随机的键名，0啊，1啊，2啊，或者其他
+$randvalue=array_rand($arrr);
+var_dump($randvalue);
+结果肯是：
+int 1 
+1.指定了个数，则返回随机数组
+$randvalue=array_rand($arrr，2);
+var_dump($randvalue);
+结果可能是：
+array (size=2)
+  0 => int 1
+  1 => int 3
