@@ -58,3 +58,11 @@ ifconfig eth0 192.168.63.27 netmask 255.255.255.0 route add default gw 192.168.6
 然后重启服务service network restart生效,或者/etc/init.d/network restart生效
 方法2:
 将ifconfig eth0 192.168.63.27 netmask 255.255.255.0 route add default gw 192.168.63.1 保存在/etc/init.d/rc.local文件中
+
+数据库注意事项
+mysql_free_result($result);关闭结果集
+mysql_close($link);关闭与数据库的连接
+
+
+
+

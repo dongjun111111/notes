@@ -463,3 +463,9 @@ select names from tables order by posted DESC limit 10;
 一个sql题目：
 表中有A.B.C三列，用sql语句实现：当A列大于B列时选择A列，否则选择B列，当B列大于C列时选择B列否则选择C列。
 select CASE WHEN A>B THEN A ELSE B END,CASE WHEN B>C THEN B ELSE C END from table
+
+合并两条sql语句：
+1.select * from table1 where id>10b and id<100;
+2.select * from table2 where id>200 and id<500;
+合并后的是：
+select * from table1 where id>10 and id<100 union all select * from table2 where id>200 and id<500;
