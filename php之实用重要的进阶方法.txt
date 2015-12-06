@@ -5632,3 +5632,51 @@ function array_diff($array_1, $array_2) {
 这个效率更高，因为键是进行 HASH 组织的，查找很快；
 而 Value 只是由 Key 组织存放，本身没有索引，每次查找都是遍历。
 
+
+++++二维数组排序++++
+function array_sort($arr,$row,$type='asc'){
+	$arr_temp=array();
+	foreach($arr as $v ){
+		$arr-temp[$v[$row]] =$v;
+	}
+	if($type == 'asc'){
+		ksort($arr_temp);
+	}
+	elseif($type =='desc'){
+		krsort($arr_temp);
+	}
+	else{
+	  
+	}
+        return $arr_temp;
+}
+$person=array(
+array('id'=>2,'name'=>'zhangsan','age'=>23),
+array('id'=>5,'name'=>'lisi','age'=>28),
+array('id'=>3,'name'=>'wangwu','age'=>17),
+);
+$person=array_sort($person,'name');
+var_dump($person);
+
++++++5种获取文件全路径的函数++++
+1.
+$path=str_replace('\\','/',__FILE__);
+2.
+function ext_name1($path){
+	return strrchr($path,'.');
+}
+3.function ext_name2($path){
+	return substr($path,strpos($path,'.'));
+}
+4. function ext_name3($path){
+	$path_parts=pathinfo($path);
+	return $path_parts['extension'];
+}
+5.function ext_name4($path){
+	$arr=explode('.',$path);
+	return $arr[count($arr)-1];
+}
+6.function ext_name5($path){
+	$pattern = '/^[^\.]+\.([\w]+)$/';
+	return preg_replace($pattern,'${1}',basename($path));
+}
