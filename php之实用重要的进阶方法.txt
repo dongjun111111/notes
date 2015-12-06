@@ -5680,3 +5680,20 @@ function ext_name1($path){
 	$pattern = '/^[^\.]+\.([\w]+)$/';
 	return preg_replace($pattern,'${1}',basename($path));
 }
+
+
++++用单态设计模式方法设计类++++++
+用php5代码编写类实现在每次对数据库连接的访问中都只能获得唯一的一个数据库连接，具体连接数据库的代码可忽略。
+class mysql{
+	private static instance = null;
+	private function __construct (){
+		mysql_connect('host','root','pwd');
+	}
+	public function getInstance(){
+		if(!self::$instance instanceof self){
+			self::$instance = new self;
+		}
+		return self::$instance;
+	}
+}
+
