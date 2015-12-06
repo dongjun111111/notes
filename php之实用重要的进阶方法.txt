@@ -5712,4 +5712,20 @@ function create_dir($path,$mode=0777){
 	}
 }
 
+++++++php确保多个进程同时写入同一个文件成功++++
+关键点：加锁
+$fp=fopen("lock.txt","w+");
+if(flock($fp,LOCK_EX)){
+	fwrite($fp,"write something");
+	flock($fp,LOCK_IN);
+}
+else{
+	echo "file is locking";
+}
+fclose($fp);
+
+
+
+
+
 
