@@ -1345,3 +1345,10 @@ echo strcasecmp('1222','1233');   //若相等返回0，反之自己猜
 
 将09转换成十进制数字
 echo decbin('09');
+
+array_map() 函数返回用户自定义函数作用后的数组。回调函数接受的参数数目应该和传递给 array_map() 函数的数.
+这个绝对好用,可以对数组中每一个值进行操作。
+$arr=array('hello','world');
+$arr=array_map('ucfirst',$arr);
+var_dump($arr);
+Hello World
