@@ -1408,3 +1408,9 @@ fclose($res);
 echo $contents;
 上面的就等于
 echo file_get_contents('http://www.qq.com');
+
+解释下面正则的意思：
+((^\s*)|(\s*$))
+匹配以0个或多个空白符开头或者0个或者多个空白符结尾的字符串。
+
+

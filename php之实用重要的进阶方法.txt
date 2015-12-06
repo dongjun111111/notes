@@ -5773,7 +5773,15 @@ function strip_html_tags($str)
 $html=file_get_contents("http://www.qq.com");
 echo strip_html_tags($html);
 
-
++++验证一个字符串是否是合法的日期格式+++++
+function checkDateTime($data){
+	if(date('Y-m-d H:i:s',strtotime($data)) == $data){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
 
 
 
