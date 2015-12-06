@@ -1338,3 +1338,10 @@ function strrev_utf8($str){
 
 var_dump(in_array('01',array('1'))); //boolean true
 var_dump('01' == 1);  //boolean true
+
+strcasecmp() 函数比较两个字符串。
+strcasecmp() 函数是二进制安全的，且不区分大小写。
+echo strcasecmp('1222','1233');   //若相等返回0，反之自己猜
+
+将09转换成十进制数字
+echo decbin('09');
