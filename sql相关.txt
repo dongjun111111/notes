@@ -446,3 +446,20 @@ String sql = " SELECT * FORM student WHERE " +
                     " AND NAME = " + (NAME.equals("")?"NAME":NAME) + 
                     " AND NUM = " + (NUM.equals("")?"NUM":NUM) + 
                     " AND CLASSID = " + (CLASSID.equals("")?"CLASSID":CLASSID);
+
+
+
+写出发帖数最多的10个人名字的sql:
+select names from tables order by posted DESC limit 10;
+
+
+数据库中的事务：
+事务是作为一个单元的一组有序的数据库操作，如果组中的所有操作都成功，
+则认为事务成功，即使只有一个操作失败，事务也不成功。如果所有操作完成，事务则提交，
+其修改作用于所有数据库进程。如果一个操作失败，则事务将回滚；该事务
+所有操作的影响都将取消。ACID四大特性。原子性，隔离性，一致性，持久性。
+
+
+一个sql题目：
+表中有A.B.C三列，用sql语句实现：当A列大于B列时选择A列，否则选择B列，当B列大于C列时选择B列否则选择C列。
+select CASE WHEN A>B THEN A ELSE B END,CASE WHEN B>C THEN B ELSE C END from table
