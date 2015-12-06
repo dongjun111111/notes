@@ -5697,3 +5697,19 @@ class mysql{
 	}
 }
 
+++++++能够创建多级目录的php函数+++++
+function create_dir($path,$mode=0777){
+	if(is_dir($path)){
+		echo "该目录已经存在";
+	}
+	else{
+		if(mkdir($path,$mode,true)){
+			echo "创建目录成功";
+		}
+		else{
+			echo "创建目录失败";
+		}
+	}
+}
+
+
