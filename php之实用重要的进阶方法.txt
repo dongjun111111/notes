@@ -5724,6 +5724,54 @@ else{
 }
 fclose($fp);
 
+++++编写一个函数，递归遍历，实现无限分类++++
+function tree($arr,$pid=0,$level=0){
+	foreach($arr ad $v){
+	//如果是顶级分类，则将其存到$list中
+	//并以此节点作为根节点，遍历找其他节点
+		if($v['parent_id'] == $pid){
+			$v['level'] =$level;
+			$list[] = $v;
+			tree($arr,$v['cat_id'],$level+1);
+		}
+	}
+	return $list;
+}
+
++++++计算两个文件的相对路径+++++
+function relative_path($path1,$path2){
+	$arr1=explode('/',dirname($path1));
+        $arr2=explode('/',dirname($path2));
+	for($i=0;$len=count($arr2);$i<$len;$i++){
+		if($arr[$i]!=$arr2[$i]){
+			break;
+		}
+	}
+	if($i<$len){
+		$return_path=array_fill(0,$len-$i,'..');
+	}
+	$return_path=array_merge($return_path,array_slice($arr1,$i));
+	return implode('/',$return_path);
+}
+$a="/a/b/c/de.php";
+$b="/a/b/12/34/c.php";
+echo relative_path($a,$b);
+
+$res=fopen('http://www.qq.com','rb');
+$contents=stream_get_contents($res);
+fclose($res);
+echo $res;
+上面的就等于：
+echo file_get_contents("http://www.qq.com");
+
++++++去除<、/、/、>标签+++++
+function strip_html_tags($str)
+{ 
+	$pattern ="/<(.+?)[\s]*\/?[\s]*>/";
+	return preg_replace($pattern,'',$str);
+}
+$html=file_get_contents("http://www.qq.com");
+echo strip_html_tags($html);
 
 
 
