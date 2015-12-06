@@ -1336,3 +1336,5 @@ function strrev_utf8($str){
 	return join("",array_reverse(preg_split("//u",$str)));
 }
 
+var_dump(in_array('01',array('1'))); //boolean true
+var_dump('01' == 1);  //boolean true
