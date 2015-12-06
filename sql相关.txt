@@ -469,3 +469,17 @@ select CASE WHEN A>B THEN A ELSE B END,CASE WHEN B>C THEN B ELSE C END from tabl
 2.select * from table2 where id>200 and id<500;
 合并后的是：
 select * from table1 where id>10 and id<100 union all select * from table2 where id>200 and id<500;
+
+用户互为好友的SNS存储结构怎么设计。
+1.首先是有个用户表，如下；
+create table uer (
+id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCERMENT,username VARCHAR(30)
+NOT NULL DEFAULT" COMMENT '用户名',email VARCHAR(50) NOT NULL DEFAULT "
+COMMENT '邮箱',password CHAR(32) NOT NULL DEFAULT " COMMENT ''密码)
+engine=MYISAM charset=utf8 comment ='用户表';
+
+其次是用户间的关系，如下：
+create table relation(
+re_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,fuid INT UNSIGNED NOT NULL COMMENT '关注人的id',
+suid INT UNSIGNED NOT NULL COMMENT '被关注人的id',relation_type ENUM('S','D') NOT NULL DEFAULT 'S' COMMENT '关系，s为关注，d表示好友'
+)engine=MYISAN charset=utf8 comment='用户关系表';
