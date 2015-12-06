@@ -483,3 +483,8 @@ create table relation(
 re_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,fuid INT UNSIGNED NOT NULL COMMENT '关注人的id',
 suid INT UNSIGNED NOT NULL COMMENT '被关注人的id',relation_type ENUM('S','D') NOT NULL DEFAULT 'S' COMMENT '关系，s为关注，d表示好友'
 )engine=MYISAN charset=utf8 comment='用户关系表';
+
+
+输出累计访问页面数分别等于1,2,3,4,5,6,7,8,9,10的唯一用户的数量的查询语句如下：
+select total,count(user_id) from (select user_id,sum(pages) as total from table group by
+user_id) as temp where total in (1,2,3,4,5,6,7,8,9,10) group by total;
