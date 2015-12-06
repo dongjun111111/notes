@@ -1353,4 +1353,8 @@ $arr=array_map('ucfirst',$arr);
 var_dump($arr);
 Hello World
 
-rsort()与array_reverse()效果相同。
+rsort()与array_reverse()效果相同。使数组元素顺序调换。
+
+输出当前北京时间，不用考虑转换。绝对标准。
+date_default_timezone_set("PRC");
+echo date("Y-m-d H:i:s",time());
