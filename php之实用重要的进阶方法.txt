@@ -5783,5 +5783,32 @@ function checkDateTime($data){
 	}
 }
 
+++++++使对象可以像数组一样进行foreach循环，属性是私有+++++
+class Test implements Iterator{
+private $item=array(
+	$id=>1,'name'=>'php'
+);
+public function rewind(){
+	reset($this->item);
+}
+public function current(){
+	return current($this-<item);
+}
+public function key(){
+	return key($this->item);
+}
+public function next(){
+	return next($this->item);
+}
+public function valid(){
+	return($this->current() !== false);
+}
+}
+$t=new Test;
+foreach($t as $k=>$v){
+echo $k.'--->'.$v.'<br>';
+}
+
+
 
 
