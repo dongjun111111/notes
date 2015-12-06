@@ -1382,3 +1382,21 @@ array (size=2)
   1 => int 3
 
 
+<?php
+class a{
+function __construct(){
+	echo 'a ';
+	}
+}
+class b extents a{
+
+	function __construct(){
+		echo 'b';
+	}
+}
+$a =new b();
+会输出：
+b
+分析：
+类b继承自类a，两个类都定义了构造函数，由于二者名字相同，所有子类中的构造函数
+覆盖了父类的构造函数，要想子类对象也执行父类的构造函数，需要在子类构造函数中使用parent::__construct()来调用父类构造函数。
