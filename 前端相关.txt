@@ -4135,3 +4135,12 @@ First
 作用：将类数组对象转换为数组对象。使我们可以在数组和对象之间灵活的转换。
 jQuery.trim(str)
 作用：这个大家应该很熟悉，就是去掉字符串起始和结尾的空格。
+
+++++php百度logo+++++
+<html>
+<body>
+<div id="m"><p id="lg"><img src="http://leo108-wordpress.stor.sinaapp.com/uploads/2012/03/8721_logo_1.gif" width="270" height="129" usemap="#mp"><map name="mp"><area shape="rect" coords="22,17,252,110"></map></p>
+</div></body>
+<script src="http://www.baidu.com/cache/dragon/js/dragon2012.js"></script>
+</body>
+</html>
