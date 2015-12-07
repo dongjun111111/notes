@@ -4266,6 +4266,46 @@ function check_chinese_char(s){
 
 
 
++++++字符串截取支持中文和其他编码++++++
+/**
++----------------------------------------------------------
+* 字符串截取，支持中文和其他编码
++----------------------------------------------------------
+* @param string $source 需要转换的字符串
+* @param string $start 开始位置
+* @param string $length 截取长度
+* @param string $charset 编码格式
+* @param string $suffix 截断显示字符后缀
++----------------------------------------------------------
+* @return string
++----------------------------------------------------------
+*/
+function xs_substr($source, $start=0, $length, $charset="utf-8", $suffix="")
+{
+	if(function_exists("mb_substr"))        //采用PHP自带的mb_substr截取字符串
+	{
+		$string = mb_substr($source, $start, $length, $charset).$suffix;
+	}
+	elseif(function_exists('iconv_substr')) //采用PHP自带的iconv_substr截取字符串
+	{
+		$string = iconv_substr($source,$start,$length,$charset).$suffix;
+	}
+	else
+	{
+		$pattern['utf-8']   = "/[x01-x7f]|[xc2-xdf][x80-xbf]|[xe0-xef][x80-xbf]{2}|[xf0-xff][x80-xbf]{3}/";
+		$pattern['gb2312'] = "/[x01-x7f]|[xb0-xf7][xa0-xfe]/";
+		$pattern['gbk']    = "/[x01-x7f]|[x81-xfe][x40-xfe]/";
+		$pattern['big5']   = "/[x01-x7f]|[x81-xfe]([x40-x7e]|xa1-xfe])/";
+		preg_match_all($pattern[$charset], $source, $match);
+		$slice = join("",array_slice($match[0], $start, $length));
+		 
+		$string = $slice.$suffix;
+	}
+	return $string;
+}
+
+
+
 +++++PHP加密专家解密算法可靠性未知，但是思路不错++++++
 /*********************************** 
 *威盾PHP加密专家解密算法 By：Neeao 
@@ -5934,3 +5974,13 @@ do{
 sleep($inteval);
 }
 while(true);
+
+
+
+++++PHP隐藏IP后一位或者两位的方法++++++++
+    $ip = '255.255.255.255';
+　　$reg1 = '/((?:\d+\.){3})\d+/';
+　　$reg2 = '~(\d+)\.(\d+)\.(\d+)\.(\d+)~';
+　　echo preg_replace($reg1, "\\1*", $ip);//以上输出结果为：255.255.255.*
+　　echo "<br>";
+　　echo preg_replace($reg2, "$1.$2.*.*", $ip);//以上输出结果为：255.255.*.*
