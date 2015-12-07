@@ -6010,3 +6010,12 @@ $xml .= create_item($data['title'], $title_size, $data['content'], $data['pubdat
 }
 $xml .= "</article>\n";
 echo $xml;
+
+
++++++php获取上个月的今天是星期几++++++
+function last_month_day($time){
+	$strtime=mktime(date('h',$time),date('i',$time),date('s',$time),date('m',$time)-1,date('d',$time),date('Y',$time));
+	echo date('Y-m-d',$strtime);
+}
+$t=last_month_day(strtotime('2007-3-30'));
+echo date('w',$t);
