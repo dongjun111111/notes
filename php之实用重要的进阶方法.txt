@@ -6205,17 +6205,40 @@ while(1){
 $thunder = ("Thunder://QUFodHRwOi8vNjAuMTkxLjYwLjEwODo4MDgwL3hweGlhemFpL0RlZXBpbl9HaG9zdF9YUF9WMTguMC5pc29aWg==");
  
 //解密它
- 
 $thunder = trim($thunder,'Thunder://');
 $c_thunder = base64_decode($thunder);
 $c_thunder = ltrim(rtrim($c_thunder,'ZZ'),'AA');
 //out [url]http://60.191.60.108:8080/xpxiazai/Deepin_Ghost_XP_V18.0.iso[/url];
  
 //加密它
- 
 $a_link = 'http://60.191.60.108:8080/xpxiazai/Deepin_Ghost_XP_V18.0.iso';
 $a_link = sprintf('AA%sZZ',$a_link);
- 
 $a_link = sprintf('Thunder://%s',base64_encode($a_link));
 //out Thunder://QUFodHRwOi8vNjAuMTkxLjYwLjEwODo4MDgwL3hweGlhemFpL0RlZXBpbl9HaG9zdF9YUF9WMTguMC5pc29aWg==
 ?>
+
+
++++php简单批量生成不重复的虚拟充值卡号密码 ++++++
+$numLen=16;
+$pwdLen=10;
+$c=100;//生成100组卡号密码
+$sNumArr=range(0,9);
+$sPwdArr=array_merge($sNumArr,range('A','Z'));
+$cards=array();
+for($x=0;$x< $c;$x++){
+$tempNumStr=array();
+for($i=0;$i< $numLen;$i++){
+$tempNumStr[]=array_rand($sNumArr);
+}
+$tempPwdStr=array();
+for($i=0;$i< $pwdLen;$i++){
+$tempPwdStr[]=$sPwdArr[array_rand($sPwdArr)];
+}
+$cards[$x]['no']=implode('',$tempNumStr);
+$cards[$x]['pwd']=implode('',$tempPwdStr);
+}
+array_unique($cards);
+print_r($cards);
+
+
++++++++++
