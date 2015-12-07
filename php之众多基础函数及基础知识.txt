@@ -1414,3 +1414,20 @@ echo file_get_contents('http://www.qq.com');
 匹配以0个或多个空白符开头或者0个或者多个空白符结尾的字符串。
 
 
+++++修改session生存时间+++++
+1.将php.ini中的session.gc_maxlifttime设置为9999重启Apache；
+2.
+$savePath='./session_save_dir/';
+$lifeTime=3600;
+session_save_path($savePath);
+session_set_cookie_params($lifeTime);
+seesion_start();
+3.
+session_start();
+$lifeTime=3600; //1分钟
+setCookie(session_name(),session_id(),time()+$lifeTime,'/');
+
+
+//设置一个cookie的名字为username，值为jack,一周后失效，
+setcookie('username','jack',time()+7*24*3600);
+
