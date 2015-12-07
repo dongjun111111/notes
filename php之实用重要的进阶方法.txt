@@ -5881,3 +5881,25 @@ $fif=ucwords($fif);
 file_put_contents('online.txt',$fif);
 
 
+
+++++防止外部页面提交表单+++++++
+<?php
+session_start();
+if(isset($_POST['name'])&&!empty($_POST['name'])){
+	if($_POST['check']==$_SESSION['check']){
+		echo "success";
+	}
+	else{
+		echo "failed";
+	}
+}
+$token=md5(uniqid(rand(),true));
+$_SESSION['check']=$token;
+?>
+<form action="" method="post">
+	<input type="text" name="name" /><br>
+	<input type="text" name="check" value="<?php 
+	echo  $token;
+	?>"/><br>
+	<input type="submit" value="submit" />
+</form>
