@@ -3813,3 +3813,56 @@ EMAIL：
 /^(\d+[A-Za-z]\w*|[A-Za-z]+\d\w*)$/
 密码（安全级别高）：
 /^(\d+[a-zA-Z~!@#$%^&(){}][\w~!@#$%^&(){}]*|[a-zA-Z~!@#$%^&(){}]+\d[\w~!@#$%^&(){}]*)$/
+
+
++++++兼容各大浏览器的设为首页加入收藏代码+++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
+<title>兼容FF 加入收藏夹和设为首页</title> 
+<SCRIPT LANGUAGE="JavaScript"> 
+<!-- 
+function AddFavorite(sURL, sTitle) 
+{ 
+    try 
+    { 
+        window.external.addFavorite(sURL, sTitle); 
+    } 
+    catch (e) 
+    { 
+        try 
+        { 
+            window.sidebar.addPanel(sTitle, sURL, ""); 
+        } 
+        catch (e) 
+        { 
+            alert("加入收藏失败，请使用Ctrl+D进行添加"); 
+        } 
+    } 
+} 
+function SetHome(obj,vrl){ 
+        try{ 
+                obj.style.behavior='url(#default#homepage)';obj.setHomePage(vrl); 
+        } 
+        catch(e){ 
+                if(window.netscape) { 
+                        try { 
+                                netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect"); 
+                        } 
+                        catch (e) { 
+                                alert("此操作被浏览器拒绝！\n请在浏览器地址栏输入“about:config”并回车\n然后将 [signed.applets.codebase_principal_support]的值设置为'true',双击即可。"); 
+                        } 
+                        var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch); 
+                        prefs.setCharPref('browser.startup.homepage',vrl); 
+                 } 
+        } 
+} 
+//--> 
+</SCRIPT> 
+</head> 
+<body> 
+<a onclick="AddFavorite(window.location,document.title)" style="cursor:pointer;">加入收藏</a> 
+<a onclick="SetHome(this,window.location)">设为首页</a> 
+</body> 
+</html>
