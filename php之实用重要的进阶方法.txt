@@ -5984,3 +5984,29 @@ while(true);
 　　echo preg_replace($reg1, "\\1*", $ip);//以上输出结果为：255.255.255.*
 　　echo "<br>";
 　　echo preg_replace($reg2, "$1.$2.*.*", $ip);//以上输出结果为：255.255.*.*
+
+
++++++PHP生成XML直接生成字符串++++++
+<?PHP
+$data_array = array(
+    array(
+    'title' => 'title1',
+    'content' => 'content1',
+        'pubdate' => '2009-10-11',
+    ),
+    array(
+    'title' => 'title2',
+    'content' => 'content2',
+    'pubdate' => '2009-11-11',
+    )
+);
+$title_size = 1;
+
+$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+$xml .= "<article>\n";
+
+foreach ($data_array as $data) {
+$xml .= create_item($data['title'], $title_size, $data['content'], $data['pubdate']);
+}
+$xml .= "</article>\n";
+echo $xml;
