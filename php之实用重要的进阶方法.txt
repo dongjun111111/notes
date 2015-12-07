@@ -6245,4 +6245,83 @@ array_unique($cards);
 print_r($cards);
 
 
-+++++++++
++++++PHP抓取百度阅读实测好用++++
+class BaiduYuedu {
+    protected $bookId;
+    protected $bookToken;
+    protected $cookie;
+    protected $result;
+    public function __construct($bookId, $bookToken, $cookie){
+        $this->bookId = $bookId;
+        $this->bookToken = $bookToken;
+        $this->cookie = $cookie;
+    }
+    public static function parseNode($node){
+        $str = '';
+        if(is_string($node['c'])){
+            $str .= $node['c'];
+        }else if(is_array($node['c'])){
+            foreach($node['c'] as $d){
+                $str .= self::parseNode($d);
+            }
+        }
+        switch($node['t']){
+            case 'h2':
+                $str .= "\n\n";
+                break;
+            case 'br':
+            case 'div':
+            case 'p':
+                $str .= "\n";
+                break;
+            case 'img':
+            case 'span':
+                break;
+            case 'obj':
+                $tmp = '(' . self::parseNode($node['data'][0]) . ')';
+                $str .= str_replace("\n", '', $tmp);
+                break;
+            default:
+                trigger_error('Unkown type:'.$node['t'], E_USER_WARNING);
+                break;
+        }
+        return $str;
+    }
+    public function get($page = 1){
+        echo "getting page {$page}...\n";
+        $ch = curl_init();
+        $url = sprintf('http://wenku.baidu.com/content/%s/?m=%s&type=json&cn=%d', $this->bookId, $this->token, $page);
+        curl_setopt_array($ch, array(
+            CURLOPT_URL            => $url,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_HEADER         => 0,
+            CURLOPT_HTTPHEADER     => array('Cookie: '. $this->cookie)
+        ));
+        $ret = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+        $str = '';
+        if(!empty($ret)){
+            $str .= self::parseNode($ret);
+            $str .= $this->get($page + 1);
+        }
+        return $str;
+    }
+    public function start(){
+        $this->result = $this->get();
+    }
+    public function getResult(){
+        return $this->result;
+    }
+    public function saveTo($path){
+        if(empty($this->result)){
+            trigger_error('Result is empty', E_USER_ERROR);
+            return;
+        }
+        file_put_contents($path, $this->result);
+        echo "save to {$path}\n";
+    }
+}
+//使用示例
+$yuedu = new BaiduYuedu('49422a3769eae009581becba', '8ed1dedb240b11bf0731336eff95093f', '你的百度域cookie');
+$yuedu->start();
+$yuedu->saveTo('result.txt');
