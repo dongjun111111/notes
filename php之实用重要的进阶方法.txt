@@ -6198,3 +6198,24 @@ while(1){
     //ob_flush();
     //flush();
 }
+
+
+++++php迅雷链路算法+++++
+其实也就是迅雷的加密算法而已。
+$thunder = ("Thunder://QUFodHRwOi8vNjAuMTkxLjYwLjEwODo4MDgwL3hweGlhemFpL0RlZXBpbl9HaG9zdF9YUF9WMTguMC5pc29aWg==");
+ 
+//解密它
+ 
+$thunder = trim($thunder,'Thunder://');
+$c_thunder = base64_decode($thunder);
+$c_thunder = ltrim(rtrim($c_thunder,'ZZ'),'AA');
+//out [url]http://60.191.60.108:8080/xpxiazai/Deepin_Ghost_XP_V18.0.iso[/url];
+ 
+//加密它
+ 
+$a_link = 'http://60.191.60.108:8080/xpxiazai/Deepin_Ghost_XP_V18.0.iso';
+$a_link = sprintf('AA%sZZ',$a_link);
+ 
+$a_link = sprintf('Thunder://%s',base64_encode($a_link));
+//out Thunder://QUFodHRwOi8vNjAuMTkxLjYwLjEwODo4MDgwL3hweGlhemFpL0RlZXBpbl9HaG9zdF9YUF9WMTguMC5pc29aWg==
+?>
