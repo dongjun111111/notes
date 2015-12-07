@@ -5903,3 +5903,13 @@ $_SESSION['check']=$token;
 	?>"/><br>
 	<input type="submit" value="submit" />
 </form>
+
+
++++++要求每隔5分钟执行一次脚本five.php，关闭浏览器亦可+++++
+ignore_user_abort();//关闭浏览器，PHP也能执行
+set_time_limit(0); //无限执行下去
+$inteval=60*5;
+do{
+sleep($inteval);
+}
+while(true);
