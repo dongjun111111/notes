@@ -5874,3 +5874,10 @@ function wash_card($card_num){
 }
 
 
+
++++转变文件内容+++++
+$fif=file_get_contents('online.txt');
+$fif=ucwords($fif);
+file_put_contents('online.txt',$fif);
+
+

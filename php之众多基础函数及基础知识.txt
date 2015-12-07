@@ -1431,3 +1431,6 @@ setCookie(session_name(),session_id(),time()+$lifeTime,'/');
 //设置一个cookie的名字为username，值为jack,一周后失效，
 setcookie('username','jack',time()+7*24*3600);
 
+
+七层网络模型名称：
+物理层、数据链路层、网络层、传输层、会话层、表示层、应用层。
