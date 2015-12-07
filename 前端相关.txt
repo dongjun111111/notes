@@ -3925,3 +3925,213 @@ function SetHome(obj,vrl){
 </center>
 </body>
 </html>
+
+
+++++jquery常用方法++++++
+jQuery 常见操作实现方式
+$("标签名") //取html元素 document.getElementsByTagName("")
+$("#ID") //取单个控件document.getElementById("")
+$("div #ID") //取某个控件中 控件
+$("#ID #ID") // 通过控件ID取其中的控件
+$("标签.class样式名") //通过class来取控件
+$("#ID").val(); //取value值
+$("#ID").val(""); //赋值
+$("#ID").hide(); //隐藏
+$("#ID").show(); //显示
+$("#ID").text(); //相当于取innerHTML
+$("#ID").text(""); //相当于innerHTML=""
+$("#ID").css("属性","值") //添加CSS样式
+$("form#表单id").find("#所找控件id").end() //遍历表单
+$("#ID").load("*.html") //载入一个文件
+例如：
+$("form#frmMain").find("#ne").css("border", "1px solid #0f0").end() // end()返回表单
+.find("#chenes").css("border-top","3px dotted #00f").end()
+$.ajax({ url: "Result.aspx", //数据请求页面的url
+type:"get", //数据传递方式(get或post)
+dataType:"html", //期待数据返回的数据格式(例如 "xml", "html", "script",或 "json")
+data: "chen=h", //传递数据的参数字符串，只适合get方式
+timeout:3000, //设置时间延迟请求的时间
+success:function(msg)//当请求成功时触发函数
+{
+$("#stats").text(msg);
+},
+error:function(msg) //当请求失败时触发的函数
+{
+$("#stats").text(msg);
+}
+});
+$(document).ready(function(){});
+$("#description").mouseover(function(){});
+//ajax方法
+$.get( "Result.aspx", //数据请求页面的url
+{ chen: "测试",age:"25"}, //传递数据的参数字符串
+function(data){ alert("Data Loaded: " + data); } //触发后的函数
+);
+});
+});
+//取得下拉选单的选取值
+$(#testSelect option:selected').text(); //取文本值
+或$("#testSelect").find('option:selected').text();
+或$("#testSelect").val();
+------
+jQuery中常用的函数方法总结
+事件处理
+ready(fn)
+代码：
+$(document).ready(function(){
+  // Your code here...
+})；
+
+作用：它可以极大地提高web应用程序的响应速度。通过使用这个方法，可以在DOM载入就绪能够读取并操纵时立即调用你所绑定的函数，而99.99%的JavaScript函数都需要在那一刻执行。
+bind(type,[data],fn)
+代码：
+$("p").bind("click", function(){
+  alert( $(this).text() );
+});
+作用：为每一个匹配元素的特定事件（像click）绑定一个事件处理器函数。起到事件监听的作用。
+toggle(fn,fn)
+代码：
+$("td").toggle(
+  function () {
+    $(this).addClass("selected");
+  },
+  function () {
+    $(this).removeClass("selected");
+  }
+);
+作用：每次点击时切换要调用的函数。如果点击了一个匹配的元素，则触发指定的第一个函数，当再次点击同一元素时，则触发指定的第二个函数。挺有趣的一个函数，在动态实现某些功能的时候可能会用到。
+(像click(),focus(),keydown()这样的事件这里就不提了，那些都是开发中比较常用到的。)
+外观效果
+addClass(class)和removeClass(class)
+代码：
+$(".stripe tr").mouseover(function(){ 
+               $(this).addClass("over");}).mouseout(function(){
+               $(this).removeClass("over");})
+});
+也可以写成：
+$(".stripe tr").mouseover(function() { $(this).addClass("over") });
+$(".stripe tr").mouseout(function() { $(this).removeClass("over") });
+作用：为指定的元素添加或移除样式，从而实现动态的样式效果，上面的实例中实现鼠标移动双色表格的代码。
+css(name,value)
+代码：
+$("p").css("color","red");
+作用：很简单，就是在匹配的元素中，设置一个样式属性的值。这个个人感觉和上面的addClass(class)有点类似。
+slide(),hide(),fadeIn(), fadeout(), slideUp() ,slideDown()
+代码：
+$("#btnShow").bind("click",function(event){ $("#divMsg").show() });
+$("#btnHide").bind("click",function(evnet){ $("#divMsg").hide() });
+作用：jQuery中提供的比较常用的几个动态效果的函数。还可以添加参数：show(speed,[callback])以优雅的动画显示所有匹配的元素，并在显示完成后可选地触发一个回调函数。
+animate(params[,duration[,easing[,callback]]])
+作用：制作动画效果用到的函数，功能非常的强大，可以连续使用此函数。
+查找筛选
+map(callback)
+HTML 代码:
+<p><b>Values: </b></p>
+<form>
+  <input type="text" name="name" value="John"/>
+  <input type="text" name="password" value="password"/>
+  <input type="text" name="url" value="http://www.sjolzy.cn>
+</form>
+jQuery 代码:
+$("p").append( $("input").map(function(){
+  return $(this).val();
+}).get().join(", ") );
+结果:
+[ <p>John, password, http://www.sjolzy.cn/</p> ]
+作用：将一组元素转换成其他数组（不论是否是元素数组）你可以用这个函数来建立一个列表，不论是值、属性还是CSS样式，或者其他特别形式。这都可以用'$.map()'来方便的建立。
+find(expr)
+HTML 代码:
+<p><span>Hello</span>, how are you?</p>
+jQuery 代码:
+$("p").find("span")
+结果:
+[ <span>Hello</span> ]
+作用：搜索所有与指定表达式匹配的元素。这个函数是找出正在处理的元素的后代元素的好方法。
+文档处理
+attr(key,value)
+HTML 代码:
+<img/><img/>
+jQuery 代码:
+$("img").attr("src","test.jpg");
+作用：取得或设置匹配元素的属性值。通过这个方法可以方便地从第一个匹配元素中获取一个属性的值。如果元素没有相应属性，则返回 undefined 。在控制HTML标记上是必备的工具。
+html()/html(val)
+HTML 代码:
+<div><p>Hello</p></div>
+jQuery 代码:
+$("div").html();
+结果:
+<p>Hello</p>
+作用：取得或设置匹配元素的html内容，同类型的方法还有text()和val()。前者是取得所有匹配元素的内容。，后者是获得匹配元素的当前值。三者有相似的地方常用在内容的操作上。
+wrap(html)
+HTML 代码:
+<p>Test Paragraph.</p>
+jQuery 代码:
+$("p").wrap("<div class='wrap'></div>");
+结果:
+<div class="wrap"><p>Test Paragraph.</p></div> 
+作用：把所有匹配的元素用其他元素的结构化标记包裹起来。
+这种包装对于在文档中插入额外的结构化标记最有用，而且它不会破坏原始文档的语义品质。 可以灵活的修改我们的DOM。
+empty()
+HTML 代码:
+<p>Hello, <span>Person</span> <a href="#">and person</a></p>
+jQuery 代码:
+$("p").empty();
+结果:
+<p></p>
+作用：删除匹配的元素集合中所有的子节点。
+Ajax处理
+load(url,[data],[callback])
+url (String) : 待装入 HTML 网页网址。
+data (Map) : (可选) 发送至服务器的 key/value 数据。
+callback (Callback) : (可选) 载入成功时回调函数。
+代码：
+$("#feeds").load("feeds.aspx", {limit: 25}, function(){
+   alert("The last 25 entries in the feed have been loaded");
+ });
+作用：载入远程 HTML 文件代码并插入至 DOM 中。这也是Jquery操作Ajax最常用最有效的方法。
+serialize()
+HTML 代码:
+<p id="results"><b>Results: </b> </p>
+<form>
+  <select name="single">
+    <option>Single</option>
+    <option>Single2</option>
+  </select>
+  <select name="multiple" multiple="multiple">
+    <option selected="selected">Multiple</option>
+    <option>Multiple2</option>
+    <option selected="selected">Multiple3</option>
+  </select><br/>
+  <input type="checkbox" name="check" value="check1"/> check1
+  <input type="checkbox" name="check" value="check2"
+checked="checked"/> check2
+  <input type="radio" name="radio" value="radio1"
+checked="checked"/> radio1
+  <input type="radio" name="radio" value="radio2"/> radio2
+</form>
+jQuery 代码:
+$("#results").append( "<tt>" + $("form").serialize() + "</tt>" );
+作用：序列化表格内容为字符串。用于 Ajax 请求。
+工具
+jQuery.each(obj,callback)
+代码：
+$.each( [0,1,2], function(i, n){
+  alert( "Item #" + i + ": " + n );
+});//遍历数组
+$.each( { name: "John", lang: "JS" }, function(i, n){
+  alert( "Name: " + i + ", Value: " + n );//遍历对象
+});
+作用：通用例遍方法，可用于例遍对象和数组。
+jQuery.makeArray(obj)
+HTML 代码:
+<div>First</div><div>Second</div><div>Third</div><div>Fourth</div>
+jQuery 代码:
+var arr = jQuery.makeArray(document.getElementsByTagName("div"));
+结果:
+Fourth
+Third
+Second
+First
+作用：将类数组对象转换为数组对象。使我们可以在数组和对象之间灵活的转换。
+jQuery.trim(str)
+作用：这个大家应该很熟悉，就是去掉字符串起始和结尾的空格。
