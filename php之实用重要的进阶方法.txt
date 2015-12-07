@@ -6186,3 +6186,15 @@ $imgUrl = "a.jpeg";//图片地址
 var_dump(imgColor($imgUrl));
 var_dump(rgb2html(245,255,244));
 var_dump(html2rgb('#F08098'));
+
+++++php实时输出++++
+ob_end_clean();
+ob_implicit_flush(1);
+while(1){
+    //部分浏览器需要内容达到一定长度了才输出
+    echo str_repeat("<div></div>", 200).'hello sjolzy.cn<br />';
+    sleep(1);
+    //ob_end_flush();
+    //ob_flush();
+    //flush();
+}
