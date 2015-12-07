@@ -5829,3 +5829,31 @@ public function removeLast(){
 }
 
 
+++++通用二维数组排序算法+++++++++
+function diy_sort($arr,$keys,$order=0){
+	if(!is_array($arr)){
+		return false;
+	}
+        $keyvalue=array();
+	foreach($arr as $key=>$val){
+ 		$keyvalue[$key]=$val[$keys];
+	}
+	if($order==0){
+		asort($keyvalue);
+	}
+	else{
+		arsort($keyvalue);
+	}
+	reset($keyvalue);
+
+	foreach($keyvalue as $key=>$vals){
+		$keysort[$key]=$key;
+	}
+	$new_array=array();
+	foreach($keysort as $key=>$val){
+		$new_array[$key]=$arr[$val];
+	}
+	return $new_array;
+}
+
+
