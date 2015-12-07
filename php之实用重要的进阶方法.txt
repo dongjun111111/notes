@@ -111,7 +111,6 @@ function encode_email($email='info@domain.com', $linkText='Contact Us', $attrs =
     $part2 = 'ilto:';
     $part3 = '" '. $attrs .' >';
     $part4 = '</a>';  
-  
     $encoded = '<script type="text/javascript">';
     $encoded .= "document.write('$part1');";
     $encoded .= "document.write('$part2');";
