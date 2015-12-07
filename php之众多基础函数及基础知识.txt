@@ -1119,9 +1119,9 @@ echo "{$array['name']}";//此句正常，大括号内的字符将作为变量来
 ++++php字符串处理函数+++++
 convert_uudecode — 解密一个字符串
 convert_uuencode — 加密一个字符串
-md5_file — 将一个文件进行MD5算法加密
-sha1_file — 将一个文件进行SHA1算法加密
-sha1 — 将一个字符串进行SHA1算法加密
+md5_file — 将一个文件进行MD5算法加密，不可逆的散列
+sha1_file — 将一个文件进行SHA1算法加密，不可逆的散列
+sha1 — 将一个字符串进行SHA1算法加密，不可逆的散列
 str_rot13 — 将字符串进行ROT13加密处理
 str_word_count — 获取字符串里面的英文段落的个数
 strip_tags — 去除一个字符串里面的HTML和PHP代码
