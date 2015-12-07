@@ -1119,10 +1119,15 @@ echo "{$array['name']}";//此句正常，大括号内的字符将作为变量来
 ++++php字符串处理函数+++++
 convert_uudecode — 解密一个字符串
 convert_uuencode — 加密一个字符串
-md5_file — 将一个文件进行MD5算法加密，不可逆的散列
-sha1_file — 将一个文件进行SHA1算法加密，不可逆的散列
-sha1 — 将一个字符串进行SHA1算法加密，不可逆的散列
+base64_encode: 将字符串以 BASE64 加密。 
+base64_decode: 将 BASE64 编码字符串解密。 
 str_rot13 — 将字符串进行ROT13加密处理
+str_rot13(str_rot13())-对str_rot13()解密
+crypt()- 单向加密算法
+md5()-不可逆散列
+md5_file — 将一个文件进行MD5算法加密，不可逆的散列
+sha1 — 将一个字符串进行SHA1算法加密，不可逆的散列
+sha1_file — 将一个文件进行SHA1算法加密，不可逆的散列
 str_word_count — 获取字符串里面的英文段落的个数
 strip_tags — 去除一个字符串里面的HTML和PHP代码
 addslashes — 用指定的方式对字符串里面的字符进行转义
@@ -1175,8 +1180,7 @@ echo phpcredits();
 parse_url: 解析 URL 字符串。 
 urldecode: 还原 URL 编码字符串。 
 urlencode: 将字符串以 URL 编码。 
-base64_encode: 将字符串以 BASE64 编码。 
-base64_decode: 将 BASE64 编码字符串解码。 
+
 
 
 +++++PHP获取多个同名复选框的值的处理(完整正确版本)多选框的处理程序前台后台++++++
