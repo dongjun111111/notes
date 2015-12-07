@@ -4305,6 +4305,10 @@ function xs_substr($source, $start=0, $length, $charset="utf-8", $suffix="")
 }
 
 
+++听说这是无敌的加密，几乎不可能解开+++++
+$pass="123456";
+echo  md5(crypt($pass,substr($pass,0,2)));
+
 
 +++++PHP加密专家解密算法可靠性未知，但是思路不错++++++
 /*********************************** 

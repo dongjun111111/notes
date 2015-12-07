@@ -3866,3 +3866,62 @@ function SetHome(obj,vrl){
 <a onclick="SetHome(this,window.location)">设为首页</a> 
 </body> 
 </html>
+
+
+++++JS自动伸缩广告代码++++++
+自动伸缩广告代码，加载完毕后动态显示然后停顿n秒后动态收缩.
+<html>
+<head>
+<title>test</title>
+<script type="text/javascript">
+ var intervalId = null;
+ function slideAd(id,nStayTime,sState,nMaxHth,nMinHth)
+ {
+  this.stayTime=nStayTime*1000 || 3000;
+  this.maxHeigth=nMaxHth || 97;
+  this.minHeigth=nMinHth || 2.5;
+  this.state=sState || "down" ;
+  var obj = document.getElementById(id);
+  if(intervalId != null)
+  {
+   window.clearInterval(intervalId);
+  }
+  function openBox()
+  {
+   var h = obj.offsetHeight;
+   obj.style.height = ((this.state == "down") ? (h + 2) : (h - 2))+"px";
+   if(obj.offsetHeight>this.maxHeigth)
+   {
+    window.clearInterval(intervalId);
+    intervalId=window.setInterval(closeBox,this.stayTime);
+   }
+   if (obj.offsetHeight<this.minHeigth)
+   {
+    window.clearInterval(intervalId);
+    obj.style.display="none";
+   }
+  }
+  function closeBox()
+  {
+   slideAd(id,this.stayTime,"up",nMaxHth,nMinHth);
+  }
+
+  intervalId = window.setInterval(openBox,30);
+ }
+
+ function showAd()
+ {
+  <!--
+  slideAd('MyMoveAd',6);    //div的id和时间（秒）
+  -->
+ }
+</script>
+</head>
+<body onload="showAd();">
+<center>
+ <div id="MyMoveAd" style="background:#ff0000;height:12px;overflow:hidden;">
+      <a href="http://www.sjolzy.cn/" target="_blank"><img src="http://mimg.126.net/ggimg/all/hotel_bbx780X100.jpg" border="0" /></a>
+ </div>
+</center>
+</body>
+</html>
