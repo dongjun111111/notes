@@ -6761,3 +6761,203 @@ function Yanggcd($m, $n) {
 print_r(Yanggcd(30, 20)."\n");
 echo "#################\n";
 
+
+
+
++++多线程并发抓取函数mfetch+++++
+error_reporting(1024);
+//多线程并发抓取函数mfetch：
+function mfetch(array $params, $method) {
+    $mh = curl_multi_init(); //初始化一个curl_multi句柄
+    $handles = array();
+    foreach ($params as $key => $param) {
+        $ch = curl_init(); //初始化一个curl句柄
+        $url = $param["url"];
+        $data = $param["params"];
+        if (strtolower($method) === "get") {
+            $url = "$url?" . http_build_query($data); //get方式
+        } else {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data); //post方式
+        }
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
+        curl_multi_add_handle($mh, $ch);
+        $handles[$ch] = $key;
+        //handles数组用来记录curl句柄对应的key,供后面使用，以保证返回的数据不乱序。
+    }
+    $running = null;
+    $curls = array(); //curl数组用来记录各个curl句柄的返回值
+    do { //发起curl请求，并循环等等1/100秒，直到引用参数"$running"为0
+        usleep(10000);
+        curl_multi_exec($mh, $running);
+        while (( $ret = curl_multi_info_read($mh) ) !== false) {
+            $curls[$handles[$ret["handle"]]] = $ret; //循环读取curl返回，并根据其句柄对应的key一起记录到$curls数组中,保证返回的数据不乱序
+        }
+    } while ($running > 0);
+    foreach ($curls as $key => &$val) {
+        $val["content"] = baidukey(curl_multi_getcontent($val["handle"]));
+        curl_multi_remove_handle($mh, $val["handle"]); //移除curl句柄
+    }
+    curl_multi_close($mh); //关闭curl_multi句柄
+    ksort($curls);
+    return $curls;
+}
+
+function baidukey($result) {
+    $pattern = '#class="result.*?class="t".*?<a.*?href="(.*?)".*?>(.*?)</a>#si';
+    preg_match_all($pattern, $result, $matches);
+    return $matches[2];
+}
+
+//测试百度
+$keyword = "phper.yang";
+$params = array();
+for ($i = 0; $i < 10; $i++) {
+    $params[$i] = array(
+        "url" => "http://www.baidu.com/s",
+        "params" => array('wd' => $keyword, 'ie' => "utf-8", 'pn' => $i * 10)
+    );
+}
+$ret = mfetch($params, 'GET');
+echo "<pre>";
+print_r($params);
+print_r($ret);
+
+
+
+
++++php采集常用函数+++++++
+//获得当前的脚本网址
+function get_php_url(){
+        if(!empty($_SERVER["REQUEST_URI"])){
+                $scriptName = $_SERVER["REQUEST_URI"];
+                $nowurl = $scriptName;
+        }else{
+                $scriptName = $_SERVER["PHP_SELF"];
+                if(empty($_SERVER["QUERY_STRING"])) $nowurl = $scriptName;
+                else $nowurl = $scriptName."?".$_SERVER["QUERY_STRING"];
+        }
+        return $nowurl;
+}
+//把全角数字转为半角数字
+function GetAlabNum($fnum){
+        $nums = array("０","１","２","３","４","５","６","７","８","９");
+        $fnums = "0123456789";
+        for($i=0;$i<=9;$i++) $fnum = str_replace($nums[$i],$fnums[$i],$fnum);
+        $fnum = ereg_replace("[^0-9\.]|^0{1,}","",$fnum);
+        if($fnum=="") $fnum=0;
+        return $fnum;
+}
+//去除HTML标记
+function Text2Html($txt){
+        $txt = str_replace("  ","　",$txt);
+        $txt = str_replace("<","&lt;",$txt);
+        $txt = str_replace(">","&gt;",$txt);
+        $txt = PReg_replace("/[\r\n]{1,}/isU","<br/>\r\n",$txt);
+        return $txt;
+}
+
+
+//清除HTML标记
+function ClearHtml($str){
+        $str = str_replace('<','&lt;',$str);
+        $str = str_replace('>','&gt;',$str);
+        return $str;
+}
+//相对路径转化成绝对路径
+function relative_to_absolute($content, $feed_url) {
+    preg_match('/(http|https|ftp):\/\//', $feed_url, $protocol);
+    $server_url = preg_replace("/(http|https|ftp|news):\/\//", "", $feed_url);
+    $server_url = preg_replace("/\/.*/", "", $server_url);
+
+
+    if ($server_url == '') {
+        return $content;
+    }
+
+
+    if (isset($protocol[0])) {
+        $new_content = preg_replace('/href="\//', 'href="'.$protocol[0].$server_url.'/', $content);
+        $new_content = preg_replace('/src="\//', 'src="'.$protocol[0].$server_url.'/', $new_content);
+    } else {
+        $new_content = $content;
+    }
+    return $new_content;
+}
+//取得所有链接
+function get_all_url($code){
+        preg_match_all('/<a\s+href=["|\']?([^>"\' ]+)["|\']?\s*[^>]*>([^>]+)<\/a>/i',$code,$arr);
+        return array('name'=>$arr[2],'url'=>$arr[1]);
+}
+
+
+//获取指定标记中的内容
+function get_tag_data($str, $start, $end){
+        if ( $start == '' || $end == '' ){
+               return;
+        }
+        $str = explode($start, $str);
+        $str = explode($end, $str[1]);
+        return $str[0];
+}
+//HTML表格的每行转为CSV格式数组
+function get_tr_array($table) {
+        $table = preg_replace("'<td[^>]*?>'si",'"',$table);
+        $table = str_replace("</td>",'",',$table);
+        $table = str_replace("</tr>","{tr}",$table);
+        //去掉 HTML 标记
+        $table = preg_replace("'<[\/\!]*?[^<>]*?>'si","",$table);
+        //去掉空白字符 
+        $table = preg_replace("'([\r\n])[\s]+'","",$table);
+        $table = str_replace(" ","",$table);
+        $table = str_replace(" ","",$table);
+
+
+        $table = explode(",{tr}",$table);
+        array_pop($table);
+        return $table;
+}
+
+
+//将HTML表格的每行每列转为数组，采集表格数据
+function get_td_array($table) {
+        $table = preg_replace("'<table[^>]*?>'si","",$table);
+        $table = preg_replace("'<tr[^>]*?>'si","",$table);
+        $table = preg_replace("'<td[^>]*?>'si","",$table);
+        $table = str_replace("</tr>","{tr}",$table);
+        $table = str_replace("</td>","{td}",$table);
+        //去掉 HTML 标记
+        $table = preg_replace("'<[\/\!]*?[^<>]*?>'si","",$table);
+        //去掉空白字符 
+        $table = preg_replace("'([\r\n])[\s]+'","",$table);
+        $table = str_replace(" ","",$table);
+        $table = str_replace(" ","",$table);
+       
+        $table = explode('{tr}', $table);
+        array_pop($table);
+        foreach ($table as $key=>$tr) {
+                $td = explode('{td}', $tr);
+                array_pop($td);
+            $td_array[] = $td;
+        }
+        return $td_array;
+}
+
+
+//返回字符串中的所有单词 $distinct=true 去除重复
+function split_en_str($str,$distinct=true) {
+        preg_match_all('/([a-zA-Z]+)/',$str,$match);
+        if ($distinct == true) {
+                $match[1] = array_unique($match[1]);
+        }
+        sort($match[1]);
+        return $match[1];
+}
+
+
+
