@@ -6730,3 +6730,34 @@ do
 }while(true);
 ?>
 
+
+
++++求最大公约数算法+++++
+/*
+  求最大公约数算法
+  1:求两个自然数的最大公约数 设两个变量M和N
+  2:如果M < N，则交换M和N
+  3:M被N除，得到余数R
+  4:判断R＝0，正确则N即为“最大公约数”，否则下一步
+  5:将N赋值给M，将R赋值给N，重做第一步。
+ */
+
+function Yanggcd($m, $n) {
+    if (!is_numeric($m) || !is_numeric($n) || ($m == 0 && $n == 0)) {
+        return false;
+    }
+    if ($n == 0) {
+        return 0;
+    }
+    $r = ''; 
+    while ($n != 0) {
+        $r = $m % $n;
+        $m = $n;
+        $n = $r;
+    }
+    return $m;
+}
+
+print_r(Yanggcd(30, 20)."\n");
+echo "#################\n";
+
