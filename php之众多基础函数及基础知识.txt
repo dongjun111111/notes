@@ -530,6 +530,9 @@ substr用法：
 $domain = substr($email, 6); 
 echo "substr 测试结果 $domain<br>"; 
 ?>
+echo substr('123456',1); //23456
+echo substr('123456',1,2);//23
+echo substr('123456',1,-2); //234
 结果如下：
 substr 测试结果 ingy@jb51.net
 
