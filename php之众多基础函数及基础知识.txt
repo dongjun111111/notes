@@ -1509,3 +1509,6 @@ echo str_pad($str,20,'..');
 		flush();
 	}
     
+
+++pack与unpack+++
+echo pack("C*",80,72,80);

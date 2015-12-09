@@ -6990,3 +6990,108 @@ function Paging($mod,$map,$field=true,$limit='10',$order='id desc',$pamap) {
  }
 
 
+++++php邮件方法（未测试）++++++
+$server = "smtp.163.com";
+$port = 25;//默认25
+$username = "@163.com" ;
+$password = "";//密码
+$sendto = "";//邮件接收者地址
+$subject = "test title2";
+$content = "test content2";
+
+$header = "MIME-Version:1.0\r\n";  
+$header .= "To: ".$sendto."\r\n";  
+$header .= "From: $username<$username>\r\n";  
+$header .= "Subject: ".$subject."\r\n";  
+
+$data = $header."\r\n".$content;//邮件内容
+
+$sock = socket_create(AF_INET,SOCK_STREAM,SOL_TCP);
+if(socket_connect($sock,$server,$port)===false)socket_strerror(socket_last_error());
+echo socket_read($sock,100)."";
+socket_write($sock,"HELO lyz810\r\n");
+echo socket_read($sock,100)."";
+socket_write($sock,"AUTH LOGIN\r\n");
+echo socket_read($sock,100)."";
+socket_write($sock,base64_encode($username)."\r\n");
+echo socket_read($sock,100)."";
+socket_write($sock,base64_encode($password)."\r\n");
+echo socket_read($sock,100)."";
+socket_write($sock,"MAIL FROM:<".$username.">\r\n");
+echo socket_read($sock,100)."";
+socket_write($sock,"RCPT TO:<".$sendto.">\r\n");
+echo socket_read($sock,100)."";
+socket_write($sock,"DATA\r\n");
+echo socket_read($sock,100)."";
+socket_write($sock,$data."\r\n.\r\n");
+socket_write($sock,"QUIT");
+echo socket_read($sock,100)."";
+
+
+
+
++++PHP猜数字游戏，写法不错++++++
+@session_start();
+echo <<<EOT
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Language" content="UTF-8" />
+EOT;
+
+class guess{
+ var $num=0;
+ var $step=0;
+ var $newgame=false;
+ var $message="";
+ function guess(){
+   if(!isset($_SESSION['num'])){
+     $_SESSION['num']=rand(0,100);
+     $_SESSION['step']=0;
+     $this->newgame=true;
+   }
+   $this->num=$_SESSION['num'];
+   $this->step=$_SESSION['step'];
+   //echo $this->num;
+ }
+ function add_step(){
+   $this->step++;
+   $_SESSION['step']=$this->step;
+ }
+ function check(){
+   if($this->newgame==true){
+     $this->message="游戏开始";
+     $this->show_form();
+   }else{
+     if(isset($_POST['mynum'])){
+       $this->add_step();
+       $this->message="你猜了".$this->step."次，";
+       if($_POST['mynum']==$this->num){
+         $this->show_ok();
+       }else{
+         if($_POST['mynum']>$this->num)
+           $this->message.="你猜的数过大";
+         else
+           $this->message.="你猜的数过小";
+
+         $this->show_form();
+       }
+     }else{
+       $this->show_form();
+     }
+   }
+ }
+ function show_form(){
+   $form=$this->message.'<form method=post action="">
+     <input type="text" name="mynum"><input type="submit">
+   </form>';
+   echo $form;
+ }
+
+ function show_ok(){
+   unset($_SESSION['num']);
+   unset($_SESSION['step']);
+   $form=$this->message.'你猜对了！<a href="?">重新开始</a>';
+   echo $form;
+ }
+}
+$a=new guess;
+$a->check();
