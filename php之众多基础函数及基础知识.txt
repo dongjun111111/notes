@@ -510,8 +510,8 @@ loading...
 回复"Reboot",查看——Reboot简介
 
 
-
-strstr和strcchr的区别
+strstr就等于strchr，但是它们和strrchr不一样！
+strstr和strrchr的区别
 strstr 显示第一次找到，要查找的字符串，以及后面的字符串。 
 strrchr 显示最后一次找到，要查找的字符串，以及后面的字符串。
 <?php 
@@ -1495,3 +1495,14 @@ STR_PAD_LEFT;填充到左边；
 STR_PAD_RIGHT;填充到右边。
 $str="Hello world";
 echo str_pad($str,20,'..');
+
+
++++flush()函数++++
+ //会每隔1s输出一个数字，但是使用ob_flush()会等待5s一起输出
+ echo str_repeat("-",60);
+	for($i=0;$i<5;$i++){
+		echo $i;	
+		sleep(1);
+		flush();
+	}
+    
