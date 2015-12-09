@@ -7095,3 +7095,85 @@ class guess{
 }
 $a=new guess;
 $a->check();
+
+
+
++++++PHP日历高效写法++++
+@date_default_timezone_set('RPC');
+function show_calender(){
+  //code by hqlulu
+  //date:2007-12-12
+  //web: http://www.aslibra.com
+
+  $starttime=microtime();
+
+  //处理请求日期
+  $y=  isset($_GET["y"]) ? intval($_GET["y"]) : date("Y");
+  $m=  isset($_GET["m"]) ? intval($_GET["m"]) : date("m");
+  if($m<1 || $m>12)$m=date("m");
+  if($y<=0)$y=date("Y");
+
+  //下个月
+  $nm=$m+1;
+  if($nm>12){
+    $nm=1;
+    $ny=$y+1;
+  }else{
+    $ny=$y;
+  }
+
+  //前一月
+  $pm=$m-1;
+  if($pm<1){
+    $pm=12;
+    $py=$y-1;
+  }else{
+    $py=$y;
+  }
+
+  //获取本月名称
+  $month = date("M",mktime(0, 0, 0, $m, 1, $y));
+
+  //获取本月最后一天
+  $lastday = date("d",mktime(0, 0, 0, $nm, 0, $ny));
+
+  //获取开始一天的星期几
+  $index = date("w",mktime(0, 0, 0, $m, 1, $y));
+
+  //生成日历头
+  echo "<table>\n<thead><tr><th colspan='1'><a href='?y={$py}&m={$pm}'>-</a></th><th colspan='5'> {$y} {$month} </th><th colspan='1'><a href='?y={$ny}&m={$nm}'>+</a></th></tr><thead>\n<tbody><tr><td>日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td>六</td></tr>";
+
+  //处理日历
+  $row=0;
+  $day=1;
+  while(1){
+    echo "<tr>";
+    if($row==0){
+      for($i=0;$i<=6;$i++)
+        if($i<$index)
+          echo "<td>&nbsp;</td>";
+        else
+          echo "<td>".$day++."</td>";
+    }else{
+      for($i=0;$i<=6;$i++)
+        if($day>$lastday)
+          echo "<td>&nbsp;</td>";
+        else
+          echo "<td>".$day++."</td>";
+    }
+    echo "</tr>";
+    $row++;
+    if($day>$lastday)break;
+  }
+  echo "</table>";
+
+  $endtime=microtime();
+  $usedtime=$endtime-$starttime;
+  return $usedtime;
+}
+
+$run_info=array();
+for($i=0;$i<10;$i++)
+  $run_info[]=show_calender();
+
+print_r($run_info);
