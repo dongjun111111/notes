@@ -6961,3 +6961,32 @@ function split_en_str($str,$distinct=true) {
 
 
 
++++thinkphp中分页类++++++
+/*
+*   分页
+*   $pamap 分页带入参数
+*/
+function Paging($mod,$map,$field=true,$limit='10',$order='id desc',$pamap) {
+		$model=M($mod);
+		$count = $model->where($map)->count();
+		$Page = new \Think\Page($count,$limit);
+                $Page->setConfig('next', '下一页');
+                $Page->setConfig('prev', '上一页');
+        //分页跳转的时候保证查询条件
+        if(empty($pamap)) {$pamap =  $map ;}
+        foreach($pamap as $key=>$val){
+            $Page->parameter[$key] = urlencode($val); //urlencode 将字符串以URL编码 不支持数组
+        }
+		$show = $Page->show();// 分页显示输出
+		
+		// 进行分页数据查询 注意limit方法的参数要使用Page类的属性
+		$list = $model->where($map)->order($order)->limit($Page->firstRow.','.$Page->listRows)->select();
+		$arr=array();
+		$arr['list']=$list;
+		$arr['show']=$show;
+                $arr['tolnum'] = $count;
+		return $arr;
+		 
+ }
+
+
