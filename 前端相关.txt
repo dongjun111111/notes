@@ -4148,3 +4148,5 @@ jQuery.trim(str)
 
 +++jquery+++++
 jquery在使用animate的时候，需要在被操作的属性上加上position='relative',不然动不了。
+使用animate()时，必须用Camel标注法书写所有的属性名，比如，必须使用paddingLeft而不是padding-left，
+使用marginRight而不是margin-right,等等。
