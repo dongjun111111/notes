@@ -493,11 +493,10 @@ user_id) as temp where total in (1,2,3,4,5,6,7,8,9,10) group by total;
 用SHOW FULL PROCESSLIST语句很容易就能查到问题SQL。
 
 sql判断语句
-case when then else end：
+case when then else end as ...
 实例：
-update employee set e_wage=
-case when job_level = '1' then e_wage*1
-     when job_level = '2' then e_wage*2
-     when job_level ='3' then e_wage*3
-     else e_wage*4
-end
+$res=mysql_query("select username,nickname,lxtel,
+case sex when '1' then 'male' 
+when '2' then 'female'
+else '0' end as sex
+from ks_seller ");
