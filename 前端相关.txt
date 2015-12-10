@@ -4144,3 +4144,7 @@ jQuery.trim(str)
 <script src="http://www.baidu.com/cache/dragon/js/dragon2012.js"></script>
 </body>
 </html>
+
+
++++jquery+++++
+jquery在使用animate的时候，需要在被操作的属性上加上position='relative',不然动不了。
