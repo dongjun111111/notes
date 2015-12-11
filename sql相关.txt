@@ -27,6 +27,7 @@ date     result
 
  
 
+
 2.表中有A B C三列,用SQL语句实现：当A列大于B列时选择A列否则选择B列，当B列大于C列时选择B列否则选择C列
 select (case when a > b then a else b end), (case when b > c then b else c end) from table;
 
