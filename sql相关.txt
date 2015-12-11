@@ -506,3 +506,7 @@ from ks_seller ");
 update table1 a, table1 b
 set a.field_1 = b.field_2, a.field_2 = b.field_1
 where a.id = b.id
+
+
++++++concat¸øÄ³¸ö×Ö¶Î×·¼Ó×Ö·û´®+++++++
+mysql_query("update ks_zhiding set name=concat(name,'mm') where id=5");
