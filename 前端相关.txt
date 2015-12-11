@@ -4150,3 +4150,25 @@ jQuery.trim(str)
 jquery在使用animate的时候，需要在被操作的属性上加上position='relative',不然动不了。
 使用animate()时，必须用Camel标注法书写所有的属性名，比如，必须使用paddingLeft而不是padding-left，
 使用marginRight而不是margin-right,等等。
+
+
+
+++++PHP接收checkbox传递的值++++++
+因为checkbox传递过来的大部分是数组元素，所以一般的传递单值在这里不适用。需要在前端将数据打包成数组
+传递过来。
+前端：
+<form action="test.php" method="post">
+1:<input type="checkbox" name='test[]' value="1" />
+2:<input type="checkbox" name='test[]'  value="2" />
+3:<input type="checkbox" name='test[]'  value="3" />
+4:<input type="checkbox" name='test[]' value="4" />
+<input type="submit" value="提交" />
+PHP：
+ $arr=$_POST['test'];
+ var_dump($arr);
+结果可能是:
+array (size=4)
+  0 => string '1' (length=1)
+  1 => string '2' (length=1)
+  2 => string '3' (length=1)
+  3 => string '4' (length=1)
