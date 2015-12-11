@@ -500,3 +500,9 @@ case sex when '1' then 'male'
 when '2' then 'female'
 else '0' end as sex
 from ks_seller ");
+
+
+++++调换表中两个字段的值++++++
+update table1 a, table1 b
+set a.field_1 = b.field_2, a.field_2 = b.field_1
+where a.id = b.id
