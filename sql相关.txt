@@ -45,6 +45,7 @@ select * from tb where datediff(dd,SendTime,getdate())=0
 
  
 
+
 select (case when chinese >= 80 then "excellent" when chinese >= 60 then "pass" else "fail" end) as chinese,
 　　(case when math >= 80 then "excellent" when math >= 60 then "pass" else "fail" end) as math,
 　　(case when english >= 80 then "excellent" when english >= 60 then "pass" else "fail" end) as english
