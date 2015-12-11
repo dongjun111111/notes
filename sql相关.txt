@@ -509,4 +509,4 @@ where a.id = b.id
 
 
 +++++concat¸øÄ³¸ö×Ö¶Î×·¼Ó×Ö·û´®+++++++
-mysql_query("update ks_zhiding set name=concat(name,'mm') where id=5");
+ mysql_query("update ks_zhiding set name=concat(name,'mm') where id=5");
