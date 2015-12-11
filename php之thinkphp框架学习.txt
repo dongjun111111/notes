@@ -880,3 +880,7 @@ Glenn,Quagmire,Oslo,Norway
 include("Common/Category.class.php");
 $Category = new Category("ArticleCategory",array('id','pid','name','fullname'));
 $categoryList = $Category->getList();
+
+++++视图调用msubstr截取字符串+++++
+调用方法：
+{$vo.title|msubstr=5,5,'utf-8',false}   //后面的utf-8和false选填
