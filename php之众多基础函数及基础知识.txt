@@ -1536,3 +1536,32 @@ function check)input($value){
 	}
 	return $value;
 }
+
+
+++PHP判断服务器类型++++
+echo PHP_SAPI;
+//结果为fpm-fcgi,使用nginx + php-fpm ；结果为cgi-fcgi,使用nginx + fastcgi；结果为apache2handler,使用apache；结果为cli,直接使用终端的php命令解析。
+
+
+++++curl++++++
+curl的工作就是通过http协议发送这些message (php的libcurl目前还支持https、ftp、telnet等其他协议)
+现在再看代码，实际上代码只做了五件事情
+curl_init()初始化curl
+curl_setopt()设置传输数据和参数
+curl_exec()执行传输并获取返回数据
+curl_errono()返回错误码
+curl_close()关闭curl
+curl使用get方法抓取任意页面的内容：
+ header("content-type:text/html;charset=utf8");
+    //初始化
+    $curl = curl_init();
+    //设置url
+    curl_setopt($curl, CURLOPT_URL, 'http://www.qq.com');
+    //设置返回获取的输出为文本流
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    //执行命令
+    $data = curl_exec($curl);
+    //关闭URL请求
+    curl_close($curl);
+    //显示获得的数据
+    print_r($data);
