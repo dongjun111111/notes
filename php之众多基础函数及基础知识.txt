@@ -1512,3 +1512,11 @@ echo str_pad($str,20,'..');
 
 ++pack与unpack+++
 echo pack("C*",80,72,80);
+
+
+++++parse_str()函数+++++++
+把查询字符串解析到变量中。
+parse_str("name=bob&age=33");
+echo $name.'--'$age.'<br>';
+parse_str('name=bob&age=55',$myarray);
+print_r($myarray);
