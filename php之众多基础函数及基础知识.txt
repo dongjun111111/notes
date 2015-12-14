@@ -1520,3 +1520,19 @@ parse_str("name=bob&age=33");
 echo $name.'--'$age.'<br>';
 parse_str('name=bob&age=55',$myarray);
 print_r($myarray);
+
+
++++++php信息安全处理+++++++
+//对输入信息进行安全处理
+$value=(!get_magic_quotes_gpc())?addslashes($value):$value;
+//对取出数据进行显示还原
+function check)input($value){
+	if(get_magic_quotes_gpc()){
+		$value=stripslashes($value);
+	}
+	//使用本函数预防数据库攻击
+	if(!is_numeric($value)){
+		$value="'".mysql_real_escape_string($value)."'";
+	}
+	return $value;
+}
