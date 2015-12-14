@@ -7171,9 +7171,35 @@ function show_calender(){
   $usedtime=$endtime-$starttime;
   return $usedtime;
 }
-
 $run_info=array();
 for($i=0;$i<10;$i++)
-  $run_info[]=show_calender();
-
+$run_info[]=show_calender();
 print_r($run_info);
+
+
++++PHP实现静态缓存++++++
+利用ob_start()生成一个缓冲文件。
+<?php
+ob_start();
+?>   
+<html>  
+<meta charset="utf-8">
+<head>PHP实现静态缓存</head>  
+<body>  
+<table>  
+<?php  
+for($i = 0; $i < 10; $i++){  
+?>    
+<tr><td><?php echo $i;?></td></tr>  
+<?php  
+}  
+?>  
+</table>  
+</body>  
+</html>  
+  
+<?php  
+$contents = ob_get_contents();  
+file_put_contents('cache.html',$contents);
+//生存一个cache.html文件 
+?>
