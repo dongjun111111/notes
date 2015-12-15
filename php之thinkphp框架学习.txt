@@ -888,3 +888,5 @@ $categoryList = $Category->getList();
 ++++++视图时间格式化+++++
 调用方法：
 {$vo.ctime|time_format='Y-m-d H:i'}
+还有一种是：
+{$time|date='Y-m-d',###}
