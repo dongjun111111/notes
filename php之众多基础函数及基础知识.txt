@@ -1594,3 +1594,22 @@ $result=curl_exec($ch);
 $result=urldecode($result);
 
 
++++PHP随机密码算法（安全性可以）+++++
+随机生成密码并且计算其所用的时间。
+function create_pwd($pwd_length=8){
+	$randpwd="";
+	for($i=0;$i<$pwd_length;$i++){
+		$randpwd .=chr(mt_rand(33,126));
+	}
+	return $randpwd;
+}
+function getmicrotime(){
+	list($usec,$sec)=explode(" ",microtime());
+	return (float)$usec+(float)$sec;
+}
+$time_start=getmicrotime();
+$pwd=create_pwd('14');
+echo $pwd;
+$time_end=getmicrotime();
+$time=$time_end-$time_start;
+echo "<br>执行时间$time seconds";
