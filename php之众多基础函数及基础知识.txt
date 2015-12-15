@@ -1586,9 +1586,9 @@ $ch=curl_init();
 curl_setopt($ch,CURLOPT_URL,$url);
 curl_setopt($ch,CURLOPT_POST,1);
 curl_setopt($ch,CURLOPT_HEADER,0);
-curl_setopt($ch,CURLOPT_RETURNTANSFER,1);
-curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,5);
-curl_setopt($ch,CURLOPT_COOKIEJAR,'cookie.txt');
-curl_setopt($ch,CURLOPT_POSTFEILDS,$post_data);
+curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); //将curl_exec()获取的信息以文件流的形式返回，而不是直接输出
+curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,5);  //发起连接前等待时间，如果为0，则无限等待
+curl_setopt($ch,CURLOPT_COOKIEJAR,'cookie.txt');  //链接结束后保存cookie信息文件
+curl_setopt($ch,CURLOPT_POSTFIELDS,$post_data);//如果value是一个数组，Content-Type头将会被设置成multipart/form-data
 $result=curl_exec($ch);
 $result=urldecode($result);
