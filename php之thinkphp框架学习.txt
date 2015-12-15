@@ -890,3 +890,10 @@ $categoryList = $Category->getList();
 {$vo.ctime|time_format='Y-m-d H:i'}
 还有一种是：
 {$time|date='Y-m-d',###}
+
+
++++elseif后面有一个/号，我擦+++++
+<if condition="">
+<elseif condition=""  />
+<else />
+</if>
