@@ -1592,3 +1592,5 @@ curl_setopt($ch,CURLOPT_COOKIEJAR,'cookie.txt');  //链接结束后保存cookie�
 curl_setopt($ch,CURLOPT_POSTFIELDS,$post_data);//如果value是一个数组，Content-Type头将会被设置成multipart/form-data
 $result=curl_exec($ch);
 $result=urldecode($result);
+
+

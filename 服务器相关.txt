@@ -64,5 +64,6 @@ mysql_free_result($result);关闭结果集
 mysql_close($link);关闭与数据库的连接
 
 
-
-
++++++ab工具检测apache服务器性能+++++
+cmd切入到ab.exe目录下，ab -n 5000 -c 247 http://localhost/test.php     //模拟5000次访问量，247同时在线（并发）
+-t测试进行总时间，单位是秒，默认50000s，-p post时的数据文件，-w以HTML表的格式输出结果
