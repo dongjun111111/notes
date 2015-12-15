@@ -1544,7 +1544,14 @@ echo PHP_SAPI;
 
 
 ++++curl++++++
-curl的工作就是通过http协议发送这些message (php的libcurl目前还支持https、ftp、telnet等其他协议)
+cURL可以使用URL的语法模拟浏览器来传输数据，
+因为它是模拟浏览器，因此它同样支持多种协议，
+FTP, FTPS, HTTP, HTTPS, GOPHER, TELNET, DICT, FILE 以及 LDAP等协议都可以很好的支持，包括一些：
+HTTPS认证，HTTP POST方法，HTTP PUT方法，FTP上传，keyberos认证，HTTP上传，代理服务器，cookies，用户名/密码认证，
+下载文件断点续传，上传文件断点续传，http代理服务器管道，甚至它还支持IPv6，scoket5代理服务器，通过http代理服务器上传文件
+到FTP服务器等等。
+这就是我们为什么要使用cURL的原因！
+curl的工作就是通过http协议发送这些message 
 现在再看代码，实际上代码只做了五件事情
 curl_init()初始化curl
 curl_setopt()设置传输数据和参数
@@ -1565,3 +1572,23 @@ curl使用get方法抓取任意页面的内容：
     curl_close($curl);
     //显示获得的数据
     print_r($data);
+实例：
+//短信验证码功能
+$post_data=array();
+$post_data['code']=验证短信提供商提供的账号；
+$post_data['passw']=账号对应的密码；//$password
+$post_data['content']="发送短信的内容";//$content
+$post_data['destMoblies']=$send_tel;//需要发送的手机号码
+$post_data['sign']=md5(urlencode($content.$password));
+$post_data['sp_code']=$sp_code;
+$url="http://...:8080/";
+$ch=curl_init();
+curl_setopt($ch,CURLOPT_URL,$url);
+curl_setopt($ch,CURLOPT_POST,1);
+curl_setopt($ch,CURLOPT_HEADER,0);
+curl_setopt($ch,CURLOPT_RETURNTANSFER,1);
+curl_setopt($ch,CURLOPT_CONNECTTIMEOUT,5);
+curl_setopt($ch,CURLOPT_COOKIEJAR,'cookie.txt');
+curl_setopt($ch,CURLOPT_POSTFEILDS,$post_data);
+$result=curl_exec($ch);
+$result=urldecode($result);
