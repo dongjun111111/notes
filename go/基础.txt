@@ -1,0 +1,16 @@
++++++go的hello world++++
+package main
+import "fmt"
+func main(){
+	var b string
+	b="Hello world"
+	fmt.Print(b)
+}
+上面的相当于：
+package main
+import "fmt"
+func main(){
+	b := "Hello world"
+	fmt.Print(b)
+}
+go语言编译器自动会推断变量b的类型。
