@@ -1,7 +1,7 @@
 <!--搜索教科书般的样式-->
 <div class="search-form fr cf">
             <div class="btn-group-click adv-sch-pannel fl">
-               <div class="cf">
+                <div class="cf">
                 	<div class="row">
                 		<label>项目时间：</label>
                 		<input type="text" id="time-start" name="begintime" class="text input-2x" value="{:I('begintime')}" placeholder="起始时间" /> -                		
