@@ -1,13 +1,14 @@
-###go的变量类型变换
-######Go不支持隐式转换，必须手动指明。
-######比如：
+##go的变量类型变换
+Go不支持隐式转换，必须手动指明。比如：
+<pre>
 var a int =2
 var b float64=float64(a)
-
-###nil
+</pre>
+##nil 错误
 golang的nil在概念上和其它语言的null、None、nil、NULL一样，都指代零值或空值。nil是预先说明的标识符，
 也即通常意义上的关键字。在golang中，nil只能赋值给指针、channel、func、interface、map或slice类型的变量。
 如果未遵循这个规则，则会引发panic。
+<pre>
 package main
 import "fmt"
 func main(){
@@ -26,8 +27,9 @@ func main(){
     }
     fmt.Print(a,b,c,d,e,f,g)
 }
-
+</pre>
 ##自动类型转换
+<pre>
 package main
 import "fmt"
 func main(){
@@ -35,11 +37,14 @@ func main(){
 	b="Hello world"
 	fmt.Print(b)
 }
+</pre>
 上面的相当于：
+<pre>
 package main
 import "fmt"
 func main(){
 	b := "Hello world"
 	fmt.Print(b)
 }
+</pre>
 go语言编译器自动会推断变量b的类型。
