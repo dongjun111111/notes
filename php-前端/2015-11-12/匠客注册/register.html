@@ -1,0 +1,148 @@
+<extend name="Public/base" /> 
+<!-- 子导航 -->
+<block name="sidebar">
+    <include file="sidemenu" />
+</block>
+<block name="body">
+    <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js?v={:SITE_VERSION}"></script>
+    <div class="main-title cf">
+        <h2>
+           注册新云匠客
+        </h2>
+    </div>
+    <!-- 标签页导航 -->
+    <div class="tab-wrap">
+        <ul class="tab-nav nav">
+            <li class="current" data-tab="tab1"><a href="javascript:void(0);">基础</a></li>   </ul>
+        <div class="tab-content">
+            <!-- 表单 -->
+           <if condition="$lists">
+           <volist name="lists" id="v">
+            <div class="form-item cf" style="width:80%;border-bottom: 1px #002240 solid ;"> 
+                <label class="item-label">{$v.contents|nl2br}</label>
+                 <span style="float: right;">{$v.mid|get_name}于{$v.ctime|time_format='Y-m-d H:i:s'}</span>
+            </div> 
+            </volist>
+            </if>
+                    
+            <form id="form" action="{:U('Admindj/guest/register')}" method="post" class="form-horizontal" >
+                <!-- 基础文档模型 -->
+                <div id="tab{$key}" >  
+                    <div class="form-item cf" >
+                        <label class="item-label">新云匠客姓名:</label>
+                        <div class="controls">
+                            <input class="text input-large" name="username" id="username" value="" type="text">
+                        </div>
+                    </div>
+                    <div class="form-item cf" >
+                        <label class="item-label">手机号码:</label>
+                        <div class="controls">
+                            <!--<input class="text input-large" name="lxtel" id="lxtel" value="" type="text">  -->
+                           <label class="textarea input-large">
+                                <textarea name="lxtel" id="lxtel" value="" type="text" ></textarea>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-item cf" >
+                        <label class="item-label">邮箱地址:</label>
+                        <div class="controls">
+                            <input class="text input-large" id="email" name="email" value="" type="email">
+                        </div>
+                    </div>
+                     <div class="form-item cf" >
+                        <label class="item-label">密码:</label>
+                        <div class="controls">
+                            <input class="text input-large" id="password" name="password" value="" type="password">
+                        </div>
+                    </div>
+                     <div class="form-item cf" >
+                        <label class="item-label">确认密码:</label>
+                        <div class="controls">
+                            <input class="text input-large" id="repassword" name="repassword" value="" type="password">
+                        </div>
+                    </div> 
+                     </div>
+                     <div class="form-item cf" >
+                        <label class="item-label">验证码:</label>
+                        <div class="controls">
+                            <input class="text input-large" type='text' name='verify'> <br>
+                            <img src='/Public/verify/' onclick="this.src='/Public/verify/?'+Math.random()" />
+                        </div>
+                    </div> 
+
+
+                <div class="form-item cf">
+                    <button class="btn submit-btn hidden " id="submit" type="submit" target-form="form-horizontal">确 定</button>
+                    <a class="btn btn-return" type="button" target-form="form-horizontal"  href="{:U('Admindj/guest/register')}" >返回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</block>
+
+<block name="script">
+    <link href="__STATIC__/datetimepicker/css/datetimepicker.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+    <php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">';</php>
+    <link href="__STATIC__/datetimepicker/css/dropdown.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.js?v={:SITE_VERSION}"></script>
+    <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script>
+
+<script type="text/javascript">
+var username=document.getElementById("username");
+var lxtel=document.getElementById("lxtel");
+var email=document.getElementById("email");
+var password=document.getElementById("password");
+var repassword=document.getElementById("repassword");
+var submit=document.getElementById("submit");
+submit.onclick=function(){
+    if(username.value.trim() == ''){
+        alert("请输入姓名");return false;
+    }
+    if(lxtel.value.trim() == ''){
+        alert("请输入电话号码");return false;
+    }
+    var reg=/^[0-9]*$/;
+    if(!reg.test(lxtel.value)){    
+      alert("请输入正确的手机号码!");return false;
+    }
+    if(email.value.trim() == ''){
+        alert("请输入邮箱");return false;
+    }
+    if(password.value.trim() == ''){
+        alert("请输入密码");return false;
+    }
+    if(password.value.length <= 6 || password.value.length >= 16){
+        alert("密码过短或太长");return false;
+    }
+     if(repassword.value.trim() == ''){
+        alert("请再次输入密码");return false;
+    }
+    if(password.value.trim() != repassword.value.trim()){
+        alert("密码不一致，请重试！");return false;
+    }
+    var re=/^(86)?0?1\d{10}$/;
+    if(!re.test(lxtel.value)){    
+      alert("请输入正确的手机号码!");return false;
+    }
+}
+
+
+$(function(){
+    $('#time-start').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+
+    $('#datetimepicker').datetimepicker({
+       format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true,
+        pickerPosition:'bottom-left'
+    });
+    
+})
+</script>
+</block>

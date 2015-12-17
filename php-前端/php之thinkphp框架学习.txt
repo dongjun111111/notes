@@ -899,6 +899,7 @@ $categoryList = $Category->getList();
 </if>
 
 
+
 ++++thinkphp中用户模型自动验证+++
 在注册的时候必用的东西。
 两种方式：
