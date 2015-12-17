@@ -1,0 +1,45 @@
+<!--自制jquery弹出层，应用于后台-->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<a class="back"  style="cursor: pointer;">反馈</a>
+ <div id="upworks_tc" style="display: none; position: fixed; width: 100%; height: 100%;filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#99000000', endColorstr='#99000000');background:rgba(0,0,0,0.6); top:0px; left: 0px; z-index: 111;">
+     <div class="upworks_tc" style="position: fixed; top: 50%; left: 50%; margin-left: -260px;  margin-top: -150px; z-index: 111;">
+        <div id="rebegin" style="padding:40px; background:#fff;"> 
+            <form action="" method="post" id="upworks_form" onsubmit=" ">
+                <p>反馈信息：</p>
+                <input type="hidden" id="rid" name="id" value="" />
+	                <textarea name="contents" placeholder="" id="content" style="width:500px; height:100px;margin-top:10px;">
+	                </textarea> 
+                <p style="margin-top:5px;"><button type="submit" class="btn" >确定</button><button id="cancelBtn" class="btn" type="button">取消</button></p>
+            </form>
+        </div>
+     </div>
+</div>
+<script src="jquery.min.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+ $(document).ready(function(){
+ $(".fenpei").click(function(){
+		$("#rebegin").zxxbox();   
+	}); 
+ $("#cancelBtn").click(function(){
+		$(".zxxbox").hide();						   
+	});
+ $('.back').click(function() {
+        document.getElementById("upworks_form").reset(); 
+        $('#content').html('对您造成的麻烦小匠深表歉意，您的提议小匠已经收到，小匠将会尽快处理！');
+        var rid = $(this).attr('data-id');
+        $('#rid').val(rid);
+        $('#upworks_tc').show();
+    })
+  $('#cancelBtn').click(function() {
+        $('#upworks_tc').hide();
+    })
+})
+</script>
+</body>
+</html>
