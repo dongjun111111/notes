@@ -940,7 +940,7 @@ self::MODEL_INSERT或者1新增数据时候验证
 self::MODEL_UPDATE或者2编辑数据时候验证
 self::MODEL_BOTH或者3全部情况下验证（默认）
 
-实例：
+静态定义：
 namespace Home\Model;
 
 use Think\Model;
@@ -976,3 +976,46 @@ if (!$User->create()){
 // 验证通过 可以进行其他数据操作
 
 }
+
+create方法的第二个参数就用于指定自动验证规则中的验证时间，也就是说create方法的自动验证
+只会验证符合验证时间的验证规则。
+
+
+我们在上面提到这里的验证时间并非只有这几种情况，你可以根据业务需要增加其他的验证时间，
+例如，你可以给登录操作专门指定验证时间为4。我们定义验证规则如下：
+namespace Home\Model;
+use Think\Model;
+class UserModel extends Model{
+   protected $_validate = array(
+     array('verify','require','验证码必须！'),  // 都有时间都验证
+     array('name','checkName','帐号错误！',1,'function',4),  // 只在登录时候验证
+     array('password','checkPwd','密码错误！',1,'function',4), // 只在登录时候验证
+   );
+}
+那么，我们就可以在登录的时候使用
+$User = D("User"); // 实例化User对象
+if (!$User->create($_POST,4)){ // 登录验证数据
+     // 验证没有通过 输出错误提示信息
+     exit($User->getError());
+}else{
+     // 验证通过 执行登录操作
+}
+
+动态验证
+如果采用动态验证的方式，就比较灵活，可以根据不同的需要，在操作同一个模型的时候使用不同的验证规则，例如上面
+的静态验证方式可以改为：
+$rules = array(
+     array('verify','require','验证码必须！'), //默认情况下用正则进行验证
+     array('name','','帐号名称已经存在！',0,'unique',1), // 在新增的时候验证name字段是否唯一
+     array('value',array(1,2,3),'值的范围不正确！',2,'in'), // 当值不为空的时候判断是否在一个范围内
+     array('repassword','password','确认密码不正确',0,'confirm'), // 验证确认密码是否和密码一致
+     array('password','checkPwd','密码格式不正确',0,'function'), // 自定义函数验证密码格式
+);
+$User = M("User"); // 实例化User对象
+if (!$User->validate($rules)->create()){
+     // 如果创建失败 表示验证没有通过 输出错误提示信息
+     exit($User->getError());
+}else{
+     // 验证通过 可以进行其他数据操作
+}
+提示：动态验证不依赖模型类的定义，所以通常用M函数实例化模型就可以！！！
