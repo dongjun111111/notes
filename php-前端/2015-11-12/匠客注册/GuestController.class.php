@@ -218,11 +218,11 @@ class GuestController extends AdminController {
 			$map['email']=I("post.email");
 			$map['kcode'] =randkcode();
 			$map['salt'] =randsalt();
-			$map['password']=md5(I("post.password"));
-			$map['paypass']=md5(I("post.password"));
-			$map['reg_itme']=time();
+			$map['password']=md5(I("post.password").$map['salt']);
+			$map['paypass']=md5(I("post.password").$map['salt']);
+			$map['reg_time']=time();
 			$map['reg_ip']=ip2long(get_client_ip());
-			$map['type'] =1;
+			$map['type'] =2;
 			$map['status'] =1;
 			$repassword=I("post.repassword");			
 			if(I("post.password") != $repassword){
