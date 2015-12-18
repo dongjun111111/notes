@@ -7203,3 +7203,74 @@ $contents = ob_get_contents();
 file_put_contents('cache.html',$contents);
 //生存一个cache.html文件 
 ?>
+
+
++++PHP中array++++++
+$arr = array('a','b','c');
+    foreach($arr as $key=>$val){
+            $val=&$arr[$key];
+            print_r($arr);
+}
+Array 第一次循环，使$val是$arr[0]的引用
+(
+[0] => a
+[1] => b
+[2] => c
+)
+Array 第二次循环，因为$arr[1]赋值给$val,而$val是$arr[0]的引用，因此数组被改变。 同样第二次循环使$val是$arr[1]的引用
+(
+[0] => b
+[1] => b
+[2] => c
+)
+Array 同理
+(
+[0] => b
+[1] => c
+[2] => c
+)
+
+
++++nginx下的php安全隔离++++++
+方法1）在Nginx配置文件中加入
+fastcgi_param PHP_VALUE "open_basedir=$document_root:/tmp/:/proc/:$document_root/../";
+
+or
+
+fastcgi_param PHP_ADMIN_VALUE "open_basedir=$document_root:/tmp/:/proc/:$document_root/../";
+
+不同的地方是：php_admin_value(php_admin_flag)命令只能用在apache的httpd.conf文件中，而 php_value(php_flag)则是用在.htaccess文件中的,nginx下相同。
+
+因为使用FastCGI，php不是每次都重新启动，所以每个主机sever都需要加入配置，以便每次访问都设置php的open_basedir。
+
+适用 nginx + php5.3以上，php5.2 此方法不生效。
+
+方法2）在php.ini中加入：
+open_basedir=./:/tmp/:/proc/
+这种方式的设置需要重启php-fpm后生效
+
+方法3）在网站根目录下创建.user.ini并写入：
+open_basedir=./:/tmp/:/proc/
+
+这种方式不需要重启nginx或php-fpm服务。安全起见应当取消掉.user.ini文件的写权限。
+
+关于.user.ini文件的详细说明：
+http://php.net/manual/zh/configuration.file.per-user.php
+
+方法4）nginx的chroot
+完全隔离php和系统，如果需要系统功能的自己创建系统环境，路径也要配成相对隔离的环境。
+http://www.baidu.com/s?wd=nginx%20chroot
+
+目前最好的是适用第一种方法。
+
+设置open_basedir的同时最好禁止下执行命令的函数，比如：
+shell_exec('ls /etc')仍然查看到/etc目录的文件列表
+shell_exec('cat /etc/passwd')仍可查看到/etc/passwd文件的内容
+
+建议禁止的函数如下：
+disable_functions = pcntl_alarm, pcntl_fork, pcntl_waitpid, pcntl_wait, pcntl_wifexited, pcntl_wifstopped,
+ pcntl_wifsignaled, pcntl_wexitstatus, pcntl_wtermsig, pcntl_wstopsig, pcntl_signal, pcntl_signal_dispatch,
+ pcntl_get_last_error, pcntl_strerror, pcntl_sigprocmask, pcntl_sigwaitinfo, pcntl_sigtimedwait, pcntl_exec, 
+pcntl_getpriority, pcntl_setpriority, eval, popen, passthru, exec, system, shell_exec, proc_open, proc_get_status, 
+chroot, chgrp, chown, ini_alter, ini_restore, dl, pfsockopen, openlog, syslog, readlink, symlink, 
+popepassthru, stream_socket_server, fsocket, chdir
