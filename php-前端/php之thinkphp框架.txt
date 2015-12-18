@@ -1025,3 +1025,21 @@ if (!$User->validate($rules)->create()){
 +++D方法与M方法+++++
 如果你建立了Model类的话，就用D函数，没有建立的话用M方法，D方法可以自动检测模型类，如果存在自定义的模型类，
 则实例化自定义模型类，如果不存在，则会实例化Model基类，同时对于已实例化过的模型，不会重复去实例化。
+
++++thinkphp清除缓存++++
+public function cache_clear() {
+        $this->deldir(TEMP_PATH);
+    }
+    function deldir($dir) {
+        $dh = opendir($dir);
+        while ($file = readdir($dh)) {
+            if ($file != "." && $file != "..") {
+                $fullpath = $dir . "/" . $file;
+                if (!is_dir($fullpath)) {
+                    unlink($fullpath);
+                } else {
+                    deldir($fullpath);
+                }
+            }
+        }
+    }
