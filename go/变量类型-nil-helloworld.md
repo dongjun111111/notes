@@ -101,3 +101,15 @@ Golang的类库设计方式和C#/C++都不同, 如果有Python经验的会感觉
 写大工程请搜索: Golang项目目录结构组织
 Golang语言本身本人没有发现bug, 即便有也早就被大神们捉住了. 唯一的一个感觉貌似bug的, 经常是结构体成员首字母小写, 但是json又无法序列化出来…
 慎用cgo. 官方已经声明未来对cgo不提供完整兼容性. 任何一门语言在早期都需要对C做出支持, 但后期完善后的不兼容都是常态。
+###golang的time.Format的坑
+golang的time.Format设计的和其他语言都不一样, 其他语言总是使用一些格式化字符进行标示, 而golang呢, 查了网上一些坑例子 自己查了下golang的源码, 发现以下代码
+// String returns the time formatted using the format string
+//  "2006-01-02 15:04:05.999999999 -0700 MST"
+func (t Time) String() string {
+    return t.Format("2006-01-02 15:04:05.999999999 -0700 MST")
+}
+尝试将2006-01-02 15:04:05写入到自己的例子中
+func nowTime() string {
+    return time.Now().Format("2006-01-02 15:04:05")
+}
+结果返回正确. 询问了下, 据说这个日期是golang诞生的日子… 咋那么自恋呢…
