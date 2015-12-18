@@ -234,7 +234,10 @@ class GuestController extends AdminController {
 			}
 			$rules = array(
 			    array('verify','require','验证码必须！'), //默认情况下用正则进行验证
-			    array('username','','帐号名称已经存在！',0,'unique',1), // 在新增的时候验证name字段是否唯一
+			    array('username','',"
+			    	<html><body><p>帐号名称已经存在!2秒后自动返回...</p><script>
+					setTimeout('window.history.back()',2000);
+                </script></body></html>",0,'unique',1), // 在新增的时候验证name字段是否唯一
 			    array('repassword','password','确认密码不正确',0,'confirm'), // 验证确认密码是否和密码一致
 			    array('password','checkPwd','密码格式不正确',0,'function'), // 自定义函数验证密码格式
 			);
@@ -254,7 +257,7 @@ class GuestController extends AdminController {
 
 
 		}
-		else{
+		else{		
 			$this->display();
 		}
 
