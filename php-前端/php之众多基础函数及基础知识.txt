@@ -1659,3 +1659,137 @@ if(varify_url($url)){
 }else{  
  echo "<div>Error ! Your URL : <a href=$url>$url</a> is <b>invalid </b></div>";  
 }  
+
+
+1》》》》》》》call_user_func
+call_user_func('方法名称','赋的值'):一种特别的调用函数的方法，例如；
+function nowmagic($a)
+{
+ echo $a;
+}
+call_user_func('nowmagic','1111111111');
+
+2》》》》》》》preg_replace_callback()
+preg_replace_callback()正则替换回调函数;
+
+3》》》》》》》array_unshift()
+array_unshift() 函数在数组开头插入一个或多个元素。例如：
+$a=array('11','22','33');
+array_unshift($a,'66');
+结果为：66,11,22,33
+
+4》》》》》》》is_numeric()
+is_numeric()   检测变量是否为数字或数字字符串;如果是返回true,不是返回false;
+
+5》》》》》》》array_unique()
+array_unique() 函数移除数组中的重复的值，并返回结果数组.
+$unique=array('f','d','f','s');
+print_r(array_unique($unique));
+结果为：
+Array ( [0] => f [1] => d [3] => s ) 
+
+6》》》》》》》stripos()与strpos()
+stripos()与strpos(),前者对大小写不敏感，后者则敏感，类似的还有str_ireplace()与str_replace()
+
+7》》》》》》》array_filter(array,function)
+array_filter(array,function);筛选出需要的结果
+function myfunction($v)
+{
+if($v=="H")
+{
+ 
+  return true;
+}
+return false;
+}
+$as=array("H","d","s");
+print_r(array_filter($as,"myfunction"));
+输出结果为：
+Array ( [0] => H ) 
+
+8》》》》》》》array_intersect()
+array_intersect() 函数返回两个或多个数组的交集数组。
+$add1=array(1,3,4,5);
+$add2=array(3,4,6,7);
+print_r(array_intersect($add1,$add2));
+结果是：
+Array ( [1] => 3 [2] => 4 ) 
+
+9》》》》》》》join() 
+
+join() 函数返回由数组元素组合成的字符串。
+join() 函数是 implode() 函数的别名。也就是说它也是把数组元素练成一段字符串
+
+10》》》》》》》parent::
+
+PHP 面向对象：parent::关键字
+parent::用来引用父类中的方法。
+class employee
+{
+protected $sal=3000;
+public function getSal()
+{
+ return $this->sal;
+}
+}
+class manager extends employee
+{
+   public function getSal()
+   {
+   parent::getSal();
+$this->sal=$this->sal+2000;
+return $this->sal;
+    }
+}
+$emp=new employee();
+echo $emp->getSal()."<br>";
+$mana=new manager();
+echo $mana->getSal();
+
+11》》》》》》》
+这里的$name可以直接用$this->name调用。
+class Person
+{
+var $name;
+var $age;
+function say()
+	{
+	echo "my name is :".$this->name."<br>";
+	echo "my age is :".$this->age."<br>";
+    }
+}
+class Student extends Person
+{
+	var $school;
+	function study()
+	{
+	echo "my name is:".$this->name."<br>";
+	echo "i am".$this->school."study";
+	}
+}
+$stu=new Student();
+$stu->name="Bob";
+$stu->age="Tom";
+$stu->school="People";
+$stu->study();
+
+12》》》》》》》__call(1,2)
+__call(1,2) 方法用于监视错误的方法调用。
+
+13》》》》》》》
+ini_set用来设置php.ini的值
+常见的设置： 
+@ini_set('memory_limit', '64M'); 
+'menory_limit'：设定一个脚本所能够申请到的最大内存字节数，这有利于写的不好的脚本消耗服务器上的可用内存。@符号代表不输出错误。 
+
+14》》》》》》》
+ltrim() - 从左侧移除字符串的空白字符或其他预定义字符
+rtrim() - 从右侧移除字符串的空白字符或其他预定义字符
+
+15》》》》》》》::与$this与->的使用区别
+在访问PHP类中的成员变量或方法时，如果被引用的变量或者方法被声明成const（定义常量）
+或者static（声明静态）,那么就必须使用操作符::,反之如果被引用的变量或者方法没有被声明成const或者static,那么就必须使用操作符->。
+另外，如果从类的内部访问const或者static变量或者方法,那么就必须使用自引用的self，
+反之如果从类的内部访问不为const或者static变量或者方法,那么就必须使用自引用的$this。
+
+
