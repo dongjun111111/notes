@@ -429,4 +429,76 @@ Say again
 使用func关键字声明一个函数。因此，如果你要声明一个函数，马上要想到func，不管是不是匿名函数，唯一的区别就是匿名函数后面没有函数名称了，直接
 
 func（参数列表）（返回值）。从上面我们也看到了，Go语言函数的返回类型在函数名的后面，和它声明变量的类型一样，这也与大部分语言不同的。而且函数的返回值可以是一个，也可以多个。比如上面的say函数，我们就返回了两个，一个整数类型，一个error。其中整数类型的是可变参数的长度，error类型则是从fmt包中Printf函数返回的值中的其中一个，而且我们看到接受fmt.Printf()函数返回值的第一个变量我们使用了"_"符号，这个代表我们不关心第一个返回值，将它忽略。接下来再来看say函数的第二个参数，是一个...interface{}类型，三个点是Go语言的一种类型Slices，类似数组，但是有所不同，这个将在后续文章中继续介绍，既然是一个类似数组的类型，当然也可以想到可变参数可以接收任意多个，但是必须是相同类型的，而这里使用一个空接口类型作为Slices的元素类型，使得可以接收任意类型参数的元素，之后可以通过缺省参数推断出每一个元素真实的类型。
+###指针
+支持指针类型 *T，指针的指针 **T，以及包含包名前缀的  *<package>.T。
 
+- 默认值 nil，没有 NULL 常量。
+- 操作符 "&" 取变量地址，"*" 透过指针访问目标对象。
+- 不⽀支持指针运算，不⽀支持 "->" 运算符，直接用 "." 访问目标成员。
+<pre>
+package main
+import "fmt"
+func main (){
+	type data struct {a int}
+	var d= data{1234}
+	var p *data
+	p =&d
+	fmt.Printf("%p,%v\n",p,p.a)
+}
+Output ==>
+0x08020022f0,1234
+</pre>
+<br>格式控制符“%p”中的p是pointer（指针）的缩写.
+<br>最简单的方法是用"%v"标志，它可以以适当的格式输出任意的类型（包括数组和结构）。下面是解释%v的乱入程序.<br>
+//start
+<pre>
+package main
+import "fmt"
+ type T struct {
+         a int
+         b string
+}
+func main(){
+        t := T{77, "Sunset Strip"}
+        a := []int{1, 2, 3, 4}
+        fmt.Printf("%v %v %v\n", u64, t, a)
+}
+Output ==>
+ 18446744073709551615 {77 Sunset Strip} [1 2 3 4]
+</pre>
+如果是使用"Print"或"Println"函数的话，甚至不需要格式化字符串。这些函数会针对数据类型 自动作转换。"Print"函数默认将每个参数以"%v"格式输出，"Println"函数则是在"Print"函数 的输出基础上增加一个换行。一下两种输出方式和前面的输出结果是一致的。
+<pre>
+ fmt.Print(u64, " ", t, " ", a, "\n")
+ fmt.Println(u64, t, a)
+</pre>
+
+//end
+#####不能对指针做加减法等运算。
+下面的这个是错误的：
+<pre>
+x := 1234
+p := &x
+p++  //Error :不能对指针进行运算
+</pre>
+那么，怎么对指针进行运算操作呢？将 Pointer 转换成 uintptr，可变相实现指针运算。
+<pre>
+package main
+import "fmt"
+import "unsafe"
+func main() {
+	d := struct {
+	s string
+	x int
+	}{"abc", 100}
+	p := uintptr(unsafe.Pointer(&d)) // *struct -> Pointer -> uintptr
+	p += unsafe.Offsetof(d.x) // uintptr + offset
+	p2 := unsafe.Pointer(p) // uintptr -> Pointer
+	px := (*int)(p2) // Pointer -> *int
+	*px = 200   //d.x = 200
+	fmt.Printf("%#v\n", d)
+}
+
+Output ==>
+struct {s string; x int}{s:"abc",x:200}
+</pre>
+####注意：GC 把 uintptr 当成普通整数对象，它⽆无法阻⽌止 "关联" 对象被回收。
