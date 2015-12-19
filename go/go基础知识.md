@@ -299,191 +299,134 @@ if err !=nil{
 - %s 字符串
 - %c 字符型
 - %f 浮点型
-panic 抛出异常 <br>
-recover 捕获异常 捕获后会返回外层函数继续执行 <br>
-defer 函数退出之前执行
 
-###cap()函数
-cap()函数返回的是数组切片分配的空间大小。
+###方法
+一般我们把类的成员函数叫做Methods（方法）。
 <pre>
 package main
 import "fmt"
-func main(){
-	myslice := make([]int,5,10)
-	fmt.Println("len(myslice):",len(myslice))
-	fmt.Println("cap(myslice):",cap(myslice))
+type mystring string
+func (str mystring) prefix(preStr string)(newStr mystring){
+	newStr =mystring(preStr) + str
+	return
 }
 
-Output==>
-len(myslice):5
-cap(myslice):10
+func main (){
+	var before mystring ="go"
+	after := before.prefix("let`s")
+	fmt.Printf("%s\n",before)
+	fmt.Printf("%s\n",after)
+}
+
+Ouptut ==>
+go
+let`s go
 </pre>
-###unsafe
-由于Go语言不能和C语言一样直接进行指针运算，所以需要引入unsafe包，通过它进行运算.unsafe.Pointer其实就是类似C的void *，在golang中是用于各种指针相互转换的桥梁。
-在Go语言中，指针的本质是什么呢？是unsafe.Pointer和uintptr。
-##import详解
-我们在写Go代码的时候经常用到import这个命令用来导入包文件，而我们经常看到的方式参考如下：
+面的程序中，第4行我们定义了一种新类型mystring，其实就是string的别名。当然，你可以定义你想要的类型，比如上篇中的结构体。
+
 <pre>
- import(
+package main
+import "fmt"
+type Person struct {
+	name string
+	age int8
+}
+func (p Person)getName()string {
+	return p.name
+}
+func main (){
+	p:=Person{"slick",21}
+	fmt.Printf("%s \n",p.getName())
+	p.name="gogo"
+	fmt.Printf("%s\n",p.getName())
+}
+
+Output ==>
+slick 
+gogo
+</pre>
+
+###GO中的接口
+最基本的接口形式：
+<pre>
+type show interface {
+	draw()
+	count()
+}
+</pre>
+和定义一个结构体类似，只不过将struct换成了interface，然后声明了两个函数：draw()和count()。就这么简单，一个接口就定义好了，那么如何实现接口呢？
+<pre>
+package main
+import (
     "fmt"
 )
-</pre>
-然后我们代码里面可以通过如下的方式调用
-<pre>
- fmt.Println("hello world")
-</pre>
-上面这个fmt是Go语言的标准库，其实是去GOROOT环境变量指定目录下去加载该模块，当然Go的import还支持如下两种方式来加载自己写的模块：
-
-* 相对路径
-<pre>
-import “./model” //当前文件同一目录的model目录，但是不建议这种方式来import
-</pre>
-* 绝对路径
-<pre>
-import “shorturl/model”//加载gopath/src/shorturl/model模块
-</pre>
-上面展示了一些import常用的几种方式，但是还有一些特殊的import，让很多新手很费解，下面我们来一一讲解一下到底是怎么一回事
-
-* 点操作<br>
-我们有时候会看到如下的方式导入包
-<pre>
- import(
-    . "fmt"
-)
-</pre>
-这个点操作的含义就是这个包导入之后在你调用这个包的函数时，你可以省略前缀的包名，也就是前面你调用的fmt.Println("helloworld")可以省略的写成Println("helloworld")
-
-* 别名操作<br>
-别名操作顾名思义我们可以把包命名成另一个我们用起来容易记忆的名字
-<pre>
- import(
-    f "fmt"
-)
-</pre>
-别名操作的话调用包函数时前缀变成了我们的前缀，即f.Println("helloworld")
-
-*  _ 操作<br>
-这个操作经常是让很多人费解的一个操作符，请看下面这个import
-<pre>
- import (
-    "database/sql"
-    _ "github.com/ziutek/mymysql/godrv"
-)
-</pre>
-_操作其实是引入该包，而不直接使用包里面的函数，而是调用了该包里面的init函数。
-
-##go的变量类型变换
-Go不支持隐式转换，必须手动指明。比如：
-<pre>
-var a int =2
-var b float64=float64(a)
-</pre>
-##nil 错误
-golang的nil在概念上和其它语言的null、None、nil、NULL一样，都指代零值或空值。nil是预先说明的标识符，
-也即通常意义上的关键字。在golang中，nil只能赋值给指针、channel、func、interface、map或slice类型的变量。
-如果未遵循这个规则，则会引发panic。
-<pre>
-package main
-import "fmt"
-func main(){
-    var a int
-    var b float32
-    var c bool====
-    var d string
-    var e []int
-    var f map[string] int
-    var g *int
-    if nil == e{
-        fmt.Print("e is nil \n")
+ 
+type Sorter interface {
+    Len() int
+    Less(i, j int) bool
+    Swap(i, j int)
+}
+ 
+type Xi []int
+type Xs []string
+ 
+func (p Xi) Len() int { return len(p) }
+func (p Xi) Less(i int, j int) bool { return p[j] < p[i] }
+func (p Xi) Swap(i int, j int) { p[i], p[j] = p[j], p[i] }
+ 
+func (p Xs) Len() int { return len(p) }
+func (p Xs) Less(i int, j int) bool { return p[j] < p[i] }
+func (p Xs) Swap(i int, j int) { p[i], p[j] = p[j], p[i] }
+ 
+ 
+func Sort(x Sorter) {
+    for i := 0; i < x.Len() - 1; i++ {
+        for j := i + 1; j < x.Len(); j++ {
+            if x.Less(i, j) {
+                x.Swap(i, j)
+            }
+        }
     }
-    if nil == f{
-        fmt.Print("f is nil \n")
-    }
-    fmt.Print(a,b,c,d,e,f,g)
 }
+func main() {
+    ints := Xi{44, 67, 3, 17, 89, 10, 73, 9, 14, 8}
+    strings := Xs{"nut", "ape", "elephant", "zoo", "go"}
+    Sort(ints)
+    fmt.Printf("%v\n", ints)
+    Sort(strings)
+    fmt.Printf("%v\n", strings)
+}
+
+Output ==>
+[3 8 9 10 14 17 44 67 73 89]
+[ape element go nut zoo]
 </pre>
-##自动类型转换
+
+##函数
 <pre>
 package main
 import "fmt"
+func say(str string,args... interface {}) (int,error){
+	_,err := fmt.Printf(str,args...)
+	return len(args),err
+}
 func main(){
-	var b string
-	b="Hello world"
-	fmt.Print(b)
+	count := 1
+	closure := func (msg string) {
+		say("%d %s\n",count,msg)
+		count++
+	}
+	closure("Say one")
+	closure("Say again")
 }
+
+Output ==>
+Say one
+Say again
 </pre>
-上面的相当于：
-<pre>
-package main
-import "fmt"
-func main(){
-	b := "Hello world"
-	fmt.Print(b)
-}
-</pre>
-go语言编译器自动会推断变量b的类型。
+ 在上述的代码中，我们一共声明并定义了两个函数，一个是say，另一个则是一个匿名函数，而且这里通过匿名函数，生成了一个函数闭包。在Go语言中
 
-##Go中字符编码问题导致的len问题
-Go中默认是UTF-8。
-<pre>
-package main
-import "fmt"
-func main () {
-	a := "fffs"
-	fmt.Println(a)
-	fmt.Printf("%d\n",len(a))
-}
-Output==>
-fffs
-4
-</pre>
-###一个疑问： 
-当一个字符串中既有英文又有中文时，会出现字符编码错误提示，待解决。
+使用func关键字声明一个函数。因此，如果你要声明一个函数，马上要想到func，不管是不是匿名函数，唯一的区别就是匿名函数后面没有函数名称了，直接
 
+func（参数列表）（返回值）。从上面我们也看到了，Go语言函数的返回类型在函数名的后面，和它声明变量的类型一样，这也与大部分语言不同的。而且函数的返回值可以是一个，也可以多个。比如上面的say函数，我们就返回了两个，一个整数类型，一个error。其中整数类型的是可变参数的长度，error类型则是从fmt包中Printf函数返回的值中的其中一个，而且我们看到接受fmt.Printf()函数返回值的第一个变量我们使用了"_"符号，这个代表我们不关心第一个返回值，将它忽略。接下来再来看say函数的第二个参数，是一个...interface{}类型，三个点是Go语言的一种类型Slices，类似数组，但是有所不同，这个将在后续文章中继续介绍，既然是一个类似数组的类型，当然也可以想到可变参数可以接收任意多个，但是必须是相同类型的，而这里使用一个空接口类型作为Slices的元素类型，使得可以接收任意类型参数的元素，之后可以通过缺省参数推断出每一个元素真实的类型。
 
-
-
-##感悟
-###Channel与锁谁轻量
-Channel和锁谁轻量? 一句话告诉你: Channel本身用锁实现的. 因此在迫不得已时, 还是尽量减少使用Channel, 但Channel属于语言层支持, 适度使用, 可以改善代码可读写
-###设计
-踏入Golang, 就不要尝试设计模式
-传统的OO在这里是非法的, 尝试模拟只是一种搞笑
-把OO在Golang里换成复合+接口
-对实现者来说, 把各种结构都复合起来, 对外暴露出一个或多个接口, 接口就好像使用者在实现模型上打出的很多洞
-别怕全局函数, 包(Package)可以控制全局函数使用范围.
-没必要什么都用interface对外封装, struct也是一种良好的封装方法
-Golang无继承, 因此无需类派生图. 没有派生这种点对点的依赖, 因此不会在大量类关系到来时, 形成繁杂不可变化的树形结构
-###容器
-用了很长时间map, 才发现Golang把map内建为语言特性时, 已经去掉了外置型map的api特性. 一切的访问和获取都是按照语言特性来做的, 原子化
-数组可以理解为底层对象, 你平时用的都是切片, 不是数组, 切片就是指针, 指向数组. 切片是轻量的, 即便值拷贝也是低损耗的
-###内存
-Golang在实际运行中, 你会发现内存可能会疯涨. 但跑上一段时间后, 就保持稳定. 这和Golang的内存分配, 垃圾回收有一定的关系
-现代的编程语言的内存管理不会很粗暴的直接从OS那边分配很多内存. 而是按需的不断分配成块的内存.
-对于非海量级应用, Golang本身的内存模型完全可以撑得下来. 无需像C++一样, 每个工程必做内存池和线程池
-###错误
-觉得Golang不停的处理err? 那是因为平时在其他语言根本没处理过错误, 要不然就是根部一次性try过所有的异常, 这是一种危险的行为
-panic可以被捕获, 因此编写服务器时, 可以做到不挂
-###危险的interface{}
-这东西就跟C/C++里的void*一样的危险, nil被interface{}包裹后不会等于nil相等, 但print出来确实是nil
-模板估计可以解决容器内带interface{}的问题. 但新东西引入, 估计又会让现在的哲学一些凌乱
-###初学Tips
-语言学习按照官网的教学走, 跑完基本就会了
-下载一个LiteIDE, 配合Golang的Runtime,基本开环境就有了
-Golang的类库设计方式和C#/C++都不同, 如果有Python经验的会感觉毫无违和感
-有一万个理由造轮子都请住手, 类库里有你要的东西
-写大工程请搜索: Golang项目目录结构组织
-Golang语言本身本人没有发现bug, 即便有也早就被大神们捉住了. 唯一的一个感觉貌似bug的, 经常是结构体成员首字母小写, 但是json又无法序列化出来…
-慎用cgo. 官方已经声明未来对cgo不提供完整兼容性. 任何一门语言在早期都需要对C做出支持, 但后期完善后的不兼容都是常态。
-###golang的time.Format的坑
-golang的time.Format设计的和其他语言都不一样, 其他语言总是使用一些格式化字符进行标示, 而golang呢, 查了网上一些坑例子 自己查了下golang的源码, 发现以下代码
-// String returns the time formatted using the format string
-//  "2006-01-02 15:04:05.999999999 -0700 MST"
-func (t Time) String() string {
-    return t.Format("2006-01-02 15:04:05.999999999 -0700 MST")
-}
-尝试将2006-01-02 15:04:05写入到自己的例子中
-func nowTime() string {
-    return time.Now().Format("2006-01-02 15:04:05")
-}
-结果返回正确. 询问了下, 据说这个日期是golang诞生的日子… 咋那么自恋呢…
