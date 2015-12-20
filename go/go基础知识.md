@@ -921,3 +921,52 @@ value of a: 17
 value of a: 18
 value of a: 19
 </pre>
+
+###嵌套for
+下面的程序使用嵌套for循环从2至100找出的素数.
+<pre>
+package main
+import "fmt"
+func main() {
+   /* local variable definition */
+   var i, j int
+
+   for i=2; i < 100; i++ {
+      for j=2; j <= (i/j); j++ {
+         if(i%j==0) {
+            break; // if factor found, not prime
+         }
+      }
+      if(j > (i/j)) {
+         fmt.Printf("%d is prime\n", i);
+      }
+   }  
+}
+
+output ==>
+2 is prime
+3 is prime
+5 is prime
+7 is prime
+11 is prime
+13 is prime
+17 is prime
+19 is prime
+23 is prime
+29 is prime
+31 is prime
+37 is prime
+41 is prime
+43 is prime
+47 is prime
+53 is prime
+59 is prime
+61 is prime
+67 is prime
+71 is prime
+73 is prime
+79 is prime
+83 is prime
+89 is prime
+97 is prime
+</pre>
