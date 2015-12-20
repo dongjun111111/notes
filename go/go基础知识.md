@@ -811,3 +811,37 @@ Well done
 Excellent!
 Your grade is  A
 </pre>
+
+
+###表达式select
+以下规则适用于select语句：
+
+- 可以有任意数量的范围内选择一个case语句。每一种情况下后跟的值进行比较，以及一个冒号。
+- 对于case的类型必须是一个通信通道操作。
+- 当通道运行下面发生的语句这种情况将执行。在case语句中break不是必需的。
+- select语句可以有一个可选默认case，它必须出现在select的结束前。缺省情况下，可用于执行任务时没有的情况下是真实的。在默认情况下break不是必需的。
+<pre>
+package main
+import "fmt"
+func main() {
+   var c1, c2, c3 chan int
+   var i1, i2 int
+   select {
+      case i1 = <-c1:
+         fmt.Printf("received ", i1, " from c1\n")
+      case c2 <- i2:
+         fmt.Printf("sent ", i2, " to c2\n")
+      case i3, ok := (<-c3):  // same as: i3, ok := <-c3
+         if ok {
+            fmt.Printf("received ", i3, " from c3\n")
+         } else {
+            fmt.Printf("c3 is closed\n")
+         }
+      default:
+         fmt.Printf("no communication\n")
+   }    
+}   
+
+Output==>
+no communication
+</pre>
