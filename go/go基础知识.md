@@ -741,4 +741,10 @@ a is of type int
 b is of type int
 c is of type string
 </pre>
-%T输出该变量的数据类型。
+%T输出该变量的数据类型<br>
+<b>const 关键字</b>
+<pre>
+  const LENGTH int = 10
+  const WIDTH int = 5  
+</pre>
+这是一个良好的编程习惯大写定义常量。
