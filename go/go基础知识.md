@@ -1307,6 +1307,7 @@ Circle area: 78.539816
 - 所有函数的外面的变量称为全局变量
 - 在这被称为形式参数函数的参数的定义
 - 让我们来解释一下什么是局部和全局变量和形式参数。
+
 ####局部变量
 <pre>
 package main
@@ -1321,6 +1322,7 @@ func main() {
    fmt.Printf ("value of a = %d, b = %d and c = %d\n", a, b, c)
 }
 </pre>
+
 ####全局变量
 全局变量函数的定义之外，通常在程序的顶部。全局变量的值在整个项目的生命周期，它们可以在里面任意的程序中定义的函数中访问。
 全局变量可以被任何函数访问。也就是说，全局变量可以在整个程序中使用在它声明之后。下面是使用全局和局部变量的例子：
@@ -1339,6 +1341,7 @@ func main() {
    fmt.Printf("value of a = %d, b = %d and g = %d\n", a, b, g)
 }
 </pre>
+
 ####形式参数
 <pre>
 package main
@@ -1366,6 +1369,7 @@ value of a in sum() = 10
 value of b in sum() = 20
 value of c in main() = 30
 </pre>
+
 ####初始化局部和全局变量
 当局部变量作为全局变量被初始化其对应值为0。指针被初始化为nil。
 ###Go语言数组
@@ -1405,6 +1409,7 @@ Element[7] = 107
 Element[8] = 108
 Element[9] = 109
 </pre>
+
 ####访问二维数组元素
 <pre>
 package main
@@ -1460,8 +1465,10 @@ output ==>
 Average value is: 214.400000
 </pre>
 ###Go语言结构
+
 ####定义结构
 定义一个结构，必须使用type和struct语句。该结构语句定义了一个新的数据类型，项目不止一个成员。类型语句是结构在我们的案例类型绑定的名称。
+
 ####访问结构成员
 要访问结构的成员，我们使用成员访问运算符(.)。成员访问运算符是编码作为结构变量名，并且我们希望访问结构部件之间的周期。可使用struct关键字来定义结构类型的变量。
 <pre>
@@ -1508,6 +1515,7 @@ Book 2 author : Zara Ali
 Book 2 subject : Telecom Billing Tutorial
 Book 2 book_id : 6495700
 </pre>
+
 ####结构作为函数参数
 <pre>
 package main
@@ -1553,6 +1561,7 @@ Book author : Zara Ali
 Book subject : Telecom Billing Tutorial
 Book book_id : 6495700
 </pre>
+
 ####指针结构
 可以非常相似定义指针结构的方式，为您定义指向任何其他变量:
 <pre>
@@ -1611,8 +1620,10 @@ Book subject : Telecom Billing Tutorial
 Book book_id : 6495700
 </pre>
 
+
 ###Go语言映射
 Go编程提供另一个重要的数据类型是映射，唯一映射一个键到一个值。一个键要使用在以后检索值的对象。给定的键和值，可以在一个Map对象存储的值。值存储后，您可以使用它的键检索。
+
 ####定义映射
 必须使用make函数来创建一个映射。
 <pre>
@@ -1712,7 +1723,8 @@ func main() {
 }
 </pre>
 Go编程语言支持递归，即要调用的函数本身。但是在使用递归时，程序员需要谨慎确定函数的退出条件，否则会造成无限循环。
-递归函数是解决许多数学问题想计算一个数阶乘非常有用的，产生斐波系列等
+递归函数是解决许多数学问题想计算一个数阶乘非常有用的，产生斐波系列等。
+
 ####数字阶乘
 <pre>
 package main
@@ -1730,6 +1742,7 @@ func main {
 output ==>
 Factorial of 15 is 2004310016
 </pre>
+
 ####斐波那契系列
 <pre>
 package main
