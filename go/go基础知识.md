@@ -627,10 +627,10 @@ func main() {
 	s string
 	x int
 	}{"abc", 100}
-	p := uintptr(unsafe.Pointer(&d)) // *struct -> Pointer -> uintptr
-	p += unsafe.Offsetof(d.x) // uintptr + offset
-	p2 := unsafe.Pointer(p) // uintptr -> Pointer
-	px := (*int)(p2) // Pointer -> *int
+	p := uintptr(unsafe.Pointer(&d)) /*  *struct -> Pointer -> uintptr  */
+	p += unsafe.Offsetof(d.x) /* uintptr + offset */
+	p2 := unsafe.Pointer(p) /* uintptr -> Pointer  */
+	px := (*int)(p2) /* Pointer -> *int  */
 	*px = 200   //d.x = 200
 	fmt.Printf("%#v\n", d)
 }
@@ -704,3 +704,8 @@ func nowTime() string {
 ![]("image/image7.png")
 
 
+
+
+###go的保留字(25)
+break default func interface select case defer go map struct chan else goto 
+package switch const fallthrough if range type continue for import return var
