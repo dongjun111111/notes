@@ -1090,6 +1090,18 @@ value of a: 18
 value of a: 19
 </pre>
 
+另一个例子：
+<pre>
+func myFunc() {
+    i := 0
+Here:   //这行的第一个词，以冒号结束作为标签
+    println(i)
+    i++
+    goto Here   //跳转到Here去
+}
+</pre>
+注意：标签名是大小写敏感的。
+
 ###嵌套for
 下面的程序使用嵌套for循环从2至100找出的素数.
 <pre>
