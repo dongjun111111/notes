@@ -683,3 +683,15 @@ func nowTime() string {
     return time.Now().Format("2006-01-02 15:04:05")
 }
 结果返回正确. 询问了下, 据说这个日期是golang诞生的日子… 咋那么自恋呢…
+
+###goruntime
+
+- 尽可能实现无锁机制；
+- 
+![]("image/image1.png")
+
+![]("image/image2.png")
+
+![]("image/image3.png")
+
+
