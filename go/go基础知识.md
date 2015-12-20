@@ -567,6 +567,25 @@ fffs
 
 
 ###指针
+####什么是指针？
+指针是一个变量，其值是另一个变量的地址，所述存储器位置，即，直接地址。就像变量或常量，必须声明指针之前，可以用它来存储任何变量的地址。指针变量声明的一般形式是：
+<pre>
+var var_name *var-type
+</pre>
+####如何使用指针？
+有一些重要的操作，我们使用指针非常频繁。 （a）定义一个指针变量（b）分配一个变量的指针；（c）在指针变量的地址，可用地址来访问它的值。这可通过使用一元运算符 * ，返回位于其操作数所指定的地址的变量的值。
+####在Go中的nil指针
+Go语言编译一个 nil 值赋给一个没有被确切的地址分配的指针变量。这样做是在变量声明时，分配 nil 指针被称为nil指针。
+<pre>
+package main
+import "fmt"
+func main() {
+   var  ptr *int
+   fmt.Printf("The value of ptr is : %x\n", ptr  )
+}
+output ==>
+The value of ptr is 0
+</pre>
 支持指针类型 *T，指针的指针 **T，以及包含包名前缀的  *<package>.T。
 
 - 默认值，没有 NULL 常量。
@@ -639,6 +658,24 @@ Output ==>
 struct {s string; x int}{s:"abc",x:200}
 </pre>
 ####注意：GC 把 uintptr 当成普通整数对象，它⽆无法阻⽌止 "关联" 对象被回收。
+###Go语言指针数组
+<pre>
+package main
+import "fmt"
+const MAX int = 3
+func main() {
+   a := []int{10,100,200}
+   var i int
+   for i = 0; i < MAX; i++ {
+      fmt.Printf("Value of a[%d] = %d\n", i, a[i] )
+   }
+}
+
+output ==>
+Value of a[0] = 10
+Value of a[1] = 100
+Value of a2] = 200
+</pre>
 ##感悟
 ###Channel与锁谁轻量
 Channel和锁谁轻量? 一句话告诉你: Channel本身用锁实现的. 因此在迫不得已时, 还是尽量减少使用Channel, 但Channel属于语言层支持, 适度使用, 可以改善代码可读写
@@ -1263,4 +1300,31 @@ a[3][0]: 3
 a[3][1]: 6
 a[4][0]: 4
 a[4][1]: 8
+</pre>
+
+###Go语言传递数组到函数
+如果想通过一个一维数组作为函数的参数，就必须声明函数形式参数在以下两种方式之一，以下两种声明方法产生类似的结果，因为每个告诉编译器，一个整数数组将会被接收。类似的方式，可以通过多维数组形式参数。
+<pre>
+package main
+import "fmt"
+func main() {
+   /* an int array with 5 elements */
+   var  balance = []int {1000, 2, 3, 17, 50}
+   var avg float32
+   /* pass array as an argument */
+   avg = getAverage( balance, 5 ) ;
+   /* output the returned value */
+   fmt.Printf( "Average value is: %f ", avg );
+}
+func getAverage(arr []int, size int) float32 {
+   var i,sum int
+   var avg float32  
+   for i = 0; i < size;i++ {
+      sum += arr[i]
+   }
+   avg = float32(sum / size)
+   return avg;
+}
+output ==>
+Average value is: 214.400000
 </pre>
