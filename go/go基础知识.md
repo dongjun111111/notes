@@ -1755,3 +1755,46 @@ func main() {
 outpt ==>
 0	1	1	2	3	5	8	13	21	34
 </pre>
+###Go语言错误处理
+使用返回值和错误消息。
+<pre>
+if err != nil {
+   fmt.Println(err)
+}
+</pre>
+例子：
+<pre>
+package main
+
+import "errors"
+import "fmt"
+import "math"
+
+func Sqrt(value float64)(float64, error) {
+   if(value < 0){
+      return 0, errors.New("Math: negative number passed to Sqrt")
+   }
+   return math.Sqrt(value)
+}
+
+func main() {
+   result, err:= Sqrt(-1)
+
+   if err != nil {
+      fmt.Println(err)
+   }else {
+      fmt.Println(result)
+   }
+   
+   result, err = Sqrt(9)
+
+   if err != nil {
+      fmt.Println(err)
+   }else {
+      fmt.Println(result)
+   }
+}
+output ==>
+Math: negative number passed to Sqrt
+3
+</pre>
