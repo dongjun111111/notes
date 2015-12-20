@@ -157,6 +157,45 @@ Output ==>
 3.5
 </pre>
 
+<pre>
+package main
+import "fmt"
+func main {
+   /* create a slice */
+   numbers := []int{0,1,2,3,4,5,6,7,8} 
+   /* print the numbers */
+   for i:= range numbers {
+      fmt.Println("Slice item",i,"is",numbers[i])
+   } 
+   /* create a map*/
+   coutryCapitalMap := map[string] string {"France":"Paris","Italy":"Rome","Japan":"Tokyo"}
+   /* print map using keys*/
+   for country := range countryCapitalMap {
+      fmt.Println("Capital of",country,"is",countryCapitalMap[country])
+   }
+   /* print map using key-value*/
+   for country,capital := range countryCapitalMap {
+      fmt.Println("Capital of",country,"is",capital)
+   }
+}
+output ==>
+Slice item 0 is 0
+Slice item 1 is 1
+Slice item 2 is 2
+Slice item 3 is 3
+Slice item 4 is 4
+Slice item 5 is 5
+Slice item 6 is 6
+Slice item 7 is 7
+Slice item 8 is 8
+Capital of France is Paris
+Capital of Italy is Rome
+Capital of Japan is Tokyo
+Capital of France is Paris
+Capital of Italy is Rome
+Capital of Japan is Tokyo
+</pre>
+
 
 ###go二维数组
 <pre>
@@ -1570,4 +1609,149 @@ Book title : Telecom Billing
 Book author : Zara Ali
 Book subject : Telecom Billing Tutorial
 Book book_id : 6495700
+</pre>
+
+###Go语言映射
+Go编程提供另一个重要的数据类型是映射，唯一映射一个键到一个值。一个键要使用在以后检索值的对象。给定的键和值，可以在一个Map对象存储的值。值存储后，您可以使用它的键检索。
+####定义映射
+必须使用make函数来创建一个映射。
+<pre>
+/* declare a variable, by default map will be nil*/
+var map_variable map[key_data_type]value_data_type
+
+/* define the map as nil map can not be assigned any value*/
+map_variable = make(map[key_data_type]value_data_type)
+</pre>
+例子:
+<pre>
+package main
+import "fmt"
+func main {
+   var coutryCapitalMap map[string]string
+   /* create a map*/
+   coutryCapitalMap = make(map[string]string)
+   
+   /* insert key-value pairs in the map*/
+   countryCapitalMap["France"] = "Paris"
+   countryCapitalMap["Italy"] = "Rome"
+   countryCapitalMap["Japan"] = "Tokyo"
+   countryCapitalMap["India"] = "New Delhi"
+   
+   /* print map using keys*/
+   for country := range countryCapitalMap {
+      fmt.Println("Capital of",country,"is",countryCapitalMap[country])
+   }
+   
+   /* test if entry is present in the map or not*/
+   captial, ok := countryCapitalMap["United States"]
+   /* if ok is true, entry is present otherwise entry is absent*/
+   if(ok){
+      fmt.Println("Capital of United States is", capital)  
+   }else {
+      fmt.Println("Capital of United States is not present") 
+   }
+}
+
+output ==>
+Capital of India is New Delhi
+Capital of France is Paris
+Capital of Italy is Rome
+Capital of Japan is Tokyo
+Capital of United States is not present
+</pre>
+
+####delete() 函数
+delete()函数是用于从映射中删除一个项目。映射和相应的键将被删除。下面是一个例子：
+<pre>
+package main
+import "fmt"
+func main {   
+   /* create a map*/
+   coutryCapitalMap := map[string] string {"France":"Paris","Italy":"Rome","Japan":"Tokyo","India":"New Delhi"}
+   
+   fmt.Println("Original map")   
+   
+   /* print map */
+   for country := range countryCapitalMap {
+      fmt.Println("Capital of",country,"is",countryCapitalMap[country])
+   }
+   
+   /* delete an entry */
+   delete(countryCapitalMap,"France");
+   fmt.Println("Entry for France is deleted")  
+   
+   fmt.Println("Updated map")   
+   
+   /* print map */
+   for country := range countryCapitalMap {
+      fmt.Println("Capital of",country,"is",countryCapitalMap[country])
+   }
+}
+
+output==>
+Original Map
+Capital of France is Paris
+Capital of Italy is Rome
+Capital of Japan is Tokyo
+Capital of India is New Delhi
+Entry for France is deleted
+Updated Map
+Capital of India is New Delhi
+Capital of Italy is Rome
+Capital of Japan is Tokyo
+</pre>
+
+####Go语言递归
+递归是以相似的方式重复项目的过程。同样适用于编程语言中，如果一个程序可以让你调用同一个函数被调用的函数，递归调用函数内使用如下。
+<pre>
+func recursion() {
+   recursion() /* function calls itself */
+}
+func main() {
+   recursion()
+}
+</pre>
+Go编程语言支持递归，即要调用的函数本身。但是在使用递归时，程序员需要谨慎确定函数的退出条件，否则会造成无限循环。
+递归函数是解决许多数学问题想计算一个数阶乘非常有用的，产生斐波系列等
+####数字阶乘
+<pre>
+package main
+import "fmt"
+func factorial(i int) {
+   if(i <= 1) {
+      return 1
+   }
+   return i * factorial(i - 1)
+}
+func main {  
+    var i int = 15
+    fmt.Printf("Factorial of %d is %d\n", i, factorial(i))
+}
+output ==>
+Factorial of 15 is 2004310016
+</pre>
+####斐波那契系列
+<pre>
+package main
+
+import "fmt"
+
+func fibonaci(i int) {
+   if(i == 0) {
+      return 0
+   }
+   if(i == 1) {
+      return 1
+   }
+   return fibonaci(i-1) + fibonaci(i-2)
+}
+
+func main() {
+    var i int
+    for i = 0; i < 10; i++ {
+       fmt.Printf("%d\t%n", fibonaci(i))
+    }    
+}
+outpt ==>
+0	1	1	2	3	5	8	13	21	34
 </pre>
