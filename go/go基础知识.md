@@ -709,3 +709,14 @@ func nowTime() string {
 ###go的保留字(25)
 break default func interface select case defer go map struct chan else goto 
 package switch const fallthrough if range type continue for import return var
+
+###go数据类型
+boolean numeric string derived(指针类型，数组类型，联盟类型，函数类型，切片类型，接口类型，地图类型，管道类型) <br>
+####整型：
+uint8(0-255)8位无符号整数 uint16(0-65535) uint32(0-4294967295) uint64(0-big) int8(-128 - 127)有符号8位整数 int16(-32768 - 32767) int32 int64
+####浮点类型:
+float32 float64 complex64 complex128
+####其它数值类型:
+byte（相当于uint8）
+rune (相当于uint32)
+uintptr (一个无符号整数来存储指针值的解释的比特位)
