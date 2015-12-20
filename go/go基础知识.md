@@ -686,8 +686,9 @@ func nowTime() string {
 
 ###goruntime
 
-- 尽可能实现无锁机制；
-- 
+- 尽可能实现无锁机制;
+- CGO有限制的使用，它会将该回收的资源推迟到下一次才对其进行回收操作;
+
 ![]("image/image1.png")
 
 ![]("image/image2.png")
