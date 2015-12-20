@@ -720,3 +720,25 @@ float32 float64 complex64 complex128
 byte（相当于uint8）
 rune (相当于uint32)
 uintptr (一个无符号整数来存储指针值的解释的比特位)
+<pre>
+package main
+import "fmt"
+func main() {
+   var a, b, c = 3, 4, "foo"  
+   fmt.Println(a)
+   fmt.Println(b)
+   fmt.Println(c)
+   fmt.Printf("a is of type %T\n", a)
+   fmt.Printf("b is of type %T\n", b)
+   fmt.Printf("c is of type %T\n", c)
+}
+
+Output ==>
+3
+4
+foo
+a is of type int
+b is of type int
+c is of type string
+</pre>
+%T输出该变量的数据类型。
