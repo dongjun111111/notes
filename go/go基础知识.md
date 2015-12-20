@@ -748,3 +748,32 @@ c is of type string
   const WIDTH int = 5  
 </pre>
 这是一个良好的编程习惯大写定义常量。
+###Go语言其它运算符
+还有其他一些重要的运算符，包括sizeof和?:在Go语言中也支持。
+& 返回一个变量的地址 &a; 将得到变量的实际地址  <br>
+* 指针的变量  *a; 将指向一个变量
+<pre>
+package main
+import "fmt"
+func main() {
+   var a int = 4
+   var b int32
+   var c float32
+   var ptr *int
+   /* example of type operator */
+   fmt.Printf("Line 1 - Type of variable a = %T\n", a );
+   fmt.Printf("Line 2 - Type of variable b = %T\n", b );
+   fmt.Printf("Line 3 - Type of variable c= %T\n", c );
+   /* example of & and * operators */
+   ptr = &a	/* 'ptr' now contains the address of 'a'*/
+   fmt.Printf("value of a is  %d\n", a);
+   fmt.Printf("*ptr is %d.\n", *ptr);
+}
+
+Ouptut ==>
+Line 1 - Type of variable a = int
+Line 2 - Type of variable b = int32
+Line 3 - Type of variable c= float32
+value of a is  4
+*ptr is 4.
+</pre>
