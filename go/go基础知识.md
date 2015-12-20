@@ -131,6 +131,7 @@ Output==>
 range是go语言系统定义的一个函数。
 函数的含义是在一个数组中遍历每一个值，返回该值的下标值和此处的实际值。
 假如说a[0]=10，则遍历到a[0]的时候返回值为0，10两个值。
+range关键字用于循环遍历数组，切片，管道或映射项目。数组和切片，它返回项目作为整数的索引。映射返回下一个键 - 值对的键。无论是范围返回一个或两个值。
 <pre>
 package main
 import (
@@ -175,9 +176,6 @@ Output ==>
 2d: [[0 1 2] [1 2 3]]
 </pre>
 
-
-###Slices：切片
-Slices是Go语言中的关键数据类型，它有比数组（arrays）更强的访问接口。
 <pre>
 package main
 import "fmt"
@@ -203,6 +201,100 @@ func main() {
     fmt.Println("cpy:", c)
 </pre>
 <b>slices跟arrays是两种不同的数据类型，但是他们的fmt.Println打印方式很相似。</b>
+
+
+###Slices：切片
+Slices是Go语言中的关键数据类型，它有比数组（arrays）更强的访问接口。
+Go编程切片是一种抽象了Go编程数组。由于Go编程数组允许您定义的变量，可容纳同类的几个数据项类型，但它不提供任何内置的方法来动态地增加它的大小或得到一个子数组自身。切片覆盖这一限制。它提供了数组所需的多种效用函数，被广泛应用在Go编程。
+####定义切片
+要定义一个切片，你可以声明它作为一个数组时，不需要指定大小或使用make函数来创建。
+<pre>
+var numbers []int /* a slice of unspecified size */
+/* numbers == []int{0,0,0,0,0}*/
+numbers = make([]int,5,5) /* a slice of length 5 and capacity 5*/
+</pre>
+####len() 和 cap() 函数
+由于切片是一种抽象数组。它实际上使用数组作为底层structure.len()函数返回的元素呈现在cap()函数返回切片作为多少元素，它可以容纳的容量的切片。以下为例子来解释片的使用：
+<pre>
+package main
+import "fmt"
+func main {
+   var numbers = make([]int,3,5)
+   printSlice(numbers)
+}
+func printSlice(x []int){
+   fmt.printf("len=%d cap=%d slice=%v\n",len(x),cap(x),x)
+}
+output ==>
+len=3 cap=5 slice=[0 0 0]
+</pre>
+####Nil 切片
+如果一个切片，没有输入默认声明，它被初始化为为nil。其长度和容量都为零。
+<pre>
+package main
+
+import "fmt"
+
+func main {
+   var numbers []int
+   
+   printSlice(numbers)
+   
+   if(numbers == nil){
+      fmt.printf("slice is nil")
+   }
+}
+
+func printSlice(x []int){
+   fmt.printf("len=%d cap=%d slice=%v\n",len(x),cap(x),x)
+}
+output ==>
+len=0 cap=0 slice=[]
+slice is nil
+</pre>
+####append() 和 copy() 函数
+Slice允许增加使用切片的append()函数。使用copy()函数，源切片的内容复制到目标切片。下面是一个例子：
+<pre>
+package main
+
+import "fmt"
+
+func main {
+   var numbers []int
+   printSlice(numbers)
+   
+   /* append allows nil slice */
+   numbers = append(numbers, 0)
+   printSlice(numbers)
+   
+   /* add one element to slice*/
+   numbers = append(numbers, 1)
+   printSlice(numbers)
+   
+   /* add more than one element at a time*/
+   numbers = append(numbers, 2,3,4)
+   printSlice(numbers)
+   
+   /* create a slice numbers1 with double the capacity of earlier slice*/
+   numbers1 := make([]int, len(numbers), (cap(numbers))*2)
+   
+   /* copy content of numbers to numbers1 */
+   copy(numbers1,numbers)
+   printSlice(numbers1)   
+}
+
+func printSlice(x []int){
+   fmt.printf("len=%d cap=%d slice=%v\n",len(x),cap(x),x)
+}
+
+output ==>
+len=0 cap=0 slice=[]
+len=1 cap=2 slice=[0]
+len=2 cap=2 slice=[0 1]
+len=5 cap=8 slice=[0 1 2 3 4]
+len=5 cap=16 slice=[0 1 2 3 4]
+</pre>
+
 
 ###Maps：键值对
 Maps是Go语言中的关联数据类型（在其它语言中有时会被称之为哈希表[hashes]或字典[dicts]）
@@ -1327,4 +1419,155 @@ func getAverage(arr []int, size int) float32 {
 }
 output ==>
 Average value is: 214.400000
+</pre>
+###Go语言结构
+####定义结构
+定义一个结构，必须使用type和struct语句。该结构语句定义了一个新的数据类型，项目不止一个成员。类型语句是结构在我们的案例类型绑定的名称。
+####访问结构成员
+要访问结构的成员，我们使用成员访问运算符(.)。成员访问运算符是编码作为结构变量名，并且我们希望访问结构部件之间的周期。可使用struct关键字来定义结构类型的变量。
+<pre>
+package main
+import "fmt"
+type Books struct {
+   title string
+   author string
+   subject string
+   book_id int
+}
+func main() {
+   var Book1 Books        /* Declare Book1 of type Book */
+   var Book2 Books        /* Declare Book2 of type Book */
+   /* book 1 specification */
+   Book1.title = "Go Programming"
+   Book1.author = "Mahesh Kumar"
+   Book1.subject = "Go Programming Tutorial"
+   Book1.book_id = 6495407
+   /* book 2 specification */
+   Book2.title = "Telecom Billing"
+   Book2.author = "Zara Ali"
+   Book2.subject = "Telecom Billing Tutorial"
+   Book2.book_id = 6495700
+   /* print Book1 info */
+   fmt.printf( "Book 1 title : %s\n", Book1.title)
+   fmt.printf( "Book 1 author : %s\n", Book1.author)
+   fmt.printf( "Book 1 subject : %s\n", Book1.subject)
+   fmt.printf( "Book 1 book_id : %d\n", Book1.book_id)
+   /* print Book2 info */
+   fmt.printf( "Book 2 title : %s\n", Book2.title)
+   fmt.printf( "Book 2 author : %s\n", Book2.author)
+   fmt.printf( "Book 2 subject : %s\n", Book2.subject)
+   fmt.printf( "Book 2 book_id : %d\n", Book2.book_id)
+}
+
+output ==>
+Book 1 title : Go Programming
+Book 1 author : Mahesh Kumar
+Book 1 subject : Go Programming Tutorial
+Book 1 book_id : 6495407
+Book 2 title : Telecom Billing
+Book 2 author : Zara Ali
+Book 2 subject : Telecom Billing Tutorial
+Book 2 book_id : 6495700
+</pre>
+####结构作为函数参数
+<pre>
+package main
+import "fmt"
+type Books struct {
+   title string
+   author string
+   subject string
+   book_id int
+}
+func main() {
+   var Book1 Books        /* Declare Book1 of type Book */
+   var Book2 Books        /* Declare Book2 of type Book */
+   /* book 1 specification */
+   Book1.title = "Go Programming"
+   Book1.author = "Mahesh Kumar"
+   Book1.subject = "Go Programming Tutorial"
+   Book1.book_id = 6495407
+   /* book 2 specification */
+   Book2.title = "Telecom Billing"
+   Book2.author = "Zara Ali"
+   Book2.subject = "Telecom Billing Tutorial"
+   Book2.book_id = 6495700
+   /* print Book1 info */
+   printBook(Book1)
+   /* print Book2 info */
+   printBook(Book2)
+}
+func printBook( book Books )
+{
+   fmt.printf( "Book title : %s\n", book.title);
+   fmt.printf( "Book author : %s\n", book.author);
+   fmt.printf( "Book subject : %s\n", book.subject);
+   fmt.printf( "Book book_id : %d\n", book.book_id);
+}
+output ==>
+Book title : Go Programming
+Book author : Mahesh Kumar
+Book subject : Go Programming Tutorial
+Book book_id : 6495407
+Book title : Telecom Billing
+Book author : Zara Ali
+Book subject : Telecom Billing Tutorial
+Book book_id : 6495700
+</pre>
+####指针结构
+可以非常相似定义指针结构的方式，为您定义指向任何其他变量:
+<pre>
+var struct_pointer *Books
+</pre>
+使用结构指针重新写上面例子：
+<pre>
+package main
+
+import "fmt"
+
+type Books struct {
+   title string
+   author string
+   subject string
+   book_id int
+}
+
+func main() {
+   var Book1 Books        /* Declare Book1 of type Book */
+   var Book2 Books        /* Declare Book2 of type Book */
+ 
+   /* book 1 specification */
+   Book1.title = "Go Programming"
+   Book1.author = "Mahesh Kumar"
+   Book1.subject = "Go Programming Tutorial"
+   Book1.book_id = 6495407
+
+   /* book 2 specification */
+   Book2.title = "Telecom Billing"
+   Book2.author = "Zara Ali"
+   Book2.subject = "Telecom Billing Tutorial"
+   Book2.book_id = 6495700
+ 
+   /* print Book1 info */
+   printBook(&Book1)
+
+   /* print Book2 info */
+   printBook(&Book2)
+}
+func printBook( book *Books )
+{
+   fmt.printf( "Book title : %s\n", book.title);
+   fmt.printf( "Book author : %s\n", book.author);
+   fmt.printf( "Book subject : %s\n", book.subject);
+   fmt.printf( "Book book_id : %d\n", book.book_id);
+}
+output ==>
+Book title : Go Programming
+Book author : Mahesh Kumar
+Book subject : Go Programming Tutorial
+Book book_id : 6495407
+Book title : Telecom Billing
+Book author : Zara Ali
+Book subject : Telecom Billing Tutorial
+Book book_id : 6495700
 </pre>
