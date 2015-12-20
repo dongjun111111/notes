@@ -874,9 +874,23 @@ func nowTime() string {
 
 
 
-###go的保留字(25)
+###go的保留字/关键字(25)
 break default func interface select case defer go map struct chan else goto 
-package switch const fallthrough if range type continue for import return var
+package switch const fallthrough if range type continue for import return var <br>
+var和const参考2.2Go语言基础里面的变量和常量申明<br>
+package和import已经有过短暂的接触<br>
+func 用于定义函数和方法<br>
+return 用于从函数返回<br>
+defer 用于类似析构函数<br>
+go 用于并发<br>
+select 用于选择不同类型的通讯<br>
+interface 用于定义接口<br>
+struct 用于定义抽象数据类型<br>
+break、case、continue、for、fallthrough、else、if、switch、goto、default流程控制<br>
+chan用于channel通讯<br>
+type用于声明自定义类型<br>
+map用于声明map类型数据<br>
+range用于读取slice、map、channel数据<br>
 
 ###go数据类型
 boolean numeric string derived(指针类型，数组类型，联盟类型，函数类型，切片类型，接口类型，地图类型，管道类型) <br>
@@ -1997,3 +2011,221 @@ func main() {
     sam.SayHi()
 }
 </pre>
+
+###并发
+有人把Go比作21世纪的C语言，第一是因为Go语言设计简单，第二，21世纪最重要的就是并行程序设计，而Go从语言层面就支持了并行。
+
+####1.goroutine
+goroutine是Go并行设计的核心。goroutine说到底其实就是线程，但是它比线程更小，十几个goroutine可能体现在底层就是五六个线程，Go语言内部帮你实现了这些goroutine之间的内存共享。执行goroutine只需极少的栈内存(大概是4~5KB)，当然会根据相应的数据伸缩。也正因为如此，可同时运行成千上万个并发任务。goroutine比thread更易用、更高效、更轻便。
+goroutine是通过Go的runtime管理的一个线程管理器。goroutine通过go关键字实现了，其实就是一个普通的函数。<br>
+go hello(a, b, c)<br>
+通过关键字go就启动了一个goroutine。我们来看一个例子
+<pre>
+package main
+
+import (
+    "fmt"
+    "runtime"
+)
+
+func say(s string) {
+    for i := 0; i < 5; i++ {
+        runtime.Gosched()
+        fmt.Println(s)
+    }
+}
+
+func main() {
+    go say("world") //开一个新的Goroutines执行
+    say("hello") //当前Goroutines执行
+}
+
+// 以上程序执行后将输出：
+// hello
+// world
+// hello
+// world
+// hello
+// world
+// hello
+// world
+// hello
+</pre>
+我们可以看到go关键字很方便的就实现了并发编程。 上面的多个goroutine运行在同一个进程里面，共享内存数据，不过设计上我们要遵循：不要通过共享来通信，而要通过通信来共享。
+
+####2.channels(channel)
+goroutine运行在相同的地址空间，因此访问共享内存必须做好同步。那么goroutine之间如何进行数据的通信呢，Go提供了一个很好的通信机制channel。channel可以与Unix shell 中的双向管道做类比：可以通过它发送或者接收值。这些值只能是特定的类型：channel类型。定义一个channel时，也需要定义发送到channel的值的类型。注意，必须使用make 创建channel：
+<pre>
+ci := make(chan int)
+cs := make(chan string)
+cf := make(chan interface{})
+</pre>
+channel通过操作符<-来接收和发送数据
+<pre>
+ch <- v    // 发送v到channel ch.
+v := <-ch  // 从ch中接收数据，并赋值给v
+</pre>
+我们把这些应用到我们的例子中来：
+<pre>
+package main
+
+import "fmt"
+
+func sum(a []int, c chan int) {
+    total := 0
+    for _, v := range a {
+        total += v
+    }
+    c <- total  // send total to c
+}
+
+func main() {
+    a := []int{7, 2, 8, -9, 4, 0}
+
+    c := make(chan int)
+    go sum(a[:len(a)/2], c)
+    go sum(a[len(a)/2:], c)
+    x, y := <-c, <-c  // receive from c
+
+    fmt.Println(x, y, x + y)
+}
+</pre>
+默认情况下，channel接收和发送数据都是阻塞的，除非另一端已经准备好，这样就使得Goroutines同步变的更加的简单，而不需要显式的lock。所谓阻塞，也就是如果读取（value := <-ch）它将会被阻塞，直到有数据接收。其次，任何发送（ch<-5）将会被阻塞，直到数据被读出。无缓冲channel是在多个goroutine之间同步很棒的工具。
+
+####3.Buffered Channels
+上面我们介绍了默认的非缓存类型的channel，不过Go也允许指定channel的缓冲大小，很简单，就是channel可以存储多少元素。ch:= make(chan bool, 4)，创建了可以存储4个元素的bool 型channel。在这个channel 中，前4个元素可以无阻塞的写入。当写入第5个元素时，代码将会阻塞，直到其他goroutine从channel 中读取一些元素，腾出空间。
+<pre>
+ch := make(chan type, value)
+value == 0 ! 无缓冲（阻塞）
+value > 0 ! 缓冲（非阻塞，直到value 个元素）
+</pre>
+我们看一下下面这个例子，你可以在自己本机测试一下，修改相应的value值
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+    c := make(chan int, 2)//修改2为1就报错，修改2为3可以正常运行
+    c <- 1
+    c <- 2
+    fmt.Println(<-c)
+    fmt.Println(<-c)
+}
+    //修改为1报如下的错误:
+    //fatal error: all goroutines are asleep - deadlock!
+</pre>
+
+####4.Range和Close
+上面这个例子中，我们需要读取两次c，这样不是很方便，Go考虑到了这一点，所以也可以通过range，像操作slice或者map一样操作缓存类型的channel，请看下面的例子:
+<pre>
+package main
+
+import (
+    "fmt"
+)
+
+func fibonacci(n int, c chan int) {
+    x, y := 1, 1
+    for i := 0; i < n; i++ {
+        c <- x
+        x, y = y, x + y
+    }
+    close(c)
+}
+
+func main() {
+    c := make(chan int, 10)
+    go fibonacci(cap(c), c)
+    for i := range c {
+        fmt.Println(i)
+    }
+}
+</pre>
+for i := range c能够不断的读取channel里面的数据，直到该channel被显式的关闭。上面代码我们看到可以显式的关闭channel，生产者通过内置函数close关闭channel。关闭channel之后就无法再发送任何数据了，在消费方可以通过语法v, ok := <-ch测试channel是否被关闭。如果ok返回false，那么说明channel已经没有任何数据并且已经被关闭。
+记住应该在生产者的地方关闭channel，而不是消费的地方去关闭它，这样容易引起panic
+另外记住一点的就是channel不像文件之类的，不需要经常去关闭，只有当你确实没有任何发送数据了，或者你想显式的结束range循环之类的
+
+####5.Select
+我们上面介绍的都是只有一个channel的情况，那么如果存在多个channel的时候，我们该如何操作呢，Go里面提供了一个关键字select，通过select可以监听channel上的数据流动。
+
+select默认是阻塞的，只有当监听的channel中有发送或接收可以进行时才会运行，当多个channel都准备好的时候，select是随机的选择一个执行的。
+<pre>
+package main
+
+import "fmt"
+
+func fibonacci(c, quit chan int) {
+    x, y := 1, 1
+    for {
+        select {
+        case c <- x:
+            x, y = y, x + y
+        case <-quit:
+            fmt.Println("quit")
+            return
+        }
+    }
+}
+
+func main() {
+    c := make(chan int)
+    quit := make(chan int)
+    go func() {
+        for i := 0; i < 10; i++ {
+            fmt.Println(<-c)
+        }
+        quit <- 0
+    }()
+    fibonacci(c, quit)
+}
+</pre>
+在select里面还有default语法，select其实就是类似switch的功能，default就是当监听的channel都没有准备好的时候，默认执行的（select不再阻塞等待channel）。
+<pre>
+select {
+case i := <-c:
+    // use i
+default:
+    // 当c阻塞的时候执行这里
+}
+</pre>
+
+####6.超时
+有时候会出现goroutine阻塞的情况，那么我们如何避免整个程序进入阻塞的情况呢？我们可以利用select来设置超时，通过如下的方式实现：
+<pre>
+func main() {
+    c := make(chan int)
+    o := make(chan bool)
+    go func() {
+        for {
+            select {
+                case v := <- c:
+                    println(v)
+                case <- time.After(5 * time.Second):
+                    println("timeout")
+                    o <- true
+                    break
+            }
+        }
+    }()
+    <- o
+}
+</pre>
+
+####7.runtime goroutine
+runtime包中有几个处理goroutine的函数：
+
+- Goexit
+退出当前执行的goroutine，但是defer函数还会继续调用
+
+- Gosched
+让出当前goroutine的执行权限，调度器安排其他等待的任务运行，并在下次某个时候从该位置恢复执行。
+
+- NumCPU
+返回 CPU 核数量
+
+- NumGoroutine
+返回正在执行和排队的任务总数
+
+- GOMAXPROCS
+用来设置可以并行计算的CPU核数的最大值，并返回之前的值。
