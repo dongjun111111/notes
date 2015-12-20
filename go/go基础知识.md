@@ -845,3 +845,47 @@ func main() {
 Output==>
 no communication
 </pre>
+###go无限循环
+<pre>
+package main
+import "fmt"
+func main() {
+   for true  {
+       fmt.Printf("This loop will run forever.\n");
+   }
+}
+
+</pre>
+tip: 按Ctrl+ C键终止无限循环.
+###Go语言continue语句
+在Go编程语言中的continue语句有点像break语句。不是强制终止，只是继续循环下一个迭代发生，在两者之间跳过任何代码。
+<pre>
+package main
+import "fmt"
+func main() {
+   /* local variable definition */
+   var a int = 10
+
+   /* do loop execution */
+   for a < 20 {
+      if a == 15 {
+         /* skip the iteration */
+         a = a + 1;
+         continue;
+      }
+      fmt.Printf("value of a: %d\n", a);
+      a++;     
+   }  
+}
+
+output ==>
+value of a: 10
+value of a: 11
+value of a: 12
+value of a: 13
+value of a: 14
+value of a: 16
+value of a: 17
+value of a: 18
+value of a: 19
+</pre>
