@@ -865,7 +865,6 @@ import "fmt"
 func main() {
    /* local variable definition */
    var a int = 10
-
    /* do loop execution */
    for a < 20 {
       if a == 15 {
@@ -879,6 +878,39 @@ func main() {
 }
 
 output ==>
+value of a: 10
+value of a: 11
+value of a: 12
+value of a: 13
+value of a: 14
+value of a: 16
+value of a: 17
+value of a: 18
+value of a: 19
+</pre>
+###Go语言goto语句
+在Go编程语言中的goto语句提供无条件跳转从跳转到标记声明的功能。
+注意：使用goto语句是高度劝阻的在任何编程语言，因为它使得难以跟踪程序的控制流程，使程序难以理解，难以修改。使用一个goto任何程序可以改写，以便它不需要goto。
+<pre>
+package main
+import "fmt"
+func main() {
+   /* local variable definition */
+   var a int = 10
+
+   /* do loop execution */
+   LOOP: for a < 20 {
+      if a == 15 {
+         /* skip the iteration */
+         a = a + 1
+         goto LOOP
+      }
+      fmt.Printf("value of a: %d\n", a)
+      a++     
+   }  
+}
+
+Output ==>
 value of a: 10
 value of a: 11
 value of a: 12
