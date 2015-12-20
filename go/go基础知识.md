@@ -970,3 +970,297 @@ output ==>
 89 is prime
 97 is prime
 </pre>
+###从函数返回多个值
+<pre>
+package main
+import "fmt"
+func swap(x, y string) (string, string) {
+   return y, x
+}
+func main() {
+   a, b := swap("Mahesh", "Kumar")
+   fmt.Println(a, b)
+}
+Output ==>
+Kumar Mahesh
+</pre>
+###Go语言按值调用
+<pre>
+package main
+import "fmt"
+func main() {
+   /* local variable definition */
+   var a int = 100
+   var b int = 200
+
+   fmt.Printf("Before swap, value of a : %d\n", a )
+   fmt.Printf("Before swap, value of b : %d\n", b )
+
+   /* calling a function to swap the values */
+   swap(a, b)
+
+   fmt.Printf("After swap, value of a : %d\n", a )
+   fmt.Printf("After swap, value of b : %d\n", b )
+}
+func swap(x, y int) int {
+   var temp int
+
+   temp = x /* save the value of x */
+   x = y    /* put y into x */
+   y = temp /* put temp into y */
+   return temp;
+}
+
+Output ==>
+Before swap, value of a :100
+Before swap, value of b :200
+After swap, value of a :100
+After swap, value of b :200
+</pre>
+这表明，参数值没有被改变，虽然它们已经在函数内部改变。
+###Go语言参考调用
+通过传递函数参数拷贝参数的地址到形式参数的参考方法调用。在函数内部，地址是访问调用中使用的实际参数。这意味着，对参数的更改会影响传递的参数。
+要通过引用传递的值，参数的指针被传递给函数就像任何其他的值。所以，相应的，需要声明函数的参数为指针类型如下面的函数swap()，它的交换两个整型变量的值指向它的参数。
+<pre>
+package main
+import "fmt"
+func main() {
+   /* local variable definition */
+   var a int = 100
+   var b int= 200
+
+   fmt.Printf("Before swap, value of a : %d\n", a )
+   fmt.Printf("Before swap, value of b : %d\n", b )
+
+   /* calling a function to swap the values.
+   * &a indicates pointer to a ie. address of variable a and 
+   * &b indicates pointer to b ie. address of variable b.
+   */
+   swap(&a, &b)
+
+   fmt.Printf("After swap, value of a : %d\n", a )
+   fmt.Printf("After swap, value of b : %d\n", b )
+}
+
+func swap(x *int, y *int) {
+   var temp int
+   temp = *x    /* save the value at address x */
+   *x = *y    /* put y into x */
+   *y = temp    /* put temp into y */
+}
+
+output ==>
+Before swap, value of a :100
+Before swap, value of b :200
+After swap, value of a :200
+After swap, value of b :100
+</pre>
+
+###Go语言函数作为值
+Go编程语言提供灵活性，以动态创建函数，并使用它们的值。在下面的例子中，我们已经与初始化函数定义的变量。此函数变量的目仅仅是为使用内置的Math.sqrt()函数。下面是一个例子：
+<pre>
+package main
+import (
+   "fmt"
+   "math"
+)
+func main(){
+   /* declare a function variable */
+   getSquareRoot := func(x float64) float64 {
+      return math.Sqrt(x)
+   }
+   /* use the function */
+   fmt.Println(getSquareRoot(9))
+}
+output ==>
+3
+</pre>
+###Go语言函数闭合
+Go编程语言支持匿名函数其可以作为函数闭包。当我们要定义一个函数内联不传递任何名称，它可以使用匿名函数。在我们的例子中，我们创建了一个函数getSequence()将返回另一个函数。该函数的目的是关闭了上层函数的变量i 形成一个闭合。下面是一个例子：
+<pre>
+package main
+import "fmt"
+func getSequence() func() int {
+   i:=0
+   return func() int {
+      i+=1
+	  return i  
+   }
+}
+func main(){
+   /* nextNumber is now a function with i as 0 */
+   nextNumber := getSequence()  
+   /* invoke nextNumber to increase i by 1 and return the same */
+   fmt.Println(nextNumber())
+   fmt.Println(nextNumber())
+   fmt.Println(nextNumber())
+   /* create a new sequence and see the result, i is 0 again*/
+   nextNumber1 := getSequence()  
+   fmt.Println(nextNumber1())
+   fmt.Println(nextNumber1())
+}
+
+output ==>
+1
+2
+3
+1
+2
+</pre>
+###Go语言方法
+Go编程语言支持特殊类型的函数调用的方法。在方法声明的语法中，“接收器”的存在是为了表示容器中的函数。该接收器可用于通过调用函数“.”运算符。下面是一个例子：
+<pre>
+package main
+import (
+   "fmt"
+   "math"
+)
+/* define a circle */
+type Circle strut {
+   x,y,radius float64
+}
+/* define a method for circle */
+func(circle Circle) area() float64 {
+   return math.Pi * circle.radius * circle.radius
+}
+func main(){
+   circle := Circle(x:0, y:0, radius:5)
+   fmt.Printf("Circle area: %f", circle.area())
+}
+
+output ==>
+Circle area: 78.539816
+</pre>
+
+###Go语言范围规则
+在任何编程程序的作用域，其中一个定义的变量可以有它的存在，超出该变量的区域就不能访问。有三个地方变量可以在Go编程语言声明如下：
+
+- 内部函数或这就是所谓的局部变量块
+- 所有函数的外面的变量称为全局变量
+- 在这被称为形式参数函数的参数的定义
+- 让我们来解释一下什么是局部和全局变量和形式参数。
+####局部变量
+<pre>
+package main
+import "fmt"
+func main() {
+   /* local variable declaration */
+   var a, b, c int 
+   /* actual initialization */
+   a = 10
+   b = 20
+   c = a + b
+   fmt.Printf ("value of a = %d, b = %d and c = %d\n", a, b, c)
+}
+</pre>
+####全局变量
+全局变量函数的定义之外，通常在程序的顶部。全局变量的值在整个项目的生命周期，它们可以在里面任意的程序中定义的函数中访问。
+全局变量可以被任何函数访问。也就是说，全局变量可以在整个程序中使用在它声明之后。下面是使用全局和局部变量的例子：
+<pre>
+package main
+import "fmt"
+/* global variable declaration */
+var g int
+func main() {
+   /* local variable declaration */
+   var a, b int
+   /* actual initialization */
+   a = 10
+   b = 20
+   g = a + b
+   fmt.Printf("value of a = %d, b = %d and g = %d\n", a, b, g)
+}
+</pre>
+####形式参数
+<pre>
+package main
+import "fmt"
+/* global variable declaration */
+var a int = 20;
+func main() {
+   /* local variable declaration in main function */
+   var a int = 10
+   var b int = 20
+   var c int = 0
+   fmt.Printf("value of a in main() = %d\n",  a);
+   c = sum( a, b);
+   fmt.Printf("value of c in main() = %d\n",  c);
+}
+/* function to add two integers */
+func sum(a, b int) int {
+   fmt.Printf("value of a in sum() = %d\n",  a);
+   fmt.Printf("value of b in sum() = %d\n",  b);
+   return a + b;
+}
+output ==>
+value of a in main() = 10
+value of a in sum() = 10
+value of b in sum() = 20
+value of c in main() = 30
+</pre>
+####初始化局部和全局变量
+当局部变量作为全局变量被初始化其对应值为0。指针被初始化为nil。
+###Go语言数组
+声明数组
+<pre>
+var balance [10] float32
+</pre>
+初始化数组
+<pre>
+var balance = [5]float32{1000.0, 2.0, 3.4, 7.0, 50.0}
+</pre>
+访问数组元素：
+<pre>
+package main
+import "fmt"
+func main() {
+   var n [10]int /* n is an array of 10 integers */
+   var i,j int
+   /* initialize elements of array n to 0 */         
+   for i = 0; i < 10; i++ {
+      n[i] = i + 100 /* set element at location i to i + 100 */
+   }
+   /* output each array element's value */
+   for j = 0; j < 10; j++ {
+      fmt.Printf("Element[%d] = %d\n", j, n[j] )
+   }
+}
+output ==>
+Element[0] = 100
+Element[1] = 101
+Element[2] = 102
+Element[3] = 103
+Element[4] = 104
+Element[5] = 105
+Element[6] = 106
+Element[7] = 107
+Element[8] = 108
+Element[9] = 109
+</pre>
+####访问二维数组元素
+<pre>
+package main
+import "fmt"
+func main() {
+   /* an array with 5 rows and 2 columns*/
+   var a = [5][2]int{ {0,0}, {1,2}, {2,4}, {3,6},{4,8}}
+   var i, j int
+   /* output each array element's value */
+   for  i = 0; i < 5; i++ {
+      for j = 0; j < 2; j++ {
+         fmt.Printf("a[%d][%d] = %d\n", i,j, a[i][j] )
+      }
+   }
+}
+output ==>
+a[0][0]: 0
+a[0][1]: 0
+a[1][0]: 1
+a[1][1]: 2
+a[2][0]: 2
+a[2][1]: 4
+a[3][0]: 3
+a[3][1]: 6
+a[4][0]: 4
+a[4][1]: 8
+</pre>
