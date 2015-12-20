@@ -777,3 +777,37 @@ Line 3 - Type of variable c= float32
 value of a is  4
 *ptr is 4.
 </pre>
+###表达式Switch
+<pre>
+package main
+import "fmt"
+func main() {
+   /* local variable definition */
+   var grade string = "B"
+   var marks int = 90
+   switch marks {
+      case 90: grade = "A"
+      case 80: grade = "B"
+      case 50,60,70 : grade = "C"
+      default: grade = "D"  
+   }
+   switch {
+      case grade == "A" :
+         fmt.Printf("Excellent!\n" )     
+      case grade == "B", grade == "C" :
+         fmt.Printf("Well done\n" )      
+      case grade == "D" :
+         fmt.Printf("You passed\n" )      
+      case grade == "F":
+         fmt.Printf("Better try again\n" )
+      default:
+         fmt.Printf("Invalid grade\n" );
+   }
+   fmt.Printf("Your grade is  %s\n", grade );      
+}
+
+Output ==>
+Well done
+Excellent!
+Your grade is  A
+</pre>
