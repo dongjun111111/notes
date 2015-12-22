@@ -7450,3 +7450,21 @@ function ftok($pathname, $proj_id) {
 }
 echo ftok($_SERVER["SCRIPT_FILENAME"], 250);
 
+
+
+++++func_get_args()与func_num_args()++++
+//func_get_args是获取方法中参数的数组，返回的是一个数组， 
+//func_num_args一般写在方法中，用于计数，就是数组的数组长度 
+function foo($name, $uid) 
+{ 
+     $count = func_num_args(); 
+     if($count >=1){ 
+         echo "函数数组的数量为:{$count}<BR>"; 
+     } 
+     $list = func_get_args(); 
+     for($i=0; $i<count($list); $i++){ 
+         echo "{$i}:{$list[$i]}<BR><BR>"; 
+     } 
+} 
+foo("xlc",22); 
+
