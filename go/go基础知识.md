@@ -1492,7 +1492,7 @@ Average value is: 214.400000
 </pre>
 ###Go语言结构
 
-####定义结构
+####定义结构struct
 定义一个结构，必须使用type和struct语句。该结构语句定义了一个新的数据类型，项目不止一个成员。类型语句是结构在我们的案例类型绑定的名称。
 
 ####访问结构成员
@@ -2229,3 +2229,27 @@ runtime包中有几个处理goroutine的函数：
 
 - GOMAXPROCS
 用来设置可以并行计算的CPU核数的最大值，并返回之前的值。
+
+###指针
+声明指针：
+var ip *int // pointer to an integer
+var fp *float32 //pointer to a float
+指针的作用很多，其实说白了就是直接操作内存，好处是：
+
+- 效率更高，这个很容易理解，直接操作内存，效率必然更高
+- 可以写复杂度更高的数据结构，这个也好理解，程序员可以操作内存，当然可以写出灵活、复杂的数据结构
+- 编写出简洁、紧凑、高效的程序
+<pre>
+package main
+import "fmt"
+func main (){
+	type data struct {a,g int }
+	var d =data{1234,555555}
+	var p *data
+	p = &d
+	fmt.Printf("%p,%v\n",p,p.g)
+}
+output ==>
+0x0820022f0,555555
+</pre>
+
