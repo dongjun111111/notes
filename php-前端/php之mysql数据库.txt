@@ -711,3 +711,21 @@ SHOW PROCEDURE STATUS WHERE db='test';
 
 /*查看存储过程详细信息，包括创建语句*/
 SHOW CREATE PROCEDURE p4;
+
+
+
+++++mysql中mysql_fetch_assoc()++++++
+mysql_fetch_assoc()从数据库中取出一行（只取一行）作为数组，那么可以用var_dump或者print_r输出,默认为id=1.
+$res=mysql_query("select * from ks_zhiding where id>8");
+$fff=mysql_fetch_assoc($res);
+var_Dump($fff);
+结果为：
+array (size=3)
+  'id' => string '9' (length=1)
+  'rank' => string '9' (length=1)
+  'name' => string 'aaa' (length=3)
+
+
+
+
+
