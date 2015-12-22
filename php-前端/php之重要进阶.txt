@@ -7290,3 +7290,76 @@ if(!$change){
 }
 mysql_query('COMMIT');
 亲测通过。
+
+
++++php socket客户端代码+++++
+class SendDevAction{
+    //log日志文件
+    private $logDevFile = "";
+    //日志字符串
+    private $logStr = "";
+    //用于发送接收的socket对象
+    private $socket;
+    //socket连接对象
+    private $connect;
+    //对方服务器ip
+    private $host = "211.155.82.229";
+    //服务器端口
+    private $port = 14527;
+    //接收回传字符串长度
+    private $getStrLength = 16384;
+
+    function __construct(){
+        //确定日志文件路径，（自定义）
+        $this->logDevFile =  date("Y-m-d H:i:s") . "Dev.log";
+
+        //创建一个socket，定义相关属性。AF_INET 在socket中定义为常量值为2，SOCK_STREAM常量值为1，SOL_TCP值为6
+        $this->socket = socket_create ( AF_INET, SOCK_STREAM, SOL_TCP );
+        //连接对方机器
+        $this->connect = socket_connect ( $this->socket, $this->host, $this->port );
+
+        //第一次握手，如果失败则返回不再执行
+        $this->firstHandshake();
+    }
+    
+    //socket第一次握手
+    function firstHandshake(){
+        //日志写入本次握手时间，和远程服务器(发送+接收)一次算一次握手
+        $this->logStr .= "\r\n\r\n".date("Y-m-d H:i:s")."\r\n";
+        
+        //要发送的字符串
+        $sendStr = "hello world";
+        //日志写入发送的字符串
+        $this->logStr .= $sendStr."\r\n";
+        //发送字符串
+        socket_write ( $this->socket, $sendStr, strlen ( $sendStr ) );
+        
+        //接收
+        $getStr = socket_read ( $this->socket, $this->getStrLength );
+        /*
+        //如果接收字符串过大，可循环多次接收直到接收完整
+        $getStr = "";
+        while(true){
+            $getStr .= socket_read( $this->socket,$this->getStrLength,PHP_BINARY_READ);
+            //根据回传字符串内容格式判断已接收完全字符串，这里回传字符串以 }] 结尾，并且全文只包含一次 }] 字符串
+            if(substr_count($getStr, "}]") > 0){
+                break;
+            }
+        }
+        */
+        //日志写入接收完成时间
+        $this->logStr .= date("Y-m-d H:i:s")."\r\n";
+        //日志写入接收字符串
+        $this->logStr .= $getStr."\r\n\r\n";
+        
+        //将日志内容补充写入日志文件文本的最下面，如无日志文件则生成新日志文件
+        file_put_contents($this->logDevFile, $this->logStr,FILE_APPEND);
+        //关闭socket连接
+        socket_close ( $this->connect );
+        //关闭socket对象
+        socket_close ( $this->socket );
+    }
+}
+//此socket代码只是发送消息的客户端，不是接收的服务器端，服务器端以后补充
+$sendDevAction = new SendDevAction();
+亲测通过。
