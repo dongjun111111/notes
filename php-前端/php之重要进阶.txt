@@ -7532,3 +7532,70 @@ foreach($properties as $property) {
         echo $matches[1]."\n";  
     }  
 }  
+
+
+++PHPemail发送配合phpmailer使用+++++
+function SendMail($address,$title,$message,$cc,$send='',$loginame='',$passwd='') 
+{ 
+    vendor('phpMail.mailer'); 
+ // Vendor('phpRPC.phprpc_server');
+    //import("Org.Util.PHPMailer");
+ //Vendor('Zend.Filter.Dir');
+  /*
+    $mail=new PHPMailer();          // 设置PHPMailer使用SMTP服务器发送Email 
+    //$mail->IsSMTP();                // 设置邮件的字符编码，若不指定，则为'UTF-8' 
+    $mail->CharSet='UTF-8';         // 添加收件人地址，可以多次使用来添加多个收件人 
+    $mail->AddAddress($address);    // 设置邮件正文 
+    $mail->Body=$message;           // 设置邮件头的From字段。 
+    $mail->From=C('MAIL_ADDRESS');  // 设置发件人名字 
+    $mail->FromName='XXX网团队';  // 设置邮件标题 
+    $mail->Subject=$title;          // 设置SMTP服务器。 
+    $mail->Host=C('MAIL_SMTP');     // 设置为"需要验证" ThinkPHP 的C方法读取配置文件 
+    $mail->SMTPAuth=true;           // 设置用户名和密码。 
+    $mail->Username=C('MAIL_LOGINNAME'); 
+    $mail->Password=C('MAIL_PASSWORD'); // 发送邮件。 */
+    $mail = new Mailer();
+    $mail->mailServer = C('MAIL_SERVER');
+    $mail->mailPort = C('MAIL_PORT');
+	if(empty($send))$send=C('MAIL_ADDRESS');
+    $mail->mailSender = $send; 
+	if(empty($loginame))$loginame=C('MAIL_LOGINNAME');
+    $mail->mailUser = $loginame;
+	if(empty($passwd))$passwd=C('MAIL_PASSWORD');
+    $mail->mailPwd = $passwd;
+	$title = iconv('utf-8','gb2312',$title);
+	$message = iconv('utf-8','gb2312',$message);
+    if($mail->connect()){
+		// $address = explode(',',$address); 
+		//$cc = explode(',',$cc);  
+		$dd = date('Y-m-d H:i:s');
+		error_log($dd.'---'.$message.$address."\n",3,WEB_PATH.'/cc.log');
+        return ($mail->send($address,$title,$message,'',$cc)); 
+    } 
+    return false;   
+}
+
++++PHP转换数字为大写汉字+++++
+ function _cny_map_unit($list,$units) { 
+    $ul=count($units); 
+    $xs=array(); 
+    foreach (array_reverse($list) as $x) { 
+        $l=count($xs); 
+        if ($x!="0" || !($l%4)) $n=($x=='0'?'':$x).($units[($l-1)%$ul]); 
+        else $n=is_numeric($xs[0][0])?$x:''; 
+        array_unshift($xs,$n); 
+    } 
+    return $xs; 
+}
+function cny($ns) { 
+    static $cnums=array("零","壹","贰","叁","肆","伍","陆","柒","捌","玖"), 
+        $cnyunits=array("圆","角","分"), 
+        $grees=array("拾","佰","仟","万","拾","佰","仟","亿"); 
+    list($ns1,$ns2)=explode(".",$ns,2); 
+    $ns2=array_filter(array($ns2[1],$ns2[0])); 
+    $ret=array_merge($ns2,array(implode("",_cny_map_unit(str_split($ns1),$grees)),"")); 
+    $ret=implode("",array_reverse(_cny_map_unit($ret,$cnyunits))); 
+    return str_replace(array_keys($cnums),$cnums,$ret); 
+}
+$ff= cny('12');
+var_dump($ff);
