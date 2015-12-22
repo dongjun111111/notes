@@ -580,3 +580,134 @@ WHERE regdate>1418313600 ON DUPLICATE KEY UPDATE PASSWORD=VALUES(PASSWORD),salt=
 mysql> ALTER TABLE  boblog_history   ENGINE=InnoDB;
 Query OK, 2808 rows affected (0.76 sec)
 Records: 2808  Duplicates: 0  Warnings: 0
+
+
++++++++MySql存储过程及MySql常用流程控制语法++++++++
+/*
+该代码是创建了一个名叫"p4"的存储过程并设置了s1,s2,s3两个int型一个varchar型参数，还可以是其他数据类型，内部创建了x1,x2两个变量
+
+DELIMITER是修改分隔符的
+DELIMITER $$的意思是把默认分隔符";"换成"$$"，这样分段写的存储过程就能整个被执行，而不是被当成多条sql语句单独执行
+创建完过程再将分隔符改回成";"
+
+两种创建变量并赋值的方式
+SET @变量名 = 值;
+SELECT 值 INTO @变量名;
+使用变量前必须先运行该变量赋值语句
+过程内部还可以通过 "DECLARE 变量名 类型(字符串型要加范围) DEFAULT 值;" 来创建变量，但如此创建的变量只能在该过程内部访问
+
+存储过程只有三种类型参数 IN,OUT,INOUT
+调用过程时过程有几个参数传几个参数，只是IN型的参数可以传的是变量，可以是常量，而OUT和INOUT型的参数传的必须是变量
+传给out，inout参数的变量值会随着在过程中改变在外部也改变，而给in参数的变量外部值则不受过程内变量值改变的影响
+*/
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS `p4`$$
+
+CREATE PROCEDURE `p4`(IN s1 INT,OUT s2 INT,INOUT s3 VARCHAR(10))
+BEGIN
+DECLARE x1 VARCHAR(10) DEFAULT 'this is x1'; 
+DECLARE x2 VARCHAR(10) DEFAULT 'this is x2'; 
+SET s1 = 11;
+SET s2 = 22;
+SET s3 = 'iss3';
+
+/*
+if语法
+*/
+IF s1 = 11 AND s2 = 12 THEN
+SELECT s1,s2;
+END IF;
+
+IF s3 = 's3' OR s1 = s2 THEN
+SELECT s3;
+ELSE 
+SELECT s1,s2,s3;
+END IF;
+
+/*
+case语法
+*/
+CASE s3
+WHEN 's1' THEN
+SELECT 'this is s1';
+WHEN 's2' THEN
+SELECT 'this is s2';
+ELSE
+SELECT 'this is s3';
+END CASE;
+
+/*
+while循环
+*/
+WHILE s1>1 DO
+SET s1=s1-1;
+END WHILE; 
+SELECT s1;
+
+/*
+repeat循环语句
+与while不同的是while满足条件就执行，repeat始终执行直到满足条件终止
+*/
+REPEAT  
+SET s1 = s1-1; 
+UNTIL s1=1  
+END REPEAT; 
+SELECT s1;
+
+
+/*
+LOOP循环
+LOOP没有循环条件，会不停的循环直到遇到 "LEAVE ZiDingYi;" "ZiDingYi"是自定义的LOOP标记
+*/
+ZiDingYi:LOOP
+SET s1 = s1+1;
+IF s1 = 5 THEN
+LEAVE ZiDingYi;
+END IF;
+END LOOP;
+SELECT s1;
+
+
+END$$
+
+DELIMITER ;
+
+
+SET @p_in=1; 
+SET @p_out=2;
+SET @p_inout = 's3';
+SELECT 'Hello World1' INTO @p_4;
+
+/*调用存储过程*/
+CALL p4(@p_in,@p_out,@p_inout);
+SELECT @p_in,@p_out,@p_inout,@p_4;
+
+
+/*
+存储过程如果只有一个语句则语句不用 begin...end包围
+存储过程中可以直接使用外部定义的变量
+存储过程中用set和select定义的变量就是全局的，执行该过程后内部用set和select定义的变量外部可以访问，其他过程也可以直接使用
+*/
+CREATE PROCEDURE p1()   SET @var='p1';  
+CREATE PROCEDURE p2() SELECT CONCAT('Last procedure was ',@var);  
+CALL p1();  
+CALL p2(); 
+SELECT @var;
+
+CREATE PROCEDURE p3() SELECT CONCAT(@p3_var,' World');
+SET @p3_var='Hello';
+CALL p3();
+
+/*删除存储过程*/
+DROP PROCEDURE p4;
+/*或者*/
+DROP PROCEDURE IF EXISTS `p4`
+
+/*查看该数据库下有哪些存储过程 test为数据库名*/
+SELECT NAME FROM mysql.proc WHERE db='test';
+/*或者*/
+SHOW PROCEDURE STATUS WHERE db='test';
+
+/*查看存储过程详细信息，包括创建语句*/
+SHOW CREATE PROCEDURE p4;
