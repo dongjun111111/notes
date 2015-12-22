@@ -405,7 +405,7 @@ type Student struct {
 	age int
 }
 func main () {
-	var st Student =Student {"tom",18}  //st :=Student {"tom" 18}
+	// var st Student =Student {"tom",18}  st :=Student {"tom" 18}
 	st.Name ="cat"
 	fmt.Printf("%s %d",st.Name ,st.age)
 }
@@ -2237,19 +2237,26 @@ var fp *float32 //pointer to a float
 指针的作用很多，其实说白了就是直接操作内存，好处是：
 
 - 效率更高，这个很容易理解，直接操作内存，效率必然更高
-- 可以写复杂度更高的数据结构，这个也好理解，程序员可以操作内存，当然可以写出灵活、复杂的数据结构
+- 可以写复杂度更高的数据
+- 结构，这个也好理解，程序员可以操作内存，当然可以写出灵活、复杂的数据结构
 - 编写出简洁、紧凑、高效的程序
 <pre>
 package main
-import "fmt"
-func main (){
-	type data struct {a,g int }
-	var d =data{1234,555555}
-	var p *data
-	p = &d
-	fmt.Printf("%p,%v\n",p,p.g)
+import (
+	"fmt"
+)
+func main () {
+	type person struct {
+	Age int
+	phone int
+	name string
+	}
+	var s=person{2333,1222222,""}
+	var p *person
+	p =&s
+	fmt.Printf("%p, %v\n",p,p.phone)
 }
 output ==>
-0x0820022f0,555555
+0xc082004640,1222222
 </pre>
 
