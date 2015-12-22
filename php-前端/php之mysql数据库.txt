@@ -749,4 +749,6 @@ DROP TABLE linshi_table;
 
 
 ++order by 多个字段+++
-order by last_time desc ,id desc
+（均未测试）
+第一种：order by last_time desc ,id desc
+第二种：select id,last_time from yourtablename group by last_time order by last_time desc,id desc
