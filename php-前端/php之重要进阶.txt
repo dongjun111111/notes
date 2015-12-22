@@ -7436,3 +7436,17 @@ echo $chs_to_En->Pinyin ( '很丰富' ); // 根据当前php页面编码格式，
 echo $chs_to_En->Pinyin ( '很丰富', "UTF-8" ); // 当前php页面编码格式是 UTF-8 则添加第二参数 "UTF-8"
 
 亲测通过。
+
+
++++php实现ftok函数++++
+function ftok($pathname, $proj_id) { 
+   $st = @stat($pathname); 
+   if (!$st) { 
+       return -1; 
+   } 
+    
+   $key = sprintf("%u", (($st['ino'] & 0xffff) | (($st['dev'] & 0xff) << 16) | (($proj_id & 0xff) << 24)));
+   return $key; 
+}
+echo ftok($_SERVER["SCRIPT_FILENAME"], 250);
+
