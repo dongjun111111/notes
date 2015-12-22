@@ -46,9 +46,9 @@ namespace Admindj\Controller;
             $ykey = 0;
             $akey = 0;
             $mdate = time();
-            $BKEY = '7d5f48d731695f9383ac04969550dfd6';
-            $YKEY = '51c3cd83a438aadcc019938ec77c5f25';
-            $AKEY = 'edd217b749a14789895e055982d85201';
+            $BKEY = '空';
+            $YKEY = '空';
+            $AKEY = '空';
             $sql = 'INSERT INTO ks_kaccount (uid,userb,usery,usera,mdate,bkey,ykey,akey,status) VALUES ("'.$id.'","0","0","0",'.$mdate.',ENCODE('.$bkey.',"'.$BKEY.'"),ENCODE('.$ykey.',"'.$YKEY.'"),ENCODE('.$akey.',"'.$AKEY.'"),1)';
             $rs = M('kaccount')->execute($sql);
             if($rs == false){
