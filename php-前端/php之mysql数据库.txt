@@ -726,6 +726,25 @@ array (size=3)
   'name' => string 'aaa' (length=3)
 
 
+++++mysql临时表+++++
+CREATE TEMPORARY TABLE linshi_table (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(20) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+);
+ 
+INSERT INTO linshi_table(NAME)VALUES('firstName');
+UPDATE linshi_table SET NAME='updateName';
+SELECT * FROM linshi_table;
 
+
+DROP TABLE linshi_table;
+
+/*
+当前创建的临时表将在当前连接MySQL期间存在。当当前连接断开时，MySQL将自动删除表并释放所用的空间。当然可以在仍然连接的时候删除表并释放空间。
+创建临时表很容易，给正常的CREATE TABLE语句加上TEMPORARY关键字
+如果在创建名为linshi_table临时表时名为linshi_table的实体表在数据库中已经存在，Mysql临时表将屏蔽（隐藏）非临时表linshi_table
+实体表隐藏后不管是查询，插入，更新，都是对临时表进行操作，实体表实际内容不受影响
+*/
 
 
