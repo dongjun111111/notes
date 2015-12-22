@@ -7274,3 +7274,19 @@ disable_functions = pcntl_alarm, pcntl_fork, pcntl_waitpid, pcntl_wait, pcntl_wi
 pcntl_getpriority, pcntl_setpriority, eval, popen, passthru, exec, system, shell_exec, proc_open, proc_get_status, 
 chroot, chgrp, chown, ini_alter, ini_restore, dl, pfsockopen, openlog, syslog, readlink, symlink, 
 popepassthru, stream_socket_server, fsocket, chdir
+
+
+++PHP+MYSQL事务机制++++
+mysql_query('START TRANSACTION');
+$dele=mysql_query("delete from ks_zhiding where id = 3 limit 1");
+if(!dele){
+	mysql_query('ROLLBACK');
+	return false;
+}
+$change=mysql_query("update ks_zhiding set name='change' where id = 5 limit 1 ");
+if(!$change){
+	mysql_query('ROLLBACK');
+	return flase;
+}
+mysql_query('COMMIT');
+亲测通过。
