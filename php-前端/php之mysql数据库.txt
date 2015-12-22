@@ -752,3 +752,17 @@ DROP TABLE linshi_table;
 （均未测试）
 第一种：order by last_time desc ,id desc
 第二种：select id,last_time from yourtablename group by last_time order by last_time desc,id desc
+
+
+++MySQL搜索关键字所处位置先后排序+++
+error_reporting(0);
+date_default_timezone_set('PRC');
+mysql_connect("localhost","root",'');
+mysql_select_db("root");
+$re=mysql_query("select * from ks_zhiding where name like '%a%' order by locate('a',name)");
+while($rows=mysql_fetch_array($re)){
+	echo $rows['name'].'<br>';
+}
+结果之一可以是：
+aaa
+change2

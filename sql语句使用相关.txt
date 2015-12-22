@@ -512,3 +512,7 @@ where a.id = b.id
 
 +++++concat给某个字段追加字符串+++++++
  mysql_query("update ks_zhiding set name=concat(name,'mm') where id=5");
+
+
++++搜索关键字所处位置先后排序+++++
+select* from表 WHERE 新闻名 like'%中国%' order by charindex('中国',新闻名)
