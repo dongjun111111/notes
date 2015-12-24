@@ -2367,7 +2367,8 @@ func TestFailed(t *testing.T) {
 </pre>
 
 
-###Golang :不要通过共享内存来通信，而应该通过通信来共享内存。
+###Go语言并发编程总结
+Golang :不要通过共享内存来通信，而应该通过通信来共享内存。
 
 ####通过golang中的 goroutine 与sync.Mutex进行 并发同步
 <pre>
