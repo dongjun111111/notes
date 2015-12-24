@@ -773,3 +773,14 @@ change2
 while($row=mysql_fetch_object($res)){
 	echo $row->id;
 }
+
+++++char_length（）与length（）+++++
+mysql中字符串长度有两个函数分别为char_length和length，前者可以计算unicode字符，包括中文等字符集的长度，
+而length函数用来计算普通字符的长度，他会把一个中文字符的长度计算为2或3.
+mysql> select length('的') as l, char_length('的') as cl;
++---+----+
+| l | cl |
++---+----+
+| 3 |  1 |
++---+----+
+可以看到中文“的”的length为3，而char_length函数结果为1
