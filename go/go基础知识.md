@@ -2293,3 +2293,75 @@ func main () {
 output ==>
 4
 </pre>
+
+###defer
+- 简化资源的回收
+<pre>
+mu.Lock()
+defer mu.Unlock()
+</pre>
+从简化资源的释放角度看, defer 类似一个语法糖, 好像不是必须的.
+
+- panic异常的捕获
+在Go语言中, panic用于抛出异常, recover用于捕获异常. recover只能在defer语句中使用, 直接调用recover是无效的.
+<pre>
+package main5
+import "fmt"
+func main () {
+	f()
+	fmt.Println("returned normally from f.")
+}
+func f() {
+	defer func () {
+	if r := recover(); r != nil {
+		fmt.Println("Recovered in f",r)
+	}
+	}()
+	fmt.Println("Calling g")
+	g()
+	fmt.Println("Returned normally form g.")
+}
+func g() {
+	panic("ERROR");
+}
+output ==>
+Calling g
+Recovered in f ERROR
+returned normally form f.
+</pre>
+因此, 如果要捕获Go语言中函数的异常, 就离不开defer语句了.
+
+- 修改返回值
+<pre>
+package main
+func test (a,b int) (sum int) {
+	defer func () {
+		sum  += 2
+	}()
+	sum =a + b
+	return sum
+}
+
+func main () {
+      print(test(2,3));
+}
+output==>
+7
+</pre>
+ 这个特性应该只是 defer 的副作用, 具体在什么场景使用就要由开发者自己决定了.
+
+- 安全的回收资源
+<pre>
+func TestFailed(t *testing.T) {  
+    var wg sync.WaitGroup  
+    for i := 0; i < 2; i++ {  
+        wg.Add(1)  
+        go func(id int) {  
+            // defer wg.Done()  
+            t.Fatalf("TestFailed: id = %v\n", id)  
+            wg.Done()  
+        }(i)  
+    }  
+    wg.Wait()  
+} 
+</pre>
