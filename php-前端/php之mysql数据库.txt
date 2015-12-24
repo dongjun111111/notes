@@ -766,3 +766,10 @@ while($rows=mysql_fetch_array($re)){
 结果之一可以是：
 aaa
 change2
+
+
++++mysql_fetch_object()+++
+实现类似mysql_fetch_array()一样的取数据的功能，但是它会把数据作为对象取出，访问方法可以是$row->to;
+while($row=mysql_fetch_object($res)){
+	echo $row->id;
+}
