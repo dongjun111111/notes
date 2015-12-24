@@ -2277,3 +2277,19 @@ output ==>
 - %s - 字符串
 - %x - 十六进制数（小写字母）
 - %X - 十六进制数（大写字母）
+
+
+###函数
+不支持 嵌套(nested)、重载(overload) 和默认参数（default parameter）
+<pre>
+package main
+func add (x,y int)(z int){
+	z = x+ y
+	return
+}
+func main () {
+	println(add(1 ,3))
+}
+output ==>
+4
+</pre>
