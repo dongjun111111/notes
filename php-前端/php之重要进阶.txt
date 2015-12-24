@@ -7277,6 +7277,11 @@ popepassthru, stream_socket_server, fsocket, chdir
 
 
 ++PHP+MYSQL事务机制++++
+支持事务的表必须是InnoDB类型
+一段事务中只能出现一次:
+mysql_query('START TRANSACTION');//开始事务
+mysql_query(' ROLLBACK ');//回滚事务
+mysql_query('COMMIT');//提交事务
 mysql_query('START TRANSACTION');
 $dele=mysql_query("delete from ks_zhiding where id = 3 limit 1");
 if(!dele){
