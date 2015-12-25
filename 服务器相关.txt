@@ -28,6 +28,7 @@ service vsftpd restart
 service iptables stop
 
 
+
 ++++服务器维护中常用dos命令+++++
 1.ping命令
 用法：ping+空格+域名
