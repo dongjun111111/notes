@@ -4377,3 +4377,84 @@ a:hover {
 </div>
 </body>
 </html>
+
+
+++++页面内搜索+++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<script type="text/javascript">
+function encode(s){
+  return s.replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">").replace(/([\\\.\*\[\]\(\)\$\^])/g,"\\$1");
+}
+function decode(s){
+  return s.replace(/\\([\\\.\*\[\]\(\)\$\^])/g,"$1").replace(/>/g,">").replace(/</g,"<").replace(/&/g,"&");
+}
+function highlight(s){
+  if (s.length==0){
+    alert('搜索关键词未填写！');
+    return false;
+  }
+  s=encode(s);
+  var obj=document.getElementsByTagName("body")[0];
+  var t=obj.innerHTML.replace(/<span\s+class=.?highlight.?>([^<>]*)<\/span>/gi,"$1");
+  obj.innerHTML=t;
+  var cnt=loopSearch(s,obj);
+  t=obj.innerHTML
+  var r=/{searchHL}(({(?!\/searchHL})|[^{])*){\/searchHL}/g
+  t=t.replace(r,"<span class='highlight'>$1</span>");
+  obj.innerHTML=t;
+  alert("搜索到关键词"+cnt+"处")
+}
+function loopSearch(s,obj){
+  var cnt=0;
+  if (obj.nodeType==3){
+    cnt=replace(s,obj);
+    return cnt;
+  }
+  for (var i=0,c;c=obj.childNodes[i];i++){
+    if (!c.className||c.className!="highlight")
+      cnt+=loopSearch(s,c);
+  }
+  return cnt;
+}
+function replace(s,dest){
+  var r=new RegExp(s,"g");
+  var tm=null;
+  var t=dest.nodeValue;
+  var cnt=0;
+  if (tm=t.match(r)){
+    cnt=tm.length;
+    t=t.replace(r,"{searchHL}"+decode(s)+"{/searchHL}")
+    dest.nodeValue=t;
+  }
+  return cnt;
+}
+</script>
+<style type="text/css">
+.highlight{background:red;font-weight:bold;color:white;}
+</style>
+</head>
+<body>
+<form onsubmit="highlight(this.s.value);return false;">
+<p>
+<input name="s" id="s" title=""/>
+<input type="submit" value="搜索"/>
+</p>
+</form>
+<div id="content">
+<font face=Verdana>餐饮O2O<br />
+中国餐饮市场是近3万亿的金矿，在“互联网改造传统产业”的大潮中，餐饮业首当其中。
+我做过创投媒体，也在投资机构工作过，接触了数百种互联网改造传统餐饮的创新模式。但无论是BAT巨头、美团、点评，亦或是各个中小创业者，目前尚有发展的餐饮互联网模式，其实不外乎两大类：
+第一种是团购，即通过优惠的模式把顾客流量大量吸引到餐厅，通过优惠的模式提高餐厅的上座率，从而让餐厅效率提高，营收增加。
+第二种是外卖，即提高餐厅“翻台率”和服务能力，通过物流让周边顾客都可以吃到餐厅美食。
+从这两个模式中我们可以看出，其实餐饮互联网化的核心真理只有一条——你是否提升餐厅效率，帮餐饮老板挣到更多钱？
+无论模式再有噱头，产品再精致，不符合这条餐饮创业“金线”的最终都活不下去。因为餐饮业的特征就是B端（商家）多而散，利润不高，你的平台必须带来销售上的提升，才有足够多的餐厅愿意和你合作，然后你才具备服务C端（顾客）的资本。
+粗听之下，“速位”的模式似乎有点多此一举？但实际情况是“速位”的模式对餐厅用户体验提升，以及效率提升都十分实用。
+</font>
+</div>
+</body>
+</html>
