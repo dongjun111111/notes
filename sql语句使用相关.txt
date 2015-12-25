@@ -527,3 +527,8 @@ ON table_name (column_name)
 在表上创建一个唯一的索引：
 CREATE UNIQUE INDEX index_name
 ON table_name (column_name)
+
+
++++sql中substr函数+++
+substr(string,start,length)
+select substr(username,0,4) from table1;
