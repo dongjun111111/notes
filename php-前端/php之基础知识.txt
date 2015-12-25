@@ -1819,3 +1819,57 @@ function func($v){
 }
 print_r(array_map('func',$arr));
 结果为：Array ( [0] => 1 [1] => 4 [2] => 9 [3] => 16 [4] => 25 ) 
+
+
+
+++PHP类perl正则表达式函数+++++
+// preg_grep返回与模式匹配的数组单元
+$subjects = array(  
+"Mechanical Engineering", "Medicine",  
+"Social Science", "Agriculture",  
+"Commercial Science", "Politics"  
+);  
+//匹配所有仅由有一个单词组成的科目名
+$alonewords = preg_grep("/^[a-z]*$/i"
+, $subjects);  
+var_dump($alonewords);
+
+
+
+//preg_split使用逗号或空格(包含" ", \r, \t, \n, \f)分隔短语
+$keywords = preg_split("/[\s,]+/", "hypertext language, programming");
+print_r($keywords);
+
+echo "<br><br>";
+
+//preg_replace执行一个正则表达式的搜索和替换
+$string = 'April 15, 2003';
+$pattern = '/(\w+) (\d+), (\d+)/i';
+$replacement = '${1}1,$3';
+echo preg_replace($pattern, $replacement, $string);
+
+echo "<br><br>";
+
+//preg_quote转义正则表达式字符
+$keywords = '$40 for a g3/400';
+$keywords = preg_quote($keywords, '/');
+echo $keywords; // 返回 \$40 for a g3\/400
+
+echo "<br><br>";
+
+//preg_replace_callback执行一个正则表达式搜索并且使用一个回调进行替换
+// 将文本中的年份增加一年.
+$text = "April fools day is 04/01/2002\n";
+$text.= "Last christmas was 12/24/2001\n";
+// 回调函数
+function next_year($matches)
+{
+  // 通常: $matches[0]是完成的匹配
+  // $matches[1]是第一个捕获子组的匹配
+  // 以此类推
+  return $matches[1].($matches[2]+1);
+}
+echo preg_replace_callback(
+            "|(\d{2}/\d{2}/)(\d{4})|",
+            "next_year",
+            $text);
