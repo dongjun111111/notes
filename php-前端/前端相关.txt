@@ -4704,3 +4704,13 @@ d.setTime(d.getTime()+(exdays*24*60*60*1000));
 var expires = "expires="+d.toGMTString();
 document.cookie = cname + "=" + cvalue + "; " + expires;
 }
+
+
++++addEventListener用法+++++
+其实就只是事件的另一种写法，没有什么牛逼的。
+document.getElementsByTagName('p')[0].addEventListener("click",function(){alert('YES');});
+上面的等同于：
+var p=document.getElementsByTagName('p')[0];
+p.onclick=function(){
+	alert('YES');
+}
