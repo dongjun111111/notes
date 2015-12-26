@@ -4762,3 +4762,12 @@ document.getElementById("myDiv2").addEventListener("click", function() {
 移除addEventListener：
 removeEventListener()方法
 element.removeEventListener("mousemove", myFunction);
+
++++createElement注意点+++++
+1.确保js代码位于body底部；
+2.确保是用document.creatElement,而不是其父元素，如Odiv.createElement这是错的！
+var p2=document.createElement('p');
+var node=document.createTextNode('this is my heart');
+p2.appendChild(node);
+var Odiv=document.getElementsByTagName('div')[0];
+Odiv.appendChild(p2);
