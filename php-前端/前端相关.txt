@@ -4771,3 +4771,5 @@ var node=document.createTextNode('this is my heart');
 p2.appendChild(node);
 var Odiv=document.getElementsByTagName('div')[0];
 Odiv.appendChild(p2);
+反向操作是：
+父元素.removeChild(子元素);   //够清晰了吧 -.-
