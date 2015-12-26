@@ -4639,3 +4639,11 @@ alert(str.slice(2,4));  //输出是：34
 给数组添加元素
 var strstr=[1,2,4,5];
 document.write(strstr.concat(6,7));  //输出：1,2,4,5,6,7
+
+
+++++js对时间格式进行操作++++++
+将毫秒的截取成时间戳标准10位格式。
+var year=new Date().getTime();
+year=year.toString();  //将时间格式转换成字符串格式再进行操作
+year=year.substr(0,10);
+document.write(year);
