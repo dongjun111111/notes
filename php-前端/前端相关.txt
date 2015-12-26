@@ -4563,3 +4563,13 @@ window.utils.isArray([]);          //true
 但是，如果重写了Object.prototype.toString方法，这时候再用来判断数据类型可能就会出错，
 所以，一般不要去重写Object.prototype.toString方法。
 */
+
+
+++JS无穷大关键字Infinity+++++
+<script>
+mynumber=2;
+while(mynumber != Infinity){
+	mynumber=mynumber*mynumber;
+	document.write(mynumber + "<br>");
+}
+</script>
