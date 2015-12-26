@@ -4669,3 +4669,11 @@ alert(num2);
 var strstr= "runrrrrrrttttttrrrrrrrvvvv"; 
 var pattern = new RegExp('rt','g'); 
 document.write(pattern.test(strstr));   //字符串strstr中存在rt,故返回true
+
+
+++++prompt的用法+++++
+var person= prompt("sometext","默认值");
+if(person != null && person != " "){
+	x = "Hello" + person + "! How are you today";
+	alert(x);
+}
