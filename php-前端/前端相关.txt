@@ -4653,3 +4653,19 @@ document.write(year);
 var x = new Date();
 x.setFullYear(2100,1,14); //年份，月份+1，日
 alert(x);
+
+
++++js中Math类中方法+++++++
+使用Math类中的方法时Math必须首字母大写，不然出错。
+var num= Math.random(1,6);
+document.write(num);
+var num2=Math.floor(num);
+alert(num2);
+
+
+++++js中正则的使用方法+++++
+1,定义一个匹配规则，pattern=new RegExp('','');
+2,使用test或者exec，pattern.test();
+var strstr= "runrrrrrrttttttrrrrrrrvvvv"; 
+var pattern = new RegExp('rt','g'); 
+document.write(pattern.test(strstr));   //字符串strstr中存在rt,故返回true
