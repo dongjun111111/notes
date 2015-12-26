@@ -4629,3 +4629,13 @@ var bill=new employee('bill','engineer');
 var a= "ggg erjddrfdhgrehgre";
 document.write(a.replace(/er/,'ttttt'));
 
+
+++++slice+++++
+slice格式是：slice(起始位置，终止位置);
+var str="1234"; 
+alert(str.slice(2,4));  //输出是：34
+
++++++concat+++++
+给数组添加元素
+var strstr=[1,2,4,5];
+document.write(strstr.concat(6,7));  //输出：1,2,4,5,6,7
