@@ -4573,3 +4573,59 @@ while(mynumber != Infinity){
 	document.write(mynumber + "<br>");
 }
 </script>
+
+++++JS中toFixed()与valueOf()方法+++++
+toFixed()将Number四舍五入为指定小数位数的数字。
+valueOf()访问指定变量的值。
+<script>
+var f=new String('fffffff');
+document.write(f.valueOf());//输出：fffffff 注意调用方法！！！！
+
+var g=new Number(34.666);
+document.write(g.toFixed(2));//输出：34.67  注意调用方法！！！！
+</script>
+
+
+++++JS将字符串转换成数组++
+一个split就可以：
+var h="f g jj ff";
+var arr=h.split(" ");
+alert(Object.prototype.toString.call(arr));//已经转换成数组格式，一个split即可，神器也
+
+
++++++indexOf()++++++
+//js中indexOf()定位关键字，有输出这个关键字的起始位置，没有输出-1
+var r="hello world ,welcome to the universe";
+var n =r.indexOf('to');
+document.write(n);
+
+
+++match()++++
+//js中match匹配关键字，有的话输出这个关键字，没有输出null
+var strr="gggnrtjherbejbdhrbhrs";
+document.write(strr.match('be')+ "<br>");
+
+
+++++toUpperCase()++++
+//js中toUpperCase()变大写
+var txxt="ff hfh fgg";
+var hggh=txxt.toUpperCase();
+document.write(hggh);
+
++++prototype+++
+//js中prototype将对象的属性改变
+function employee(name,job){
+	this.name=name;
+	this.job=job;
+}
+var bill=new employee('bill','engineer');
+	employee.prototype.job=null;
+	bill.job="teacher";
+	document.write(bill.job);
+
+
++++replace++++
+//js替换replace,注意格式
+var a= "ggg erjddrfdhgrehgre";
+document.write(a.replace(/er/,'ttttt'));
+
