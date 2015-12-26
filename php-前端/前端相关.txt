@@ -4468,3 +4468,98 @@ data-* 属性赋予我们在所有 HTML 元素上嵌入自定义 data 属性的�
 data-* 属性包括两部分：
 属性名不应该包含任何大写字母，并且在前缀 "data-" 之后必须有至少一个字符
 属性值可以是任意字符串。
+
+
++++JS中NaN与NaN不相等+++++
+btn.onclick=function(){
+	
+	var r= parseInt('agc');
+	var f= parseInt('ddd');
+	if(r == f){
+		alert(true);
+	}
+	else{
+		alert(false);
+	}
+结果为：false
+
+
++++JS最全最权威的判断数据类型方法对比+++++
+/* 判断数据类型可能想到的方法：constructor、typeof、instanceof、Object.prototype.toString.call()*/
+/***** 1、通过constructor属性  *****/
+var myvar= new Array("a","b","c","d");
+function A(){}myvar.constructor = A;
+var c = myvar.constructor;alert(c); 
+// function A(){}
+//可见，通过constructor属性获取类型的方法很容易被修改，不应该用来判断类型。
+
+/***** 2、通过typeof  *****/
+/*     
+typeof是一个操作符，而不是个函数。   
+typeof的实际应用是用来检测一个对象是否已经定义或者是否已经赋值。        
+如if(typeof a!="undefined"){}，而不要去使用if(a)因为如果a不存在（未声明）则会出错。  
+typeof检测对象类型时一般只能返回如下几个结果： 
+number,boolean,string,function,object,undefined。   
+对于Array,Null,自定义对象 等使用typeof一律返回object，      
+这正是typeof的局限性。
+*/
+var num = new Number(1);
+var arr = [1,2,3];alert(typeof num); //object 而不是number
+alert(typeof arr); //object 而不是Array
+alert(typeof null);  // object
+
+/***** 3、通过 instanceof  *****/
+/* 用instanceof操作符来判断对象是否是某个类的实例。   
+ 如果obj instanceof Class返回true，那么Class的原型与obj原型链上的某个原型是同一个对象，  
+ 即obj要么由Class创建，要么由Class的子类创建。
+*/
+function t(){};
+t.prototype  = Array.prototype;
+//t.prototype  = [];
+var x = new t();
+alert(x instanceof t);//弹出true
+alert(x instanceof Array);//弹出true
+alert(x instanceof Object);//弹出true
+/*
+由此可知，通过 instanceof 判断数据类型也不可靠。
+
+因为一个对象（此处x）的原型链可以很长，每个原型的类型可以不同。
+另外在iframe内也会容易出错：即有个页面定义了一个数组a，页面又嵌套了一个IFrame，在Iframe里面通过 top.a instanceof Array， 是返回false的。
+这个说明 父页面和内嵌iframe里的对象是不同的，不能混合在一起使用。
+改成top.a instanceof top.Array 就会返回true
+*/
+
+/***** 4、通过 Object.prototype.toString.call()  *****/
+/* 
+ Object.prototype.toString.call() 作用是：
+    1、获取对象的类名（对象类型）。    
+    2、然后将[object、获取的类名]组合并返回。
+   可应用于判断Array,Date,Function等类型的对象
+*/
+var num = new Number(1);
+var arr = [1,2,3];
+alert(Object.prototype.toString.call(num)); // [object Number]
+alert(Object.prototype.toString.call(arr));// [object Array]
+
+// 扩展示例：（apply等价于call）
+window.utils = {   
+  toString: Object.prototype.toString,  
+  isObject: function (obj) {    
+        return this.toString.apply(obj) === '[object Object]';   
+  },   
+  isFunction: function (obj) {      
+  	return this.toString.apply(obj) === '[object Function]'; 
+   },  
+  isArray: function (obj) {      
+  	return this.toString.apply(obj) === '[object Array]';   
+ }
+}
+function A() { }
+window.utils.isFunction(A);        //true
+window.utils.isObject(new A());    //true
+window.utils.isArray([]);          //true
+/*
+  jQuery等框架 就是用这个方法判断对象的类型的，因此可以把这种方法作为权威的判断方法。
+但是，如果重写了Object.prototype.toString方法，这时候再用来判断数据类型可能就会出错，
+所以，一般不要去重写Object.prototype.toString方法。
+*/
