@@ -4707,10 +4707,58 @@ document.cookie = cname + "=" + cvalue + "; " + expires;
 
 
 +++addEventListener用法+++++
-其实就只是事件的另一种写法，没有什么牛逼的。
+它第一种用途很简单，其实就只是事件的另一种写法，没有什么牛逼的。
 document.getElementsByTagName('p')[0].addEventListener("click",function(){alert('YES');});
 上面的等同于：
 var p=document.getElementsByTagName('p')[0];
 p.onclick=function(){
 	alert('YES');
 }
+给window对象添加事件句柄
+下面的当窗口大小改变时，触发方法。
+window.addEventListener("resize",function(){
+	document.getElementsByTagName('p')[0].innerHTML=Math.random(1,6);
+})
+第二种重要用途：可以指定事件传递的方式。
+事件冒泡或事件捕获：
+事件传递有两种方式：冒泡与捕获。
+事件传递定义了元素事件触发的顺序。 如果你将 <p> 元素插入到 <div> 元素中，用户点击 <p> 元素, 哪个元素的 "click" 事件先被触发呢？
+在 冒泡 中，内部元素的事件会先被触发，然后再触发外部元素，即： <p> 元素的点击事件先触发，然后会触发 <div> 元素的点击事件。
+在 捕获 中，外部元素的事件会先被触发，然后才会触发内部元素的事件，即： <div> 元素的点击事件先触发 ，然后再触发 <p> 元素的点击事件。
+addEventListener() 方法可以指定 "useCapture" 参数来设置传递类型：
+addEventListener(event, function, useCapture);
+默认值为 false, 即冒泡传递，当值为 true 时, 事件使用捕获传递。
+<style>
+div {
+    background-color: coral;
+    border: 1px solid;
+    padding: 50px;
+}
+</style>
+</head>
+<body>
+<div id="myDiv">
+  <p id="myP">点击段落，我是冒泡。</p>
+</div><br>
+<div id="myDiv2">
+  <p id="myP2">点击段落，我是捕获。 </p>
+</div>
+<script>
+document.getElementById("myP").addEventListener("click", function() {
+    alert("你点击了 P 元素!");
+}, false);
+
+document.getElementById("myDiv").addEventListener("click", function() {
+    alert(" 你点击了 DIV 元素 !");
+}, false);
+
+document.getElementById("myP2").addEventListener("click", function() {
+    alert("你点击了 P 元素!");
+}, true);
+document.getElementById("myDiv2").addEventListener("click", function() {
+    alert("你点击了 DIV 元素 !");
+}, true);
+</script>
+移除addEventListener：
+removeEventListener()方法
+element.removeEventListener("mousemove", myFunction);
