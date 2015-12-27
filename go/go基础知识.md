@@ -2754,3 +2754,19 @@ print(a)
 func CompareAndSwapUint64(val *uint64, old, new uint64) (swapped bool)
 就提供了比较和交换两个uint64类型数据的操作。这让开发者无需再为这样的操作专门添加
 Lock操作。
+
+###go的if else坑点
+<pre>
+package main
+import "fmt"
+func main () {
+	var a int =1
+	var b int =4
+	if(a == b){
+	fmt.Println("true");	
+}else{
+	fmt.Println("false");
+}
+}
+</pre>
+else必须跟在中括号后面，成一行。
