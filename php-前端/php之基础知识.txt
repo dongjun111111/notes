@@ -1871,5 +1871,80 @@ function next_year($matches)
 }
 echo preg_replace_callback(
             "|(\d{2}/\d{2}/)(\d{4})|",
-            "next_year",
-            $text);
+            "next_year",$text);
+
+
++++进制转换++++
+十进制转二进制decbin()函数
+echo decbin(12);   //1100
+二进制转十进制bindec()函数
+echo bindec('110011'); //输出51
+自己实现的方法：
+//从十进制向其它进制转换，用的是就用该数字不断除以要转换的进制数，读取余数。连接一起就可以了。
+//$datalist 传入数据array(100,123,130)
+//@param int $bin 转换的进制可以是：2,8,16
+function decto_bin($datalist,$bin)
+{
+    static $arr=array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F');
+    if(!is_array($datalist)) $datalist=array($datalist);
+    if($bin==10)return $datalist; //相同进制忽略
+    $bytelen=ceil(16/$bin); //获得如果是$bin进制，一个字节的长度
+    $aOutChar=array();
+    foreach ($datalist as $num)
+    {
+        $t="";
+        $num=intval($num);
+    if($num===0)continue;
+        while($num>0)
+        {
+            $t=$arr[$num%$bin].$t;
+            $num=floor($num/$bin);
+        }
+        $tlen=strlen($t);
+        if($tlen%$bytelen!=0)
+        {
+        $pad_len=$bytelen-$tlen%$bytelen;
+        $t=str_pad("",$pad_len,"0",STR_PAD_LEFT).$t; //不足一个字节长度，自动前面补充0
+        }
+        $aOutChar[]=$t;
+    }
+    return $aOutChar;
+} 
+var_dump(decto_bin(array(12,3),2));
+其他进制转为十进制：
+/**
+ *二进制、八进制、十六进制 转十进制*
+ *
+ * @param array $datalist 传入数据array(df,ef)
+ * @param int $bin 转换的进制可以是：2,8,16
+ * @return array 返回数据 array() 返回没有数据转换的格式
+ * @copyright chengmo QQ:8292669
+ */
+function bin_todec($datalist,$bin)
+{
+    static $arr=array('0'=>0,'1'=>1,'2'=>2,'3'=>3,'4'=>4,'5'=>5,'6'=>6,'7'=>7,'8'=>8,'9'=>9,'A'=>10,'B'=>11,'C'=>12,'D'=>13,'E'=>14,'F'=>15);
+    if(!is_array($datalist))$datalist=array($datalist);
+    if($bin==10)return $datalist; //为10进制不转换
+    $aOutData=array(); //定义输出保存数组
+    foreach ($datalist as $num)
+    {
+        $atnum=str_split($num); //将字符串分割为单个字符数组
+        $atlen=count($atnum);
+        $total=0;
+        $i=1;
+        foreach ($atnum as $tv)
+        {
+            $tv=strtoupper($tv);
+             
+            if(array_key_exists($tv,$arr))
+            {
+                if($arr[$tv]==0)continue;
+                $total=$total+$arr[$tv]*pow($bin,$atlen-$i);
+            }
+            $i++;
+        }
+        $aOutData[]=$total;
+    }
+    return $aOutData;
+}
+var_dump(bin_todec(array('1101101','111101101'),2));
