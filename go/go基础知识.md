@@ -2810,3 +2810,36 @@ func main() {
 
 }
 </pre>
+空指针与nil
+<pre>
+package main
+import "fmt"
+func main () {
+	var ptr *int
+	if(ptr == nil){  //如果ptr是空指针
+		fmt.Println("ptr is a null pointer")
+	}
+}
+</pre>
+指针数组
+<pre>
+package main
+import "fmt"
+const MAX int = 3
+func main () {
+	a := []int {10,20,30}
+	var i int
+	var ptr [MAX]*int
+	for i =0 ;i< MAX ;i ++ {
+		ptr[i] = &a[i] //整数地址赋值给指针数组
+	}
+	
+	for i=0;i< MAX; i++ {
+		fmt.Printf("a[%d] = %d \n",i,*ptr[i])
+	}
+}
+output ==>
+a[0]= 10
+a[1]= 20
+a[2]= 30
+</pre>
