@@ -2772,4 +2772,41 @@ func main () {
 else必须跟在中括号后面，成一行。
 
 ####printf与println的区别
- printf可以解析变量，一般用%d %s %t %p等代替要输出的变量；println不可以，原样输出%d %T，所以一般直接把变量放在括号里面输出。println自带换行。
+ printf可以解析变量，一般用%d %s %t %p等代替要输出的变量；println不可以，原样输出%d %T，所以一般直接把变量放在括号里面输出.
+
+###函数返回多个值
+<pre>
+package main
+import "fmt"
+func swap (x,y string)(string , string){   //格式注意
+	return y,x
+}
+func main() {
+	a ,b := swap("fff","dddd")
+	fmt.Println(a,b)
+}
+</pre>
+
+####获取变量在内存中的存储位置
+<pre>
+package main
+import "fmt"
+func main (){
+	var a int = 10
+	fmt.Printf("%x \n",&a)
+}
+</pre>
+
+####访问指针存储地址与值的方法与区别
+<pre>
+package main
+import "fmt"
+func main() {
+	var a int = 30
+	var ip *int
+	ip = &a
+	fmt.Printf("%x\n",ip)     //ip存储地址
+	fmt.Printf("%d\n",*ip)    //*ip值
+
+}
+</pre>
