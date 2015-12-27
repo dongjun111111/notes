@@ -4835,3 +4835,32 @@ function createPerson (name,qq){
 }
 var obj=createPerson('fff','5675777676');
 obj.showName();
+
+
+
+++++JS中的call++++
+function show (a,b){
+	alert('this是：'+ this+'\n a是：'+ a +'\n b 是:' +b);
+}
+show.call('abc',13,45);
+
+
+
++++JS中prototype+++++
+var userA;
+var userB;
+function User(name,age)
+{
+ this.str_name = name;
+ this.str_age = age;
+}
+User.prototype.sayage  = function()  //给User添加方法
+{
+ alert(this.str_age);
+}
+function testUser()
+{
+ userA = new User("Tomseon","27");
+ userA.sayage();
+}
+testUser();
