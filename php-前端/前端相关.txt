@@ -4814,3 +4814,24 @@ fixed 相对于浏览器窗口固定位置，不占据空间
 relative 相对于正常位置，大多作为定位元素的容器块 占据空间
 absolute 相对于最近的已定位元素(或者<html>)，不占据空间
 
+
+
++++js工厂模式++++++
+//构造函数 工厂模式；问题：没有new关键字；函数重复，会造成资源浪费。
+function createPerson (name,qq){
+	//原料
+	var obj=new Object();
+	//加工
+	obj.name=name;
+	obj.qq=qq;
+	obj.showName=function(){
+		alert('我的名字叫：'+ obj.name);
+	}
+	obj.showQQ=function(){
+		alert('我的qq叫：'+ obj.qq);
+	}
+	//出厂
+	return obj;
+}
+var obj=createPerson('fff','5675777676');
+obj.showName();
