@@ -2770,3 +2770,6 @@ func main () {
 }
 </pre>
 else必须跟在中括号后面，成一行。
+
+####printf与println的区别
+ //printf可以解析变量，println不可以，原样输出%d %T。println自带换行
