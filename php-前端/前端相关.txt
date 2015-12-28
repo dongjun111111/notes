@@ -4700,7 +4700,7 @@ var ca = document.cookie.split(';');
 		var c =ca[i].trim();
 		if(c.indexOf(name) == 0) return c.substring(name.length,c.length);
 	}
-	return "";
+	return "没有" + cname+ "的cookie值";
 }
 //调试
 var g=getCookie('username');
@@ -4785,7 +4785,7 @@ Odiv.appendChild(p2);
 
 
 +++无指定变量接收方法，用window调用内部属性++++
-myfunc();
+myfunc();   //必须在上面调用方法
 document.getElementById('demo').innerHTML="I can play "+ window.carname;
 function myfunc(){
 	carname= "volvo";
