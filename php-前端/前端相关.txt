@@ -4847,20 +4847,21 @@ show.call('abc',13,45);
 
 
 +++JS中prototype+++++
-var userA;
-var userB;
-function User(name,age)
-{
- this.str_name = name;
- this.str_age = age;
+为对象添加方法或属性
+var usera;
+function user (name,age){
+	this.name=name;
+	this.age=age;
 }
-User.prototype.sayage  = function()  //给User添加方法
-{
- alert(this.str_age);
+user.prototype.say=function(){
+	alert(this.age);
 }
-function testUser()
-{
- userA = new User("Tomseon","27");
- userA.sayage();
+user.prototype.sname=function(){
+	alert(this.name);
 }
-testUser();
+function testuser(){
+	usera=new user('bob','44');
+	usera.say();
+	usera.sname(); 
+}
+testuser();	
