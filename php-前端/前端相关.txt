@@ -4895,3 +4895,11 @@ testuser();
 </span>
 <input style="margin-top:50px;" type="submit" value="提交">
 </form>
+
+
+++++decodeURI()与encodeURI()+++++
+<script>
+var name= "http://baidu.com/MY FIRST/";
+name=encodeURI(name);
+alert(decodeURI(name));
+</script>
