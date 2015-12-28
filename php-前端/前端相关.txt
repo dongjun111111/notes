@@ -4596,6 +4596,7 @@ document.write(g.toFixed(2));//输出：34.67  注意调用方法！！！！
 
 
 ++++JS将字符串转换成数组++
+split可以根据标识符分割，如果不输入标识符，则默认分割成长度为1的数组。
 一个split就可以：
 var h="f g jj ff";
 var arr=h.split(" ");
@@ -4681,7 +4682,7 @@ document.write(pattern.test(strstr));   //字符串strstr中存在rt,故返回tr
 
 
 ++++prompt的用法+++++
-var person= prompt("sometext","默认值");
+var person= prompt("提示信息","默认值");
 if(person != null && person != " "){
 	x = "Hello" + person + "! How are you today";
 	alert(x);
