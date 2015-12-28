@@ -5030,10 +5030,10 @@ window.onload = function() {
         </div>
         <hr>
         <div class="menuitems">
-            <a href="http://uu.51ditu.com" target="_blank">灵图UU</a>
+            <a href="http://uu.51ditu.com" target="_blank">红红</a>
         </div>
         <div class="menuitems">
-            <a href="http://baidu.com" target="_blank">路书下载</a>
+            <a href="http://baidu.com" target="_blank">卡卡</a>
         </div>
         <hr>
         <div class="menuitems">
@@ -5048,3 +5048,16 @@ window.onload = function() {
     </div>
   </body>
 </html>
+
+
+++++js禁用右键++++
+  <title>js禁用鼠标右键</title> 
+    <script>
+        window.onmousedown = function () {
+            if (window.event) {
+                if (event.button == 2) {
+                    alert('请不要点击鼠标右键！'); return false;
+                }
+            }
+        }
+   </script>
