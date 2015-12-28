@@ -4866,3 +4866,32 @@ function testuser(){
 	usera.sname(); 
 }
 testuser();	
+
+
++++++可输入的下拉框+++++
+<script language="javascript">
+    function changeF()
+    {
+       document.getElementById('makeupCo').value=
+       document.getElementById('makeupCoSe').options[document.getElementById('makeupCoSe').selectedIndex].value;
+    }
+    
+</script>
+<span style="position:absolute;border:1pt solid #c1c1c1;overflow:hidden;width:188px;
+    height:19px;clip:rect(-1px 190px 190px 170px);">
+<select name="makeupCoSe" id="makeupCoSe" style="width:190px;height:20px;margin:-2px;" onChange="changeF();">
+    <option  value='50'>50</option>
+    <option  value='100'>100</option>
+    <option  value='200'>200</option>
+    <option  value='300'>300</option>
+    <option  value='500'>500</option>
+    <option  value='1000'>1000</option>
+</select>
+</span>
+<form method="post" action="pay.php"> 
+<span style="position:absolute;border-top:1pt solid #c1c1c1;border-left:1pt 
+    solid #c1c1c1;border-bottom:1pt solid #c1c1c1;width:170px;height:19px;">
+    <input type="text" name="makeupCo" id="makeupCo" value="请选择或输入" style="width:170px;height:15px;border:0pt;" onfocus="if (value==defaultValue) value=''" onblur="if(!value) value=defaultValue">
+</span>
+<input style="margin-top:50px;" type="submit" value="提交">
+</form>

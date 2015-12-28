@@ -7604,3 +7604,45 @@ function cny($ns) {
 }
 $ff= cny('12');
 var_dump($ff);
+
+
+
+++++用程序过滤大文本数据里面的邮箱++++++
+批量过滤邮箱，批量取出邮箱地址。
+<?php
+    /**
+     *过滤用户邮箱的脚本
+     *argv[1]  获取用户输入文件的路径
+     *Author komiles
+     *Date   2013-09-17
+     */
+    $filePath = $argv[1];
+    $newFile  = $argv[2];
+
+    if(file_exists($newFile)){
+        exit("该文件已存在，请重新命名\n");
+    }else{
+        $result = file_get_contents($filePath);
+        $pattern = '/([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)/';
+        preg_match_all($pattern, $result, $emailList);
+        $handle = fopen($newFile,a);
+        foreach($emailList[0] as $value){        
+            fwrite($handle , $value."\n");
+        }
+        echo "一共".count(file($filePath))."条数据,本次处理".count($emailList[0])."条数据\n";
+    }
+?>
+
+
++++把一个一维数组转换为in()++++
+便于sql操作。
+$arr=array(1,5,6,7,8,5);
+function dbcreatein($itemlist){
+	if(empty($itemlist)){
+		return " IN ('')";
+	}else{
+		return " IN ('" .join ("','",$itemlist) ."')";
+	}
+}
+$arr=dbcreatein($arr);
+var_dump($arr);
