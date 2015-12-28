@@ -4903,3 +4903,33 @@ var name= "http://baidu.com/MY FIRST/";
 name=encodeURI(name);
 alert(decodeURI(name));
 </script>
+
+
++++js获取选中的文字++++++
+<html>
+	<head>
+				<title>Get selected text with JavaScript</title>
+				<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<script src="jquery.js" type="text/javascript"></script>
+				<script>
+					$(document).ready(function () {
+						$(".contenttext").mouseup(function (e) {
+							var txt;
+							var parentOffset = $(this).offset();
+							var x = e.pageX - parentOffset.left;
+							var y = e.pageY - parentOffset.top;
+							txt = window.getSelection();
+							if (txt.toString().length >= 1) {
+								alert(txt);
+							}
+						});
+					});
+				</script>
+    </head>
+			<body>
+				<div class="contenttext">
+					使用 PHP 的一大好处是它对于初学者来说及其的简单，同时也给专业的程序员提供了各种高级的特性。当您看到 PHP 长长的特性列表时，请不要害怕。您可以很快的入门，只需几个小时您就可以自己写一些简单的脚本。 
+				</div>
+			</body>
+</html>
