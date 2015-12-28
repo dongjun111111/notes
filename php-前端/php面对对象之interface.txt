@@ -52,3 +52,35 @@ $p = new Man();
  echo eat($p);
 $p2 = new Woman();
  echo eat($p2);
+
+
+
++++interface实例++++
+interface shop{
+	public function buy($id);
+	public function sell($id);
+	public function view($id);
+}
+class baseshop implements shop{
+	public function buy($id){
+		echo "你购买了ID为：".$id."的商品";
+	}
+	public function sell($id){
+		echo "你卖了ID为：".$id."的商品";
+	}
+	public function view($id){
+		echo "你查看了ID为：".$id."的商品";
+	}
+}
+
+$bs=new baseshop();
+$bs->buy('4');
+$bs->sell('7');
+$bs->view('1');
+
+
++++++使用接口常量+++++
+interface a {
+	const b = "interface constant";
+}
+echo a::b;   //输出：interface constant
