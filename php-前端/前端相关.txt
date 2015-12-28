@@ -5154,3 +5154,73 @@ $(function(){
     });
 });
 </script>
+
+
+++++网页查看源代码与开发者工具操作+++++
+<html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+<p>test</p>
+<script src="jquery.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+//禁用网页右键功能
+function click() {if (event.button==2) {alert('偷看打屁股！');}}
+document.onmousedown=click;
+function click() {if (event.button==2) {alert('偷看打屁股！');}}
+document.onmousedown=click;
+//禁用开发者工具
+function fuckyou() {  
+    //window.location = 'about:blank';
+    //window.close();
+
+};
+function ck() {  
+    console.profile();
+    console.profileEnd();
+    if (console.clear) {
+        console.clear();
+    };
+    return console.profiles.length > 0;
+};
+
+function hehe() {  
+    if ((window.console && window.console.firebug) || (typeof opera == "object" && typeof opera.postError == "function")) {
+        fuckyou();
+    };
+    if (ck()) {
+        fuckyou();
+    };
+};
+
+//hehe();  //此方法可以重新启用开发者工具
+
+window.onresize = function() {  
+    if ((window.outerHeight - window.innerHeight) > 200) {
+        fuckyou();
+    };
+};
+
+$(document).keydown(function() {
+    return key(arguments[0]);
+});
+
+function key(a) {  
+    var b;
+    if (window.event) {
+        b = a.keyCode;
+    } else {
+        if (a.which) {
+            b = a.which;
+        };
+    };
+    if (b == 123) {
+        window.close();
+        return false;
+    };
+};
+</script>
+</body>
+</html>
