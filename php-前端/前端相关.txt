@@ -5224,3 +5224,18 @@ function key(a) {
 </script>
 </body>
 </html>
+
+
++++HTML5中localStorage+++
+localStorage键值对存储。
+需要注意的是，HTML5本地存储只能存字符串，任何格式存储的时候都会被自动转为字符串，
+所以读取的时候，需要自己进行类型的转换。
+这里最推荐使用的自然是getItem()和setItem()，清除键值对使用removeItem()。如果希望一次性清除所有的键值对，
+可以使用clear()。另外，HTML5还提供了一个key()方法，可以在不知道有哪些键值的时候使用，如下：
+var storage = window.localStorage;
+function showStorage(){
+ for(var i=0;i<storage.length;i++){
+  //key(i)获得相应的键，再用getItem()方法获得对应的值
+  document.write(storage.key(i)+ " : " + storage.getItem(storage.key(i)) + "<br>");
+ }
+}
