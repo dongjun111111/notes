@@ -5239,3 +5239,263 @@ function showStorage(){
   document.write(storage.key(i)+ " : " + storage.getItem(storage.key(i)) + "<br>");
  }
 }
+
+
++++JS题目+++++
+题目1
+if (!("a" in window)) {
+    var a = 1;
+}
+alert(a);
+代码看起来是想说：如果window不包含属性a，就声明一个变量a，然后赋值为1。
+你可能认为alert出来的结果是1，然后实际结果是“undefined”。要了解为什么，我们需要知道JavaScript里的3个概念。
+首先，所有的全局变量都是window的属性，语句 var a = 1;等价于window.a = 1; 你可以用如下方式来检测全局变量是否声明：
+"变量名称" in window
+第二，所有的变量声明都在范围作用域的顶部，看一下相似的例子：
+alert("a" in window);
+var a;
+此时，尽管声明是在alert之后，alert弹出的依然是true，这是因为JavaScript引擎首先会扫描所有的变量声明，然后将这些变量声明移动到顶部，最终的代码效果是这样的：
+var a;
+alert("a" in window);
+这样看起来就很容易解释为什么alert结果是true了。
+
+第三，你需要理解该题目的意思是，变量声明被提前了，但变量赋值没有，因为这行代码包括了变量声明和变量赋值。
+
+你可以将语句拆分为如下代码：
+
+var a;    //声明
+a = 1;    //初始化赋值
+当变量声明和赋值在一起用的时候，JavaScript引擎会自动将它分为两部以便将变量声明提前，不将赋值的步骤提前是因为他有可能影响代码执行出不可预期的结果。
+
+所以，知道了这些概念以后，重新回头看一下题目的代码，其实就等价于：
+
+var a;
+if (!("a" in window)) {
+    a = 1;
+}
+alert(a);
+这样，题目的意思就非常清楚了：首先声明a，然后判断a是否在存在，如果不存在就赋值为1，很明显a永远在window里存在，这个赋值语句永远不会执行，所以结果是undefined。
+
+题目2
+function a(x) {
+    return x * 2;
+}
+var a;
+alert(a);
+这个题目就是题目2里的大叔加的注释了，也就是函数声明和变量声明的关系和影响，遇到同名的函数声明，VO不会重新定义，所以这时候全局的VO应该是如下这样的：
+VO(global) = {
+    a: 引用了函数声明“a”
+}
+而执行a的时候，相应地就弹出了函数a的内容了。
+
+题目3
+function b(x,y,a){
+	arguments[2] =10;
+	alert(a);
+}
+b(1,2,3);
+结果为10，arguments将函数中的参数作为一个数组(arguments)，可以对其进行修改.
+
++++Event事件+++
+reset:
+<input type="reset" value="这个是Form清除" />
+onselect:(仅仅适用于textarea与input)
+<textarea>
+在现代金融体系中
+</textarea>
+    <script type="text/javascript">
+    var oP=document.getElementsByTagName("textarea")[0];
+    oP.onselect=function() {
+    	alert(44);
+    }
+</script>
+onscroll:
+   window.onscroll=function() {
+    	alert(44);
+    }
+
++++奇特的JS++
+var x =10;
+function f() {
+	var y = 20;
+	function bar() {
+		alert(x + y);
+	}
+	return bar;
+}
+f()();
+
+
+++++css自适应垂直时间表timeline++++
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta charset="utf-8">
+<title>自适应垂直时间表(Timeline)</title> 
+<script src="jquery.js"></script> 
+<script> 
+    $(function() { 
+        $('.timeline .events li:nth-child(2n)').addClass('alt'); 
+    }); 
+</script> 
+
+<style> 
+    * { 
+    box-sizing: border-box; 
+} 
+  
+body { 
+    background-color: #efefef; 
+} 
+  
+#main { 
+    margin: 20px auto; 
+} 
+  
+.timeline { 
+    overflow: hidden; 
+    position: relative; 
+} 
+  
+.timeline:after { 
+    content: ""; 
+    position: absolute; 
+    width: 6px; 
+    height: 100%; 
+    background-color: #AFDCF8; 
+    top: 0; 
+    left: 50%; 
+    margin-left: -3px; 
+    z-index: 0; 
+} 
+  
+.timeline .year { 
+    background-color: #AFDCF8; 
+    width: 60px; 
+    height: 60px; 
+    border-radius: 30px; 
+    position: relative; 
+    margin: 0 auto 50px; 
+    clear: both; 
+    z-index: 1; 
+} 
+  
+.timeline .year-inner { 
+    background-color: #46A4DA; 
+    width: 50px; 
+    height: 50px; 
+    text-align: center; 
+    line-height: 50px; 
+    color: #fff; 
+    border-radius: 25px; 
+    position: absolute; 
+    top: 50%; 
+    margin-top: -25px; 
+    left: 50%; 
+    margin-left: -25px; 
+} 
+  
+.timeline .events { 
+    list-style-type: none; 
+    padding: 0; 
+    margin: 0; 
+    clear: both; 
+} 
+  
+.timeline .events li { 
+    width: 40%; 
+    margin-bottom: 100px; 
+    border: solid 1px #AFDCF8; 
+    padding: 10px; 
+    border-radius: 5px; 
+    float: left; 
+    clear: left; 
+    position: relative; 
+} 
+  
+  
+.timeline .events li:after { 
+    content: ""; 
+    position: absolute; 
+    top: 30px; 
+    left: 100%; 
+    width: 25%;  /* 10% = 1 * 40% * 25% */
+    height: 6px; 
+    background-color: #AFDCF8; 
+      
+} 
+  
+  
+.timeline .events li.alt { 
+    float: right; 
+    clear: right; 
+    margin-top: 50px; 
+    margin-bottom: 50px; 
+} 
+  
+.timeline .events li.alt:before { 
+    content: ""; 
+    position: absolute; 
+    top: 30px; 
+    left: -25%; 
+    width: 25%; 
+    height: 6px; 
+    background-color: #AFDCF8; 
+} 
+  
+.events img { 
+    width: 100%; 
+} 
+</style> 
+</head> 
+<body> 
+    <div id="main"> 
+        <h2 style="text-align:center;"> 
+    自适应垂直时间表(Timeline) 
+        </h2> 
+        <div class="timeline"> 
+            <div class="year"> 
+                <div class="year-inner"> 
+                    <a href="javascript:void(0);alert(2015);">2015</a>
+                </div> 
+            </div> 
+            <ul class="events"> 
+                <li> 
+                    <img src="logo.png"> 
+                </li> 
+                <li> 
+                    <img src="logo.png">                      
+                </li> 
+                <li> 
+                    <img src="logo.png">   
+                </li> 
+                <li> 
+                    <img src="logo.png"> 
+                </li> 
+            </ul> 
+            <div class="year"> 
+                <div class="year-inner"> 
+                    <a href="javascript:void(0);alert(2014);">2014</a> 
+                </div> 
+            </div> 
+            <ul class="events"> 
+                <li> 
+                    <img src="logo.png"> 
+                </li> 
+                <li> 
+                    <img src="logo.png"> 
+                </li> 
+                <li> 
+                    <img src="logo.png">  
+                </li> 
+                <li> 
+                    <img src="logo.png"> 
+                </li> 
+                <li> 
+                    <img src="logo.png">  
+                </li> 
+            </ul> 
+        </div> 
+    </div> 
+</body> 
+</html> 
