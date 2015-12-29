@@ -5504,3 +5504,62 @@ body {
 +++深拷贝、浅拷贝+++
 浅拷贝是直接复制源对象的属性和方法。
 深拷贝是在浅拷贝的基础上，如果源对象属性也是一个对象，那么连这个对象也复制，也就是在内存中又开辟了一块地方用来存放。
+
+++浏览器桌面通知Notification++++
+function showMsgNotification(title, msg){
+var Notification = window.Notification || window.mozNotification || window.webkitNotification;
+if (Notification && Notification.permission === "granted"){
+var instance = new Notification(
+title, {
+body: msg,
+icon: "image_url"
+}
+);
+instance.onclick = function () {
+// Something to do
+};
+instance.onerror = function () {
+// Something to do
+};
+instance.onshow = function () {
+// Something to do
+// console.log(instance.close);
+setTimeout(instance.close, 3000);
+};
+instance.onclose = function () {
+// Something to do
+};
+}else if (Notification && Notification.permission !== "denied") {
+Notification.requestPermission(function (status) {
+if (Notification.permission !== status) {
+Notification.permission = status;
+}
+// If the user said okay
+if (status === "granted") {
+var instance = new Notification(
+title, {
+body: mag,
+icon: "image_url"
+}
+);
+instance.onclick = function () {
+};
+instance.onerror = function () {
+// Something to do
+};
+instance.onshow = function () {
+// Something to do
+setTimeout(instance.close, 3000);
+};
+instance.onclose = function () {
+// Something to do 
+};
+}else {
+return false
+}
+});
+}else{
+return false;
+}
+}
+showMsgNotification('Test','content');
