@@ -7646,3 +7646,47 @@ function dbcreatein($itemlist){
 }
 $arr=dbcreatein($arr);
 var_dump($arr);
+
+
++++防止伪造跨站请求的小招式++++
+随机串代码实现：
+<?php
+class Crumb {                                                                                                  
+                                                                                                                  
+    CONST SALT = "your-secret-salt";                                                         
+                                                                 
+    static $ttl = 7200;                                                                                           
+                                                                                                                  
+    static public function challenge($data) {                                                                     
+        return hash_hmac('md5', $data, self::SALT);                                                               
+    }                                                                                                             
+                                                                                                                  
+    static public function issueCrumb($uid, $action = -1) {                                                       
+        $i = ceil(time() / self::$ttl);                                                                           
+        return substr(self::challenge($i . $action . $uid), -12, 10);                                             
+    }                                                                                                             
+                                                                                                                  
+    static public function verifyCrumb($uid, $crumb, $action = -1) {                                              
+        $i = ceil(time() / self::$ttl);                                                                           
+                                                                                                                  
+        if(substr(self::challenge($i . $action . $uid), -12, 10) == $crumb ||                                     
+            substr(self::challenge(($i - 1) . $action . $uid), -12, 10) == $crumb)                                
+            return true;                                                                                          
+                                                                                                                  
+        return false;                                                                                             
+    }                                                                                                             
+                                                                                                                  
+}
+在表单中插入一个隐藏的随机串crumb
+<form method="post" action="demo.php">
+<input type="hidden" name="crumb" value="<?php echo Crumb::issueCrumb($uid)?>">
+<input type="text" name="content">
+<input type="submit">
+</form>
+对crumb进行检查
+<?php
+if(Crumb::verifyCrumb($uid, $_POST['crumb'])) {
+    //按照正常流程处理表单
+} else {
+    //crumb校验失败，错误提示流程
+}
