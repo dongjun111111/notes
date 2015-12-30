@@ -5581,3 +5581,16 @@ $('#p3').click(function(){
 $("#p3").click(function(){
 	$('input').val('test once'); <!--改变值-->
 })
+
+
++++js中try_catch()++++
+try{
+	alerrt('yes');
+}
+catch(err){
+	txt= "there was an error on this page";
+	txt +="Error description:" + err.message + "\n\n";
+	txt += "click ok to continue";
+	alert(txt);
+}
+
