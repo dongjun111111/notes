@@ -5594,3 +5594,6 @@ catch(err){
 	alert(txt);
 }
 
+
+++++js获取父元素属性操作++++
+p.parentNode.removeChild(p);
