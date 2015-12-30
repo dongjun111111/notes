@@ -5563,3 +5563,21 @@ return false;
 }
 }
 showMsgNotification('Test','content');
+
+
++++jquery常用+++
+$('.div3').mouseleave(function(){
+	$(this).animate({left:'0',opacity:'1'}); <!--0则回到原位-->
+})
+$('.div3').mouseenter(function(){
+        alert("url:"+ $('input').val());<!--获取input中value的值-->
+})
+$('#p3').click(function(){
+	alert("attr-url:" + $('input').attr('url'));
+})
+$('#p3').click(function(){
+	$('#p2').text('animating'); <!--改变内容-->
+})
+$("#p3").click(function(){
+	$('input').val('test once'); <!--改变值-->
+})
