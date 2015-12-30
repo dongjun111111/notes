@@ -5597,3 +5597,17 @@ catch(err){
 
 ++++js获取父元素属性操作++++
 p.parentNode.removeChild(p);
+
++++js中true与false+++
+如果逻辑对象无初始值或者其值为 0、-0、null、""、false、undefined 或者 NaN，
+那么对象的值为 false。否则，其值为 true（即使当自变量为字符串 "false" 时）。
+
+++js与php比较+++++
+d1=d.substr(0,1);  //start,length  
+ //php substr(start,length) 
+d1=d.substring(0,1); //start,stop
+//php 无substring
+list($a,$b,$c)=$arr;
+echo $a;
+list($a,$b)=[$b,$a];  //调换两个值swap
+//echo lcg_value();  //0-1随机数
