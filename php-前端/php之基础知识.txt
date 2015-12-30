@@ -1948,3 +1948,32 @@ function bin_todec($datalist,$bin)
     return $aOutData;
 }
 var_dump(bin_todec(array('1101101','111101101'),2));
+
+
++++uniqid()++++
+uniqid() 函数基于以微秒计的当前时间，生成一个唯一的 ID。
+echo uniqid();
+可以是：568339d4a7c3a
+
+
++++php针对iphone和android设备输出不同的viewport++++++
+<?php
+
+//if iphone
+$browser = strpos($_SERVER['HTTP_USER_AGENT'],"iPhone");
+  if ($browser == true){
+  $browser = 'iphone';
+}
+//if android
+$android = strpos($_SERVER['HTTP_USER_AGENT'],"Android");
+   if ($android == true){
+   $brower = 'android';
+}
+?>
+
+<?php if ($browser == 'iphone') { ?>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+<?php } elseif ($brower == 'android') { ?>
+  <meta name="HandheldFriendly" content="true" />
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no" />
+<?php } ?>
