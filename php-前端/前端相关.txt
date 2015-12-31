@@ -5619,3 +5619,7 @@ document.getElementsByTagName('input')[0].setAttribute('type','text');
 对应的有getAttribute('属性名称'):
 var s= document.getElementsByTagName('input')[0].getAttribute('type');
 alert(s);
+还有removeAttribute(''),移除指定属性。
+tagName,返回标签名称：
+var s=document.getElementsByTagName('input')[0].tagName;
+alert(s);   //input
