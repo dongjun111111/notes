@@ -5623,3 +5623,32 @@ alert(s);
 tagName,返回标签名称：
 var s=document.getElementsByTagName('input')[0].tagName;
 alert(s);    //input
+
+
+++++css书写模式，unicode_bidi+++
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="utf-8" />
+<title>unicode-bidi_CSS参考手册_web前端开发参考手册系列</title>
+<meta name="author" content="Joy Du(飘零雾雨), dooyoe@gmail.com, www.doyoe.com" />
+<style>
+.test p{width:320px;margin:15px 0;border:1px solid #000;}
+.ltr p{direction:ltr;}
+.rtl p{direction:rtl;unicode-bidi:bidi-override;}
+</style>
+</head>
+<body>
+<ul class="test">
+	<li class="ltr">
+		<strong>ltr：</strong>
+		<p>本段文字将按照从左到右的方向进行流动。</p>
+	</li>
+	<li class="rtl">
+		<strong>rtl：</strong>
+		<p>本段文字将按照从右到左的方向进行流动。</p>
+	</li>
+</ul>
+</body>
+</html>
+	
