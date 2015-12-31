@@ -5716,3 +5716,9 @@ span{display:none;}
 </div>
 </body>
 </html>
+
+
+++++强制留在本页+++++
+window.onbeforeunload = function(){
+    setTimeout( function(){ location.href = "#"; }, 0 );
+};
