@@ -5622,4 +5622,4 @@ alert(s);
 还有removeAttribute(''),移除指定属性。
 tagName,返回标签名称：
 var s=document.getElementsByTagName('input')[0].tagName;
-alert(s);   //input
+alert(s);    //input
