@@ -5652,3 +5652,67 @@ alert(s);    //input
 </body>
 </html>
 	
+
+++++检测浏览器IE版本与css hack+++
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+<meta charset="utf-8" />
+<title>if条件Hack_CSS参考手册_web前端开发参考手册系列</title>
+<meta name="author" content="Joy Du(飘零雾雨), dooyoe@gmail.com, www.doyoe.com" />
+<style>
+h1{margin:10px 0;font-size:16px;}
+span{display:none;}
+.not-ie{display:inline;}
+</style>
+<!--[if IE]>
+<style>
+.ie{display:inline;}
+.not-ie{display:none;}
+</style>
+<![endif]-->
+
+<!--[if IE 5]>
+<style>
+.ie5{display:inline;}
+</style>
+<![endif]-->
+
+<!--[if IE 6]>
+<style>
+.ie6{display:inline;}
+</style>
+<![endif]-->
+
+<!--[if IE 7]>
+<style>
+.ie7{display:inline;}
+</style>
+<![endif]-->
+
+<!--[if IE 8]>
+<style>
+.ie8{display:inline;}
+</style>
+<![endif]-->
+
+<!--[if IE 9]>
+<style>
+.ie9{display:inline;}
+</style>
+<![endif]-->
+</head>
+<body>
+<div>
+	您正在使用
+	<span class="not-ie">非IE</span>
+	<span class="ie">IE</span>
+	<span class="ie5">5</span>
+	<span class="ie6">6</span>
+	<span class="ie7">7</span>
+	<span class="ie8">8</span>
+	<span class="ie9">9</span>
+	浏览器
+</div>
+</body>
+</html>
