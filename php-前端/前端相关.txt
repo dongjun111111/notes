@@ -5611,3 +5611,8 @@ list($a,$b,$c)=$arr;
 echo $a;
 list($a,$b)=[$b,$a];  //调换两个值swap
 //echo lcg_value();  //0-1随机数
+
+++++setAttribute()+++++
+setAttribute() 方法添加指定的属性，并为其赋指定的值。
+如果这个指定的属性已存在，则仅设置/更改值。
+document.getElementsByTagName('input')[0].setAttribute('type','text');
