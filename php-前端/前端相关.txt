@@ -5724,7 +5724,7 @@ window.onbeforeunload = function(){
 };
 
 
-+++兼容IE的烟花效果+++++
++++兼容IE的烟花焰火效果+++++
 <script>
 var showcoo = function(){
  this.size = 40;

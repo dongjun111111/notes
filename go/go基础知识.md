@@ -195,7 +195,17 @@ Capital of France is Paris
 Capital of Italy is Rome
 Capital of Japan is Tokyo
 </pre>
-
+数组range用法
+<pre>
+package main 
+import "fmt"
+func main () {
+	arr := [5]int{234,3,56,4,3}
+	for d := range arr {
+	fmt.Println(d)
+}
+}
+</pre>
 
 ###go二维数组
 <pre>
