@@ -351,18 +351,21 @@ func main(){
 	}
 }
 </pre>
+内容拷贝：
+<pre>
+slice1 := []int {1,2,4,5,6}
+slice2 := []int {7,8,9]
+copy(slice2,slice1) //只会复制slice1的前3个元素到slice2中
+copy(slice1,slice2)  //只会复制slice2的3个元素到slice1的前3个位置
+</pre>
 ####Nil 切片
 如果一个切片，没有输入默认声明，它被初始化为为nil。其长度和容量都为零。
 <pre>
 package main
-
 import "fmt"
-
 func main {
    var numbers []int
-   
    printSlice(numbers)
-   
    if(numbers == nil){
       fmt.printf("slice is nil")
    }
