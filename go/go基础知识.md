@@ -325,6 +325,32 @@ myslice2 := make([]int,5,10)
 直接创建并初始化包含5个元素的数组切片：
 myslice3 := []int {1,2,4,5,6}
 </pre>
+向一个数组切片中追加另一个数组切片，append； 注意要第二个切片后面要加上... 不然编译出错。因为按append语义，
+从第二个参数起的所有参数都是待附加的元素，加上省略号相当于把myslice2包含的所有元素打散后传入。
+<pre>
+package main 
+import "fmt"
+func main(){
+	myslice1 := []int {12,3,4,5}
+	myslice2 := []int {7,8,9}
+	myslice1 =append(myslice1,myslice2...)
+	for _,i := range myslice1 {
+		fmt.Print(i)
+	}
+}
+</pre>
+向数组切片追加元素：
+<pre>
+package main 
+import "fmt"
+func main(){
+	myslice1 := []int {1234,54,6,7}
+	myslice1 = append(myslice1,77,88)   //这里不是:=，而是=
+	for _,i := range myslice1 {
+		fmt.Println(i)
+	}
+}
+</pre>
 ####Nil 切片
 如果一个切片，没有输入默认声明，它被初始化为为nil。其长度和容量都为零。
 <pre>
