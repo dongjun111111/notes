@@ -436,6 +436,32 @@ func main (){
 Output==>
 map[k1:7 k2:13]
 </pre>
+map声明。创建。赋值。使用的实例：
+<pre>
+package main 
+import "fmt"
+type personinfo struct {
+	id string
+	name string
+	address string
+}
+func main (){
+	//map的声明 persondb是map的变量名，string是键的类型，personinfo是其中所存放的值得类型
+	var persondb  map[string] personinfo
+	//创建 键类型为string，值类型为personinfo的map
+	persondb=make(map[string] personinfo)
+	persondb["12345"] = personinfo{"12345","tom","room200"}
+	persondb["1"] =personinfo{"1","jack","room333"}
+    //map是一堆键值对的未排序集合。比如以身份证号作为唯一键来标识一个人的信息。
+	//从这个map查找见为12345的信息
+	person,ok := persondb["12345"]
+	if ok {
+		fmt.Println("Found person:",person.name,"with id 12345.")
+	}else{
+		fmt.Println("Not found")
+	}
+}
+</pre>
 ###引用类型
 引用类型包括slice、map、channel,他们有复杂的内部结构，除了申请内存外，还需要初始化相关属性。<br>
 内置函数new计算类型大小，为其分配零值内存。返回指针。而make会被编译器翻译成具体的创建函数，而其分配内存和初始化成员结构，返回对象而不是指针。
