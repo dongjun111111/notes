@@ -47,6 +47,24 @@ Output==>
 s := "hello" + 
 "world"
 </pre>
+
+###匿名函数
+<pre>
+package main 
+import "fmt"
+func main(){
+	var j int = 5
+	a := func()(func()){
+		var i int = 10
+		return func () {
+			fmt.Printf("i,j :%d,%d \n",i,j)
+		}
+	}()
+	a()
+	j *=2
+	a()
+}
+</pre>
 ##字符串遍历
 这里有两种情况：
 <br>下面一种是纯英文格式，比较方便。
