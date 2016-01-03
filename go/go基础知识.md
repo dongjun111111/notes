@@ -207,6 +207,22 @@ func main () {
 }
 </pre>
 
+<pre>
+package main
+import "fmt"
+func my(array [5]int){
+	array[0] =100
+	fmt.Println("array value:",array)
+}
+func main (){
+	array := [5]int {1,23,4,5,6}
+	my(array)
+	fmt.Println("array:values:",array)
+}
+</pre>
+
+
+
 ###go二维数组
 <pre>
 package main
@@ -276,6 +292,38 @@ func printSlice(x []int){
 }
 output ==>
 len=3 cap=5 slice=[0 0 0]
+</pre>
+切片：<br>
+切片创建有两种形式：
+
+* 基于数组：
+<pre>
+package main
+import "fmt"
+func main(){
+	var myarr [10]int =[10]int {1,2,4,5,6,7,7,8,8,9}
+	var myslice []int =myarr[:5]   //取数组前5个数据，相应的5:表示从第5位往后取
+	fmt.Println("elements of myarr:")
+	for 
+	_,v := range myarr {//如果这里没有_,则v代表的是下标值，0-9，而并不是数组值，所有要两个值，第二个值是数组的值
+		fmt.Print(v," ")
+	}
+	fmt.Println("\nElements of myslice :")
+	for _,v :=range myslice {
+		fmt.Print(v , " ")
+	}
+	fmt.Println()
+}
+</pre>
+
+* 直接创建
+<pre>
+创建一个初始元素个数为5的数组切片，初始值为0：
+myslice1 := make([]int,5)
+创建提供初始元素个数为5的数组切片，元素初始值为0，并预留10个元素的存储空间：
+myslice2 := make([]int,5,10)
+直接创建并初始化包含5个元素的数组切片：
+myslice3 := []int {1,2,4,5,6}
 </pre>
 ####Nil 切片
 如果一个切片，没有输入默认声明，它被初始化为为nil。其长度和容量都为零。
