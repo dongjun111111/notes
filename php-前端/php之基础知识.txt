@@ -2169,3 +2169,10 @@ $format=sprintf("%.3f",$num);
 echo $format;
 第三种：
 echo number_format($num,3);
+
+
+++++eval()执行PHP代码+++
+必须以分号结尾。
+$str="hello world";
+$code="print('$str');";
+eval($code);
