@@ -82,6 +82,29 @@ var file1 IFile = new(File)
 var file2 IReader = new(File)
 var file3 IWriter = new(File)
 var file4 ICloser = new(File)
+
+####接口赋值
+两种情况：
+
+1. 将对象实例化赋值给接口；
+第一种要求实现接口要求的所有方法：
+<pre>
+type Interger int 
+func (a Integer) Less (b Integer) bool {
+	return a <b
+}
+func (a *Integer) Add (b Integer){
+	*a +=b
+}
+//对应的，我们定义接口LessAdder,如下：
+type LessAdder interface {
+	Less(b Integer) bool
+	Add(b Integer)  
+}
+</pre>
+2. 将一个接口赋值给另一个接口。
+
+
 ###匿名函数
 <pre>
 package main 
