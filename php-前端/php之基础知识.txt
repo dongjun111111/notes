@@ -2176,3 +2176,11 @@ echo number_format($num,3);
 $str="hello world";
 $code="print('$str');";
 eval($code);
+
+$str13=crypt($str); // UNIX 的标准加密 DES 模块加密,单向加密
+$str5=ord($str);//返回ascii值
+$str6=sha1($str);//安全哈希算法
+$str7=str_shuffle($str);//随机打乱，可用于验证码，简单批量密码生成
+$str8=str_split($str,4);  //字符串到数组 ，长度
+$str10=strchr($str,'6'); //有则输出第一次出现到结束的内容
+$str101=strstr($str,"6");//有则输出第一次出现到结束的内容
