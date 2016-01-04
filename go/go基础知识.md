@@ -48,6 +48,40 @@ s := "hello" +
 "world"
 </pre>
 
+###接口
+go语言中的接口并不是其他语言（C++,java等）中所提供的接口概念。go:非侵入式接口。
+一个类只需要实现了接口要求的所有函数，我们就说这个类实现了该接口：
+定义一个File类：
+<pre>
+type File struct {
+	//...
+}
+func (f *File) Read(buf []byte) (n int,err error)
+func (f *File) Write(buf []byte) (n int ,err error)
+func (f *File) Seek(off int64,whence int) (pos int64,err error)
+func (f *File) Close() error
+//上面定义了一个File类，并实现有Read(),Write(),Seek(),Close()等方法。实现一个基于File类的接口：
+type IFile interface {
+	Read(buf []byte) (n int,err error)
+	Write(buf []byte) (n int,err error)
+	Seek(off int64,whence int) (pos int64,err error)
+	Close() error
+}
+type IReader interface {
+	Read(buf []byte) (n int ,err error)
+}
+type IWriter interface {
+	Write(buf []byte) (n int ,err error)
+}
+type ICloser interface {
+	Close() error
+}
+</pre>
+尽管File类并没有从这些接口继承，甚至可以不知道这些接口的存在，但是File类实现了这些接口，可以进行赋值:
+var file1 IFile = new(File)
+var file2 IReader = new(File)
+var file3 IWriter = new(File)
+var file4 ICloser = new(File)
 ###匿名函数
 <pre>
 package main 
