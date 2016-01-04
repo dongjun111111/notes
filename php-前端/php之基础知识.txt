@@ -2184,3 +2184,26 @@ $str7=str_shuffle($str);//随机打乱，可用于验证码，简单批量密码
 $str8=str_split($str,4);  //字符串到数组 ，长度
 $str10=strchr($str,'6'); //有则输出第一次出现到结束的内容
 $str101=strstr($str,"6");//有则输出第一次出现到结束的内容
+
+$arr5=array_key_exists("5",$arr);//键名是否存在
+$arr14=in_array('6',$arr); //看元素在不在数组中
+function my($v){
+    return $v*$v;
+}
+$arr6=array_map("my",$arr); //array_map将函数作用于数组每个键值上，类似功能还有array_filter()
+$arr10=array_search("8",$arr);//有此键值则返回对应的键名
+$arr8=array_rand($arr,2);//array_rand($arr);随机返回任意一个键值，array_rand(,4)随机返回任意一个长度为4的数组
+$arr2=array_chunk($arr,3); //将一个数组分割为新的数组块。array_chunk(原数组，单一数组长度（或者说值个数）);
+$arr1=implode($arr);
+$arr3=array_fill(5,3,"f");//array_fill(起始键名号，长度，键值);
+$arr4=array_flip($arr); //键名与键值调换
+array_multisort($arr); //无返回值，直接处理，类似于sort()
+$arr7=array_product($arr);//计算所用键值的乘积
+$arr9=array_reverse($arr); //倒序
+$arr11=array_sum($arr); //返回键值之和
+$arr12=array_values($arr); //返回键值，忽略键名，默认从0开始
+$a=4;
+$b=6;
+$g=8;
+$arr13=compact('a','b','g'); //将多个变量变成数组
+list() //将数组键值赋值给变量，不错
