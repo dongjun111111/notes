@@ -1070,3 +1070,35 @@ if (!$User->create()){
 通俗一点说：
 M实例化参数是数据库的表名。
 D实例化的是你自己在Model文件夹下面建立的模型文件。
+
+
+++++$_validate和$_auto+++++
+自动验证
+protected $_validate = array(
+        array('name', 'require', '标识不能为空', self::EXISTS_VALIDATE, 'regex', self::MODEL_BOTH),
+);定义一个验证规则，可以在使用create创建数据对象的时候自动进行数据验证。
+$article=D('Article');
+if($article->create()){        //创建数据对象并且自动进行验证
+ $article->author=session('username');
+自动创建
+就可以在使用create方法创建数据对象的时候自动处理：
+$User = D("User"); // 实例化User对象
+if (!$User->create()){ // 创建数据对象
+     // 如果创建失败 表示验证没有通过 输出错误提示信息
+     exit($User->getError());
+}else{
+     // 验证通过 写入新增数据
+        $User->add();
+}
+
+
++++create自动创建对象+++++
+ThinkPHP可以帮助你创建数据对象。典型的应用就是自动根据表单数据创建数据对象，适用于在一个数据表的字段非常之多的情况。
+很简单的例子：
+// 实例化User模型
+$User = M('User');
+ // 根据表单提交的POST数据创建数据对象
+$User->create();
+ // 把创建的数据对象写入数据库
+$User->add();
+}
