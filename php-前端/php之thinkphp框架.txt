@@ -1080,7 +1080,14 @@ protected $_validate = array(
 $article=D('Article');
 if($article->create()){        //创建数据对象并且自动进行验证
  $article->author=session('username');
+}
 自动创建
+protected $_auto = array ( 
+         array('status','1'),  // 新增的时候把status字段设置为1
+         array('password','md5',3,'function') , // 对password字段在新增和编辑的时候使md5函数处理
+         array('name','getName',3,'callback'), // 对name字段在新增和编辑的时候回调getName方法
+         array('update_time','time',2,'function'), // 对update_time字段在更新的时候写入当前时间戳
+);定义一个自动创建规则，create的时候自动调用这里。
 就可以在使用create方法创建数据对象的时候自动处理：
 $User = D("User"); // 实例化User对象
 if (!$User->create()){ // 创建数据对象
