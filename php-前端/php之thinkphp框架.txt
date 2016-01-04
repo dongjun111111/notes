@@ -1109,3 +1109,13 @@ $User->create();
  // 把创建的数据对象写入数据库
 $User->add();
 }
+
+
++++控制器中的空操作++++
+public function _empty($name){
+        $this->operate($name);
+    }
+    protected function operate($name){
+        echo "您输入了<font color=red>".$name."</font>,然而并没有该方法!";
+}
+当用户访问没有定义的方法时，会转到_empty()。
