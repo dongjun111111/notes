@@ -2240,3 +2240,14 @@ $file=file_get_contents("fflush.txt");//读取文件
 var_dump($file);
 
 file_put_contents("fflush.txt","222",FILE_APPEND); //追加内容
+
+$temp=tmpfile(); //临时文件不会在本地创建，fclose()后销毁
+fwrite($temp,"testing,testing");
+rewind($temp);
+echo fread($temp,1024); //读取前1024位
+fclose($temp);
+
+mkdir("testing");//创建一个文件夹
+rename("testing","ttt");  //重命名文件夹
+var_dump(stat("./ttt/test.txt"));  //返回文件详细信息
+echo gettype(filesize("./ttt/test.txt")); //获得变量类型
