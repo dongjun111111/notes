@@ -2251,3 +2251,6 @@ mkdir("testing");//创建一个文件夹
 rename("testing","ttt");  //重命名文件夹
 var_dump(stat("./ttt/test.txt"));  //返回文件详细信息
 echo gettype(filesize("./ttt/test.txt")); //获得变量类型
+
+$cars=array("volvo","bmw","toyota");
+echo sizeof($cars);//返回数组中元素的数目

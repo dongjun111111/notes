@@ -1,7 +1,0 @@
-<script src="device.min.js"></script>
-//进行判断
-<script type="text/javascript">
-    if(device.mobile()){
-        window.location = "shouji.html";  //可以换成http地址
-    }
-</script>
