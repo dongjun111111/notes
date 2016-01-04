@@ -2208,3 +2208,13 @@ $g=8;
 $arr13=compact('a','b','g'); //将多个变量变成数组
 list() //将数组键值赋值给变量，无返回值
 shuffle($arr);//打乱数组键值（键名忽略），无返回值
+
+echo getcwd(); //获得该文件所在目录
+echo "<br>";
+$dir= dir("log"); //循环列出目录下文件
+while(($file=$dir->read()) !== false){
+    echo "filename:".$file."<br>";
+}
+$dir->close();
+echo "<br>";
+print_r(scandir("log")); //直接列出目录下文件
