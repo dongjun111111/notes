@@ -2218,3 +2218,25 @@ while(($file=$dir->read()) !== false){
 $dir->close();
 echo "<br>";
 print_r(scandir("log")); //直接列出目录下文件
+
+echo date("Y-m-d",strtotime("tomorrow"));//打印明天日期
+
+$file=fopen("log.log","r");  //读取文件内容
+while(!feof($file)){
+    echo fgets($file)."<br>";   //fgets()读取一行，fgetc()逐个读取
+}
+fclose($file);
+
+$fp = fopen("fflush.txt", "a+");//创建文件,(追加)写入内容
+for ($i = 0; $i < 10; $i++) {
+    fwrite($fp, "4"); 
+  //sleep(1);等待1秒
+}
+//fflush($fp); 可要可不要
+fclose($fp);
+
+
+$file=file_get_contents("fflush.txt");//读取文件
+var_dump($file);
+
+file_put_contents("fflush.txt","222",FILE_APPEND); //追加内容
