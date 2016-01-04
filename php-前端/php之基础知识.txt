@@ -2159,4 +2159,13 @@ fstat() 函数返回关于一个打开的文件的信息。
 [12] 或 [blocks] - 所占据块的数目
 
 
-
++++数字处理，保留小数+++++
+（这里保留3位）
+$num=13.5664;
+第一种：
+echo round($num,3);
+第二种：
+$format=sprintf("%.3f",$num);
+echo $format;
+第三种：
+echo number_format($num,3);
