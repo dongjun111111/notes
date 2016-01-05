@@ -1179,3 +1179,21 @@ class TController extends Controller {
 		echo "after<br>";
 	}
 }
+
+
+use Think\Controlller其实就是引用了thinkphp引擎文件夹里think目录下的Controller.class.php
+
+
++++exp++++
+thinkphp中的exp会把后面的字符串当成sql执行，下面的IN(0)被当成了sql语句。
+像IN、gt、lt、eq、elt等都是把后面的当成字符串。
+$arr['status']=array('exp','IN(0)');
+$res=$info->where($arr)->select();
+
+++thinkphp快速插入数据+++++
+下面向tel_messge表的tel,message,request和status字段插入了数据。
+M("TelMessage")->tel="124544545";
+M("TelMessage")->message="流年@ee.com";
+M("TelMessage")->request="testttt";
+M("TelMessage")->status="2";
+$res=M("TelMessage")->add();
