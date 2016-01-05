@@ -1142,5 +1142,21 @@ function BPaging($mod,$map,$field=true,$limit='10',$order='id desc',$pamap) {
         $arr['show']=$show;
         $arr['tolnum'] = $count;
         return $arr;
-         
  }
+
+
+++++空控制器+++++
+输入不存在的控制器，会出现下面的友好提示。
+<?php
+namespace Admin\Controller;
+use Think\Controller;
+
+class EmptyController extends Controller {
+    public function index(){
+        $name=CONTROLLER_NAME;
+        $this->show($name);
+    }
+    protected function show($name){
+        echo "您输入了".$name.",但没有定义该控制器";
+    }
+}
