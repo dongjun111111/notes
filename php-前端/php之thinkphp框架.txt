@@ -1184,12 +1184,32 @@ class TController extends Controller {
 use Think\Controlller其实就是引用了thinkphp引擎文件夹里think目录下的Controller.class.php
 
 
-+++exp++++
++++查询++++
+1.exp
 thinkphp中的exp会把后面的字符串当成sql执行，下面的IN(0)被当成了sql语句。
 像IN、gt、lt、eq、elt等都是把后面的当成字符串。
 $arr['status']=array('exp','IN(0)');
 $res=$info->where($arr)->select();
-
+exp应用之用户积分：
+$User = M("User"); // 实例化User对象
+ // 要修改的数据对象属性赋值
+$data['name'] = 'ThinkPHP';
+$data['score'] = array('exp','score+1');// 用户的积分加1
+$User->where('id=5')->save($data); // 根据条件保存修改的数据
+2.
+$map['id'] = array(array('gt',3),array('lt',10), 'or');
+得到的查询条件是： (`id` > 3) OR (`id` < 10)
+3.复合查询
+$where['name']  = array('like', '%thinkphp%');
+$where['title']  = array('like','%thinkphp%');
+$where['_logic'] = 'or';
+得到的查询条件是： ( ( name like '%thinkphp%') OR ( title like '%thinkphp%') )
+4.定位查询
+获取符合条件的第3条记录：$User->where('score>0')->order('score desc')->getN(2);
+获取第一条记录：$User->where('score>80')->order('score desc')->first();
+5.top动态查询
+获取符合条件的前N条记录（和定位查询一样，也要求当前模型类必须继承高级模型类后才能使用）
+获取积分的前8位：$User-> where('score>80')->order('score desc')->top8();
 ++thinkphp快速插入数据+++++
 下面向tel_messge表的tel,message,request和status字段插入了数据。
 M("TelMessage")->tel="124544545";
