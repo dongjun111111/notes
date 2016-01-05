@@ -1160,3 +1160,22 @@ class EmptyController extends Controller {
         echo "您输入了".$name.",但没有定义该控制器";
     }
 }
+
+
++++前置和后置操作++++
+前置和后置操作指的是在执行某个操作方法之前和之后会自动调用的方法，不过
+仅仅对访问控制器有效。
+<?php
+namespace Admin\Controller;
+use Think\Controller;
+class TController extends Controller {
+	public function _before_index(){
+		echo "before<br>";
+	}
+	public function index(){
+		echo "index<br>";
+	}
+	public function _after_index(){
+		echo "after<br>";
+	}
+}
