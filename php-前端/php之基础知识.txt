@@ -2254,3 +2254,11 @@ echo gettype(filesize("./ttt/test.txt")); //获得变量类型
 
 $cars=array("volvo","bmw","toyota");
 echo sizeof($cars);//返回数组中元素的数目
+
+
++++本年度的开始与结束1月1号与12月31号++++
+$t=time();
+$ybeg = mktime(0, 0, 0, 1, 1, date('Y', $t));
+echo date("Y-m-d",$ybeg);
+$yend = mktime(23, 59, 59, 12, 31, date('Y', $t));
+echo date("Y-m-d",$yend);
