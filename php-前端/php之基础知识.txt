@@ -2262,3 +2262,15 @@ $ybeg = mktime(0, 0, 0, 1, 1, date('Y', $t));
 echo date("Y-m-d",$ybeg);
 $yend = mktime(23, 59, 59, 12, 31, date('Y', $t));
 echo date("Y-m-d",$yend);
+
++++防范XSS+++
+XSS（跨站脚本攻击）可以用于窃取其他用户的Cookie信息，要避免此类问题，可以采用如下解决方案：
+直接过滤所有的JavaScript脚本；
+转义Html元字符，使用htmlentities、htmlspecialchars等函数；
+
+
+++PHP log()++++
+php开根号
+echo log(16,2); //4
+echo log(8,2);   //3
+echo log(25,5); //2
