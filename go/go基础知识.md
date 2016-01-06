@@ -3051,4 +3051,5 @@ func main(){
 	}
 }
 </pre>
-in browser,input http://localhost:8080/hello,then "hello world" is showing up.Amazing!
+1. go run t.go
+2. in browser,input http://localhost:8080/hello,then "hello world" is showing up.Amazing!
