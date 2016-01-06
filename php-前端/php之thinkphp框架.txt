@@ -1217,3 +1217,10 @@ M("TelMessage")->message="流年@ee.com";
 M("TelMessage")->request="testttt";
 M("TelMessage")->status="2";
 $res=M("TelMessage")->add();
+
+
+++++一维数组在controller与模板中间传递++++
+控制器如果传递到模板的数据是一维数组的话，在模板页需要用$key表示键名，$vo（根据自己设定）表示键值。如下：
+<volist name="fields" id="vo">
+<option <if condition="pow(2,$data['htype']) eq $key"> selected="selected" </if> value="{$key}">{$vo}</option>
+</volist>
