@@ -3031,3 +3031,24 @@ a[0]= 10
 a[1]= 20
 a[2]= 30
 </pre>
+
+###Go hello world
+<pre>
+package main 
+import (
+	"io"
+	"log"
+	"net/http"
+)
+func helloHandler(w http.ResponseWriter,r *http.Request){
+		io.WriteString(w,"Hello ,world")
+}
+func main(){
+	http.HandleFunc("/hello",helloHandler)
+	err :=http.ListenAndServe(":8080",nil)
+	if err != nil {
+		log.Fatal("ListenAndServe:",err.Error())
+	}
+}
+</pre>
+in browser,input http://localhost:8080/hello,then "hello world" is showing up.Amazing!
