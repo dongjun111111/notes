@@ -1227,6 +1227,7 @@ $res=M("TelMessage")->add();
 
 
 ++++thinkPHP中save注意事项，返回值分析+++++
+实例：
 $result = $Model->where('id=1')->save($data);
 if($result !== false) {
    echo 'success';
