@@ -1234,5 +1234,12 @@ if($result !== false) {
 }else{
    echo 'false';
 }
+或者是这样：
+$result=$Model->where("id=1")->save($data);
+if($result === false){
+	echo "false";
+}else{
+	echo "success";
+}
 save方法的更新判断用$result !== false来判断，如果为真就都是成功的，只是如果为0 表示没有更新任何记录！
 它返回的数值就是更新成功的数量，等于0不代表出错，只是代表更新数据条数为0！！！
