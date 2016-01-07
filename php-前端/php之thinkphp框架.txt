@@ -1224,3 +1224,14 @@ $res=M("TelMessage")->add();
 <volist name="fields" id="vo">
 <option <if condition="pow(2,$data['htype']) eq $key"> selected="selected" </if> value="{$key}">{$vo}</option>
 </volist>
+
+
+++++thinkPHP中save注意事项，返回值分析+++++
+$result = $Model->where('id=1')->save($data);
+if($result !== false) {
+   echo 'success';
+}else{
+   echo 'false';
+}
+save方法的更新判断用$result !== false来判断，如果为真就都是成功的，只是如果为0 表示没有更新任何记录！
+它返回的数值就是更新成功的数量，等于0不代表出错，只是代表更新数据条数为0！！！
