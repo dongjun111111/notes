@@ -3053,3 +3053,28 @@ func main(){
 </pre>
 1. go run t.go
 2. in browser,input http://localhost:8080/hello,then "hello world" is showing up.Amazing!
+
+###MD5与sha1加密
+<pre>
+package main 
+import (
+	"fmt"
+	"crypto/sha1"
+	"crypto/md5"
+)
+func main(){
+	TestString :="Hi,Jason"
+
+	Md5Inst:=md5.New()
+	Md5Inst.Write([]byte(TestString))
+	Result:=Md5Inst.Sum([]byte(""))
+	fmt.Printf("%x\n\n",Result)
+
+	Sha1Inst :=sha1.New()
+	Sha1Inst.Write([]byte(TestString))
+	Result=Sha1Inst.Sum([]byte(""))
+	fmt.Printf("%x\n\n",Result)
+
+}
+</pre>
+
