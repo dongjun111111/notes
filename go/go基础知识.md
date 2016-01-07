@@ -3055,6 +3055,7 @@ func main(){
 2. in browser,input http://localhost:8080/hello,then "hello world" is showing up.Amazing!
 
 ###MD5与sha1加密
+字符串加密
 <pre>
 package main 
 import (
@@ -3077,4 +3078,29 @@ func main(){
 
 }
 </pre>
-
+文件加密：
+<pre>
+package main 
+import (
+	"io"
+	"fmt"
+	"os"
+	"crypto/md5"
+	"crypto/sha1"
+)
+func main () {
+	TestFile :="123.txt"
+	infile,inerr :=os.Open(TestFile)
+	if inerr == nil {
+		md5h := md5.New()
+		io.Copy(md5h,infile)
+		fmt.Printf("%x %s\n",md5h.Sum([]byte("")))
+		sha1h := sha1.New()
+		io.Copy(sha1h,infile)
+		fmt.Printf("%x %s\n",sha1h.Sum([]byte("")))
+	}else{
+		fmt.Println(inerr)
+		os.Exit(1)
+	}
+}
+</pre>
