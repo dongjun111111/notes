@@ -2274,3 +2274,17 @@ php开根号
 echo log(16,2); //4
 echo log(8,2);   //3
 echo log(25,5); //2
+
+
+++http_build_query()++++
+将数组或者字符串转换成地址栏url地址格式
+$str1=array('foo'=>'bar','baz'=>'boom','cow'=>'milk','php'=>'hypertext processor');
+echo http_build_query($str1);
+结果是：foo=bar&baz=boom&cow=milk&php=hypertext+processor
+
+
++++str_replace(array(),array().$str)++++
+$str="hello you";
+$str=str_replace(array('e','o'),array('E','O'),$str);
+echo $str;
+结果是：hEllO yOu
