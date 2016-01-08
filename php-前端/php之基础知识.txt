@@ -2288,3 +2288,10 @@ $str="hello you";
 $str=str_replace(array('e','o'),array('E','O'),$str);
 echo $str;
 结果是：hEllO yOu
+
+
+++++$SERVER['REQUEST_URI']与$_SERVER['HTTP_REFERER']++++
+//获取当前请求的完整的（除域名的）url
+ECHO $_SERVER["REQUEST_URI"] ;
+//获取前一个URL
+echo $_SERVER['HTTP_REFERER'];
