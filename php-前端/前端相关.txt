@@ -5817,6 +5817,15 @@ window.onload = function(){
  }
  setInterval(happyNewYear,400);
 }
-
-
 </script>
+
+
++++js日期格式转换成时间戳++++
+日期格式：2014-9-10 12:45:50
+function get_unix_time(dateStr)
+{
+    var newstr = dateStr.replace(/-/g,'/'); 
+    var date =  new Date(newstr); 
+    var time_str = date.getTime().toString();
+    return time_str.substr(0, 10);
+}
