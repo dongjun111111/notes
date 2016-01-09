@@ -5840,3 +5840,25 @@ var copy_text="Js为复制内容加后缀内容";
 clipboardData.setData('Text','\r\n'+txt_copy+'\r\n'+copy_text+'\r\n');
 }
 </script>
+
++++复制专题地址和 url 地址，分享给他人++++
+便捷的分享url地址的js小方法。
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>Js复制代码</title>
+</head>
+<body>
+<p>
+<input type="button" name="anniu1" onClick='copyToClipBoard()' value="复制专题地址和url地址，传给QQ/MSN上的好友">
+<script language="javascript">
+function copyToClipBoard(){
+var clipBoardContent="";
+clipBoardContent+=document.title;
+clipBoardContent+="";
+clipBoardContent+=this.location.href;
+window.clipboardData.setData("Text",clipBoardContent);
+alert("复制成功，请粘贴到你的QQ/MSN上推荐给你的好友");
+}
+</script>
