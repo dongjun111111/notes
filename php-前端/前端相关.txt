@@ -5829,3 +5829,14 @@ function get_unix_time(dateStr)
     var time_str = date.getTime().toString();
     return time_str.substr(0, 10);
 }
+
++++js为复制内容自动加后缀内容+++++
+别人复制自己东西时候添加版权信息之内的东西。
+<script language="javascript">
+document.body.oncopy=function(){
+event.returnValue=false;
+var txt_copy=document.selection.createRange().text;
+var copy_text="Js为复制内容加后缀内容";
+clipboardData.setData('Text','\r\n'+txt_copy+'\r\n'+copy_text+'\r\n');
+}
+</script>
