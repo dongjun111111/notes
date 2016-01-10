@@ -5941,3 +5941,13 @@ var d="版权所有";d=d.sup();
 t=t+d;
 document.write(t);
 结果自己尝试。
+相应的有：sub()   下标（用法类似于上标用法）
+
+
+++css中line-through与js中的strike()+++
+显示效果是文字中间的删除线：
+css:
+<p style="text-decoration:line-through;">hello world</p> 
+js:
+var t="hello world";
+document.write(t.strike());
