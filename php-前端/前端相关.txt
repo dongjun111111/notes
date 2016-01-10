@@ -5968,8 +5968,8 @@ var arr1=s.split("");   //1,2,3,4,5,6,7,8 字符串变数组
 <object type="application/x-shockwave-flash" style="outline:none;" data="http://cdn.abowman.com/widgets/hamster/hamster.swf?" width="300" height="225"><param name="movie" value="http://cdn.abowman.com/widgets/hamster/hamster.swf?"></param><param name="AllowScriptAccess" value="always"></param><param name="wmode" value="opaque"></param></object>
 
 
-++++js求出数组中最大值+++
-下面的是求最大值的方法。
+++++js求出数组中最大值与最小值+++
+最大值方法一：
 function max(tmp){ 
 var tmp;
 var max = tmp[0];
@@ -5980,6 +5980,20 @@ for(var i=1;i<tmp.length;i++){
 例子：
 var arr=Array(1,3,4,56,7,5,4,4,5,56,33333);
 alert(max(arr));
+最大值方法二：
+Array.prototype.max=function(){
+	return Math.max.apply({},this);
+}
+例子：
+var arr=Array(1,3,4,56,7,5,4,4,5,56,33333);
+alert(arr.max());
+最小值方法：
+Array.prototype.min = function(){   //最小值
+ return Math.min.apply({},this);
+}
+例子：
+var arr=Array(1,3,4,56,7,5,4,4,5,56,33333);
+alert(arr.min());
 
 
 
