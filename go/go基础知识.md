@@ -3122,3 +3122,63 @@ import (
 </pre>
 然后再执行go build 或者 go install之前，只要先执行<br>
 go get github.com/myteam/exp/crc32就行了。
+
+###反射reflect（建议少用）
+通过使用Type和Value,我们可以对一个类型进行各项灵活的操作。
+<pre>
+package main 
+import (
+	"fmt"
+	"reflect"
+)
+func main (){
+	var x float64 =34.5
+	fmt.Println("type:" ,reflect.TypeOf(x))
+}
+
+output==>
+float64
+</pre>
+<pre>
+package main 
+import (
+	"fmt"
+	"reflect"
+)
+func main (){
+	var x float64= 3.4
+	v :=reflect.ValueOf(x)
+	fmt.Println("type:" , v.Type())
+}
+output==>
+float64
+</pre>
+
+<pre>
+package main 
+import (
+	"fmt"
+	"reflect"
+)
+func main (){
+	var x float64 =34.5
+	fmt.Println("value:",reflect.ValueOf(x))
+}
+output ==>
+34.5
+</pre>
+Kind():
+<pre>
+package main 
+import (
+	"fmt"
+	"reflect"
+)
+func main (){
+	var x float64= 3.4
+	v :=reflect.ValueOf(x)
+	fmt.Println("kind is float64 :" , v.Kind() == reflect.Float64)
+}
+output==>
+kind of float64 : true
+</pre>
