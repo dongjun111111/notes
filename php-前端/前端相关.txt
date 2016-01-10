@@ -5915,3 +5915,21 @@ alert("复制成功，请粘贴到你的QQ/MSN上推荐给你的好友");
 		}, 1000*parseInt({:C('DRAFT_AOTOSAVE_INTERVAL')}));
 	}
 	autoSaveDraft();
+
+
++++js时间戳引发的对js变量类型的思考++++
+下面的是时间戳截断案例：
+var t=new Date().getTime();
+t=String(t);
+t=t.substr(0,10);
+alert(t);
+js的变量类型会影响操作，像时间戳格式的不支持截取操作，必须你先转换成string类型之后才能继续。
+强制类型转换的例子：
+Boolean(value) ---转换成Boolean类型
+Number（value）---转换成数字类型
+String(value) ---转换成字符串类型
+PaeseInt(value) ---转换成整型
+ParseFloat(value) --- 转换成精度型
+
+var i = 10;
+var s = i.toString(); ---转换成字符串
