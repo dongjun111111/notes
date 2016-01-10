@@ -3452,3 +3452,41 @@ func main() {
 }
 
 </pre>
+带缓冲的channel：
+<pre>
+package main 
+import "fmt"
+func main() {
+	c := make(chan int ,3)
+	c <- 15
+	c <- 34
+	c <- 65
+	close(c)
+	fmt.Printf("%d\n",<-c)
+	fmt.Printf("%d\n",<-c)
+	fmt.Printf("%d\n",<-c)
+}
+output==>
+15
+34
+65
+</pre>
+上面的虽然已经close了，但是我们依旧可以从中读出关闭前写入的3个值，下面的情况，则会出现错误提示：
+<pre>
+package main 
+import "fmt"
+func main() {
+	c := make(chan int ,3)
+	c <- 15
+	c <- 34
+	c <- 65
+	close(c)
+	c <- 1
+	fmt.Printf("%d\n",<-c)
+	fmt.Printf("%d\n",<-c)
+	fmt.Printf("%d\n",<-c)
+}
+output==>
+panic :send on closed channel
+</pre>
+第四次读取时，则会返回该channel类型的零值。向这类channel写入操作也会触发panic。
