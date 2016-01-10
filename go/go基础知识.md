@@ -3104,3 +3104,21 @@ func main () {
 	}
 }
 </pre>
+
+
+###代码格式化
+在go的命令行工具中，用
+go fmt 文件名
+可以实现对代码的格式化，美观易读。
+
+###远程import支持
+go 语言可以调用远程的包。例如：
+<pre>
+package main
+import (
+	"fmt"
+    "github.com/myteam/exp/crc32"
+)
+</pre>
+然后再执行go build 或者 go install之前，只要先执行<br>
+go get github.com/myteam/exp/crc32就行了。
