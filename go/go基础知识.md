@@ -3489,4 +3489,23 @@ func main() {
 output==>
 panic :send on closed channel
 </pre>
-第四次读取时，则会返回该channel类型的零值。向这类channel写入操作也会触发panic。
+第四次读取时，则会返回该channel类型的零值。向这类channel写入操作也会触发panic。<br>
+close还可以协同多个Goroutines。比如下面这个例子，我们创建了100个Worker Goroutine，这些Goroutine在被创建出来后都阻塞在"<-start"上，直到我们在main goroutine中给出开工的信号："close(start)"，这些goroutines才开始真正的并发运行起来。
+<pre>
+package main 
+import "fmt"
+func worker(start chan bool,index int){
+	<-start
+	fmt.Println("This is worker:",index)
+}
+func main(){
+	start := make(chan bool)
+	for i:=1;i<100;i++{
+		go worker(start,i)
+	}
+	close(start)
+	select{}
+}
+</pre>
+这里又引出一个话题：select{}的用法。
+惯用法：for/select
