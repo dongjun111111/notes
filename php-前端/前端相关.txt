@@ -5966,3 +5966,62 @@ var arr1=s.split("");   //1,2,3,4,5,6,7,8 字符串变数组
 +++js小老鼠+++++
 哈哈，宠物。
 <object type="application/x-shockwave-flash" style="outline:none;" data="http://cdn.abowman.com/widgets/hamster/hamster.swf?" width="300" height="225"><param name="movie" value="http://cdn.abowman.com/widgets/hamster/hamster.swf?"></param><param name="AllowScriptAccess" value="always"></param><param name="wmode" value="opaque"></param></object>
+
+
+++++js求出数组中最大值+++
+下面的是求最大值的方法。
+function max(tmp){ 
+var tmp;
+var max = tmp[0];
+for(var i=1;i<tmp.length;i++){ 
+  if(max<tmp[i])max=tmp[i];}
+  return max;
+};
+例子：
+var arr=Array(1,3,4,56,7,5,4,4,5,56,33333);
+alert(max(arr));
+
+
+
+
+
+++++JS中的call()与apply()+++++
+所有函数都定义了call()与apply()两个方法，call与apply的第一个参数都是需要调用的函数对象，在函数体内这个参数
+就是this的值，剩余的参数是需要传递给函数的值，call与apply的不同就是call传的值可以是任意的，而apply传的
+剩余值必须为数组。
+简单理解：
+
+call和apply是为了动态改变this而出现的，当一个object没有某个方法，但是其他的有，我们可以借助call或apply用其它对象的方法来操作。
+function func1(){
+    this.a=100;
+    this.echo=function(){ 
+        return   this.a + 100;
+    }
+}
+function func2(){
+    this.a=500;
+}
+var a1=new func1();
+var a2=new func2();
+var d=a1.echo.call(a2);
+alert(d);  //600
+这里把func1的echo方法给func2使用，也就是通过call实现了继承。
+
+还有一个例子：
+function cat(){}
+cat.prototype={
+    food:"fish",
+    say:function(){
+        alert("I love "+ this.food);
+    }
+}
+var cat=new cat();
+cat.say();   //I love fish
+通过面对对象的方法实现了猫吃鱼。如果这时候有一个对象是dog={food:"bone"};我们不想对它重新定义say()方法，而此时cat对象
+有这个方法，我们可以通过call或者apply实现dog拥有这个say()方法：
+cat.say.call(dog);  //I love bone
+
+
+
+
+
