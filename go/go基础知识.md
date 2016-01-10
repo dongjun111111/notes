@@ -3124,6 +3124,7 @@ import (
 go get github.com/myteam/exp/crc32就行了。
 
 ###反射reflect（建议少用）
+####简单类型的反射操作
 通过使用Type和Value,我们可以对一个类型进行各项灵活的操作。
 <pre>
 package main 
@@ -3239,3 +3240,33 @@ settability of v : true
 7.6
 </pre>
 这时候，v已经重新赋值。
+
+####对结构的反射操作
+获取一个结构中的所有成员的值：
+<pre>
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+type T struct {
+	A int
+	S string
+}
+
+func main() {
+	t := T{203, "mh203"}
+	s := reflect.ValueOf(&t).Elem()
+	typeOfT := s.Type()
+	for i := 0; i < s.NumField(); i++ {
+		f := s.Field(i)
+		fmt.Printf("%d : %s %s =%v \n", i, typeOfT.Field(i).Name, f.Type(), f.Interface())
+	}
+}
+
+output ==>
+0: A int= 203
+1: B string = mh203
+</pre>
