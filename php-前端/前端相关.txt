@@ -6042,6 +6042,8 @@ cat.say();   //I love fish
 cat.say.call(dog);  //I love bone
 
 
-
-
++++js正则test、exec++++
+var pa=RegExp("e");
+document.write(pa.test("hello world"));  //成功返回true，反之返回false
+document.write(pa.exec("hEllo world")); //成功返回符合条件的字符串或其他东西，反之返回null
 
