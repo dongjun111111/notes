@@ -3147,7 +3147,7 @@ import (
 )
 func main (){
 	var x float64= 3.4
-	v :=reflect.ValueOf(x)
+	v :=reflect.ValueOf(x) 
 	fmt.Println("type:" , v.Type())
 }
 output==>
@@ -3176,9 +3176,66 @@ import (
 )
 func main (){
 	var x float64= 3.4
-	v :=reflect.ValueOf(x)
+	v :=reflect.ValueOf(x)   
 	fmt.Println("kind is float64 :" , v.Kind() == reflect.Float64)
 }
 output==>
 kind of float64 : true
 </pre>
+Canset():()这里要说明为什么要少用reflect,在欲改变变量值的时候更要慎用：
+<pre>
+package main 
+import (
+	"fmt"
+	"reflect"
+)
+func main(){
+	var x float64=4.5
+	p := reflect.ValueOf(&x)  //得到x的地址
+	fmt.Println("settability of v :",p.CanSet())
+}
+output==>
+settability of v : false
+</pre>
+这说明：在上面的情况下不能通过反射对x重新赋值，这就是reflect慎用的原因，可以通用
+下面的方法实现：
+<pre>
+package main 
+import (
+	"fmt"
+	"reflect"
+)
+func main(){
+	var x float64=4.5
+	p := reflect.ValueOf(&x)  //得到x的地址
+	fmt.Println("settability of v :",p.CanSet())
+	v := p.Elem()
+	fmt.Println("settability of v :" ,v.CanSet())
+}	
+output ==>
+settability of v : false
+settability of v : true  //这时候可以重新赋值
+</pre>
+<pre>
+package main 
+import (
+	"fmt"
+	"reflect"
+)
+func main(){
+	var x float64=4.5
+	p := reflect.ValueOf(&x)  //得到x的地址
+	fmt.Println("settability of v :",p.CanSet())
+	v := p.Elem()
+	fmt.Println("settability of v :" ,v.CanSet())
+	v.SetFloat(7.6)
+	fmt.Println(v.Interface())
+	fmt.Println(x)
+}	
+output ==>
+settability of v : false
+settability of v : true
+7.6
+7.6
+</pre>
+这时候，v已经重新赋值。
