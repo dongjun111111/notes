@@ -3509,3 +3509,19 @@ func main(){
 </pre>
 这里又引出一个话题：select{}的用法。
 惯用法：for/select
+我们在使用select时很少只是对其进行一次evaluation，我们常常将其与for {}结合在一起使用，并选择适当时机从for{}中退出。
+<pre>
+for {
+select {
+case x := <- somechan:
+// … 使用x进行一些操作
+case y, ok := <- someOtherchan:
+// … 使用y进行一些操作，
+// 检查ok值判断someOtherchan是否已经关闭
+case outputChan <- z:
+// … z值被成功发送到Channel上时
+default:
+// … 上面case均无法通信时，执行此分支
+}
+}
+</pre>
