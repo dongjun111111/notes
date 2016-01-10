@@ -5831,7 +5831,7 @@ function get_unix_time(dateStr)
 }
 
 +++js为复制内容自动加后缀内容+++++
-别人复制自己东西时候添加版权信息之内的东西。
+当别人复制自己东西时候添加版权信息之内的东西。亲测好用。
 <script language="javascript">
 document.body.oncopy=function(){
 event.returnValue=false;
@@ -5955,3 +5955,14 @@ css:
 js:
 var t="hello world";
 document.write(t.strike());
+
+
++++Js字符串与数组互换+++
+var arr=Array(1,2,3,4,5,6,7,8);
+var s=arr.join("");   //12345678  数组变成字符串
+var arr1=s.split("");   //1,2,3,4,5,6,7,8 字符串变数组
+
+
++++js小老鼠+++++
+哈哈，宠物。
+<object type="application/x-shockwave-flash" style="outline:none;" data="http://cdn.abowman.com/widgets/hamster/hamster.swf?" width="300" height="225"><param name="movie" value="http://cdn.abowman.com/widgets/hamster/hamster.swf?"></param><param name="AllowScriptAccess" value="always"></param><param name="wmode" value="opaque"></param></object>
