@@ -3487,7 +3487,7 @@ func main() {
 	fmt.Printf("%d\n",<-c)
 }
 output==>
-panic :send on closed channel
+panic:send on closed channel
 </pre>
 第四次读取时，则会返回该channel类型的零值。向这类channel写入操作也会触发panic。<br>
 close还可以协同多个Goroutines。比如下面这个例子，我们创建了100个Worker Goroutine，这些Goroutine在被创建出来后都阻塞在"<-start"上，直到我们在main goroutine中给出开工的信号："close(start)"，这些goroutines才开始真正的并发运行起来。
