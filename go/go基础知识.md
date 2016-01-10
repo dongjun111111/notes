@@ -3426,3 +3426,29 @@ unicode/utf16 实现了UTF-16序列的的编码和解码
 text
 unicode/utf8 实现了支持以UTF-8编码的文本的函数和常数
 </pre>
+
+####goroutine与channel实现并发
+并行计算，两个goroutine进行并行的累加计算，都完成后打印
+<pre>
+package main
+
+import "fmt"
+
+func sum(values []int, resultChan chan int) {
+	sum := 0
+	for _, value := range values {
+		sum += value
+	}
+	resultChan <- sum //将计算结果发送到channel
+}
+
+func main() {
+	values := []int{12, 3, 4, 5, 6, 7, 7, 8}
+	resultChan := make(chan int, 2)  //定义2个goroutine
+	go sum(values[:len(values)/2], resultChan)
+	go sum(values[len(values)/2:], resultChan)
+	sum1, sum2 := <- resultChan, <-resultChan  //接收结果
+	fmt.Println("result:", sum1, sum2, sum1 + sum2,sum2 - sum1,sum1 * sum2)
+}
+
+</pre>
