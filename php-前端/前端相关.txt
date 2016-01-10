@@ -5933,3 +5933,11 @@ ParseFloat(value) --- 转换成精度型
 
 var i = 10;
 var s = i.toString(); ---转换成字符串
+
++++sup()上标+++
+将文字变小显示在右上。
+var t="hello world";
+var d="版权所有";d=d.sup();
+t=t+d;
+document.write(t);
+结果自己尝试。
