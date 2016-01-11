@@ -6100,3 +6100,9 @@ alert(obj.Property);
 obj.e();  //结果是：2 2  ；如果没有obj.Property=2;obj.e=function(){alert(2);},则结果为 1 1
 
 
++++getAttribute与setAttribute++++
+getAttribute:获得指定名称所对应的属性值；
+setAttribute:修改或者增加属性值。
+var btn=document.getElementById('btn');
+alert(getAttribute('type')); //button
+btn.setAttribute('type','text'); //这时候按钮成了输入框
