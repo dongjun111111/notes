@@ -6120,3 +6120,11 @@ Number.prototype.numtoarr=function(){
 var s=(5).numtoarr();
 alert(s);     //5,4,3,2,1,0
 
+
++++getPrototypeOf()+++++
+Object.getPrototypeOf() 方法返回指定对象的原型（也就是该对象内部属性[[Prototype]]的值）。
+var proto={};
+var obj=Object.create(proto);
+if(Object.getPrototypeOf(obj) ===proto){
+    alert("true");
+}
