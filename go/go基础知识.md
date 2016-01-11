@@ -353,6 +353,18 @@ var numbers []int /* a slice of unspecified size */
 /* numbers == []int{0,0,0,0,0}*/
 numbers = make([]int,5,5) /* a slice of length 5 and capacity 5*/
 </pre>
+
+<pre>
+package main 
+import "fmt"
+func main(){
+	a := [10]int {1,2,3,4,5,6,7,8,9,10}
+	s := a[2:8]  //取出2-8之间的数构成一个新数组，也就是一个切片
+	s1 :=make([]int, 10 ,20)  // 取出10-20之间的数 ，结果为0,0,0...
+	s2 := a[:3]  //1,2,3
+	fmt.Println(s,s1,s2)
+}
+</pre>
 ####len() 和 cap() 函数
 由于切片是一种抽象数组。它实际上使用数组作为底层structure.len()函数返回的元素呈现在cap()函数返回切片作为多少元素，它可以容纳的容量的切片。以下为例子来解释片的使用：
 <pre>
