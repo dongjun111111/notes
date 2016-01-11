@@ -3455,14 +3455,40 @@ func sum(values []int, resultChan chan int) {
 }
 
 func main() {
-	values := []int{12, 3, 4, 5, 6, 7, 7, 8}
+	values := []int{1, 3, 4, 5, 6, 7, 7, 8}
 	resultChan := make(chan int, 2)  //定义2个goroutine
 	go sum(values[:len(values)/2], resultChan)
 	go sum(values[len(values)/2:], resultChan)
 	sum1, sum2 := <- resultChan, <-resultChan  //接收结果
-	fmt.Println("result:", sum1, sum2, sum1 + sum2,sum2 - sum1,sum1 * sum2)
+	fmt.Println("result:", sum1 + sum2)
 }
+output ==>
+36
+</pre>
+上面的是用2个切片完成，接下来分成3个切片完成求和的目的。
+<pre>
+package main
 
+import "fmt"
+
+func sum(value []int, resultChan chan int) {
+	sum := 0
+	for _, value := range value {
+		sum += value
+	}
+	resultChan <- sum
+}
+func main() {
+	arr := []int{1, 2, 3, 4, 5, 6, 7, 8}
+	resultChan := make(chan int, 3)
+	go sum(arr[:len(arr)/3], resultChan)
+	go sum(arr[len(arr)/3:len(arr)/3*2],resultChan)
+	go sum(arr[len(arr)/3*2:],resultChan)
+	sum1, sum2,sum3 := <-resultChan, <-resultChan,<-resultChan
+	fmt.Println("result:",sum1+sum2+sum3)
+}
+output ==>
+36
 </pre>
 带缓冲的channel：
 <pre>
