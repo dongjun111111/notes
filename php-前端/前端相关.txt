@@ -6069,3 +6069,16 @@ array(
 );
 $name=array_column($records,'name');
 print_r($name);
+
+
++++js隐式全局变量++++
+var a = 1
+function func() {
+    a = b = 2
+}
+func()
+alert(a)
+alert(b) // ?
+结果是：a 、b 均为 2
+JS中不用var声明的变量默认是全局变量，而这里的连等使的情况更加隐蔽。这里的b是全局的，因此func外可以访问。
+
