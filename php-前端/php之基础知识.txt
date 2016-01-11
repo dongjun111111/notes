@@ -2295,3 +2295,23 @@ echo $str;
 ECHO $_SERVER["REQUEST_URI"] ;
 //获取前一个URL
 echo $_SERVER['HTTP_REFERER'];
+
+
++++++获取网站来源（针对搜索引擎）+++++
+通过下面的方法可以知道网页来自哪个搜索引擎导入，稍稍修改可以知道
+获得上一个网页URL.
+function get_referer(){
+ $se = 0;
+ $url       = $_SERVER["HTTP_REFERER"];   //获取完整的来路URL
+ $str   = str_replace("http://","",$url); //去掉http://
+ $strdomain = explode("/",$str);          // 以“/”分开成数组
+ $domain    = $strdomain[0];              //取第一个“/”以前的字符
+ if(strstr($domain,'baidu.com')){
+  $se = 1;
+ }
+ else if(strstr($domain,'google.cn')){
+  $se = 1;
+ }
+ return $se;
+}
+
