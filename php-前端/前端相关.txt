@@ -6118,5 +6118,5 @@ Number.prototype.numtoarr=function(){
     return result;
 }
 var s=(5).numtoarr();
-alert(s);    //5,4,3,2,1,0
+alert(s);     //5,4,3,2,1,0
 
