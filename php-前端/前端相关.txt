@@ -6047,3 +6047,25 @@ var pa=RegExp("e");
 document.write(pa.test("hello world"));  //成功返回true，反之返回false
 document.write(pa.exec("hEllo world")); //成功返回符合条件的字符串或其他东西，反之返回null
 
+
++++array_column()+++++
+在多维数组中取出相同键名的键值重新生成新的数组，用array_column。
+$records=array(
+array(
+    'id'=>2135,
+    'name'=>'bob',
+    'phone'=>12334566754,
+    ),
+array(
+    'id'=>1232,
+    "name"=>'sam',
+    "phone"=>2422342234,
+    ),
+array(
+    'id'=>2353,
+    'name'=>'rachel',
+    'phone'=>54622424432
+    )
+);
+$name=array_column($records,'name');
+print_r($name);
