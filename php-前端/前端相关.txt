@@ -6106,3 +6106,17 @@ setAttribute:修改或者增加属性值。
 var btn=document.getElementById('btn');
 alert(getAttribute('type')); //button
 btn.setAttribute('type','text'); //这时候按钮成了输入框
+
+
+++++prototype动态增加属性+++++++
+实现输入一个数组调用方法得到依次增加的数组。由一个数字变成一个数组。
+Number.prototype.numtoarr=function(){
+    var result=[];
+    for(var i=0;i<=this;i++){
+        result.unshift(i);
+    }
+    return result;
+}
+var s=(5).numtoarr();
+alert(s);    //5,4,3,2,1,0
+
