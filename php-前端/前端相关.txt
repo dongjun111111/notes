@@ -6134,3 +6134,55 @@ if(Object.getPrototypeOf(obj) ===proto){
 if (window!=top) // 判断当前的window对象是否是top对象
 top.location.href =window.location.href; // 如果不是，将top对象的网址自动导向被嵌入网页的网址
 </script>
+
+
++++上上下下左左右右++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" /> 
+<title></title> 
+<style type="text/css"> 
+.bg{background-color:pink;} 
+p{ text-align:center; color:#d00; padding:10px 0; } 
+h1{ text-align:center; font-size:80px; color:#f06; line-height:120px;} 
+</style> 
+</head> 
+<body> 
+<p>按 ↑ ↑ ↓ ↓ ← ← → → </p> 
+</body> 
+<script type="text/javascript"> 
+    function trick(e){ 
+        if(typeof window.k=="undefined"){ 
+            window.k="" 
+        } 
+        var e=e||event; 
+     //alert(e.keyCode); 
+        if(e.keyCode==116) window.k=""; 
+        window.k+=e.keyCode+","; 
+        if(window.k=="38,38,40,40,37,37,39,39,") { 
+            play(); 
+            window.k=""; 
+        }         
+    }      
+    function play(){ 
+        var bdy=document.getElementsByTagName("body")[0]; 
+        var p=bdy.getElementsByTagName("p")[0]; 
+        var h1=document.createElement("h1"); 
+        h1.innerHTML="Happy New Year!"; 
+        bdy.className="bg"; 
+        p.style.display="none"; 
+        bdy.appendChild(h1); 
+        window.setTimeout("clean()",5000); 
+    } 
+    function clean(){ 
+        var bdy=document.getElementsByTagName("body")[0]; 
+        var p=bdy.getElementsByTagName("p")[0]; 
+        bdy.className=""; 
+        p.style.display=""; 
+        var h1=bdy.getElementsByTagName("h1")[0]; 
+        bdy.removeChild(h1); 
+    }      
+    document.onkeydown=trick; 
+</script> 
+</html> 
