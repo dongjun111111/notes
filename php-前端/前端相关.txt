@@ -6082,3 +6082,21 @@ alert(b) // ?
 结果是：a 、b 均为 2
 JS中不用var声明的变量默认是全局变量，而这里的连等使的情况更加隐蔽。这里的b是全局的，因此func外可以访问。
 
+
++++property+++++
+//prototype为类型（函数）定义动态的属性和方法，而Proerty为类型定义“静态”的属性和方法。
+function a(){
+    this.Property=1;
+    this.e=function(){
+        alert(1);
+    }
+}
+var obj=new a();
+obj.Property=2;
+obj.e=function(){
+    alert(2);
+}
+alert(obj.Property);
+obj.e();  //结果是：2 2  ；如果没有obj.Property=2;obj.e=function(){alert(2);},则结果为 1 1
+
+
