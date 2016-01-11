@@ -2299,7 +2299,7 @@ echo $_SERVER['HTTP_REFERER'];
 
 +++++获取网站来源（针对搜索引擎）+++++
 通过下面的方法可以知道网页来自哪个搜索引擎导入，稍稍修改可以知道
-获得上一个网页URL.
+获得上一个网页URL。
 function get_referer(){
  $se = 0;
  $url       = $_SERVER["HTTP_REFERER"];   //获取完整的来路URL
