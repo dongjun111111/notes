@@ -2330,3 +2330,9 @@ var btn=document.getElementById("btn");
 btn.onclick=function(){
   location.hash="field";
 }
+
+
+++++屏幕尺大小寸改变时触发++++
+window.onresize=function(){
+  alert(2);
+}
