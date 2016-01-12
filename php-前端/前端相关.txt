@@ -6204,3 +6204,8 @@ zoom: 0.001;
 transform: scale(0);
  IE6/IE7/IE9不占据空间，IE8/FireFox/Chrome/Opera占据空间。都无法点击
 }
+
+
+++css奇技淫巧+++++
+不要滚动条? 让竖条没有: <body style='overflow:scroll;overflow-y:hidden'> </body>
+让横条没有: <body style='overflow:scroll;overflow-x:hidden'> </body>
