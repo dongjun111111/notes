@@ -1243,3 +1243,12 @@ if($result === false){
 }
 save方法的更新判断用$result !== false来判断，如果为真就都是成功的，只是如果为0 表示没有更新任何记录！
 它返回的数值就是更新成功的数量，等于0不代表出错，只是代表更新数据条数为0！！！
+
+
++++thinkphp中的<if>标签++++
+<if condition="($name eq 1) OR ($name gt 100) "> value1
+<elseif condition="$name eq 2"/>value2
+<else /> value3
+</if>
+<if condition="($name eq 2) && ($name eq 3)">value1
+</if>
