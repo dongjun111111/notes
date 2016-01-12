@@ -2315,3 +2315,7 @@ function get_referer(){
  return $se;
 }
 
+++++PHP判断有put方式的文件上传+++++
+if($_SERVER['REQUEST_METHOD']=='PUT'&&count($_FILES)){
+    echo '有以PUT方式提交的文件';
+}
