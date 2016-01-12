@@ -6236,3 +6236,5 @@ crosshair ：十字标
 当浏览者拖动滚动条的时触发：onScroll（）
 禁止鼠标右键：在<body>标签中加入 <body oncontextmenu=‘return false’>
 页面禁止复制图片禁止拖拽图片进行下载<body oncontextmenu='return false' ondragstart='return false' onselectstart ='return false' onselect='document.selection.empty()' oncopy='document.selection.empty()' onbeforecopy='return false' onmouseup='document.selection.empty()'>
+改变字体大小:function doZoom(size){document.getElementById('zoom').style.fontSize=size+'px';}
+记录网页最后修改时间：document.write('最后更新: ' + document.lastModified );
