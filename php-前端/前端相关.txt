@@ -6238,3 +6238,7 @@ crosshair ：十字标
 页面禁止复制图片禁止拖拽图片进行下载<body oncontextmenu='return false' ondragstart='return false' onselectstart ='return false' onselect='document.selection.empty()' oncopy='document.selection.empty()' onbeforecopy='return false' onmouseup='document.selection.empty()'>
 改变字体大小:function doZoom(size){document.getElementById('zoom').style.fontSize=size+'px';}
 记录网页最后修改时间：document.write('最后更新: ' + document.lastModified );
+禁止页面自动缓存：<meta http-equiv='Expires' CONTENT='0'>
+<meta http-equiv='Cache-Control' CONTENT='no-cache'>
+<meta http-equiv='Pragma' CONTENT='no-cache'>
+文字以滚动方式展示，4个方向，高度宽度可调：<marquee direction=up height=30 onmouseout=start() onmouseover=stop() scrollAmount=2>滚动信息</marquee>
