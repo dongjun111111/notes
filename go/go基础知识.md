@@ -3564,3 +3564,16 @@ default:
 }
 }
 </pre>
+
+###go中有''
+<pre>
+package main 
+import "fmt"
+func main(){
+	s := "hello"
+	c := []byte(s)  //将字符串s转换为[]byte类型
+	c[0] = 'c'  //这里如果是""，则是错误
+	s2 := string(c) //再转换成string类型
+	fmt.Printf("%s \n",s2)
+}
+</pre>
