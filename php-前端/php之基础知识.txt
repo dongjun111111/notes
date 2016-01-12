@@ -2336,3 +2336,8 @@ btn.onclick=function(){
 window.onresize=function(){
   alert(2);
 }
+
+
+++++页面刷新或者关闭时触发+++++
+var unloadPageTip = function(){return "您编辑的文章内容还没有进行保存!";};
+window.onbeforeunload = unloadPageTip;
