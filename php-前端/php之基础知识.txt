@@ -2319,3 +2319,14 @@ function get_referer(){
 if($_SERVER['REQUEST_METHOD']=='PUT'&&count($_FILES)){
     echo '有以PUT方式提交的文件';
 }
+
+
++++当锚点hash改变时候触发++++
+document.getElementsByTagName("body")[0].onhashchange=function(){
+  alert("锚点已经改变");
+}
+location.hash="f";
+var btn=document.getElementById("btn");
+btn.onclick=function(){
+  location.hash="field";
+}
