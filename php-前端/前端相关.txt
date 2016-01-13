@@ -6327,3 +6327,14 @@ else if (now.getTime()>deadline.getTime())
 }    
 </script>    
 <!--倒计时-->    
+
+
++++uri编码++++
+，我们可以知道：escape()除了 ASCII 字母、数字和特定的符号外，对传进来的字符串全部进行转义编码，因此如果想
+对URL编码，最好不要使用此方法。而encodeURI() 用于编码整个URI,因为URI中的合法字符都不会被编码转换。
+encodeURIComponent方法在编码单个URIComponent（指请求参数）应当是最常用的，它可以讲参数中的中文、特殊字符
+进行转义，而不会影响整个URL。
+document.write(encodeURIComponent("http://www.w3school.com.cn/p 1/"));  //http%3A%2F%2Fwww.w3school.com.cn%2Fp%201%2F
+var strstr="http://www.w3school.com.cn/p 1/";
+strstr=encodeURIComponent(strstr);
+document.write(decodeURIComponent(strstr));  //http://www.w3school.com.cn/p 1/
