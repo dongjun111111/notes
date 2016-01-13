@@ -2321,23 +2321,51 @@ if($_SERVER['REQUEST_METHOD']=='PUT'&&count($_FILES)){
 }
 
 
-+++当锚点hash改变时候触发++++
-document.getElementsByTagName("body")[0].onhashchange=function(){
-  alert("锚点已经改变");
-}
-location.hash="f";
-var btn=document.getElementById("btn");
-btn.onclick=function(){
-  location.hash="field";
-}
+++PHP限制IP+++ （未测试）
+//限制IP
+class IP{ //获取客户IP地址 
+function getIpAdr($ip){ 
+$ip1=getenv("HTTP_X_FORWARDED_FOR"); 
+$ip2=getenv("HTTP_CLIENT_IP"); 
+$ip3=getenv("REMOTE_ADDR"); 
+if($ip1&&$ip1!='unknow') 
+$ip=$ip1; 
+else if($ip2&&$ip2!='unknow') 
+$ip=$ip2; 
+else if($ip3&&$ip3!='unknow') 
+$ip=$ip3; 
+else 
+$ip='127.0.0.1'; 
+} 
+} 
+function get_netip($myip){ //只留客户IP地址的前三位 
+$temp=explode(".",$myip); 
+$netip.=$temp[0]; 
+$netip.="."; 
+$netip.=$temp[1]; 
+$netip.="."; 
+$netip.=$temp[2]; 
+return $netip; 
+} 
+$filename="test.ini"; //定义操作文件 
+$ip_lib=file($filename); //读取文件数据到数组中 
+$allow=0; 
+$IP=new IP; 
+$thisip=""; 
+$IP->getIpAdr($thisip); 
+$thenetip=get_netip($thisip); 
 
+for($i=0;$i<count($ip_lib);$i++){ 
+if(ereg($thenetip,$ip_lib[$i])){ 
+$allow=1; 
+break; 
+} 
+} 
 
-++++屏幕尺大小寸改变时触发++++
-window.onresize=function(){
-  alert(2);
-}
-
-
-++++页面刷新或者关闭时触发+++++
-var unloadPageTip = function(){return "您编辑的文章内容还没有进行保存!";};
-window.onbeforeunload = unloadPageTip;
+if ($allow==1) 
+{ 
+echo "验证通过"; 
+} 
+else { 
+echo "<script>alert('No');</script>"; 
+} 

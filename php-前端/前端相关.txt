@@ -6242,3 +6242,24 @@ crosshair ：十字标
 <meta http-equiv='Cache-Control' CONTENT='no-cache'>
 <meta http-equiv='Pragma' CONTENT='no-cache'>
 文字以滚动方式展示，4个方向，高度宽度可调：<marquee direction=up height=30 onmouseout=start() onmouseover=stop() scrollAmount=2>滚动信息</marquee>
+
++++当锚点hash改变时候触发++++
+document.getElementsByTagName("body")[0].onhashchange=function(){
+  alert("锚点已经改变");
+}
+location.hash="f";
+var btn=document.getElementById("btn");
+btn.onclick=function(){
+  location.hash="field";
+}
+
+
+++++屏幕尺大小寸改变时触发++++
+window.onresize=function(){
+  alert(2);
+}
+
+
+++++页面刷新或者关闭时触发+++++
+var unloadPageTip = function(){return "您编辑的文章内容还没有进行保存!";};
+window.onbeforeunload = unloadPageTip;
