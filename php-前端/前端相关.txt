@@ -6472,3 +6472,93 @@ var imgReady = (function () {
 imgReady('a.jpeg', function () {
   alert('size ready: width=' + this.width + '; height=' + this.height);
 });
+
+
+
+
+++++页面加载等待效果+++++
+//获取浏览器页面可见高度和宽度
+var _PageHeight = document.documentElement.clientHeight,
+PageWidth = document.documentElement.clientWidth;
+//计算loading框距离顶部和左部的距离（loading框的宽度为215px，高度为61px）
+var _LoadingTop = _PageHeight > 61 ? (_PageHeight - 61) / 2 : 0,
+LoadingLeft = _PageWidth > 215 ? (_PageWidth - 215) / 2 : 0;
+//在页面未加载完毕之前显示的loading Html自定义内容
+var _LoadingHtml = '<div id="loadingDiv" style="position:absolute;left:0;width:100%;height:' + _PageHeight + 'px;top:0;background:#f3f8ff;opacity:0.8;filter:alpha(opacity=80);z-index:10000;"><div style="position: absolute; cursor1: wait; left: ' + _LoadingLeft + 'px; top:' + _LoadingTop + 'px; width: auto; height: 57px; line-height: 57px; padding-left: 50px; padding-right: 5px; background: #fff url(./loading.gif) no-repeat scroll 5px 10px; border: 2px solid #95B8E7; color: #696969; font-family:\'Microsoft YaHei\';">页面加载中，请等待...</div></div>';
+//呈现loading效果
+document.write(_LoadingHtml);
+//监听加载状态改变
+document.onreadystatechange = completeLoading;
+//加载状态为complete时移除loading效果
+function completeLoading() {
+  if (document.readyState == "complete") {
+       var loadingMask = document.getElementById('loadingDiv');
+       loadingMask.parentNode.removeChild(loadingMask);
+  }
+}
+
+
+
+++带进度条的超链接跳转等待效果+++++
+<html>
+    <head>
+    <title>一个漂亮的带进度条的等待跳转页面</title>
+    <SCRIPT type=text/javascript>
+    <!--
+    var ie5 = (document.all && document.getElementsByTagName);
+    var step = 0;
+    function setSB(v, el, inforEl, message) {
+    if (ie5 || document.readyState == "complete") {
+    filterEl = el.children[0];
+    valueEl = el.children[1];
+    if (filterEl.style.pixelWidth > 0) {
+    var filterBackup = filterEl.style.filter;
+    filterEl.style.filter = "";
+    filterEl.style.filter = filterBackup;
+    }
+    filterEl.style.width = v + "%";
+    valueEl.innerText = v + "%";
+    inforEl.innerText = message;
+    }
+    }
+    function setSBByStep(v, el, inforEl, message) {
+    if (ie5 || document.readyState == "complete") {
+    step = step + v;
+    filterEl = el.children[0];
+    valueEl = el.children[1];
+    if (filterEl.style.pixelWidth > 0) {
+    var filterBackup = filterEl.style.filter;
+    filterEl.style.filter = "";
+    filterEl.style.filter = filterBackup;
+    }
+    filterEl.style.width = step + "%";
+    valueEl.innerText = step + "%"
+    inforEl.innerText = message;
+    }
+    }
+    function fakeProgress(v, el) {
+    if (v >= 101)
+    location.href="#";
+    else {
+    setSB(v, el, infor,"");
+    window.setTimeout("fakeProgress(" + (v + 1) + ", document.all['" + el.id + "'])", 50);
+    }
+    }
+    //-->
+    </SCRIPT>
+    </head>
+    <BODY onload=fakeProgress(0,sb)>
+    <DIV align=center>
+    <DIV id=sb
+    style="BORDER-RIGHT: #ffffff 1px solid; BORDER-TOP: #ffffff 1px solid; BACKGROUND: #99ccff; BORDER-LEFT: medium none; WIDTH: 400px; BORDER-BOTTOM: #cccccc 1px solid; HEIGHT: 14px; TEXT-ALIGN: left">
+    <DIV id=sbChild1
+    style="FILTER: Alpha(Opacity=0, FinishOpacity=80, Style=1, StartX=0, StartY=0, FinishX=100, FinishY=0); OVERFLOW: hidden; WIDTH: 100%; POSITION: absolute; HEIGHT: 12px">
+    <DIV style="BACKGROUND: #000000; WIDTH: 100%" ;height:12px; overflow:
+    hidden></DIV></DIV>
+    <DIV
+    style="FONT-SIZE: 10px; WIDTH: 400px; COLOR: white; FONT-FAMILY: arial; POSITION: absolute; HEIGHT: 14px; TEXT-ALIGN: center"></DIV></DIV>
+    <P></P>
+    <DIV id=infor
+    style="FONT-SIZE: 11px; WIDTH: 100%; COLOR: #999999; FONT-FAMILY: arial; POSITION: relative; HEIGHT: 14px; TEXT-ALIGN: center"></DIV></DIV>
+    </body>
+    </html>
