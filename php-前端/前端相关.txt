@@ -6365,3 +6365,29 @@ function lenStat(target){
 	strlen=Math.ceil(strlen/2);//中英文相加除2取整数
 	return strlen;
 }
+
+
++++遮罩++++
+常用于弹出层。
+function showMask(){
+  var mask = document.createElement("div");
+  document.body.appendChild(mask);
+  mask.style.display = "table";
+  mask.style.background = "black";
+  mask.style.filter = "alpha(opacity=25)";//ie支持滤镜
+  mask.style.opacity=0.25;//不支持滤镜的浏览器
+  mask.style.zIndex = 1000;
+  mask.style.width = "100%";
+  mask.style.height = "100%";
+  mask.style.position = "absolute";
+  mask.style.top = 0;
+  mask.style.left = 0;
+  mask.id = "mask_box";
+}
+function unMask(){
+	while(document.getElementById("mask_box")!=null){
+	  	document.body.removeChild(document.getElementById("mask_box"));
+	}
+}
+showMask(); //打开遮罩
+unMask(); //去除遮罩
