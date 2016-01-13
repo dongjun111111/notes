@@ -6562,3 +6562,7 @@ function completeLoading() {
     style="FONT-SIZE: 11px; WIDTH: 100%; COLOR: #999999; FONT-FAMILY: arial; POSITION: relative; HEIGHT: 14px; TEXT-ALIGN: center"></DIV></DIV>
     </body>
     </html>
+
+
+++js打开新网页最大化，并且界面清爽+++++
+　window.open ('readme.html', 'newwindow', 'height=1000, width=4000, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no') //这句要写成一行
