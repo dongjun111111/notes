@@ -6278,3 +6278,11 @@ function checkIP()
 	}
 }
 </script>
+
+
++++window.open()和document.open()++++
+window.open() 和 document.open() 的区别:
+window.open() 方法打开新窗口并载入指定的HTML文档。
+document.open() 方法打开新文档为 write() 和 writeln() 的输出做准备。
+当文档内的对象上的事件激发的函数调用 open 方法时， window 对象的 open 方法被使用。
+而当文档内的对象上的事件直接使用 open 方法时， document 对象的 open 方法被使用。
