@@ -2373,3 +2373,9 @@ echo "<script>alert('No');</script>";
 
 ++PHP过滤中文++++
 echo preg_replace('/([\x80-\xff]*)/i', '', "hello 你好world");
+
+
++++获取经过zlib压缩过的网站内容+++++
+使用file_get_contents()直接获取的话会返回一堆乱码，在链接前面加上compress.zlib://即可返回解压数据，如：
+
+file_get_contents("compress.zlib://http://www.xxx.com/xx.php");
