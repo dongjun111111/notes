@@ -6263,3 +6263,18 @@ window.onresize=function(){
 ++++页面刷新或者关闭时触发+++++
 var unloadPageTip = function(){return "您编辑的文章内容还没有进行保存!";};
 window.onbeforeunload = unloadPageTip;
+
+
+++js验证IP合法性+++++
+function checkIP()
+{
+	obj=document.getElementById("ip").value;
+	var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+	var reg = obj.match(exp);
+	if(reg==null){
+		alert("IP地址不合法！");
+	}else{
+		alert("IP地址合法！");
+	}
+}
+</script>
