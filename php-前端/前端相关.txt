@@ -6338,3 +6338,30 @@ document.write(encodeURIComponent("http://www.w3school.com.cn/p 1/"));  //http%3
 var strstr="http://www.w3school.com.cn/p 1/";
 strstr=encodeURIComponent(strstr);
 document.write(decodeURIComponent(strstr));  //http://www.w3school.com.cn/p 1/
+
+
+++JS判断是不是中文+++++
+function isChinese(str){  //判断是不是中文
+    var reCh=/[u00-uff]/;
+    return !reCh.test(str);
+}
+
+
++++js精确获取字符串长度，包括中文++++
+function isChinese(str){  //判断是不是中文
+    var reCh=/[u00-uff]/;
+    return !reCh.test(str);
+}
+function lenStat(target){
+    var strlen=0; //初始定义长度为0
+	var txtval =target.trim();
+	for(var i=0;i<txtval.length;i++){
+		if(isChinese(txtval.charAt(i))==true){
+		  	strlen=strlen+2;//中文为2个字符
+		}else{
+		  	strlen=strlen+1;//英文一个字符
+		}
+	}
+	strlen=Math.ceil(strlen/2);//中英文相加除2取整数
+	return strlen;
+}
