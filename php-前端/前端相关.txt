@@ -6609,3 +6609,80 @@ function getIEVersion(){
 };
 //如果不是返回null
 alert(getIEVersion());
+
+
+
++++页面内搜索+++++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/2000/REC-xhtml1-20000126/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<script type="text/javascript">
+function encode(s){
+  return s.replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">").replace(/([\\\.\*\[\]\(\)\$\^])/g,"\\$1");
+}
+function decode(s){
+  return s.replace(/\\([\\\.\*\[\]\(\)\$\^])/g,"$1").replace(/>/g,">").replace(/</g,"<").replace(/&/g,"&");
+}
+function highlight(s){
+  if (s.length==0){
+    alert('搜索关键词未填写！');
+    return false;
+  }
+  s=encode(s);
+  var obj=document.getElementsByTagName("body")[0];
+  var t=obj.innerHTML.replace(/<span\s+class=.?highlight.?>([^<>]*)<\/span>/gi,"$1");
+  obj.innerHTML=t;
+  var cnt=loopSearch(s,obj);
+  t=obj.innerHTML
+  var r=/{searchHL}(({(?!\/searchHL})|[^{])*){\/searchHL}/g
+  t=t.replace(r,"<span class='highlight'>$1</span>");
+  obj.innerHTML=t;
+  alert("搜索到关键词"+cnt+"处")
+}
+function loopSearch(s,obj){
+  var cnt=0;
+  if (obj.nodeType==3){
+    cnt=replace(s,obj);
+    return cnt;
+  }
+  for (var i=0,c;c=obj.childNodes[i];i++){
+    if (!c.className||c.className!="highlight")
+      cnt+=loopSearch(s,c);
+  }
+  return cnt;
+}
+function replace(s,dest){
+  var r=new RegExp(s,"g");
+  var tm=null;
+  var t=dest.nodeValue;
+  var cnt=0;
+  if (tm=t.match(r)){
+    cnt=tm.length;
+    t=t.replace(r,"{searchHL}"+decode(s)+"{/searchHL}")
+    dest.nodeValue=t;
+  }
+  return cnt;
+}
+</script>
+<style type="text/css">
+.highlight{background:green;font-weight:bold;color:white;}
+</style>
+</head>
+<body>
+<hr><script type="text/javascript" src="http://www.zzjs.net/ad/tc.js"></script>
+<form onsubmit="highlight(this.s.value);return false;">
+<p><input name="s" id="s" title="输入站长特效看看"/><input type="submit" value="搜索"/></p>
+</form>
+<div id="content">
+<font face=Verdana>站长特效网,www.zzjs.net<br />
+专注于网页特效及广告代码,供站长和js爱好者参考.<br />
+<br />
+打造国内最帅的网页特效站!
+<br />
+欢迎收藏本站,您的选择是不会错的.
+<br />
+站长特效,永远是最帅的!</font>
+</div>
+</body>
+</html>
