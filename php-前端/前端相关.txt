@@ -6590,3 +6590,22 @@ function completeLoading() {
 <marquee behavior="scroll" contenteditable="true" onstart="this.firstChild.innerHTML+=this.firstChild.innerHTML;" scrollamount="3" width="100" onmouseover="this.stop();" onmouseout="this.start();"> 
 这里是要滚动的内容 
 </marquee>
+
+
+++获得浏览器IE版本++++
+function getIEVersion(){
+    var ua = navigator.userAgent,matches,tridentMap={'4':8,'5':9,'6':10,'7':11};
+    matches = ua.match(/MSIE (\d+)/i);
+    if(matches&&matches[1])
+    {
+        return +matches[1];
+    }
+    matches = ua.match(/Trident\/(\d+)/i);
+    if(matches&&matches[1])
+    {
+        return tridentMap[matches[1]]||null;
+    }
+    return null;
+};
+//如果不是返回null
+alert(getIEVersion());
