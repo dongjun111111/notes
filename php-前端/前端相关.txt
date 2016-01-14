@@ -6577,3 +6577,10 @@ function completeLoading() {
     }
  alert(getLoacalTimeString());
 
+
++++innerHTML outerHTML++++
+<span style="color:red" id="test1">test1</span>
+<a href="javascript:alert(test1.innerHTML)">innerHTML内容</a> <!--显示内部内容test1 -->
+<a href="javascript:alert(test1.innerText)">innerText内容</a>  <!--效果与innerHTML一样,只适用于IE -->
+<a href="javascript:alert(test1.outerHTML)">outerHTML内容</a>  <!--
+显示整个标签内容<span style="color:red" id="test1">test1</span> -->
