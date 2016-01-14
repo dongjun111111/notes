@@ -6584,3 +6584,9 @@ function completeLoading() {
 <a href="javascript:alert(test1.innerText)">innerText内容</a>  <!--效果与innerHTML一样,只适用于IE -->
 <a href="javascript:alert(test1.outerHTML)">outerHTML内容</a>  <!--
 显示整个标签内容<span style="color:red" id="test1">test1</span> -->
+
+
+++marquee无缝滚动++++
+<marquee behavior="scroll" contenteditable="true" onstart="this.firstChild.innerHTML+=this.firstChild.innerHTML;" scrollamount="3" width="100" onmouseover="this.stop();" onmouseout="this.start();"> 
+这里是要滚动的内容 
+</marquee>
