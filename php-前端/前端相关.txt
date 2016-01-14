@@ -6686,3 +6686,21 @@ function replace(s,dest){
 </div>
 </body>
 </html>
+
+
++++js中的bind+++++
+<button>bind</button>
+<script>
+var logger={
+  x : 0,
+  updateCount :function(){
+    this.x++;
+    alert(this.x);
+  }
+}
+/*document.querySelector('button').addEventListener('click',function(){
+  logger.updateCount();
+});
+*/
+document.querySelector('button').addEventListener('click',logger.updateCount.bind(logger));
+</script>
