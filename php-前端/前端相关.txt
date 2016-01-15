@@ -6704,3 +6704,28 @@ var logger={
 */
 document.querySelector('button').addEventListener('click',logger.updateCount.bind(logger));
 </script>
+
+++windowURL+++++
+window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+
+
+++js修改数组中指定键值++++
+Array.prototype.indexOf = function(val) {
+      for (var i = 0; i < this.length; i++) {
+          if (this[i]== val)
+              return i;
+      }
+      return -1;
+};
+Array.prototype.remove = function(val) {
+     var index = this.indexOf(val);
+     if (index > -1) {
+         this.splice(index, 1);
+     }else{
+         alert('没有此键值，未修改数组');
+    }
+};
+
+var arr=Array(1,2,3,4,5,6);
+arr.remove('2');
+alert(arr);
