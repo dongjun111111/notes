@@ -802,6 +802,33 @@ Output ==>
 [ape element go nut zoo]
 </pre>
 
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type usb interface {   
+	sname() string
+ 	connect() 
+}
+type PhoneConnecter struct {
+	name string
+	
+}
+func (pc PhoneConnecter) sname() string{
+	return pc.name
+}
+func (pc PhoneConnecter)connect(){
+	fmt.Println("Connect:",pc.name)
+}
+func main(){
+	var a usb
+	a =PhoneConnecter{"PhoneConnecter"}
+	a.connect()
+}
+
+</pre>
 ##函数
 <pre>
 package main
