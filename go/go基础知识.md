@@ -3789,7 +3789,7 @@ func main(){
 	}
 }
 </pre>
-###array|slice|struct|map|pointer声明创建区别
+###array|slice|struct|map|pointer|interface声明创建区别
 
 + array:
 var arr [5]int  //声明<br>
@@ -3811,5 +3811,10 @@ mapp = make(map[string]string)//可以理解为实例化<br>
 mapp["key"] ="value" //创建
 
 + 指针:
-var ptr *int //声明一个变量指向int型变量的指针，存放内存地址
+var ptr *int //声明一个变量指向int型变量的指针，存放内存地址<br>
  &ptr  //通过指针访问变量的在内存中的存放地址，显示变量值
+
++interface
+ type inter interface {  //声明
+	area() int 
+}
