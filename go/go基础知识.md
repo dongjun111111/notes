@@ -3651,3 +3651,20 @@ func main(){  //会产生一个nil指针，即值为0
 	fmt.Printf("ptr : %x \n",ptr)
 }
 </pre>
+指针数组（将普通数组的值指针存到指定的指针数组，再由指针数组通过地址取出对应的值）
+<pre>
+package main
+import "fmt"
+const MAX int = 3
+func main(){
+	a :=[]int{10,100,200}
+	var i int
+	var ptr [MAX]*int
+	for i =0;i<MAX;i++ {
+		ptr[i]=&a[i]
+	}
+	for i =0 ;i < MAX;i++ {
+		fmt.Printf("value of a[%d] :%d\n",i, *ptr[i])
+	}
+}
+</pre>
