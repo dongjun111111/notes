@@ -3800,11 +3800,19 @@ var sl make([]int)   //声明<br>
 sl := []int{...}  //快速创建
 
 + struct:
+<pre>
 type str strcut{  //声明<br>
-   ...<br>
-}<br>
+   ...
+}
+</pre>
 str.name = ""  //创建元素
-
+或者下面一种
+<pre>
+type rectangle struct {
+	width,height int
+}
+r1 :=rectangle{12,2}
+</pre>
 + map:
 type mapp map[string]string  //声明<br>
 mapp = make(map[string]string)//可以理解为实例化<br>
