@@ -3604,3 +3604,27 @@ func main(){
 	fmt.Printf("%s \n",s2)
 }
 </pre>
+数组平均数
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func getAvg(arr []int,size int) float32 {
+	var sum int
+	var avg float32
+	for _,v :=range arr {
+		sum += v
+	}
+	
+	avg =float32(sum / size)
+	return avg
+}
+func main(){
+	arr :=[]int{4,5,7,7,6,4,54,13}
+	var avg float32
+	avg =getAvg(arr,len(arr))
+	fmt.Println(avg)
+}
+</pre>
