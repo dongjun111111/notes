@@ -3771,3 +3771,45 @@ func main(){
 	show(&person1)  //&对一个内存地址进行访问
 }
 </pre>
+字典map
+<pre>
+package main //map
+import (
+	"fmt"
+)
+func main(){
+	var mapp map[string]string  //声明（必须）
+	mapp=make(map[string]string) //创建（必须）,可以理解为对象的实例化
+	mapp["name"]="jason"    //key-value
+	mapp["age"] ="45"
+	mapp["tool"]="knife"
+	
+	for _,v:=range mapp{
+		fmt.Println(v,mapp[v])
+	}
+}
+</pre>
+###array|slice|struct|map|pointer声明创建区别
+
++ array:
+var arr [5]int  //声明<br>
+arr :=[]int {...} //快捷创建
+
++ slice：
+var sl make([]int)   //声明<br>
+sl := []int{...}  //快速创建
+
++ struct:
+type str strcut{  //声明<br>
+   ...<br>
+}<br>
+str.name = ""  //创建元素
+
++ map:
+type mapp map[string]string  //声明<br>
+mapp = make(map[string]string)//可以理解为实例化<br>
+mapp["key"] ="value" //创建
+
++ 指针:
+var ptr *int //声明一个变量指向int型变量的指针，存放内存地址
+ &ptr  //通过指针访问变量的在内存中的存放地址，显示变量值
