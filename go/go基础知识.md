@@ -3696,14 +3696,56 @@ func main(){
 package main 
 import "fmt"
 func main(){
-	var a int
+	a := 4
 	var ptr *int
 	var pptr **int
-	a  =4
 	ptr= &a
 	pptr = &ptr
-	fmt.Printf("value of a : %d\n",a)
-	fmt.Printf("value at *ptr: %d \n",*ptr)  //这里是*
-	fmt.Printf("value at **pptr: %d\n",**pptr)  //这里是**
+	fmt.Printf("%d\n",a)
+	fmt.Printf("%d\n",*ptr)
+	fmt.Printf("%d\n",**pptr)
+}
+</pre>
+函数指针
+<pre>
+package main
+import "fmt"
+func main(){
+	var a int = 3
+	var b int =6
+	fmt.Printf("%d\n",a)	
+	fmt.Printf("%d\n",b)
+	swap(&a,&b)
+	fmt.Printf("%d\n",a)
+	fmt.Printf("%d\n",b)
+} 
+//Go语言允许您将指针传递给函数。要做到这一点，只需声明函数参数为指针类型
+func swap(x *int, y *int) {
+	var temp int
+	temp = *x
+	*x =*y
+	*y = temp
+}
+</pre>
+结构的例子
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type book struct{
+	title string
+	author string
+	subject string
+	id int
+}
+func main(){
+	var book1 book //声明一个book的结构
+	book1.title= "bob"
+	book1.author = "jason"
+	book1.subject ="cs"
+	book1.id=45
+	fmt.Println(book1.title,book1.author,book1.subject,book1.id)
 }
 </pre>
