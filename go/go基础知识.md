@@ -3668,3 +3668,26 @@ func main(){
 	}
 }
 </pre>
+给指针数组赋值时出现的一个错误，关于range.
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	arr :=[4]int{3,5,67,8}
+	var ptr [4]*int
+	/*这里错误，输出的都是8,最后一个值,用range循环赋值的注意点
+	for k,v:=range arr {
+		ptr[k] = &v
+	}
+	*/
+	for i:=0;i<len(arr);i++{  //这一种则可以正确输出
+		ptr[i] = &arr[i]
+	}
+	for i :=0;i<len(ptr);i++{
+		fmt.Printf("%d\n",*ptr[i])
+	}
+}
+</pre>
