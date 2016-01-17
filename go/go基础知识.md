@@ -3826,3 +3826,33 @@ var ptr *int //声明一个变量指向int型变量的指针，存放内存地�
  type inter interface {  //声明
 	area() int 
 }
+带有接收者的函数，更加灵活
+<pre>
+package main
+import (
+	"fmt"
+	"math"
+)
+type rectangle struct {
+	width,height float64
+}
+type circle struct {
+	radius float64
+}
+func (r rectangle) area() float64 {
+	return r.width*r.height
+}
+func (c circle) area()float64{
+	return c.radius*c.radius*math.Pi
+}
+func main(){
+	r1 :=rectangle{12,2}
+	r2 :=rectangle{6,4}
+	c1 :=circle{2}
+	c2 :=circle{5}
+	fmt.Println(r1.area())
+	fmt.Println(r2.area())
+	fmt.Println(c1.area())
+	fmt.Println(c2.area())
+}
+</pre>
