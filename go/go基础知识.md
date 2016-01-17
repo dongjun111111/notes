@@ -3628,3 +3628,26 @@ func main(){
 	fmt.Println(avg)
 }
 </pre>
+指针
+<pre>
+package main 
+import "fmt"
+func main(){
+	var ip *int
+	var a int = 20 
+	ip =&a
+	fmt.Printf("address of a : %x\n",&a)
+	fmt.Printf("address of ip:%x\n",ip)
+	fmt.Printf("ip is : %d \n",*ip)
+}
+</pre>
+
+nil指针
+<pre>
+package main   
+import "fmt"
+func main(){  //会产生一个nil指针，即值为0
+	var ptr *int
+	fmt.Printf("ptr : %x \n",ptr)
+}
+</pre>
