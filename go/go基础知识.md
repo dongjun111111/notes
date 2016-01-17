@@ -3827,6 +3827,7 @@ var ptr *int //声明一个变量指向int型变量的指针，存放内存地�
 	area() int 
 }
 带有接收者的函数，更加灵活
+method
 <pre>
 package main
 import (
@@ -3854,5 +3855,34 @@ func main(){
 	fmt.Println(r2.area())
 	fmt.Println(c1.area())
 	fmt.Println(c2.area())
+}
+</pre>
+结构的继承与带有接收者的函数的综合使用，
+使函数优雅
+<pre>
+package main
+import "fmt"
+type human struct {
+	name string
+	age int
+	phone string
+}
+type student struct {
+	human
+	school string
+}
+type employee struct {
+	human
+	company string
+}
+func (h *human) sayhi(){ //带有接收者的函数,完整的可以是(h *human) sayhi() int{}
+	
+	fmt.Printf("%s , %s\n",h.name,h.phone)
+}
+func main(){
+	mark :=student{human{"mark",23,"3445343"},"MIT"}
+	sam :=employee{human{"sam",45,"26564"},"Google"}
+	mark.sayhi()
+	sam.sayhi()
 }
 </pre>
