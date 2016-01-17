@@ -3659,7 +3659,7 @@ const MAX int = 3
 func main(){
 	a :=[]int{10,100,200}
 	var i int
-	var ptr [MAX]*int
+	var ptr [MAX]*int    //指针数组的声明，数组元素的个数一定要写上,即[num]
 	for i =0;i<MAX;i++ {
 		ptr[i]=&a[i]
 	}
@@ -3677,7 +3677,7 @@ import (
 )
 func main(){
 	arr :=[4]int{3,5,67,8}
-	var ptr [4]*int
+	var ptr [4]*int    
 	/*这里错误，输出的都是8,最后一个值,用range循环赋值的注意点
 	for k,v:=range arr {
 		ptr[k] = &v
@@ -3689,5 +3689,21 @@ func main(){
 	for i :=0;i<len(ptr);i++{
 		fmt.Printf("%d\n",*ptr[i])
 	}
+}
+</pre>
+指针的指针
+<pre>
+package main 
+import "fmt"
+func main(){
+	var a int
+	var ptr *int
+	var pptr **int
+	a  =4
+	ptr= &a
+	pptr = &ptr
+	fmt.Printf("value of a : %d\n",a)
+	fmt.Printf("value at *ptr: %d \n",*ptr)  //这里是*
+	fmt.Printf("value at **pptr: %d\n",**pptr)  //这里是**
 }
 </pre>
