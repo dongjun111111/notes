@@ -3749,3 +3749,25 @@ func main(){
 	fmt.Println(book1.title,book1.author,book1.subject,book1.id)
 }
 </pre>
+结构作为函数参数，指针形式
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type person struct {
+	name string
+	age int
+}
+func show(person1 *person){ //声明一个变量作为指向person结构的指针
+	fmt.Println(person1.name)
+	fmt.Println(person1.age)
+}
+func main(){
+	var person1 person
+	person1.name= "jason"
+	person1.age =54
+	show(&person1)  //&对一个内存地址进行访问
+}
+</pre>
