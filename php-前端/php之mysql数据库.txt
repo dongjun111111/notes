@@ -796,3 +796,9 @@ uid  rank  name
 3----5----change2
 2----4----ddd
 4----6----gggrr
+
+
++++查询连续3天没有登录的人名+++++++
+查询连续3天没有登录的人名
+select name from table where id=(
+select max(id) from table group by to_char(time,'yyyymmdd') having count(*)<3);
