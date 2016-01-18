@@ -3886,3 +3886,26 @@ func main(){
 	sam.sayhi()
 }
 </pre>
+并发
+<pre>
+package main
+
+import (
+	"fmt"
+	"runtime"
+)
+func say(s string){
+	for i:=0;i<2;i++{
+		runtime.Gosched()
+		fmt.Println(s)
+	}
+}
+func main(){
+	go say("world") //开一个新的Gotuntines,后执行
+	say("hello") //当前Goruntines
+}
+结果是:
+hello
+world
+hello
+</pre>
