@@ -3886,7 +3886,7 @@ func main(){
 	sam.sayhi()
 }
 </pre>
-并发
+并发(原则：不要通过共享来通信，而要通过通信来共享。)
 <pre>
 package main
 
@@ -3896,7 +3896,7 @@ import (
 )
 func say(s string){
 	for i:=0;i<2;i++{
-		runtime.Gosched()
+		runtime.Gosched() //让CPU把时间片让给别人,下次某个时候继续恢复执行该goroutine
 		fmt.Println(s)
 	}
 }
