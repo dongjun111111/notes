@@ -3909,7 +3909,7 @@ hello
 world
 hello
 </pre>
-channel
+channel之声明及简单应用
 <pre>
 package main
 
