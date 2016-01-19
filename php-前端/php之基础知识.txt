@@ -2385,3 +2385,11 @@ file_get_contents("compress.zlib://http://www.xxx.com/xx.php");
 intval --强制转换成整型 （int）
 strval --强制转换成字符串类型 (string)
 类似的还有（bool）、（float）、（array）等
+
+
+++array_slice()++++
+截取指定位置开始的指定长度的数组。
+$arr=array('red','green','yellow','brown');
+print_r(array_slice($arr,0,2));    //'red','green'
+如果没有指定起始位置，则默认从后面开始截取：
+print_r(array_slice($arr,2));     //'yellow','brown'
