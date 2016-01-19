@@ -2379,3 +2379,9 @@ echo preg_replace('/([\x80-\xff]*)/i', '', "hello 你好world");
 使用file_get_contents()直接获取的话会返回一堆乱码，在链接前面加上compress.zlib://即可返回解压数据，如：
 
 file_get_contents("compress.zlib://http://www.xxx.com/xx.php");
+
+
++++php强制转换++++
+intval --强制转换成整型 （int）
+strval --强制转换成字符串类型 (string)
+类似的还有（bool）、（float）、（array）等

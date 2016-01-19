@@ -1252,3 +1252,7 @@ save·½·¨µÄ¸üĞÂÅĞ¶ÏÓÃ$result !== falseÀ´ÅĞ¶Ï£¬Èç¹ûÎªÕæ¾Í¶¼ÊÇ³É¹¦µÄ£¬Ö»ÊÇÈç¹ûÎª0 ±
 </if>
 <if condition="($name eq 2) && ($name eq 3)">value1
 </if>
+
++++D·½·¨++++
+·ÃÎÊ/Common/Model/DataModel.class.phpÀïÃæµÄgetSellData()·½·¨µÄÊµÀı¡£×¢ÒâD£¨£©ÀïÃæµÄĞ´·¨¡£
+$data[$key] = D('Common/Data')->getSellData($key,$stime,$etime,0);
