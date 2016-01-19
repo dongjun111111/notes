@@ -1256,3 +1256,30 @@ save·½·¨µÄ¸üĞÂÅĞ¶ÏÓÃ$result !== falseÀ´ÅĞ¶Ï£¬Èç¹ûÎªÕæ¾Í¶¼ÊÇ³É¹¦µÄ£¬Ö»ÊÇÈç¹ûÎª0 ±
 +++D·½·¨++++
 ·ÃÎÊ/Common/Model/DataModel.class.phpÀïÃæµÄgetSellData()·½·¨µÄÊµÀı¡£×¢ÒâD£¨£©ÀïÃæµÄĞ´·¨¡£
 $data[$key] = D('Common/Data')->getSellData($key,$stime,$etime,0);
+
+
+++sendMail++++
+µ÷ÓÃphpmailer²å¼ş·¢ËÍÓÊ¼ş¡£
+function SendMail($address,$title,$message,$cc,$send='',$loginame='',$passwd='') 
+{ 
+    vendor('phpMail.mailer'); 
+    $mail = new Mailer();
+    $mail->mailServer = C('MAIL_SERVER');
+    $mail->mailPort = C('MAIL_PORT');
+	if(empty($send))$send=C('MAIL_ADDRESS');
+    $mail->mailSender = $send; 
+	if(empty($loginame))$loginame=C('MAIL_LOGINNAME');
+    $mail->mailUser = $loginame;
+	if(empty($passwd))$passwd=C('MAIL_PASSWORD');
+    $mail->mailPwd = $passwd;
+	$title = iconv('utf-8','gb2312',$title);
+	$message = iconv('utf-8','gb2312',$message);
+    if($mail->connect()){
+		// $address = explode(',',$address); 
+		//$cc = explode(',',$cc);  
+		$dd = date('Y-m-d H:i:s');
+		error_log($dd.'---'.$message.$address."\n",3,WEB_PATH.'/cc.log');
+        return ($mail->send($address,$title,$message,'',$cc)); 
+    } 
+    return false;      
+}
