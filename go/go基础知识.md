@@ -4007,3 +4007,21 @@ func main(){
 output==>
 想念
 </pre>
+关于函数返回值：
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func test()(int, string){ //这里int与string中间有','
+	return 4,"星星"
+}
+func main(){
+	str := "hello world"
+	strrune := []rune(str)
+	strrune[0] = 'H'
+	_,xing := test()
+	fmt.Println(string(strrune),xing)
+}
+</pre>
