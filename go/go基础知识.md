@@ -3988,9 +3988,22 @@ package main
 func main(){
 	ss :="hello world"
 	bss :=[]byte(ss)
-	bss[0]='H'    //这里必须单引号，单引号，单引号
+	bss[0]='H'    //这里必须单引号，单引号，单引号	
 	fmt.Println(s,d,string(bss))
 }
 output ==>
 Hello world
+</pre>
+类似的有rune,而rune更适合有中文的字符串。如下：
+<pre>
+package main
+import "fmt"
+func main(){
+	str := "惦念"
+	strrune :=[]rune(str)
+	strtune[0] = '想'
+	fmt.Println(string(strrune))
+}
+output==>
+想念
 </pre>
