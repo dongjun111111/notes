@@ -3981,3 +3981,16 @@ time.Sleep(2 * time.Second)
 output==>
 a is 3
 </pre>
+###其实golang中有'',它用于byte类型的变量的处理。比如:
+<pre>
+//将string类型转换成byte类型后再转换成string输出
+package main 
+func main(){
+	ss :="hello world"
+	bss :=[]byte(ss)
+	bss[0]='H'
+	fmt.Println(s,d,string(bss))
+}
+output ==>
+Hello world
+</pre>
