@@ -4025,3 +4025,18 @@ func main(){
 	fmt.Println(string(strrune),xing)
 }
 </pre>
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	str := "大家好，我是谁"
+	for _,v :=range str {
+		fmt.Printf("%c",v) //%c单个字符输出
+	}
+}
+output==>
+大家好，我是谁
+</pre>
