@@ -3988,7 +3988,7 @@ package main
 func main(){
 	ss :="hello world"
 	bss :=[]byte(ss)
-	bss[0]='H'
+	bss[0]='H'    //这里必须单引号，单引号，单引号
 	fmt.Println(s,d,string(bss))
 }
 output ==>
