@@ -4038,5 +4038,33 @@ func main(){
 	}
 }
 output==>
-大家好，我是谁
+大家好，我是谁	
+</pre>
+注意：range在循环时候操作的不是原数据，而是新复制的对象。
+而for则不会。
+<pre>
+package main
+import (
+	"fmt"
+)
+func main(){
+	var s string
+	s = "leeeoo jason"
+	a :=[3]int{0,2,5}
+	println(s)
+	/*for i,v :=range a {
+		if i ==0 {
+			a[1],a[2] =999,999
+			fmt.Println(v)
+		}
+		fmt.Println(v)
+	}   //输出0，2，5
+	*/
+	for i:=0;i<len(a);i++{
+		if i == 1 {
+			a[i] = 10
+		}
+		fmt.Println(a[i])
+	}	//输出0,10,5
+}
 </pre>
