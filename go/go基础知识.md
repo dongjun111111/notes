@@ -4068,3 +4068,22 @@ func main(){
 	}	//输出0,10,5
 }
 </pre>
+将函数作为函数的返回值输出
+<pre>
+package main
+import (
+	"fmt"
+)
+func test() func(){
+	return func(){
+	x :=100
+		fmt.Printf("x (%p) = %d \n",&x,x)
+	}
+}
+func main(){
+	f :=test()
+	f()
+}
+output ==>
+x (0xc0820022e0) = 100 
+</pre>
