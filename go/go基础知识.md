@@ -4201,3 +4201,18 @@ output ==>
 send over.
 recv over.
 </pre>
+简单http服务器
+<pre>
+package main
+import (
+	"fmt"
+	"net/http"
+)
+func handler(w http.ResponseWriter, r *http.Request){
+	fmt.Fprint(w,"yes")
+}
+func main(){
+	http.HandleFunc("/test",handler)
+	http.ListenAndServe(":8080",nil)
+}
+</pre>
