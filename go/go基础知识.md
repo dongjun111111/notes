@@ -4109,3 +4109,21 @@ func main(){
 output==>
 60
 </pre>
+%T --- >输出的是变量的类型，如int,string等等
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func print (v interface{}){
+	fmt.Printf("%T：%v\n",v,v)
+}
+func main(){
+	print(1)
+	print("Hello wolrd")
+}
+output ==>
+int :1
+string : hello wolrd
+</pre>
