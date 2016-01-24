@@ -4166,4 +4166,8 @@ func main(){
 	fmt.Println(pi.(user))
 	fmt.Println(vi.(*user))
 }
+
+output==>
+{jack 12}     //不是指针形式修改不了
+&{jason2 12}
 </pre>
