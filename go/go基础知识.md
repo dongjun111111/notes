@@ -4147,3 +4147,23 @@ output ==>
 int :1
 string : hello wolrd
 </pre>
+如何通过interface接口修改数值：
+接口转型其返回临时对象，只有使用指针才能修改其状态。
+<pre>
+package main
+import (
+	"fmt"
+)
+type user struct {
+	name string
+	age int
+}
+func main(){
+	u :=user{"jack",12}
+	var pi,vi interface {} = u,&u 
+	//pi.(user).name = "jason1"     //Errot : cannot assign to pi.(user).name  | 只有指针才能修改
+	vi.(*user).name = "jason2"
+	fmt.Println(pi.(user))
+	fmt.Println(vi.(*user))
+}
+</pre>
