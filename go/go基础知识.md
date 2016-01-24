@@ -4093,7 +4093,7 @@ a:= [...][2]int{{1, 1}, {2, 2}, {3, 3}} // 第 2 纬度不能用 "..."
 </pre>
 位拷贝拷贝的是地址，而值拷贝则拷贝的是内容。数组是值拷贝，值拷⻉贝⾏行为会造成性能问题，通常会建议使⽤用 slice，或数组指针。
 
-###map字典
+####map字典
 <pre>
 package main
 func main(){
@@ -4108,6 +4108,26 @@ func main(){
 }
 output==>
 60
+</pre>
+####interface
+小实例：
+<pre>
+package main 
+
+import (
+	"fmt"
+)
+type user struct {
+	id int
+	name string
+}
+func main (){
+	u :=user{35,"jason"}
+	var i interface{} = u
+	fmt.Printf("%v\n",i.(user))
+}
+output ==>
+{35 jason}
 </pre>
 %T --- >输出的是变量的类型，如int,string等等
 <pre>
