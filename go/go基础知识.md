@@ -4092,3 +4092,20 @@ x (0xc0820022e0) = 100
 a:= [...][2]int{{1, 1}, {2, 2}, {3, 3}} // 第 2 纬度不能用 "..."
 </pre>
 位拷贝拷贝的是地址，而值拷贝则拷贝的是内容。数组是值拷贝，值拷⻉贝⾏行为会造成性能问题，通常会建议使⽤用 slice，或数组指针。
+
+###map字典
+<pre>
+package main
+func main(){
+	m := map[int]struct {
+		name string
+		age int
+	}{
+		1 : {"use1",10},
+		5 : {"fgf",60},
+	}
+	println(m[5].age)
+}
+output==>
+60
+</pre>
