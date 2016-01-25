@@ -7763,3 +7763,30 @@ function getWeixinUserInfo($openid, $token) {
 	$content = json_decode ( $content, true );
 	return $content;
 }
+
+++这个应该是微信验证的东西+++
+function OAuthWeixin($callback) {
+	$isWeixinBrowser = isWeixinBrowser ();
+	if (! $isWeixinBrowser || empty ( $GLOBALS ['user'] ['appid'] )) {
+		redirect ( $callback . '&openid=-1' );
+	}
+	$param ['appid'] = $GLOBALS ['user'] ['appid'];
+	
+	if (! isset ( $_GET ['getOpenId'] )) {
+		$param ['redirect_uri'] = $callback . '&getOpenId=1';
+		$param ['response_type'] = 'code';
+		$param ['scope'] = 'snsapi_base';
+		$param ['state'] = 123;
+		$url = 'https://open.weixin.qq.com/connect/oauth2/authorize?' . http_build_query ( $param ) . '#wechat_redirect';
+		redirect ( $url );
+	} elseif ($_GET ['state']) {
+		$param ['secret'] = $GLOBALS ['user'] ['secret'];
+		$param ['code'] = I('code');
+		$param ['grant_type'] = 'authorization_code';
+		
+		$url = 'https://api.weixin.qq.com/sns/oauth2/access_token?' . http_build_query ( $param );
+		$content = file_get_contents ( $url );
+		$content = json_decode ( $content, true );
+		redirect ( $callback . '&openid=' . $content ['openid'] );
+	}
+}
