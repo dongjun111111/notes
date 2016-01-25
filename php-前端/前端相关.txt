@@ -6810,3 +6810,22 @@ window.onunloadcancel = function()
     alert("取消离开");
 }
 </script>
+
+
++++从后台获取/发送JSON数据的格式统一+++++++
+$.getJSON(url,params,function(json){
+     if(json && json.status === "1"){
+       $.flash(json.msg);
+       $$.jsons["xxxx"] = json;//将JSON保存起来
+     }else{
+       $.flash(json.msg,"error")
+     }
+});
+$.post(url,params,function(json){
+     if(json && json.status === "1"){
+       $.flash(json.msg);
+       $$.jsons["xxxx"] = json;
+     }else{
+       $.flash(json.msg,"error")
+     }
+},"json");
