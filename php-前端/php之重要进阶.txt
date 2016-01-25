@@ -7845,3 +7845,49 @@ function wp_file_get_contents($url){
 }
 $str  =  "3454 65 645  34 342 3 45 5";
 echo trim_all($str);
+
+
++++PHP判断设备浏览器++++
+function isMobile() {
+    $mobile = array();
+    static $mobilebrowser_list ='Mobile|iPhone|Android|WAP|NetFront|JAVA|OperasMini|UCWEB|WindowssCE|Symbian|Series|webOS|SonyEricsson|Sony|BlackBerry|Cellphone|dopod|Nokia|samsung|PalmSource|Xphone|Xda|Smartphone|PIEPlus|MEIZU|MIDP|CLDC';
+    //note 获取手机浏览器
+    if(preg_match("/$mobilebrowser_list/i", $_SERVER['HTTP_USER_AGENT'], $mobile)) {
+        return true;
+    }else{
+        if(preg_match('/(mozilla|chrome|safari|opera|m3gate|winwap|openwave)/i', $_SERVER['HTTP_USER_AGENT'])) {
+            return false;
+        }else{
+            if($_GET['mobile'] === 'yes') {
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+}
+//判断浏览器
+function getUserAgent(){
+	$t = '';
+	if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 10.0")) 
+		$t = "Internet Explorer 10.0"; // 这里可以写其他的执行命令
+	else if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 9.0")) 
+		$t = "Internet Explorer 9.0";  
+	else if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 8.0")) 
+		$t = "Internet Explorer 8.0";  
+		else if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 7.0"))
+		$t = "Internet Explorer 7.0";
+		else if(strpos($_SERVER["HTTP_USER_AGENT"],"MSIE 6.0"))
+		$t = "Internet Explorer 6.0";
+		else if(strpos($_SERVER["HTTP_USER_AGENT"],"Firefox/3"))
+		$t =  "Firefox 3";
+		else if(strpos($_SERVER["HTTP_USER_AGENT"],"Firefox/2"))
+		$t =  "Firefox 2";
+		else if(strpos($_SERVER["HTTP_USER_AGENT"],"Chrome"))
+		$t =  "Google Chrome";
+		else if(strpos($_SERVER["HTTP_USER_AGENT"],"Safari"))
+		$t =  "Safari";
+		else if(strpos($_SERVER["HTTP_USER_AGENT"],"Opera"))
+		$t =  "Opera"; 
+	return $t;
+}
