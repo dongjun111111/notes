@@ -7820,3 +7820,16 @@ function getShort($str, $length = 40, $ext = '') {
 	}
 	return $output;
 }
+
+
+++防超时的file_get_contents改造函数++++
+//防超时的file_get_contents改造函数
+function wp_file_get_contents($url){
+	$context = stream_context_create(array(
+		 'http' => array(
+		  'timeout' => 30 //超时时间，单位为秒
+		 ) 
+	));  
+	
+	return file_get_contents($url, 0, $context);
+}
