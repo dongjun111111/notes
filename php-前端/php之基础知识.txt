@@ -2393,3 +2393,46 @@ $arr=array('red','green','yellow','brown');
 print_r(array_slice($arr,0,2));    //'red','green'
 如果没有指定起始位置，则默认从后面开始截取：
 print_r(array_slice($arr,2));     //'yellow','brown'
+
+
+++++基于数组创建文件++++++
+// 基于数组创建文件
+function create_dir_or_files($files) {
+  foreach ( $files as $key => $value ) {
+    if (substr ( $value, - 1 ) == '/') {
+      mkdir ( $value );
+    } else {
+      @file_put_contents ( $value, '' );
+    }
+  }
+}
+
+if (! function_exists ( 'array_column' )) {
+  function array_column(array $input, $columnKey, $indexKey = null) {
+    $result = array ();
+    if (null === $indexKey) {
+      if (null === $columnKey) {
+        $result = array_values ( $input );
+      } else {
+        foreach ( $input as $row ) {
+          $result [] = $row [$columnKey];
+        }
+      }
+    } else {
+      if (null === $columnKey) {
+        foreach ( $input as $row ) {
+          $result [$row [$indexKey]] = $row;
+        }
+      } else {
+        foreach ( $input as $row ) {
+          $result [$row [$indexKey]] = $row [$columnKey];
+        }
+      }
+    }
+    return $result;
+  }
+}
+
+
+$arr=array("1.txt","2.txt","3.txt","4.txt");
+create_dir_or_files($arr);
