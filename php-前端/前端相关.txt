@@ -6804,7 +6804,6 @@ window.onbeforeunload = function()
     return "真的离开?";
 }
 
-
 window.onunloadcancel = function()
 {
     clearTimeout(_t);
