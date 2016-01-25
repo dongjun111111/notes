@@ -7738,3 +7738,28 @@ function GetCurUrl() {
   return $url;
 }
 echo GetCurUrl();
+
+
+++PHP通过openid获取微信用户基本信息,此功能只有认证的服务号才能用++++
+// 通过openid获取微信用户基本信息,此功能只有认证的服务号才能用
+function getWeixinUserInfo($openid, $token) {
+	if (empty ( $GLOBALS ['user'] ['appid'] )) {
+		return false;
+	}
+	$param ['appid'] = $GLOBALS ['user'] ['appid'];
+	$param ['secret'] = $GLOBALS ['user'] ['secret'];
+	$param ['grant_type'] = 'client_credential';
+	
+	$url = 'https://api.weixin.qq.com/cgi-bin/token?' . http_build_query ( $param );
+	$content = file_get_contents ( $url );
+	$content = json_decode ( $content, true );
+	
+	$param2 ['access_token'] = $content ['access_token'];
+	$param2 ['openid'] = $openid;
+	$param2 ['lang'] = 'zh_CN';
+	
+	$url = 'https://api.weixin.qq.com/cgi-bin/user/info?' . http_build_query ( $param2 );
+	$content = file_get_contents ( $url );
+	$content = json_decode ( $content, true );
+	return $content;
+}
