@@ -7891,3 +7891,23 @@ function getUserAgent(){
 		$t =  "Opera"; 
 	return $t;
 }
+
+
++++最近日期转时间戳++++++
+//最近日期转时间戳
+function rq2Time($rq){ 
+  if(empty($rq)) return false;
+  //日期
+  if($rq=='today'){
+     $time = strtotime(date('Y-m-d'))+24*3600-1; //今天
+  }elseif($rq=='week'){
+     $time = strtotime('-1 week');//近一周
+  }elseif($rq=='month'){
+    $time = strtotime('last month');//近一月
+  }elseif($rq=='threemonth'){
+    $time = strtotime('-3 month'); //近3个月
+  }elseif($rq=='year'){
+    $time = strtotime('last year'); //近一年
+  } 
+  return $time;
+}
