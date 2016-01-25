@@ -7833,3 +7833,15 @@ function wp_file_get_contents($url){
 	
 	return file_get_contents($url, 0, $context);
 }
+
+
+
+++PHP删除字符串中所有空格++++
+//取出字符串中所有空格
+ function trim_all($str){//删除空格
+        $qian=array(" ","　","\t","\n","\r");
+        $hou=array("","","","","");
+        return str_replace($qian,$hou,$str); 
+}
+$str  =  "3454 65 645  34 342 3 45 5";
+echo trim_all($str);
