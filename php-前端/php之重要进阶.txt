@@ -7706,3 +7706,14 @@ if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image_content, $resu
     echo '新文件保存成功：', $new_file;
   }
 }
+
+
+++PHP判断是否在微信浏览器中+++++
+// 判断是否是在微信浏览器里
+function isWeixinBrowser() {
+	$agent = $_SERVER ['HTTP_USER_AGENT'];
+	if (! strpos ( $agent, "icroMessenger" )) {
+		return false;
+	}
+	return true;
+}
