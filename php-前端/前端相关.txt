@@ -6793,3 +6793,21 @@ alert(arr);
         flashTitlePlayer.stop();
     }
 </script>
+
+
++++js捕获关闭页面事件，兼容大多数浏览器++
+<script language="JavaScript">
+var _t;
+window.onbeforeunload = function()
+{
+    setTimeout(function(){_t = setTimeout(onunloadcancel, 0)}, 0);
+    return "真的离开?";
+}
+
+
+window.onunloadcancel = function()
+{
+    clearTimeout(_t);
+    alert("取消离开");
+}
+</script>
