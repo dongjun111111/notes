@@ -2382,9 +2382,17 @@ file_get_contents("compress.zlib://http://www.xxx.com/xx.php");
 
 
 +++php强制转换++++
+第一种：
 intval --强制转换成整型 （int）
 strval --强制转换成字符串类型 (string)
-类似的还有（bool）、（float）、（array）等
+floatval--强制转换成浮点型(float)
+第二种：
+有（bool）、（float）、（array）等
+第三种：
+settype();
+$num=12.6;
+settype($num,"int");    //无返回值，直接处理
+echo $num;    // 12
 
 
 ++array_slice()++++
