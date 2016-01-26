@@ -2459,3 +2459,10 @@ function dbCreateIn($itemList)
 }
 $arr=dbCreateIn($arr);
 echo $arr;
+
+
++++日期时间+++++
+$str1="Y-m-01";  //本月第一天
+$str2="Y-m-t";  //本月最后一天
+$str=date($str2,time());
+echo $str;
