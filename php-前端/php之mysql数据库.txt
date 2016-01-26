@@ -837,6 +837,11 @@ myql中的btree索引与hash索引的区别：
 5）Hash 索引遇到大量Hash值相等的情况后性能并不一定就会比B-Tree索引高。
 
 
+memory引擎：
+memory使用存在内存中的内容来创建表。每个MEMORY表实际对应一个磁盘文件，格式是.frm。
+MEMORY类型的表访问非常快，因为它到数据是放在内存中的，并且默认使用HASH索引，但是一旦服务器关闭，表中的数据就会丢失，但表还会继续存在。
+　存储在MEMORY数据表里的数据行使用的是长度不变的格式，因此加快处理速度，这意味着不能使用BLOB和TEXT这样的长度可变的数据类型。VARCHAR是一种长度可变的类型，但因为它在MySQL内部当作长度固定不变的CHAR类型，所以可以使用。
+create table tab_memory engine=memory select id,name,age,addr from man order by id;
 +++关系型数据库与非关系型数据库++++
 web2.0时代中催生的新需求：
 1.对数据库高并发读写的需求；
