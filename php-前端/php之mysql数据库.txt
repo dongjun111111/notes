@@ -807,6 +807,7 @@ select max(id) from table group by to_char(time,'yyyymmdd') having count(*)<3);
 ++++mysql数据库中字段类型选择+++++
 bigint 默认(20)  Max:有符号9223372036854775807  无符号9223372036854775807 * 2
 int 默认(11)   Max:有符号2147483647  无符号4294967285
+mediumint Max:有符号8388607 无符号：16777215
 smallint 默认(6)  Max:有符号32767  无符号65535
 tinyint 默认(4)   Max:有符号127  无符号255
 varchar (可变长度),1000个汉字/2000英文 ,效率比char低，但是比char省空间 
