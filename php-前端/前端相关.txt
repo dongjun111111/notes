@@ -6886,3 +6886,11 @@ move("jelle_test_div","jelle_test_div");
   <area shape="circle" coords="129,161,10" href ="javascript:void(0);alert('Mercury');" alt="Mercury" />
   <area shape="rect" coords="0,0,110,260" href ="javascript:void(0);alert('Sun');" alt="Sun" />
 </map>
+
+
+++++输入框，带有提示信息的++++++
+<fieldset>
+<legend>这是输入框哟</legend>
+<textarea style="width:99%;height:200px;border:1px solid black;" wrap="off">
+</textarea> 
+</fieldset>
