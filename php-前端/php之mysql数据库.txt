@@ -826,6 +826,7 @@ ENUM ÀàÐÍÊÇ·Ç³£¿ìºÍ½ô´ÕµÄ¡£Êµ¼ÊÉÏ£¬Æä±£´æµÄÊÇ TINYINT£¬µ«ÆäÍâ±íÉÏÏÔÊ¾Îª×Ö·û´®¡£Õ
 ÓÃÕâ¸ö×Ö¶ÎÀ´×öÒ»Ð©Ñ¡ÏîÁÐ±í±äµÃÏàµ±µÄÍêÃÀ¡£
 Èç¹ûÄãÓÐÒ»¸ö×Ö¶Î£¬±ÈÈç¡°ÐÔ±ð¡±£¬¡°¹ú¼Ò¡±£¬¡°Ãñ×å¡±£¬¡°×´Ì¬¡±»ò¡°²¿ÃÅ¡±£¬ÄãÖªµÀÕâÐ©×Ö¶ÎµÄÈ¡ÖµÊÇÓÐÏÞ
 ¶øÇÒ¹Ì¶¨µÄ£¬ÄÇÃ´£¬ÄãÓ¦¸ÃÊ¹ÓÃ ENUM ¶ø²»ÊÇ VARCHAR¡£
+current_timestamp()»ñÈ¡µ±Ç°Ê±¼ä´Á¡£
 
 myqlÖÐµÄbtreeË÷ÒýÓëhashË÷ÒýµÄÇø±ð£º
 ¾Í¼ìË÷Ð§ÂÊ¶øÑÔ£¬hashË÷Òý±Èbtree¸ßµÄ¶à¡£µ«ÊÇÊÂÊµÉÏÎªÊ²Ã´btreeµÄÓ¦ÓÃ¸ü¹ã£¿
