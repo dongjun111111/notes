@@ -6864,3 +6864,10 @@ move=function(o,t){
 move("jelle_test_div","jelle_test_div");
 // ]]>
 </script>
+
++++input拖动条output+++++
+<form oninput="x.value=parseInt(a.value) + parseInt(b.value)"/> 
+	0<input type="range" id="a" value="50" />100
+	+ <input type="number" id="b" value="50" />
+	=<output id="x"></output>
+</form>
