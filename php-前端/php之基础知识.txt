@@ -2444,3 +2444,18 @@ if (! function_exists ( 'array_column' )) {
 
 $arr=array("1.txt","2.txt","3.txt","4.txt");
 create_dir_or_files($arr);
+
+
+
++++将数组转换成sql语句可以使用的in形式++++
+$arr=array(56,78,56,66,87,45,74);
+function dbCreateIn($itemList)
+{
+    if(empty($itemList )){
+        return " IN ('') ";
+    }else{
+        return " IN ('" . join ("','", $itemList) . "') ";
+    }
+}
+$arr=dbCreateIn($arr);
+echo $arr;
