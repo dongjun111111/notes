@@ -6871,3 +6871,18 @@ move("jelle_test_div","jelle_test_div");
 	+ <input type="number" id="b" value="50" />
 	=<output id="x"></output>
 </form>
+
+
+
+++++map可实现在图片中自定义区域功能++++
+<details>  
+哈哈，这个标签有点意思|不支持 IE ff
+</details>
+<p>2323234<del>删除线，兼容性好</del>565</p>
+<!--area兼容性好-->
+<img src="planets.jpg" border="0" usemap="#planetmap" alt="Planets" />
+<map name="planetmap" id="planetmap">
+  <area shape="circle" coords="180,139,14" href ="javascript:void(0);alert('Venus');" alt="Venus" />
+  <area shape="circle" coords="129,161,10" href ="javascript:void(0);alert('Mercury');" alt="Mercury" />
+  <area shape="rect" coords="0,0,110,260" href ="javascript:void(0);alert('Sun');" alt="Sun" />
+</map>
