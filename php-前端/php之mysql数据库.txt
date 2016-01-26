@@ -802,3 +802,14 @@ uid  rank  name
 查询连续3天没有登录的人名
 select name from table where id=(
 select max(id) from table group by to_char(time,'yyyymmdd') having count(*)<3);
+
+
+++++mysql数据库中字段类型选择+++++
+bigint 默认(20)  Max:有符号9223372036854775807  无符号9223372036854775807 * 2
+int 默认(11)   Max:有符号2147483647  无符号4294967285
+smallint 默认(6)  Max:有符号32767  无符号65535
+tinyint 默认(4)   Max:有符号127  无符号255
+varchar (可变长度),1000个汉字/2000英文 ,效率比char低，但是比char省空间 
+char (固定长度),少则满，多则溢出 ,效率比varchar高，但是比varchar占空间（以空间换效率）
+[VARCHAR虽然比CHAR节省空间，但是如果一个VARCHAR列经常被修改，而且每次被修改的数据的长度不同，这会引起'行迁移'(Row Migration)现象，
+而这造成多余的I/O,是数据库设计和调整中要尽力避免的，在这种情况下用CHAR代替VARCHAR会更好一些.]
