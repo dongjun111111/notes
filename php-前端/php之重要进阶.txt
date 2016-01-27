@@ -7992,3 +7992,22 @@ function getBankCode($name){
     }
     else return '';
   }
+
+
++++获取浏览器类型++++
+function getBrowser(){
+  $agent=$_SERVER['HTTP_USER_AGENT'];
+  if(strpos($agent,"MSIE") !== false || strpos($agent,"rv:11.0")){
+    return "IE";
+  }else if(strpos($agent,"FireFox")!== false){
+    return "FireFox";
+  }else if(strpos($agent,"Chrome")!== false){
+    return "Chrome";
+  }else if(strpos($agent,"Opera")!== false){
+    return "Opeta";
+  }else if(strpos($agent,"Chrome")==false && strpos($agent,"Safari")!==false){
+    return "Safari";
+  }else{
+    return "Unknow";
+  }
+}
