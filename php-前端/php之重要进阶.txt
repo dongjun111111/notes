@@ -7953,3 +7953,42 @@ function JSON($array) {
 }
 $arr=array("name"=>"沟通个人推荐","age"=>2);
 echo JSON($arr);
+
+
+++获取各大银行的名称代码++++
+function getBankCode($name){ 
+    if(strpos($name,'工商银行')!==false){
+      return 'ICBC';
+    }else if(strpos($name,'建设银行')!==false){
+      return 'CCB';
+    }else if(strpos($name,'招商银行')!==false){
+      return 'CMB';
+    }else if(strpos($name,'农业银行')!==false){
+      return 'ABC';
+    }else if(strpos($name,'交通银行')!==false){
+      return 'BOCO';
+    }else if(strpos($name,'广发银行')!==false){
+      return 'CGB';
+    }else if(strpos($name,'中国银行')!==false){
+      return 'BOC';
+    }else if(strpos($name,'民生银行')!==false){
+      return 'CMBC';
+    }else if(strpos($name,'华夏银行')!==false){
+      return 'HXB';
+    }else if(strpos($name,'兴业银行')!==false){
+      return 'CIB';
+    }else if(strpos($name,'光大银行')!==false){
+      return 'CEB';
+    }else if(strpos($name,'中信银行')!==false){
+      return 'ECITIC';
+    }else if(strpos($name,'平安银行')!==false){
+      return 'PINGANBANK';
+    }else if(strpos($name,'中国邮政')!==false){
+      return 'POST';
+    }else if(strpos($name,'上海银行')!==false){
+      return 'SHB';
+    }else if(strpos($name,'浦发银行')!==false){
+      return 'SPDB';
+    }
+    else return '';
+  }
