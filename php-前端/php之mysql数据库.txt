@@ -897,3 +897,15 @@ key_buffer_sizeÖ¸¶¨Ë÷Òý»º³åÇøµÄ´óÐ¡£¬Ëü¾ö¶¨Ë÷Òý´¦ÀíµÄËÙ¶È£¬ÓÈÆäÊÇË÷Òý¶ÁµÄËÙ¶È¡£Í
 ÖÁÉÙÊÇ1:100£¬1:1000¸üºÃ£¨ÉÏÊö×´Ì¬Öµ¿ÉÒÔÊ¹ÓÃSHOW STATUS LIKE ¡®key_read%¡¯»ñµÃ£©¡£ 
 key_buffer_sizeÖ»¶ÔMyISAM±íÆð×÷ÓÃ¡£¼´Ê¹Äã²»Ê¹ÓÃMyISAM±í£¬µ«ÊÇÄÚ²¿µÄÁÙÊ±´ÅÅÌ±íÊÇMyISAM±í£¬Ò²ÒªÊ¹ÓÃ¸ÃÖµ¡£
 ¿ÉÒÔÊ¹ÓÃ¼ì²é×´Ì¬Öµcreated_tmp_disk_tablesµÃÖªÏêÇé¡£
+
+5.query_cache_size
+Ê¹ÓÃ²éÑ¯»º³å£¬MySQL½«²éÑ¯½á¹û´æ·ÅÔÚ»º³åÇøÖÐ£¬½ñºó¶ÔÓÚÍ¬ÑùµÄSELECTÓï¾ä£¨Çø·Ö´óÐ¡Ð´£©£¬½«Ö±½Ó´Ó»º³åÇøÖÐ¶ÁÈ¡½á¹û¡£ 
+Í¨¹ý¼ì²é×´Ì¬ÖµQcache_*£¬¿ÉÒÔÖªµÀquery_cache_sizeÉèÖÃÊÇ·ñºÏÀí£¨ÉÏÊö×´Ì¬Öµ¿ÉÒÔÊ¹ÓÃSHOW STATUS LIKE ¡®Qcache%¡¯»ñµÃ£©¡£
+Èç¹ûQcache_lowmem_prunesµÄÖµ·Ç³£´ó£¬Ôò±íÃ÷¾­³£³öÏÖ»º³å²»¹»µÄÇé¿ö£¬Èç¹ûQcache_hitsµÄÖµÒ² ·Ç³£´ó£¬Ôò±íÃ÷²éÑ¯»º³å
+Ê¹ÓÃ·Ç³£Æµ·±£¬´ËÊ±ÐèÒªÔö¼Ó»º³å´óÐ¡£»Èç¹ûQcache_hitsµÄÖµ²»´ó£¬Ôò±íÃ÷ÄãµÄ²éÑ¯ÖØ¸´ÂÊºÜµÍ£¬ÕâÖÖÇé¿öÏÂÊ¹ÓÃ²éÑ¯»º³å
+·´¶ø»áÓ°ÏìÐ§ÂÊ£¬ÄÇÃ´¿ÉÒÔ¿¼ÂÇ²»ÓÃ²éÑ¯»º³å¡£´ËÍâ£¬ÔÚSELECTÓï¾äÖÐ¼ÓÈëSQL_NO_CACHE¿ÉÒÔÃ÷È·±íÊ¾²»Ê¹ÓÃ²éÑ¯»º³å¡£ 
+Óë²éÑ¯»º³åÓÐ¹ØµÄ²ÎÊý»¹ÓÐquery_cache_type¡¢query_cache_limit¡¢query_cache_min_res_unit¡£ 
+query_cache_typeÖ¸¶¨ÊÇ·ñÊ¹ÓÃ²éÑ¯»º³å£¬¿ÉÒÔÉèÖÃÎª0¡¢1¡¢2£¬¸Ã±äÁ¿ÊÇSESSION¼¶µÄ±äÁ¿¡£ 
+query_cache_limitÖ¸¶¨µ¥¸ö²éÑ¯ÄÜ¹»Ê¹ÓÃµÄ»º³åÇø´óÐ¡£¬È±Ê¡Îª1M¡£ 
+query_cache_min_res_unitÊÇÔÚ4.1°æ±¾ÒÔºóÒýÈëµÄ£¬ËüÖ¸¶¨·ÖÅä»º³åÇø¿Õ¼äµÄ×îÐ¡µ¥Î»£¬È±Ê¡Îª4K¡£
+¼ì²é×´Ì¬Öµ Qcache_free_blocks£¬Èç¹û¸ÃÖµ·Ç³£´ó£¬Ôò±íÃ÷»º³åÇøÖÐËéÆ¬ºÜ¶à£¬Õâ¾Í±íÃ÷²éÑ¯½á¹û¶¼±È½ÏÐ¡£¬´ËÊ±ÐèÒª¼õÐ¡ query_cache_min_res_unit¡£
