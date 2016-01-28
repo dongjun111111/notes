@@ -855,3 +855,20 @@ web2.0时代中催生的新需求：
 任何大数据量的web系统，都非常忌讳多个大表的关联查询，以及复杂的数据分析类型的复杂SQL报表查询，特别是SNS类型
 的网站，从需求以及产品设计角 度，就避免了这种情况的产生。往往更多的只是单表的主键查询，以及单表的简单条件分页
 查询，SQL的功能被极大的弱化了。
+
+
+
+++++mysql常用参数+++++
+1.max_connections
+//查看mysql允许的最大连接数
+$r=mysql_query("show variables like 'max_connections'");
+while($row = mysql_fetch_row($r)){
+   print_r($row);
+}
+//输出： Array ( [0] => max_connections [1] => 151 )
+//查看当前mysql连接数
+$r2=mysql_query("show status like 'max%connections'");
+while($row2 = mysql_fetch_row($r2)){
+   print_r($row2);
+}
+//输出：Array ( [0] => Max_used_connections [1] => 1 )
