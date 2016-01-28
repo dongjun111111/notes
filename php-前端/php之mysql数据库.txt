@@ -909,3 +909,38 @@ query_cache_type指定是否使用查询缓冲，可以设置为0、1、2，该变量是SESSION级的变量
 query_cache_limit指定单个查询能够使用的缓冲区大小，缺省为1M。 
 query_cache_min_res_unit是在4.1版本以后引入的，它指定分配缓冲区空间的最小单位，缺省为4K。
 检查状态值 Qcache_free_blocks，如果该值非常大，则表明缓冲区中碎片很多，这就表明查询结果都比较小，此时需要减小 query_cache_min_res_unit。
+
+6.record_buffer_size
+每个进行一个顺序扫描的线程为其扫描的每张表分配这个大小的一个缓冲区。如果你做很多顺序扫描，你可能想要增加该值。
+默认数值是131072(128K)，可改为16773120 (16M)
+
+7.read_rnd_buffer_size
+随机读缓冲区大小。当按任意顺序读取行时(例如，按照排序顺序)，将分配一个随机读缓存区。进行排序查询时，MySQL会首先
+扫描一遍该缓冲，以避 免磁盘搜索，提高查询速度，如果需要排序大量数据，可适当调高该值。但MySQL会为每个客户连接
+发放该缓冲空间，所以应尽量适当设置该值，以避免内存开 销过大。 一般可设置为16M.
+
+8.sort_buffer_size
+每个需要进行排序的线程分配该大小的一个缓冲区。增加这值加速ORDER BY或GROUP BY操作。默认数值是2097144(2M)，可改为16777208 (16M)。
+
+9.join_buffer_size
+联合查询操作所能使用的缓冲区大小
+record_buffer_size，read_rnd_buffer_size，sort_buffer_size，join_buffer_size为每个线程独占，也就是说，
+如果有100个线程连接，则占用为16M*100
+
+10.table_cache
+表高速缓存的大小。每当MySQL访问一个表时，如果在表缓冲区中还有空间，该表就被打开并放入其中，这样可以更快地访问
+表内容。通过检查峰值时间的状态值Open_tables和Opened_tables，可以决定是否需要增加table_cache的值。如果你
+发现open_tables等于table_cache，并且opened_tables在不断增长，那么你就需要增加table_cache的值了
+（上述状态值可以使用SHOW STATUS LIKE ‘Open%tables’获得）。注意，不能盲目地把table_cache设置成很大的值。
+如果设置得太高，可能会造成文件描述符不足，从而造成性能 不稳定或者连接失败。1G内存机器，推荐值是128－256。
+内存在4GB左右的服务器该参数可设置为256M或384M。
+
+11.max_heap_table_size
+用户可以创建的内存表(memory table)的大小。这个值用来计算内存表的最大行数值。这个变量支持动态改变，
+即set @max_heap_table_size=# 这个变量和tmp_table_size一起限制了内部内存表的大小。如果某个内部heap（堆积）表
+大小超过tmp_table_size，MySQL可以根据需要自动将内存中的heap表改为基于硬盘的MyISAM表。
+
+12.tmp_table_size
+通过设置tmp_table_size选项来增加一张临时表的大小，例如做高级GROUP BY操作生成的临时表。如果调高该值，MySQL同时
+将增加heap表的大小，可达到提高联接查询速度的效果，建议尽量优化查询，要确保查询过程中生成的临时表在内存中，
+避免临时表过大导致生成基于硬盘的MyISAM表。
