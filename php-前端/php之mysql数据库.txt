@@ -859,7 +859,7 @@ web2.0时代中催生的新需求：
 
 
 ++++mysql常用参数+++++
-1.max_connections
+1. max_connections
 //查看mysql允许的最大连接数
 $r=mysql_query("show variables like 'max_connections'");
 while($row = mysql_fetch_row($r)){
