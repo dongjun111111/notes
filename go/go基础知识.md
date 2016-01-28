@@ -4216,3 +4216,21 @@ func main(){
 	http.ListenAndServe(":8080",nil)
 }
 </pre>
+####goto跳转
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	i:=0
+	Loop:      //定义标签
+	fmt.Printf("%d\n",i)	
+	if i<10 {
+		i++
+		goto Loop //跳转回标签
+	}
+}
+//实现的一个循环
+</pre>
