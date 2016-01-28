@@ -872,3 +872,6 @@ while($row2 = mysql_fetch_row($r2)){
    print_r($row2);
 }
 //输出：Array ( [0] => Max_used_connections [1] => 1 )
+取值参考：
+max_used_connections / max_connections * 100% （理想值≈ 85%）  
+如果max_used_connections跟max_connections相同 那么就是max_connections设置过低或者超过服务器负载上限了，低于10%则设置过大。
