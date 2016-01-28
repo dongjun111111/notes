@@ -886,3 +886,14 @@ back_logÖµÖ¸³öÔÚMySQLÔİÊ±Í£Ö¹»Ø´ğĞÂÇëÇóÖ®Ç°µÄ¶ÌÊ±¼äÄÚÓĞ¶àÉÙ¸öÇëÇó¿ÉÒÔ±»´æÔÚ¶ÑÕ»Ö
 264084 | unauthenticated user | xxx.xxx.xxx.xxx | NULL | Connect | NULL | login | NULL µÄ´ıÁ¬½Ó½ø³ÌÊ±£¬
 ¾ÍÒª¼Ó´óback_log µÄÖµÁË¡£ 
 Ä¬ÈÏÊıÖµÊÇ50£¬¿Éµ÷ÓÅÎª128£¬¶ÔÓÚLinuxÏµÍ³ÉèÖÃ·¶Î§ÎªĞ¡ÓÚ512µÄÕûÊı¡£
+
+3.interactive_timeout 
+Ò»¸ö½»»¥Á¬½ÓÔÚ±»·şÎñÆ÷ÔÚ¹Ø±ÕÇ°µÈ´ıĞĞ¶¯µÄÃëÊı¡£Ò»¸ö½»»¥µÄ¿Í»§±»¶¨ÒåÎª¶Ômysql_real_connect()Ê¹ÓÃCLIENT_INTERACTIVE Ñ¡ÏîµÄ¿Í»§¡£  
+Ä¬ÈÏÊıÖµÊÇ28800£¬¿Éµ÷ÓÅÎª7200¡£
+
+4.key_buffer_size 
+key_buffer_sizeÖ¸¶¨Ë÷Òı»º³åÇøµÄ´óĞ¡£¬Ëü¾ö¶¨Ë÷Òı´¦ÀíµÄËÙ¶È£¬ÓÈÆäÊÇË÷Òı¶ÁµÄËÙ¶È¡£Í¨¹ı¼ì²é×´Ì¬Öµ Key_read_requests
+ºÍKey_reads£¬¿ÉÒÔÖªµÀkey_buffer_sizeÉèÖÃÊÇ·ñºÏÀí¡£±ÈÀıkey_reads / key_read_requestsÓ¦¸Ã¾¡¿ÉÄÜµÄµÍ£¬
+ÖÁÉÙÊÇ1:100£¬1:1000¸üºÃ£¨ÉÏÊö×´Ì¬Öµ¿ÉÒÔÊ¹ÓÃSHOW STATUS LIKE ¡®key_read%¡¯»ñµÃ£©¡£ 
+key_buffer_sizeÖ»¶ÔMyISAM±íÆğ×÷ÓÃ¡£¼´Ê¹Äã²»Ê¹ÓÃMyISAM±í£¬µ«ÊÇÄÚ²¿µÄÁÙÊ±´ÅÅÌ±íÊÇMyISAM±í£¬Ò²ÒªÊ¹ÓÃ¸ÃÖµ¡£
+¿ÉÒÔÊ¹ÓÃ¼ì²é×´Ì¬Öµcreated_tmp_disk_tablesµÃÖªÏêÇé¡£
