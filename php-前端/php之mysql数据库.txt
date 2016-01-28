@@ -875,3 +875,14 @@ while($row2 = mysql_fetch_row($r2)){
 取值参考：
 max_used_connections / max_connections * 100% （理想值≈ 85%）  
 如果max_used_connections跟max_connections相同 那么就是max_connections设置过低或者超过服务器负载上限了，低于10%则设置过大。
+
+2.back_log 
+MySQL能暂存的连接数量。当主要MySQL线程在一个很短时间内得到非常多的连接请求，这就起作用。如果MySQL的连接数据
+达到 max_connections时，新来的请求将会被存在堆栈中，以等待某一连接释放资源，该堆栈的数量即back_log，如果等待
+连接的数量超过 back_log，将不被授予连接资源。 
+back_log值指出在MySQL暂时停止回答新请求之前的短时间内有多少个请求可以被存在堆栈中。只有如果期望在一个短时间
+内有很多连接，你需要增加它，换句话说，这值对到来的TCP/IP连接的侦听队列的大小。 
+当观察你主机进程列表（mysql> show full processlist），发现大量
+264084 | unauthenticated user | xxx.xxx.xxx.xxx | NULL | Connect | NULL | login | NULL 的待连接进程时，
+就要加大back_log 的值了。 
+默认数值是50，可调优为128，对于Linux系统设置范围为小于512的整数。
