@@ -7079,3 +7079,30 @@ function replaceMessage(){
       var oOldp=document.body.getElementsByTagName("p")[0];
       document.body.insertBefore(oNewp,oOldp);
 }
+文档碎片：
+//文档碎片:类似一个临时的文档，要所有要加的dom元素先放在这里，达到不要每次操作dom元素
+提高页面效率
+    var d1 = new Date();
+    //创建十个段落,常规的方式
+    for(var i = 0 ; i < 1000; i ++) {
+        var p = document.createElement("p");
+        var oTxt = document.createTextNode("段落" + i);
+        p.appendChild (oTxt);
+        document.body.appendChild(p);
+    }
+    var d2 = new Date();
+    document.write("第一次创建需要的时间:"+(d2.getTime()-d1.getTime()));
+
+
+    //使用了createDocumentFragment()的程序
+    var d3 = new Date();
+    var pFragment = document.createDocumentFragment();
+    for(var i = 0 ; i < 1000; i ++) {
+        var p = document.createElement("p");
+        var oTxt = document.createTextNode("段落" + i);
+        p.appendChild(oTxt);
+        pFragment.appendChild(p);
+    }
+    document.body.appendChild(pFragment);
+    var d4 = new Date();
+    document.write("第2次创建需要的时间:"+(d4.getTime()-d3.getTime()));
