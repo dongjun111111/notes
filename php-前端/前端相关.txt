@@ -7070,3 +7070,12 @@ oBtn.onclick=function(){
 	Op.parentNode.replaceChild(newOp,Op);
 }
 </script>
+插入新消息到前面位置：
+insertBefore(new,old)
+function replaceMessage(){
+      var oNewp=document.createElement("p");
+      var oText=document.createTextNode("World Hello");
+      oNewp.appendChild(oText);
+      var oOldp=document.body.getElementsByTagName("p")[0];
+      document.body.insertBefore(oNewp,oOldp);
+}
