@@ -7034,3 +7034,39 @@ Array.prototype.unique3 = function()
             return ev;
         }
     }; 
+
+
++++javascript操作节点++++
+创建节点：
+createElement和createTextNode：
+createElement例子：
+<script type=text/javascript>
+function Message(){
+         var op=document.createElement("p");
+         var oText=document.createTextNode("hello world!");
+         op.appendChild(oText);
+         document.body.appendChild(op);
+}
+</script>
+<body onload="Message();">
+</body>
+删除节点：
+removeChild(必须用父元素操作)
+function removeMessage(){
+    var op=document.body.getElementsByTagName("p")[0];
+    op.parentNode.removeChild(op);
+}
+替换节点：
+replaceChild(new,old)(必须用父元素操作)
+替换的内容是其节点，而不是节点里面的内容，切记！
+<script>
+var Op=document.getElementsByTagName('p')[0];
+var oldtext=Op.innerHTML;
+var newOp=document.createElement('p');
+var newtext=document.createTextNode('Hello world');
+newOp.appendChild(newtext);
+var oBtn=document.getElementsByTagName('button')[0];
+oBtn.onclick=function(){
+	Op.parentNode.replaceChild(newOp,Op);
+}
+</script>
