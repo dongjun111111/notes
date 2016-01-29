@@ -7123,3 +7123,5 @@ document.getElementsByTagName("INPUT")[0].setAttribute("type","button");
 removeAttribute(''):
 删除 header 元素的 style 属性：
 document.getElementsByTagName("H1")[0].removeAttribute("style");
+
+

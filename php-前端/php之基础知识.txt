@@ -329,7 +329,13 @@ PHP函数microtime()返回当前 Unix 时间戳和微秒数。
 
 ++++++++strpos()++++++++
 在使用该函数的时候。里面的位置一定要分清楚，strpos(原字符串，“需要查找的字符串片段”);
-谨记谨记谨记
+在使用strpos时候，比较位置的时候要使用===(三等于)而不是==(普通的双等于);比如：
+ if(strpos($data,'imgurl:') === 0){
+  $data=substr($data,7);
+  echo "<img src='".$data."' title='照片' alt='图片' height='40px' width='40px' />";
+  }else{
+  echo get_emotion($data);
+}
 
  
 ++++++++strcmp()函数++++++++
