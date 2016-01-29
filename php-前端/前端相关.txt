@@ -7106,3 +7106,20 @@ function replaceMessage(){
     document.body.appendChild(pFragment);
     var d4 = new Date();
     document.write("第2次创建需要的时间:"+(d4.getTime()-d3.getTime()));
+
+操作属性：
+判断是否存在某个属性：(返回true或false)
+hasAttribute(''):
+document.getElementsByTagName("BUTTON")[0].hasAttribute("onclick");
+获得属性：
+getAttribute(''):
+获得链接的 target 属性：
+document.getElementsByTagName("a")[0].getAttribute("target");
+改变属性：
+setAttribute('',''):
+设置 input 元素的 type 属性：
+document.getElementsByTagName("INPUT")[0].setAttribute("type","button");
+删除属性：
+removeAttribute(''):
+删除 header 元素的 style 属性：
+document.getElementsByTagName("H1")[0].removeAttribute("style");
