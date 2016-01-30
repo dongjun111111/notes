@@ -971,3 +971,62 @@ innodb_additional_mem_pool_size
 该参数指定InnoDB用来存储数据字典和其他内部数据结构的内存池大小。缺省值是1M。通常不用太大，只要够用就行，应该与表结构的复杂度有关系。如果不够用，MySQL会在错误日志中写入一条警告信息。根据MySQL手册，对于2G内存的机器，推荐值是20M，可适当增加。
 innodb_thread_concurrency=8
 推荐设置为 2*(NumCPUs+NumDisks)，默认一般为8。
+
+innodb引擎优化
+innodb_buffer_pool_size     （面试必问）
+主要存放热数据，按照page来存放，page为最小单位，甚至是按段来存放
+建议值： 如果是专用数据库server 建议分到物理内存的50% -- 75% 
+ 
+如果跑有其他服务，那么建议“2/8的原则”：
+比如100G的数据，最少达到10%的活跃数据，那么建议buffer pool分20G
+如果是好友关系系统，这样的数据都几乎是热数据，那么建议30%-50%的内存
+再比如偷菜游戏，几乎所有都能达到90%的热数据，那么你懂的
+ 
+innodb_buffer_pool_instances        
+主要为了方便buffer pool全局的锁，
+一般情况下设置为8 ，在5.5版本是分到4 ，到了5.6版本之后要分到8，不能改成其他值，因为这是压测得出的结果，8是可能得到最好的性能
+ 
+innodb_log_file_size                
+建议设置为data page的百分比，比如page为15% 那么buffer pool为100G ，那么两边相乘得出结果为15G，其实建议的是与data page配置的相等，有可能都配置不了那么大，那么就将file_size设置为1g
+ 
+那么如果我们要用多个log file，就会涉及到以下参数 ：
+innodb_log_file_in_gourp
+可以设置有几个log文件，至于如何计算：
+Innodb的redo log           文件大小，总大小为innodb_log_file_size *
+Innodb_log_file_ingroup     总大小不要低于600M
+ 
+一般建议3个log file即可 多了没有必要
+ 
+ 
+本文来自道森学习笔记，版权归 http://wubx.net/ 所有
+innodb_file_per_table          
+是否设置独立表空间
+在5.6之前是关闭的， 在5.6之后默认为打开，建议是打开状态
+ 
+innodb_file_format     #建议指定为 Barracuda
+                                                       
+ 
+innodb_flush_log_at_trx_commit
+如果在导数据，可能是2天或者3天也没有导完，那么可能是这个参数设置为1的结果导致
+1  为每一次事务进一次刷新到磁盘，安全度高，但是性能最低，经常会导致导数据最慢
+0  每秒钟进一下事务的刷新到磁盘
+2  一般建议值，大约每秒一次事务的刷新及同步到磁盘，实际只写到操作系统的buffer中，操作系统如果断电会导致失误丢失；#因为导数据都是人为参与的过程所以设置为2，让速度最大化完成，如果出错再手动搞一次即可，建议值
+ 
+innodb_flush_log_at_timeout  (在5.6中被引入）
+·该参数用于控制每N秒（1-2700秒之间）刷新一次日志。是对group commit的一个增强功能，默认是1秒，1秒钟刷新一次并由croup commit来处理，实际可以在1-2700秒之间来搞，如果系统对性能要求很高，可以将这个值设置大一些，吞吐率也会更高，因为group commit工作也会更好一点，如果说对同步实时性要求很高，那么就设置低一点，默认值即可
+之间是一个相对的关系，如果调大会得到一个很好的性能，但是从库可能会出现延迟
+如果调整为3秒，那么这3秒做一次commit，那么在第2秒的时候挂掉了，那么在这2秒的时候数据会丢失
+ 
+ 
+innodb_flush_method
+用指定数据实际写到磁盘上的方法，直接使用O_DIRECT即可
+O_DIRECT 工作在XFS或EXT4上性能都很不错的
+最大问题就是O_DIRECT用来减小系统的VFS级别的cache，节省出来的内存可以提供buffer pool来使用
+如果用fsync来做，其会占用vfs级别的cache，会占用大量内存，如果buffer pool很大，那么容易造成oom
+所以使用O_DIRECT来做是为了节省内存提供buffer pool更大空间
+ 
+innodb_flush_neighbors
+默认是0 在用这个参数之后会临近extent脏页面进行刷新
+比如在进行写入的时间，会将脏也进行check ，这个时间会将脏页面合并成顺序写 就是说将临近的extent也合并进去
+再比如第一个extent和第二个extent 是挨着的，那么移到这里之后发现第二个也有，那么顺便将第二个也刷过去
+如果是sas sata 盘建议使用1；但是对于ssd是没有寻址延迟，所以不需要脏页面刷新，因为原先就是热数据但是刷新之后又变为冷数据数据又会做一次加载
