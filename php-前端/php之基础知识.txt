@@ -2478,3 +2478,13 @@ echo $str;
 $a=1;$b=2;
 $a=$a+$b;$b=$a-$b;$a=$a-$b;
 echo $a,$b;
+
+
++++$_SERVER函数++++
+$_SERVER['REMOTE_PORT'];用户连接服务器时所使用的端口，//50563 
+$_SERVER['SCRIPT_FILENAME'];当前执行脚本的绝对路径名//D:/wamp/www/onethink/wwwroot/test.php 
+$_SERVER['SERVER_SIGNATURE'];包含服务器版本和虚拟主机名的字符串//Apache/2.4.9 (Win64) PHP/5.5.12 Server at 127.0.0.1 Port 80
+$_SERVER['REQUEST_METHOD'];访问页面时的请求方法 //GET
+$_SERVER['SERVER_SOFTWARE'];服务器标识的字串，在响应请求时的头信息中给出 //Apache/2.4.9 (Win64) PHP/5.5.12 
+$_SERVER['REQUEST_TIME']; 请求开始时的时间戳 //1454229771 
+$_SERVER['SERVER_PROTOCOL'];请求页面时通信协议的名称和版本 //HTTP/1.1 
