@@ -2496,3 +2496,4 @@ $_SERVER['SERVER_PROTOCOL'];请求页面时通信协议的名称和版本 //HTTP
 $row[’id’] 的速度是$row[id]的7倍。
 如果能将类的方法定义成static，就尽量定义成static，它的速度会提升将近4倍。
 str_replace函数比preg_replace函数快，但strtr函数的效率是str_replace函数的四倍。 strtr用法：strtr(string,oldstr,newstr)
+尽量使用php自带的函数，比自己造轮子效率更高。
