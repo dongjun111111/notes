@@ -2504,3 +2504,14 @@ uniqid() 函数基于以微秒计的当前时间，生成一个唯一的 ID。//
 由于基于系统时间，通过该函数生成的 ID 不是最佳的。如需生成绝对唯一的 ID，请使用 md5() 函数（请在字符串函数参考中查找）。
 $token = md5(uniqid(rand()));
 echo $token;
+
+
++++HTTP重定向(反向代理负载均衡)+++++
+$domains=array('http://baidu.com',
+                'http://sina.com',
+                'http://163.com',
+    );
+$domain=$domains[array_rand($domains)];
+echo $domain;
+当然这种方法效率确实不高，一般推荐表用nginx.
+反向代理服务的核心工作主要是转发HTTP请求，扮演了浏览器端和后台Web服务器中转的角色。因为它工作在HTTP层（应用层），也就是网络七层结构中的第七层，因此也被称为“七层负载均衡”。
