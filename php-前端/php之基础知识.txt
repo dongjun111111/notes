@@ -2501,6 +2501,6 @@ str_replace函数比preg_replace函数快，但strtr函数的效率是str_replac
 
 ++uniqid()以微秒计的当前时间生成唯一ID+++
 uniqid() 函数基于以微秒计的当前时间，生成一个唯一的 ID。//echo uniqid(); 
-：由于基于系统时间，通过该函数生成的 ID 不是最佳的。如需生成绝对唯一的 ID，请使用 md5() 函数（请在字符串函数参考中查找）。
+由于基于系统时间，通过该函数生成的 ID 不是最佳的。如需生成绝对唯一的 ID，请使用 md5() 函数（请在字符串函数参考中查找）。
 $token = md5(uniqid(rand()));
 echo $token;
