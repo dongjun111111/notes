@@ -4243,5 +4243,5 @@ func main(){
 	fmt.Println(len([]rune(s)))  //强制转换
 }
 output==>
-4
+4   //不转换结果是10
 </pre>
