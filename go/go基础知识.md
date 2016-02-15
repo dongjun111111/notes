@@ -4234,3 +4234,14 @@ func main(){
 }
 //实现的一个循环
 </pre>
+####强制转换成rune切片
+<pre>
+package main
+import "fmt"
+func main(){
+	s := "是功夫f"
+	fmt.Println(len([]rune(s)))  //强制转换
+}
+output==>
+4
+</pre>
