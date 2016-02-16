@@ -551,3 +551,9 @@ uid  rank  name
 查询连续3天没有登录的人名
 select name from table where id=(
 select max(id) from table group by to_char(time,'yyyymmdd') having count(*)<3);
+
+
+
++++mysql的replace用法++++
+replace将字段中存在的某个字符串替换成另一个。
+update `ks_menu` set url=replace(url,'Tbadmin','Admindj')    //将Tbadmin替换成Admindj
