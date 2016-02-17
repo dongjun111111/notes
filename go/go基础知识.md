@@ -4272,3 +4272,19 @@ func main(){
 	wg.Wait()
 }
 </pre>
+####延迟调用defer
+<pre>
+package main
+func main(){
+	x ,y := 10,20
+	defer func(i int){
+		println("defer:",i,y)
+	}(y)    //这里（y）相当于调用了该匿名函数并传入了一个值：y
+	x += 10
+	y += 100
+	println("x=",x,"y=",y)
+}
+output ==>
+x=10 y=20
+defer 20 120
+</pre>
