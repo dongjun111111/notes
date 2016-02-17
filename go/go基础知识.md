@@ -4317,7 +4317,7 @@ package main
 func main(){
 	s :=[]int{1,34,5,6}  //slice
 	d :=[4]int{4,5,6} //array
-	f :=make([]int,3,4)  //make声明slice 
+	f :=make([]int,3,4)  //make声明slice，注意这里是[]int,而不是[]int{}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	f[2] = 3
 	println(s[0])
 	println(d[1])
