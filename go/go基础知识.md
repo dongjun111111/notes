@@ -4312,3 +4312,15 @@ func main(){
 output ==>
 [102,103]
 </pre>
+<pre>
+package main
+func main(){
+	s :=[]int{1,34,5,6}  //slice
+	d :=[4]int{4,5,6} //array
+	println(s[0])
+	println(d[1])
+}
+output==>
+1
+5
+</pre>
