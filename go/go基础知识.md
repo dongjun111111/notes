@@ -4245,7 +4245,7 @@ func main(){
 output==>
 4   //不转换结果是10
 </pre>
-####goroutine并发编程
+####goroutine 并发编程
 <pre>
 package main
 
