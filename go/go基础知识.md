@@ -4285,6 +4285,6 @@ func main(){
 	println("x=",x,"y=",y)
 }
 output ==>
-x=10 y=20
+x=10 y=120
 defer 20 120
 </pre>
