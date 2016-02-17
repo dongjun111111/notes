@@ -4328,3 +4328,13 @@ output==>
 5
 3
 </pre>
+<pre>
+package main
+func main(){
+	s :=[]int{1,2,3,4,5,6,7}
+	s1 :=s[2:5]
+	s2 :=append(s1,77)
+	println(s1[0])  //3,4,5
+	println(s2[0])	//3,4,5,77
+}
+</pre>
