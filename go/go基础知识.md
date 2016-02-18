@@ -4408,3 +4408,34 @@ output==>
 jason
 administrator
 </pre>
+<pre>
+package main
+
+import (
+	"fmt"
+	"encoding/json"
+)
+type person struct{
+	username string
+	age int
+	friend []string   //切片
+	addr string
+}
+func testjson(){
+	p1 :=&person{
+		"jason",
+		23,
+		[]string{"lisi","wangyu"},  //这里有[]string
+		"hz",
+	}
+	p,err :=json.Marshal(p1)
+	if err !=nil{
+		fmt.Print(err.Error())
+	}
+	fmt.Print(p)
+}
+func main(){
+	testjson()
+}
+
+</pre>
