@@ -8044,20 +8044,21 @@ function listdir($dir){
   if(is_dir($dir)){
     preg_match_all("/[\/]{1}/",$dir,$arrNum);   
     if(count($arrNum[0]) ==1){
-     echo "<b><font color=red>父文件夹：".$dir.'</font></b><br>';
+     echo "<b><font color=red>主文件夹：".$dir.'</font></b><br>';
     }
     $dh=dir($dir);   
     while(($file=$dh->read()) !== false){
       //打印文件夹名称      
       if(is_dir($dir.'/'.$file) && $file != "." && $file != ".."){
-        echo "<hr><b>子文件夹：".$dir."/".$file."</b><br>";
+        echo "<hr><b>文件夹：".$dir."/".$file."</b><br>";
         listdir($dir."/".$file);
-      }else{
-        if($file != "." && $file != ".."){
+      }else{  
+        if($file != "." && $file != ".."){ //打印文件名称
           echo $file."<br>";
         }
       }
     }
+    closedir($dh);
   }
 }
 listdir("./phpqrcode");
