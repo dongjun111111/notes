@@ -4371,3 +4371,18 @@ func main(){
 output ==>
 sir
 </pre>
+<pre>
+package main    
+type user struct {
+	id int
+	name string
+}
+func main(){     //换一种形式
+	m :=map[user]int{
+		user{1,"tom"}:100,
+	}
+	println(m[user{1,"tom"}])
+}
+output ==>
+100
+</pre>
