@@ -2586,3 +2586,11 @@ $str="追加 \r\n";                   //这里的\r\n换行用的
 $append=fopen($testfile,"a");
 fwrite($append,$str);
 fclose($append);
+
+++++统计字符串中数字|字母出现的个数（亲测可用）++++++
+echo $str = "3fdf5gfdgd";  
+preg_match_all("/[0-9]{1}/",$str,$arrNum);  
+preg_match_all("/[a-zA-Z]{1}/",$str,$arrAl); 
+echo "<br>";  
+echo "数字个数:".count($arrNum[0])."<br/>";  
+echo "字母个数:".count($arrAl[0])."<br/>";
