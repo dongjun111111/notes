@@ -4475,3 +4475,28 @@ func main(){
 output==>
 int:1
 </pre>
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type Tester struct{
+	s interface {     //声明一个接口
+		String() string
+	}
+}
+type User struct {
+	id int
+	name string
+}
+func (self *User) String() string {
+	return fmt.Sprintf("user %d,%s",self.id,self.name)
+}
+func main(){
+	t := Tester{&User{2,"jason"}}
+	fmt.Println(t.s.String())   //调用接口
+}
+output==>
+user 2,jason
+</pre>
