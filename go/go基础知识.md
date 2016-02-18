@@ -4439,3 +4439,24 @@ func main(){
 }
 
 </pre>
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type user struct{
+	id int
+	name string
+}
+func (self user)test(){
+	fmt.Println(self)
+}
+func main(){
+	u :=user{2,"jason"}
+	mvalue :=u.test
+	u.id,u.name = 6 , "jack"
+	u.test()
+	mvalue()
+}
+</pre>
