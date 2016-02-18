@@ -4359,3 +4359,15 @@ output==>
 2
 0
 </pre>
+<pre>
+package main
+func main(){
+	type user struct {name string}
+	m :=map[int]user{
+		1 : {"sir"},   //这里逗号不可少
+	}
+	println(m[1].name)
+}
+output ==>
+sir
+</pre>
