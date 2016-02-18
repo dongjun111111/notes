@@ -8045,7 +8045,7 @@ function listDir($dir){
     if($dh = opendir($dir)){
       while(($file = readdir($dh)) !== false){
         if((is_dir($dir."/".$file)) && $file!="." && $file != ".."){
-          echo "<hr><b><font color='red'>文件夹名：</font>",$file,"</b><br>";
+          echo "<hr><b>文件夹名：".$dir."/".$file."</b><br>";
           listDir($dir."/".$file."/");
         }else{
           if($file !="." && $file != ".."){
