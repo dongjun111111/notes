@@ -2567,3 +2567,10 @@ function myfunction($v){
 print_r(array_map("myfunction",$arr));
 结果是：
 Array ( [0] => 49 [1] => 64 [2] => 81 )
+
+++++array_product()++++
+array_product()计算并返回数组的乘积。
+$arr=array(1,2,44,5,6,7,8,8);
+$a=array_product($arr);
+print_r($a);
+结果是：1182720
