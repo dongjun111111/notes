@@ -4338,3 +4338,24 @@ func main(){
 	println(s2[0])	//3,4,5,77
 }
 </pre>
+####map字典
+<pre>
+package main    //map字典
+func main(){
+	m :=make(map[string]int,1000)  //1000是提前申请的内存容量
+	m =map[string]int{
+		"a":1,
+	}
+	if v ,ok :=m["a"];ok{
+		println(v)
+	}
+	m["b"] = 2
+	println(m["b"])
+	delete(m,"b")  //删除的语法！！！不是delete(m["b"])
+	println(m["b"])
+}
+output==>
+1
+2
+0
+</pre>
