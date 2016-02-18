@@ -4386,3 +4386,25 @@ func main(){     //换一种形式
 output ==>
 100
 </pre>
+####struct
+<pre>
+package main
+func main(){
+	type user struct {
+		name string
+	}
+	type manage struct {
+		user
+		title string
+	}
+	m :=manage{
+		user : user{"jason"},
+		title : "administrator",
+	}
+	println(m.user.name)
+	println(m.title)
+}
+output==>
+jason
+administrator
+</pre>
