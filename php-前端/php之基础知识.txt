@@ -2574,3 +2574,15 @@ $arr=array(1,2,44,5,6,7,8,8);
 $a=array_product($arr);
 print_r($a);
 结果是：1182720
+
+
+++++++文件写入追加内容++++
+方案一：
+file_put_contents('test.txt',"再次 \r\n",FILE_APPEND);    //这里的\r\n换行用的
+echo file_get_contents('test.txt');
+方案二：
+$testfile="test.txt";
+$str="追加 \r\n";                   //这里的\r\n换行用的
+$append=fopen($testfile,"a");
+fwrite($append,$str);
+fclose($append);
