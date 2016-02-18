@@ -2542,3 +2542,11 @@ $c=array_combine($arr1,$arr2);
 print_r($c);
 结果为：
 Array ( [bill] => 60 [steve] => 4 [mark] => 7 )
+
+
++++array_count_values()++++++
+array_count_values() 函数用于统计数组中所有值出现的次数。
+$arr=array('A','Cat','Dog','A','Dog');
+print_r(array_count_values($arr));
+结果是：
+Array ( [A] => 2 [Cat] => 1 [Dog] => 2 )    //键值指的是对应键名出现的次数
