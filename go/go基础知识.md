@@ -4460,3 +4460,18 @@ func main(){
 	mvalue()
 }
 </pre>
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func Print(v interface{}){     //空接口
+	fmt.Printf("%T:%v\n",v,v) //这里必须是%T,打印变量类型
+}
+func main(){
+	Print(1)
+}
+output==>
+int:1
+</pre>
