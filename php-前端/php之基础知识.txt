@@ -2550,3 +2550,10 @@ $arr=array('A','Cat','Dog','A','Dog');
 print_r(array_count_values($arr));
 结果是：
 Array ( [A] => 2 [Cat] => 1 [Dog] => 2 )    //键值指的是对应键名出现的次数
+
+++++array_flip()++++
+array_flip()交换键值与键名位置。
+$arr=array(7,8,9);
+print_r(array_flip($arr));
+结果是：
+Array([7]=>0 [8]=>1 [9]=>2);
