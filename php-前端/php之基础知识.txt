@@ -2557,3 +2557,13 @@ $arr=array(7,8,9);
 print_r(array_flip($arr));
 结果是：
 Array([7]=>0 [8]=>1 [9]=>2);
+
+++++array_map()++++
+array_map()可以使用自定义的函数作用于每个键值上，并且返回用户自定义函数作用后的带有新值得数组。
+$arr=array(7,8,9);
+function myfunction($v){
+  return $v*$v;
+}
+print_r(array_map("myfunction",$arr));
+结果是：
+Array ( [0] => 49 [1] => 64 [2] => 81 )
