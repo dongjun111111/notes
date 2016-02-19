@@ -4500,3 +4500,23 @@ func main(){
 output==>
 user 2,jason
 </pre>
+接口转型返回临时对象，只有使用指针才能修改其内容。
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type user struct {
+	id int
+	name string
+}
+func main(){
+	u := user{1,"tom"}
+	var vi interface{} = &u         //这里,如果只是u，则报错
+	vi.(*user).name = "jack"		//这里
+	fmt.Println(vi.(*user))         //这里
+}
+output==>
+&{1 jack}
+</pre>
