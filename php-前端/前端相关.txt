@@ -7125,3 +7125,29 @@ removeAttribute(''):
 document.getElementsByTagName("H1")[0].removeAttribute("style");
 
 
+++++jquery使用ajax传值++++
+function ajax(id,pic){
+//由于ThinkPHP不解析JavaScript里的ThinkPHP常量，所以需要先在这里定义。
+var URL='__URL__';
+$.ajax({
+url: URL+'/returnAjax/id/'+id,//提交访问的URL
+type: 'GET',//提交的方法
+dataType: 'text',//返回的内容的类型，由于PHP文件是直接echo的，那么这里就是text
+timeout: 1000,//超时时间
+error: function(){ //如果出错，执行函数
+alert('Error loading XML document');
+},
+success: function(data){
+//alert(data);//如果成功，弹出数据
+writeHtml(data,pic);
+}
+});
+}
+function writeHtml(data,pic){
+var product = eval('(' + data + ')'); //即使不引入json.js也可以转成json对象 
+//alert($("#cate_pic").attr("src"));
+$("#cate_pic").attr("src","../images/"+pic);
+$("#product_pic").attr("src","../Attachments/product/"+product.attachpath+"/"+product.attachthumb);
+$("#product_subject").html(product.subject);
+$("#product_content").html(product.content);
+}
