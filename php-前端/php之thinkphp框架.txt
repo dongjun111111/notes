@@ -1283,3 +1283,10 @@ function SendMail($address,$title,$message,$cc,$send='',$loginame='',$passwd='')
     } 
     return false;      
 }
+
+
+++++thinkphp中add（）方法的返回值+++++
+在ThinkPHP开发中，写入数据是我们经常遇到的事情，在写入数据后往往需要判断一下以作下一步的操作,如写入是否成功等。
+ThinkPHP写入数据后的返回值有两种情况：
+$result=M("News")->add(array('name'=>'WBlog','content'=>'WBlog博客管理系统'));
+如果写入结果$result数据非法则返回false,如果是自增主键 $result则返回主键值，否则返回1。
