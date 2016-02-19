@@ -4518,5 +4518,35 @@ func main(){
 	fmt.Println(vi.(*user))         //这里
 }
 output==>
-&{1 jack}
+&{1 jack}		
+</pre>
+<pre>
+package main
+
+import (
+	"runtime"
+	"sync"
+)
+func main(){
+	wg :=new(sync.WaitGroup)
+	wg.Add(1)  //添加或者减少等待goroutine的数量
+	go func(){
+		defer wg.Done()  //相当于Add(-1)
+		defer println("A.defer")
+		func() {
+			defer println("B.defer")
+			runtime.Goexit()
+			println("8")
+		}()
+		println("A")
+	}()
+	wg.Wait() //执行阻塞，直到所有的WaitGroup数量变成0
+}
+/*WaitGroup的特点是Wait()可以用来阻塞直到队列中的所有任务
+都完成时才解除阻塞，而不需要sleep一个固定的时间来等待．但是
+其缺点是无法指定固定的goroutine数目．但是其缺点是无法指定
+固定的goroutine数目．可能通过使用channel解决此问题。*/
+output==>
+B.defer
+A.defer
 </pre>
