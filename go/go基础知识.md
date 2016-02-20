@@ -4550,3 +4550,17 @@ output==>
 B.defer
 A.defer
 </pre>
+一个goroutine和主程序通信的例子。
+<pre>
+package main
+func main(){
+	channel :=make(chan string)   //d定义
+	go func(){
+		channel <- "hello"   //给channel赋值
+	}()
+	msg := <- channel    //将channel值赋给msg
+	println(msg)
+}
+output ==>
+hello
+</pre>
