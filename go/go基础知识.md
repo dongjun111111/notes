@@ -4628,7 +4628,7 @@ func main(){
 	queue :=make(chan int , 1)
 	go producer(queue)
 	go consumer(queue)
-	time.Sleep(1e9)
+	time.Sleep(1e9)   //等待所以并发完成
 }
 output==>
 rceive: 0
