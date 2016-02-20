@@ -4642,3 +4642,39 @@ rceive: 7
 rceive: 8
 rceive: 9
 </pre>
+多个channel
+<pre>
+package main
+
+import (
+	"time"
+)
+/*一个goroutine中处理多个channel的情况。我们不可能阻塞在
+两个channel，这时就该select场了。与C语言中的select可以监
+控多个fd一样，go语言中select可以等待多个channel。
+*/
+func main(){
+	c1 :=make(chan string)
+	c2 :=make(chan string)
+	go func(){
+		time.Sleep(time.Second * 1)
+		c1 <- "one"
+	}()
+	go func(){
+		time.Sleep(time.Second * 2)
+		c2 <- "two"
+	}()
+	for i :=0;i<2;i++{
+		select {
+			case msg1 := <- c1:
+			println("receive:",msg1)
+			case msg2 := <- c2 :
+			println("receive:",msg2)
+		}
+	}
+}
+
+output==>
+receive: one
+receive: two
+</pre>
