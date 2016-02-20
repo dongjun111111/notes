@@ -4601,3 +4601,44 @@ arr[1] = 5
 4
 5
 </pre>
+var ch chan int<br>
+var ch1 chan<- int  //ch1只能写<br>
+var ch2 <-chan int  //ch2只能读<br>
+channel是类型相关的，也就是一个channel只能传递一种类型。例如，上面的ch只能传递int。<br>
+在go语言中，有4种引用类型：slice，map，channel，interface。<br>
+channel消息传递
+<pre>
+package main
+
+import (
+	"time"
+)
+func producer(queue chan<- int){
+	for i:=0;i<10;i++{
+		queue <- i
+	}
+}
+func consumer(queue <- chan int){
+	for i:=0;i<10;i++{
+		v :=<- queue
+		println("rceive:",v)
+	}
+}
+func main(){
+	queue :=make(chan int , 1)
+	go producer(queue)
+	go consumer(queue)
+	time.Sleep(1e9)
+}
+output==>
+rceive: 0
+rceive: 1
+rceive: 2
+rceive: 3
+rceive: 4
+rceive: 5
+rceive: 6
+rceive: 7
+rceive: 8
+rceive: 9
+</pre>
