@@ -4564,3 +4564,18 @@ func main(){
 output ==>
 hello
 </pre>
+给结构体起别名
+<pre>
+package main
+type data struct{
+	name string
+	age int
+}
+type ddata data
+func main(){
+	data :=ddata{"nihao",34}
+	println(data.name)
+}
+output==>
+nihao 
+</pre>
