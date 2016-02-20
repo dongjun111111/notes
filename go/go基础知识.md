@@ -4579,3 +4579,25 @@ func main(){
 output==>
 nihao 
 </pre>
+数组是值类型，所以不能通过传递参数在函数内部进行修改：
+<pre>
+package main
+func modify(arr[5]int){
+	arr[1] = 5
+	println("arr[1] = ",arr[1])
+}
+func main(){
+	td :=[5]int{1,2,3,4,5}
+	modify(td)
+	for _,val := range td{
+		println(val)
+	}
+}
+output ==>
+arr[1] = 5
+1
+2
+3
+4
+5
+</pre>
