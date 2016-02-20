@@ -4613,12 +4613,12 @@ package main
 import (
 	"time"
 )
-func producer(queue chan<- int){
+func producer(queue chan<- int){    //只能写
 	for i:=0;i<10;i++{
 		queue <- i
 	}
 }
-func consumer(queue <- chan int){
+func consumer(queue <- chan int){	//只能读
 	for i:=0;i<10;i++{
 		v :=<- queue
 		println("rceive:",v)
