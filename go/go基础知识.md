@@ -5000,3 +5000,29 @@ func main(){
 output ==>
 2
 </pre>
+字节切片比较函数
+
+- func Compare(a, b[]byte) int : 返回整数：1, 0 ,-1 
+- func Equal(a, b []byte) bool: 返回true or false 
+- func EqualFold(a, b []byte) bool : 忽略大小写：返回 true or false
+<pre>
+package main
+import (
+    "bytes"
+    "fmt"
+)
+func main() {
+    a := []byte("abc")
+    b := []byte("ABC")
+    s := []byte("GOLANG")
+    t := []byte("golang")
+
+    fmt.Println(bytes.Compare(a, b))
+    fmt.Println(bytes.Equal(a, b))
+    fmt.Println(bytes.EqualFold(s, t))
+}
+输出为：
+1
+false
+true
+</pre>
