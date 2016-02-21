@@ -4949,5 +4949,38 @@ test jason
 </pre>
 对于大文件来说，逐行读取很方便，性能可能慢一些，但是仅占用极少的内存空间：
 <pre>
+package main
 
+import (
+	"io"
+	"bufio"
+	"os"
+)
+func processline(line []byte){
+	os.Stdout.Write(line)
+}
+func readline(filepath string,hookfn func([]byte)) error{
+	f,err :=os.Open(filepath)
+	if err != nil{
+		return err
+	}
+	defer f.Close()
+	bfrd :=bufio.NewReader(f)
+	for{
+		line,err :=bfrd.ReadBytes('\n')
+		hookfn(line)
+		if err != nil{
+			if err == io.EOF{
+				return nil
+			}
+			return err
+		}
+	}
+	return nil
+}
+func main(){
+	readline("test.txt",processline)
+}
+output ==>
+test jason
 </pre>
