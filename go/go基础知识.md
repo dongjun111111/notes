@@ -4806,3 +4806,8 @@ func main(){
 output ==>
 2016-02-21 16:56:40.4286884 +0800 CST
 </pre>
+go语言的int转换成string有3种方法：
+
+- 1、int32位，strconv.Itoa
+- 2、大于32位，strconv.FormatInt()
+- 3、万恶的fmt.Sprintf...好吧，这个我在php里是经常用来做格式化
