@@ -4678,3 +4678,29 @@ output==>
 receive: one
 receive: two
 </pre>
+<pre>
+package main
+func main(){
+	data :=make(chan int)     
+	exit :=make(chan bool)  
+	go func(){    
+		for d:=range data{  //从队列接收数据，直到close
+			println(d)
+		}
+		println("recv over")
+		exit<-true	//发出退出通知
+	}()
+	data <- 1		//发送数据
+	data <- 2
+	data <- 3
+	close(data)		//关闭队列
+	println("send over")
+	<-exit
+}
+output==>
+1
+2
+3
+send over
+recv over
+</pre>
