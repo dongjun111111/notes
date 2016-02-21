@@ -4984,3 +4984,19 @@ func main(){
 output ==>
 test jason
 </pre>
+func Count(s, sep []byte) int 计算子字节切片 sep 在字节切片 s 中出现的非重叠实例的数量。
+<pre>
+package main
+
+import (
+	"bytes"
+	"fmt"
+)
+func main(){
+	s :=[]byte("banana")
+	sep1 :=[]byte("an")
+	fmt.Println(bytes.Count(s,sep1))
+}
+output ==>
+2
+</pre>
