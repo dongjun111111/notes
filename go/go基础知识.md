@@ -4881,3 +4881,7 @@ output ==>
 Md5:202cb962ac59075b964b07152d234b70
 Sha1:40bd001563085fc35165329ea1ff5c5ecbdbbeef
 </pre>
+golang 中的json注意点
+<br><b>
+在使用json时，golang有一个大坑，非常非常大的坑，初学者很容易栽，那就是你定义的struct，如果某个字段需要被encoding到json的数据中，那这个字段必须是可导出的，也就是说，必须以大写字母开头！类似的情况也经常发生在”html/template”中，初学者务必小心。
+</b>
