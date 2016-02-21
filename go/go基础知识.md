@@ -4746,3 +4746,15 @@ output ==>
 0 0 
 3 3 
 </pre>
+时间格式化
+<pre>
+package main
+import (
+	"time"
+)
+func main(){
+	println(time.Now().Format("2006-01-02 15:04:05"))  //time.Now().Format("2006-01-02 15:04:05")格式化时间的标准格式,只能是这个时间
+}
+output ==>
+2016-02-21 15:53:09   //当前时间
+</pre>
