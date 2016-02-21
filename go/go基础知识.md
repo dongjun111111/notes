@@ -4852,3 +4852,32 @@ Golang简单写文件操作的四种方法
  w.Flush()
  f.Close()
 </pre>
+sha1与md5加密
+<pre>
+package main
+
+import (
+	"crypto/sha1"
+	"fmt"
+	"io"
+	"crypto/md5"
+)
+func md5t(data string) string{
+	t :=md5.New()
+	io.WriteString(t,data) //使用 io.WriteString 写入文件|字符串
+	return fmt.Sprintf("%x",t.Sum(nil)) //Sprintf(格式化)将int转成string
+}
+func sha1t(data string) string{
+	t :=sha1.New()
+	io.WriteString(t,data)
+	return fmt.Sprintf("%x",t.Sum(nil))
+}
+func main(){
+	var data string = "123"
+	fmt.Printf("Md5:%s\n",md5t(data))
+	fmt.Printf("Sha1:%s\n",sha1t(data))
+}
+output ==>
+Md5:202cb962ac59075b964b07152d234b70
+Sha1:40bd001563085fc35165329ea1ff5c5ecbdbbeef
+</pre>
