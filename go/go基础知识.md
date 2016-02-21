@@ -4885,3 +4885,69 @@ golang 中的json注意点
 <br><b>
 在使用json时，golang有一个大坑，非常非常大的坑，初学者很容易栽，那就是你定义的struct，如果某个字段需要被encoding到json的数据中，那这个字段必须是可导出的，也就是说，必须以大写字母开头！类似的情况也经常发生在”html/template”中，初学者务必小心。
 </b>
+###Golang读取文件
+对于小文件，一次性读取：
+<pre>
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"os"
+)
+func readall(filepath string)([]byte,error){
+	f,err :=os.Open(filepath)
+	if err != nil{
+		return nil,err
+	}
+	return ioutil.ReadAll(f)
+}
+func main(){
+	d,_ :=readall("test.txt")
+	fmt.Printf("%s",d)     
+}
+output ==>
+test jason
+</pre>
+对于一般性文件，则是分块读取，可在速度和内存占用之间取得很好的平衡：
+<pre>
+package main
+
+import (
+	"io"
+	"bufio"
+	"os"
+)
+func processblock(line []byte){
+	os.Stdout.Write(line)
+}
+func readblock(filepath string,bufsize int,hookfn func([]byte)) error{
+	f ,err :=os.Open(filepath)
+	if err != nil{
+		return err
+	}
+	defer f.Close()
+	buf :=make([]byte,bufsize) //规定一次读取多少字节
+	bfrd :=bufio.NewReader(f)
+	for {
+		n ,err :=bfrd.Read(buf)
+		hookfn(buf[:n]) // n是成功读取字节数
+		if err != nil{ //遇到任何错误立即返回，并忽略 EOF 错误信息
+			if err == io.EOF { 
+				return nil
+			}
+			return err
+		}
+	}
+	return nil
+}
+func main(){
+	readblock("test.txt",1000,processblock)
+}
+output ==>
+test jason
+</pre>
+对于大文件来说，逐行读取很方便，性能可能慢一些，但是仅占用极少的内存空间：
+<pre>
+
+</pre>
