@@ -4758,3 +4758,26 @@ func main(){
 output ==>
 2016-02-21 15:53:09   //当前时间
 </pre>
+<pre>
+package main
+/*将通道作为变量形式进行赋值与输出,区别在于要有 "<-" */
+import (
+	"math/rand"
+)
+func test()chan int{
+	c :=make(chan int)
+	go func() {
+		c <- rand.Int()     //c<- 写入值
+	}()
+	return c
+}
+func main(){
+	t:= test()
+	println(<-t)    //<-t 读取值
+/*
+等价于上面的
+    t:=<-test()
+	println(t)
+*/
+}
+</pre>
