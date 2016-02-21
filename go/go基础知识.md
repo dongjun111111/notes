@@ -5045,3 +5045,35 @@ output==>
 true 
 false
 </pre>
+func Join(s [][]byte, sep []byte) []byte<br>
+用字节切片 sep 吧 s中的每个字节切片连接成一个，并且返回
+<pre>
+package main
+import (
+    "bytes"
+    "fmt"
+)
+func main() {
+    // 字节切片 的每个元素，依旧是字节切片。
+    s := [][]byte{
+        []byte("你好"),
+        []byte("世界"),  //这里的逗号，必不可少
+    }
+    sep := []byte(",")
+    fmt.Println(string(bytes.Join(s, sep)))
+
+    var a = []int{1,
+        2,
+        3,
+        5,  //这里的逗号，也必不可少
+    }
+    fmt.Println(a)
+
+    var b = []int{1, 2, 3, 4, 5}  //这里最后一个元素不需要逗号
+    fmt.Println(b)
+}
+output==>
+你好,世界
+[1 2 3 5]
+[1 2 3 4 5]
+</pre>
