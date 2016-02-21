@@ -4704,3 +4704,29 @@ output==>
 send over
 recv over
 </pre>
+<pre>
+package main
+func main(){
+	data := make(chan int ,3)  // 缓冲区可以存储 3 个元素
+	exit := make(chan bool)
+	data <- 1					// 在缓冲区未满前，不会阻塞。(这里只能存入缓冲区允许的数量)
+	data <- 2					//这里如果传入数据大于3个，则报错
+	data <- 3
+	go func(){
+		for d :=range data{
+			println(d)
+		}
+		exit <- true
+	}()
+	data <- 4
+	data <- 5
+	close(data)
+	<- exit 
+}
+output ==>
+1
+2
+3
+4
+5
+</pre>
