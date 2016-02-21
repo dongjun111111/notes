@@ -4730,3 +4730,19 @@ output ==>
 4
 5
 </pre>
+<pre>
+package main
+func main(){
+	d1 :=make(chan int)
+	d2 :=make(chan int,3)
+	d2 <- 1
+	d2 <- 2
+	d2 <- 3
+	//d2 <- 4 缓冲区数量超出允许的数值，报错
+	println(len(d1),cap(d1))
+	println(len(d2),cap(d2))
+}
+output ==>
+0 0 
+3 3 
+</pre>
