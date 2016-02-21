@@ -5026,3 +5026,22 @@ func main() {
 false
 true
 </pre>
+<pre>
+package main
+/*func Contains(b, subslice [] byte) bool 
+检查字节切片 b ，是否包含子字节切片.检查是否存在某个字节 */
+import (
+	"bytes"
+	"fmt"
+)
+func main(){
+	b :=[]byte("golang")
+	subslice1 :=[]byte("go")
+	subslice2 :=[]byte("Go")
+	fmt.Println(bytes.Contains(b,subslice1))
+	fmt.Println(bytes.Contains(b,subslice2))
+}
+output==>
+true 
+false
+</pre>
