@@ -5150,3 +5150,31 @@ func main() {
     fmt.Println(x) //prints [7 2 3]
 }
 </pre>
+####试图访问不存在的 Map 键值
+并不能在所有情况下都能通过判断 map 的记录值是不是 nil 判断记录是否存在。在 Go 语言中，对于“零值”是 nil 的数据类型可以这样判断，但是其他的数据类型不可以。简而言之，这种做法并不可靠（例如布尔变量的“零值”是 false）。最可靠的做法是检查 map 记录的第二返回值。
+<pre>
+//错误代码
+package main
+
+import "fmt"
+
+func main() {  
+    x := map[string]string{"one":"a","two":"","three":"c"}
+
+    if v := x["two"]; v == "" { //incorrect
+        fmt.Println("no entry")
+    }
+}
+//修正代码
+package main
+
+import "fmt"
+
+func main() {  
+    x := map[string]string{"one":"a","two":"","three":"c"}
+
+    if _,ok := x["two"]; !ok {
+        fmt.Println("no entry")
+    }
+}
+</pre>
