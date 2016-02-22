@@ -2596,3 +2596,7 @@ echo "<br>";
 echo "数字个数:".count($arrNum[0])."<br/>";  
 echo "字母个数:".count($arrAl[0])."<br/>";
 echo "/个数:".count($speNum[0]);
+
++++++array_merge()注意事项+++
+$arr=array_merge($arr1,$arr2);
+$arr1或者$arr2其中一个是空，则$arr必定是空的!!!!!
