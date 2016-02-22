@@ -8062,3 +8062,27 @@ function listdir($dir){
   }
 }
 listdir("./phpqrcode");
+
+
+
+++++++计算多长时间之前方法++++++
+/*多少时间前*/
+    public function form_time($time,$str){
+        isset($str)?$str:$str='m-d';
+        $way = time() - $time;
+        $r = '';
+        if($way < 60 && $way > 0){
+            $r = '刚刚';
+        }elseif($way >= 60 && $way <3600){
+            $r = floor($way/60).'分钟前';
+        }elseif($way >=3600 && $way <86400){
+            $r = floor($way/3600).'小时前';
+        }elseif($way >=86400 && $way <2592000){
+            $r = floor($way/86400).'天前';
+        }elseif($way >=2592000 && $way <15552000){
+            $r = floor($way/2592000).'个月前';
+        }else{
+            $r = date("$str",$time);  //例如：$str = Y-m-d H:i:s
+        }
+        return $r;
+    }
