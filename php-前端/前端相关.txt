@@ -6587,6 +6587,7 @@ function completeLoading() {
 
 
 ++marquee无缝滚动++++
+循环输出，遍历内容
 <marquee behavior="scroll" contenteditable="true" onstart="this.firstChild.innerHTML+=this.firstChild.innerHTML;" scrollamount="3" width="100" onmouseover="this.stop();" onmouseout="this.start();"> 
 这里是要滚动的内容 
 </marquee>
