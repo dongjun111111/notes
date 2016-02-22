@@ -5111,3 +5111,18 @@ package main
 	    one,two = two,one
 	}
 </pre>
+####除非特别指定，否则无法使用 nil 对变量赋值
+nil 可以用作 interface、function、pointer、map、slice 和 channel 的“空值”。但是如果不特别指定的话，Go 语言不能识别类型，所以会报错。
+<pre>
+package main
+func main() {  
+    var x = nil //error
+    _ = x
+}
+//下面的正确
+package main
+func main() {  
+    var x interface{} = nil
+    _ = x
+}
+</pre>
