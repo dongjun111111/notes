@@ -8086,3 +8086,12 @@ listdir("./phpqrcode");
         }
         return $r;
     }
+类似的方法：
+function timeago($time,$unit='前'){
+  $ago = time()-$time;
+  if($ago<=3*60) $str = '刚刚';
+  elseif($ago<3600) $str = intval($ago/60).'分钟'.$unit;
+  elseif($ago<24*3600) $str = intval($ago/3600).'小时'.$unit;
+  else $str = intval($ago/(24*3600)).'天'.$unit;
+  return $str;
+}
