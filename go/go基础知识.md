@@ -5135,3 +5135,18 @@ func main() {
     cap(m) //error
 }
 </pre>
+####Go语言中，传递的数组不是内存地址，而是原数组的拷贝
+所以是无法通过传递数组的方法去修改原地址的数据的。
+如果需要修改原数组的数据，需要使用数组指针（array pointer）。
+<pre>
+package main
+import "fmt"
+func main() {  
+    x := [3]int{1,2,3}
+    func(arr *[3]int) {
+        (*arr)[0] = 7
+        fmt.Println(arr) //prints &[7 2 3]
+    }(&x)
+    fmt.Println(x) //prints [7 2 3]
+}
+</pre>
