@@ -5219,3 +5219,34 @@ func main() {
 }
 //如果需要在 UTF8 类型的 String 中取出指定字符，那么需要用到 unicode/utf8 与实验性的 utf8string 包。utf8string 包包含 AT() 方法，可以取出字符，也可以将 String 转换为 Rune SLice。
 </pre>
+####String并不一定是UTF8格式
+String 类型不一定是 UTF8 格式，String 中也可以包含自定义的文字/字节。只有需要将字符串显示出来的时候才需要用 UTF8 格式，其他情况下可以随便用转义来表示任意字符。<br>
+可以使用 unicode/utf8 包中体重的 ValidString() 方法判断是否是 UTF8 类型的文本。
+<pre>
+package main
+
+import (  
+    "fmt"
+    "unicode/utf8"
+)
+
+func main() {  
+    data1 := "ABC"
+    fmt.Println(utf8.ValidString(data1)) //prints: true
+
+    data2 := "A\xfeC"
+    fmt.Println(utf8.ValidString(data2)) //prints: false
+}
+</pre>
+####log.Fatal 与 log.Panic 在后台悄悄做了一些事情
+日志库提供了不同级别的日志记录，如果使用 Fatal 和 Panic 级别的日志，那么记录完这条日志后，应用程序便会退出而不会继续执行。
+<pre>
+package main
+
+import "log"
+
+func main() {  
+    log.Fatalln("Fatal Level: log entry") //app exits here
+    log.Println("Normal Level: log entry")
+}
+</pre>
