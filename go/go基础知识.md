@@ -5126,3 +5126,12 @@ func main() {
     _ = x
 }
 </pre>
+####Map是定长的
+创建 Map 的时候可以指定 Map 的长度，但是在运行时是无法使用 cap() 功能重新指定 Map 的大小，Map 是定长的。
+<pre>
+package main
+func main() {  
+    m := make(map[string]int,99)
+    cap(m) //error
+}
+</pre>
