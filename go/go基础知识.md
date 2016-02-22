@@ -5091,3 +5091,23 @@ func main(){
 output==>
 1
 </pre>
+<pre>
+package main
+	myvar := 1 //error只能在函数内部使用简短的变量声明
+	func main() {  
+}
+</pre>
+<pre>
+package main
+	func main() {  
+	    one := 0
+	    one := 1 //error无法使用精简的赋值语句对变量重新赋值
+	}
+//下面的正确
+	package main
+	func main() {  
+	    one := 0
+	    one, two := 1,2
+	    one,two = two,one
+	}
+</pre>
