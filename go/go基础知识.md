@@ -5178,3 +5178,44 @@ func main() {
     }
 }
 </pre>
+####String不可变
+对于 String 中单个字符的操作会导致编译失败。String 是带有一些附加属性的只读的字节片（Byte Slices）。所以如果想要对 String 操作的话，应当使用字节片操作，而不是将它转换为 String 类型。
+<pre>
+//错误代码
+package main
+
+import "fmt"
+
+func main() {  
+    x := "text"
+    x[0] = 'T'
+
+    fmt.Println(x)
+}
+//修改代码
+package main
+
+import "fmt"
+
+func main() {  
+    x := "text"
+    xbytes := []byte(x)
+    xbytes[0] = 'T'
+
+    fmt.Println(string(xbytes)) //prints Text
+}
+</pre>
+####String 与下标
+和其他语言不同，String 的下表返回值是 Byte 类型的值，而不是字符类型。
+<pre>
+package main
+
+import "fmt"
+
+func main() {  
+    x := "text"
+    fmt.Println(x[0]) //print 116
+    fmt.Printf("%T",x[0]) //prints uint8
+}
+//如果需要在 UTF8 类型的 String 中取出指定字符，那么需要用到 unicode/utf8 与实验性的 utf8string 包。utf8string 包包含 AT() 方法，可以取出字符，也可以将 String 转换为 Rune SLice。
+</pre>
