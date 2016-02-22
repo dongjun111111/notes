@@ -5077,3 +5077,17 @@ output==>
 [1 2 3 5]
 [1 2 3 4 5]
 </pre>
+<pre>
+package main
+type vertex struct {
+	x int
+	y int
+}
+func main(){
+	p:=vertex{1,2}
+	q :=&p.x
+	println(*q)
+}
+output==>
+1
+</pre>
