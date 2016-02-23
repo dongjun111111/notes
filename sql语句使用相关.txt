@@ -562,3 +562,5 @@ update `ks_menu` set url=replace(url,'Tbadmin','Admindj')    //将Tbadmin替换成Ad
 +++sql函数的使用注意点+++++
 在使用sql函数处理字段时候，一般情况下都要将处理的字段 as 一下。例子如下： 
 $result=mysql_query("select id,rank,ucase(name) as name,type from ks_zhiding ");
+mid(字段名,起始位置(从1开始),截取长度)
+$result=mysql_query("select id,rank,mid(name,2,1) as name,type from ks_zhiding ");
