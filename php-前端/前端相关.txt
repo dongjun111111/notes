@@ -7152,3 +7152,7 @@ $("#product_pic").attr("src","../Attachments/product/"+product.attachpath+"/"+pr
 $("#product_subject").html(product.subject);
 $("#product_content").html(product.content);
 }
+
+
+++++colspan+++++
+colspan 属性规定单元格可横跨的列数。
