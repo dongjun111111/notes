@@ -564,3 +564,11 @@ update `ks_menu` set url=replace(url,'Tbadmin','Admindj')    //将Tbadmin替换成Ad
 $result=mysql_query("select id,rank,ucase(name) as name,type from ks_zhiding ");
 mid(字段名,起始位置(从1开始),截取长度)
 $result=mysql_query("select id,rank,mid(name,2,1) as name,type from ks_zhiding ");
+length（）   //返回字段长度
+$result=mysql_query("select id,rank,length(name) as name,type from ks_zhiding ");
+round(字段名,0) 对字段进行类似四舍五入的处理。
+$result=mysql_query("select id,rank,name,round(type,0) as type from ks_zhiding ");
+floor(字段名) 向下取整
+$result=mysql_query("select id,rank,name,floor(type) as type from ks_zhiding ");
+ceil（字段名）下上取整
+$result=mysql_query("select id,rank,name,ceil(type) as type from ks_zhiding ");
