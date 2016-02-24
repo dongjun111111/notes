@@ -5250,3 +5250,43 @@ func main() {
     log.Println("Normal Level: log entry")
 }
 </pre>
+go http
+<pre>
+package main
+
+import (
+	"io"
+	"log"
+	"net/http"
+)
+func main(){
+	mux := http.NewServeMux()
+	mux.Handle("/",&myHandler{})
+	err :=http.ListenAndServe(":8089",mux)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+type myHandler struct{}
+func (*myHandler) ServeHTTP(w http.ResponseWriter,r *http.Request){
+	io.WriteString(w, r.URL.String())
+}
+/*package main
+
+import (
+	"io"
+	"log"
+	"net/http"
+)
+func main(){
+	http.HandleFunc("/",sayhello)
+	err :=http.ListenAndServe(":8088",nil)
+	if err !=nil{
+		log.Fatal(err)
+	}
+}
+func sayhello(w http.ResponseWriter,r *http.Request){
+	io.WriteString(w,"hello world,this is version 1.")
+}
+*/
+</pre>
