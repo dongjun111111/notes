@@ -2621,3 +2621,10 @@ $_SESSION['user'] = 'lowell';
 session_unset();
 session_destroy(); 
 ?>
+
+++++strrchr函数++++++
+实际上，这个函数是查找某个字符，而不是查找字符串，应该参考官方文档.
+$a = 'abcdef.txt';
+$b = '.php';
+echo strrchr($a, $b);
+上面的代码输出是：.txt
