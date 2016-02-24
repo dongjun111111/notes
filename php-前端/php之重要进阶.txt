@@ -8095,3 +8095,53 @@ function timeago($time,$unit='前'){
   else $str = intval($ago/(24*3600)).'天'.$unit;
   return $str;
 }
+
+
+++++面对对象-__get ;__set访问对象属性,方法+++++
+第一种：
+class person{
+  public $name;
+  public $age;
+  public $sex;
+  public function __construct($name,$age,$sex){
+    $this->age=$age;
+    $this->name =$name;
+    $this->sex=$sex;
+  }
+  public function say(){
+    echo '姓名：'.$this->name.',年龄：'.$this->age.',性别：'.$this->sex;
+  }
+}
+$newperson=new person();
+$newperson->name="jason";
+$newperson->age =34;
+$newperson->sex = "male";
+$newperson->say();
+
+第二种，比第一种好：
+class person{
+  private $name;
+  private $age;
+  private $sex;
+  private function __get($ppname){
+  //在直接获取私有属性值的时候，自动调用了这个__get()方法
+    return $this->$ppname;
+  }
+  private  function __set($ppname,$value){
+  //在直接设置私有属性值的时候，自动调用了这个__set()方法为私有属性赋值
+    $this->$ppname =$value;
+  }
+  function say(){
+    echo "<br>姓名：".$this->name.'<br>';
+    echo "性别：".$this->sex.'<br>';
+    echo "年龄：".$this->age.'<br>';
+  }
+}
+$pe=new person();
+$pe->name = "jason";
+$pe->age =55;
+$pe->sex='male';
+echo $pe->name;
+echo $pe->age;
+echo $pe->sex;
+$pe->say();
