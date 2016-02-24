@@ -5533,6 +5533,24 @@ func main() {
     time.Sleep(1000000000)
     p.Signal(os.Kill)
     os.Exit(10)
-
+}
+</pre>
+net/http包
+<pre>
+package main
+//http客户端 
+import (
+	"io/ioutil"
+	"net/http"
+	"fmt"
+)
+func main(){
+	response,err :=http.Get("http://baidu.com")
+	if err !=nil {
+		println(err)
+	}
+	defer response.Body.Close() //使用完成后关闭
+    body,_ := ioutil.ReadAll(response.Body) 
+    fmt.Println(string(body)) 
 }
 </pre>
