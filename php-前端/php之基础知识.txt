@@ -2607,3 +2607,17 @@ print_r($result);
 +++++array_merge()注意事项+++
 $arr=array_merge($arr1,$arr2);
 $arr1或者$arr2其中一个是空，则$arr必定是空的!!!!!
+
++++session的注意点+++
+session_unset()：
+释放当前在内存中已经创建的所有$_SESSION变量，但不删除session文件以及不释放对应的session id;
+session_destroy()：
+删除当前用户对应的session文件以及释放session id，内存中的$_SESSION变量内容依然保留;
+unset($_SESSION["aa"])：
+删除指定的session;
+因此，释放用户的session所有资源，需要顺序执行如下代码：
+<?php
+$_SESSION['user'] = 'lowell';
+session_unset();
+session_destroy(); 
+?>
