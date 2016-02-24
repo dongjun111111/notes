@@ -2597,6 +2597,13 @@ echo "数字个数:".count($arrNum[0])."<br/>";
 echo "字母个数:".count($arrAl[0])."<br/>";
 echo "/个数:".count($speNum[0]);
 
+++array_intersect()+++
+返回两个数组的交集：
+$a1=array("a"=>"red","b"=>"green","c"=>"blue","d"=>"yellow");
+$a2=array("e"=>"red","f"=>"green","g"=>"blue");
+$result=array_intersect($a1,$a2);
+print_r($result);
+
 +++++array_merge()注意事项+++
 $arr=array_merge($arr1,$arr2);
 $arr1或者$arr2其中一个是空，则$arr必定是空的!!!!!
