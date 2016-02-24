@@ -5290,3 +5290,18 @@ func sayhello(w http.ResponseWriter,r *http.Request){
 }
 */
 </pre>
+os包
+<pre>
+package main
+
+import (
+	"os"
+	"fmt"
+)
+func main(){
+	var goos string = os.Getenv("GOOS") //操作系统类型
+	fmt.Printf("the operating system is :%s \n",goos)
+	path := os.Getenv("PATH") //环境变量
+	fmt.Printf("Path is %s\n",path)
+}
+</pre>
