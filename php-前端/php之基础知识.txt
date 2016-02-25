@@ -2628,3 +2628,9 @@ $a = 'abcdef.txt';
 $b = '.php';
 echo strrchr($a, $b);
 上面的代码输出是：.txt
+
+
+++++explode 分开，将字符串打散成数组，根据标识符来打散++++
+$str="233 5 56 67 67  67 55 5656";
+$arr=explode(" ",$str);
+var_dump($arr);
