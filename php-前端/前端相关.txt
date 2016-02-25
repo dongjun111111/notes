@@ -7177,3 +7177,23 @@ encodeURI()是Javascript中真正用来对URL编码的函数。
 最后一个Javascript编码函数是encodeURIComponent()。与encodeURI()的区别是，它用于对URL的组成部分进行个别编码，而不用于对整个URL进行编码。
 因此，"; / ? : @ & = + $ , #"，这些在encodeURI()中不被编码的符号，在encodeURIComponent()中统统会被编码。至于具体的编码方法，两者是一样。
 它对应的解码函数是decodeURIComponent()。
+
+
+++++添加到收藏夹+++
+将网站添加到收藏。
+<a onclick="AddFavorite('百度','http://www.baidu.com')" href="javascript:void(0)">收藏</a>
+<script>
+function AddFavorite(title, url) {
+  try {
+      window.external.addFavorite(url, title);
+  }
+catch (e) {
+     try {
+       window.sidebar.addPanel(title, url, "");
+    }
+     catch (e) {
+         alert("抱歉，您所使用的浏览器无法完成此操作。\n\n加入收藏失败，请使用Ctrl+D进行添加");
+     }
+  }
+}
+</script>
