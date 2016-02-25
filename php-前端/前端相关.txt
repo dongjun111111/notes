@@ -7156,3 +7156,14 @@ $("#product_content").html(product.content);
 
 ++++colspan+++++
 colspan 属性规定单元格可横跨的列数。
+
+++++++js判断undefined类型++++++
+    if (reValue== undefined){
+    alert("undefined");
+    }
+  发现判断不出来，最后查了下资料要用typeof
+方法：
+if (typeof(reValue) == "undefined") { 
+   alert("undefined"); 
+}  
+typeof 返回的是字符串，有六种可能："number"、"string"、"boolean"、"object"、"function"、"undefined"
