@@ -2634,3 +2634,16 @@ echo strrchr($a, $b);
 $str="233 5 56 67 67  67 55 5656";
 $arr=explode(" ",$str);
 var_dump($arr);
+
++++""与0++++
+PHP坑。空竟然与0相等。
+$s1="";
+$s2=0;
+if($s1 == $s2){
+  echo "yes<br>";
+}
+if($s1 === $s2){
+  echo "YES";
+}else{
+  echo "NO";
+}
