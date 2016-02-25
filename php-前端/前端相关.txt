@@ -7167,3 +7167,13 @@ if (typeof(reValue) == "undefined") {
    alert("undefined"); 
 }  
 typeof 返回的是字符串，有六种可能："number"、"string"、"boolean"、"object"、"function"、"undefined"
+
+
+++encodeURI与encodeURIComponent++++++
+encodeURI()是Javascript中真正用来对URL编码的函数。
+它着眼于对整个URL进行编码，因此除了常见的符号以外，对其他一些在网址中有特殊含义的符号
+"; / ? : @ & = + $ , #"，也不进行编码。编码后，它输出符号的utf-8形式，
+并且在每个字节前加上%。它对应的解码函数是decodeURI()。
+最后一个Javascript编码函数是encodeURIComponent()。与encodeURI()的区别是，它用于对URL的组成部分进行个别编码，而不用于对整个URL进行编码。
+因此，"; / ? : @ & = + $ , #"，这些在encodeURI()中不被编码的符号，在encodeURIComponent()中统统会被编码。至于具体的编码方法，两者是一样。
+它对应的解码函数是decodeURIComponent()。
