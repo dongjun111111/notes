@@ -1294,3 +1294,8 @@ $result=M("News")->add(array('name'=>'WBlog','content'=>'WBlog博客管理系统'));
 ++控制器使用模板的方法+++
  $arr[0] = D('Common/Data')->getProdData($dtype,$btime,$etime);   
             模板简称 方法名
+
+
+++++<if>标签的注意点++++++
+遇到一个<if>标签的坑，特别记录一下：（里面是数组中的某个键值比较尽量用[]形式列出！）
+<if condition="$vo.mid eq $vo.id"> <===> <if condition="$vo['mid'] eq $vo['id']">这样就可以了！
