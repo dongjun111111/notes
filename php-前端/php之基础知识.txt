@@ -2665,3 +2665,13 @@ else{
 return $cip;
 }
 echo GetIP();
+
+
++++判断字符串中是否存在某个字符串++++
+strchr判断第一次出现，成功则返回字符串本身：
+不能写成strchr($bk,"act_") == "act_"来判断：
+if(strchr($bk,"act_")){
+     $final_bk = "act_supei"; 
+ }else{
+     $final_bk = $bk."-"."act_supei";
+}
