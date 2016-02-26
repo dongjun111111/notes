@@ -2675,3 +2675,17 @@ if(strchr($bk,"act_")){
  }else{
      $final_bk = $bk."-"."act_supei";
 }
+
+
++++二维数组排序，根据某个键值对二维数组进行排序+++++
+$array[] = array('id'=>1,'price'=>50);
+$array[] = array('id'=>2,'price'=>70);
+$array[] = array('id'=>3,'price'=>30);
+$array[] = array('id'=>4,'price'=>20);
+foreach ($array as $key=>$value){
+    $price[$key] = $value['price'];
+}
+array_multisort($price,SORT_NUMERIC,SORT_DESC,$array);
+echo '<pre>';
+print_r($array);
+echo '</pre>';
