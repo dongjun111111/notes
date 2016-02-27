@@ -5561,3 +5561,43 @@ c <- true<br>
 执行后，在同一个时间片里仍然继续执行了接下来的fmt.Println("go end").
 之后调度器才切换到另一个goroutine，所以每次都打印了 go end。<br>
 如果调度器让一个时间片缩短到只进行一个原子操作，那样才接近真并行，但太影响效率了，这中间只能有一个取舍。
+###阻塞等待所有goroutines都完成
+<pre>
+package main
+
+import (
+	"time"
+	"fmt"
+	"runtime"
+	"sync"
+)
+var wg sync.WaitGroup //定义一个同步等待的组
+func main(){
+	maxProcs :=runtime.NumCPU() //获取CPU个数
+	runtime.GOMAXPROCS(maxProcs)//限制同时运行的goroutines数量
+	for i :=0;i <10;i++{
+		wg.Add(1) //为同步等待组增加一个成员
+		go Printer(i) //并发一个goroutine
+	}
+	wg.Wait() //阻塞等待所有组内成员都执行完毕退栈
+	fmt.Println("We Done")
+}
+//定义一个函数用于并发
+func Printer(a int)(){
+	time.Sleep(2000 * time.Millisecond)
+	fmt.Printf("i am %d\n",a)
+	defer wg.Done()
+}
+output==>
+i am 0
+i am 5
+i am 1
+i am 9
+i am 8
+i am 2
+i am 7
+i am 3
+i am 4
+i am 6
+We Done
+</pre>
