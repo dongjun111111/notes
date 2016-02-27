@@ -5783,3 +5783,18 @@ output==>
 3
 2
 </pre>
+####信道数据读取和信道关闭
+信道数据的读取不可用range循环出来。原因是range不等到信道关闭是不会结束读取的。也就是如果 缓冲信道干涸了，那么range就会阻塞当前goroutine, 所以死锁。
+<pre>
+package main
+funcm main(){
+	ch :=make(chan int ,3)
+	ch <- 1
+	ch <- 4
+	ch <- 3
+	for v :=range ch {
+		println(v)
+	}
+}
+报错，range不等到信道关闭不会结束读取，导致出现死锁
+</pre>
