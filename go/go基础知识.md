@@ -5703,4 +5703,16 @@ Done!!!
 所以，你可以测试下，无论如何，我们测试到的无缓冲信道的大小都是0 (len(channel))<br>
 如果信道正有数据在流动，我们还要加入数据，或者信道干涩，我们一直向无数据流入的空信道取数据呢？ 就会引起死锁。你会看到下面的报错内容：<br>
 fatal error: all goroutines are asleep - deadlock!<br>
-何谓死锁? 操作系统有讲过的，所有的线程或进程都在等待资源的释放。如上的程序中, 只有一个goroutine, 所以当你向里面加数据或者存数据的话，都会锁死信道， 并且阻塞当前 goroutine, 也就是所有的goroutine(其实就main线一个)都在等待信道的开放(没人拿走数据信道是不会开放的)，也就是死锁咯。
+何谓死锁? 操作系统有讲过的，所有的线程或进程都在等待资源的释放。如上的程序中, 只有一个goroutine, 所以当你向里面加数据或者存数据的话，都会锁死信道， 并且阻塞当前 goroutine, 也就是所有的goroutine(其实就main线一个)都在等待信道的开放(没人拿走数据信道是不会开放的)，也就是死锁咯。<br>
+一个死锁的案例
+<pre>
+package main
+import (
+	"fmt"
+)
+func main(){
+	ch :=make(chan int)
+	ch <- 1 //1流入信道，堵塞当前线, 没人取走数据信道不会打开,造成死锁
+	fmt.Println("this line code won`t run")
+}
+</pre>
