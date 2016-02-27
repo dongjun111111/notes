@@ -5768,3 +5768,18 @@ func main(){
 	ch <- 4
 }
 </pre>
+其实，缓冲信道是先进先出的，我们可以把缓冲信道看作为一个线程安全的队列：
+<pre>
+package main
+func main(){
+	var ch chan int = make(chan int,2)
+	ch <- 3
+	ch <- 2
+	println(<- ch)  //缓冲信道先进先出
+	println(<- ch)
+	
+}
+output==>
+3
+2
+</pre>
