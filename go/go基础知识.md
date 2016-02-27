@@ -5602,3 +5602,51 @@ i am 4
 i am 6
 We Done
 </pre>
+另一种是利用channel的阻塞机制
+<pre>
+package main
+//利用channel的阻塞机制
+import (
+	"time"
+	"fmt"
+	"runtime"
+)
+var num =14  //定义共并发多少数量
+var cnum chan int
+func main(){
+	maxprocs :=runtime.NumCPU()
+	runtime.GOMAXPROCS(maxprocs)//限制同时运行的goroutines数量
+	cnum =make(chan int,num)//make一个chan,缓存为num
+	for i :=0;i<num;i++{
+		go Printer(i)
+	}
+	//利用channel的阻塞，一直从信道取数据，直到取得跟并发数一样的个数的数据，
+	//则视为所有goroutines完成
+	for i :=0;i<num;i++{
+		<- cnum
+	}
+	fmt.Println("Done!!!")
+}
+
+func Printer(a int){
+	time.Sleep(200 * time.Millisecond)
+	fmt.Printf("I am %d\n",a)
+	cnum <- 1 //goroutine结束时传送一个标示给信道。
+}
+output==>
+I am 0
+I am 1
+I am 7
+I am 13
+I am 12
+I am 11
+I am 10
+I am 9
+I am 8
+I am 4
+I am 6
+I am 5
+I am 3
+I am 2
+Done!!!
+</pre>
