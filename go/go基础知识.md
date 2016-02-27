@@ -5841,3 +5841,43 @@ output==>
 
 - 无缓冲的信道是一批数据一个一个的"流进流出".
 - 缓冲信道则是一个一个存储，然后一起流出去.
+
+
+
+####使用channel的close发送广播
+<pre>
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+func waiter(i int,block,done chan struct{} ){
+	time.Sleep(time.Duration(rand.Intn(3000)) * time.Millisecond)
+	fmt.Println(i,"waiting...")
+	<- block
+	fmt.Println(i,"done!")
+	done <- struct{}{}
+}
+func main(){
+	block,done :=make(chan struct{}),make(chan struct{})
+	for i:=0;i<4;i++{
+		go waiter(i,block,done)
+	}
+	time.Sleep(5 * time.Second)
+	close(block)
+	for i:=0;i<4;i++{
+		<- done
+	}
+}
+output==>
+3 waiting...
+2 waiting...
+1 waiting...
+0 waiting...
+3 done!
+2 done!
+1 done!
+0 done!
+</pre>
