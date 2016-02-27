@@ -5748,3 +5748,4 @@ c, quit := make(chan int), make(chan int)
 <pre>
 c := make(chan int, 1)
 </pre>
+这样的话，c可以缓存一个数据。也就是说，放入一个数据，c并不会挂起当前线, 再放一个才会挂起当前线直到第一个数据被其他goroutine取走, 也就是只阻塞在容量一定的时候，不达容量不阻塞。这十分类似Python中的队列Queue.
