@@ -6054,3 +6054,41 @@ Go语言通过goroutine提供了目前为止所有(我所了解的)语言里对�
 (7) Go语言运行库封装了异步IO，所以可以写出貌似并发数很多的服务端，可即使我们通过调整$GOMAXPROCS来充分利用多核CPU并行处理，其效率也不如我们利用IO事件驱动设计的、按照事务类型划分好合适比例的线程池。在响应时间上，协作式调度是硬伤。
 
 (8) goroutine最大的价值是其实现了并发协程和实际并行执行的线程的映射以及动态扩展，随着其运行库的不断发展和完善，其性能一定会越来越好，尤其是在CPU核数越来越多的未来，终有一天我们会为了代码的简洁和可维护性而放弃那一点点性能的差别。
+
+####runtime.Gosched的作用分析
+runtime.Gosched()用于让出CPU时间片，就像是跑接力赛，A跑了一会碰到代码runtime.Gosched()就把接力棒交给B了，A停止执行，B继续执行。
+<pre>
+package main
+
+import (
+	"runtime"
+)
+func say(s string){
+	for i:=0;i<2;i++{
+		runtime.Gosched()
+		println(s)
+		
+	}
+}
+func main(){
+	go say("world")
+	say("hello")
+}
+output==>
+hello
+world
+hello
+解析：
+注意结果：
+1、先输出了hello,后输出了world.
+2、hello输出了2个，world输出了1个（因为第2个hello输出完，主线程就退出了，第2个world没机会了）
+把代码中的runtime.Gosched()注释掉，执行结果是：
+hello
+hello
+因为say("hello")这句占用了时间，等它执行完，线程也结束了，say("world")就没有机会了。
+这里同时可以看出，go中的goroutins并不是同时在运行。事实上，如果没有在代码中通过
+runtime.GOMAXPROCS(n) 其中n是整数，
+指定使用多核的话，goroutins都是在一个线程里的，它们之间通过不停的让出时间片轮流运行，达到类似同时运行的效果。
+</pre>
+当然，要牢记一句话：<br>
+当一个goroutine发生阻塞，Go会自动地把与该goroutine处于同一系统线程的其他goroutines转移到另一个系统线程上去，以使这些goroutines不阻塞
