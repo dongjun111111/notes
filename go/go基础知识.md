@@ -6205,3 +6205,16 @@ func main() {
 }
 
 </pre>
+####Golang之iinterface
+<pre>
+package main
+func main(){
+	var s interface{} =[]string{"left","right"}
+	for _,x :=range s.([]string){
+		println(x)
+	}
+}
+output==>
+left
+right
+</pre>
