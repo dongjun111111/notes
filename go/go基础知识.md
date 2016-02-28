@@ -6272,3 +6272,23 @@ func main(){
 	}
 }
 </pre>
+重写文件
+<pre>
+package main
+
+import (
+	"os"
+)
+func main(){
+	userfile :="yes.txt"
+	fout,err :=os.Create(userfile)
+	defer fout.Close()
+	if err != nil {
+		println(userfile,err)
+		return 
+	}
+	for i := 0;i<10;i++{
+		fout.WriteString("Just a test!\r\n")
+	}
+}
+</pre>
