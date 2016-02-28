@@ -6249,3 +6249,26 @@ func main(){
 
 }
 </pre>
+读文件
+<pre>
+package main
+
+import (
+	"os"
+)
+func main(){
+	userfile :="yes.txt"
+	fin,err :=os.Open(userfile)
+	defer fin.Close()
+	if err != nil {
+		println(userfile,err)
+		return
+	}
+	buf :=make([]byte,1024)
+	for {
+		n ,_:=fin.Read(buf)
+		if 0 == n {break}
+		os.Stdout.Write(buf[:n])
+	}
+}
+</pre>
