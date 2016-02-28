@@ -6218,3 +6218,34 @@ output==>
 left
 right
 </pre>
+
+###Golang字符串
+<pre>
+package main
+import (
+	"strings"
+	"fmt"
+)
+func main(){
+	fmt.Println("是否包含：",strings.Contains("test","f")) //false
+	fmt.Println("出现字符的次数：",strings.Count("teast","t")) //1
+	fmt.Println("判断字符串首部是不是某个字符：",strings.HasPrefix("test","te")) //true
+	fmt.Println("判断字符串尾部是不是某个字符：",strings.HasSuffix("test,","rf")) //false
+	fmt.Println("查询字符串位置:",strings.Index("teast","e")) //1
+	fmt.Println(strings.LastIndex("go gopher", "go")) // 3
+	fmt.Println("字符串数组连接：",strings.Join([]string{"a","b"},"-")) //a-b
+	fmt.Println("重复一个字符串：",strings.Repeat("a",3)) //aaa
+	fmt.Println("字符串替换，若指定起始位置为0，则全部替换：",strings.Replace("foo","o","3",-1))//f33
+	fmt.Println("字符串替换 指定起始位置1:",strings.Replace("foo","o","22",1)) //f22o
+	fmt.Println("字符串切割：",strings.Split("a-b-c-d-e","-")) //[a b c d e]
+	fmt.Println("小写转换：",strings.ToLower("TEST")) //test
+	fmt.Println("大写转换：",strings.ToUpper("up")) //UP
+	fmt.Println("长度：",len("helo")) //4
+	fmt.Println("标取字符串中的字符：","hello"[1]) //101
+	fmt.Println(strings.ContainsRune("我是中国", '我')) // true  注意第二个参数，用的是字符（单引号）
+	fmt.Println(strings.EqualFold("Go", "go")) // true 大小写忽略
+	fmt.Println(strings.IndexRune("我是中国人", '中')) // 在存在返回 6
+	fmt.Println("Fields are: %q", strings.Fields(" foo bar baz ")) //["foo" "bar" "baz"] 返回一个列表
+
+}
+</pre>
