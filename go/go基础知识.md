@@ -6094,3 +6094,29 @@ runtime.GOMAXPROCS(n) 其中n是整数，
 当一个goroutine发生阻塞，Go会自动地把与该goroutine处于同一系统线程的其他goroutines转移到另一个系统线程上去，以使这些goroutines不阻塞.<br>
 并发关乎结构，并行关乎执行;并发是指同时处理很多事情,在程序设计阶段；并行是指同时能完成很多事情，在执行阶段。
 并发提供了一种方式让我们能够设计一种方案将问题(非必须的)并行的解决；同时执行(通常是相关的)计算任务的编程技术。
+
+####select
+注意到 select 的代码形式和 switch 非常相似， 不过 select 的 case 里的操作语句只能是【IO 操作】.<br>
+此示例里面 select 会一直等待等到某个 case 语句完成， 也就是等到成功从 ch1 或者 ch2 中读到数据。 则 select 语句结束。<br>
+【使用 select 实现 timeout 机制】
+<pre>
+package main
+import (
+	"time"
+)
+func main(){
+	timeout := make(chan bool,1)
+	var ch  chan int=make(chan int)
+	go func(){
+		ch <- 5 
+		time.Sleep(1e9)
+		timeout <- true
+	}()
+	select {
+		case <- ch :
+		println("收到数据")
+		case <-timeout:
+		println("timeout!")
+	}
+}
+</pre>
