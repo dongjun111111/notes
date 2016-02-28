@@ -6123,3 +6123,53 @@ func main(){
 
 ###Golang中的单引号
 golang里单引号只能有一个字符，如果输出会返回这个字符的ascii码 ，如果想输出为字符需要用string()函数转换一下。
+
+
+###Golang之cond锁定期唤醒锁
+cond的主要作用就是获取锁之后，wait()方法会等待一个通知，来进行下一步锁释放等操作，以此控制锁合适释放，释放频率。
+<pre>
+package main
+import (
+	"time"
+	"fmt"
+	"sync"
+)
+var locker = new(sync.Mutex)
+var cond =sync.NewCond(locker)
+func test(x int){
+	cond.L.Lock()             //获取锁
+	cond.Wait()               //等待通知，暂时阻塞
+	fmt.Println(x)
+ 	time.Sleep(time.Second)
+  	cond.L.Unlock()          //释放锁
+}
+func main(){
+	for i :=0;i<40;i++{
+		go test(i)
+	}
+	fmt.Println("start all")
+	time.Sleep(time.Second * 1)
+	fmt.Println("broadcast")
+	cond.Signal()            //下发一个通知给已经获取锁的goroutine
+	time.Sleep(time.Second * 1)
+	cond.Signal()            //1秒后下发一个通知给已经获取锁的goroutine
+	time.Sleep(time.Second * 2)
+	cond.Broadcast()         //2秒之后下发广播给所有等待的goroutine
+	time.Sleep(time.Second * 10)
+}
+output ==>
+start all
+broadcast
+3
+0
+20
+1
+2
+6
+4
+5
+8
+7
+9
+10
+</pre>
