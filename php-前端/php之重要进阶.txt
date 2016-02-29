@@ -8321,3 +8321,42 @@ $num = mysql_affected_rows();
 if($num == 1){
     //成功 
 }
+
++++网易一元夺宝的算法+++++
+关键在于：将已经生成的号码排除，防止后面的出现重复情况。
+  //总需人数
+$total = 5000;
+//原始数，夺宝号码起始
+$base_serial = 10001;
+//生成5000个连续的夺宝号码
+$array = range($base_serial, $base_serial + $total);
+//随机获取一个夺宝号码 
+echo getRandomValue($array);
+echo "\n";
+//随机获取一个夺宝号码 
+echo getRandomValue($array);
+echo "\n";
+//随机获取一个夺宝号码 
+echo getRandomValue($array);
+echo "\n";
+//随机获取一个夺宝号码 
+echo getRandomValue($array);
+echo "\n";
+//随机获取一个夺宝号码 
+echo getRandomValue($array);
+echo "\n";
+//随机获取夺宝号码核心算法 
+function getRandomValue( & $array){
+    //计算数组长度 
+    $length = count($array);
+    //获取不超过数组长度的随机数 
+    $key = rand(0, $length-1);
+    //获得的随机夺宝号码 
+    $value = $array[$key];
+    //将该号码删除，表示已经被占用 
+    unset($array[$key]);
+    //数组重新排序
+    sort($array);
+    //返回夺宝号码 
+    return $value;
+}
