@@ -2689,3 +2689,17 @@ array_multisort($price,SORT_NUMERIC,SORT_DESC,$array);
 echo '<pre>';
 print_r($array);
 echo '</pre>';
+
+++++函数调用方法+++++
+get_defined_functions返回引入PHP文件的所有方法的array格式，包括自定义的，内置的。user为自定义方法，internal为内置方法数组。 
+function myrow($id, $data)
+{
+return "<tr><th>$id</th><td>$data</td></tr>n";
+}
+$arr = get_defined_functions();
+print_r($arr); 
+类似的还有：
+get_defined_constants 获取定义所有常量的数组
+get_defined_functions 获取定义所有函数的数组
+get_defined_vars 获取定义所有变量的数组
+get_declared_classes 返回已经定义的类的数组 
