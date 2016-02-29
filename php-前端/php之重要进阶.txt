@@ -8296,3 +8296,28 @@ if($result){
 与数据库的交互。最终只有很少的人走到这一步，也就解决的数据库的压力问题。
 为了检测实际效果，我使用Apache AB工具模拟10、20、1000个用户并发进行抢购，经过大量的测试，最终抢购成功的用户
 始终为10，没有出现“超卖”。
+
+
+++++传统关系型数据库如何处理“库存”问题+++++
+在商城中，有一件商品有100件库存，那么用户每购买一件，库存要做减一。 刚开始我想到这样进行处理：
+问题的关键在于上面的代码使用了两条SQL语句，所以造成了不同用户的请求可能交叉执行。 如果能将操作合并到
+一条SQL语句中，就可以避免这个问题。
+$model = new Model();
+$result = mysql_query("UPDATE goods SET quantity = quantity - 1 WHERE id = 1 ");
+由于关系型数据库都是存储在文件中，对同一条记录的修改不能同时进行。这意味着即使A、B用户同时购买，修改库存时
+也是按先后顺序来的，因此库存可以正确的减少。
+
+还有一个问题，如果库存已经为0了，上面的代码就有问题了，因为没有检查库存。
+有两种方法解决该问题：
+1、将quantity字段设为unsigned，当库存为0时，因为字段不能为负数，将会返回false。
+2、修改SQL语句和实现代码：
+$model = new Model();
+//读取商品的库存 
+$quantity = $model->where(" id = 1 ")->count();
+//库存减一 
+$quantity--;
+$result = mysql_query("UPDATE goods SET quantity = quantity - 1 WHERE id = 1 WHERE quantity > 0 ");
+$num = mysql_affected_rows();
+if($num == 1){
+    //成功 
+}
