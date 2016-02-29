@@ -6474,3 +6474,50 @@ func main() {
 output ==>
 <nil>
 </pre>
+tar创建新文件
+<pre>
+package main
+
+import (
+    "os"
+    "io"
+    "archive/tar"
+)
+func handleError(err error){
+	println(err)
+}
+func main() {
+    fw, err := os.Create("do.tar")    // 创建tar包文件，返回*io.Writer
+    handleError(err)    // handleError为错误处理函数，下同
+    defer fw.Close()
+
+    // 实例化新的tar.Writer
+    tw := tar.NewWriter(fw)
+    defer tw.Close()
+
+    // 获取要打包的文件的内容
+    fr, err := os.Open("do.txt")
+    handleError(err)
+    defer fr.Close()
+
+    // 获取文件信息
+    fi, err := fr.Stat()
+    handleError(err)
+
+    // 创建tar.Header
+    hdr := new(tar.Header)
+    hdr.Name = fi.Name()
+    hdr.Size = fi.Size()
+    hdr.Mode = int64(fi.Mode())
+    hdr.ModTime = fi.ModTime()
+
+    // 写入数据头
+    err = tw.WriteHeader(hdr)
+    handleError(err)
+
+    // 写入文件数据
+    _, err = io.Copy(tw, fr)
+    handleError(err)
+}
+//已经创建do.tar文件
+</pre>
