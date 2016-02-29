@@ -8360,3 +8360,23 @@ function getRandomValue( & $array){
     //返回夺宝号码 
     return $value;
 }
+
+
++++PHP实现类似消息队列++++
+//php定时器，实现事务队列
+$db=new Db(); //数据库对象
+while(true){
+  $first=$db->field(true)->order('id desc')->limit(1)->select();//获取数据库中第一条数据
+  if(!$first){
+    break; //没有数据，停止
+  }
+  $res=dosomething();//对第一条数据进行具体操作
+  if($res){
+    $db->order('id desc')->limit(1)->delete();//删除已经成功操作的数据
+    echo "操作成功";
+  }else{
+    echo "操作失败";
+  }
+  sleep(10); //每隔10秒操作一次
+}
+echo "所有数据操作完成";
