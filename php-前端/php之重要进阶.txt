@@ -8214,3 +8214,47 @@ while ($buff = socket_read($socket, 1024, PHP_NORMAL_READ)) {
 socket_close($socket);  
 ?>  
 具体前看链接:http://www.cnblogs.com/thinksasa/archive/2013/02/26/2934206.html
+
+
+++++API访问频率限制的解决方案（Redis）+++++
+用Redis来实现:
+<?php
+require('predis/src/Autoloader.php');
+ 
+$redis = new Predis\Client(array(
+    'scheme' => 'tcp',
+    'host'   => '127.0.0.1',
+    'port'   => '6379'
+));
+ 
+$redis->auth('123456');
+ 
+//这个key记录该用户1的访问次数 
+$key = 'user:1:api_count';
+ 
+//限制次数为10 
+$limit = 10;
+ 
+$check = $redis->exists($key);
+if($check){
+    $redis->incr($key);
+    $count = $redis->get($key);
+    if($count > 10){
+        exit('your have too many request');
+    }
+}else{
+    $redis->incr($key);
+    //限制时间为60秒 
+    $redis->expire($key,60);
+}
+ 
+$count = $redis->get($key);
+echo 'You have '.$count.' request';
+ 
+//......
+//API业务逻辑 
+echo '<br/>';
+echo 'Hello,World!This is the api content.';
+?>
+上面的代码实现了在60秒内单用户最多只能访问API 10次。这样的需求使用缓存来处理是非常合适的，当用户量很多的时候，
+计数量会很大，而且这些数据并不需要长久保存，用数据库存储显然不划算。 
