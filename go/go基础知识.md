@@ -6299,3 +6299,117 @@ func main(){
 - GO语言提供的原子操作都是非入侵式的，由标准库sync/atomic中的众多函数代表 
 - 类型包括int32,int64,uint32,uint64,uintptr,unsafe.Pointer，共六个。
 - 这些函数提供的原子操作共有五种：增或减，比较并交换，载入，存储和交换
+####增或减Add
+<pre>
+package main
+import (
+    "fmt"
+    "sync/atomic"
+)
+
+func main(){
+    var i32 int32
+    fmt.Println("=====old i32 value=====")
+    fmt.Println(i32)
+    //第一个参数值必须是一个指针类型的值,因为该函数需要获得被操作值在内存中的存放位置,以便施加特殊的CPU指令
+    //结束时会返回原子操作后的新值
+    newI32 := atomic.AddInt32(&i32,3)
+    fmt.Println("=====new i32 value=====")
+    fmt.Println(i32)
+    fmt.Println(newI32)
+
+    var i64 int64
+    fmt.Println("=====old i64 value=====")
+    fmt.Println(i64)
+    newI64 := atomic.AddInt64(&i64,-3)
+    fmt.Println("=====new i64 value=====")
+    fmt.Println(i64)
+    fmt.Println(newI64)
+
+}
+</pre>
+####比较并交换CAS
+Compare And Swap 简称CAS，在sync/atomic包种，这类原子操作由名称以‘CompareAndSwap’为前缀的若干个函数代表。
+<pre>
+package main
+
+import (
+    "fmt"
+    "sync/atomic"
+)
+
+var value int32
+
+func main()  {
+    fmt.Println("======old value=======")
+    fmt.Println(value)
+    fmt.Println("======CAS value=======")
+    addValue(3)
+    fmt.Println(value)
+
+
+}
+
+//不断地尝试原子地更新value的值,直到操作成功为止
+func addValue(delta int32){
+    //在被操作值被频繁变更的情况下,CAS操作并不那么容易成功
+    //so 不得不利用for循环以进行多次尝试
+    for {
+        v := value
+        if atomic.CompareAndSwapInt32(&value, v, (v + delta)){
+            //在函数的结果值为true时,退出循环
+            break
+        }
+        //操作失败的缘由总会是value的旧值已不与v的值相等了.
+        //CAS操作虽然不会让某个Goroutine阻塞在某条语句上,但是仍可能会使流产的执行暂时停一下,不过时间大都极其短暂.
+    }
+}
+</pre>
+####载入Load
+上面的比较并交换案例总 v:= value为变量v赋值，但… 要注意，在进行读取value的操作的过程中,其他对此值的读写操作是可以被同时进行的,那么这个读操作很可能会读取到一个只被修改了一半的数据.
+<pre>
+package main
+
+import (
+    "fmt"
+    "sync/atomic"
+)
+
+var value int32
+
+func main()  {
+    fmt.Println("======old value=======")
+    fmt.Println(value)
+    fmt.Println("======CAS value=======")
+    addValue(3)
+    fmt.Println(value)
+
+
+}
+
+//不断地尝试原子地更新value的值,直到操作成功为止
+func addValue(delta int32){
+    //在被操作值被频繁变更的情况下,CAS操作并不那么容易成功
+    //so 不得不利用for循环以进行多次尝试
+    for {
+        //v := value
+        //在进行读取value的操作的过程中,其他对此值的读写操作是可以被同时进行的,那么这个读操作很可能会读取到一个只被修改了一半的数据.
+        //因此我们要使用载入
+        v := atomic.LoadInt32(&value)
+        if atomic.CompareAndSwapInt32(&value, v, (v + delta)){
+            //在函数的结果值为true时,退出循环
+            break
+        }
+        //操作失败的缘由总会是value的旧值已不与v的值相等了.
+        //CAS操作虽然不会让某个Goroutine阻塞在某条语句上,但是仍可能会使流产的执行暂时停一下,不过时间大都极其短暂.
+    }
+}
+</pre>
+####存储Store
+与读取操作相对应的是写入操作。 而sync/atomic包也提供了与原子的载入函数相对应的原子的值存储函数。 以Store为前缀
+在原子地存储某个值的过程中，任何CPU都不会进行针对同一个值的读或写操作。原子的值存储操作总会成功，因为它并不会关心被操作值的旧值是什么和CAS操作有着明显的区别
+<pre>
+    fmt.Println("======Store value=======")
+    atomic.StoreInt32(&value, 10)
+    fmt.Println(value)
+</pre>
