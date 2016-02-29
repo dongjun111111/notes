@@ -2703,3 +2703,7 @@ get_defined_constants 获取定义所有常量的数组
 get_defined_functions 获取定义所有函数的数组
 get_defined_vars 获取定义所有变量的数组
 get_declared_classes 返回已经定义的类的数组 
+
+++$_SERVER['SERVER_NAME']与$_SERVER['HTTP_HOST']+++
+PHP获取当前域名。
+在实际程序中，应尽量使用_SERVER["HTTP_HOST"],比较保险和可靠。
