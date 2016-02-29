@@ -6413,3 +6413,24 @@ func addValue(delta int32){
     atomic.StoreInt32(&value, 10)
     fmt.Println(value)
 </pre>
+
+####bufio.Reader
+创建支持缓存读取的具有缺省长度缓冲区的Reader对象，Reader对象会从底层的io.Reader接口读取尽量多的数据进行缓存。
+<pre>
+package main
+
+import (
+	"fmt"
+	"bufio"
+	"bytes"
+)
+func main(){
+	rb :=bytes.NewReader([]byte("a string to be read"))
+	r :=bufio.NewReader(rb)
+	var buf [128]byte
+	n ,_:=r.Read(buf[:])
+	fmt.Println(string(buf[:n]))
+}
+output==>
+a string to be read
+</pre>
