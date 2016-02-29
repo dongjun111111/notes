@@ -6521,3 +6521,22 @@ func main() {
 }
 //已经创建do.tar文件
 </pre>
+####bufio.NewReaderSize
+创建的支持缓存读取的具有指定长度缓冲区的Reader对象，Reader对象会从底层的io.Reader接口读取尽量多的数据进行缓存。
+<pre>
+package main
+
+import (
+	"bufio"
+	"bytes"
+)
+func main(){
+	rb :=bytes.NewBuffer([]byte("this is a new string"))
+	r :=bufio.NewReaderSize(rb,8132)
+	var buf [128]byte
+	n ,_:=r.Read(buf[:])
+	println(string(buf[:n]))
+}
+output==>
+this is a new string
+</pre>
