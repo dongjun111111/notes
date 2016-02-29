@@ -8213,3 +8213,4 @@ while ($buff = socket_read($socket, 1024, PHP_NORMAL_READ)) {
 }    
 socket_close($socket);  
 ?>  
+具体前看链接:http://www.cnblogs.com/thinksasa/archive/2013/02/26/2934206.html
