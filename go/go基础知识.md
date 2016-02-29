@@ -6540,3 +6540,26 @@ func main(){
 output==>
 this is a new string
 </pre>
+####bufio.NewWriter
+创建支持缓存写的具有缺省长度缓冲区的Writer对象，Writer对象会将缓存的数据批量写入底层的io.Writer接口
+<pre>
+package main
+
+import (
+	"fmt"
+	"bufio"
+	"bytes"
+)
+func main(){
+	wb :=bytes.NewBuffer(nil)
+	w :=bufio.NewWriter(wb)
+	w.Write([]byte("hello."))
+	w.Write([]byte("world!"))
+	fmt.Printf("%d:%s\n",len(wb.Bytes()),string(wb.Bytes()))
+	w.Flush()
+	fmt.Printf("%d:%s\n",len(wb.Bytes()),string(wb.Bytes()))
+}
+output==>
+0:
+12:hello.world!
+</pre>
