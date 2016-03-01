@@ -113,3 +113,30 @@ set 的内部实现是一个 value永远为null的HashMap，实际就是通过�
 2>"2"
 3>"77"
 </pre>
+
+5. Sorted set
+常用命令：zadd,zrange,zrem,zcard等<br>
+使用场景：<br>
+Redis sorted set的使用场景与set类似，区别是set不是自动有序的，而sorted set可以通过用户额外提供一个优先级(score)的参数来为成员排序，并且是插入有序的，即自动排序。当你需要一个有序的并且不重复的集合列表，那么可以选择sorted set数据结构，比如twitter 的public timeline可以以发表时间作为score来存储，这样获取时就是自动按时间排好序的。<br>
+实现方式：<br>
+Redis sorted set的内部使用HashMap和跳跃表(SkipList)来保证数据的存储和有序，HashMap里放的是成员到score的映射，而跳跃表里存放的是所有的成员，排序依据是HashMap里存的score,使用跳跃表的结构可以获得比较高的查找效率，并且在实现上比较简单。<br>
+<pre>
+127.0.0.1:6379 >zadd group 1 1
+<integer>1
+127.0.0.1:6379 >zadd group 2 2
+<integer>1
+127.0.0.1:6379 >zadd group 3 3
+<integer>1
+127.0.0.1:6379 >zrange group 0 10
+1>"1"
+2>"2"
+3>"3"
+127.0.0.1:6379 >zadd group 4 gy
+<integer>1
+127.0.0.1:6379 >zrem group gy       //移除一个元素
+<integer>1
+127.0.0.1:6379 >zrange group 0 10    //遍历一个集合
+1>"1"
+2>"2"
+3>"3"
+</pre>
