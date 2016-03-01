@@ -6677,3 +6677,47 @@ list包实现了双向链表的功能。<br>
 </pre>
 ####ring
 ring包实现了环形双向链表的功能。
+###AES加密
+<pre>
+package main
+
+import (
+    "crypto/aes"
+    "crypto/cipher"
+    "fmt"
+    "os"
+)
+
+func main() {
+    // 消息明文
+    src := []byte("hello, world")
+    // 密钥，长度可以为16、24、32字节
+    key := "1234567890abcdef"
+    // 初始向量，长度必须为16个字节(128bit)
+    var iv = []byte("abcdef1234567890")[:aes.BlockSize]
+    // 得到块，用于加密和解密
+    block, err := aes.NewCipher([]byte(key))
+    if err != nil {
+        fmt.Printf("Error: NewCipher(%d bytes) = %s", len(key), err)
+        os.Exit(1)
+    }
+    fmt.Printf("NewClipher(%d bytes)\n", len(key))
+
+    // 加密，使用CFB模式(密文反馈模式)，其他模式参见crypto/cipher
+    encrypter := cipher.NewCFBEncrypter(block, iv)
+
+    encrypted := make([]byte, len(src))
+    encrypter.XORKeyStream(encrypted, src)
+    fmt.Printf("Encrypting %s : %v -> %v\n", src, []byte(src), encrypted)
+
+    // 解密
+    decrypter := cipher.NewCFBDecrypter(block, iv)
+
+    decrypted := make([]byte, len(src))
+    decrypter.XORKeyStream(decrypted, encrypted)
+    fmt.Printf("Decrypting %v -> %v : %s\n", encrypted, decrypted, decrypted)
+}
+output==>
+Encrypting hello, world : [104 101 108 108 111 44 32 119 111 114 108 100] -> [235 32 43 140 87 212 167 232 74 65 110 69]
+Decrypting [235 32 43 140 87 212 167 232 74 65 110 69] -> [104 101 108 108 111 44 32 119 111 114 108 100] : hello, world
+</pre>
