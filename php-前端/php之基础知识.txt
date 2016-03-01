@@ -2719,3 +2719,20 @@ foreach($arr as $k=>$v){
 array_multisort($age,SORT_NUMERIC,SORT_ASC,$arr);
 }
 var_dump($arr);
+官方的一个案例是：
+$data[] = array('volume' => 67, 'edition' => 2);
+$data[] = array('volume' => 86, 'edition' => 1);
+$data[] = array('volume' => 85, 'edition' => 6);
+$data[] = array('volume' => 98, 'edition' => 2);
+$data[] = array('volume' => 86, 'edition' => 6);
+$data[] = array('volume' => 67, 'edition' => 7);
+// 取得列的列表
+foreach ($data as $k => $r) {
+    $volume[$k]  = $r['volume'];
+    $edition[$k] = $r['edition'];
+}
+// 将数据根据 volume 降序排列，根据 edition 升序排列
+// 把 $data 作为最后一个参数，以通用键排序
+//排序优先级从左到右依次减小，最左边优先级最大
+array_multisort($volume, SORT_DESC, $edition, SORT_ASC, $data);
+var_dump($data);
