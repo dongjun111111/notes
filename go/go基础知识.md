@@ -6585,3 +6585,25 @@ func main() {
 output==>
 0: 12:hello,world! 
 </pre>
+###peek
+读取指定字节数的数据，这些被读取的数据不会从缓冲区中清除。在下次读取之后，本次返回的字节切片会失效。如果Peek返回的字节数不足n字节，则会同时返回一个错误说明原因。如果n比缓冲区要大，则错误为ErrBufferFull。
+<pre>
+package main
+
+import (
+	"fmt"
+	"bufio"
+	"bytes"
+)
+func main(){
+	rb :=bytes.NewBuffer([]byte("12345678"))
+	r :=bufio.NewReader(rb)
+	b1 ,_:=r.Peek(4)
+	fmt.Println(string(b1))
+	b2,_:=r.Peek(8)
+	fmt.Println(string(b2))
+}
+output==>
+1234
+12345678
+</pre>
