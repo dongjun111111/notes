@@ -67,4 +67,10 @@ Hash实现方式：
 <integer>1
 127.0.0.1:6379 >llen group                      //输出数组group长度（元素个数）
 <integer>0
+127.0.0.1:6379 >lpush group 1
+<integer>1
+127.0.0.1:6379 >lpush group 2
+<integer>1
+127.0.0.1:6379 >lpop group                  //1将从group组中移除
+"1"
 </pre>
