@@ -7202,3 +7202,37 @@ catch (e) {
 ++++js获取10位标准时间戳++++++
 var time = Date.parse(new Date()) / 1000;
 alert(str);    //类型为数字类型
+
+++++call和apply的用法（详细介绍）++++
+js中call和apply都可以实现继承，唯一的一点参数不同，func.call(func1,var1,var2,var3)对应的apply写法为
+：func.apply(func1,[var1,var2,var3])。
+   function  Person(name,age,love){ 
+        this.name=name; 
+        this.age=age; 
+        this.love=love; 
+        this.say=function say(){ 
+            alert("姓名："+name); 
+        } 
+        this.hello=function hello(){
+          alert("Love is :" + love);
+        }
+    } 
+    //call方式 
+    function student(name,age){ 
+        Person.call(this,name,age); 
+    } 
+    //apply方式 
+    function teacher(name,love){ 
+        Person.apply(this,[name,love]); 
+        //Person.apply(this,arguments); //跟上句一样的效果，arguments 
+    } 
+    //call与aplly的异同： 
+    //1,第一个参数this都一样,指当前对象 
+    //2,第二个参数不一样：call的是一个个的参数列表；apply的是一个数组（arguments也可以） 
+
+    var per=new Person("武凤楼",25,"魏荧屏"); //输出：“武凤楼” 
+    per.say(); 
+    var stu=new student("曹玉",18);//输出：“曹玉” 
+    stu.say(); 
+    var tea=new teacher("秦杰",16);//输出：“秦杰” 
+    tea.say();  
