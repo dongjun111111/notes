@@ -7197,3 +7197,8 @@ catch (e) {
   }
 }
 </script>
+
+
+++++js获取10位标准时间戳++++++
+var time = Date.parse(new Date()) / 1000;
+alert(str);    //类型为数字类型
