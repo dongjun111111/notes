@@ -6607,3 +6607,23 @@ output==>
 1234
 12345678
 </pre>
+读取数据存放到p中，返回已读取的字节数。
+<pre>
+package main
+import (
+	"fmt"
+	"bufio"
+	"bytes"
+)
+func main(){
+	rb :=bytes.NewBuffer([]byte("1234567890"))
+	r :=bufio.NewReader(rb)
+	var buf [128]byte
+	n,err :=r.Read(buf[:]) //n 读取的字节数,err 错误
+	fmt.Printf("%d,%v\n",n,err)
+	fmt.Println(string(buf[:n]))
+}
+output==>
+10,<nil>
+1234567890
+</pre>
