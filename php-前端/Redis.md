@@ -51,7 +51,11 @@ Hash实现方式：
 上面已经说到Redis Hash对应Value内部实际就是一个HashMap，实际这里会有2种不同实现，这个Hash的成员比较少时Redis为了节省内存会采用类似一维数组的方式来紧凑存储，而不会采用真正的HashMap结构，对应的value redisObject的encoding为zipmap,当成员数量增大时会自动转成真正的HashMap,此时encoding为ht。
 
 3. List
-常用命令是lpush,rpush,lpop,rpop,lrange等。插入分为左右两种情况，分别对应lpush与rpush,因为两者的效果类似，为求简单直观，下面大部分以lpush为主进行介绍。 
+常用命令是lpush,rpush,lpop,rpop,lrange等。插入分为左右两种情况，分别对应lpush与rpush,因为两者的效果类似，为求简单直观，下面大部分以lpush为主进行介绍。 <br>
+应用场景：<br>
+Redis list的应用场景非常多，也是Redis最重要的数据结构之一，比如twitter的关注列表，粉丝列表等都可以用Redis的list结构来实现，比较好理解，这里不再重复。
+
+s
 <pre>
 127.0.0.1:6379 >lpush group1 34
 <integer> 1
@@ -63,7 +67,7 @@ Hash实现方式：
 1>"34"
 2>"yes"
 3>"56"
-127.0.0.1:6379 >del group *                    //删除group组下所有元素
+127.0.0.1:6379 >del group *                     //删除group组下所有元素
 <integer>1
 127.0.0.1:6379 >llen group                      //输出数组group长度（元素个数）
 <integer>0
@@ -71,6 +75,27 @@ Hash实现方式：
 <integer>1
 127.0.0.1:6379 >lpush group 2
 <integer>1
-127.0.0.1:6379 >lpop group                  //1将从group组中移除
+127.0.0.1:6379 >lpop group                     //1将从group组中移除
 "1"
+</pre>
+实现方式：
+Redis list的实现为一个双向链表，即可以支持反向查找和遍历，更方便操作，不过带来了部分额外的内存开销，Redis内部的很多实现，包括发送缓冲队列等也都是用的这个数据结构。
+
+4. Set
+常用命令是sadd,spop,smembers,sunion等等.<br>
+应用场景：<br>
+Redis set对外提供的功能与list类似是一个列表的功能，特殊之处在于set是可以自动排重的，当你需要存储一个列表数据，又不希望出现重复数据时，set是一个很好的选择，并且set提供了判断某个成员是否在一个set集合内的重要接口，这个也是list所不能提供的。<br>
+实现方式：<br>
+set 的内部实现是一个 value永远为null的HashMap，实际就是通过计算hash的方式来快速排重的，这也是set能提供判断一个成员是否在集合内的原因。
+<pre>
+127.0.0.1:6379 >sadd bbs 23
+<integer>1
+127.0.0.1:6379 >sadd bbs 23
+<integer>0                           //添加失败，已经存在
+127.0.0.1:6379 >sadd bbs 12
+<integer>1
+127.0.0.1:6379 >smembers bbs        //显示所有元素
+1>"23"
+2>"12"
+127.0.0.1:6379 >del bbs              //删除所有元素
 </pre>
