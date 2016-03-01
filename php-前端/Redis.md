@@ -47,3 +47,20 @@ ok
 5>"email"
 6>"454@qq.com"
 </pre>
+Hash实现方式：
+上面已经说到Redis Hash对应Value内部实际就是一个HashMap，实际这里会有2种不同实现，这个Hash的成员比较少时Redis为了节省内存会采用类似一维数组的方式来紧凑存储，而不会采用真正的HashMap结构，对应的value redisObject的encoding为zipmap,当成员数量增大时会自动转成真正的HashMap,此时encoding为ht。
+
+3. List
+常用命令是lpush,rpush,lpop,rpop,lrange等。
+<pre>
+127.0.0.1:6379 >lpush group1 34
+<integer> 1
+127.0.0.1:6379 >lpush group1 yes
+<integer> 1
+127.0.0.1:6379 >lpush group1 56
+<integer> 1
+127.0.0.1:6379 >lrange group1 0 10             //将0-10位的元素遍历出来
+1>"34"
+2>"yes"
+3>"56"
+</pre>
