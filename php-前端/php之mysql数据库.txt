@@ -1072,4 +1072,12 @@ CHARÊý¾ÝÀàÐÍÓëVARCHARÊý¾ÝÀàÐÍ²»Í¬£¬Æä²ÉÓÃµÄÊÇ¹Ì¶¨³¤¶ÈµÄ´æ´¢·½Ê½¡£¼òµ¥µÄËµ£¬¾ÍÊÇÏ
 ÓÃ¿É±ä³¤¶ÈµÄ×Ö·ûÐÍÊý¾ÝÊ±£¬Êý¾Ý¿â¹ÜÀíÔ±ÒªÊ±²»Ê±µÄ¶ÔËéÆ¬½øÐÐÕûÀí¡£ÈçÖ´ÐÐÊý¾Ý¿âµ¼³öµ¼Èë×÷Òµ£¬À´Ïû³ýËéÆ¬¡£
 2¡¢¼´Ê¹Ê¹ÓÃVarcharÊý¾ÝÀàÐÍ£¬Ò²²»ÄÜ¹»Ì«¹ýÓÚ¿¶¿®£¡
 ±ÈÈçÄãÖ»Ê¹ÓÃµ½90¸ö×Ö·û£¬VARCHAR(100)ÓëVARCHAR(200)ÕæµÄÏàÍ¬Âð?½á¹ûÊÇ·ñ¶¨µÄ¡£ËäÈ»ËûÃÇÓÃÀ´´æ´¢90¸ö×Ö·ûµÄÊý¾Ý£¬
-Æä´æ´¢¿Õ¼äÏàÍ¬¡£µ«ÊÇ¶ÔÓÚÄÚ´æµÄÏûºÄÊÇ²»Í¬µÄ
+Æä´æ´¢¿Õ¼äÏàÍ¬¡£µ«ÊÇ¶ÔÓÚÄÚ´æµÄÏûºÄÊÇ²»Í¬µÄ.
+Èý¡¢×Ü½áchar£¬varchar£¬textÇø±ð
+³¤¶ÈµÄÇø±ð£¬char·¶Î§ÊÇ0¡«255£¬varchar×î³¤ÊÇ64k£¬µ«ÊÇ×¢ÒâÕâÀïµÄ64kÊÇÕû¸örowµÄ³¤¶È£¬Òª¿¼ÂÇµ½ÆäËüµÄcolumn£¬
+»¹ÓÐÈç¹û´æÔÚnot nullµÄÊ±ºòÒ²»áÕ¼ÓÃÒ»Î»£¬¶Ô²»Í¬µÄ×Ö·û¼¯£¬ÓÐÐ§³¤¶È»¹²»Ò»Ñù£¬±ÈÈçutf8µÄ£¬×î¶à21845£¬»¹Òª³ýÈ¥
+±ðµÄcolumn£¬µ«ÊÇvarcharÔÚÒ»°ãÇé¿öÏÂ´æ´¢¶¼¹»ÓÃÁË¡£Èç¹ûÓöµ½ÁË´óÎÄ±¾£¬¿¼ÂÇÊ¹ÓÃtext£¬×î´óÄÜµ½4G¡£
+Ð§ÂÊÀ´Ëµ»ù±¾ÊÇchar>varchar>text£¬µ«ÊÇÈç¹ûÊ¹ÓÃµÄÊÇInnodbÒýÇæµÄ»°£¬ÍÆ¼öÊ¹ÓÃvarchar´úÌæchar;
+charºÍvarchar¿ÉÒÔÓÐÄ¬ÈÏÖµ£¬text²»ÄÜÖ¸¶¨Ä¬ÈÏÖµ;
+Êý¾Ý¿âÑ¡ÔñºÏÊÊµÄÊý¾ÝÀàÐÍ´æ´¢»¹ÊÇºÜÓÐ±ØÒªµÄ£¬¶ÔÐÔÄÜÓÐÒ»¶¨Ó°Ïì¡£ÕâÀïÔÚÁãËé¼ÇÂ¼Á½±Ê£¬¶ÔÓÚintÀàÐÍµÄ£¬Èç¹û
+²»ÐèÒª´æÈ¡¸ºÖµ£¬×îºÃ¼ÓÉÏunsigned£»¶ÔÓÚ¾­³£³öÏÖÔÚwhereÓï¾äÖÐµÄ×Ö¶Î£¬¿¼ÂÇ¼ÓË÷Òý£¬ÕûÐÎµÄÓÈÆäÊÊºÏ¼ÓË÷Òý¡£
