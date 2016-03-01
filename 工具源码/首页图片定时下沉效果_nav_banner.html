@@ -1,0 +1,59 @@
+<style>
+	.nav_header{width: 100%; position: relative; height: 80px; overflow: hidden;}
+	.big_nav_banner{width: 1920px; position: absolute; left: 50%; margin-left: -960px; z-index: 9;}
+	.small_nav_banner{width: 1920px; position: absolute; left: 50%; margin-left: -960px; z-index: 10;}
+	.close_updown{filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#7FFFFFFF', endColorstr='#7FFFFFFF');background:rgba(255,255,255,0.5); display: none; width: 45px; height: 18px; position: absolute; right: 10px; top: 10px; color: #FFFFFF; font-size: 14px; text-align: center; line-height: 18px; z-index: 11; cursor: pointer;}
+</style>
+<eq name='choosenav' value='index'>
+<div class="nav_header">
+	<div class="big_nav_banner">
+		<p><a href="http://www.93jiang.com/cp/306" target="_blank"><img src="http://img.jiangcdn.com/pc/big_zhaopin.jpg"></a></p>
+	</div>
+	<div class="small_nav_banner">
+		<p><a href="http://www.93jiang.com/cp/306" target="_blank"><img src="http://img.jiangcdn.com/pc/small_zhaopin.jpg"></a></p>
+	</div>
+	<div class="close_updown" href="javascript:void(0)">X关闭</div>
+</div>
+<script>
+	var banner_visit_time=getCookie('m_jiang_visit');
+	if(!banner_visit_time){
+		var dsk=setTimeout('showBig()',2000);
+		var dsk1=setTimeout('showSmall()',7000);
+		setCookie('m_jiang_visit', '{$times}_t', 300);
+		$(window).scroll(function(){
+			clearTimeout(dsk);
+			clearTimeout(dsk1);
+			$('.nav_header').stop();
+			$('.nav_header').css('height','80px');
+			$('.big_nav_banner').css('z-index','9');
+			$('.close_updown').hide();
+		})
+		$('.close_updown').click(function(){
+			clearTimeout(dsk1);
+			$('.nav_header').css('height','80px');
+			$('.big_nav_banner').css('z-index','9');
+			$('.close_updown').hide();
+		})
+	}else{
+		//$('.web_alert').hide();
+	}
+	function showBig(){
+		$('.big_nav_banner').css('z-index','11');
+		$('.nav_header').animate({height:"500px"},1500,function(){
+			$('.close_updown').show();
+		});
+	}
+	function showSmall(){
+		$('.nav_header').animate({height:"80px"},1500,function(){
+			$('.close_updown').hide();
+			$('.big_nav_banner').css('z-index','9');
+		});
+	}
+</script>
+<else/>
+<div class="nav_header">
+	<div class="small_nav_banner">
+		<p><a href="http://www.93jiang.com/cp/306" target="_blank"><img src="http://img.jiangcdn.com/pc/small_zhaopin.jpg"></a></p>
+	</div>
+</div>
+</eq>
