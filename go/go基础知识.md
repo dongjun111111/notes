@@ -6627,3 +6627,21 @@ output==>
 10,<nil>
 1234567890
 </pre>
+返回第一个字符
+<pre>
+package main
+
+import (
+	"fmt"
+	"bufio"
+	"bytes"
+)
+func main(){
+	rb :=bytes.NewBuffer([]byte("987654321"))
+	r :=bufio.NewReader(rb)
+	b,err :=r.ReadByte()
+	fmt.Printf("%c,%v\n",b,err)
+}
+output==>
+9,<nil>
+</pre>
