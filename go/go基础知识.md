@@ -6645,3 +6645,21 @@ func main(){
 output==>
 9,<nil>
 </pre>
+读取到指定字符
+<pre>
+package main
+
+import (
+	"fmt"
+	"bufio"
+	"bytes"
+)
+func main(){
+	rb :=bytes.NewReader([]byte("123$456"))
+	r :=bufio.NewReader(rb)
+	b,err :=r.ReadBytes('$')
+	fmt.Printf("%s,%v\n",string(b),err)
+}
+output==>
+123$
+</pre>
