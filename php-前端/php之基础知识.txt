@@ -2736,3 +2736,16 @@ foreach ($data as $k => $r) {
 //排序优先级从左到右依次减小，最左边优先级最大
 array_multisort($volume, SORT_DESC, $edition, SORT_ASC, $data);
 var_dump($data);
+数组不区分大小写进行排序:
+$array=array("Alpha","Beta","atomic","bank");
+$arr=array_map("strtolower",$array);
+array_multisort($arr,SORT_ASC,SORT_STRING,$array);
+var_dump($array);
+多元素排序规则：
+$grade = array(
+  "score" => array(70, 95, 70.0, 60, "70"),
+  "name" => array("Zhang San", "Li Si", "Wang Wu","Zhao Liu", "Liu Qi")
+);
+ // 将分数作为数值，由高到低排序           // 将名字作为字符串，由小到大排序
+array_multisort($grade["score"], SORT_NUMERIC, SORT_DESC,$grade["name"], SORT_STRING,SORT_ASC);
+var_dump($grade);
