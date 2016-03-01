@@ -6663,3 +6663,17 @@ func main(){
 output==>
 123$
 </pre>
+###container
+常用的容器工具包，目前有heap、list、ring三种数据结构.
+####heap
+任何实现了heap.Interface接口的对象都可以使用heap包提供的方法对堆进行操作(堆是一个完全二叉树)。通过对heap.Interface中的Less方法的不同实现，来实现最大堆和最小堆。通常堆的数据结构为一个一维数组。
+####list
+list包实现了双向链表的功能。<br>
+遍历一个list的代码实例（其中l为*list对象）：
+<pre>
+    for e := l.Front(); e != nil; e = e.Next() {
+        // do something with e.Value
+    }
+</pre>
+####ring
+ring包实现了环形双向链表的功能。
