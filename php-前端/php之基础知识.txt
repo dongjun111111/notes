@@ -2791,3 +2791,9 @@ class foo{
 class_alias('foo','bar');
 $f= new bar;
 $f->dad();
+
+
++++fopen+++
+fp=fopen("file","ab"); 
+"w","w+","wb","wb+"方式可以创建新文件，其他方式不可 
+"a","a+","ab","ab+"为打开已存在的文件，文件使用方式为添加方式，不会覆盖原来的file文件的信息
