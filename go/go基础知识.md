@@ -6971,7 +6971,7 @@ func main(){
 output==>
 2016/03/02 22:05:17 lite.go:10:
 </pre>
-Fatal:
+log.Fatal:
 打印日志并且退出；相当于调用了Print()和os.Exit(1)
 <pre>
 package main
@@ -6987,4 +6987,18 @@ func main(){
 output==>
 2016/03/02 22:07:24 Hi age = 4
 进程退出
+</pre>
+类似的是log.Fatalf:<br>
+按格式输出日志，并退出。相当于调用Printf()并调用os.Exit(1)
+<pre>
+package main
+import(
+    "log"
+)
+func main(){
+    name := "golang"
+    log.Fatalf("%8d,%8s", 23, name)
+}
+output==>
+2016/03/02 22:11:20       23,  golang
 </pre>
