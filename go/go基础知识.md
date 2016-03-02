@@ -6840,3 +6840,14 @@ func main(){
 output==>
 [5]
 </pre>
+package main
+
+import (
+	"fmt"
+	"index/suffixarray"
+)
+func main(){
+	data :=[]byte("UpUp")
+	index :=suffixarray.New(data)
+	fmt.Println(index)
+}
