@@ -10,7 +10,7 @@ string base64_encode(string data)
 设置地区为 US English，然后重新设置回系统默认：
 <?php
 echo setlocale(LC_ALL,"US");
-echo "<br>";
+echo "<br>" ;
 echo setlocale(LC_ALL,NULL);
 ?>
 
