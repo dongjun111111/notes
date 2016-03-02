@@ -6821,3 +6821,21 @@ func main(){
 output==>
 [89 101 83]
 </pre>
+####index.Lookup
+<pre>
+package main
+
+import (
+	"fmt"
+	"index/suffixarray"
+)
+func main(){
+	data :=[]byte("helloyork")
+	index:=suffixarray.New(data)
+	str :=[]byte("y")
+	res :=index.Lookup(str,1)
+	fmt.Println(res)
+}
+output==>
+[5]
+</pre>
