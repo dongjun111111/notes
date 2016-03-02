@@ -6751,3 +6751,18 @@ func main(){
 output==>
 &lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;
 </pre>
+UnescapeString
+<pre>
+package main
+
+import (
+	"html"
+	"fmt"
+)
+func main(){
+	var s string = "&lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt"
+	fmt.Println(html.UnescapeString(s))
+}
+output==>
+<script>alert('xss');</script>
+</pre>
