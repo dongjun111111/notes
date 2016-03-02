@@ -2764,3 +2764,30 @@ foreach($arr_season as $hkey => $uu){
     }
   } 
 }
+
+
+++++get_parent_class+++++
+//get_parent_class获取对象或者类的父类名
+class dad{
+  function dad(){
+    echo "dad";
+  }
+}
+class child extends dad{
+  function child(){
+    echo "I am ",get_parent_class($this), " `s son ";
+  }
+}
+$foo = new child();
+
+
+++++class_alias+++
+class_alias给一个类取别名。
+class foo{
+  function dad(){
+    echo "类foo下面的dad";
+  }
+}
+class_alias('foo','bar');
+$f= new bar;
+$f->dad();
