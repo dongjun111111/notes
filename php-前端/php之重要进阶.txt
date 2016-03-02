@@ -8443,3 +8443,8 @@ index.php文件代码:
  use DemoNameSpace\Demo;
  $DemoObj = new Demo();
 ?>
+
+++++get post request+++++
+$_REQUEST[]具用$_POST[] $_GET[]的功能，但是$_REQUEST[]比较慢。通过POST和GET方法提交的所有数据都可以
+通过$_REQUEST数组获得。
+request是先读取 get再读post 的， 同时存在， 即覆盖掉前面的变量。
