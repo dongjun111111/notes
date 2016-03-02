@@ -8400,3 +8400,19 @@ if(!cookie($key)){
   }else{
   //保持不变
 }
+
+
+++++abstract抽象类与抽象方法+++++
+abstract class User{
+  abstract protected function getUser();//定义抽象方法
+  public function Pt(){
+    print $this->getUser();
+  }
+}
+class VipUser extends User {
+  protected function getUser(){
+    return "抽象类与抽象方法";
+  }
+}
+$user = new VipUser();
+$user ->Pt();
