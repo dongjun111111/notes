@@ -2749,3 +2749,18 @@ $grade = array(
  // 将分数作为数值，由高到低排序           // 将名字作为字符串，由小到大排序
 array_multisort($grade["score"], SORT_NUMERIC, SORT_DESC,$grade["name"], SORT_STRING,SORT_ASC);
 var_dump($grade);
+
+
++++strpos的注意点+++++
+二位数组的子元素的遍历问题。
+$keyword = "你好春天";
+$arr_season = array(
+  '1'=>array('春季','春'),'2'=>array('夏季','夏'),'3'=>array('秋季','秋'),'4'=>array('冬季','冬')
+);
+foreach($arr_season as $hkey => $uu){
+  foreach($uu as $_uu){ 
+    if(strpos($keyword,$_uu)!==false){
+      $keyword = str_replace($_uu, '', $keyword);
+    }
+  } 
+}
