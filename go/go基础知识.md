@@ -6954,3 +6954,19 @@ func main() {
     fmt.Println(reflect.TypeOf(multiWriter))
 }
 </pre>
+####Log包
+<pre>
+package main
+
+import (
+	"log"
+)
+func main(){
+	//Llongfile完整文件名:行号
+	//Lshortfile 文件名LstdFlags日期(Y-m-d)与时间(i:h:s)
+	log.SetFlags(log.Lshortfile | log.LstdFlags)
+	log.Println()
+}
+output==>
+2016/03/02 22:05:17 lite.go:10:
+</pre>
