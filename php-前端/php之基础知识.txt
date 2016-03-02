@@ -2799,7 +2799,40 @@ fp=fopen("file","ab");
 "a","a+","ab","ab+"为打开已存在的文件，文件使用方式为添加方式，不会覆盖原来的file文件的信息
 
 
-+++stream_get_contents+++++
++++stream_get_contents与stream_get_meta_data+++++
 与 file_get_contents() 一样，但是 stream_get_contents() 是对一个已经打开的资源流进行操作，
 并将其内容写入一个字符串返回。 返回的内容取决于 maxlength 字节长度和 offset 指定的起始位置。
 $content = stream_get_contents($handle, 1024 * 1024);
+stream_get_meta_data获取某个网站的头文件信息。
+$thisurl="http://163.com";
+$fp=fopen($thisurl,"r");
+print_r(stream_get_meta_data($fp));
+结果可以是：
+Array ( [wrapper_data] => Array ( [0] => HTTP/1.1 301 Moved Permanently [1] => Server: nginx [2] => Date: Wed, 02 Mar 2016 08:56:38 GMT [3] => Content-Type: text/html [4] => Content-Length: 178 [5] => Connection: close 
+[6] => Location: http://www.163.com/ [7] => HTTP/1.0 302 Moved Temporarily 
+[8] => Server: Cdn Cache Server V2.0 [9] => Date: Wed, 02 Mar 2016 08:56:38 GMT 
+[10] => Content-Length: 0 [11] => Location: http://www.163.com/special/0077jt/error_isp.html 
+[12] => Connection: close [13] => HTTP/1.0 200 OK [14] => Expires: Wed, 02 Mar 2016 08:58:38 GMT 
+[15] => Date: Wed, 02 Mar 2016 08:56:38 GMT [16] => Server: nginx 
+[17] => Content-Type: text/html; charset=GBK [18] => Vary: Accept-Encoding 
+[19] => Cache-Control: max-age=120 [20] => Via: 1.1 cache.163.com:80 (squid) 
+[21] => X-Via: 1.0 czdx88:8107 (Cdn Cache Server V2.0), 1.0 jiaxing27:0 (Cdn Cache Server V2.0) 
+[22] => Connection: close ) [wrapper_type] => http [stream_type] => tcp_socket/ssl [mode] => r 
+[unread_bytes] => 0 [seekable] => [uri] => http://163.com [timed_out] => [blocked] => 1 [eof] => )
+
+更加友好的形式是:
+$url = "http://www.163.com/";
+if(!($fp = @fopen($url, 'r')))
+         return NULL;
+      $meta = stream_get_meta_data($fp);
+          foreach(array_keys($meta) as $h){
+              $v = $meta[$h];
+              echo "".$h.": ".$v."<br/>";
+              if(is_array($v)){
+                  foreach(array_keys($v) as $hh){
+                      $vv = $v[$hh];
+                      echo "".$hh.": ".$vv."<br/>";
+                  }
+              }
+          }
+fclose($fp); 
