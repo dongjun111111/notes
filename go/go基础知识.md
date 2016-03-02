@@ -6721,5 +6721,16 @@ output==>
 Encrypting hello, world : [104 101 108 108 111 44 32 119 111 114 108 100] -> [235 32 43 140 87 212 167 232 74 65 110 69]
 Decrypting [235 32 43 140 87 212 167 232 74 65 110 69] -> [104 101 108 108 111 44 32 119 111 114 108 100] : hello, world
 </pre>
-###Encoding
-encoding/base32 
+###Errors
+<pre>
+package main
+import (
+	"errors"
+	"fmt"
+)
+func main(){
+	fmt.Println(errors.New("Err"))
+}
+output==>
+Err
+</pre>
