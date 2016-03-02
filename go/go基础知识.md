@@ -6822,6 +6822,7 @@ output==>
 [89 101 83]
 </pre>
 ####index.Lookup
+功能说明：根据输入byte数组查找索引，并返回匹配结果在数据中的位置（结果未排序）
 <pre>
 package main
 
