@@ -7073,3 +7073,32 @@ func main(){
 output==>
 2016/03/02 22:39:04 string
 </pre>
+####rand
+<pre>
+package main
+import (
+    "fmt"
+    "math/rand"
+)
+
+func main() {
+    n := 10
+    i := 0
+    for i < n {
+        x := rand.Float32()
+        fmt.Println(x)
+        i += 1
+    }
+}
+output==>
+0.6046603
+0.9405091
+0.6645601
+0.4377142
+0.4246375
+0.68682307
+0.06563702
+0.15651925
+0.09696952
+0.30091187
+</pre>
