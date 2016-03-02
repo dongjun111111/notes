@@ -7035,3 +7035,27 @@ func main(){
 	l.Println("log to file copy.txt")
 }
 </pre>
+####log.Panic
+这个方法相当于调用Print()及panic()。<br>
+类似的还有log.Panicf和log.Panicln.
+<pre>
+package main
+import(
+    "log"
+    "fmt"
+)
+func main(){
+
+    defer func(){
+        if err := recover(); err !=nil{
+            fmt.Println(err)    //output : "call panic and stop"
+            handleException()
+        }
+    }()
+    log.Panic("call panic and stop")
+    log.Println("this will not be called.")
+}
+func handleException(){
+    log.Println("recovering...")
+}
+</pre>
