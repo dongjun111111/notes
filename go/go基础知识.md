@@ -7017,3 +7017,21 @@ output==>
 2016/03/02 22:15:08 bytes
 进程退出
 </pre>
+####log.New自定义日志输出
+这个方法用来自定义logger，指定输出目标、格式等。
+<pre>
+package main
+import (
+	"log"
+	"os"
+)
+func main(){
+	file,err :=os.OpenFile("copy.txt",os.O_WRONLY,0666) //copy.txt必须已经存在，指定输出位置在copy.txt
+	if err != nil{
+		panic(err)
+	}
+	defer file.Close()
+	l :=log.New(file,"logger",log.Ldate)
+	l.Println("log to file copy.txt")
+}
+</pre>
