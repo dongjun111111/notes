@@ -7059,3 +7059,17 @@ func handleException(){
     log.Println("recovering...")
 }
 </pre>
+####log.Print
+输出日志到标准logger
+<pre>
+package main
+
+import (
+	"log"
+)
+func main(){
+	log.Print("string")
+}
+output==>
+2016/03/02 22:39:04 string
+</pre>
