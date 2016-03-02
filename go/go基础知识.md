@@ -7181,3 +7181,21 @@ func main() {
 output==>
 3305628230121721621
 </pre>
+####rand.seed
+以提供的参数作为种子值,来初始化随机产生器.如果Seed没有被调用,那么随机数调用前默认调用Seed(1).<br>
+小贴士,一般用传入time.Now().UnixNano()给Seed函数来实现不同运行次数看到不同结果的目的.
+<pre>
+package main
+import (
+    "fmt"
+    "math/rand"
+    "time"
+)
+
+func main() {
+   rand.Seed(time.Now().UnixNano())
+   fmt.Println(rand.Int())
+}
+output==>
+4905570427655584144
+</pre>
