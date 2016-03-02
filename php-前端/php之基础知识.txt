@@ -2767,7 +2767,7 @@ foreach($arr_season as $hkey => $uu){
 
 
 ++++get_parent_class+++++
-//get_parent_class获取对象或者类的父类名
+//get_parent_class获取对象或者类的父类名，相对应的有is_subclass_of — 如果此对象是该类的子类，则返回 TRUE。
 class dad{
   function dad(){
     echo "dad";
