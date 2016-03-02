@@ -6936,3 +6936,21 @@ func main() {
     fmt.Println(reflect.TypeOf(multiReader))
 }
 </pre>
+####同样的就有将一个数据同时写入多个文件中。MultiWriter
+<pre>
+package main
+
+import (
+    "io"
+    "fmt"
+    "os"
+    "reflect"
+)
+
+func main() {
+    writer1, _ := os.Create("dst1.txt")
+    writer2, _ := os.Create("dst2.txt")
+    multiWriter := io.MultiWriter(writer1, writer2)
+    fmt.Println(reflect.TypeOf(multiWriter))
+}
+</pre>
