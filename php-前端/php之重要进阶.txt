@@ -8403,6 +8403,11 @@ if(!cookie($key)){
 
 
 ++++abstract抽象类与抽象方法+++++
+在面向对象（OOP）语言中，一个类可以有一个或多个子类，而每个类都有至少一个公有方法作为外部代码访问的接口。
+而抽象方法就是为了方便继承而引入的，现在来看一下抽象方法和抽象类分别是如何定义以及他们的特点。
+什么是抽象方法？
+我们在类里面定义的只有方法名没有方法体的方法就是抽象方法，所谓没有方法体就是在方法声明的时候没有大括号
+以及其中的内容，而是直接声明时在方法名后加上分号结束，另外在声明抽象方法时还要加一个关键字"abstract"来修饰。
 abstract class User{
   abstract protected function getUser();//定义抽象方法
   public function Pt(){
@@ -8416,3 +8421,25 @@ class VipUser extends User {
 }
 $user = new VipUser();
 $user ->Pt();
+
+
+++++namespace++++
+Demo.php文件代码:
+<?php
+ namespace DemoNameSpace;
+ 
+ class Demo {
+ private $mysqlHandle;
+ 
+ public function __construct() {
+ echo 'This is namespace of PHP demo ,The Demo magic constant "__NAMESPACE__" is '.__NAMESPACE__;
+ }
+ }
+?>
+
+index.php文件代码:
+<?php
+ include 'Demo.php';
+ use DemoNameSpace\Demo;
+ $DemoObj = new Demo();
+?>
