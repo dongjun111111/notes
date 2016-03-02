@@ -7001,4 +7001,19 @@ func main(){
 }
 output==>
 2016/03/02 22:11:20       23,  golang
+进程退出
+</pre>
+类似的还有log.Fatalln
+<pre>
+package main
+
+import (
+	"log"
+)
+func main(){
+	log.Fatalln("bytes")
+}
+output==>
+2016/03/02 22:15:08 bytes
+进程退出
 </pre>
