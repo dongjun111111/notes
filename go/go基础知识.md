@@ -6805,3 +6805,19 @@ func main() {
     jpeg.Encode(file, alpha, nil)      //将image信息写入文件中  
 }  
 </pre>
+####suffixarray
+功能说明： 根据正则表达式查找所有的索引，并返回匹配结果在数据中的位置（结果已排序）
+<pre>
+package main
+import (
+	"fmt"
+	"index/suffixarray"
+)
+func main(){
+	data := []byte("YeS")
+	index :=suffixarray.New(data)
+	fmt.Println(index.Bytes())
+}
+output==>
+[89 101 83]
+</pre>
