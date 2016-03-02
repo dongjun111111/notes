@@ -6899,3 +6899,23 @@ func main(){
 output==>
 success!,total 140 bytes
 </pre>
+####limitreader
+获得一个只能从r读到n比特数据的Reader
+<pre>
+package main
+
+import (
+    "io"
+    "fmt"
+    "os"
+    "reflect"
+)
+
+func main() {
+    reader, _ := os.Open("yes.txt")
+    limitReader := io.LimitReader(reader, 20)
+    fmt.Println(reflect.TypeOf(limitReader))
+}
+output==>
+*io.LimitedReader
+</pre>
