@@ -1081,3 +1081,20 @@ CHARÊý¾ÝÀàÐÍÓëVARCHARÊý¾ÝÀàÐÍ²»Í¬£¬Æä²ÉÓÃµÄÊÇ¹Ì¶¨³¤¶ÈµÄ´æ´¢·½Ê½¡£¼òµ¥µÄËµ£¬¾ÍÊÇÏ
 charºÍvarchar¿ÉÒÔÓÐÄ¬ÈÏÖµ£¬text²»ÄÜÖ¸¶¨Ä¬ÈÏÖµ;
 Êý¾Ý¿âÑ¡ÔñºÏÊÊµÄÊý¾ÝÀàÐÍ´æ´¢»¹ÊÇºÜÓÐ±ØÒªµÄ£¬¶ÔÐÔÄÜÓÐÒ»¶¨Ó°Ïì¡£ÕâÀïÔÚÁãËé¼ÇÂ¼Á½±Ê£¬¶ÔÓÚintÀàÐÍµÄ£¬Èç¹û
 ²»ÐèÒª´æÈ¡¸ºÖµ£¬×îºÃ¼ÓÉÏunsigned£»¶ÔÓÚ¾­³£³öÏÖÔÚwhereÓï¾äÖÐµÄ×Ö¶Î£¬¿¼ÂÇ¼ÓË÷Òý£¬ÕûÐÎµÄÓÈÆäÊÊºÏ¼ÓË÷Òý¡£
+
+
++++binaryÓëBLOB+++
+binary ºÍ varbinary
+¹Ì¶¨³¤¶È (binary) µÄ»ò¿É±ä³¤¶È (varbinary) µÄ binary Êý¾ÝÀàÐÍ¡£
+binary [ ( n ) ]
+¹Ì¶¨³¤¶ÈµÄ n ¸ö×Ö½Ú¶þ½øÖÆÊý¾Ý¡£N ±ØÐë´Ó 1 µ½ 8,000¡£´æ´¢¿Õ¼ä´óÐ¡Îª n+4 ×Ö½Ú¡£ 
+BLOB (binary large object)
+BLOB (binary large object),¶þ½øÖÆ´ó¶ÔÏó£¬ÊÇÒ»¸ö¿ÉÒÔ´æ´¢¶þ½øÖÆÎÄ¼þµÄÈÝÆ÷¡£
+ÔÚ¼ÆËã»úÖÐ£¬BLOB³£³£ÊÇÊý¾Ý¿âÖÐÓÃÀ´´æ´¢¶þ½øÖÆÎÄ¼þµÄ×Ö¶ÎÀàÐÍ¡£
+BLOBÊÇÒ»¸ö´óÎÄ¼þ£¬µäÐÍµÄBLOBÊÇÒ»ÕÅÍ¼Æ¬»òÒ»¸öÉùÒôÎÄ¼þ£¬ÓÉÓÚËüÃÇµÄ³ß´ç£¬±ØÐëÊ¹ÓÃÌØÊâµÄ·½Ê½À´´¦Àí
+£¨ÀýÈç£ºÉÏ´«¡¢ÏÂÔØ»òÕß´æ·Åµ½Ò»¸öÊý¾Ý¿â£©¡£
+´óÐÍ¶ÔÏó
+BLOB¾ÍÊÇÊ¹ÓÃ¶þ½øÖÆ±£´æÊý¾Ý¡£
+Èç£º±£´æÎ»Í¼¡£
+CLOBÊ¹ÓÃCHARÀ´±£´æÊý¾Ý¡£
+Èç£º±£´æXMLÎÄµµ¡£
