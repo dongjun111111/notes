@@ -6735,6 +6735,9 @@ output==>
 Err
 </pre>
 ###EscapeString
+EscapeString用于将特殊字符转移为html实体,如把<转义成&lt;<br>
+它只会转义下列五种字符: < > & ' " <br>
+需要注意的是 UnescapeString(EscapeString(s)) == s 返回结果一定是true,但是反过来就不一定是true了.
 <pre>
 package main
 import (
