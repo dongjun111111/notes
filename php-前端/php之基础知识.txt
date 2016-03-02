@@ -2797,3 +2797,9 @@ $f->dad();
 fp=fopen("file","ab"); 
 "w","w+","wb","wb+"方式可以创建新文件，其他方式不可 
 "a","a+","ab","ab+"为打开已存在的文件，文件使用方式为添加方式，不会覆盖原来的file文件的信息
+
+
++++stream_get_contents+++++
+与 file_get_contents() 一样，但是 stream_get_contents() 是对一个已经打开的资源流进行操作，
+并将其内容写入一个字符串返回。 返回的内容取决于 maxlength 字节长度和 offset 指定的起始位置。
+$content = stream_get_contents($handle, 1024 * 1024);
