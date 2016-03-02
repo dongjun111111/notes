@@ -6840,6 +6840,8 @@ func main(){
 output==>
 [5]
 </pre>
+返回Index类型,功能说明： 创建一个索引.
+<pre>
 package main
 
 import (
@@ -6851,3 +6853,6 @@ func main(){
 	index :=suffixarray.New(data)
 	fmt.Println(index)
 }
+ouptut==>
+&{[85 112 85 112] [2 0 3 1]}
+</pre>
