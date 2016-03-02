@@ -6919,3 +6919,20 @@ func main() {
 output==>
 *io.LimitedReader
 </pre>
+####MultiReader
+获得一个可以对参数中的多个Reader进行连续读取的reader,一次性读取多个文件。
+<pre>
+import (
+    "io"
+    "fmt"
+    "os"
+    "reflect"
+)
+
+func main() {
+    reader1, _ := os.Open("src1.txt")
+    reader2, _ := os.Open("src2.txt")
+    multiReader := io.MultiReader(reader1, reader2)
+    fmt.Println(reflect.TypeOf(multiReader))
+}
+</pre>
