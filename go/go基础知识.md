@@ -6856,3 +6856,22 @@ func main(){
 ouptut==>
 &{[85 112 85 112] [2 0 3 1]}
 </pre>
+####copy
+文件复制操作。<br>
+功能说明： 向dst拷贝src的全部数据；读取src中数据直到EOF，故不会返回io.EOF.
+可能的异常： io.ErrShortWrite:写入数据不等于读取数据.
+<pre>
+package main
+import (
+	"io"
+	"os"
+)
+func main(){
+	yes,_ :=os.Open("yes.txt")
+	df,_ :=os.Create("copy.txt")
+	wr,err :=io.Copy(yes,df) //关键的一步,wr指的是复制的内存大小(拷贝字节数)
+	if err == nil{
+		println("Copy success, total",wr,"bytes")
+	}
+}
+</pre>
