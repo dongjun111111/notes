@@ -6875,3 +6875,27 @@ func main(){
 	}
 }
 </pre>
+####io.EOF
+io.EOF：当n>src字节数时，拷贝src全部数据并返回src字节数<br>
+io.ErrShortWrite:写入数据不等于读取数据<br>
+<pre>
+package main 
+
+import (
+	"io"
+	"os"
+)
+func main(){
+	sf,_ :=os.Open("yes.txt")
+	df,_ :=os.Create("df.txt")
+	written,err :=io.Copy(df,sf) 
+	if err == nil{
+		println("success!,total",written,"bytes")
+	}
+	if err ==io.EOF{
+		println("copy all total",written,"bytes")
+	}
+}
+output==>
+success!,total 140 bytes
+</pre>
