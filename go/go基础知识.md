@@ -6955,6 +6955,7 @@ func main() {
 }
 </pre>
 ####Log包
+基本常量
 <pre>
 package main
 
@@ -6969,4 +6970,21 @@ func main(){
 }
 output==>
 2016/03/02 22:05:17 lite.go:10:
+</pre>
+Fatal:
+打印日志并且退出；相当于调用了Print()和os.Exit(1)
+<pre>
+package main
+
+import (
+	"log"
+)
+func main(){
+	age := 4
+	log.Fatal("Hi age = ",age)
+	
+}
+output==>
+2016/03/02 22:07:24 Hi age = 4
+进程退出
 </pre>
