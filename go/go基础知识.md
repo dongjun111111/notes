@@ -6734,3 +6734,17 @@ func main(){
 output==>
 Err
 </pre>
+###EscapeString
+<pre>
+package main
+import (
+	"html"
+	"fmt"
+)
+func main(){
+	var s string = "<script>alert('xss');</script>"
+	fmt.Println(html.EscapeString(s))
+}
+output==>
+&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;
+</pre>
