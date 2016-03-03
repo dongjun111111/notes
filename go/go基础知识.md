@@ -7478,3 +7478,38 @@ Just a test!
 Just a test!
 Just a test!
 </pre>
+####cookie
+<pre>
+package main
+
+import (
+    "log"
+    "net"
+    "net/http"
+    "time"
+)
+
+func HelloServer(w http.ResponseWriter, req *http.Request) {
+    expire := time.Now().AddDate(0, 0, 1)
+    mycookie := http.Cookie{"test", "testcookie", "/", "www.sanguohelp.com", expire, expire.Format(time.UnixDate),
+        86400, true, true, "test=testcookie", []string{"test=tcookie"}}
+
+    http.SetCookie(w, &mycookie)
+
+}
+
+func main() {
+
+    http.HandleFunc("/hello", HelloServer)
+
+    l, e := net.Listen("tcp", ":8888")
+    if e != nil {
+        log.Fatal("Listen: ", e)
+    }
+
+    err := http.Serve(l, nil)
+    if err != nil {
+        log.Fatal("Serve: ", err)
+    }
+}
+</pre>
