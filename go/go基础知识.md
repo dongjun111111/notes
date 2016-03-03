@@ -7641,3 +7641,96 @@ func main() {
     fmt.Println(path.Split("static"))   // "" static
 }
 </pre>
+###reflect
+reflect.Append返回新的切片.<br>
+追加一个切片x值到切片，并返回所创建的Slice。在Go中，每一个x值必须是分配给切片的元素类型。
+<pre>
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+func main(){
+	var a []int
+	var value reflect.Value = reflect.ValueOf(&a)
+	//判断指针是否指向内存地址
+	if !value.CanSet(){
+		value =value.Elem() //使指针指向内存地址
+	}
+	value = reflect.Append(value,reflect.ValueOf(1))
+	value = reflect.Append(value, reflect.ValueOf(2))
+	value = reflect.Append(value, reflect.ValueOf(3), reflect.ValueOf(4)) //支持可变参数
+	fmt.Println(value.Kind(),value.Slice(0, value.Len()).Interface())
+}
+output==>
+slice [1 2 3 4]
+</pre>
+####reflect.Copy
+Copy 复制src的内容复制到dst，直到dst已被填补满，或src已经耗尽。它返回复制的元素的数量。每个 dst 和 src 的 Kind（样）都必须切片(Slice)“或”数组(Array)，dst和src必须具有相同的元素类型。
+<pre>
+package main
+import (
+    "fmt"
+    "reflect"
+)
+
+type A struct {
+  A0 []int
+  A1 []int
+}
+
+func main(){
+    var a A
+    a.A0 = append(a.A0, []int{1,2,3,4,5,6,7}...)
+    a.A1 = append(a.A1, 9, 8, 7, 6)
+    var n = reflect.Copy(reflect.ValueOf(a.A0), reflect.ValueOf(a.A1))
+    fmt.Println(n, a)
+    //>>4 {[9 8 7 6 5 6 7] [9 8 7 6]}}
+}
+4 {[9 8 7 6 5 6 7] [9 8 7 6]}
+</pre>
+####reflect.Kind
+reflect.Kind 有以下常量成员
+reflect.Invalid       // 无效
+reflect.Bool          // 布尔
+reflect.Int           // 整数（有符号）
+reflect.Int8          // 整数8位（有符号）
+reflect.Int16         // 整数16位（有符号）
+reflect.Int32         // 整数32位（有符号）
+reflect.Int64         // 整数64位（有符号）
+reflect.Uint          // 整数（无符号）
+reflect.Uint8         // 整数8（无符号）
+reflect.Uint16        // 整数16（无符号）
+reflect.Uint32        // 整数（无符号）
+reflect.Uint64        // 整数（无符号）
+reflect.Uintptr       // 整数（指针,无符号）
+reflect.Float32       // 浮点数32位
+reflect.Float64       // 浮点数64位
+reflect.Complex64     // 复数64位
+reflect.Complex128    // 复数128位
+reflect.Array         // 数组
+reflect.Chan          // 信道
+reflect.Func          // 函数
+reflect.Interface     // 接口
+reflect.Map           // 地图
+reflect.Ptr           // 指针
+reflect.Slice         // 切片
+reflect.String        // 字符
+reflect.Struct        // 结构
+reflect.UnsafePointer // 安全指针
+<pre>
+ package main
+    import (
+        "fmt"
+        "reflect"
+    )
+    func main() {
+        var a string
+        var kind reflect.Kind = reflect.TypeOf(a).Kind()
+        fmt.Println(kind, kind == reflect.String, kind == reflect.Int)
+        //>>string true false
+    }
+output==>
+string true false
+</pre>
