@@ -2836,3 +2836,19 @@ if(!($fp = @fopen($url, 'r')))
               }
           }
 fclose($fp); 
+
+
++++Protected+++++
+PHP类的protected（保护成员）
+对于有些类来说，需要做到封装，这时，就可以使用protected关键字了。
+被protected关键字修饰的类成员，可以在本类和子类中被调用，其它地方则不可以被调用。
+class Book{
+  protected  $name = "computer";
+}
+class EBook extends Book{
+  public function showme(){
+    echo "对于protected修饰的变量，在子类中可以直接调用,如$ name=".$this->name;
+  }
+}
+$ebook=new EBook();
+$ebook->showme();
