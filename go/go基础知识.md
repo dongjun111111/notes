@@ -7415,3 +7415,30 @@ func main(){
 }
 在地址栏中输入localhost:9999/hello,结果是直接跳到world页面中。
 </pre>
+####http.Serve
+tcp监听端口，在端口上启用http服务。
+<pre>
+package main
+import (
+	"log"
+	"net"
+	"io"
+	"net/http"
+)
+func helloServer(w http.ResponseWriter,req *http.Request){
+	io.WriteString(w,"hellowolrd server")
+}
+func main(){
+	http.HandleFunc("/hi",helloServer)
+	// 首先，创建用tcp协议监听8888端口
+	l,e :=net.Listen("tcp",":8888")
+	if e != nil{
+		log.Fatal("Listen:",e)
+	}
+	// 然后在监听的这个端口上启用http服务进行http服务
+	err:=http.Serve(l,nil)
+	if err != nil {
+		log.Fatal("serve:",err)
+	}
+}
+</pre>
