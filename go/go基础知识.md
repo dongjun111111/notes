@@ -7264,3 +7264,31 @@ func main() {
 浏览器地址栏中输入localhost:8888/hello
 404
 </pre>
+自定义多个页面链接入口
+<pre>
+package main
+
+import (
+	"log"
+	"io"
+	"net/http"
+)
+func helloServer(w http.ResponseWriter, req *http.Request){
+	io.WriteString(w,"hello world")
+}
+func IndexPhpServer(w http.ResponseWriter ,req *http.Request){
+	io.WriteString(w,"<html><body><font color=red>Yes,这是红的</font></body></html>")
+}
+func jiang(w http.ResponseWriter,req *http.Request){
+	io.WriteString(w,"这是jiang的网站")
+}
+func main(){
+	http.HandleFunc("/hello",helloServer)
+	http.HandleFunc("/index.php",IndexPhpServer)
+	http.HandleFunc("/jiang",jiang)
+	err :=http.ListenAndServe(":8008",nil)
+	if err != nil {
+		log.Fatal("ListenAndServe:",err)
+	}
+}
+</pre>
