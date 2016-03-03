@@ -7201,3 +7201,23 @@ output==>
 </pre>
 ###Net包
 net 包是处理网络I/O的包.
+####CanonicalHeaderKey
+<pre>
+package main
+//功能说明： 这个函数返回一个规范好的标准的http header字符串。
+// 标准化的http header 字符串格式为： 第一个字母和跟着“-”字符
+//后面的第一个字母大写，剩下的字符全部小写。 举个例子： 对于一个
+//http头（header） "accept-encoding" 来说， 规范好的标准
+//化格式就是 "Accept-Encoding"。
+import (
+	"net/http"
+	"fmt"
+)
+func main(){
+	fmt.Println(http.CanonicalHeaderKey("accept-encoding"))
+	fmt.Println(http.CanonicalHeaderKey("accept-Language"))
+}
+output==>
+Accept-Encoding
+Accept-Language
+</pre>
