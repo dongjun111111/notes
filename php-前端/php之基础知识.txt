@@ -2886,3 +2886,15 @@ parse_str("name=Bill&age=60");
 echo $name."<br>";
 echo $age;
 //结果是Bill 与60
+
++++class_exists注意事项++++++
+class_exists：
+它是有两个参数的，我们平时用这个方法的时候大都只给了第一个参数，第二个参数的默认值是默认为true，
+而关于第二个参数的解释是：
+autoload
+Whether or not to call __autoload by default.
+所以当我们不设置第二个参数时，会去调用__autoload方法去加载类，
+众所周知__autoload方法的机制，它可能会对磁盘进行大量的I/O操作，严重影响效率，
+所以大家在用这个方法的时候可以用这个方法解决：把第二个参数设置为false。
+所以使用时候一般写成：
+class_exists(类名,false);
