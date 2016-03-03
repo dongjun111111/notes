@@ -2872,3 +2872,9 @@ $tmp=str_repeat('hello',1000);
 echo "运行后内存：".memory_get_usage();
 unset($tmp);
 echo "回到正常内存：".memory_get_usage();
+
+
++++substr_count+++++
+获得某个字符串中出现某个特定字符的次数。
+$str = "hello gghle hrlloe heollheghef";
+echo substr_count($str,'he');     //结果是4
