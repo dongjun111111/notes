@@ -7442,3 +7442,39 @@ func main(){
 	}
 }
 </pre>
+####http.ServeFile
+将本地文件输出到浏览器,通过tcp监听端口，通过http服务。
+<pre>
+package main
+
+import (
+	"log"
+	"net"
+	"net/http"
+)
+func helloserver(w http.ResponseWriter,req *http.Request){
+	http.ServeFile(w,req,"yes.txt")
+}
+func main(){
+	http.HandleFunc("/hello",helloserver)
+	l,e :=net.Listen("tcp",":8009")
+	if e != nil {
+		log.Fatal("listen:",e)
+	}
+	err :=http.Serve(l,nil)
+	if err != nil {
+		log.Fatal("serve:",err)
+	}
+}
+output=>
+Just a test!
+Just a test!
+Just a test!
+Just a test!
+Just a test!
+Just a test!
+Just a test!
+Just a test!
+Just a test!
+Just a test!
+</pre>
