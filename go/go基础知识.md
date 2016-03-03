@@ -7331,3 +7331,19 @@ func main(){
 	}
 }
 </pre>
+####http.ParseHTTPVersion
+用来解析一个HTTP版本字符串
+<pre>
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+func main(){
+	major,minor,ok :=http.ParseHTTPVersion("HTTP/1.1")
+	fmt.Println(major,minor,ok) //major主版本号，minor从版本号
+}
+output==>
+1 1 true
+</pre>
