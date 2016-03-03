@@ -7690,7 +7690,7 @@ func main(){
 }
 4 {[9 8 7 6 5 6 7] [9 8 7 6]}
 </pre>
-####reflect.Kind
+####reflect.TypeOf(x).Kind()
 reflect.Kind 有以下常量成员
 reflect.Invalid       // 无效
 reflect.Bool          // 布尔
