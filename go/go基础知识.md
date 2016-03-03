@@ -7567,3 +7567,77 @@ func main(){
 output==>
 b
 </pre>
+####path.Dir
+这个函数主要是返回path中最后一个元素的路径
+<pre>
+package main
+
+import (
+    "fmt"
+    "path"
+)
+
+func main() {
+    fmt.Println(path.Dir("/a/b/c")) // /a/b
+    fmt.Println(path.Dir("")) // .
+}
+</pre>
+####path.Ext
+<pre>
+package main
+
+import (
+    "fmt"
+    "path"
+)
+
+func main() {
+    fmt.Println(path.Ext("/a/b/c/bar.css")) // .css
+    fmt.Println(path.Ext("/a/b/c/bar")) // ""
+}
+</pre>
+####path.IsAbs
+这个函数主要是判断路径是不是绝对路径，如果是绝对路径返回true
+<pre>
+package main
+
+import (
+    "fmt"
+    "path"
+)
+
+func main() {
+    fmt.Println(path.IsAbs("/home/zzz/go.pdf")) // true
+    fmt.Println(path.IsAbs("home/zzz/go.pdf"))  // false
+}
+</pre>
+####path.join
+<pre>
+package main
+
+import (
+    "fmt"
+    "path"
+)
+
+func main() {
+    fmt.Println(path.Join("a", "b", "c")) // a/b/c
+    fmt.Println(path.Join("a", "", "c"))  // a/c
+    fmt.Println(path.Join("a", "../bb/../c", "c")) // c/c
+}
+</pre>
+####path.Split
+这个函数主要是分离路径中的文件目录和文件
+<pre>
+package main
+
+import (
+    "fmt"
+    "path"
+)
+
+func main() {
+    fmt.Println(path.Split("static/myfile.css")) // static/ myfile.css
+    fmt.Println(path.Split("static"))   // "" static
+}
+</pre>
