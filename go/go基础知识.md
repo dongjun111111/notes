@@ -7530,3 +7530,23 @@ output==>
 Not Found
 Accepted
 </pre>
+###Os包
+os.Getwd
+<pre>
+package main
+
+import (
+	"fmt"
+	"os"
+)
+func main(){
+	pwd,err :=os.Getwd()
+	if err != nil{
+		fmt.Printf("Error:%s\n",err)
+		return
+	}
+	fmt.Println("The current directory is:",pwd)
+}
+output==>
+The current directory is: C:\mygo\src\lite
+</pre>
