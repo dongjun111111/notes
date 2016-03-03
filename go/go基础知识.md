@@ -7550,3 +7550,20 @@ func main(){
 output==>
 The current directory is: C:\mygo\src\lite
 </pre>
+####path.Base
+这个函数主要是用来返回最后一个元素的路径,如果路径为空返回.如果路径由斜线组成,返回/
+<pre>
+package main
+
+import (
+	"path"
+	"fmt"
+)
+func main(){
+	fmt.Println(path.Base("/a/b"))
+	fmt.Println(path.Base(""))  // .    
+    fmt.Println(path.Base("////"))  // /
+}
+output==>
+b
+</pre>
