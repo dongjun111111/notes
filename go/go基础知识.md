@@ -7513,3 +7513,20 @@ func main() {
     }
 }
 </pre>
+####http.StatusText
+string对应状态码的字符串
+<pre>
+package main
+
+import (
+	"net/http"
+	"fmt"
+)
+func main(){
+	fmt.Println(http.StatusText(404))
+	fmt.Println(http.StatusText(202))
+}
+output==>
+Not Found
+Accepted
+</pre>
