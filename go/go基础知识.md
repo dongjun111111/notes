@@ -7312,3 +7312,22 @@ func main() {
 output==>
 post ok
 </pre>
+####http.NotFound直接输出404
+<pre>
+package main
+
+import (
+	"log"
+	"net/http"
+)
+func helloServer(w http.ResponseWriter , req *http.Request){
+	http.NotFound(w,req)
+}
+func main(){
+	http.HandleFunc("/hello",helloServer)
+	err :=http.ListenAndServe(":8080",nil)
+	if err != nil{
+		log.Fatal("listenAndServe:",err)
+	}
+}
+</pre>
