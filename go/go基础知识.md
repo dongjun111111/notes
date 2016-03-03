@@ -7389,3 +7389,29 @@ func main() {
     }
 }
 </pre>
+####http.Redirect
+页面跳转
+<pre>
+package main
+
+import (
+	"log"
+	"io"
+	"net/http"
+)
+func helloServer(w http.ResponseWriter, req *http.Request){
+	http.Redirect(w,req,"world",http.StatusFound)
+}
+func worldServer(w http.ResponseWriter,req *http.Request){
+	io.WriteString(w,"world server")
+}
+func main(){
+	http.HandleFunc("/hello",helloServer)
+	http.HandleFunc("/world",worldServer)
+	err :=http.ListenAndServe(":9999",nil)
+	if err != nil{
+		log.Fatal("listenAndServe:",err)
+	}
+}
+在地址栏中输入localhost:9999/hello,结果是直接跳到world页面中。
+</pre>
