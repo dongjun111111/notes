@@ -94,3 +94,19 @@ Internal Server Error 解决办法：
 如果你想解决PHP程序中的文件权限设置错误，并且不造成网站发生500内部服务器错误。那么需要依循以下规则：
 1.保证：文件夹权限要设置为755或者更低,文件权限要设置为644或者更低。
 2.如果文件权限是644但是PHP程序功能还是不好用，提示文件权限不够，那么可以联系客服，让他们将安全模块禁用。
+
+++常见状态码++++
+ static $_status = array(
+        // Success 2xx
+        200 => 'OK',
+        // Redirection 3xx
+        301 => 'Moved Permanently',  //永久移除
+        302 => 'Moved Temporarily ',  // 1.1 暂时移除
+        // Client Error 4xx
+        400 => 'Bad Request',  //请求无效
+        403 => 'Forbidden',    //禁止访问
+        404 => 'Not Found',     //没有找到
+        // Server Error 5xx
+        500 => 'Internal Server Error',   //网络文件权限错误
+        503 => 'Service Unavailable',  //服务不可用,可能是一个网站的程序占资源太多或者发生太多的错误
+    );
