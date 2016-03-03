@@ -2865,3 +2865,10 @@ class把一个一个function组织起来，namespace可以理解成把一个一�
 另外，如果从类的内部访问const或者static变量或者方法,那么就必须使用自引用的self，反之如果从类的内部访问
 不为const或者static变量或者方法,那么就必须使用自引用的$this。
 
++++memory_get_usage获取内存使用状况+++
+使用完的变量应该马上删除，释放内存。
+echo "开始内存:".memory_get_usage();
+$tmp=str_repeat('hello',1000);
+echo "运行后内存：".memory_get_usage();
+unset($tmp);
+echo "回到正常内存：".memory_get_usage();
