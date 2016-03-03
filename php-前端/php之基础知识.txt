@@ -2917,3 +2917,28 @@ echo http_build_query($data);
 $arr=array('a','b','c');
 var_dump(array_reverse($arr));  //键值顺序反转
 var_dump(array_flip($arr));    //键值与键名互换
+
+++++++getIp+++
+获取准确用户IP地址。
+function get_client_ip($type = 0) {   //ip形式
+    $type       =  $type ? 1 : 0;
+    static $ip  =   NULL;
+    if ($ip !== NULL) return $ip[$type];
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $arr    =   explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $pos    =   array_search('unknown',$arr);
+        if(false !== $pos) unset($arr[$pos]);
+        $ip     =   trim($arr[0]);
+    }elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip     =   $_SERVER['HTTP_CLIENT_IP'];
+    }elseif (isset($_SERVER['REMOTE_ADDR'])) {
+        $ip     =   $_SERVER['REMOTE_ADDR'];
+    }
+    // IP地址合法验证
+    $long = sprintf("%u",ip2long($ip));
+    $ip   = $long ? array($ip, $long) : array('0.0.0.0', 0);
+    return $ip[$type];
+}
+function getIP(){    //long形式
+  return bindec( decbin( ip2long( get_client_ip () ) ) );
+}
