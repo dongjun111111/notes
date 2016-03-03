@@ -2912,3 +2912,8 @@ if(!extension_loaded('json')){
 $data=array('foo'=>'bar','baz'=>'boom','cow'=>'milk');
 echo http_build_query($data);
 结果是：foo=bar&baz=boom&cow=milk
+
++++array_reverse与array_flip++++
+$arr=array('a','b','c');
+var_dump(array_reverse($arr));  //键值顺序反转
+var_dump(array_flip($arr));    //键值与键名互换
