@@ -2898,3 +2898,17 @@ Whether or not to call __autoload by default.
 所以大家在用这个方法的时候可以用这个方法解决：把第二个参数设置为false。
 所以使用时候一般写成：
 class_exists(类名,false);
+
+++extension_loaded++++
+检测扩展是否开启：
+if(!extension_loaded('json')){
+  echo "json扩展没有开启";
+}else{
+  echo "json扩展已经开启";
+}
+
++++http_build_query++++
+该函数将PHP数组转变成url请求字符串。
+$data=array('foo'=>'bar','baz'=>'boom','cow'=>'milk');
+echo http_build_query($data);
+结果是：foo=bar&baz=boom&cow=milk
