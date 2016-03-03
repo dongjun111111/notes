@@ -2852,3 +2852,16 @@ class EBook extends Book{
 }
 $ebook=new EBook();
 $ebook->showme();
+
++++Namespace的作用++++
+class把一个一个function组织起来，namespace可以理解成把一个一个class,function等有序的组织起来。个人觉得，namespace的主要优势有
+第一,可以更好的管理代码
+第二,文件一多，可以避免class，function的重名
+第三,代码可读性增强了
+
++++PHP中::、-&gt;、self、$this操作符的区别+++++
+在访问PHP类中的成员变量或方法时，如果被引用的变量或者方法被声明成const（定义常量）或者static（声明静态）,
+那么就必须使用操作符::,反之如果被引用的变量或者方法没有被声明成const或者static,那么就必须使用操作符->。
+另外，如果从类的内部访问const或者static变量或者方法,那么就必须使用自引用的self，反之如果从类的内部访问
+不为const或者static变量或者方法,那么就必须使用自引用的$this。
+
