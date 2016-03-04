@@ -7752,3 +7752,24 @@ func main(){
 output==>
 [5 6 6 7 7 8 9]
 </pre>
+####sort.Float64sAreSorted
+sort.Float64sAreSorted判断float64切片是否已经排序过，当然，它已经把float64切片重新排序了.
+<pre>
+package main
+
+import (
+	"sort"
+	"fmt"
+)
+func main(){
+	a :=[]float64{2,4,6,7,4,5,6,7,5,7,9}
+	fmt.Println(sort.Float64sAreSorted(a))
+	sort.Float64s(a)
+	fmt.Println(sort.Float64sAreSorted(a))
+	fmt.Println(a)
+}
+output==>
+false
+true
+[2 4 4 5 5 6 6 7 7 7 9]
+</pre>
