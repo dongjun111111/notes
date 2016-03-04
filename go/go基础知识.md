@@ -7901,3 +7901,20 @@ false
 [golang php java python c]
 [c golang java php python]
 </pre>
+####Strings
+以升序排列string切片
+<pre>
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+func main(){
+	a :=[]string{"php","golang","java","python","c"}
+	sort.Strings(a)
+	fmt.Println(a)
+}
+output==>
+[c golang java php python]
+</pre>
