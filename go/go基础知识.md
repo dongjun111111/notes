@@ -7773,3 +7773,20 @@ false
 true
 [2 4 4 5 5 6 6 7 7 7 9]
 </pre>
+####sort.Ints()
+以升序排列int切片
+<pre>
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+func main(){
+	a :=[]int{34,5,6,4,3,4,5,6,564,3,43,3,5,566,56,43}
+	sort.Ints(a)
+	fmt.Println(a)
+}
+ouptut==>
+[3 3 3 4 4 5 5 5 6 6 34 43 43 56 564 566]
+</pre>
