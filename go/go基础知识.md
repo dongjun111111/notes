@@ -7735,3 +7735,20 @@ output==>
 string true false
 </pre>
 ###sort包
+####sort.Float64s()
+Float64s 以升序排列 float64 切片
+<pre>
+package main 
+
+import (
+	"fmt"
+	"sort"
+)
+func main(){
+	a :=[]float64{5,6,7,8,9,6,7}
+	sort.Float64s(a)
+	fmt.Println(a)  //注意这里的fmt.Println若换成println则输出结果不一样
+}
+output==>
+[5 6 6 7 7 8 9]
+</pre>
