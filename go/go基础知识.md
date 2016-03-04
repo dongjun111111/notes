@@ -7845,3 +7845,33 @@ func main(){
 output==>
 [64 54 23 6 5 5 4 3 3]
 </pre>
+####sort.Search
+二分法找某个数
+<pre>
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+func main() {
+	var s string
+	fmt.Printf("Pick an integer from 0 to 100.\n")
+	answer := sort.Search(100, func(i int) bool {
+		fmt.Printf("Is your number <= %d? ", i)
+		fmt.Scanf("%s", &s)
+		return s != "" && s[0] == 'y'
+	})
+	fmt.Printf("Your number is %d.\n", answer)
+}
+oupput==>
+Pick an integer from 0 to 100.
+Is your number <= 50? 
+Is your number <= 75? 
+Is your number <= 88? 
+Is your number <= 94? 
+Is your number <= 97? 
+Is your number <= 99? 
+Your number is 100.
+</pre>
