@@ -7790,3 +7790,22 @@ func main(){
 ouptut==>
 [3 3 3 4 4 5 5 5 6 6 34 43 43 56 564 566]
 </pre>
+####sort.IntsAreSorted
+判断int切片是否已经排序过
+<pre>
+package main
+
+import (
+	"sort"
+	"fmt"
+)
+func main(){
+	a :=[]int{3,4,5,6,5,7,8}
+	sort.Ints(a)
+	fmt.Println(sort.IntsAreSorted(a))
+	fmt.Println(a)
+}
+output==>
+true
+[3 4 5 5 6 7 8]
+</pre>
