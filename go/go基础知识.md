@@ -7875,3 +7875,29 @@ Is your number <= 97?
 Is your number <= 99? 
 Your number is 100.
 </pre>
+####StringSlice
+有以下方法：Less . Search . Swap。
+<pre>
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+func main(){
+	p :=sort.StringSlice{"php","golang","java","python","c"}
+	fmt.Println(p.Len())  //5  返回数组/切片的长度
+	fmt.Println(p.Less(0,1)) //false 返回 p[i] < p[j] 是否为真
+	fmt.Println(p.Search("java"))  //2
+	p.Swap(0,1)  //交换键名为0与1的键值
+	fmt.Println(p)
+	p.Sort()
+	fmt.Println(p)  //排序 a-z
+}
+output==>
+5
+false
+2
+[golang php java python c]
+[c golang java php python]
+</pre>
