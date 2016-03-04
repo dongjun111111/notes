@@ -7937,3 +7937,23 @@ output==>
 false
 true
 </pre>
+###Strconv
+####strconv.AppendBool
+将布尔值 b 转换为字符串 "true" 或 "false" 然后将结果追加到 dst 的尾部，返回追加后的 []byte.
+<pre>
+package main
+import (
+    "fmt"
+    "strconv"
+)
+
+func main() {
+   	list := strconv.AppendBool(make([]byte, 3), false)
+    fmt.Println(list)//[0 0 0 102 97 108 115 101]
+    newlist := strconv.AppendBool(list, true)
+    fmt.Println(newlist)//[0 0 0 102 97 108 115 101 116 114 117 101]
+}
+output==>
+[0 0 0 102 97 108 115 101]
+[0 0 0 102 97 108 115 101 116 114 117 101]
+</pre>
