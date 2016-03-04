@@ -7809,3 +7809,22 @@ output==>
 true
 [3 4 5 5 6 7 8]
 </pre>
+####sort.IsSorted
+判断数据是否已经按升序排列
+<pre>
+package main
+
+import (
+	"sort"
+	"fmt"
+)
+func main(){
+	d :=[]int{23,5,6,45,3,2}
+	sort.Sort(sort.IntSlice(d))
+	fmt.Println(sort.IsSorted(sort.IntSlice(d)))
+	fmt.Println(d)
+}
+output==>
+true
+[2 3 5 6 23 45]
+</pre>
