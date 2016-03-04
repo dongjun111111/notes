@@ -7973,3 +7973,23 @@ output==>
 12345 <nil>
 0 strconv.ParseInt: parsing "abcde": invalid syntax
 </pre>
+####FormatBool
+将true或者false转换成字符串
+<pre>
+package main
+
+import (
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    b := strconv.FormatBool(true)
+    fmt.Println(b)
+    b = strconv.FormatBool(false)
+    fmt.Println(b)
+}
+output==>
+true
+false
+</pre>
