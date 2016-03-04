@@ -7918,3 +7918,22 @@ func main(){
 output==>
 [c golang java php python]
 </pre>
+####StringsAreSorted
+判断是否已经按升序排列
+<pre>
+package main
+
+import (
+	"sort"
+	"fmt"
+)
+func main(){
+	a :=[]string{"php","golang","java"}
+	fmt.Println(sort.StringsAreSorted(a)) //false
+	sort.Strings(a)
+	fmt.Println(sort.StringsAreSorted(a)) //true
+}
+output==>
+false
+true
+</pre>
