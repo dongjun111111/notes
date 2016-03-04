@@ -7957,3 +7957,19 @@ output==>
 [0 0 0 102 97 108 115 101]
 [0 0 0 102 97 108 115 101 116 114 117 101]
 </pre>
+####Atoi
+Atoi是函数ParseInt(s, 10, 0)的简写。把字符串格式的数字如“12345”转化为数字12345.
+<pre>
+package main
+import (
+    "fmt"
+    "strconv"
+)
+func main() {
+    fmt.Println(strconv.Atoi("12345"))
+    fmt.Println(strconv.Atoi("abcde"))
+}
+output==>
+12345 <nil>
+0 strconv.ParseInt: parsing "abcde": invalid syntax
+</pre>
