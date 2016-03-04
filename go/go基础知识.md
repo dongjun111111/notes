@@ -7828,3 +7828,20 @@ output==>
 true
 [2 3 5 6 23 45]
 </pre>
+####sort.Reverse
+返回逆序(倒序)的数据
+<pre>
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+func main(){
+	s :=[]int{3,5,64,5,6,3,54,4,23}
+	sort.Sort(sort.Reverse(sort.IntSlice(s)))
+	fmt.Println(s)
+}
+output==>
+[64 54 23 6 5 5 4 3 3]
+</pre>
