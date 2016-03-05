@@ -7993,3 +7993,57 @@ output==>
 true
 false
 </pre>
+####Cond
+*cond:创建Cond。
+<br>Wait():添加waiter，使用时要注意先调用c.L.Lock()。
+<br>Broadcast():唤醒所有waiter，包括上一代和新一代。
+<pre>
+package main
+
+import (
+    "fmt"
+    "time"
+    "sync"
+)
+
+func waiter(cond *sync.Cond,id int) {
+    cond.L.Lock()
+    cond.Wait()
+    cond.L.Unlock()
+    fmt.Printf("Waiter:%d wake up!\n",id)
+}
+
+func main() {
+    locker := new(sync.Mutex)
+    cond := sync.NewCond(locker)  //使用Mutex作为Locker
+
+    for i := 0; i < 3; i++ {        //生成waiter
+        go waiter(cond,i)
+    }
+    time.Sleep(time.Second * 1)     //等待waiter到位
+
+    cond.L.Lock()
+    cond.Signal()                   //唤醒一个waiter
+    cond.L.Unlock()
+
+    for i := 3; i < 5; i++ {        //生成新一代waiter
+        go waiter(cond,i)
+    }
+    time.Sleep(time.Second * 1)
+
+    cond.L.Lock()
+    cond.Signal()                   //唤醒的将是上一代（id<3）的waiter之一
+    cond.L.Unlock()
+
+    cond.L.Lock()
+    cond.Broadcast()                //唤醒所以waiter
+    cond.L.Unlock()
+    time.Sleep(time.Second * 1)
+}
+output==>
+Waiter:0 wake up!
+Waiter:1 wake up!
+Waiter:2 wake up!
+Waiter:3 wake up!
+Waiter:4 wake up!
+</pre>
