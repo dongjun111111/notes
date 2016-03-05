@@ -8259,3 +8259,41 @@ func main() {
 output==>
 2016/03/05 14:22:53 1 The operation completed successfully. 33265
 </pre>
+####scanner
+初始化一个词法解析器。
+<pre>
+package main
+
+import (
+	"text/scanner"
+	"fmt"
+	"strings"
+)
+func main(){
+	src:=strings.NewReader("int hello = 3;hello+23;print hello;")
+	fmt.Println(src)
+	var s scanner.Scanner
+	s.Init(src)
+	
+	tok :=s.Scan()
+	fmt.Println(s.TokenText())
+	for tok !=scanner.EOF {
+		tok = s.Scan()
+		fmt.Println(s.TokenText())
+	}
+}
+output==>
+&{int hello = 3;hello+23;print hello; 0 -1}
+int
+hello
+=
+3
+;
+hello
++
+23
+;
+print
+hello
+;
+</pre>
