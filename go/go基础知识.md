@@ -8607,3 +8607,26 @@ The ABC of Go
 GO1,The ABC of Go,25
 </pre>
 当在进行大量的计算时，提升性能最直接有效的一种方式就是避免重复计算。通过在内存中缓存和重复利用相同计算的结果，称之为内存缓存。最明显的例子就是生成斐波那契数列的程序
+
+####Copy与Append
+<pre>
+package main
+import "fmt"
+
+func main() {
+    sl_from := []int{1, 2, 3}
+    sl_to := make([]int, 10)
+
+    n := copy(sl_to, sl_from)   //复制
+    fmt.Println(sl_to)
+    fmt.Printf("Copied %d elements\n", n) // n == 3
+
+    sl3 := []int{1, 2, 3}
+    sl3 = append(sl3, 4, 5, 6)    //追加
+    fmt.Println(sl3)
+}
+output==>
+[1 2 3 0 0 0 0 0 0 0]
+Copied 3 elements
+[1 2 3 4 5 6]
+</pre>
