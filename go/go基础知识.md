@@ -8477,7 +8477,6 @@ output==>
 判断某个字符串的前缀是否是某个字符。
 <pre>
 package main
-
 import (
 	"strings"
 	"fmt"
@@ -8490,6 +8489,22 @@ func main(){
 output==>
 this is an example of a string
 true
+</pre>
+####strings.HasSuffix
+<pre>
+package main
+import (
+	"strings"
+	"fmt"
+)
+func main(){
+	var str string ="this is an example of a string\n"
+	fmt.Printf("%s",str)
+	fmt.Printf("%t\n",strings.HasSuffix(str,"nn"))
+}
+output==>
+this is an example of a string
+false
 </pre>
 ####Count
 输出字符串中有多少个指定字符
