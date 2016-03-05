@@ -8206,3 +8206,29 @@ output==>
 8630
 count:10000
 </pre>
+####WaitGroup
+- Add(1):添加delta个元素进入WaitGroup。个人觉得这里的接口设计有问题，如果Add(2)，那就要掉用两次Done()。而且会有Add(2)的需求吗？
+- Done():对WaitGroup的counter减1。
+- Wait():阻塞，直到WaitGroup中的所以过程完成。
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+func wgProcess(wg *sync.WaitGroup,id int){
+	fmt.Printf("process %d is going!\n",id)
+	wg.Done()
+}
+func main(){
+	wg :=new(sync.WaitGroup)
+	for i:=0;i<3;i++{
+		wg.Add(1)
+		go wgProcess(wg,i)
+	}
+	wg.Wait()
+}
+output==>
+process 2 is going!
+</pre>
