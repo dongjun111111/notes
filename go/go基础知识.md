@@ -8421,3 +8421,20 @@ output==>
 2016-03-05 14:52:19.2307049 +0800 +0800
 2016-03-05 14:52:20.2307621 +0800 +0800
 </pre>
+####timer
+新建一个Timer，在时间d之后将当前时间发送给C.
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	timer :=time.NewTimer(2 * time.Second)
+	t := <- timer.C
+	fmt.Println(t)
+}
+output==>
+2016-03-05 14:55:39.2671463 +0800 +0800
+</pre>
