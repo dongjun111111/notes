@@ -8456,3 +8456,20 @@ fmt.Printf("%c", s)
 output==>
 [H e l l o   世 界]
 </pre>
+####utf16.Encode
+将s编码成 UTF-16 序列并返回.
+<pre>
+package main
+
+import (
+	"fmt"
+	"unicode/utf16"
+)
+func main(){
+	s :=[]rune("hello世界")
+	u :=utf16.Encode(s)
+	fmt.Printf("%v",u)
+}
+output==>
+[104 101 108 108 111 19990 30028]
+</pre>
