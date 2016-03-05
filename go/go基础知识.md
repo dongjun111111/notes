@@ -8545,3 +8545,26 @@ output==>
 hey,how are you
 HEY,HOW ARE YOU
 </pre>
+####strings.Fields
+<pre>
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+func main(){
+	str :="the quick brown fox jumps over the lazy dog"
+	//会利用 1 个或多个空白符号来作为动态长度的分隔符将字符串分割
+	//成若干小块，组成一个slice，如果字符串只包含空白符号，则返回一个长度为 0 的 slice。
+	//相当于PHP中的implode(" ",)
+	sl :=strings.Fields(str)
+	fmt.Printf("分割形成的切片是:%v\n",sl)
+	for _,val :=range sl{
+		fmt.Printf("%s -",val)
+	}
+}
+output==>
+分割形成的切片是:[the quick brown fox jumps over the lazy dog]
+the -quick -brown -fox -jumps -over -the -lazy -dog -
+</pre>
