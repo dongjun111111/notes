@@ -8395,3 +8395,29 @@ func main() {
 output==>
 March
 </pre>
+####ticker
+新建一个Ticker，包含了time channel，每隔指定d间隔的时间发送时间给这个channel。d必须大于0，否则函数会崩溃.每隔一段时间操作一次指定动作。
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func tick(ch <-chan time.Time){
+	for t :=range ch {
+		fmt.Println(t)
+	}
+}
+func main(){
+	ticker :=time.NewTicker(time.Second)
+	go tick(ticker.C)
+	time.Sleep(5 * time.Second)
+}
+output==>
+2016-03-05 14:52:16.2305333 +0800 +0800
+2016-03-05 14:52:17.2325906 +0800 +0800
+2016-03-05 14:52:18.2306477 +0800 +0800
+2016-03-05 14:52:19.2307049 +0800 +0800
+2016-03-05 14:52:20.2307621 +0800 +0800
+</pre>
