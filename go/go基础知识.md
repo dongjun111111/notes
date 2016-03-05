@@ -8492,6 +8492,7 @@ this is an example of a string
 true
 </pre>
 ####Count
+输出字符串中有多少个指定字符
 <pre>
 package main
 
@@ -8505,4 +8506,21 @@ func main(){
 }
 output==>
 4
+</pre>
+####Repeat
+重复字符串组成新的字符串。
+<pre>
+package main
+import (
+	"fmt"
+	"strings"
+)
+func main(){
+	var or string = "hi "
+	var new string
+	new =strings.Repeat(or,4)
+	fmt.Printf("%s",new)
+}
+output==>
+hi hi hi hi
 </pre>
