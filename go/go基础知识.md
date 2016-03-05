@@ -8378,4 +8378,20 @@ output==>
 Sat Mar  5 14:44:27 2016
 Sat Mar  5 14:44:27 +0800 2016
 </pre>
+####Month
+返回一年中的某个月
+<pre>
+package main
 
+import (
+    "fmt"
+    "time"
+)
+
+func main() {
+    _, M, _ := time.Now().Date()
+    fmt.Println(M)
+}
+output==>
+March
+</pre>
