@@ -8105,3 +8105,33 @@ output==>
 count1:100000
 count2:100000
 </pre>
+####Once
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+func main(){
+	once :=new(sync.Once)
+	ch :=make(chan int,3)
+	for i:=0;i<3;i++{
+		go func(x int){
+			once.Do(func(){
+				fmt.Printf("once %d\n",x)
+			})
+			fmt.Printf("%d\n",x)
+			ch <-1
+		}(i)
+	}
+	for i :=0;i<3;i++{
+		<- ch 
+	}
+}
+output==>
+once 0
+0
+1
+2
+</pre>
