@@ -8438,3 +8438,21 @@ func main(){
 output==>
 2016-03-05 14:55:39.2671463 +0800 +0800
 </pre>
+####utf16.Decode()
+将utf-16序列 解码成Unicode字符序列并返回
+<pre>
+package main
+
+import (
+ "fmt"
+"unicode/utf16"
+)
+func main() {
+u := []uint16{72, 101, 108, 108, 111, 32, 19990, 30028}
+s := utf16.Decode(u)
+fmt.Printf("%c", s)
+//[H e l l o   世 界]
+}
+output==>
+[H e l l o   世 界]
+</pre>
