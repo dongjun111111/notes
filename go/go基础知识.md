@@ -8473,3 +8473,21 @@ func main(){
 output==>
 [104 101 108 108 111 19990 30028]
 </pre>
+####strings.HasPrefix
+判断某个字符串的前缀是否是某个字符。
+<pre>
+package main
+
+import (
+	"strings"
+	"fmt"
+)
+func main(){
+	var str string ="this is an example of a string\n"
+	fmt.Printf("%s",str)
+	fmt.Printf("%t\n",strings.HasPrefix(str,"th"))
+}
+output==>
+this is an example of a string
+true
+</pre>
