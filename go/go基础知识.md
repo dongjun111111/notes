@@ -8524,3 +8524,24 @@ func main(){
 output==>
 hi hi hi hi
 </pre>
+####ToLower与ToUpper
+大小写转换
+<pre>
+package main
+
+import (
+	"strings"
+)
+func main(){
+	var or string = "hey,how are you"
+	var lower string
+	var upper string
+	lower = strings.ToLower(or)
+	upper= strings.ToUpper(or)
+	println(lower)
+	println(upper)
+}
+output==>
+hey,how are you
+HEY,HOW ARE YOU
+</pre>
