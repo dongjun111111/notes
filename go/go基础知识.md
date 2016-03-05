@@ -8491,3 +8491,18 @@ output==>
 this is an example of a string
 true
 </pre>
+####Count
+<pre>
+package main
+
+import (
+	"strings"
+	"fmt"
+)
+func main(){
+	var str string = "this is it going"
+	fmt.Println(strings.Count(str,"i"))
+}
+output==>
+4
+</pre>
