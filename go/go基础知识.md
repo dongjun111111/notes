@@ -8335,3 +8335,28 @@ output==>
 2016-03-05 14:36:26.3602038 +0800 +0800
 2018-06-09 14:36:26.3602038 +0800 +0800
 </pre>
+####After
+等待指定时间段之后将当前时间发送给返回的chan中。等价于NewTimer(d).C
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	result :=make(chan int)
+	go func(ch chan int){
+		time.Sleep(3 * time.Second)
+		ch <- 4
+	}(result)
+	select {
+		case <- time.After(2 * time.Second):
+		fmt.Println("time out")
+		case <- result:
+		fmt.Println(result)
+	}
+}
+output==>
+time out
+</pre>
