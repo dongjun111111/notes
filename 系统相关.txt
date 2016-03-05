@@ -389,7 +389,7 @@ http ¶ÌÂÖÑ¯µÄ¾ÖÏÞÊÇÊµÊ±ÐÔµÍ;
 Á½ÕßÏàÍ¬µã£º
 ¿ÉÒÔ¿´³ö http ³¤ÂÖÑ¯ºÍ http ¶ÌÂÖÑ¯µÄ¶¼»á hold Ò»¶ÎÊ±¼ä;
 Á½Õß²»Í¬µã
-¼ä¸ô·¢ÉúÔÚ·þÎñ¶Ë»¹ÊÇä¯ÀÀÆ÷¶Ë: http ³¤ÂÖÑ¯ÔÚ·þÎñ¶Ë»á hold Ò»¶ÎÊ±¼ä, http ¶ÌÂÖÑ¯ÔÚä¯ÀÀÆ÷¶Ë ¡°hold¡± Ò»¶ÎÊ±¼ä;
+¼ä¸ô·¢ÉúÔÚ·þÎñ¶Ë»¹ÊÇä¯ÀÀÆ÷¶Ë: http ³¤ÂÖÑ¯ÔÚÎñ¶Ë»á hold Ò»¶ÎÊ±¼ä, http ¶ÌÂÖÑ¯ÔÚä¯ÀÀÆ÷¶Ë ¡°hold¡± Ò»¶ÎÊ±¼ä;
 Ó¦ÓÃ£º
 ³¤ÂÖÑ¯Ò»°ãÓÃÔÚ web im, im ÊµÊ±ÐÔÒªÇó¸ß, http ³¤ÂÖÑ¯µÄ¿ØÖÆÈ¨Ò»Ö±ÔÚ·þÎñÆ÷¶Ë, ¶øÊý¾ÝÊÇÔÚ·þÎñÆ÷¶ËµÄ, Òò´ËÊµÊ±ÐÔ¸ß;
 ÏñÐÂÀËÎ¢±¡µÄim, ÅóÓÑÍøµÄ im ÒÔ¼° webQQ ¶¼ÊÇÓÃ http ³¤ÂÖÑ¯ÊµÏÖµÄ;
@@ -400,3 +400,8 @@ http ¶ÌÂÖÑ¯Ò»°ãÓÃÔÚÊµÊ±ÐÔÒªÇó²»¸ßµÄµØ·½, ±ÈÈçÐÂÀËÎ¢±¡µÄÎ´¶ÁÌõÊý²éÑ¯¾ÍÊÇä¯ÀÀÆ÷¶ËÃ
 ²»¹Ü http ³¤ÂÖÑ¯»¹ÊÇ http ¶ÌÂÖÑ¯ ±£Ö¤Í¬Ò»¸öÓÃ»§ÔÚ¶à tab ÏÂÖ»´æÔÚÒ»¸ö¶¨Ê±²éÑ¯ÊÇÓÐºÃ´¦µÄ, Õâ¿ÉÒÔÍ¨¹ýÔÚä¯ÀÀÆ÷¶Ë»º´æÊý¾Ý½â¾ö, ÔÚ http ÏìÓ¦ºóÔÚä¯ÀÀÆ÷¶Ë»º´æÊý¾Ý, ²¢ÉèÖÃÒ»¸öÓÐÐ§ÆÚ, È»ºóÔÚÃ¿´Î·¢ËÍ http ÇëÇóÊ±¼ì²éÊÇ·ñÓÐÓÐÐ§Êý¾Ý, Ã»ÓÐÔò·¢ËÍÇëÇó»ñÈ¡
 
 
++++linux±à¼­ÎÄ¼þÓöµ½Ö»¶ÁÎÄ¼þÊ±ºòµÄ´¦Àí·½Ê½++++
+±£´æµÄÊ±ºò»áÌáÊ¾£ºÃ»ÓÐRoot Permission 
+¿ÉÒÔÓÃÈçÏÂ·½·¨½â¾ö£º
+±£´æÊ±¼ÓÉÏ£º
+:w !sudo tee %
