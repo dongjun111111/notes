@@ -8360,3 +8360,22 @@ func main(){
 output==>
 time out
 </pre>
+####Format
+返回根据layout指定的格式格式化之后的字符串，layout定义了标准时间的显示格式。预定义的layout有ANSIC，UnixDate，RFC3339等。
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	t :=time.Now()
+	fmt.Println(t.Format(time.ANSIC))
+	fmt.Println(t.Format(time.UnixDate))
+}
+output==>
+Sat Mar  5 14:44:27 2016
+Sat Mar  5 14:44:27 +0800 2016
+</pre>
+
