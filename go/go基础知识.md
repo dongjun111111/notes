@@ -8297,3 +8297,41 @@ print
 hello
 ;
 </pre>
+###Time
+####Add
+返回时间（t + d）
+<pre>
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func main() {
+    now := time.Now()
+    fmt.Println("now:", now)
+    fmt.Println("after 3 hours", now.Add(3*time.Hour))
+}
+output==>
+now: 2016-03-05 14:34:07.2542474 +0800 +0800
+after 3 hours 2016-03-05 17:34:07.2542474 +0800 +0800
+</pre>
+####AddDate
+生成增加后的年月日之后的时间。
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	now :=time.Now()
+	fmt.Println(now)
+	fmt.Println(now.AddDate(2,3,4))
+}
+output==>
+2016-03-05 14:36:26.3602038 +0800 +0800
+2018-06-09 14:36:26.3602038 +0800 +0800
+</pre>
