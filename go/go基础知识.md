@@ -8568,3 +8568,26 @@ output==>
 分割形成的切片是:[the quick brown fox jumps over the lazy dog]
 the -quick -brown -fox -jumps -over -the -lazy -dog -
 </pre>
+####strings.Split与strings.Join
+类似与PHP中的explode与implode。
+<pre>
+package main
+import (
+	"fmt"
+	"strings"
+)
+func main(){
+	str2 := "GO1|The ABC of Go|25"
+	sl :=strings.Split(str2,"|")//字符串分割成切片
+	for _,val :=range sl {
+		fmt.Println(val)
+	}
+	str3 :=strings.Join(sl,",")  //将切片组合成字符串
+	fmt.Println(str3)
+}
+output==>
+GO1
+The ABC of Go
+25
+GO1,The ABC of Go,25
+</pre>
