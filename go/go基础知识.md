@@ -8779,3 +8779,32 @@ output==>
 </pre>
 代码分析：
 首先创建一个无缓冲channel ch,然后执行go afunc()此时执行<-ch,则afunc便会阻塞，不再继续往下执行，直到主进程中ch <- 1向channel ch 中注入数据才会解除afunc该协程的阻塞。
+<br>无缓冲总结：
+对于无缓存的channel,放入channel和从channel中向外面取数据这两个操作不能放在同一个协程中，防止死锁的发生；同时应该先利用go 开一个协程对channel进行操作，此时阻塞该go 协程，然后再在主协程中进行channel的相反操作（与go 协程对channel进行相反的操作），实现go 协程解锁．即必须go协程在前，解锁协程在后．
+###select超时处理案例
+<pre>
+package main
+import (
+	"time"
+	"fmt"
+)
+func main(){
+	c :=make(chan int)
+	o :=make(chan bool)
+	go func(){
+		select {
+			case  i := <- c :
+			fmt.Println(i)
+			//设置超时时间为３ｓ，如果channel　3s钟没有响应，一直阻塞，则报告超时，进行超时处理
+			case <- time.After(time.Duration(3) * time.Second) :
+			fmt.Println("3秒内没有数据,超时处理")
+			o <- true
+			break
+		}
+	}()
+	<- o
+	
+}
+output==>
+3秒内没有数据,超时处理
+</pre>
