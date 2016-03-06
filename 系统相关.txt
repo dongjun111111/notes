@@ -413,6 +413,7 @@ pwd 显示当前路径
 cat more less 都可以查看一个或者多个文档，区别是cat可以将多个文件合
 tac filename 从最后一行开始反向查看名叫filename的文内容并在一起看，
 cat -n 1.txt显示1.txt文件并且前面显示行号而more与less不能合并成一个文件查看.
+od 1.txt 二进制形式显示文件1.txt
 mkdir /home/test 创建文件夹 /home/test
 chown oracle /home/test 表示改变目录所有者为oracle账户
 chgrp dba /home/test 改变/home/test目录为dba所有
@@ -448,3 +449,10 @@ sort file1 file2 排序两个文件的内容
 comm -1 file1 file2 比较两个文件的内容只删除 'file1' 所包含的内容 
 comm -2 file1 file2 比较两个文件的内容只删除 'file2' 所包含的内容 
 comm -3 file1 file2 比较两个文件的内容只删除两个文件共有的部分 
+ps aux 列出系统进程
+whereis filename 显示文件filename的所在位置
+runlevel查看现在的运行级别
+free显示内存CPU的使用情况
+top动态观察进程
+id 用来查看账户的信息
+dmesg显示启动信息
