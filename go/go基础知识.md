@@ -8630,3 +8630,40 @@ output==>
 Copied 3 elements
 [1 2 3 4 5 6]
 </pre>
+###channel消息传递
+<pre>
+package main
+//生产者－消费者模型的消息传递
+import (
+	"time"
+	"fmt"
+)
+func producer (queue chan<- int){  //定义一个只写的channel
+	for i:=0;i<10;i++{
+		queue <- i
+	}
+}
+func consumer(queue <-chan int){  // 定义一个只读的channel
+	for i :=0;i<10;i++{
+		v :=<-queue
+		fmt.Println("receive:",v)
+	}
+}
+func main(){
+	queue :=make(chan int,1)
+	go producer(queue)
+	go consumer(queue)
+	time.Sleep(1e9)  //等待producer与consumer完成
+}
+output==>
+receive: 0
+receive: 1
+receive: 2
+receive: 3
+receive: 4
+receive: 5
+receive: 6
+receive: 7
+receive: 8
+receive: 9
+</pre>
