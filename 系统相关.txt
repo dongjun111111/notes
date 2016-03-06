@@ -433,3 +433,4 @@ groupdel group_name 删除一个用户组
 useradd dj 创建一个新用户dj
 userdel -r dj 删除一个用户dj (这里必须有-r ,目的是排除主目录)
 passwd 修改当前账号的密码
+passwd user1 修改名字为user1用户的密码（只有当前用户是root才有效）
