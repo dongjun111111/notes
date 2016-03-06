@@ -1,4 +1,23 @@
-##不可变字符串
+19
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18##不可变字符串
 <pre>
 package main 
 import "fmt"
@@ -8699,4 +8718,47 @@ func main(){
 output==>
 receive: one
 receive: c2
+</pre>
+###sync.WaitGroup
+程序中需要并发，需要创建多个goroutine，并且一定要等到这些并发全部完成后才继续接下来的程序执行。WaitGroup的特点是Wait()可以用来阻塞直到队列中的所有任务都完成时才解除阻塞，而不需要sleep一个固定的时间来等待，但是其缺点时候无法指定固定的goroutine数目。
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+var wg sync.WaitGroup
+func function(num int){
+	fmt.Println(num)
+	wg.Done()
+}
+func main(){
+	for i:=0;i<20;i++{
+		wg.Add(1)
+		go function(i)
+	}
+	wg.Wait()
+}
+output==>
+19
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
 </pre>
