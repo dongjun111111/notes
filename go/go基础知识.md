@@ -8762,3 +8762,20 @@ output==>
 17
 18
 </pre>
+###无缓冲channel
+<pre>
+package main
+func afunc(ch chan int){
+	println("yes")
+	<- ch 
+}
+func main(){
+	ch :=make(chan int)
+	go afunc(ch)
+	ch <- 1
+}
+output==>
+"yes"
+</pre>
+代码分析：
+首先创建一个无缓冲channel ch,然后执行go afunc()此时执行<-ch,则afunc便会阻塞，不再继续往下执行，直到主进程中ch <- 1向channel ch 中注入数据才会解除afunc该协程的阻塞。
