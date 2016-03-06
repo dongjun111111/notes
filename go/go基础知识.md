@@ -8916,3 +8916,31 @@ output==>
 那我跟着跑
 在这里我取到了a的值 hello world
 </pre>
+####golang大小端的判断
+<pre>
+package main
+ 
+import (
+    "fmt"
+    "unsafe"
+)
+ 
+const N int = int(unsafe.Sizeof(1)) //取一个int型占用字节数
+ 
+func main() {
+    x := 0x1234 // 4*4一共占用16位，2字节
+    p := unsafe.Pointer(&x) //取地址
+    fmt.Printf("sizeof N %v\n", N)
+    p2 := (*[N]byte)(p) // 32位，4字节 类型转化
+    fmt.Printf("%v %v %v %v \n", p2[0], p2[1], p2[2], p2[3]) 
+    if p2[0] == 0 {
+        fmt.Println("本机器：大端") // 
+    } else {
+        fmt.Println("本机器：小端") // 52（=3*16+4） 18（=1*16+2） 0 0
+    }
+}
+output==>
+sizeof N 8
+52 18 0 0 
+本机器：小端
+</pre>
