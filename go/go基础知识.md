@@ -9063,3 +9063,30 @@ output ==>
 Goexit 退出当前goroutine(但是defer语句会照常执行)
 我们从例子中可以看到，默认的, 所有goroutine会在一个原生线程里跑，也就是只使用了一个CPU核。<br>
 在同一个原生线程里，如果当前goroutine不发生阻塞，它是不会让出CPU时间给其他同线程的goroutines的，这是Go运行时对goroutine的调度，我们也可以使用runtime包来手工调度。
+####真正的并行小案例
+<pre>
+package main
+
+import (
+	"runtime"
+	"fmt"
+)
+var quit chan int = make(chan int)
+func loop(id int){
+	for i:=0;i<20;i++{
+		fmt.Printf("%d",id)
+	}
+	quit <- 0
+}
+func main(){
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	for i:=0;i<3;i++{
+		go loop(i)
+	}
+	for i:=0;i<3;i++{
+		<- quit
+	}
+}
+output==>
+000211111111111112000000211111112222222222222222200000000000
+</pre>
