@@ -8866,7 +8866,7 @@ output==>
 3
 4
 </pre>
-####channel的个数控制输出的个数
+####通过控制channel的个数来控制输出结果的个数。
 <pre>
 package main
 
