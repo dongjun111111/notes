@@ -8919,7 +8919,6 @@ output==>
 ####golang大小端的判断
 <pre>
 package main
- 
 import (
     "fmt"
     "unsafe"
