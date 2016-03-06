@@ -8667,3 +8667,36 @@ receive: 7
 receive: 8
 receive: 9
 </pre>
+###select
+go中用select可以等待多个channel
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	c1 :=make(chan string)
+	c2 :=make(chan string)
+	go func (){
+		time.Sleep(time.Second * 1)
+		c1 <- "one"
+	}()
+	go func(){
+		time.Sleep(time.Second * 2)
+		c2 <- "c2"
+	}()
+	for i:=0;i<2;i++{
+		select {
+			case msg1 :=<-c1:
+			fmt.Println("receive:",msg1)
+			case msg2 :=<- c2:
+			fmt.Println("receive:",msg2)
+		}
+	}
+}
+output==>
+receive: one
+receive: c2
+</pre>
