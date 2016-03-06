@@ -405,3 +405,31 @@ http ¶ÌÂÖÑ¯Ò»°ãÓÃÔÚÊµÊ±ĞÔÒªÇó²»¸ßµÄµØ·½, ±ÈÈçĞÂÀËÎ¢±¡µÄÎ´¶ÁÌõÊı²éÑ¯¾ÍÊÇä¯ÀÀÆ÷¶ËÃ
 ¿ÉÒÔÓÃÈçÏÂ·½·¨½â¾ö£º
 ±£´æÊ±¼ÓÉÏ£º
 :w !sudo tee %
+
+linux ³£ÓÃÃüÁî£º
+whoami ²é¿´µ±Ç°ÓÃ»§
+df ÏÔÊ¾ÏµÍ³µÄÓ²¼şĞÅÏ¢
+pwd ÏÔÊ¾µ±Ç°Â·¾¶
+cat more less ¶¼¿ÉÒÔ²é¿´Ò»¸ö»òÕß¶à¸öÎÄµµ£¬Çø±ğÊÇcat¿ÉÒÔ½«¶à¸öÎÄ¼şºÏ²¢ÔÚÒ»Æğ¿´£¬¶ømoreÓëless²»ÄÜºÏ²¢³ÉÒ»¸öÎÄ¼ş²é¿´.
+mkdir /home/test ´´½¨ÎÄ¼ş¼Ğ /home/test
+chown oracle /home/test ±íÊ¾¸Ä±äÄ¿Â¼ËùÓĞÕßÎªoracleÕË»§
+chgrp dba /home/test ¸Ä±ä/home/testÄ¿Â¼ÎªdbaËùÓĞ
+rmdir /home/test É¾³ıhome/testÄ¿Â¼
+hostname¿ÉÒÔ²é¿´linuxµÄ¼ÆËã»úÃû
+su - ÇĞ»»Îªroot×î¸ß¹ÜÀíÔ±ÕË»§
+su ÕË»§Ãû ÇĞ»»ÎªÖ¸¶¨ÕË»§
+rm -f filename É¾³ıÒ»¸ö½ĞfilenameµÄÎÄ¼ş
+rmdir testdir É¾³ıÒ»¸ö½ĞtestdirµÄÄ¿Â¼
+mv dir1 new_dir ÒÆ¶¯/ÖØÃüÃûÒ»¸öÄ¿Â¼
+cp file1 file2 ¸´ÖÆÒ»¸öÎÄ¼ş
+cp -a /tmp/dir1 ¸´ÖÆ/tmp/dir1ÏÂÃæËùÓĞÎÄ¼şµ½µ±Ç°¹¤×÷Ä¿Â¼
+cp -a dir1 dir2 ¸´ÖÆÒ»¸öÄ¿Â¼µ½dir2Ä¿Â¼
+find / -name 1.txt ½øÈë¸ùÎÄ¼şÏµÍ³ËÑË÷½Ğ1.txtµÄÎÄ¼şºÍÄ¿Â¼
+find / -user dongjun ËÑË÷ÊôÓÚÓÃ»§dongjunµÄËùÓĞÎÄ¼şÓëÄ¿Â¼
+find /hone/user1 -name \*.bin ÔÚÄ¿Â¼ '/ home/user1' ÖĞËÑË÷´øÓĞ'.bin' ½áÎ²µÄÎÄ¼ş 
+find /new/ -type f -mtime -10 ËÑË÷ÔÚ10ÌìÄÚ/new/Ä¿Â¼ÏÂ±»´´½¨»òÕßĞŞ¸Ä¹ıµÄÎÄ¼ş
+groupadd group_name ´´½¨Ò»¸öĞÂÓÃ»§×é 
+groupdel group_name É¾³ıÒ»¸öÓÃ»§×é 
+useradd dj ´´½¨Ò»¸öĞÂÓÃ»§dj
+userdel -r dj É¾³ıÒ»¸öÓÃ»§dj (ÕâÀï±ØĞëÓĞ-r ,Ä¿µÄÊÇÅÅ³ıÖ÷Ä¿Â¼)
+passwd ĞŞ¸Äµ±Ç°ÕËºÅµÄÃÜÂë
