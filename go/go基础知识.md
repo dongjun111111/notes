@@ -8866,3 +8866,29 @@ output==>
 3
 4
 </pre>
+####channel的个数控制输出的个数
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func afunc(ch chan int){
+	fmt.Println("finish")
+	<- ch
+}
+func main(){
+	ch :=make(chan int)
+	for i:=0;i<10;i++{
+		go afunc(ch)
+	}
+	channelcount := 1//通过控制channelcount数值大小，来控制输出的值的个数
+	//这里如果channelcount为2 ，则输出两个finished
+	for i:=0;i<channelcount;i++{ 
+		ch <- 1
+	}
+	
+}
+output==>
+finish
+</pre>
