@@ -8892,3 +8892,27 @@ func main(){
 output==>
 finish
 </pre>
+同步时main取得协程的变量。
+<pre>
+package main
+import (
+	"fmt"
+)
+var a string
+var c =make(chan int,10)
+func f(){
+	fmt.Println("那我跟着跑")
+	a = "hello world"
+	c <- 0
+}
+func main(){
+	fmt.Println("我是main函数，我先跑")
+	go f()
+	<- c
+	fmt.Println("在这里我取到了a的值",a)
+}
+output==>
+我是main函数，我先跑
+那我跟着跑
+在这里我取到了a的值 hello world
+</pre>
