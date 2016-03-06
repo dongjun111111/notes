@@ -8943,7 +8943,7 @@ sizeof N 8
 52 18 0 0 
 本机器：小端
 </pre>
-###channel实现类似并行
+###Channel实现类似并行
 <pre>
 package main
 import (
