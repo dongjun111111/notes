@@ -8943,3 +8943,38 @@ sizeof N 8
 52 18 0 0 
 本机器：小端
 </pre>
+###channel实现类似并行
+<pre>
+package main
+import (
+	"time"
+	"fmt"
+)
+var quit chan int
+func foo(id int){
+	fmt.Println(id)
+	time.Sleep(time.Second *3)  //所有输出完之后会停顿3秒
+	quit <- 0
+}
+func main(){
+	count := 10
+	quit =make(chan int,count)  //缓冲
+	for i :=0;i<count;i++{
+		go foo(i)
+	}
+	for i:=0;i<count;i++{
+		<- quit
+	}
+}
+output==>
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre>
