@@ -444,3 +444,7 @@ grep ^llo 1.txt在1.txt文件中查找以llo开头的单词
 grep [0-9] 1.txt 在1.txt文件中查找所有包含数字的行
 grep Aug -R /var/log/* 在目录 '/var/log' 及随后的目录中搜索字符串"Aug" 
 paste file1 file2合并两个文件的内容
+sort file1 file2 排序两个文件的内容
+comm -1 file1 file2 比较两个文件的内容只删除 'file1' 所包含的内容 
+comm -2 file1 file2 比较两个文件的内容只删除 'file2' 所包含的内容 
+comm -3 file1 file2 比较两个文件的内容只删除两个文件共有的部分 
