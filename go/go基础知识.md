@@ -8978,3 +8978,53 @@ output==>
 8
 9
 </pre>
+####下面的情况还是单核运行
+<pre>
+package  main
+
+import (
+	"runtime"
+	"fmt"
+)
+var quit chan int = make(chan int)
+func loop(){
+	for i:=0;i<10;i++{
+//显式地让出CPU时间给其他goroutine，结果是两个一样的同时输出
+		//runtime.Gosched() 
+		fmt.Printf("%d\n",i)
+	}
+	quit <- 0
+}
+func main(){
+	core :=runtime.NumCPU()
+	runtime.GOMAXPROCS(core)
+	go loop()
+	go loop()
+	println("计算机的可运行核心个数是：",core)
+	for i:=0;i<2;i++{
+		<- quit
+	}
+}
+output==>
+计算机的可运行核心个数是： 4
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre>
