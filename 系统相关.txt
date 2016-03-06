@@ -436,3 +436,5 @@ userdel -r dj 删除一个用户dj (这里必须有-r ,目的是排除主目录)
 passwd 修改当前账号的密码
 passwd user1 修改名字为user1用户的密码（只有当前用户是root才有效）
 ls -lh 显示带有权限的文件
+head -2 file1 查看一个文件的前两行 
+tail -1 file1 查看一个文件的最后一行
