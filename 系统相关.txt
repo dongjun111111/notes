@@ -411,7 +411,8 @@ whoami 查看当前用户
 df 显示系统的硬件信息
 pwd 显示当前路径
 cat more less 都可以查看一个或者多个文档，区别是cat可以将多个文件合
-tac filename 从最后一行开始反向查看名叫filename的文内容并在一起看，而more与less不能合并成一个文件查看.
+tac filename 从最后一行开始反向查看名叫filename的文内容并在一起看，
+cat -n 1.txt显示1.txt文件并且前面显示行号而more与less不能合并成一个文件查看.
 mkdir /home/test 创建文件夹 /home/test
 chown oracle /home/test 表示改变目录所有者为oracle账户
 chgrp dba /home/test 改变/home/test目录为dba所有
@@ -438,3 +439,8 @@ passwd user1 修改名字为user1用户的密码（只有当前用户是root才有效）
 ls -lh 显示带有权限的文件
 head -2 file1 查看一个文件的前两行 
 tail -1 file1 查看一个文件的最后一行
+grep llo 1.txt 在1.txt文件中查找关键字 llo
+grep ^llo 1.txt在1.txt文件中查找以llo开头的单词
+grep [0-9] 1.txt 在1.txt文件中查找所有包含数字的行
+grep Aug -R /var/log/* 在目录 '/var/log' 及随后的目录中搜索字符串"Aug" 
+paste file1 file2合并两个文件的内容
