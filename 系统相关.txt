@@ -410,7 +410,8 @@ linux 常用命令：
 whoami 查看当前用户
 df 显示系统的硬件信息
 pwd 显示当前路径
-cat more less 都可以查看一个或者多个文档，区别是cat可以将多个文件合并在一起看，而more与less不能合并成一个文件查看.
+cat more less 都可以查看一个或者多个文档，区别是cat可以将多个文件合
+tac filename 从最后一行开始反向查看名叫filename的文内容并在一起看，而more与less不能合并成一个文件查看.
 mkdir /home/test 创建文件夹 /home/test
 chown oracle /home/test 表示改变目录所有者为oracle账户
 chgrp dba /home/test 改变/home/test目录为dba所有
