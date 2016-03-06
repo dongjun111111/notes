@@ -9028,3 +9028,28 @@ output==>
 8
 9
 </pre>
+####g关于goroutine的一个问题
+下面的代码并没有任何输出，why？
+<pre>
+package main
+import (
+	"fmt"
+)
+var ch chan int
+func say(s string){
+	for i:=0;i<5;i++{
+		fmt.Println(s)
+	}
+	ch <- 1
+}
+func main(){
+	go say("world")
+
+	
+}
+output ==>
+
+</pre>
+解析：这里Go仍然在使用单核，for死循环占据了单核CPU所有的资源，而main线和say两个goroutine都在一个线程里面， 所以say没有机会执行。解决方案还是两个：
+允许Go使用多核(runtime.GOMAXPROCS)；
+手动显式调动(runtime.Gosched)。
