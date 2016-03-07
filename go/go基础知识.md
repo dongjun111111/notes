@@ -9267,5 +9267,4 @@ func main() {
     } 
     fmt.Println("远程服务返回结果：", reply) 
 }
-
 </pre>
