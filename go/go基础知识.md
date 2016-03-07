@@ -9146,3 +9146,17 @@ func main() {
     fmt.Printf("%d\n",<-rand_service_handler)
 }
 </pre>
+####golang的版本信息
+<pre>
+package main
+
+import (
+	"runtime"
+	"fmt"
+)
+func main(){
+	fmt.Println(runtime.Version())
+}
+output==>
+go1.4rc2
+</pre>
