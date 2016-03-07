@@ -9126,3 +9126,23 @@ func main() {
 output==>
 0 time1 2 3 4 5 6 7 8 9     //这里time只输出一次，why?
 </pre>
+####普通生成器模型
+<pre>
+package main
+//普通生成器模型
+import "fmt"
+import "math/rand"
+func rand_generator_2() chan int {
+   out := make(chan int)
+   go func() {
+       for {
+       out <- rand.Int()
+       }
+  }()
+  return out
+} 
+func main() {
+    rand_service_handler :=rand_generator_2()
+    fmt.Printf("%d\n",<-rand_service_handler)
+}
+</pre>
