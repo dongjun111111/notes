@@ -2750,6 +2750,10 @@ func main(){
 }
 </pre>
 
+无缓冲的信道是一批数据一个一个的「流进流出」<br>
+缓冲信道则是一个一个存储，然后一起流出去
+
+
 ####带缓冲的channel 
 之前创建的都是不带缓冲的channel，这种做法对于传递单个数据的场景可以接受，
 但对于需要持续传输大量数据的场景就有些不合适了。接下来我们介绍如何给channel带上缓冲，
@@ -9098,3 +9102,27 @@ output==>
 
 一个数字的所有输出都会在另一个数字的所有输出之前
 原因是， 3个goroutine分配到至多4个线程上，就会至少两个goroutine分配到同一个线程里，单线程里的goroutine 不阻塞不放开CPU, 也就发生了顺序输出。
+####一个问题
+<pre>
+package main
+import (
+	"fmt"
+)
+var complete chan int = make(chan int)
+
+func loop() {
+    for i := 0; i < 10; i++ {
+        fmt.Printf("%d ", i)
+    }
+	println("time") //只输出一次，why?
+    complete <- 0 
+}
+
+
+func main() {
+    go loop()
+    <- complete // 直到线程跑完, 取到消息. main在此阻塞住
+}
+output==>
+0 time1 2 3 4 5 6 7 8 9     //这里time只输出一次，why?
+</pre>
