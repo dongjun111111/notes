@@ -9098,3 +9098,28 @@ output==>
 
 一个数字的所有输出都会在另一个数字的所有输出之前
 原因是， 3个goroutine分配到至多4个线程上，就会至少两个goroutine分配到同一个线程里，单线程里的goroutine 不阻塞不放开CPU, 也就发生了顺序输出。
+
+####json
+<pre>
+package main  
+import (  
+  "fmt"
+  "encoding/json"
+)
+type Person struct {  
+  FirstName string `json:"first_name"` //FirstName <=> firest_name 
+  LastName string `json:"last_name"` 
+  MiddleName string `json:"middle_name,omitempty"` 
+} 
+func main() {  
+  json_string := ` { "first_name": "John", "last_name": "Smith" }`
+  person := new(Person)
+  json.Unmarshal([]byte(json_string), person) //将json数据转为Person Struct 
+  fmt.Println(person) 
+  new_json, _ := json.Marshal(person) //将Person Sturct 转为json格式   
+  fmt.Printf("%s\n", new_json) 
+} 
+output==>
+&{John Smith }
+{"first_name":"John","last_name":"Smith"}
+</pre>
