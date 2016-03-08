@@ -9456,6 +9456,7 @@ func PKCS5UnPadding(origData []byte) []byte {
 	return origData[:(length - unpadding)]
 }
 </pre>
+##Go By Example http://gobyexample.everyx.in/
 ####变参函数
 这个函数使用任意数目的 int 作为参数。
 如果你的 slice 已经有了多个值，想把它们作为变参使用，你要这样调用 func(slice...)。
@@ -9515,5 +9516,23 @@ output==>
 1
 </pre>
 ####递归
+face 函数在到达 face(0) 前一直调用自身。
 <pre>
+package main
+
+import (
+	"fmt"
+)
+func fact(n int) int{
+	if n == 0{
+		return 1
+	}
+	return n*fact(n-1)
+}
+func main(){
+	fmt.Println(fact(7))
+}
+output==>
+5040
 </pre>
+####指针
