@@ -467,3 +467,5 @@ getconf LONG_BIT
 query_cache_size = 512M
 #指定单个查询能够使用的缓冲区大小，缺省为1M
 query_cache_limit = 2M
+查看无法删除的文件，被占资源 
+lsof |grep deleted  
