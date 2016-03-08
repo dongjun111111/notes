@@ -9332,3 +9332,40 @@ output==>
 go1.4rc2
 >>>>>>> 99a36c9796d03006b29c940be236a036f19dbaf9
 </pre>
+####Go实现AES加解密
+AES简介
+密码学中的高级加密标准（Advanced Encryption Standard，AES），又称Rijndael加密法，这个标准用来替代原先的DES。AES加密数据块分组长度必须为128bit，密钥长度可以是128bit、192bit、256bit中的任意一个。<br>
+AES也是对称加密算法。
+核心代码如下：
+<pre>
+func AesEncrypt(origData, key []byte) ([]byte, error) {
+     <span id="48_nwp" style="width: auto; height: auto; float: none;"><a id="48_nwl" href="http://cpro.baidu.com/cpro/ui/uijs.php?adclass=0&app_id=0&c=news&cf=1001&ch=0&di=128&fv=19&is_app=0&jk=b7bc64a13f80e9b6&k=block&k0=block&kdi0=0&luki=9&mcpm=0&n=10&p=baidu&q=74042097_cpr&rb=0&rs=1&seller_id=1&sid=b6e9803fa164bcb7&ssp2=1&stid=9&t=tpclicked3_hc&td=1989498&tu=u1989498&u=http%3A%2F%2Fblog%2Estudygolang%2Ecom%2Ftag%2Fgolang%5Fphp%2F&urlid=0" target="_blank" mpid="48" style="text-decoration: none;"><span style="color:#0000ff;font-size:13.92px;width:auto;height:auto;float:none;">block</span></a></span>, err := aes.NewCipher(key)
+     if err != nil {
+          return nil, err
+     }
+     blockSize := block.BlockSize()
+     origData = PKCS5Padding(origData, blockSize)
+     // origData = ZeroPadding(origData, block.BlockSize())
+     blockMode := cipher.NewCBCEncrypter(block, key[:blockSize])
+     crypted := make([]byte, len(origData))
+     // 根据CryptBlocks方法的说明，如下方式初始化crypted也可以
+     // crypted := origData
+     blockMode.CryptBlocks(crypted, origData)
+     return crypted, nil
+}
+
+func AesDecrypt(crypted, key []byte) ([]byte, error) {
+     block, err := aes.NewCipher(key)
+     if err != nil {
+          return nil, err
+     }
+     blockSize := block.BlockSize()
+     blockMode := cipher.NewCBCDecrypter(block, key[:blockSize])
+     origData := make([]byte, len(crypted))
+     // origData := crypted
+     blockMode.CryptBlocks(origData, crypted)
+     origData = PKCS5UnPadding(origData)
+     // origData = ZeroUnPadding(origData)
+     return origData, nil
+}
+</pre>
