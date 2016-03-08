@@ -456,3 +456,4 @@ free显示内存CPU的使用情况
 top动态观察进程
 id 用来查看账户的信息
 dmesg显示启动信息
+source /etc/profile  刷新配置环境信息

@@ -1259,3 +1259,12 @@ pgsql.ignore_notice = Off
 pgsql.log_notice = Off
 ; 是否在日志中记录PostgreSQL后端的提醒消息。
 ; 仅在pgsql.ignore_notice=Off时，才可以记录。
+
+
+
+[Sybase-CT] 
+sybct.allow_persistent = On ; 允许或禁止 持久连接 
+sybct.max_persistent = -1 ; 持久连接的最大数。-1 代表无限制 
+sybct.max_links = -1 ; 连接的最大数目（持久和非持久）。-1 代表无限制 
+sybct.min_server_severity = 10 ; 显示的错误的最低严重性 
+sybct.min_client_severity = 10 ; 显示的消息的最低重要性
