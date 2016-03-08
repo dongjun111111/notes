@@ -9456,3 +9456,31 @@ func PKCS5UnPadding(origData []byte) []byte {
 	return origData[:(length - unpadding)]
 }
 </pre>
+####变参函数
+这个函数使用任意数目的 int 作为参数。
+如果你的 slice 已经有了多个值，想把它们作为变参使用，你要这样调用 func(slice...)。
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func sum(nums ...int){
+	fmt.Print(nums," ")
+	total := 0
+	for _,num := range nums {
+		total += num
+	}
+	fmt.Println(total)
+}
+func main(){
+	sum(1,2)
+	sum(1,2,3,4)
+	nums :=[]int{4,5,6,7,8,9}
+	sum(nums...)
+}
+output==>
+[1 2] 3
+[1 2 3 4] 10
+[4 5 6 7 8 9] 39
+</pre>
