@@ -9593,6 +9593,28 @@ bob
 0xc08200a650
 </pre>
 ####方法
+Go 自动处理方法调用时的值和指针之间的转化。你可以使用指针来调用方法来避免在方法调用时产生一个拷贝，或者让方法能够改变接受的数据
 <pre>
+package main
 
+import (
+	"fmt"
+)
+type rect struct {
+	width,height int
+}
+func (r *rect)area() int {  //这一种可以将函数作为变量的方法
+	return r.width * r.height
+}
+func perim(r rect) int {     //这一种只是普通的函数
+	return 2*r.width + 2*r.height
+}
+func main(){
+	r :=rect{width:4,height:5}
+	fmt.Println("area:",r.area())  //调用方法之一
+	fmt.Println("perim:",perim(r))  //调用方法之二，对比上面的
+}
+output==>
+area: 20
+perim: 18
 </pre>
