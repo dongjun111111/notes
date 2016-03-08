@@ -418,7 +418,7 @@ mkdir /home/test 创建文件夹 /home/test
 chown oracle /home/test 表示改变目录所有者为oracle账户
 chgrp dba /home/test 改变/home/test目录为dba所有
 rmdir /home/test 删除home/test目录
-hostname可以查看linux的计算机名
+hostname查看linux的计算机名
 su - 切换为root最高管理员账户
 su 账户名 切换为指定账户
 rm -f filename 删除一个叫filename的文件
