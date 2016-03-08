@@ -9484,3 +9484,36 @@ output==>
 [1 2 3 4] 10
 [4 5 6 7 8 9] 39
 </pre>
+####闭包
+我们调用 intSeq 函数，将返回值（也是一个函数）赋给nextInt。这个函数的值包含了自己的值 i，这样在每次调用 nextInt 是都会更新 i 的值。通过多次调用 nextInt 来看看闭包的效果。
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func intSeq() func() int{
+	i := 0
+	return func() int{
+		i += 1
+		return i
+	}
+}
+func main(){
+	nextInt := intSeq()
+	fmt.Println(nextInt())
+	fmt.Println(nextInt())
+	fmt.Println(nextInt())
+	
+	newInts := intSeq()
+	fmt.Println(newInts())
+}
+output==>
+1
+2
+3
+1
+</pre>
+####递归
+<pre>
+</pre>
