@@ -9536,3 +9536,63 @@ output==>
 5040
 </pre>
 ####指针
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func zeroval(ival int){
+	ival = 0
+}
+func zeroptr(iptr *int){
+	*iptr = 0
+}
+func main(){
+	i := 1
+	fmt.Println("initial:",i)
+	zeroval(i)
+	fmt.Println("zeroval:",i)
+	zeroptr(&i)
+	fmt.Println("zeroptr:",i)
+	//通过 &i 语法来取得 i 的内存地址，例如一个变量i 的指针
+	fmt.Println("pointer:",&i) 
+	
+}
+output==>
+initial: 1
+zeroval: 1
+zeroptr: 0
+pointer: 0xc0820062e0
+</pre>
+####结构体
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type person struct {
+	name string
+	age int
+}
+func main(){
+	fmt.Println(person{"jason",34})
+	s := person{"bob",12}
+	fmt.Println(s.name)
+	s.age = 66
+	fmt.Println(s.age)
+	sp :=&s.age
+	fmt.Println(sp)
+	
+}
+output==>
+{jason 34}
+bob
+66
+0xc08200a650
+</pre>
+####方法
+<pre>
+
+</pre>
