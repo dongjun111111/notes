@@ -457,3 +457,9 @@ top动态观察进程
 id 用来查看账户的信息
 dmesg显示启动信息
 source /etc/profile  刷新配置环境信息
+查看linux内核版本3种方法：
+cat /proc/version      uname -a         uname -r 
+查看linux版本，列出所有版本信息：
+lsb_release -a     cat /etc/issue
+查看系统是64位还是32位:
+getconf LONG_BIT      
