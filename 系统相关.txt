@@ -463,3 +463,7 @@ cat /proc/version      uname -a         uname -r
 lsb_release -a     cat /etc/issue
 查看系统是64位还是32位:
 getconf LONG_BIT      
+主库 增删改-MyISAM
+query_cache_size = 512M
+#指定单个查询能够使用的缓冲区大小，缺省为1M
+query_cache_limit = 2M
