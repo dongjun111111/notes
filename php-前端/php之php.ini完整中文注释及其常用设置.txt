@@ -1273,3 +1273,32 @@ sybct.min_client_severity = 10 ; 显示的消息的最低重要性
 session.cache_expire = 180 ; 文档在 n 分钟后过时 
 session.use_trans_sid = 1 ; 使用过渡性的 sid 支持，若编译时许可了 
 ; --enable-trans-sid 
+
+php.ini中经常会用到的一些常用配置：
+short_open_tag = Off
+这个设置的作用是关闭短标签，在设置成Off之后，<?php echo 123; ?>可以显示，而<? echo 123; ?>就不行了，同理<?=$var?>这样的写法也不行了，要养成写<?php ?>的习惯。
+output_buffering = 0
+这个设置的作用是不使用头部缓冲，头部缓冲的作用是在服务器向浏览器发送数据前，可以设置一定大小的缓冲数据，比如这段代码：
+<?php
+echo 123;
+session_start();
+?>
+如果在设置output_buffering = 4096的时候就不会有问题，但是在output_buffering = 0的时候，会报错：
+Warning: session_start() [function.session-start]: Cannot send session cookie - headers already sent by (output started at D:\work\web\html\test.php:2) in D:\work\web\html\test.php on line 3
+设置为0的目的是帮你写出高质量的代码。
+error_reporting = E_ALL
+这个设置的作用是将错误级别设置为最高，可以显示所有的问题，方便查错，也有利于写出高质量的代码。
+display_errors = On
+这个设置的作用是让浏览器显示出程序的错误，调试的时候当然是要On的，不然就什么错误信息也看不到了。
+register_globals = Off
+这个设置的作用是关闭自动注册的全局变量，在设置为On的时候，php会将$_POST，$_GET，$_COOKIE，$_ENV，$_SESSION数组中的$key=>$value直接注册为变量，比如$_POST['username']就会被注册为$username，虽然方便了调用，但是会有三个问题：1、不知道变量是哪里来的，$_POST来的还是$_SESSION来的呢？非常不方便别人阅读代码。2、变量之间互相覆盖，引起不必要的麻烦。3、安全问题。所以要设置为Off。
+magic_quotes_gpc = On
+magic_quotes_runtime = Off
+照着设置就可以了，magic_quotes的本意是自动对程序中的一些会引起安全问题的内容进行转义，但是因为是自动的，所以会引起一些不必要的麻烦（比如不同系统环境的程序开发，安装），因为php6中完全移除magic_quotes。
+extension_dir = "路径"
+在安装的时候设置的一个php.ini设置，用来指定php扩展模块的地址。
+upload_max_filesize = 2M
+文件上传时候的大小限制，需要的时候可以把设置改大一些
+;extension=php_mssql.dll
+extension=php_mysql.dll
+前面有一个";"表示关闭，去掉";"表示开启，用来加载php扩展用，这些是常用的需要加载的php模块。
