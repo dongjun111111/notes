@@ -3186,3 +3186,28 @@ $test= new test();
 $test->demo('one','two','three');
 输出：
 你所调用的函数:demo(Array ( [0] => one [1] => two [2] => three ) )不存在！
+
+
++++++__sleep()与__wakeup()+++++++
+在PHP5中有两个魔术方法__sleep()方法和__wakeup()方法，在对象序列化的时候，会调用一个__sleep()方法来完成一些
+睡前的事情；而在重新醒来，即由二进制串重新组成一个对象的时候，则会自动调用PHP的另一个函数__wakeup()，
+做一些对象醒来就要做的动作。
+(个人感觉没有什么用)
+
+
++++++__autoload()自动加载类函数+++++
+在软件开发的系统中，不可能把所有的类都写在一个PHP文件中，当在一个PHP文件中需要调用另一个文件中声明的类时，
+就需要通过include把 这个文件引入。不过有的时候，在文件众多的项目中，要一一将所需类的文件都include进来，
+是一个很让人头疼的事，所以我们能不能在用到什么类的时 候，再把这个类所在的php文件导入呢？这就是我们这里
+我们要讲的自动加载类。
+<?php
+function __autoload($classname)
+{
+    require_once $classname . '.php';
+}
+//MyClass1类不存在时，自动调用__autoload()函数，传入参数”MyClass1”
+$obj = new MyClass1();
+//MyClass2类不存在时，自动调用__autoload()函数，传入参数”MyClass2”
+$obj2 = new MyClass2();
+?>
+__autoload() 是专门为 类的不存在 而设计的！！！很多框架利用这个函数，实现 类文件的自动加载 ！！
