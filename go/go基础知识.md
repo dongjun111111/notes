@@ -9976,3 +9976,33 @@ worker 1 processing job 7
 worker 2 processing job 8
 worker 3 processing job 9
 </pre>
+####速率限制
+速率限制 是一个重要的控制服务资源利用和质量的途径。Go 通过 Go 协程、通道和打点器优美的支持了速率限制.<br>
+这个 limiter 通道将每 1s 接收一个值。这个是速率限制任务中的管理器。<br>
+通过在每次请求前阻塞 limiter 通道的一个接收，我们限制自己每 1s 执行一次请求。
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	request:=make(chan int,5)
+	for i:=1;i<=5;i++{
+		request <- i
+	}
+	close(request)
+	limiter :=time.Tick(time.Second * 1)
+	for req :=range request{
+		<- limiter
+		fmt.Println("request",req,time.Now())
+	}
+}
+output==>
+request 1 2016-03-09 22:56:25.8006495 +0800 +0800
+request 2 2016-03-09 22:56:26.8007067 +0800 +0800
+request 3 2016-03-09 22:56:27.8007639 +0800 +0800
+request 4 2016-03-09 22:56:28.8008211 +0800 +0800
+request 5 2016-03-09 22:56:29.8008783 +0800 +0800
+</pre>
