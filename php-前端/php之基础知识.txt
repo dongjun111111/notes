@@ -2952,3 +2952,41 @@ function get_client_ip($type = 0) {   //ip形式
 function getIP(){    //long形式
   return bindec( decbin( ip2long( get_client_ip () ) ) );
 }
+
+
+++++__construct+++++
+// 创建一个人类
+class Person
+{
+    // 下面是人的成员属性
+    var $name;  // 人的名子
+    var $sex;   // 人的性别
+    var $age;   // 人的年龄
+    // 定义一个构造方法参数为姓名$name、性别$sex和年龄$age
+    function __construct($name, $sex, $age)
+    {
+        // 通过构造方法传进来的$name给成员属性$this->name赋初使值
+        $this->name = $name;
+        // 通过构造方法传进来的$sex给成员属性$this->sex赋初使值
+        $this->sex = $sex;
+        // 通过构造方法传进来的$age给成员属性$this->age赋初使值
+        $this->age = $age;
+    }
+    // 这个人的说话方法
+    function say()
+    {
+        echo "我的名子叫：" . $this->name . " 性别：" . $this->sex . " 我的年龄是：" . $this->age;
+    }
+}
+// 通过构造方法创建3个对象$p1、p2、$p3,分别传入三个不同的实参为姓名、性别和年龄
+$p1 = new Person("张三","男", 20);
+$p2 = new Person("李四","女", 30);
+$p3 = new Person("王五","男", 40);
+// 下面访问$p1对象中的说话方
+$p1->say();
+// 下面访问$p2对象中的说话方法
+$p2->say();
+// 下面访问$p3对象中的说话方法
+$p3->say();
+使用__construct，可以使用new Person("张三","男", 20)的形式赋初始值，不然只能通过访问对象的方法赋值，
+比如这样$p1->name = "张三";
