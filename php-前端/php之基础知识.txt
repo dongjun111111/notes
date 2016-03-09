@@ -3007,3 +3007,18 @@ class person{
 $person=new person('jason');
 $person->say();
 输出：jason
+
+通过__set__get方法对私有变量赋值
+class car{
+  private $price;
+  function __set($name,$price){
+    $this->$name =$price;
+  }
+  function __get($name){
+    echo $this->$name;
+  }
+}
+$toyota=new car();
+$toyota->price= "3434343434";
+$toyota->price;
+输出：3434343434
