@@ -9880,3 +9880,33 @@ received job 2
 received job 3
 received all job
 </pre>
+####定时器
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	timer1 :=time.NewTimer(time.Second * 2)
+	//<-timer1.C 直到这个定时器的通道 C 明确的发送了定时器失效
+	//的值之前，将一直阻塞,之后继续执行下面的操作
+	<- timer1.C
+	fmt.Println("Timer 1 expired")
+	timer2 :=time.NewTimer(time.Second)
+	go func(){
+		<-timer2.C
+		fmt.Println("Timer 2 expired")
+	}()
+	//第一个定时器将在程序开始后 ~2s 失效，
+	//但是第二个在它没失效之前就停止了。所以执行的是stop()操作
+	stop2 :=timer2.Stop()
+	if stop2 {
+		fmt.Println("Timer 2 stoppd")
+	}
+}
+output==>
+Timer 1 expired
+Timer 2 stoppd
+</pre>
