@@ -9881,9 +9881,9 @@ received job 3
 received all job
 </pre>
 ####定时器
+定时器表示在未来某一时刻的独立事件。你告诉定时器需要等待的时间，然后它将提供一个用于通知的通道。这里的定时器将等待 2 秒
 <pre>
 package main
-
 import (
 	"fmt"
 	"time"
@@ -9909,4 +9909,31 @@ func main(){
 output==>
 Timer 1 expired
 Timer 2 stoppd
+</pre>
+####打点器
+定时器 是当你想要在未来某一刻执行一次时使用的 - 打点器 则是当你想要在固定的时间间隔重复执行准备的操作。这里是一个打点器的例子，它将定时的执行，直到我们将它停止。
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	ticker :=time.NewTicker(time.Millisecond * 500)
+	go func(){
+		for t :=range ticker.C{ //打点器通道值(t是时间)
+			fmt.Println("tick at",t)
+		}
+	}()
+	//打点的次数等与1500/500 = 3
+	time.Sleep(time.Millisecond * 1500)
+	ticker.Stop()
+	fmt.Println("ticker stopped")
+}
+output==>
+tick at 2016-03-09 22:26:50.4440523 +0800 +0800
+tick at 2016-03-09 22:26:50.9440809 +0800 +0800
+tick at 2016-03-09 22:26:51.4441095 +0800 +0800
+ticker stopped
 </pre>
