@@ -3116,3 +3116,73 @@ $class =new myclass();
 $class->show();
 输出：
 用show()输出constant value用show()输出constant value
+
+
++++++__toString()方法与__clone()方法+++++
+在类中有输出内容时自动调用该方法，__toString()”方法一定要有个返回值(return 语句)。
+
+class Person
+{
+    // 下面是人的成员属性
+    var $name;  // 人的名子
+    var $sex;   // 人的性别
+    var $age;   // 人的年龄
+    // 定义一个构造方法参数为属性姓名$name、性别$sex和年龄$age进行赋值
+    function __construct($name = "", $sex = "", $age = "")
+    {
+        $this->name = $name;
+        $this->sex = $sex;
+        $this->age = $age;
+    }
+    // 这个人可以说话的方法, 说出自己的属性
+    function say()
+    {
+        echo "我的名子叫：" . $this->name . " 性别：" . $this->sex . " 我的年龄是：" . $this->age . "<br>";
+    }
+    // 对象克隆时自动调用的方法, 如果想在克隆后改变原对象的内容，需要在__clone()中重写原本的属性和方法
+    function __clone()
+    {
+        // $this指的复本p2, 而$that是指向原本p1，这样就在本方法里，改变了复本的属性。
+        $this->name = "我是假的 $that->name";
+        $this->age = 30;
+    }
+}
+$p1 = new Person("张三", "男", 20);
+$p2 = clone $p1;
+$p1->say();
+$p2->say();
+输出：
+我的名子叫：张三 性别：男 我的年龄是：20
+我的名子叫：我是假的 性别：男 我的年龄是：30
+
++++抽象类与抽象方法+++
+什么是抽象方法？我们在类里面定义的没有方法体的方法就是抽象方法，所谓的没有方法体指的是，在方法声明的时候没有
+大括号以及其中的内容，而是直接在声明时在方法名后加上分号结束，另外在声明抽象方法时还要加一个关键字“abstract”
+来修饰.
+abstract class Demo
+{
+    var $test;
+    abstract function fun1();
+    abstract function fun2();
+    function fun3()
+    {
+        ...
+    }
+}
+
+
++++++__call()处理调用错误++++
+在程序开发中，如果在使用对象调用对象内部方法时候，调用的这个方法不存在那么程序就会出错，然后程序退出不能继续
+执行。那么可不可以在程序调用对象内部 不存在的方法时，提示我们调用的方法及使用的参数不存在，但程序还可以继续
+执行，这个时候我们就要使用在调用不存在的方法时自动调用的方 法“__call()”。
+class test{
+  function __call($funtion_name,$args){
+    echo "你所调用的函数:$funtion_name(";
+    print_r($args);
+    echo ")不存在！";
+  }
+}
+$test= new test();
+$test->demo('one','two','three');
+输出：
+你所调用的函数:demo(Array ( [0] => one [1] => two [2] => three ) )不存在！
