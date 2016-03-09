@@ -9693,4 +9693,29 @@ direct : 0
 direct : 1
 direct : 2
 </pre>
-####
+####通道
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func afunc(ch chan int){
+	fmt.Println("finish")
+	<- ch
+}
+func main(){
+	ch :=make(chan int)
+	channelcount := 2
+	for i:=0;i<channelcount;i++{
+		go afunc(ch)
+	}
+	
+	for i:=0;i<channelcount;i++{
+		ch <- 1
+	}
+}
+output==>
+finish
+finish
+</pre>
