@@ -10102,5 +10102,18 @@ ops: 3598302
 </pre>
 ####排序
 <pre>
+package main
 
+import (
+	"fmt"
+	"sort"
+)
+func main(){
+	ints :=[]int{5,6,7,7,88,9}
+	//sort.Sort(sort.Reverse(sort.IntSlice(ints)))//倒序
+	sort.Ints(ints) //正序，为什么这两个差这么多呢
+	fmt.Println(ints)
+}
+output==>
+[5 6 7 7 9 88]
 </pre>
