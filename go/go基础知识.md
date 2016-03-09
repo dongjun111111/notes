@@ -10117,3 +10117,63 @@ func main(){
 output==>
 [5 6 7 7 9 88]
 </pre>
+####使用函数自定义排序
+<pre>
+package main
+import "sort"
+import "fmt"
+//为了在 Go 中使用自定义函数进行排序，我们需要一个对应的类型。这里我们创建一个为内置 []string 类型的别名的ByLength 类型，
+type ByLength []string
+//我们在类型中实现了 sort.Interface 的 Len，Less和 Swap 方法，这样我们就可以使用 sort 包的通用Sort 方法了，Len 和 Swap 通常在各个类型中都差不多，Less 将控制实际的自定义排序逻辑。在我们的例子中，我们想按字符串长度增加的顺序来排序，所以这里使用了 len(s[i]) 和 len(s[j])。
+func (s ByLength) Len() int {
+    return len(s)
+}
+func (s ByLength) Swap(i, j int) {
+    s[i], s[j] = s[j], s[i]
+}
+func (s ByLength) Less(i, j int) bool {
+    return len(s[i]) < len(s[j])
+}
+//一切都准备好了，我们现在可以通过将原始的 fruits 切片转型成 ByLength 来实现我们的自定排序了。然后对这个转型的切片使用 sort.Sort 方法。
+func main() {
+    fruits := []string{"peach", "banana", "kiwi"}
+    sort.Sort(ByLength(fruits))
+    fmt.Println(fruits)
+}
+</pre>
+####panic
+panic 意味着有些出乎意料的错误发生。通常我们用它来表示程序正常运行中不应该出现的，后者我么没有处理好的错误。
+<pre>
+package main
+
+import (
+	"os"
+)
+func main(){
+	panic("a problem")
+	_,err :=os.Create("/tmp/file")
+	if err != nil{
+		panic(err)
+	}
+}
+output==>
+panic: a problem
+</pre>
+####defer
+Defer 被用来确保一个函数调用在程序执行结束前执行。同样用来执行一些清理工作。 defer 用在像其他语言中的ensure 和 finally用到的地方。<br>
+假设我们想要创建一个文件，向它进行写操作，然后在结束时关闭它。这里展示了如何通过 defer 来做到这一切
+####正则表达式
+<pre>
+package main
+
+import (
+	"regexp"
+	"fmt"
+)
+func main(){
+	match,_ :=regexp.MatchString("p([a-z]+)ch","peach")
+	fmt.Println(match)
+}
+output==>
+true
+</pre>
