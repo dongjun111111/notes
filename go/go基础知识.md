@@ -9839,3 +9839,44 @@ output==>
 no message received
 no message sent
 </pre>
+####通道的关闭
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	jobs :=make(chan int,5)
+	done :=make(chan bool)
+	go func(){
+		for {
+			j,more :=<- jobs
+			if more {
+				fmt.Println("received job",j)
+			}else{
+				fmt.Println("received all job")
+				done <- true
+				return
+			}
+		}
+	}()
+	
+	for j:=1;j<=3;j++{
+		jobs <- j
+		fmt.Println("sent job",j)
+	}
+	close(jobs)
+	fmt.Println("sent all obs")
+	<- done
+}
+output==>
+sent job 1
+sent job 2
+sent job 3
+sent all obs
+received job 1
+received job 2
+received job 3
+received all job
+</pre>
