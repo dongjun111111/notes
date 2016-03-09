@@ -3077,3 +3077,42 @@ $student =new student();
 $student->name = "jason";
 $student->say();
 输出：jason
+
+
++++++php之final关键字+++++
+使用final关键标记的类不能被继承；
+使用final关键标记的方法不能被子类覆盖，是最终版本；
+
++++static与const++++
+class person{
+  public static $country = "china";
+  public static function say(){
+    echo "<br>my country is your home<br>";
+  }
+  public static function run(){  //类中静态方法访问静态成员
+    echo person::$country;
+  }
+}
+echo person::$country; //l类外部访问类中静态成员
+person::say();    //类外部访问类中静态方法
+person::run();
+输出：
+china
+my country is your home
+china
+const是一个定义常量的关键字，在PHP中定义常量使用的是“define()”这个函数，但是在类里面定义常量使用的
+是“const”这个关键字，类似于C中的#define如果在程序中改变了它的值，那么会出现错误，用“const”修饰的成员属性
+的访问方式和“static”修饰的成员访问的方式差不多，也是使用“类名”，在方法里面使用“self”关键字。
+但是不用使用“$”符号，也不能使用对象来访问。
+const的访问方法不一样，如例：
+class myclass {
+  const constant = "constant value";
+  function show(){
+    echo "用show()输出".self::constant;
+  }
+}
+echo myclass::show();  
+$class =new myclass();
+$class->show();
+输出：
+用show()输出constant value用show()输出constant value
