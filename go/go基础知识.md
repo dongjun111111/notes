@@ -9618,3 +9618,52 @@ output==>
 area: 20
 perim: 18
 </pre>
+####接口
+<pre>
+package main
+
+import (
+	"fmt"
+	"math"
+)
+type geometry interface{  //声明接口
+	area() float64
+	perim() float64
+}
+type rect struct {
+	width,height float64
+}
+type circle struct {
+	radius float64
+}
+func (r rect) area() float64{//实现接口中的area()方法
+	return r.width * r.height
+}
+func (r rect) perim() float64{//实现接口中的perim()方法
+	return 2*r.width + 2*r.height
+}
+func (c circle) area() float64{//实现接口中的area()方法
+	return math.Pi * c.radius*c.radius
+}
+func (c circle) perim() float64 {//实现接口中的perim()方法
+	return 2*math.Pi*c.radius
+}
+func measure(g geometry){
+	fmt.Println(g)  //打印本身
+	fmt.Println(g.area()) //打印面积
+	fmt.Println(g.perim()) //打印周长
+}
+func main(){
+	r :=rect{width:3,height:4}
+	c :=circle{radius:5}
+	measure(r)
+	measure(c)
+}
+output==>
+{3 4}
+12
+14
+{5}
+78.53981633974483
+31.41592653589793
+</pre>
