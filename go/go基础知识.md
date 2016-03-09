@@ -10006,3 +10006,35 @@ request 3 2016-03-09 22:56:27.8007639 +0800 +0800
 request 4 2016-03-09 22:56:28.8008211 +0800 +0800
 request 5 2016-03-09 22:56:29.8008783 +0800 +0800
 </pre>
+####原子计数器
+Go 中最主要的状态管理方式是通过通道间的沟通来完成的，我们在工作池的例子中碰到过，但是还是有一些其他的方法来管理状态的。这里我们将看看如何使用 sync/atomic包在多个 Go 协程中进行 原子计数 .
+<pre>
+
+package main
+
+import (
+	"fmt"
+	"time"
+	"runtime"
+	"sync/atomic"
+)
+func main(){
+	var ops uint64 = 0
+	for i:=0;i<50;i++{
+		go func(){
+			for {//使用 AddUint64 来让计数器自动增加
+				atomic.AddUint64(&ops,1)//& 语法来给出 ops 的内存地址
+				runtime.Gosched()
+			}
+		}()
+	}
+	//等待一秒，让 ops 的自加操作执行一会
+	time.Sleep(time.Second)
+	//为了在计数器还在被其它 Go 协程更新时，安全的使用它，我们通过 
+	//LoadUint64 将当前值拷贝提取到 opsFinal中。
+	opsFinal :=atomic.LoadUint64(&ops)
+	fmt.Println("完成该程序进行了ops:",opsFinal,"次操作")
+}
+output==>
+完成该程序进行了ops: 4311429 次操作
+</pre>
