@@ -10198,3 +10198,21 @@ output==>
 "Yes"
 map[num:6.13 strs:[a b]]
 </pre>
+####时间戳
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	secs :=time.Now().Unix()  //标准时间戳格式 10位
+	nanos :=time.Now().UnixNano() //19位时间戳
+	fmt.Println(secs)
+	fmt.Println(nanos)
+}
+output==>
+1457539202
+1457539202453493800
+</pre>
