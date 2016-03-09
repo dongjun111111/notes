@@ -3040,3 +3040,19 @@ class person{
 $p1= new person();
 $p1->name = "this is a person name";
 echo isset($p1->name);
+（个人感觉这两个函数没有什么卵用)
+
+
+++++extends与implements++++
+extends 是继承某个类 
+继承之后可以使用父类的方法 
+也可以重写父类的方法
+implements 是实现多个接口 
+接口的方法一般为空的 
+必须重写才能使用
+
++++php中的Interface++++
+PHP中类是单继承，也就是不支持多继承，当一个类需要多个类的功能时，继承就无能为力了，为此 就引入了类的接口技术。
+使用关键字 interface 来定义，并使用关键字 implements 来实现接口中的方法，且必须实现所有接口中所定义的方法。
+且接口里面不能声明变量,而且所有成员都是public权限的。
+说白了，PHP为了实现一个类继承多个类的功能而引入了interface。
