@@ -3022,3 +3022,21 @@ $toyota=new car();
 $toyota->price= "3434343434";
 $toyota->price;
 输出：3434343434
+
+
+++++__isset()与__unset()++++++
+当类外部想知道类中是否存在或者试图删除一个私有成员时会自动调用这两个方法。
+class person{
+  private $name;
+  private function __isset($num){
+    echo "当在类外部使用isset()函数测定私有成员是否存在时自动调用";
+    return isset($this->$num);
+  }
+  private function __unset($num){
+    echo "当在类外部使用unset()函数来删除私有成员时自动调用";
+    unset($this->$num);
+  }
+}
+$p1= new person();
+$p1->name = "this is a person name";
+echo isset($p1->name);
