@@ -10177,3 +10177,24 @@ func main(){
 output==>
 true
 </pre>
+####json
+<pre>
+package main
+import (
+	"fmt"
+	"encoding/json"
+)
+func main(){
+	blob ,_:=json.Marshal("Yes")  //字符串转成json
+	fmt.Println(string(blob))
+	byt := []byte(`{"num":6.13,"strs":["a","b"]}`)
+	var dat map[string]interface{} //json转成golang map
+	if err :=json.Unmarshal(byt,&dat);err !=nil{
+		panic(err)		
+	}
+	fmt.Println(dat)
+}
+output==>
+"Yes"
+map[num:6.13 strs:[a b]]
+</pre>
