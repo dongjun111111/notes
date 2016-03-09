@@ -2990,3 +2990,20 @@ $p2->say();
 $p3->say();
 使用__construct，可以使用new Person("张三","男", 20)的形式赋初始值，不然只能通过访问对象的方法赋值，
 比如这样$p1->name = "张三";
+
+构造函数的另一个用途是，通过构造函数访问类中的私有变量.
+因为构造方法是默认的公有方法（构造方法不要设置成私有的），所以在类的外面可以访问到，这样就可以使用构造方法
+创建对象， 另外构造方法也是类里面的函数，所以可以用构造方法给私有的属性赋初值。Say()的方法是默认公有的，
+ 所以在外面也可以访问的到， 说出他自己的私有属性。
+class person{
+	private $name;
+	function __construct($name){
+		$this->name = $name;
+	}
+	function say(){
+		echo $this->name;
+	}
+}
+$person=new person('jason');
+$person->say();
+输出：jason
