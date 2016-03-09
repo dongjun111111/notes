@@ -10216,3 +10216,65 @@ output==>
 1457539202
 1457539202453493800
 </pre>
+####数字解析
+内置的 strconv 包提供了数字解析功能。
+使用 ParseFloat 解析浮点数，这里的 64 表示表示解析的数的位数。
+在使用 ParseInt 解析整形数时，例子中的参数 0 表示自动推断字符串所表示的数字的进制。64 表示返回的整形数是以 64 位存储的
+<pre>
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+func main(){
+	f,_:=strconv.ParseFloat("14.0",64)
+	fmt.Println(f)
+}
+output==>
+14
+</pre>
+####URL解析
+我们将解析这个 URL 示例，它包含了一个 scheme，认证信息，主机名，端口，路径，查询参数和片段。
+<pre>
+package main
+
+import (
+	"fmt"
+	"net/url"
+	"strings"
+)
+func main(){
+	s :="postgres://user:pass@host.com:5434/path?k=v#5"
+	u,err :=url.Parse(s)
+	if err != nil{
+		panic(err)
+	}
+	fmt.Println(u.Scheme)
+	fmt.Println(u.User)
+	fmt.Println(u.User.Username())
+	p, _ := u.User.Password()
+    fmt.Println(p)
+	fmt.Println(u.Host)
+	h := strings.Split(u.Host, ":")
+    fmt.Println(h[0])
+    fmt.Println(h[1])
+	fmt.Println(u.Path)
+    fmt.Println(u.Fragment)
+	fmt.Println(u.RawQuery)
+    m, _ := url.ParseQuery(u.RawQuery)
+    fmt.Println(m)
+}
+output==>
+postgres
+user:pass
+user
+pass
+host.com:5434
+host.com
+5434
+/path
+5
+k=v
+map[k:[v]]
+</pre>
