@@ -8883,11 +8883,12 @@ func afunc(ch chan int){
 }
 func main(){
 	ch :=make(chan int)
-	for i:=0;i<10;i++{
+	//通过控制channelcount数值大小，来控制输出的值的个数
+	//这里如果channelcount为2 ，则输出两个finished
+	channelcount := 1
+	for i:=0;i<channelcount;i++{
 		go afunc(ch)
 	}
-	channelcount := 1//通过控制channelcount数值大小，来控制输出的值的个数
-	//这里如果channelcount为2 ，则输出两个finished
 	for i:=0;i<channelcount;i++{ 
 		ch <- 1
 	}
@@ -9667,3 +9668,29 @@ output==>
 78.53981633974483
 31.41592653589793
 </pre>
+####协程
+<pre>
+package main
+
+import (
+
+	"fmt"
+)
+func f(from string){
+	for i:=0;i<3;i++{
+		fmt.Println(from,":",i)
+	}
+}
+func main(){
+	f("direct")
+	go f("goroutine")
+	go func(msg string){//该协程不会输出，因为主进程直接结束了
+		fmt.Println(msg)//可以手动等待一秒就可以输出going
+	}("going")
+}
+output==>
+direct : 0
+direct : 1
+direct : 2
+</pre>
+####
