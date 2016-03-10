@@ -10312,3 +10312,32 @@ output==>
 MD5: e2fc714c4727ee9395f324cd2e7f331f
 SHA1: 81fe8bfe87576c3ecb22426f8e57847382917acf
 </pre>
+####base64
+Go 同时支持标准的和 URL 兼容的 base64 格式。编码需要使用 []byte 类型的参数，所以要将字符串转成此类型。
+解码可能会返回错误，如果不确定输入信息格式是否正确，那么，你就需要进行错误检查了
+<pre>
+package main
+
+import (
+	"fmt"
+	"encoding/base64"
+)
+func main(){
+	data := "abc1234445" //编码
+	senc :=base64.StdEncoding.EncodeToString([]byte(data))
+	fmt.Println(senc)
+	//解码要注意进行错误检查
+	sdec,_ :=base64.StdEncoding.DecodeString(string(senc))
+	fmt.Println(string(sdec))//编码
+	uenc :=base64.URLEncoding.EncodeToString([]byte(data))
+	fmt.Println(uenc)
+	//解码要注意进行错误检查
+	udec,_:=base64.URLEncoding.DecodeString(uenc)
+	fmt.Println(string(udec))
+}
+output==>
+YWJjMTIzNDQ0NQ==
+abc1234445
+YWJjMTIzNDQ0NQ==
+abc1234445
+</pre>
