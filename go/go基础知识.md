@@ -10385,3 +10385,38 @@ func main(){
 	os.Exit(3)
 }
 </pre>
+####go里面的类型断言
+x.(T)           <br>
+其中x为interface{}类型 T是要断言的类型。类型断言有个非常好的使用场景：当某个类型为interface{}的变量，真实类型为A时，才做某件事时，这时可以使用类型断言.<br>下面有个例子。只有当某个interface{}的类型 存储的是int时才打印出来。
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+	"math/rand"
+)
+func main(){
+	var v interface{}
+	r :=rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i:=0;i<10;i++{
+		v = i
+		if(r.Intn(100) % 2) == 0{
+			v = "hello"
+		}
+		
+		if _,ok :=v.(int); ok {
+			fmt.Println(v)
+		}
+	}
+}
+output==>
+1
+3
+4
+5
+6
+7
+8
+9
+</pre>
