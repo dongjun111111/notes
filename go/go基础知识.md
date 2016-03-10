@@ -10420,3 +10420,93 @@ output==>
 8
 9
 </pre>
+####环境变量
+<pre>
+package main
+
+import (
+	"fmt"
+	"os"
+)
+func main(){
+	//设置环境变量
+	err :=os.Setenv("keys","hello")
+	if err != nil{
+		fmt.Println(err)
+	}else{
+		fmt.Println("set key ok!")
+		//显示所有环境变量
+		for _,v :=range os.Environ() {
+			fmt.Println(v)
+		}
+	}
+}
+output==>
+set key ok!
+keys=hello
+PSModulePath=C:\Windows\system32\WindowsPowerShell\v1.0\Modules\
+TMP=C:\Users\ADMINI~1\AppData\Local\Temp
+TEMP=C:\Users\ADMINI~1\AppData\Local\Temp
+HOMEDRIVE=C:
+LITEIDE_EXEC=C:\Windows\system32\cmd.exe
+ComSpec=C:\Windows\system32\cmd.exe
+CATALINA_HOME=E:\java工具\tomcat\apache-tomcat-7.0.42-windows-x64\apache-tomcat-7.0.42
+HOMEPATH=\Users\Administrator
+GOTOOLDIR=C:\Go\pkg\tool\windows_amd64
+ProgramW6432=C:\Program Files
+LITEIDE_EXECOPT=/C
+#envKKPRbc_Cmdilne=
+GOPATH=C:\mygo\src
+GOBIN=
+Path=C:\Program Files\Java\jdk1.8.0_45\bin;C:\Program Files\Java\jdk1.8.0_45\jre\bin;D:\app\Administrator\product\11.2.0\dbhome_1\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Microsoft SQL Server\100\Tools\Binn\;C:\Program Files\Microsoft SQL Server\100\Tools\Binn\;C:\Program Files\Microsoft SQL Server\100\DTS\Binn\;C:\Program Files (x86)\MySQL\MySQL Utilities 1.3.6\E:\java工具\tomcat\apache-tomcat-7.0.42-windows-x64\apache-tomcat-7.0.42\lib;E:\java工具\tomcat\apache-tomcat-7.0.42-windows-x64\apache-tomcat-7.0.42\bin;E:\java工具\apache-maven-3.1.0-bin\apache-maven-3.1.0\bin;C:\Program Files\nodejs\;C:\Users\Administrator\AppData\Roaming\npm\node_modules\express\;C:\Go\bin;Z:/其他/liteIDE/liteide/bin;C:/Go/bin;C:/Go/bin/windows_amd64;C:/mygo/src/bin;C:/mygo/src/bin/windows_amd64;
+LITEIDE_TERM=C:\Windows\system32\cmd.exe
+GOOS=windows
+CLASSPATH=.;C:\Program Files\Java\jdk1.8.0_45\lib\dt.jar;C:\Program Files\Java\jdk1.8.0_45\lib\tools.jar;
+USERDOMAIN=JASON
+windows_tracing_flags=3
+COMPUTERNAME=JASON
+CommonProgramW6432=C:\Program Files\Common Files
+PUBLIC=C:\Users\Public
+USERNAME=Administrator
+NUMBER_OF_PROCESSORS=4
+ProgramData=C:\ProgramData
+GOEXE=.exe
+=::=::\
+LOGONSERVER=\\JASON
+SystemRoot=C:\Windows
+ALLUSERSPROFILE=C:\ProgramData
+PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY
+CommonProgramFiles=C:\Program Files\Common Files
+CATALINA_BASE=E:\java工具\tomcat\apache-tomcat-7.0.42-windows-x64\apache-tomcat-7.0.42
+LITEIDE_MAKE=mingw32-make
+LOCALAPPDATA=C:\Users\Administrator\AppData\Local
+#envTSLOGRBCShellExt5316=4254128
+GOHOSTOS=windows
+GORACE=
+GOARCH=amd64
+windir=C:\Windows
+LITEIDE_TERMARGS=
+FP_NO_HOST_CHECK=NO
+ShellLaunch{A81BA54B-CCFE-4204-8E79-A68C0FDFA5CF}=ShellExt
+GOCHAR=6
+CGO_ENABLED=1
+MAVEN_HOME=E:\java工具\apache-maven-3.1.0-bin\apache-maven-3.1.0
+PROCESSOR_REVISION=2502
+GOROOT=C:\Go
+ProgramFiles=C:\Program Files
+OS=Windows_NT
+USERPROFILE=C:\Users\Administrator
+CC=gcc
+CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
+JAVA_HOME=C:\Program Files\Java\jdk1.8.0_45
+JRE_HOME=E:\java工具\jre1.8.0_45
+PROCESSOR_LEVEL=6
+APPDATA=C:\Users\Administrator\AppData\Roaming
+CXX=g++
+SystemDrive=C:
+PROCESSOR_ARCHITECTURE=AMD64
+GOHOSTARCH=amd64
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 37 Stepping 2, GenuineIntel
+GOGCCFLAGS=-m64 -mthreads -fmessage-length=0
+ProgramFiles(x86)=C:\Program Files (x86)
+</pre>
