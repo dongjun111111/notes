@@ -10341,3 +10341,27 @@ abc1234445
 YWJjMTIzNDQ0NQ==
 abc1234445
 </pre>
+####行过滤器
+一个行过滤器 在读取标准输入流的输入，处理该输入，然后将得到一些的结果输出到标准输出的程序中是常见的一个功能。grep 和 sed 是常见的行过滤器。
+这里是一个使用 Go 编写的行过滤器示例，它将所有的输入文字转化为大写的版本。你可以使用这个模式来写一个你自己的 Go行过滤器。
+<pre>
+package main
+//将小写转换成大写
+import (
+	"strings"
+	"os"
+	"bufio"
+	"fmt"
+)
+func  main(){
+	scanner :=bufio.NewScanner(os.Stdin)
+	for scanner.Scan(){
+		ucl := strings.ToUpper(scanner.Text())
+		fmt.Println(ucl)
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, "error:", err)
+		os.Exit(1)
+    }
+}
+</pre>
