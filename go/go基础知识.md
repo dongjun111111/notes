@@ -10278,3 +10278,37 @@ host.com
 k=v
 map[k:[v]]
 </pre>
+####sha1散列与MD5
+SHA1 散列经常用生成二进制文件或者文本块的短标识。例如，git 版本控制系统大量的使用 SHA1 来标识受版本控制的文件和目录。这里是 Go中如何进行 SHA1 散列计算的例子。<br>
+SHA1 值经常以 16 进制输出，例如在 git commit 中。使用%x 来将散列结果格式化为 16 进制字符串。<br>
+你可以使用和上面相似的方式来计算其他形式的散列值。例如，计算 MD5 散列，引入 crypto/md5 并使用 md5.New()方法。
+<pre>
+package main
+
+import (
+	"crypto/sha1"
+	"fmt"
+	"io"
+	"crypto/md5"
+)
+//对字符串进行MD5哈希
+func a(data string) string{  
+	t :=md5.New()
+	io.WriteString(t,data)
+	return fmt.Sprintf("%x",t.Sum(nil))
+}
+//对字符串进行SHA1哈希
+func b(data string) string{
+	t :=sha1.New()
+	io.WriteString(t,data)
+	return fmt.Sprintf("%x",t.Sum(nil))
+}
+func main(){
+	var data string = "abcd"
+	fmt.Println("MD5:",a(data))
+	fmt.Println("SHA1:",b(data))
+}
+output==>
+MD5: e2fc714c4727ee9395f324cd2e7f331f
+SHA1: 81fe8bfe87576c3ecb22426f8e57847382917acf
+</pre>
