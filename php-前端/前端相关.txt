@@ -7349,3 +7349,19 @@ if(in_array($origin, $allow_origin)){
   
 echo json_encode($ret);  
 ?>  
+
+
++++node.JS md5加密中文与php结果不一致++++
+经查阅资料发现是编码问题，只要在node.JS中加入编码即可解决问题。
+var crypto = require('crypto');
+
+var md5 = function(str){
+    var crypto_md5 = crypto.createHash('md5');
+    crypto_md5.update(str, 'utf8'); // 加入编码
+    return crypto_md5.digest('hex');
+}
+
+var str = '程序员';
+var result = str + ' md5:' + md5(str);
+
+console.log(result);
