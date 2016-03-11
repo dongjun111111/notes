@@ -7275,3 +7275,77 @@ function setCookie(name, value, seconds) {
 setCookie("age","34","1600");
 clearCookie("age");
 alert(getCookie("age"));
+
+
++++Access-Control-Allow-Origin与ajax跨域+++
+在被请求的Response header中加入：
+// 指定允许其他域名访问  
+header('Access-Control-Allow-Origin:*');  
+// 响应类型  
+header('Access-Control-Allow-Methods:POST');  
+// 响应头设置  
+header('Access-Control-Allow-Headers:x-requested-with,content-type');  
+就可以实现ajax POST跨域访问了。
+Access-Control-Allow-Origin:* 表示允许任何域名跨域访问。
+如果需要指定某域名才允许跨域访问，只需把Access-Control-Allow-Origin:*改为Access-Control-Allow-Origin:允许的域名
+例如：header('Access-Control-Allow-Origin:http://www.client.com');
+示例：
+client.html 路径：http://www.client.com/client.html
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">  
+<html>  
+ <head>  
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">  
+  <title> 跨域测试 </title>  
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>  
+ </head>  
+  
+ <body>  
+    <div id="show"></div>  
+    <script type="text/javascript">  
+    $.post("http://www.server.com/server.php",{name:"fdipzone",gender:"male"})  
+      .done(function(data){  
+        document.getElementById("show").innerHTML = data.name + ' ' + data.gender;  
+      });  
+    </script>  
+ </body>  
+</html>  
+server.php 路径：http://www.server.com/server.php
+<?php  
+$ret = array(  
+    'name' => isset($_POST['name'])? $_POST['name'] : '',  
+    'gender' => isset($_POST['gender'])? $_POST['gender'] : ''  
+);  
+  
+header('content-type:application:json;charset=utf8');  
+header('Access-Control-Allow-Origin:*');  
+header('Access-Control-Allow-Methods:POST');  
+header('Access-Control-Allow-Headers:x-requested-with,content-type');  
+  
+echo json_encode($ret);  
+?>  
+
+如果需要设置多个域名允许访问，这里需要用php处理一下：
+server.php 修改为
+<?php  
+$ret = array(  
+    'name' => isset($_POST['name'])? $_POST['name'] : '',  
+    'gender' => isset($_POST['gender'])? $_POST['gender'] : ''  
+);  
+  
+header('content-type:application:json;charset=utf8');  
+  
+$origin = isset($_SERVER['HTTP_ORIGIN'])? $_SERVER['HTTP_ORIGIN'] : '';  
+  
+$allow_origin = array(  
+    'http://www.client.com',  
+    'http://www.client2.com'  
+);  
+  
+if(in_array($origin, $allow_origin)){  
+    header('Access-Control-Allow-Origin:'.$origin);  
+    header('Access-Control-Allow-Methods:POST');  
+    header('Access-Control-Allow-Headers:x-requested-with,content-type');  
+}  
+  
+echo json_encode($ret);  
+?>  
