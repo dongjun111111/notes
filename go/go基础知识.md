@@ -10645,3 +10645,48 @@ func main() {
     fmt.Println("All task done!!!")
 }
 </pre>
+####unsafe
+Offsetof
+<pre>
+package main
+//该函数返回由v所指示的某结构体中的字段在该结构体中的位置偏移字节数
+import (
+	"unsafe"
+	"fmt"
+)
+type datas struct{
+	c0 byte
+	c1 int
+	c2 string
+	c3 int
+}
+func main(){
+	var d datas
+	fmt.Println(unsafe.Offsetof(d.c0))
+	fmt.Println(unsafe.Offsetof(d.c1))
+	fmt.Println(unsafe.Offsetof(d.c2))
+	fmt.Println(unsafe.Offsetof(d.c3))
+}
+output==>
+0
+8
+16
+32
+</pre>
+Sizeof
+<pre>
+package main
+//Sizeof函数返回变量v占用的内存空间的字节数，在64位系统中，如果变量v是int类型，会返回16，
+//因为v的“top level”内存就是它的值使用的内存；如果变量v是string类型，会返回16，因为v的“top level”内存不是存放着实际的字符串，
+//而是该字符串的地址；如果变量v是slice类型，会返回24，这是因为slice的描述符就占了24个字节。
+	"fmt"
+	"unsafe"
+)
+func main(){
+	d := "gffggfd"
+	df :=unsafe.Sizeof(d)
+	fmt.Println(df)
+}
+output==>
+16
+</pre>
