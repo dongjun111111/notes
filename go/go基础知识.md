@@ -10811,3 +10811,31 @@ func main(){
 output==>
 Only Once
 </pre>
+####Cond
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+	"sync"
+)
+func main(){
+	locker :=new(sync.Mutex)
+	cond :=sync.NewCond(locker)
+	done :=false
+	cond.L.Lock()
+	go func(){
+		time.Sleep(4e9)
+		done = true
+		cond.Signal()
+	}()
+	if(!done){
+		cond.Wait()
+	}
+	fmt.Println("now done is:",done)
+}
+output==>
+//等待多秒后
+now done is: true
+</pre>
