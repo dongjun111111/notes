@@ -395,7 +395,7 @@ int main()
 　　//开始连接
 　　if (connect(con_client,(LPSOCKADDR)＆csin,sizeof(csin)))
 　　{//AfxMessageBox(“connect wrong!”); 
-　　return －1;}
+　　return －1;
 　　else
 　　{//连接成功，创建数据接收线程
 　　AfxBeginThread(readdata,＆con_client);}
@@ -409,3 +409,5 @@ int main()
 　　// con_client 为与服务器进行连接的套接字。
 　　closesocket(conn[1]);
 　　在实际应用中，应当根据需要调整并改变一些变量的作用域。
+
+
