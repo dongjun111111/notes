@@ -614,6 +614,7 @@ obj-m+=hz.o
 IntelµÄÎïÀíµØÖ·À©Õ¹£¨PAE£©
 ÔÚµçÄÔÉÏ°²×°µÄRAMÊýÁ¿²»ÊÜÏÞÖÆ£¬Ö»ÊÇÊÜÖÆÓÚÖ÷°åÉÏµÄDIMMÊýÁ¿£¬´¦ÀíÆ÷¿ÉÒÔÑ¡Ö·µÄÎïÀíÄÚ´æÊýÁ¿ÊÜÏÞ¡£Í¨³££¬CPUµÄ×Ö³¤¾ö¶¨ÁËÕâ¸öÏÞÖÆ£¬Ò»¸ö32Îª»úÆ÷Ö»ÄÜ´æ´¢32Î»µÄÖ¸Õë£¬Òò´ËÎïÀíµØÖ·ÏÞÖÆÎª4GB¡£
 
+
 µ±ÐèÒªÔö¼ÓDRAM´óÓÚ4GBµÄ½â¾ö°ì·¨ÊÇ×ª»»Îª64Î»ÌåÏµ½á¹¹£¬ÕâÒâÎ¶×ÅÄãµÄËùÓÐÓ¦ÓÃ³ÌÐò·Åµ½Ò»¸öÐÂµÄÆ½Ì¨ÉÏ£¬ÕâÊÇ¸öÏàµ±¸ßµÄ½â¾ö·½°¸¡£
 
 Intel¹«Ë¾µÄPhysical Address Extension£¨PAE£©¼¼ÊõÔÊÐí´¦ÀíÆ÷Í¨¹ýÒ³ÃæµØÖ·´Ó20bitÀ©Õ¹µ½24bit£¬´Ó¶ø¿ÉÒÔÑ°Ö·64GBµÄRAM£¬Ò³Ãæ´óÐ¡¿ÉÒÔ¸Ä±ä£¬ËùÒÔÆ«ÒÆÁ¿ÈÔÈ»Îª12bit£¬ÕâÒâÎ¶×ÅÓÐÐ§ÎïÀíµØÖ·Îª36bits¡£ÒòÎªÂß¼­µØÖ·±ØÐë·ûºÏ32Îª¼Ä´æÆ÷£¬´¦ÀíÆ÷ÈÔÈ»Ö»ÄÜÑ¡Ö·4GBµÄÐéÄâÄÚ´æ¡£
@@ -649,3 +650,53 @@ MMUºÍ²Ù×÷ÏµÍ³Ê¹ÓÃÒ³ÃæµØÖ·¹ÜÀíÒ³Ãæ£¬ËùÒÔ·ÖÅä¸ø»º´æ»òÕß½ø³ÌÒ³ÃæÊ±ºò£¬²Ù×÷ÏµÍ³¿ÉÒÔË
 # pthread_setschedparam ¨C ÎªÏß³ÌÑ¡ÔñÒ»¸öÊ±Ðò°²ÅÅ²ßÂÔ
 
 # sysconf ¨C ÏÔÊ¾ÏµÍ³³£Á¿µÄÅäÖÃÏ¸½ÚÄÚÈÝ
+
+
+++++LinuxÄÚ´æ¹ÜÀíSlab·ÖÅäÆ÷++++++
+Ò»£º¸ÅÊö
+
+²ÉÓÃ»ï°éËã·¨·ÖÅäÄÚ´æÊ±£¬Ã¿´ÎÖÁÉÙ·ÖÅäÒ»¸öÒ³Ãæ¡£µ«µ±ÇëÇó·ÖÅäµÄÄÚ´æ´óÐ¡Îª¼¸Ê®¸ö×Ö½Ú»ò¼¸°Ù¸ö×Ö½ÚÊ±Ó¦¸ÃÈçºÎ´¦Àí£¿ÈçºÎÔÚÒ»¸öÒ³ÃæÖÐ·ÖÅäÐ¡µÄÄÚ´æÇø£¬Ð¡ÄÚ´æÇøµÄ·ÖÅäËù²úÉúµÄÄÚËéÆ¬ÓÖÈçºÎ½â¾ö£¿Linux²ÉÓÃSlab¡£
+
+Linux ËùÊ¹ÓÃµÄ slab ·ÖÅäÆ÷µÄ»ù´¡ÊÇ Jeff Bonwick Îª SunOS ²Ù×÷ÏµÍ³Ê×´ÎÒýÈëµÄÒ»ÖÖËã·¨¡£Jeff µÄ·ÖÅäÆ÷ÊÇÎ§ÈÆ¶ÔÏó»º´æ½øÐÐµÄ¡£ÔÚÄÚºËÖÐ£¬»áÎªÓÐÏÞµÄ¶ÔÏó¼¯£¨ÀýÈçÎÄ¼þÃèÊö·ûºÍÆäËû³£¼û½á¹¹£©·ÖÅä´óÁ¿ÄÚ´æ¡£Jeff ·¢ÏÖ¶ÔÄÚºËÖÐÆÕÍ¨¶ÔÏó½øÐÐ³õÊ¼»¯ËùÐèµÄÊ±¼ä³¬¹ýÁË¶ÔÆä½øÐÐ·ÖÅäºÍÊÍ·ÅËùÐèµÄÊ±¼ä¡£Òò´ËËûµÄ½áÂÛÊÇ²»Ó¦¸Ã½«ÄÚ´æÊÍ·Å»ØÒ»¸öÈ«¾ÖµÄÄÚ´æ³Ø£¬¶øÊÇ½«ÄÚ´æ±£³ÖÎªÕë¶ÔÌØ¶¨Ä¿¶ø³õÊ¼»¯µÄ×´Ì¬¡£ÀýÈç£¬Èç¹ûÄÚ´æ±»·ÖÅä¸øÁËÒ»¸ö»¥³âËø£¬ÄÇÃ´Ö»ÐèÔÚÎª»¥³âËøÊ×´Î·ÖÅäÄÚ´æÊ±Ö´ÐÐÒ»´Î»¥³âËø³õÊ¼»¯º¯Êý£¨mutex_init£©¼´¿É¡£ºóÐøµÄÄÚ´æ·ÖÅä²»ÐèÒªÖ´ÐÐÕâ¸ö³õÊ¼»¯º¯Êý£¬ÒòÎª´ÓÉÏ´ÎÊÍ·ÅºÍµ÷ÓÃÎö¹¹Ö®ºó£¬ËüÒÑ¾­´¦ÓÚËùÐèµÄ×´Ì¬ÖÐÁË
+
+Linux slab ·ÖÅäÆ÷Ê¹ÓÃÁËÕâÖÖË¼ÏëºÍÆäËûÒ»Ð©Ë¼ÏëÀ´¹¹½¨Ò»¸öÔÚ¿Õ¼äºÍÊ±¼äÉÏ¶¼¾ßÓÐ¸ßÐ§ÐÔµÄÄÚ´æ·ÖÅäÆ÷¡£
+
+Í¼ 1 ¸ø³öÁË slab ½á¹¹µÄ¸ß²ã×éÖ¯½á¹¹¡£ÔÚ×î¸ß²ãÊÇ cache_chain£¬ÕâÊÇÒ»¸ö slab »º´æµÄÁ´½ÓÁÐ±í¡£Õâ¶ÔÓÚ best-fit Ëã·¨·Ç³£ÓÐÓÃ£¬¿ÉÒÔÓÃÀ´²éÕÒ×îÊÊºÏËùÐèÒªµÄ·ÖÅä´óÐ¡µÄ»º´æ£¨±éÀúÁÐ±í£©¡£cache_chain µÄÃ¿¸öÔªËØ¶¼ÊÇÒ»¸ö kmem_cache ½á¹¹µÄÒýÓÃ£¨³ÆÎªÒ»¸ö cache£©¡£Ëü¶¨ÒåÁËÒ»¸öÒª¹ÜÀíµÄ¸ø¶¨´óÐ¡µÄ¶ÔÏó³Ø¡£
+Ã¿¸ö»º´æ¶¼°üº¬ÁËÒ»¸ö slabs ÁÐ±í£¬ÕâÊÇÒ»¶ÎÁ¬ÐøµÄÄÚ´æ¿é£¨Í¨³£¶¼ÊÇÒ³Ãæ£©¡£´æÔÚ 3 ÖÖ slab£º
+
+slabs_full£ºÍêÈ«·ÖÅäµÄ slab
+
+slabs_partial£º²¿·Ö·ÖÅäµÄ slab
+
+slabs_free£º¿Õ slab£¬»òÕßÃ»ÓÐ¶ÔÏó±»·ÖÅä
+
+×¢Òâ slabs_free ÁÐ±íÖÐµÄ slab ÊÇ½øÐÐ»ØÊÕ£¨reaping£©µÄÖ÷Òª±¸Ñ¡¶ÔÏó¡£ÕýÊÇÍ¨¹ý´Ë¹ý³Ì£¬slab ËùÊ¹ÓÃµÄÄÚ´æ±»·µ»Ø¸ø²Ù×÷ÏµÍ³¹©ÆäËûÓÃ»§Ê¹ÓÃ¡£
+
+slab ÁÐ±íÖÐµÄÃ¿¸ö slab ¶¼ÊÇÒ»¸öÁ¬ÐøµÄÄÚ´æ¿é£¨Ò»¸ö»ò¶à¸öÁ¬ÐøÒ³£©£¬ËüÃÇ±»»®·Ö³ÉÒ»¸ö¸ö¶ÔÏó¡£ÕâÐ©¶ÔÏóÊÇ´ÓÌØ¶¨»º´æÖÐ½øÐÐ·ÖÅäºÍÊÍ·ÅµÄ»ù±¾ÔªËØ¡£×¢Òâ slab ÊÇ slab ·ÖÅäÆ÷½øÐÐ²Ù×÷µÄ×îÐ¡·ÖÅäµ¥Î»£¬Òò´ËÈç¹ûÐèÒª¶Ô slab ½øÐÐÀ©Õ¹£¬ÕâÒ²¾ÍÊÇËùÀ©Õ¹µÄ×îÐ¡Öµ¡£Í¨³£À´Ëµ£¬Ã¿¸ö slab ±»·ÖÅäÎª¶à¸ö¶ÔÏó¡£
+
+ÓÉÓÚ¶ÔÏóÊÇ´Ó slab ÖÐ½øÐÐ·ÖÅäºÍÊÍ·ÅµÄ£¬Òò´Ëµ¥¸ö slab ¿ÉÒÔÔÚ slab ÁÐ±íÖ®¼ä½øÐÐÒÆ¶¯¡£ÀýÈç£¬µ±Ò»¸ö slab ÖÐµÄËùÓÐ¶ÔÏó¶¼±»Ê¹ÓÃÍêÊ±£¬¾Í´Ó slabs_partial ÁÐ±íÖÐÒÆ¶¯µ½ slabs_full ÁÐ±íÖÐ¡£µ±Ò»¸ö slab ÍêÈ«±»·ÖÅä²¢ÇÒÓÐ¶ÔÏó±»ÊÍ·Åºó£¬¾Í´Ó slabs_full ÁÐ±íÖÐÒÆ¶¯µ½ slabs_partial ÁÐ±íÖÐ¡£µ±ËùÓÐ¶ÔÏó¶¼±»ÊÍ·ÅÖ®ºó£¬¾Í´Ó slabs_partial ÁÐ±íÒÆ¶¯µ½ slabs_free ÁÐ±íÖÐ¡£
+Ã¿¸öSlabµÄÊ×²¿¶¼ÓÐÒ»¸öÐ¡Ð¡µÄÇøÓòÊÇ²»ÓÃµÄ£¬³ÆÎª¡°×ÅÉ«Çø£¨coloring area£©¡±¡£×ÅÉ«ÇøµÄ´óÐ¡Ê¹SlabÖÐµÄÃ¿¸ö¶ÔÏóµÄÆðÊ¼µØÖ·¶¼°´¸ßËÙ»º´æÖÐµÄ¡±»º´æÐÐ£¨cache line£©¡±´óÐ¡½øÐÐ¶ÔÆë£¨80386µÄÒ»¼¶¸ßËÙ»º´æÐÐ´óÐ¡Îª16×Ö½Ú£¬PentiumÎª32×Ö½Ú£©¡£ÒòÎªSlabÊÇÓÉ1¸öÒ³Ãæ»ò¶à¸öÒ³Ãæ£¨×î¶àÎª32£©×é³É£¬Òò´Ë£¬Ã¿¸öSlab¶¼ÊÇ´ÓÒ»¸öÒ³Ãæ±ß½ç¿ªÊ¼µÄ£¬Ëü×ÔÈ»°´¸ßËÙ»º´æµÄ»º³åÐÐ¶ÔÆë¡£µ«ÊÇ£¬SlabÖÐµÄ¶ÔÏó´óÐ¡²»È·¶¨£¬ÉèÖÃ×ÅÉ«ÇøµÄÄ¿µÄ¾ÍÊÇ½«SlabÖÐµÚÒ»¸ö¶ÔÏóµÄÆðÊ¼µØÖ·ÍùºóÍÆµ½Óë»º³åÐÐ¶ÔÆëµÄÎ»ÖÃ¡£ÒòÎªÒ»¸ö»º³åÇøÖÐÓÐ¶à¸öSlab£¬Òò´Ë£¬Ó¦¸Ã°ÑÃ¿¸ö»º³åÇøÖÐµÄ¸÷¸öSlab×ÅÉ«ÇøµÄ´óÐ¡¾¡Á¿°²ÅÅ³É²»Í¬µÄ´óÐ¡£¬ÕâÑù¿ÉÒÔÊ¹µÃÔÚ²»Í¬µÄSlabÖÐ£¬´¦ÓÚÍ¬Ò»Ïà¶ÔÎ»ÖÃµÄ¶ÔÏó£¬ÈÃËüÃÇÔÚ¸ßËÙ»º´æÖÐµÄÆðÊ¼µØÖ·Ïà»¥´í¿ª£¬ÕâÑù¾Í¿ÉÒÔ¸ÄÉÆ¸ßËÙ»º´æµÄ´æÈ¡Ð§ÂÊ¡£
+
+Ã¿¸öSlabÉÏ×îºóÒ»¸ö¶ÔÏóÒÔºóÒ²ÓÐ¸öÐ¡Ð¡µÄ·ÏÁÏÇøÊÇ²»ÓÃµÄ£¬ÕâÊÇ¶Ô×ÅÉ«Çø´óÐ¡µÄ²¹³¥£¬Æä´óÐ¡È¡¾öÓÚ×ÅÉ«ÇøµÄ´óÐ¡£¬ÒÔ¼°SlabÓëÆäÃ¿¸ö¶ÔÏóµÄÏà¶Ô´óÐ¡¡£µ«¸ÃÇøÓòÓë×ÅÉ«ÇøµÄ×ÜºÍ¶ÔÓÚÍ¬Ò»ÖÖ¶ÔÏóµÄ¸÷¸öSlabÊÇ¸ö³£Êý¡£
+
+Ã¿¸ö¶ÔÏóµÄ´óÐ¡»ù±¾ÉÏÊÇËùÐèÊý¾Ý½á¹¹µÄ´óÐ¡¡£Ö»ÓÐµ±Êý¾Ý½á¹¹µÄ´óÐ¡²»Óë¸ßËÙ»º´æÖÐµÄ»º³åÐÐ¶ÔÆëÊ±£¬²ÅÔö¼ÓÈô¸É×Ö½ÚÊ¹Æä¶ÔÆë¡£ËùÒÔ£¬Ò»¸öSlabÉÏµÄËùÓÐ¶ÔÏóµÄÆðÊ¼µØÖ·¶¼±ØÈ»ÊÇ°´¸ßËÙ»º´æÖÐµÄ»º³åÐÐ¶ÔÆëµÄ¡£
+
+Óë´«Í³µÄÄÚ´æ¹ÜÀíÄ£Ê½Ïà±È£¬ slab »º´æ·ÖÅäÆ÷Ìá¹©ÁËºÜ¶àÓÅµã¡£Ê×ÏÈ£¬ÄÚºËÍ¨³£ÒÀÀµÓÚ¶ÔÐ¡¶ÔÏóµÄ·ÖÅä£¬ËüÃÇ»áÔÚÏµÍ³ÉúÃüÖÜÆÚÄÚ½øÐÐÎÞÊý´Î·ÖÅä¡£slab »º´æ·ÖÅäÆ÷Í¨¹ý¶ÔÀàËÆ´óÐ¡µÄ¶ÔÏó½øÐÐ»º´æ¶øÌá¹©ÕâÖÖ¹¦ÄÜ£¬´Ó¶ø±ÜÃâÁË³£¼ûµÄËéÆ¬ÎÊÌâ¡£slab ·ÖÅäÆ÷»¹Ö§³ÖÍ¨ÓÃ¶ÔÏóµÄ³õÊ¼»¯£¬´Ó¶ø±ÜÃâÁËÎªÍ¬Ò»Ä¿¶ø¶ÔÒ»¸ö¶ÔÏóÖØ¸´½øÐÐ³õÊ¼»¯¡£×îºó£¬slab ·ÖÅäÆ÷»¹¿ÉÒÔÖ§³ÖÓ²¼þ»º´æ¶ÔÆëºÍ×ÅÉ«£¬ÕâÔÊÐí²»Í¬»º´æÖÐµÄ¶ÔÏóÕ¼ÓÃÏàÍ¬µÄ»º´æÐÐ£¬´Ó¶øÌá¸ß»º´æµÄÀûÓÃÂÊ²¢»ñµÃ¸üºÃµÄÐÔÄÜ¡£
+
+¶þ£º³õÊ¼»¯
+
+³õ¿´ÆðÀ´£¬slabÏµÍ³µÄ³õÊ¼»¯²»ÊÇÌØ±ðÂé·³£¬ÒòÎª»ï°éÏµÍ³ÒÑ¾­ÍêÈ«ÆôÓÃ£¬ÄÚºËÃ»ÓÐÊÜµ½ÆäËûÌØ±ðµÄÏÞÖÆ¡£¾¡¹ÜÈç´Ë£¬ÓÉÓÚslab·ÖÅäÆ÷µÄ½á¹¹ËùÖÂ£¬ÕâÀïÓÐÒ»¸ö¼¦Óëµ°µÄÎÊÌâ¡£Îª³õÊ¼»¯slabÊý¾Ý½á¹¹£¬ÄÚºËÐèÒªÈô¸ÉÔ¶Ð¡ÓÚÒ»ÕûÒ³µÄÄÚ´æ¿é£¬ÕâÐ©×îÊÊºÏÓÉkmalloc·ÖÅä¡£ÕâÀïÊÇ¹Ø¼üËùÔÚ£ºÖ»ÓÐÔÚslabÏµÍ³ÒÑ¾­ÆôÓÃÖ®ºó£¬²ÅÄÜÊ¹ÓÃkmalloc¡£¸üÈ·ÇÐµÄËµ£¬¸ÃÎÊÌâÉæ¼°kmallocµÄPer-CPU»º´æµÄ³õÊ¼»¯¡£ÔÚÕâÐ©»º´æÄÜ³õÊ¼»¯Ö®Ç°£¬kmalloc±ØÐë¿ÉÒÔÓÃÀ´·ÖÅäËùÐèµÄÄÚ´æ¿Õ¼ä£¬¶økmalloc×ÔÉíÒ²´¦ÓÚ³õÊ¼»¯µÄ¹ý³ÌÖÐ£¬ËùÒÔÕâÊÇÒ»¸ö²»¿ÉÄÜÍê³ÉµÄ³¡¾°£¬ÄÚºË±ØÐë½èÖúÒ»Ð©¼¼ÇÉ¡£ÄÚºËÖÐÊ¹ÓÃkmem_cache_initº¯ÊýÓÃÓÚ³õÊ¼»¯slab·ÖÅäÆ÷¡£ËüÔÚÄÚºË³õÊ¼»¯½×¶Î(start_kernel)¡¢»ï°éÏµÍ³ÆôÓÃÖ®ºóµ÷ÓÃ¡£kmem_cache_init²ÉÓÃÁËÒ»¸ö¶à²½ÖèµÄ¹ý³Ì£¬Öð²½¼¤»îslab·ÖÅäÆ÷¡£
+
+kmem_cache_init¿ÉÒÔ·ÖÎªÁù¸ö½×¶Î£º
+
+µÚÒ»¸ö½×¶Î£ºÊÇ¸ù¾Ýkmem_cacheÀ´ÉèÖÃcache_cacheµÄ×Ö¶ÎÖµ£»
+
+µÚ¶þ¸ö½×¶Î£ºÊ×ÏÈÊÇ´´½¨arraycache_init¶ÔÓ¦µÄ¸ßËÙ»º´æ£¬Í¬Ê±Ò²ÊÇÔÚÕâ¸ökmem_cache_createµÄµ÷ÓÃ¹ý³ÌÖÐ£¬´´½¨ÁËÓÃÓÚ±£´æcacheµÄkmem_cacheµÄslab£¬²¢³õÊ¼»¯ÁËslabÖÐµÄ¸÷¸ö¶ÔÏó;
+
+µÚÈý¸ö½×¶Î£º´´½¨kmem_list3¶ÔÓ¦µÄ¸ßËÙ»º´æ£¬ÔÚÕâÀïÒª×¢ÒâµÄÒ»µãÊÇ£¬Èç¹ûsizeof(arraycache_t)ºÍsizeof(kmem_list3)µÄ´óÐ¡Ò»Ñù´ó£¬ÄÇÃ´¾Í²»ÔÙÊ¹ÓÃkmem_cache_createÀ´Îªkmem_list3´´½¨cacheÁË£¬ÒòÎªÈç¹ûÁ½ÕßÏàµÈµÄ»°£¬Á½Õß¾Í¿ÉÒÔÊ¹ÓÃÍ¬Ò»¸öcache;
+
+µÚËÄ¸ö½×¶Î£º´´½¨²¢³õÊ¼»¯ËùÓÐµÄÍ¨ÓÃcacheºÍdma cache;
+
+µÚÎå¸ö½×¶Î£º´´½¨Á½¸öarraycache_init¶ÔÏó£¬·Ö±ðÈ¡´úcache_cacheÖÐµÄarray×Ö¶ÎºÍmalloc_sizes[INDEX_AC].cs_cachep->array×Ö¶Î;
+
+µÚÁù¸ö½×¶Î£º´´½¨Á½¸ökmem_list3¶ÔÏó£¬È¡´úcache_cacheÖÐµÄkmem_list3×Ö¶ÎºÍmalloc_sizes[INDEX_AC].cs_cachep->nodelist3×Ö¶Î.Èç´ËÒ»À´£¬¾­¹ýÉÏÃæµÄÁù¸ö½×¶Îºó£¬ËùÓÐµÄ³õÊ¼»¯¹¤×÷»ù±¾Íê³ÉÁË¡£
