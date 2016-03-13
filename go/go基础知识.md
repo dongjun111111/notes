@@ -10730,3 +10730,9 @@ output==>
 val: 0
 val: 10
 </pre>
+但是如果我们把read中的RLock和RUnlock两个函数给注释了，就返回了:
+<pre>
+val :10
+val :10
+</pre>
+这个就是由于读的时候没有加读锁，在准备读取val的时候，val被write函数进行修改了。
