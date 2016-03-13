@@ -211,6 +211,3 @@ IO multiplexingÕâ¸ö´Ê¿ÉÄÜÓÐµãÄ°Éú£¬µ«ÊÇÈç¹ûÎÒËµselect/epoll£¬´ó¸Å¾Í¶¼ÄÜÃ÷°×ÁË¡£Ó
 Òì²½IO£¬Èç¶¨ÒåËùËµ£¬²»»áÒòÎªIO²Ù×÷×èÈû£¬IO²Ù×÷È«²¿Íê³É²ÅÍ¨ÖªÇëÇó½ø³Ì¡£
   ¾­¹ýÉÏÃæµÄ½éÉÜ£¬»á·¢ÏÖnon-blocking IOºÍasynchronous IOµÄÇø±ð»¹ÊÇºÜÃ÷ÏÔµÄ¡£ÔÚnon-blocking IOÖÐ£¬ËäÈ»½ø³Ì´ó²¿·ÖÊ±¼ä¶¼²»»á±»block£¬µ«ÊÇËüÈÔÈ»ÒªÇó½ø³ÌÈ¥Ö÷¶¯µÄcheck£¬²¢ÇÒµ±Êý¾Ý×¼±¸Íê³ÉÒÔºó£¬Ò²ÐèÒª½ø³ÌÖ÷¶¯µÄÔÙ´Îµ÷ÓÃrecvfromÀ´½«Êý¾Ý¿½±´µ½ÓÃ»§ÄÚ´æ¡£¶øasynchronous IOÔòÍêÈ«²»Í¬¡£Ëü¾ÍÏñÊÇÓÃ»§½ø³Ì½«Õû¸öIO²Ù×÷½»¸øÁËËûÈË£¨kernel£©Íê³É£¬È»ºóËûÈË×öÍêºó·¢ÐÅºÅÍ¨Öª¡£ÔÚ´ËÆÚ¼ä£¬ÓÃ»§½ø³Ì²»ÐèÒªÈ¥¼ì²éIO²Ù×÷µÄ×´Ì¬£¬Ò²²»ÐèÒªÖ÷¶¯µÄÈ¥¿½±´Êý¾Ý¡£
 
-
-+++TCP/IP++++
-http://www.cnblogs.com/fengzanfeng/articles/1339347.html
