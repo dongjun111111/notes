@@ -10841,3 +10841,41 @@ output==>
 //等待多秒后
 now done is: true
 </pre>
+####如何充分利用CPU多核：
+<pre>
+runtime.GOMAXPROCS(runtime.NumCPU()
+ * 2)
+ </pre>
+以上是根据经验得出的比较合理的设置。
+####没有设置runtime.GOMAXPROCS会有竞态条件的问题吗？
+答案是没有. 因为没有设置runtime.GOMAXPROCS的情况下， 所有的goroutine都是在一个原生的系统thread里面执行， 自然不会有竞态条件。
+####多goroutine执行如果避免发生竞态条件：
+多goroutine执行，访问全局的变量，比如map，可能会发生竞态条件;
+ 如何检查呢？首先在编译的时候指定 -race参数，指定这个参数之后，编译出来的程序体积大一倍以上， 另外cpu，内存消耗比较高，适合测试环境， 但是发生竞态条件的时候会panic，有详细的错误信息。go内置的数据结构array，slice，map都不是线程安全的。
+####解决并发情况下的竞态条件的方法：
+1 channel， 但是channel并不能解决所有的情况，channel的底层实现里面也有用到锁， 某些情况下channel还不一定有锁高效， 另外channel是Golang里面最强大也最难掌握的一个东西， 如果发生阻塞不好调试。
+2 加锁， 需要注意高并发情况下，锁竞争也是影响性能的一个重要因素， 使用读写锁，在很多情况下更高效， 举例如下：
+<pre>
+var mu sync.RWMutex
+
+	…
+
+
+
+	mu.RLock()
+	defer mu.RUnlock()
+	conns := h.all_connections[img_id]
+
+	for _, c := range conns {
+		if c == nil /*|| c.uid == uid */ {
+			continue
+		}
+
+		select {
+		case c.send <- []byte(message):
+		default:
+			h.conn_unregister(c)
+		}
+	}
+</pre>
+3  原子操作（CAS）, Golang的atomic包对原子操作提供支持，Golang里面锁的实现也是用的原子操作。
