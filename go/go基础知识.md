@@ -10690,3 +10690,43 @@ func main(){
 output==>
 16
 </pre>
+###sync - 处理同步需求
+但当多个goroutine同时进行处理的时候，就会遇到比如同时抢占一个资源，某个goroutine等待另一个goroutine处理完某一个步骤之后才能继续的需求。 在golang的官方文档上，作者明确指出，golang并不希望依靠共享内存的方式进行进程的协同操作。而是希望通过管道channel的方式进行。 当然，golang也提供了共享内存，锁，等机制进行协同操作的包。sync包就是为了这个目的而出现的。
+#####锁
+sync包中定义了Locker结构来代表锁。并且创造了两个结构来实现Locker接口：Mutex 和 RWMutex。<br>
+Mutex就是互斥锁，互斥锁代表着当数据被加锁了之后，除了加锁的程序，其他程序不能对数据进行读操作和写操作。 这个当然能解决并发程序对资源的操作。但是，效率上是个问题。当加锁后，其他程序要读取操作数据，就只能进行等待了。 这个时候就需要使用读写锁。<br>
+读写锁分为读锁和写锁，读数据的时候上读锁，写数据的时候上写锁。有写锁的时候，数据不可读不可写。有读锁的时候，数据可读，不可写。'
+<pre>
+package main
+
+import (
+	"time"
+	"sync"
+)
+var m *sync.RWMutex
+var val = 0
+func read(i int){
+	m.RLock()
+	time.Sleep(1 *time.Second)
+	println("val:",val)
+	time.Sleep(1*time.Second)
+	m.RUnlock()
+}
+func write(i int){
+	m.Lock()
+	val = 10
+	time.Sleep(1 * time.Second)
+	m.Unlock()
+}
+func main(){
+	m =new(sync.RWMutex)
+	go read(1)
+	go write(2)
+	go read(3)
+	time.Sleep(5 * time.Second)
+	
+}
+output==>
+val: 0
+val: 10
+</pre>
