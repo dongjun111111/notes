@@ -10904,3 +10904,32 @@ func main(){
 output==>
 C:\mygo\src\right
 </pre>
+####Golang函数默认参数：
+大家都知道Golang是一门简洁的语言，不支持函数默认参数. 这个特性有些情况下确实是有用的，如果不支持，往往需要重写函数，或者多写一个函数。其实这个问题非常好解决， 举例如下：
+<pre>
+func (this *ImageModel) GetImageListCount(project_id int64,  paramter_optional ...int) int {
+	var t int
+
+	expire_time := 600
+	if len(paramter_optional) > 0 {
+		expire_time = paramter_optional[0]
+	}
+
+	...
+}
+</pre>
+####性能监控：
+<pre>
+go func() {
+			profServeMux := http.NewServeMux()
+			profServeMux.HandleFunc("/debug/pprof/", pprof.Index)
+			profServeMux.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
+			profServeMux.HandleFunc("/debug/pprof/profile", pprof.Profile)
+			profServeMux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
+			err := http.ListenAndServe(":7789", profServeMux)
+			if err != nil {
+				panic(err)
+			}
+		}()
+//然后用go.tool.pprof分析。
+</pre>
