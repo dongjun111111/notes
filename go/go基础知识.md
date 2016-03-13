@@ -10933,3 +10933,116 @@ go func() {
 		}()
 //然后用go.tool.pprof分析。
 </pre>
+####守护进程（daemon）
+在Linux环境下可用
+<pre>
+package main
+ //在Linux环境下可用
+import (
+    "fmt"
+    "log"
+    "os"
+    "runtime"
+    "syscall"
+    "time"
+)
+ 
+func daemon(nochdir, noclose int) int {
+    var ret, ret2 uintptr
+    var err syscall.Errno
+ 
+    darwin := runtime.GOOS == "darwin"
+ 
+    // already a daemon
+    if syscall.Getppid() == 1 {
+        return 0
+    }
+ 
+    // fork off the parent process
+    ret, ret2, err = syscall.RawSyscall(syscall.SYS_FORK, 0, 0, 0)
+    if err != 0 {
+        return -1
+    }
+ 
+    // failure
+    if ret2 < 0 {
+        os.Exit(-1)
+    }
+ 
+    // handle exception for darwin
+    if darwin && ret2 == 1 {
+        ret = 0
+    }
+ 
+    // if we got a good PID, then we call exit the parent process.
+    if ret > 0 {
+        os.Exit(0)
+    }
+ 
+    /* Change the file mode mask */
+    _ = syscall.Umask(0)
+ 
+    // create a new SID for the child process
+    s_ret, s_errno := syscall.Setsid()
+    if s_errno != nil {
+        log.Printf("Error: syscall.Setsid errno: %d", s_errno)
+    }
+    if s_ret < 0 {
+        return -1
+    }
+ 
+    if nochdir == 0 {
+        os.Chdir("/")
+    }
+ 
+    if noclose == 0 {
+        f, e := os.OpenFile("/dev/null", os.O_RDWR, 0)
+        if e == nil {
+            fd := f.Fd()
+            syscall.Dup2(int(fd), int(os.Stdin.Fd()))
+            syscall.Dup2(int(fd), int(os.Stdout.Fd()))
+            syscall.Dup2(int(fd), int(os.Stderr.Fd()))
+        }
+    }
+ 
+    return 0
+}
+ 
+func main() {
+    daemon(0, 1)
+    for {
+        fmt.Println("hello")
+        time.Sleep(1 * time.Second)
+    }
+}
+</pre>
+####进程管理：
+个人比较喜欢用supervisord来进行进程管理，支持进程自动重启.
+####代码热更新：
+代码热更新一直是解释型语言比较擅长的，Golang里面不是做不到，只是稍微麻烦一些，
+就看必要性有多大。如果是线上在线人数很多， 业务非常重要的场景， 还是有必要， 一般情况下没有必要。
+
+1. 更新配置.
+因为配置文件一般是个json或者ini格式的文件，是不需要编译的，在线更新配置还是相对比较容易的， 思路就是使用信号， 比如SIGUSER2， 程序在信号处理函数中重新加载配置即可。
+
+2. 热更新代码.
+目前网上有多种第三方库， 实现方法大同小异。先编译代码(这一步可以使用fsnotify做到监控代码变化，自动编译)，关键是下一步graceful restart进程，实现方法可参考：http://grisha.org/blog/2014/06/03/graceful-restart-in-golang/
+   也是创建子进程，杀死父进程的方法。
+####条件编译:
+条件编译时一个非常有用的特性，一般一个项目编译出一个可执行文件，但是有些情况需要编译成多个可执行文件，执行不同的逻辑，这比通过命令行参数执行不同的逻辑更清晰.比如这样一个场景，一个web项目，是常驻进程的.
+但是有时候需要执行一些程序步骤初始化数据库，导入数据，执行一个特定的一次性的任务等。假如项目中有一个main.go, 里面定义了一个main函数，同目录下有一个task.go函数，里面也定义了一个main函数，正常情况下这是无法编译通过的， 会提示“main redeclared”。解决办法是使用go build 的-tags参数。步骤如下(以windows为例说明)：
+<pre>
+1.在main.go头部加上//
+ +build main
+
+2.
+ 在task.go头部加上// +build task
+
+3.
+ 编译住程序：go build -tags 'main'
+
+4.
+ 编译task：go build -tags 'task' -o task.exe
+</pre>
+####如何将项目有关资源文件打包进主程序：
+使用gogenerate命令
