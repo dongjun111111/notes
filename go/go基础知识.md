@@ -10786,3 +10786,28 @@ v3:5
 v4:<nil>
 </pre>
 依据我们刚刚讲述的临时对象池特性和使用注意事项，读者应该可以想象得出临时对象池的一些适用场景（比如作为临时且状态无关的数据的暂存处），以及一些不适用的场景（比如用来存放数据库连接的实例）。
+####Once
+有的时候，我们多个goroutine都要过一个操作，但是这个操作我只希望被执行一次，这个时候Once就上场了。比如下面的例子:
+<pre>
+package main
+
+import (
+	"time"
+	"fmt"
+	"sync"
+)
+func main(){
+	var once sync.Once
+	onceBody :=func(){
+		fmt.Println("Only Once")
+	}
+	for i:=0;i<10;i++{
+		go func(){
+			once.Do(onceBody)			
+		}()
+	}
+	time.Sleep(1e9)
+}
+output==>
+Only Once
+</pre>
