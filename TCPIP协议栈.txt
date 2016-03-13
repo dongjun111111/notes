@@ -279,3 +279,133 @@ int main()
        }
        return 0;
 }
+
+
+++++socket通信机制++++
+服务器端
+　　一、创建服务器套接字（CREATE）。
+　　二、服务器套接字进行信息绑定（BIND），并开始监听连接（LISTEN）。
+　　三、接受来自客户端的连接请求（ACCEPT），并创建接收进程。
+　　四、开始数据传输(SEND、RECEIVE)。
+　　五、关闭套接字（CLOSESOCKET）。
+客户机端
+　　一、创建客户机套接字（CREATE）。
+　　二、与远程服务器进行连接（CONNECT），如被接受则创建接收进程。
+　　三、开始数据传输(SEND、RECEIVE)。
+　　四、关闭套接字（CLOSESOCKET）。
+　　以上的设计思路是我们开发的基本步骤，同时也是大多数网络应用程序运行的基本方式，下面我们具体说明它在VC中的实现。
+　　服务器端：
+　　一、建立支持SOCKET项目。
+　　利用APP WIZARD创建MFC EXE项目，进行到WIZARD的第四步时，在“What features would you like include?”中，选中“Windows Sockets”项。其它各步骤各选项根据实际应用进行选择即可。这样创建的项目就已经支持SOCKET，并已经初始化了。
+　　如果要在已有的项目中添加SOCKET支持，只须进行两项工作：
+　　1?痹?stdafx.h文件中包含头文件WINSOCK.H (＃include “winsock.h” )。
+　　2?背跏蓟?套接字，在应用程序类的成员函数：“::InitInstance()”中添加如下初始化套接字代码。
+　　if (!AfxSocketInit())
+　　{AfxMessageBox(IDP_SOCKETS_INIT_FAILED);
+　　return FALSE;}
+　　二、创建服务套接字并创建监听线程。
+　　//创建服务套接字
+　　SOCKET sercon=socket(PF_INET,SOCK_STREAM,0);
+　　//判断是否成功创建
+　　if (sercon==INVALID_SOCKET)
+　　{AfxMessageBox(“Server WRONG !”);
+　　return －1;}
+　　//配置套接字地址等信息
+　　SOCKADDR_IN sin;
+　　sin.sin_family=AF_INET;
+　　//指定本地地址
+　　sin.sin_addr.s_addr=htonl(INADDR_ANY);
+　　//指定服务器端口号nPort，可自设
+　　int nPort=5080;
+　　sin.sin_port=htons(nPort);
+　　//地址信息与套接字进行绑定。
+　　if (bind(sercon,(LPSOCKADDR)＆sin,sizeof(sin))==SOCKET_ERROR)
+　　{AfxMessageBox(“bind wrong!”);
+　　return －1;}
+　　//建立监听队列（大小为3），开始监听
+　　if (listen(sercon,3)==SOCKET_ERROR)
+　　{AfxMessageBox(“listen wrong!”);
+　　return －1;};
+　　①实现监听线程，并创建数据接收线程。
+　　//在程序需要开始监听连接的地方创建监听线程，并实现。
+　　//创建监听线程（在程序开始或按钮事件实现中）
+　　AfxBeginThread(waitconnect,NULL)；
+　　//实现监听线程
+　　UINT waitconnect(LPVOID lpParm)
+　　{SOCKET conn[3];
+　　int lenc=sizeof(sockaddr);
+　　int alreadycon=0;
+　　//sercon为前面所创建服务器套接字
+　　while(1)
+　　{if (alreadycon<=3) 
+　　{//接受连接请求
+　　conn[alreadycon]=accept(sercon,＆cin,＆lenc);
+　　if (conn[alreadycon]==INVALID_SOCKET)
+　　{AfxMessageBox(“accept WRONG !”);}
+　　else
+　　{//创建数据接收线程
+　　AfxBeginThread(readdata,＆connn[alreadycon]);
+　　Alreadycon= alreadycon＋1;
+　　return 0；}}
+　　else
+　　{//避免影响主线程运行
+　　Sleep(200);}
+　　}
+　　}
+　　②实现数据接收线程。
+　　UINT waitconnect(LPVOID ss)
+　　{ SOCKET ＊readsock;
+　　readsock=(SOCKET ＊)ss;
+　　char buf[2000];
+　　int revnum=0;
+　　//开始循环接受数据
+　　while (revnum!=－1)
+　　{//revnum<=0则表示连接已断！
+　　revnum=recv(＊readsock,buf,2000,0);
+　　if (revnum>0)
+　　buf[revnum]=0;//截断缓冲区
+　　//buf中存储已接受数据。}
+　　}
+　　③发送数据
+　　//conn[1]为用于接受连接的套接字， sendstr为所发送数据。
+　　send(conn[1],LPCTSTR(sendstr),sendstr.GetLength(),0);
+　　④关闭套接字。
+　　//conn[1]为用于接受连接的套接字
+　　closesocket(conn[1]);
+　　客户程序端：
+　　客户端程序的编程有很多与服务器端相同或相近，甚至相同的代码。
+　　一、建立支持SOCKET项目。
+　　方法同服务器端。
+　　二、创建客户套接字、对服务器进行连接。
+　　//nHost 须用户指定的远程服务机，IP或域名。
+　　CString nHost;
+　　//h为地址信息
+　　struct hostent ＊h;
+　　h=gethostbyname(nHost);
+　　//nHost 须用户指定的远程服务端口号
+　　int nPort;
+　　SOCKET con_client;
+　　SOCKADDR_IN csin;
+　　if (h!=NULL)
+　　{//创建套接字
+　　con_client =socket(AF_INET,SOCK_STREAM,0);
+　　csin.sin_family=AF_INET;
+　　memcpy(＆(csin.sin_addr.s_addr),h－>h_addr,sizeof(int));
+　　csin.sin_port=htons(nPort);
+　　//开始连接
+　　if (connect(con_client,(LPSOCKADDR)＆csin,sizeof(csin)))
+　　{//AfxMessageBox(“connect wrong!”); 
+　　return －1;}
+　　else
+　　{//连接成功，创建数据接收线程
+　　AfxBeginThread(readdata,＆con_client);}
+　　}
+　　三、实现数据接收线程。
+　　代码与服务器端完全相同。
+　　四、发送数据。
+　　//con_client 为与服务器进行连接的套接字。
+　　send(con_client,LPCTSTR(sendstr),sendstr.GetLength(),0);
+　　五、关闭套接字。
+　　// con_client 为与服务器进行连接的套接字。
+　　closesocket(conn[1]);
+　　在实际应用中，应当根据需要调整并改变一些变量的作用域。
