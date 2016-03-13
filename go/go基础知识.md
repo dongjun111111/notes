@@ -11046,3 +11046,75 @@ func main() {
 </pre>
 ####如何将项目有关资源文件打包进主程序：
 使用gogenerate命令
+####Golang的web项目中的keepalive
+关于keepalive，是比较复杂的， 注意以下几点：
+
+1. http1.1
+默认支持keepalive， 但是不同浏览器对keepalive都有个超时时间， 比如firefox:默认超时时间115秒， 不同浏览器不一样；
+
+2. Nginx默认超时时间75秒；
+
+3. golang默认超时时间是无限的，
+要控制golang中的keepalive可以设置读写超时， 举例如下：
+<pre>
+server := &http.Server{
+		Addr:           ":9999",
+		Handler:        framework,
+		ReadTimeout:    32 * time.Second,
+		WriteTimeout:   32 * time.Second,
+		MaxHeaderBytes: 1 << 20,
+	}
+	server.ListenAndServe()
+</pre>
+####github.com/go-sql-driver/mysql使用主意事项:
+<b>这是使用率极高的一个库</b>，在用它进行事务处理的情况下， 要注意一个问题， 由于它内部使用了连接池， 使用事务的时候如果没有Rollback或者Commit， 这个取出的连接就不会放回到池子里面， 导致的后果就是连接数过多， 所以使用事务的时候要注意正确地使用。
+####github.com/garyburd/redigo/redis使用注意事项：
+<b>这也是一个使用率极高的库</b>,同样需要注意，它是支持连接池的， 所以最好使用连接池， 正确的用法是这样的：
+<pre>
+func initRedis(host string) *redis.Pool {
+	return &redis.Pool{
+		MaxIdle: 64,	
+		IdleTimeout: 60 * time.Second,
+		TestOnBorrow: func(c redis.Conn, t time.Time) error {
+			_, err := c.Do("PING")
+
+			return err
+		},
+		Dial: func() (redis.Conn, error) {
+			c, err := redis.Dial("tcp", host)
+			if err != nil {
+				return nil, err
+			}
+
+			_, err = c.Do("SELECT", config.RedisDb)
+
+			return c, err
+		},
+	}
+}
+/*另外使用的时候也要把连接放回到池子里面，
+否则也会导致连接数居高不下。用完之后调用rd.Close()， 这个Close并不是真的关闭连接，而是放回到池子里面。*/
+</pre>
+####如何执行异步任务：
+比如用户提交email,给用户发邮件， 发邮件的步骤是比较耗时的， 这个场景适合可以使用异步任务：
+<pre>
+/*思路是启动一个goroutine执行异步的操作，
+ 当前goroutine继续向下执行。特别需要注意的是新启动的个goroutine如果对全局变量有读写操作的话，需要注意避免发生竞态条件， 可能需要加锁。*/
+	result := global.ResponseResult{ErrorCode: 0, ErrorMsg: "GetInviteCode success!"}
+		render.JSON(200, &result)
+		go func() {
+			type data struct {
+				Url string
+			}
+			name := "beta_test"
+			subject := "We would like to invite you to the private beta of Screenshot."
+			url := config.HttpProto + r.Host + "/user/register/" + *uniqid
+			html := ParseMailTpl(&name, &beta_test_mail_content, data{url})
+			e := this.SendMail(mail, subject, html.String())
+			if e != nil {
+				lib.Log4w("GetInviteCode, SendMail faild", mail, uniqid, e)
+			} else {
+				lib.Log4w("GetInviteCode, SendMail success", mail, uniqid)
+			}
+		}()
+</pre>
