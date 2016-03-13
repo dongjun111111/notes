@@ -10879,3 +10879,28 @@ var mu sync.RWMutex
 	}
 </pre>
 3  原子操作（CAS）, Golang的atomic包对原子操作提供支持，Golang里面锁的实现也是用的原子操作。
+####获取程序绝对路径：
+Golang编译出来之后是独立的可执行程序，不过很多时候需要读取配置，由于执行目录有时候不在程序所在目录，路径的问题经常让人头疼，正确获取绝对路径非常重要， 方法如下：
+<pre>
+package main
+
+import (
+	"fmt"
+	"strings"
+	"path/filepath"
+	"os"
+	"os/exec"
+)
+func GetCurrPath() string{
+	file,_:=exec.LookPath(os.Args[0])
+	path,_:=filepath.Abs(file)
+	index :=strings.LastIndex(path,string(os.PathSeparator))
+	ret :=path[:index]
+	return ret
+}
+func main(){
+	fmt.Println(GetCurrPath())
+}
+output==>
+C:\mygo\src\right
+</pre>
