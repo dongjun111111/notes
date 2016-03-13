@@ -11431,3 +11431,44 @@ fmt.Sprintln的别名
 {{eq arg1 arg2 arg3 arg4}}
 即只能作如下比较：
 arg1==arg2 || arg1==arg3 || arg1==arg4 ...
+####
+<pre>
+package main
+/*这个程序演示了如何将管道用于被任意数量的goroutine发送
+和接收数据，也演示了如何将select语句用于从多个通讯中选择一个*/
+import (
+	"fmt"
+	"sync"
+)
+func main() {
+    people := []string{"Anna", "Bob", "Cody", "Dave", "Eva"}
+    match := make(chan string, 1) // 为一个未匹配的发送操作提供空间
+    wg := new(sync.WaitGroup)
+    wg.Add(len(people))
+    for _, name := range people {
+        go Seek(name, match, wg)
+    }
+    wg.Wait()
+    select {
+    case name := <-match:
+        fmt.Printf("No one received %s’s message.\n", name)
+    default:
+        // 没有待处理的发送操作
+    }
+}
+
+// 函数Seek 发送一个name到match管道或从match管道接收一个peer，结束时通知wait group
+func Seek(name string, match chan string, wg *sync.WaitGroup) {
+    select {
+    case peer := <-match:
+        fmt.Printf("%s sent a message to %s.\n", peer, name)
+    case match <- name:
+        // 等待某个goroutine接收我的消息
+    }
+    wg.Done()
+}
+output==>
+Anna sent a message to Bob.
+Cody sent a message to Dave.
+No one received Eva’s message.
+</pre>
