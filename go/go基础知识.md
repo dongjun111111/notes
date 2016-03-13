@@ -11118,3 +11118,47 @@ func initRedis(host string) *redis.Pool {
 			}
 		}()
 </pre>
+####text/template
+<pre>
+package main
+import (
+    "os"
+    "text/template"
+)
+
+type Person struct {
+    Name string
+    Age  int
+}
+
+func main() {
+
+    t := template.Must(
+        template.New("test").Funcs(
+            template.FuncMap{
+                "lt": func(a, b int) bool { return a < b },
+                "eq": func(a, b int) bool { return a == b },
+                "gt": func(a, b int) bool { return a > b },
+            },
+        ).Parse(
+            "{{.Name}}:{{ if .Age | lt 5 }} 5 < age.{{else}} 5 > age.{{end}}\n",
+        ),
+    )
+
+    t.Execute(os.Stdout, &Person{
+        Name: "lulu",
+        Age:  4,
+    })
+    t.Execute(os.Stdout, &Person{
+        Name: "lili",
+        Age:  6,
+    })
+
+    // output:
+    // lulu: 5 > age.
+    // lili: 5 < age.
+}
+output==>
+lulu: 5 > age.
+lili: 5 < age.
+</pre>
