@@ -10742,3 +10742,46 @@ val :10
  通过Get方法获取到的值是任意的。如果一个临时对象池的Put方法未被调用过，且它的New字段也未曾被赋予一个非nil的函数值，那么它的Get方法返回的结果值就一定会是nil。
 当多个goroutine都需要创建同一个对象的时候，如果goroutine过多，可能导致对象的创建数目剧增。 而对象又是占用内存的，进而导致的就是内存回收的GC压力徒增。造成“并发大－占用内存大－GC缓慢－处理并发能力降低－并发更大”这样的恶性循环。 在这个时候，我们非常迫切需要有一个对象池，每个goroutine不再自己单独创建对象，而是从对象池中获取出一个对象（如果池中已经有的话）。 这就是sync.Pool出现的目的了。
 sync.Pool的使用非常简单，提供两个方法:Get和Put 和一个初始化回调函数New。
+<pre>
+//在这里，我们使用runtime/debug代码包的SetGCPercent函数来禁用、恢复GC以及指定垃圾收集比率
+package main
+
+import (
+	"runtime"
+	"fmt"
+	"sync"
+	"sync/atomic"
+	"runtime/debug"
+)
+func main(){
+	 // 禁用GC，并保证在main函数执行结束前恢复GC
+	defer debug.SetGCPercent(debug.SetGCPercent(-1))
+	var count int32
+	newFunc :=func() interface{}{
+		return atomic.AddInt32(&count,1)
+	}
+	pool :=sync.Pool{New:newFunc}
+	v1 :=pool.Get()
+	fmt.Printf("v1:%v\n",v1)
+	//临时对象池的存取
+	pool.Put(newFunc())
+	pool.Put(newFunc())
+	pool.Put(newFunc())
+	v2 :=pool.Get()
+	fmt.Printf("v2:%v\n",v2)
+	//垃圾回收对临时对象池的影响
+	debug.SetGCPercent(100)
+	runtime.GC()
+	v3 :=pool.Get()
+	fmt.Printf("v3:%v\n",v3)
+	pool.New =nil
+	v4 :=pool.Get()
+	fmt.Printf("v4:%v\n",v4)
+	
+}
+output==>
+v1:1
+v2:2
+v3:5
+v4:<nil>
+</pre>
