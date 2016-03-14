@@ -11607,3 +11607,55 @@ func main(){
 output==>
 value of items : [map[1:2] map[1:2] map[1:2] map[1:2] map[1:2]]
 </pre>
+####map的排序
+map默认是无序的，想为map排序，需要将key(或者value）拷贝到一个切片，再对切片排序.
+<pre>
+package main
+
+import (
+	"sort"
+	"fmt"
+)
+var (
+	bar = map[string]int{"alpha":23,"bravo":45,"charlie":56,"delta":56,"echo":34,"foxtrot":23,"golf":16,"indio":78}
+)
+func main(){
+	//未排序前
+	fmt.Println("Unsorted:")
+	for k,v :=range bar {
+		fmt.Println("key:",k,"value:",v)
+	}
+	//进行排序,通过对map里面的key排序实现对map排序
+	keys :=make([]string,len(bar))//声明一个字符串切片
+	i :=0
+	for k,_:=range bar{
+		keys[i] = k
+		i++
+	}
+	sort.Strings(keys)
+	fmt.Println("Sorted:")
+	for _,k :=range keys {
+		fmt.Println("keys:",k,"values:",bar[k])
+	}
+	
+}
+output==>
+Unsorted:
+key: charlie value: 56
+key: delta value: 56
+key: echo value: 34
+key: foxtrot value: 23
+key: golf value: 16
+key: indio value: 78
+key: alpha value: 23
+key: bravo value: 45
+Sorted:
+keys: alpha values: 23
+keys: bravo values: 45
+keys: charlie values: 56
+keys: delta values: 56
+keys: echo values: 34
+keys: foxtrot values: 23
+keys: golf values: 16
+keys: indio values: 78
+</pre>
