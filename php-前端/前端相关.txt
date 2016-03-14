@@ -7410,3 +7410,30 @@ content有两个值”yes”和”no”,当我们需要显示工具栏和菜单�
 ++++del+++++
 <del> 标签定义文档中已删除的文本。
 <del>3445667676</del>
+
+
++++++进度条progress标签++++
+支持绝大多数主流浏览器
+<style>
+progress {
+    display: inline-block;
+    width: 160px;
+    height: 20px;
+    border: 1px solid #0064B4;  
+    background-color:#e6e6e6;
+    color: #0064B4; /*IE10*/
+}
+/*ie6-ie9*/
+progress ie {
+    display:block;
+    height: 100%;
+    background: #0064B4;
+}
+progress::-moz-progress-bar { background: #0064B4; }
+progress::-webkit-progress-bar { background: #e6e6e6; }
+progress::-webkit-progress-value  { background: #0064B4; }
+</style>
+</head>
+<body>
+<progress value="50" max="100"></progress> 
+</body>
