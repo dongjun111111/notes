@@ -7365,3 +7365,8 @@ var str = '程序员';
 var result = str + ' md5:' + md5(str);
 
 console.log(result);
+
+
++++++Meta标签中的apple-mobile-web-app-capable属性及含义++++
+这meta的作用就是删除默认的苹果工具栏和菜单栏。
+content有两个值”yes”和”no”,当我们需要显示工具栏和菜单栏时，这个行meta就不用加了，默认就是显示。
