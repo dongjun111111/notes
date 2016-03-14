@@ -11659,3 +11659,29 @@ keys: foxtrot values: 23
 keys: golf values: 16
 keys: indio values: 78
 </pre>
+####map的键值对调
+<pre>
+package main
+
+import (
+	"fmt"
+)
+var (
+	bar =map[string]int{"alpha":23,"yravo":65,"cag":12}
+)
+func main(){
+	swap :=make(map[int]string,len(bar))
+	for k,v:=range bar {
+		swap[v] = k
+	}
+	fmt.Println("swap:")
+	for k,v:=range swap {
+		fmt.Println("keys:",k,"values:",v)
+	}
+}
+output==>
+swap:
+keys: 23 values: alpha
+keys: 65 values: yravo
+keys: 12 values: cag
+</pre>
