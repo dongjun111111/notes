@@ -216,19 +216,130 @@ IO multiplexingÕâ¸ö´Ê¿ÉÄÜÓÐµãÄ°Éú£¬µ«ÊÇÈç¹ûÎÒËµselect/epoll£¬´ó¸Å¾Í¶¼ÄÜÃ÷°×ÁË¡£Ó
 ³£ÓÃµÄÊý¾Ý½á¹¹£º
 
 1.Bloom Filter
-
    ´óÖÂË¼ÏëÊÇÕâÑù£¬°ÑÒ»¸öÊý¾ÝÍ¨¹ýN¸ö¹þÏ£º¯ÊýÓ³Éäµ½Ò»¸ö³¤¶ÈÎªMµÄÊý×éµÄÒ»Î»ÉÏ£¬½«hashº¯Êý¶ÔÓ¦µÄÖµµÄÎ»Êý×éÖÃ1£¬²éÕÒÊ±Èç¹û·¢ÏÖËùÓÐhashº¯Êý¶ÔÓ¦Î»¶¼ÊÇ1ËµÃ÷¸ÃÊý¾ÝµÄ´æÔÚ¡£µ«²»ÄÜ±£Ö¤ÍêÈ«ÕýÈ·ÐÔ£¬µ«ÊÇ´Ë·½·¨ÎÞ±È¸ßÐ§¡£
 
 ¡¾ÊµÀý¡¿¸øÄãA,BÁ½¸öÎÄ¼þ£¬¸÷´æ·Å50ÒÚÌõURL£¬Ã¿ÌõURLÕ¼ÓÃ64×Ö½Ú£¬ÄÚ´æÏÞÖÆÊÇ4G£¬ÈÃÄãÕÒ³öA,BÎÄ¼þ¹²Í¬µÄURL¡£Èç¹ûÊÇÈý¸öÄËÖÁn¸öÎÄ¼þÄØ£¿ 
 
 2.¹þÏ£·¨
-
    Õâ¸ö¼òµ¥£¬ÎÞ·ÇÊÇÍ¨¹ýÒ»Ð©¹þÏ£º¯Êý°ÑÔªËØ¸ãµ½Ò»¸öÖ¸¶¨µÄÎ»ÖÃ£¬¼òµ¥µÄËµ¾ÍÊÇÒ»ÖÖ½«ÈÎÒâ³¤¶ÈµÄÏûÏ¢Ñ¹Ëõµ½Ä³Ò»¹Ì¶¨³¤¶ÈµÄÏûÏ¢ÕªÒªµÄº¯Êý¡£Õâ¸öºÜÒ»°ã°¡¸Ð¾õ¡£ÎÞ·Ç¾ÍÊÇ·ÖÀà²éÕÒÃ´£¬ÍêÈ«²»Èç1ÃÍ¡£
 
 3.×î´ó»ò×îÐ¡¶Ñ
-
      ¾ÍÊÇÒ»¸öÍêÈ«µÄ×î´ó»ò×îÐ¡¶þ²æÊ÷£¬ÓÃÍ¾£¬±ÈÈç:1)100w¸öÊýÖÐÕÒ×î´óµÄÇ°100¸öÊý¡£ ÓÃÒ»¸ö100¸öÔªËØ´óÐ¡µÄ×îÐ¡¶Ñ¼´¿É¡£¸Ð¾õ»¹ÊÇ²»´íµÄ¡£
 
 4.Bit-map
-
 ËùÎ½µÄBit-map¾ÍÊÇÓÃÒ»¸öbitÎ»À´±ê¼ÇÄ³¸öÔªËØ¶ÔÓ¦µÄValue£¬ ¶øKey¼´ÊÇ¸ÃÔªËØ¡£ÓÉÓÚ²ÉÓÃÁËBitÎªµ¥Î»À´´æ´¢Êý¾Ý£¬Òò´ËÔÚ´æ´¢¿Õ¼ä·½Ãæ£¬¿ÉÒÔ´ó´ó½ÚÊ¡¡£
+
+
+ÊµÀý:¹«Ë¾µÄÒ»µÀ¿¼ÊÔÌâËã·¨·ÖÎö¡ª¡ª´óÊý¾ÝÁ¿ÕûÊýÅÅÐò
+    ÌâÄ¿´óÒâ£ºÒÆ¶¯¹«Ë¾ÐèÒª¶ÔÒÑ¾­·¢·ÅµÄËùÓÐ139¶ÎµÄºÅÂë½øÐÐÍ³¼ÆÅÅÐò£¬ÒÑ¾­·¢·ÅµÄ139ºÅÂë¶ÎµÄÎÄ¼þ¶¼´æ·ÅÔÚÒ»¸öÎÄ±¾ÎÄ¼þÖÐ£¨Ô­ÌâÊÇ·ÅÔÚÁ½¸öÎÄ¼þÖÐ£©£¬Ò»¸öºÅÂëÒ»ÐÐ£¬ÏÖÔÚÐèÒª½«ÎÄ¼þÀïµÄËùÓÐºÅÂë½øÐÐÅÅÐò£¬²¢Ð´Èëµ½Ò»¸öÐÂµÄÎÄ¼þÖÐ£»ºÅÂë¿ÉÄÜ»áÓÐºÜ¶à£¬×î¶à¿ÉÄÜÓÐÒ»ÒÚ¸ö²»Í¬µÄºÅÂë£¨ËùÓÐµÄ139¶ÎºÅÂë£©£¬´æÈëÎÄ±¾ÎÄ¼þÖÐ´ó¸ÅÒªÕ¼1.2GµÄ¿Õ¼ä£»jvm×î´óµÄÄÚ´æÔÚ300ÒÔÄÚ£¬³ÌÐòÒª¿¼ÂÇ³ÌÐòµÄ¿ÉÖ´ÐÐÐÔ¼°Ð§ÂÊ£»Ö»ÄÜÊ¹ÓÃJava±ê×¼¿â£¬²»µÃÊ¹ÓÃµÚÈý·½¹¤¾ß¡£
+    ÕâÊÇ¸öµäÐÍµÄ´óÊý¾ÝÁ¿µÄÅÅÐòËã·¨ÎÊÌâ£¬Ê×ÏÈÒª¿¼ÂÇ¿Õ¼äÎÊÌâ£¬Ò»ÏÂ°Ñ1.2GµÄÊý¾Ý¶ÁÈëÄÚ´æÊÇ²»Ì«¿ÉÄÜµÄ£¬¾ÍËã°Ñ1Ò»ÒÚÌõÊý¾Ý£¬×ª¶¼×ª»»³ÉintÀàÐÍ´æ´¢Ò²ÒªÕ¼½Ó½ü400MµÄ¿Õ¼ä¡£µ±Ê±×ö¸öÌâÄ¿ÎÒ²¢Ã»ÓÐÏëÌ«¶àµÄÖ´ÐÐÐ§ÂÊÎÊÌâ£¬Ö÷Òª¾Í¿¼ÂÇÁË¿Õ¼ä£¬¶øÇÒÏ°¹ßÐÔµÄÏëµ½ºÏ²¢ÅÅÐò£¬»ù±¾Ë¼ÏëÊÇÔ­ÎÄ¼þ·Ö¸î³ÉÈô¸É¸öÐ¡ÎÄ¼þ²¢ÅÅÐò£¬ÔÙ½«ÅÅÐòºÃµÄÐ¡ÎÄ¼þºÏ²¢µÃµ½×îºó½á¹û£¬Ëã·¨´ó¸ÅÈçÏÂ£º 
+  1.Ë³Ðò¶ÁÈ¡´æ·ÅºÅÂëÎÄ¼þµÄÖÐËùÓÐºÅÂë£¬²¢È¡139Ö®ºóµÄ°ËÎ»×ª»»ÎªintÀàÐÍ£»Ã¿¶ÁÈ¡ºÅÂëÊýÂúÒ»°ÙÍò¸ö£¬£¨Õâ¸öÊý¾Ý¿ÉÅäÖÃ£©½«ÒÑ¾­¶ÁÈ¡µÄºÅÂëÅÅÐò²¢´æÈëÐÂ½¨µÄÁÙÊ±ÎÄ¼þ¡£
+    2.½«ËùÓÐÉú³ÉµÄºÅÂëÓÐÐòµÄÁÙÊ±ÎÄ¼þºÏ²¢´æÈë½á¹ûÎÄ¼þ¡£
+    Õâ¸öËã·¨ËäÈ»½â¾öÁË¿Õ¼äÎÊÌâ£¬µ«ÊÇÔËÐÐÐ§ÂÊ¼«µÍ£¬ÓÉÓÚIO¶ÁÐ´²Ù×÷Ì«¶à£¬¼ÓÉÏ²½Öè1ÖÐµÄÅÅÐòµÄËã·¨£¨¿ìËÙÅÅÐò£©±¾À´Ð§ÂÊ¾Í²»¸ß£¨¶ÔÓÚµç»°ÅÅÐòÕâÖÖÌØÊâÇé¿öÀ´Ëµ£©£¬µ¼ÖÂ1ÒÚÌõÊý¾ÝÅÅÐòÔËÐÐ3¸öÐ¡Ê±²ÅÓÐ½á¹û¡£ 
+
+ÁíÍâÒ»ÖÖÊÇ£ºÊ¹ÓÃÊÇÎ»ÏòÁ¿£¨Êµ¼ÊÉÏ¾ÍÊÇÒ»¸öbitÊý×é£©£¬ÓÃµç»°×÷Îªindex£¬ÐÄÖÐ´óÏ²£¬ÕÒµ½ÁË½â¾ö´ËÎÊÌâµÄ×îÍêÃÀ·½°¸À²£ºÓÃÎ»ÏòÁ¿´æ´¢µç»°ºÅÂë£¬Ò»¸öºÅÂëÕ¼Ò»¸öbit£¬Ò»ÒÚ¸öµç»°ºÅÂëÒ²Ö»ÐèÒª´ó¸Å12MµÄ¿Õ¼ä£»Ëã·¨´ó¸ÅÈçÏÂ£º
+      1.³õÊ¼»¯bits[capacity]£»
+      2.Ë³ÐòËùÓÐ¶ÁÈëµç»°ºÅÂë£¬²¢×ª»»ÎªintÀàÐÍ£¬ÐÞ¸ÄÎ»ÏòÁ¿Öµ£ºbits[phoneNum]=1£»
+      3.±éÀúbitsÊý×é£¬Èç¹ûbits[index]=1£¬×ª»»indexÎªµç»°ºÅÂëÊä³ö¡£ 
+    JavaÖÐÃ»ÓÐbitÀàÐÍ£¬Ò»¸öbooleanÖµÕ¼¿Õ¼äÎª1byte£¬ÕâÀïÐ´¸öÓÃintÄ£ÄâbitÊý×éµÄÀà£º
+<pre>
+public class BitArray {   
+    private int[] bits = null;   
+    private int length;   
+    //ÓÃÓÚÉèÖÃ»òÕßÌáÈ¡intÀàÐÍµÄÊý¾ÝµÄÄ³Ò»Î»(bit)µÄÖµÊ±Ê¹ÓÃ  
+    private final static int[] bitValue = {   
+        0x80000000,//10000000 00000000 00000000 00000000         
+        0x40000000,//01000000 00000000 00000000 00000000         
+        0x20000000,//00100000 00000000 00000000 00000000         
+        0x10000000,//00010000 00000000 00000000 00000000         
+        0x08000000,//00001000 00000000 00000000 00000000         
+        0x04000000,//00000100 00000000 00000000 00000000         
+        0x02000000,//00000010 00000000 00000000 00000000         
+        0x01000000,//00000001 00000000 00000000 00000000         
+        0x00800000,//00000000 10000000 00000000 00000000         
+        0x00400000,//00000000 01000000 00000000 00000000         
+        0x00200000,//00000000 00100000 00000000 00000000         
+        0x00100000,//00000000 00010000 00000000 00000000         
+        0x00080000,//00000000 00001000 00000000 00000000         
+        0x00040000,//00000000 00000100 00000000 00000000         
+        0x00020000,//00000000 00000010 00000000 00000000         
+        0x00010000,//00000000 00000001 00000000 00000000             
+        0x00008000,//00000000 00000000 10000000 00000000         
+        0x00004000,//00000000 00000000 01000000 00000000         
+        0x00002000,//00000000 00000000 00100000 00000000         
+        0x00001000,//00000000 00000000 00010000 00000000         
+        0x00000800,//00000000 00000000 00001000 00000000         
+        0x00000400,//00000000 00000000 00000100 00000000         
+        0x00000200,//00000000 00000000 00000010 00000000         
+        0x00000100,//00000000 00000000 00000001 00000000         
+        0x00000080,//00000000 00000000 00000000 10000000         
+        0x00000040,//00000000 00000000 00000000 01000000         
+        0x00000020,//00000000 00000000 00000000 00100000         
+        0x00000010,//00000000 00000000 00000000 00010000         
+        0x00000008,//00000000 00000000 00000000 00001000         
+        0x00000004,//00000000 00000000 00000000 00000100         
+        0x00000002,//00000000 00000000 00000000 00000010         
+        0x00000001 //00000000 00000000 00000000 00000001               
+    };   
+    public BitArray(int length) {   
+        if(length < 0){   
+            throw new IllegalArgumentException("length±ØÐë´óÓÚÁã£¡");   
+        }   
+        bits = new int[length / 32 + (length % 32 > 0 ? 1 : 0)];   
+        this.length = length;   
+    }   
+    //È¡indexÎ»µÄÖµ  
+    public int getBit(int index){   
+        if(index <0 || index > length){   
+            throw new IllegalArgumentException("length±ØÐë´óÓÚÁãÐ¡ÓÚ" + length);   
+        }   
+        int intData = bits[index/32];   
+        return (intData & bitValue[index%32]) >>> (32 - index%32 -1);   
+    }   
+    //ÉèÖÃindexÎ»µÄÖµ£¬Ö»ÄÜÎª0»òÕß1   
+    public void setBit(int index,int value){   
+        if(index <0 || index > length){   
+            throw new IllegalArgumentException("length±ØÐë´óÓÚÁãÐ¡ÓÚ" + length);   
+        }          
+        if(value!=1&&value!=0){   
+            throw new IllegalArgumentException("value±ØÐëÎª0»òÕß1");   
+        }   
+        int intData = bits[index/32];   
+        if(value == 1){   
+            bits[index/32] = intData | bitValue[index%32];   
+        }else{   
+            bits[index/32] = intData & ~bitValue[index%32];   
+        }   
+    }   
+    public int getLength(){   
+        return length;   
+    }      
+}        
+</pre>
+
+bitÊý×éÓÐÁË£¬Ê£ÏÂ¾ÍÊÇËã·¨´úÂë£¬ºËÐÄ´úÂëÈçÏÂ£º 
+<pre>
+bitArray = new BitArray(100000000);    
+//Ë³Ðò¶ÁÈ¡ËùÓÐµÄÊÖ»úºÅÂë  
+while((phoneNum = bufferedReader.readLine())!=null){   
+    phoneNum = phoneNum.trim().substring(3);//13573228432   
+    //È¡139ºó8Î»×ª»»ÎªintÀàÐÍ  
+    phoneNumAsInt = Integer.valueOf(phoneNum);   
+    //ÉèÖÃ¶ÔÓ¦bitÖµÎª1   
+    bitArray.setBit(phoneNumAsInt, 1);   
+}      
+//±éÀúbitÊý×éÊä³öËùÓÐ´æÔÚµÄºÅÂë  
+for(int i = 0;i<sortUnit;i++){   
+    if(bitArray.getBit(i)==1){   
+            writer.write("139" + leftPad(String.valueOf(i + sortUnit*times), 8));   
+            writer.newLine();                          
+    }                  
+}   
+writer.flush();    
+</pre>
+
+¾­²âÊÔ£¬ÐÞ¸ÄºóµÄËã·¨ÅÅÐòÊ±Ö»ÐèÒª20¶àMµÄÄÚ´æ£¬Ò»ÒÚÌõµç»°ºÅÂëÅÅÐòÖ»Òª10·ÖÖÓ£¨Ê±¼äÖ÷Òª»¨ÔÚIOÉÏ£©£¬¿´À´Ð§¹û»¹ÊÇºÜÃ÷ÏÔµÄ¡£ 
+    Õâ¸öËã·¨ºÜ¿ì£¬²»¹ýÒ²ÓÐËûµÄ¾ÖÏÞÐÔ£º 
+    1.Ö»ÄÜÓÃÓÚÕûÊýµÄÅÅÐò£¬»òÕß¿ÉÒÔ×¼È·Ó³Éäµ½ÕýÕûÊý£¨¶ÔÏó²»Í¬¶ÔÓ¦µÄÕýÕûÊýÒ²²»ÏàÍ¬£©µÄÊý¾ÝµÄÅÅÐò¡£ 
+    2.²»ÄÜ´¦ÀíÖØ¸´µÄÊý¾Ý£¬ÖØ¸´µÄÊý¾ÝÅÅÐòºóÖ»ÓÐÒ»Ìõ£¨Èç¹ûÓÐÕâÖÖÐèÇó¿ÉÒÔÔÚÕâ¸öËã·¨µÄ»ù´¡ÉÏÐÞ¸Ä£¬¸ø³öÏÖ´ÎÊý´óÓÚ1µÄÊý¾ÝÌí¼Ó¸ö¼ÆÊýÆ÷£¬È»ºó´æÈëMapÖÐ£© 
+    3.¶ÔÓÚÊý¾ÝÁ¿¼«Æä´óµÄÊý¾Ý´¦Àí¿ÉÄÜ»¹ÊÇ±È½ÏÕ¼ÓÃ¿Õ¼ä£¬ÕâÖÖÇé¿ö¿ÉÅäºÏ¶àÍ¨µÀÅÅÐòËã·¨½â¾ö¡£
