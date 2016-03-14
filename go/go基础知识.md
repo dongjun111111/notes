@@ -11501,3 +11501,47 @@ output==>
 5
 0
 </pre>
+####测试键值对是否存在及删除元素
+现在我们没法区分到底是 key1 不存在还是它对应的 value 就是空值。
+为了解决这个问题，我们可以这么用：val1, isPresent = map1[key1].
+isPresent 返回一个 bool 值：如果 key1 存在于 map1，val1 就是 key1 对应的 value 值，并且 isPresent为true；如果 key1 不存在，val1 就是一个空值，并且 isPresent 会返回 false。
+如果你只是想判断某个 key 是否存在而不关心它对应的值到底是多少，你可以这么做：
+<pre>
+_, ok := map1[key1] // 如果key1存在则ok == true，否在ok为false
+</pre>
+或者和 if 混合使用：
+<pre>
+if _, ok := map1[key1]; ok {
+    // ...
+}
+</pre>
+删除map:直接 delete(map1, key1) 就可以。如下：
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	var value int
+	var isprsent bool
+	map1 :=make(map[string]int)
+	map1["Beijing"] = 23
+	map1["NewYork"] = 34
+	map1["Tokyo"]  = 12
+	value,isprsent = map1["Beijing"]
+	if isprsent {
+		fmt.Println("map1 does contain Beijing",value)
+	}else {
+		fmt.Println("map1 does not contain Beijing",value)
+	}
+	delete(map1,"Tokyo") //删除某一个键值对
+	_,isprsent = map1["Tokyo"]
+	if !isprsent {
+		fmt.Println("The Tokyo has deleted")
+	}
+}
+output==>
+map1 does contain Beijing 23
+The Tokyo has deleted
+</pre>
