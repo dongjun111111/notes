@@ -1110,3 +1110,37 @@ MySQL 有个叫BOOL的类型。可是，它的文档位于数的类型章节之中。而且，它仅仅只是TINY
 
 +++mysql复制一条数据到另一个表+++
 insert into 表1(字段1,字段2,字段3) select 字段1,字段2,字段3 from 表1 where id=1
+
+
+++mysql中每隔一段时间自动执行一次sql语句+++
+mysql要实现定时执行sql语句就要用到Event
+
+具体操作如下：
+
+先看看看event 事件是否开启
+show variables like '%sche%';
+
+如没开启，则开启。需要数据库超级权限
+set global event_scheduler =1;
+
+创建存储过程 update_a  (注：就是你要执行的sql语句)
+mysql> create procedure update_a() update a set a.y_avg=(select avg(b.youhao) from b where a.a_id=b.a_id);
+
+创建一个定时任务：event e_updateA 
+mysql> create event if not exists e_updateA
+    -> on schedule every 60 second      ---设置60秒执行一次    
+      
+    -> on schedule at date_add(now(),interval 1 minute) ---在一分钟后执行
+
+    -> on completion preserve
+    -> do call update_a();    ---执行update_a()存储过程
+
+创建Event之后，sql语句就定时执行一次。
+
+关闭事件任务
+mysql> alter event e_updateA ON
+    -> COMPLETION PRESERVE DISABLE;
+
+开启事件任务
+mysql> alter event e_updateA ON
+    -> COMPLETION PRESERVE ENABLE;
