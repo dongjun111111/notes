@@ -7396,3 +7396,17 @@ content有两个值”yes”和”no”,当我们需要显示工具栏和菜单�
 列表标题
     列表内容
     列表内容
+
+
++++datalist+++++
+测试发现IE不支持。
+<input id="mycar" list="cars" />
+<datalist id="cars">
+  <option value="ford">
+  <option value="bmw">
+  <option value="benz">
+</datalist>
+
+++++del+++++
+<del> 标签定义文档中已删除的文本。
+<del>3445667676</del>
