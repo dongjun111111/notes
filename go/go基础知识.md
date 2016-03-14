@@ -11473,7 +11473,8 @@ Cody sent a message to Dave.
 No one received Eva’s message.
 </pre>
 ####map
-不要使用 new，永远用 make 来构造 map
+不要使用 new，永远用 make 来构造 map.<br>
+和数组不同，map 可以根据新增的 key-value 对动态的伸缩，因此它不存在固定长度或者最大限制。但是你也可以选择标明 map 的初始容量 capacity，就像这样：map2 := make(map[string]float, 100)。当 map 增长到容量上限的时候，如果再增加新的 key-value 对，map 的大小会自动加 1。所以出于性能的考虑，对于大的 map 或者会快速扩张的 map，即使只是大概知道容量，也最好先标明。
 <pre>
 package main
 import (
@@ -11481,7 +11482,7 @@ import (
 )
 func main(){
 	var maplist map[string]int
-	var mapAssigned map[string]int
+	var mapAssigned map[string]int	
 	maplist = map[string]int{"one":1,"two":2}
 	mapCreated :=make(map[string]float32)
 	mapAssigned = maplist
