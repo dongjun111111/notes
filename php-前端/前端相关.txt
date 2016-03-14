@@ -7370,3 +7370,16 @@ console.log(result);
 +++++Meta标签中的apple-mobile-web-app-capable属性及含义++++
 这meta的作用就是删除默认的苹果工具栏和菜单栏。
 content有两个值”yes”和”no”,当我们需要显示工具栏和菜单栏时，这个行meta就不用加了，默认就是显示。
+
+
+++++base标签，给超链接赋初始值++++
+<head>
+<base target="_blank" href="http://www.qq.com" /> 
+</head>
+<body>
+<a href="">base标签给a超链接赋初始值</a>
+<hr>
+<a href="/movie/">在base基础上访问该域名下的其他内容</a>
+<hr>
+<a href="http://baidu.com">访问自定义内容，不受base的href值影响，但还是会新页打开</a>
+</body>
