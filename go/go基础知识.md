@@ -11472,3 +11472,31 @@ Anna sent a message to Bob.
 Cody sent a message to Dave.
 No one received Eva’s message.
 </pre>
+####map
+不要使用 new，永远用 make 来构造 map
+<pre>
+package main
+import (
+	"fmt"
+)
+func main(){
+	var maplist map[string]int
+	var mapAssigned map[string]int
+	maplist = map[string]int{"one":1,"two":2}
+	mapCreated :=make(map[string]float32)
+	mapAssigned = maplist
+	
+	mapCreated["key1"] =4.5
+	mapCreated["key2"] =4.6
+	mapAssigned["two"] =5
+	fmt.Printf("%d\n",maplist["one"])
+	fmt.Printf("%f\n",mapCreated["key2"])
+	fmt.Printf("%d\n",maplist["two"])
+	fmt.Printf("%d\n",maplist["ten"])
+}
+output==>
+1
+4.600000
+5
+0
+</pre>
