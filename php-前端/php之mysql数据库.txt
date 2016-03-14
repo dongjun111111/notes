@@ -1109,4 +1109,4 @@ MySQL 有个叫BOOL的类型。可是，它的文档位于数的类型章节之中。而且，它仅仅只是TINY
 
 
 +++mysql复制一条数据到另一个表+++
-INSERT  INTO  tb2  (id, name, age)   SELECT  id, name, age   FROM  tb1  WHERE  id = 1;
+insert into 表1(字段1,字段2,字段3) select 字段1,字段2,字段3 from 表1 where id=1
