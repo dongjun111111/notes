@@ -211,3 +211,24 @@ IO multiplexingÕâ¸ö´Ê¿ÉÄÜÓÐµãÄ°Éú£¬µ«ÊÇÈç¹ûÎÒËµselect/epoll£¬´ó¸Å¾Í¶¼ÄÜÃ÷°×ÁË¡£Ó
 Òì²½IO£¬Èç¶¨ÒåËùËµ£¬²»»áÒòÎªIO²Ù×÷×èÈû£¬IO²Ù×÷È«²¿Íê³É²ÅÍ¨ÖªÇëÇó½ø³Ì¡£
   ¾­¹ýÉÏÃæµÄ½éÉÜ£¬»á·¢ÏÖnon-blocking IOºÍasynchronous IOµÄÇø±ð»¹ÊÇºÜÃ÷ÏÔµÄ¡£ÔÚnon-blocking IOÖÐ£¬ËäÈ»½ø³Ì´ó²¿·ÖÊ±¼ä¶¼²»»á±»block£¬µ«ÊÇËüÈÔÈ»ÒªÇó½ø³ÌÈ¥Ö÷¶¯µÄcheck£¬²¢ÇÒµ±Êý¾Ý×¼±¸Íê³ÉÒÔºó£¬Ò²ÐèÒª½ø³ÌÖ÷¶¯µÄÔÙ´Îµ÷ÓÃrecvfromÀ´½«Êý¾Ý¿½±´µ½ÓÃ»§ÄÚ´æ¡£¶øasynchronous IOÔòÍêÈ«²»Í¬¡£Ëü¾ÍÏñÊÇÓÃ»§½ø³Ì½«Õû¸öIO²Ù×÷½»¸øÁËËûÈË£¨kernel£©Íê³É£¬È»ºóËûÈË×öÍêºó·¢ÐÅºÅÍ¨Öª¡£ÔÚ´ËÆÚ¼ä£¬ÓÃ»§½ø³Ì²»ÐèÒªÈ¥¼ì²éIO²Ù×÷µÄ×´Ì¬£¬Ò²²»ÐèÒªÖ÷¶¯µÄÈ¥¿½±´Êý¾Ý¡£
 
+
++++¹ØÓÚº£Á¿Êý¾Ý´¦Àí+++++
+³£ÓÃµÄÊý¾Ý½á¹¹£º
+
+1.Bloom Filter
+
+   ´óÖÂË¼ÏëÊÇÕâÑù£¬°ÑÒ»¸öÊý¾ÝÍ¨¹ýN¸ö¹þÏ£º¯ÊýÓ³Éäµ½Ò»¸ö³¤¶ÈÎªMµÄÊý×éµÄÒ»Î»ÉÏ£¬½«hashº¯Êý¶ÔÓ¦µÄÖµµÄÎ»Êý×éÖÃ1£¬²éÕÒÊ±Èç¹û·¢ÏÖËùÓÐhashº¯Êý¶ÔÓ¦Î»¶¼ÊÇ1ËµÃ÷¸ÃÊý¾ÝµÄ´æÔÚ¡£µ«²»ÄÜ±£Ö¤ÍêÈ«ÕýÈ·ÐÔ£¬µ«ÊÇ´Ë·½·¨ÎÞ±È¸ßÐ§¡£
+
+¡¾ÊµÀý¡¿¸øÄãA,BÁ½¸öÎÄ¼þ£¬¸÷´æ·Å50ÒÚÌõURL£¬Ã¿ÌõURLÕ¼ÓÃ64×Ö½Ú£¬ÄÚ´æÏÞÖÆÊÇ4G£¬ÈÃÄãÕÒ³öA,BÎÄ¼þ¹²Í¬µÄURL¡£Èç¹ûÊÇÈý¸öÄËÖÁn¸öÎÄ¼þÄØ£¿ 
+
+2.¹þÏ£·¨
+
+   Õâ¸ö¼òµ¥£¬ÎÞ·ÇÊÇÍ¨¹ýÒ»Ð©¹þÏ£º¯Êý°ÑÔªËØ¸ãµ½Ò»¸öÖ¸¶¨µÄÎ»ÖÃ£¬¼òµ¥µÄËµ¾ÍÊÇÒ»ÖÖ½«ÈÎÒâ³¤¶ÈµÄÏûÏ¢Ñ¹Ëõµ½Ä³Ò»¹Ì¶¨³¤¶ÈµÄÏûÏ¢ÕªÒªµÄº¯Êý¡£Õâ¸öºÜÒ»°ã°¡¸Ð¾õ¡£ÎÞ·Ç¾ÍÊÇ·ÖÀà²éÕÒÃ´£¬ÍêÈ«²»Èç1ÃÍ¡£
+
+3.×î´ó»ò×îÐ¡¶Ñ
+
+     ¾ÍÊÇÒ»¸öÍêÈ«µÄ×î´ó»ò×îÐ¡¶þ²æÊ÷£¬ÓÃÍ¾£¬±ÈÈç:1)100w¸öÊýÖÐÕÒ×î´óµÄÇ°100¸öÊý¡£ ÓÃÒ»¸ö100¸öÔªËØ´óÐ¡µÄ×îÐ¡¶Ñ¼´¿É¡£¸Ð¾õ»¹ÊÇ²»´íµÄ¡£
+
+4.Bit-map
+
+ËùÎ½µÄBit-map¾ÍÊÇÓÃÒ»¸öbitÎ»À´±ê¼ÇÄ³¸öÔªËØ¶ÔÓ¦µÄValue£¬ ¶øKey¼´ÊÇ¸ÃÔªËØ¡£ÓÉÓÚ²ÉÓÃÁËBitÎªµ¥Î»À´´æ´¢Êý¾Ý£¬Òò´ËÔÚ´æ´¢¿Õ¼ä·½Ãæ£¬¿ÉÒÔ´ó´ó½ÚÊ¡¡£
