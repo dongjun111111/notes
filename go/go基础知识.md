@@ -11545,3 +11545,28 @@ output==>
 map1 does contain Beijing 23
 The Tokyo has deleted
 </pre>
+用range循环输出map
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	map1 :=make(map[int]string)
+	map1[3] = "yes"
+	map1[2] = "no"
+	map1[0] = "haha"
+	map1[5] = "you"
+	map1[6] = "guess"
+	for key,value := range map1 {
+		fmt.Println("key is ",key,"value is ",value)
+	}
+}
+output==>
+key is  3 value is  yes
+key is  2 value is  no
+key is  0 value is  haha
+key is  5 value is  you
+key is  6 value is  guess
+</pre>
