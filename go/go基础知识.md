@@ -11588,3 +11588,22 @@ Map item:Capital of France is Paris
 Map item:Capital of Italy is Rome
 Map item:Capital of Japan is Tokyo
 </pre>
+####map类型的切片
+假设我们想获取一个 map 类型的切片，我们必须使用两次 make() 函数，第一次分配切片，第二次分配 切片中每个 map 元素.
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	items :=make([]map[int]int,5)
+	for i :=range items {
+		items[i] =make(map[int]int,1)
+		items[i][1]= 2
+	}
+	fmt.Println("value of items :",items)
+}
+output==>
+value of items : [map[1:2] map[1:2] map[1:2] map[1:2] map[1:2]]
+</pre>
