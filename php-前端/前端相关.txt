@@ -7433,7 +7433,13 @@ progress::-moz-progress-bar { background: #0064B4; }
 progress::-webkit-progress-bar { background: #e6e6e6; }
 progress::-webkit-progress-value  { background: #0064B4; }
 </style>
+<script>
+ if (typeof window.screenX !== "number") {
+    document.createElement("progress"); 
+    document.createElement("ie"); 
+  }
+</script>
 </head>
 <body>
-<progress value="50" max="100"></progress> 
+<progress value="50" max="100"><ie style="width:20%;"></ie></progress> 
 </body>
