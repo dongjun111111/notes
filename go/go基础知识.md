@@ -12585,3 +12585,45 @@ func main(){
 output==>
 error: Not found any error
 </pre>
+####启动外部命令和程序
+os 包有一个 StartProcess 函数可以调用或启动外部系统命令和二进制可执行文件；它的第一个参数是要运行的进程，第二个参数用来传递选项或参数，第三个参数是含有系统环境基本信息的结构体。
+
+这个函数返回被启动进程的 id（pid），或者启动失败返回错误。
+
+exec 包中也有同样功能的更简单的结构体和函数；主要是 exec.Command(name string, arg ...string) 和 Run()。首先需要用系统命令或可执行文件的名字创建一个 Command 对象，然后用这个对象作为接收者调用 Run()。下面的程序（因为是执行 Linux 命令，只能在 Linux 下面运行）演示了它们的使用：
+<pre>
+package main
+import (
+    "fmt"
+    "os/exec"
+    "os"
+)
+
+func main() {
+// 1) os.StartProcess //
+/*********************/
+/* Linux: */
+env := os.Environ()
+procAttr := &os.ProcAttr{
+            Env: env,
+            Files: []*os.File{
+                os.Stdin,
+                os.Stdout,
+                os.Stderr,
+            },
+        }
+// 1st example: list files
+pid, err := os.StartProcess("/bin/ls", []string{"ls", "-l"}, procAttr)  
+if err != nil {
+        fmt.Printf("Error %v starting process!", err)  //
+        os.Exit(1)
+}
+fmt.Printf("The process id is %v", pid)
+output==>
+The process id is &{2054 0}total 2056
+-rwxr-xr-x 1 ivo ivo 1157555 2011-07-04 16:48 Mieken_exec
+-rw-r--r-- 1 ivo ivo    2124 2011-07-04 16:48 Mieken_exec.go
+-rw-r--r-- 1 ivo ivo   18528 2011-07-04 16:48 Mieken_exec_go_.6
+-rwxr-xr-x 1 ivo ivo  913920 2011-06-03 16:13 panic.exe
+-rw-r--r-- 1 ivo ivo     180 2011-04-11 20:39 panic.go
+</pre>
