@@ -7455,3 +7455,11 @@ mix-blend-mode属性规定了源元素如何将颜色和背景混和起来。背
 是一个源元素，而包裹自己的div容器是背景元素）。使用方法很简单：
 mix-blend-mode:difference;
 mix-blend-mode:overlay;
+
+
+++++user-modify+++
+user-modify="read-write"与user-modify="read-write-plaintext-only"
+<!--read-write支持富文本，read-write-plaintext-only只支持纯文本-->
+<p contenteditable="true" user-modify="read-write" style="height:4em;width:auto;border:1px grey solid;">
+这是一段这是一段这是一段这是一段
+</p>
