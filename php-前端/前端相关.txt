@@ -7443,3 +7443,15 @@ progress::-webkit-progress-value  { background: #0064B4; }
 <body>
 <progress value="50" max="100"><ie style="width:20%;"></ie></progress> 
 </body>
+
+
++++isolation与max-blend-mode++++++
+使用isolation属性
+如果你使用了mix-blend-mode，它会把当前元素和所有在其下方重叠的背景元素都混和起来。如果你想让一组元素在一个
+<div>容器中互相混和，而不影响其它下方重叠的元素呢？
+isolation:isolate;//创建了一个新的堆叠背景，只有在这个堆叠背景中的元素才会进行混和，之下的其它元素都不会发生混和。
+使用mix-blend-mode属性
+mix-blend-mode属性规定了源元素如何将颜色和背景混和起来。背景可以是源元素之下的任何元素（例如，一个标题
+是一个源元素，而包裹自己的div容器是背景元素）。使用方法很简单：
+mix-blend-mode:difference;
+mix-blend-mode:overlay;
