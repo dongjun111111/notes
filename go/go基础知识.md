@@ -12079,3 +12079,108 @@ Please enter some input:
 hello world
 hello world
 </pre>
+####文件读取
+<pre>
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"io"
+)
+func main(){
+	inputfile,inputerr :=os.Open("../server/main.go")
+	if inputerr != nil {
+		fmt.Println("An err occurred on opening the file")
+		return //退出
+	}
+	defer inputfile.Close() //在程序退出前关闭文件句柄
+	inputreader := bufio.NewReader(inputfile)
+	for {
+		inputstring,readererror:=inputreader.ReadString('\n')
+		if readererror == io.EOF {
+			return
+		}
+		fmt.Println("The input is:",inputstring)
+	}
+}
+output==>
+The input is: // Copyright 2013 The Gorilla WebSocket Authors. All rights reserved.
+
+The input is: // Use of this source code is governed by a BSD-style
+
+The input is: // license that can be found in the LICENSE file.
+
+The input is: 
+
+The input is: package main
+
+The input is: 
+
+The input is: import (
+
+The input is: 	"flag"
+
+The input is: 	"log"
+
+The input is: 	"net/http"
+
+The input is: 	"text/template"
+
+The input is: )
+
+The input is: 
+
+The input is: var addr = flag.String("addr", ":8080", "http service address")
+
+The input is: var homeTempl = template.Must(template.ParseFiles("home.html"))
+
+The input is: 
+
+The input is: func serveHome(w http.ResponseWriter, r *http.Request) {
+
+The input is: 	if r.URL.Path != "/" {
+
+The input is: 		http.Error(w, "Not found", 404)
+
+The input is: 		return
+
+The input is: 	}
+
+The input is: 	if r.Method != "GET" {
+
+The input is: 		http.Error(w, "Method not allowed", 405)
+
+The input is: 		return
+
+The input is: 	}
+
+The input is: 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+The input is: 	homeTempl.Execute(w, r.Host)
+
+The input is: }
+
+The input is: 
+
+The input is: func main() {
+
+The input is: 	flag.Parse()
+
+The input is: 	go h.run()
+
+The input is: 	http.HandleFunc("/", serveHome)
+
+The input is: 	http.HandleFunc("/ws", serveWs)
+
+The input is: 	err := http.ListenAndServe(*addr, nil)
+
+The input is: 	if err != nil {
+
+The input is: 		log.Fatal("ListenAndServe: ", err)
+
+The input is: 	}
+
+The input is: }
+<pre>
