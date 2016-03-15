@@ -1174,6 +1174,45 @@ SQL优化
 情况下去掉排序和分组对业务也没有多大影响。
 如何判断使用了临时表？
 使用explain查看执行计划，Extra列看到Using temporary就意味着使用了临时表。
+临时表的创建，方法是在正常的CREATE TABLE语句加上TEMPORARY关键字：
+DROP PROCEDURE IF EXISTS demoSp;     
+CREATE PROCEDURE demoSp()  
+BEGIN  
+    set @sqlstr=concat("select count(*) from ", "dual");  
+    prepare stmt from @sqlstr;  
+    EXECUTE stmt;           
+    deallocate prepare stmt;      
+END;  
+临时表将在你连接MySQL期间存在。当你断开时，MySQL将自动删除表并释放所用的空间。当然你可以在仍然连接的时候
+删除表并释放空间。
+DROP TABLE tmp_table
+
+mysql之触发器trigger：
+触发器创建语法四要素：1.监视地点(table) 2.监视事件(insert/update/delete) 3.触发时间(after/before) 4.触发事件
+语法：
+
+create trigger triggerName
+
+after/before insert/update/delete on 表名
+
+for each row   #这句话在mysql是固定的
+
+begin
+
+sql语句;
+
+end;
+
+实例：创建一个触发器
+create trigger tg1
+after insert on o
+for each row 
+begin
+update g set num=num-3 where id=1;
+end
+这时候我们只要执行：
+insert into o(gid,much) values(1,3)$
+会发现商品1的数量变为7了，说明在我们插入一条订单的时候，触发器自动帮我们做了更新操作。
 
 
 +++++group by与distinct++++
