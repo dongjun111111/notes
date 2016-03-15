@@ -12249,3 +12249,30 @@ func main() {
     }
 }
 </pre>
+####写文件
+bufio.NewWriter()     WriteString()   Flush()
+<pre>
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+func main(){
+	outputfile,outputerror :=os.OpenFile("yes.txt",os.O_WRONLY|os.O_CREATE,0666)
+	if outputerror != nil{
+		fmt.Println("an error occurred file opening or creating\n")
+		return
+	}
+	defer outputfile.Close()
+	outputwriter :=bufio.NewWriter(outputfile)
+	outputstring := "这是新写入的内容\n"
+	for i:= 0;i<10;i++{
+		outputwriter.WriteString(outputstring)
+	}
+	outputwriter.Flush()
+	
+}
+//成功创建yes.txt,并且内容为10个这是新写入的内容
+</pre>
