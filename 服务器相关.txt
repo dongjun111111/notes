@@ -347,6 +347,23 @@ writer.flush();
 
 
 ++++多服务器共享 SESSION 的主要障碍及解决办法+++++++
+PHP SESSION 的工作原理
+在解决问题之前，先来了解一下 PHP SESSION 的工作原理。在客户端（如浏览器）登录网站时，被访问的 PHP 页面可以
+使用session_start() 打开 SESSION，这样就会产生客户端的唯一标识 SESSION ID（此 ID 可通过函数session_id() 获
+取/设置）。SESSION ID 可以通过两种方式保留在客户端，使得请求不同的页面时，PHP程序可以获知客户端的 SESSION ID；
+一种是将 SESSION ID 自动加入到 GET 的 URL 中，或者 POST的表单中，默认情况下，变量名为 PHPSESSID；另一种是
+通过 COOKIE，将 SESSION ID 保存在 COOKIE中，默认情况下，这个 COOKIE 的名字为 PHPSESSID。这里我们主要以 COOKIE
+方式进行说明，因为应用比较广泛。
+那么 SESSION 的数据保存在哪里呢？当然是在服务器端，但不是保存在内存中，而是保存在文件或数据库中。默认情况下，
+php.ini中设置的 SESSION 保存方式是 files（session.save_handler = files），即使用读写文件的方式保存SESSION 
+数据，而 SESSION 文件保存的目录由 session.save_path 指定，文件名以 sess_为前缀，后跟 SESSIONID，
+如：sess_c72665af28a8b14c0fe11afe3b59b51b。文 件中的数据即是序列化之后的 SESSION数据了。如果访问量大，
+可能产生的 SESSION 文件会比较多，这时可以设置分级目录进行 SESSION文件的保存，效率会提高很多，设置方法为：
+session.save_path=”N;/save_path”，N为分级的级 数，save_path 为开始目录。当写入 SESSION 数据的时候，
+PHP 会获取到客户端的SESSION_ID，然后根据这个 SESSION ID 到指定的 SESSION 文件保存目录中找到相应的 SESSION文件，
+不存在则创建之，最后将数据序列化之后写入文件。读取 SESSION数据是也是类似的操作流程，对读出来的数据需要进行
+解序列化，生成相应的 SESSION 变量。
+
 通过了解 SESSION 的工作原理，我们可以发现，在默认情况下，各个服务器会各自分别对同一个客户端产生 SESSIONID，如
 对于同一个用户浏览器，A 服务器产生的 SESSION ID 是30de1e9de3192ba6ce2992d27a1b6a0a，而 B 服务器生成的则是
 c72665af28a8b14c0fe11afe3b59b51b。另外，PHP 的 SESSION数据都是分别保存在本服务器的文件系统中。
