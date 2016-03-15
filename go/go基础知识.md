@@ -11801,3 +11801,23 @@ func main(){
 output==>
 The name is the person is JASON bob
 </pre>
+给结构体取别名
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type number struct {
+	f float32
+}
+type aliasnum number  //给结构体number取别名
+func main(){
+	a :=number{5.8}
+	b := aliasnum{4.5}
+	var c = number(b)
+	fmt.Println(a,b,c)
+}
+output==>
+{5.8} {4.5} {4.5}
+</pre>
