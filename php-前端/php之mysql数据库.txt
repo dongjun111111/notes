@@ -1214,6 +1214,29 @@ end
 insert into o(gid,much) values(1,3)$
 会发现商品1的数量变为7了，说明在我们插入一条订单的时候，触发器自动帮我们做了更新操作。
 
+mysql中大幅度提高性能方案———分区表
+工作中仍然是海量数据出现的情况.每年大概会有几亿条记录.而且数据的时效性比较强.但历史数据仍然要求保留.
+这个时候经过分析和研究,最终决定通过时间字段进行分区.下面是分区表的创建代码.读者门在插入了不同年份时间段
+以后，可以时间字段为条件进行查询，可以看到数据库扫描过的区段. 
+CREATE TABLE part_data  
+      (c1 int default NULL,  
+  c2 varchar(30) default NULL,  
+  c3 date default NULL)  
+  partition by range (to_days(c3))  
+ (PARTITION p0 VALUES LESS THAN (to_days('1995-01-01')),  
+ PARTITION p1 VALUES LESS THAN (to_days('1996-01-01')) ,  
+ PARTITION p2 VALUES LESS THAN (to_days('1997-01-01')) ,  
+ PARTITION p3 VALUES LESS THAN (to_days('1998-01-01')) ,  
+ PARTITION p4 VALUES LESS THAN (to_days('1999-01-01')) ,  
+ PARTITION p5 VALUES LESS THAN (to_days('2000-01-01')) ,  
+ PARTITION p6 VALUES LESS THAN (to_days('2001-01-01')) ,  
+ PARTITION p7 VALUES LESS THAN (to_days('2002-01-01')) ,  
+ PARTITION p8 VALUES LESS THAN (to_days('2003-01-01')) ,  
+ PARTITION p9 VALUES LESS THAN (to_days('2004-01-01')) ,  
+ PARTITION p10 VALUES LESS THAN (to_days('2010-01-01')),  
+ PARTITION p11 VALUES LESS THAN MAXVALUE );  
+分区查询,可以查看扫描过的区段.当然要加上where子句,以c3时间为条件进行检索.若不使用时间字段，分区将失去作用. 
+explain partitions select * from part_data\G  
 
 +++++group by与distinct++++
 distinct用法：SELECT DISTINCT Company FROM Orders    //从 Company" 列中仅选取唯一不同的值
