@@ -1215,6 +1215,7 @@ insert into o(gid,much) values(1,3)$
 会发现商品1的数量变为7了，说明在我们插入一条订单的时候，触发器自动帮我们做了更新操作。
 
 mysql中大幅度提高性能方案———分区表
+
 工作中仍然是海量数据出现的情况.每年大概会有几亿条记录.而且数据的时效性比较强.但历史数据仍然要求保留.
 这个时候经过分析和研究,最终决定通过时间字段进行分区.下面是分区表的创建代码.读者门在插入了不同年份时间段
 以后，可以时间字段为条件进行查询，可以看到数据库扫描过的区段. 
@@ -1237,6 +1238,35 @@ CREATE TABLE part_data
  PARTITION p11 VALUES LESS THAN MAXVALUE );  
 分区查询,可以查看扫描过的区段.当然要加上where子句,以c3时间为条件进行检索.若不使用时间字段，分区将失去作用. 
 explain partitions select * from part_data\G  
+
+创建分区表（分区表分为RANGE,LIST,HASH,KEY四种类型,并且分区表的索引是可以局部针对分区表建立的）
+CREATE TABLE sales (
+    id INT AUTO_INCREMENT,
+    amount DOUBLE NOT NULL,
+    order_day DATETIME NOT NULL,
+    PRIMARY KEY(id, order_day)
+) ENGINE=Innodb PARTITION BY RANGE(YEAR(order_day)) (
+    PARTITION p_2010 VALUES LESS THAN (2010),
+    PARTITION p_2011 VALUES LESS THAN (2011),
+    PARTITION p_2012 VALUES LESS THAN (2012),
+    PARTITION p_catchall VALUES LESS THAN MAXVALUE);
+这段语句表示将表内数据按照order_dy的年份范围进行分区,2010年一个区,2011一个,2012一个,剩下的一个.
+　要注意如果这么做,则order_day必须包含在主键中,且会产生一个问题,就是当年份超过阈值,到了2013,2014时,需要手动创建这些分区
+　替代方法就是使用HASH
+CREATE TABLE sales (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    amount DOUBLE NOT NULL,
+    order_day DATETIME NOT NULL
+) ENGINE=Innodb PARTITION BY HASH(id DIV 1000000);
+这种分区表示每100W条数据建立一个分区,且没有阈值范围的影响
+
+对于大数据而言
+　　对于大数据(如10TB)而言,索引起到的作用相对小,因为索引的空间与维护成本很高,另外如果不是索引覆盖查询,将导致
+回表,造成大量磁盘IO.那么对于这种情况的解决策略是:
+　　1.全量扫描数据,不要任何索引
+　　通过分区表表达式将数据定位在少量的分区表,然后正常访问这些分区表的数据
+　　2.分离热点,索引数据
+　　将热点数据分离出来在一个小的分区,并对分区建立索引,对热点数据的查询提高效率.
 
 +++++group by与distinct++++
 distinct用法：SELECT DISTINCT Company FROM Orders    //从 Company" 列中仅选取唯一不同的值
