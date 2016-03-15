@@ -11824,3 +11824,39 @@ output==>
 ####匿名字段和内嵌结构体
 结构体可以包含一个或多个 匿名（或内嵌）字段，即这些字段没有显式的名字，只有字段的类型是必须的，此时类型就是字段的名字。匿名字段本身可以是一个结构体类型，即 结构体可以包含内嵌结构体。
 可以粗略地将这个和面向对象语言中的继承概念相比较，随后将会看到它被用来模拟类似继承的行为。Go 语言中的继承是通过内嵌或组合来实现的，所以可以说，在 Go 语言中，相比较于继承，组合更受青睐。
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type inner struct {
+	in1 int
+	in2 int
+}
+type outer struct {
+	b int
+	c float32
+	int //匿名字段
+	inner //内嵌结构体  (结构体内嵌结构体)
+}
+func main(){
+	outernew := new(outer)
+	outernew.b = 6
+	outernew.c = 7.6
+	outernew.int = 40
+	outernew.in1 = 34
+	outernew.in2 = 29
+	fmt.Println(outernew.b)
+	fmt.Println(outernew.c)
+	fmt.Println(outernew.int)
+	fmt.Println(outernew.in1)
+	fmt.Println(outernew.in2)
+}
+output==>
+6
+7.6
+40
+34
+29
+</pre>
