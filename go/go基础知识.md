@@ -12018,3 +12018,14 @@ output==>
 The type of areaIntf is: *main.Square
 areaIntf does not contain a variable of type Circle
 </pre>
+#### 测试一个值是否实现了某个接口
+使用接口使代码更具有普适性。
+<pre>
+type Stringer interface {
+    String() string
+}
+
+if sv, ok := v.(Stringer); ok {
+    fmt.Printf("v implements String(): %s\n", sv.String()) // note: sv, not v
+}
+</pre>
