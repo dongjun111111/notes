@@ -12184,3 +12184,29 @@ The input is: 	}
 
 The input is: }
 <pre>
+####将整个文件的内容写入字符串或另一个文件中
+<pre>
+package main
+
+import (
+	"os"
+	"fmt"
+	"io/ioutil"
+)
+func main(){
+	inputfile := "test.txt"
+	outputfile :="test_2.txt"
+	buf,err :=ioutil.ReadFile(inputfile)
+	if err != nil {
+		fmt.Fprintf(os.Stderr,"File error:%s\n",err)
+	}
+	fmt.Println(string(buf)) //将文件内容写入字符串
+	err = ioutil.WriteFile(outputfile,buf,0644)//将一个文件内容写入到另一个文件中
+	if err != nil {
+		panic(err)
+	}
+}
+output==>
+this is a test file.
+CopyRight Jason 2016
+</pre>
