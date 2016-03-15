@@ -12029,3 +12029,53 @@ if sv, ok := v.(Stringer); ok {
     fmt.Printf("v implements String(): %s\n", sv.String()) // note: sv, not v
 }
 </pre>
+#### 读取用户的输入
+我们如何读取用户的键盘（控制台）输入呢？从键盘和标准输入 os.Stdin 读取输入，最简单的办法是使用 fmt 包提供的 Scan 和 Sscan 开头的函数。
+<pre>
+package main
+
+import (
+	"fmt"
+)
+var (
+	firstname,lastname string
+)
+func main(){
+	fmt.Println("Please enter your fullname :")
+//Scanln 扫描来自标准输入的文本，将空格分隔的值依次存放到后续的参数内，直到碰到换行
+	fmt.Scanln(&firstname,&lastname)
+	fmt.Println("hi",firstname,lastname)
+}
+input==>
+jason D
+output==>
+hi jason D
+</pre>
+也可以使用 bufio 包提供的缓冲读取（buffered reader）来读取数据:
+<pre>
+package main
+
+import (
+	"fmt"
+	"os"
+	"bufio"
+)
+var inputreader *bufio.Reader
+var input string
+var err error
+func main(){
+	inputreader = bufio.NewReader(os.Stdin)
+	fmt.Println("Please enter some input:")
+	input,err =inputreader.ReadString('\n')
+	//以回车为节点
+	if err == nil{
+		fmt.Println(input)
+	}
+}
+input==>
+hello world
+output==>
+Please enter some input:
+hello world
+hello world
+</pre>
