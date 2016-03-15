@@ -12372,3 +12372,141 @@ func main() {
     }
 }
 </pre>
+####用切片读写文件
+<pre>
+package main
+
+import (
+    "flag"
+    "fmt"
+    "os"
+)
+
+func cat(f *os.File) {
+    const NBUF = 512
+    var buf [NBUF]byte
+    for {
+        switch nr, err := f.Read(buf[:]); true {
+        case nr < 0:
+            fmt.Fprintf(os.Stderr, "cat: error reading: %s\n", err.Error())
+            os.Exit(1)
+        case nr == 0: // EOF
+            return
+        case nr > 0:
+            if nw, ew := os.Stdout.Write(buf[0:nr]); nw != nr {
+                fmt.Fprintf(os.Stderr, "cat: error writing: %s\n", ew.Error())
+            }
+        }
+    }
+}
+
+func main() {
+    flag.Parse() // Scans the arg list and sets up flags
+    if flag.NArg() == 0 {
+        cat(os.Stdin)
+    }
+    for i := 0; i < flag.NArg(); i++ {
+        f, err := os.Open(flag.Arg(i))
+        if f == nil {
+            fmt.Fprintf(os.Stderr, "cat: can't open %s: error %s\n", flag.Arg(i), err)
+            os.Exit(1)
+        }
+        cat(f)
+        f.Close()
+    }
+}
+</pre>
+####json
+<pre>
+package main
+
+import (
+    "encoding/json"
+    "fmt"
+    "log"
+    "os"
+)
+
+type Address struct {
+    Type    string
+    City    string
+    Country string
+}
+
+type VCard struct {
+    FirstName string
+    LastName  string
+    Addresses []*Address
+    Remark    string
+}
+
+func main() {
+    pa := &Address{"private", "Aartselaar", "Belgium"}
+    wa := &Address{"work", "Boom", "Belgium"}
+    vc := VCard{"Jan", "Kersschot", []*Address{pa, wa}, "none"}
+    // fmt.Printf("%v: \n", vc) // {Jan Kersschot [0x126d2b80 0x126d2be0] none}:
+    // JSON format:
+    js, _ := json.Marshal(vc)
+    fmt.Printf("JSON format: %s", js)
+    // using an encoder:
+    file, _ := os.OpenFile("vcard.json", os.O_CREATE|os.O_WRONLY, 0)
+    defer file.Close()
+    enc := json.NewEncoder(file)
+    err := enc.Encode(vc)
+    if err != nil {
+        log.Println("Error in encoding json")
+    }
+}
+output==>
+JSON format: {"FirstName":"Jan","LastName":"Kersschot","Addresses":[{"Type":"private","City":"Aartselaar","Country":"Belgium"},{"Type":"work","City":"Boom","Country":"Belgium"}],"Remark":"none"}
+</pre>
+####XML 数据格式
+<pre>
+package main
+
+import (
+    "encoding/xml"
+    "fmt"
+    "strings"
+)
+
+var t, token xml.Token
+var err error
+
+func main() {
+    input := "<Person><FirstName>Laura</FirstName><LastName>Lynn</LastName></Person>"
+    inputReader := strings.NewReader(input)
+    p := xml.NewDecoder(inputReader)
+
+    for t, err = p.Token(); err == nil; t, err = p.Token() {
+        switch token := t.(type) {
+        case xml.StartElement:
+            name := token.Name.Local
+            fmt.Printf("Token name: %s\n", name)
+            for _, attr := range token.Attr {
+                attrName := attr.Name.Local
+                attrValue := attr.Value
+                fmt.Printf("An attribute is: %s %s\n", attrName, attrValue)
+                // ...
+            }
+        case xml.EndElement:
+            fmt.Println("End of token")
+        case xml.CharData:
+            content := string([]byte(token))
+            fmt.Printf("This is the content: %v\n", content)
+            // ...
+        default:
+            // ...
+        }
+    }
+}
+output==>
+Token name: Person
+Token name: FirstName
+This is the content: Laura
+End of token
+Token name: LastName
+This is the content: Lynn
+End of token
+End of token
+</pre>
