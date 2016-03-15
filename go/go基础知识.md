@@ -11703,3 +11703,75 @@ func main() {
         LINUX_REBOOT_CMD_RESTART)
 }
 </pre>
+####精密计算和big包
+我们知道有些时候通过编程的方式去进行计算是不精确的。如果你使用 Go 语言中的 float64 类型进行浮点运算，返回结果将精确到 15 位，足以满足大多数的任务。当对超出 int64 或者 uint64 类型这样的大数进行计算时，如果对精度没有要求，float32 或者 float64 可以胜任，但如果对精度有严格要求的时候，我们不能使用浮点数，在内存中它们只能被近似的表示。
+
+对于整数的高精度计算 Go 语言中提供了 big 包。其中包含了 math 包：有用来表示大整数的 big.Int 和表示大有理数的 big.Rat 类型（可以表示为 2/5 或 3.1416 这样的分数，而不是无理数或 π）。这些类型可以实现任意位类型的数字，只要内存足够大。缺点是更大的内存和处理开销使它们使用起来要比内置的数字类型慢很多。
+
+大的整型数字是通过 big.NewInt(n) 来构造的，其中 n 为 int64 类型整数。而大有理数是用过 big.NewRat(N,D) 方法构造。N（分子）和 D（分母）都是 int64 型整数。因为 Go 语言不支持运算符重载，所以所有大数字类型都有像是 Add() 和 Mul() 这样的方法。它们作用于作为 receiver 的整数和有理数，大多数情况下它们修改 receiver 并以 receiver 作为返回结果。因为没有必要创建 big.Int 类型的临时变量来存放中间结果，所以这样的运算可通过内存链式存储。
+<pre>
+package main
+
+import (
+    "fmt"
+    "math"
+    "math/big"
+)
+
+func main() {
+    // Here are some calculations with bigInts:
+    im := big.NewInt(math.MaxInt64)
+    in := im
+    io := big.NewInt(1956)
+    ip := big.NewInt(1)
+    ip.Mul(im, in).Add(ip, im).Div(ip, io)
+    fmt.Printf("Big Int: %v\n", ip)
+    // Here are some calculations with bigInts:
+    rm := big.NewRat(math.MaxInt64, 1956)
+    rn := big.NewRat(-1956, math.MaxInt64)
+    ro := big.NewRat(19, 56)
+    rp := big.NewRat(1111, 2222)
+    rq := big.NewRat(1, 1)
+    rq.Mul(rm, rn).Add(rq, ro).Mul(rq, rp)
+    fmt.Printf("Big Rat: %v\n", rq)
+}
+output==>
+Big Int: 43492122561469640008497075573153004
+Big Rat: -37/112
+</pre>
+####结构体struct
+写这条语句的惯用方法是：t := new(T)，变量 t 是一个指向 T的指针，此时结构体字段的值是它们所属类型的零值。
+声明 var t T 也会给 t 分配内存，并零值化内存，但是这个时候 t 是类型T。在这两种方式中，t 通常被称做类型 T 的一个实例（instance）或对象（object）。
+<pre>
+package main 
+import (
+	"fmt"
+)
+type st struct {    //第一种struct
+	i1 int 
+	f1 float32
+	str string
+}
+
+func main(){
+	st2 := struct { //第二种struct
+		name string
+		phone int
+	}{
+		"jack",1234567890,  //注意这里需要在末尾加上,
+	}
+	ms :=new(st) //结构体的声明，用new关键字
+	ms.i1 = 10
+	ms.f1 = 15.5
+	ms.str = "jason"
+	fmt.Println("The int is :",ms.i1)
+	fmt.Println("The float32 is :",ms.f1)
+	fmt.Println("The string is :",ms.str)
+	fmt.Println(st2.name)
+}
+output==>
+The int is : 10
+The float32 is : 15.5
+The string is : jason
+jack
+</pre>
