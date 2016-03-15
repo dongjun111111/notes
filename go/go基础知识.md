@@ -11861,6 +11861,7 @@ output==>
 29
 </pre>
 ####方法
+以一个结构体来示例
 <pre>
 package main
 
@@ -11887,4 +11888,24 @@ output==>
 23
 12
 35
+</pre>
+以一个非结构体示例
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type IntVector []int
+func (v IntVector) sum()(s int){
+	for _,x := range v {
+		s += x
+	}
+	return s
+}
+func main(){
+	fmt.Println(IntVector{2,2,3}.sum())
+}
+output==>
+7
 </pre>
