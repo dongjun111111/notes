@@ -11775,3 +11775,29 @@ The float32 is : 15.5
 The string is : jason
 jack
 </pre>
+对结构的元素进行修改
+<pre>
+package main 
+
+import (
+	"fmt"
+	"strings"
+)
+type person struct {
+	firstname string
+	lastname string
+}
+func up(p *person){ //如果这里不用指针的形式则不能成功地修改原数据
+	p.firstname = strings.ToUpper(p.firstname)
+	p.lastname = strings.ToLower(p.lastname)
+}
+func main(){
+	var person1 person
+	person1.firstname = "jason"
+	person1.lastname = "Bob"
+	up(&person1)   //这里
+	fmt.Println("The name is the person is",person1.firstname,person1.lastname)
+}
+output==>
+The name is the person is JASON bob
+</pre>
