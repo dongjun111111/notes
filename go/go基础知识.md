@@ -11957,3 +11957,64 @@ func main(){
 output==>
 34
 </pre>
+####类型断言：如何检测和转换接口变量的类型
+一个接口类型的变量 varI 中可以包含任何类型的值，必须有一种方式来检测它的 动态 类型，即运行时在变量中存储的值的实际类型。在执行过程中动态类型可能会有所不同，但是它总是可以分配给接口变量本身的类型。通常我们可以使用 类型断言 来测试在某个时刻 varI 是否包含类型 T 的值：
+<pre>
+	v := varI.(T)    //varI 必须是一个接口变量，否则编译器会报错
+</pre>
+类型断言可能是无效的，虽然编译器会尽力检查转换是否有效，但是它不可能预见所有的可能性。如果转换在程序运行时失败会导致错误发生。更安全的方式是使用以下形式来进行类型断言：
+<pre>
+if v, ok := varI.(T); ok {  // checked type assertion
+    Process(v)
+    return
+}
+// varI is not of type T
+</pre>
+<pre>
+package main
+
+import (
+    "fmt"
+    "math"
+)
+
+type Square struct {
+    side float32
+}
+
+type Circle struct {
+    radius float32
+}
+
+type Shaper interface {
+    Area() float32
+}
+
+func main() {
+    var areaIntf Shaper
+    sq1 := new(Square)
+    sq1.side = 5
+
+    areaIntf = sq1
+    // Is Square the type of areaIntf?
+    if t, ok := areaIntf.(*Square); ok {
+        fmt.Printf("The type of areaIntf is: %T\n", t)
+    }
+    if u, ok := areaIntf.(*Circle); ok {
+        fmt.Printf("The type of areaIntf is: %T\n", u)
+    } else {
+        fmt.Println("areaIntf does not contain a variable of type Circle")
+    }
+}
+
+func (sq *Square) Area() float32 {
+    return sq.side * sq.side
+}
+
+func (ci *Circle) Area() float32 {
+    return ci.radius * ci.radius * math.Pi
+}
+output==>
+The type of areaIntf is: *main.Square
+areaIntf does not contain a variable of type Circle
+</pre>
