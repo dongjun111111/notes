@@ -12262,8 +12262,6 @@ bufio.NewWriter()     WriteString()   Flush()
 outputWriter := bufio.NewWriter(outputFile)
 接着，使用一个 for 循环，将字符串写入缓冲区，写 10 次：outputWriter.WriteString(outputString)
 缓冲区的内容紧接着被完全写入文件：outputWriter.Flush()
-
-如果写入的东西很简单，我们可以使用 fmt.Fprintf(outputFile, “Some test data.\n”) 直接将内容写入文件。fmt 包里的 F 开头的 Print 函数可以直接写入任何 io.Writer，包括文件
 <pre>
 package main
 
@@ -12288,4 +12286,20 @@ func main(){
 	
 }
 //成功创建yes.txt,并且内容为10个这是新写入的内容
+</pre>
+如果写入的东西很简单，我们可以使用 fmt.Fprintf(outputFile, “Some test data.\n”) 直接将内容写入文件。fmt 包里的 F 开头的 Print 函数可以直接写入任何 io.Writer，包括文件.如下：
+<pre>
+package main
+import (
+	"os"
+)
+func main(){
+	os.Stdout.WriteString("hello jason\n")//成功则输出到屏幕
+	f,_:=os.OpenFile("test.md",os.O_CREATE|os.O_WRONLY,0)
+	defer f.Close()
+	f.WriteString("world") //成功则写入到test.md文件中
+}
+output ==>
+hello jason
+//test.md文件也成功创建
 </pre>
