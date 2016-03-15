@@ -12251,6 +12251,19 @@ func main() {
 </pre>
 ####写文件
 bufio.NewWriter()     WriteString()   Flush()
+
+- os.O_RDONLY：只读
+- os.O_WRONLY：只写
+- os.O_CREATE：创建：如果指定文件不存在，就创建该文件。
+- os.O_TRUNC：截断：如果指定文件已存在，就将该文件的长度截为0。
+在读文件的时候，文件的权限是被忽略的，所以在使用 OpenFile 时传入的第三个参数
+可以用0。而在写文件时，不管是 Unix 还是 Windows，都需要使用 0666。
+然后，我们创建一个写入器（缓冲区）对象：
+outputWriter := bufio.NewWriter(outputFile)
+接着，使用一个 for 循环，将字符串写入缓冲区，写 10 次：outputWriter.WriteString(outputString)
+缓冲区的内容紧接着被完全写入文件：outputWriter.Flush()
+
+如果写入的东西很简单，我们可以使用 fmt.Fprintf(outputFile, “Some test data.\n”) 直接将内容写入文件。fmt 包里的 F 开头的 Print 函数可以直接写入任何 io.Writer，包括文件
 <pre>
 package main
 
