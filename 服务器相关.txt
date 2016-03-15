@@ -343,3 +343,27 @@ writer.flush();
     1.只能用于整数的排序，或者可以准确映射到正整数（对象不同对应的正整数也不相同）的数据的排序。 
     2.不能处理重复的数据，重复的数据排序后只有一条（如果有这种需求可以在这个算法的基础上修改，给出现次数大于1的数据添加个计数器，然后存入Map中） 
     3.对于数据量极其大的数据处理可能还是比较占用空间，这种情况可配合多通道排序算法解决。
+
+
+
+++++多服务器共享 SESSION 的主要障碍及解决办法+++++++
+通过了解 SESSION 的工作原理，我们可以发现，在默认情况下，各个服务器会各自分别对同一个客户端产生 SESSIONID，如
+对于同一个用户浏览器，A 服务器产生的 SESSION ID 是30de1e9de3192ba6ce2992d27a1b6a0a，而 B 服务器生成的则是
+c72665af28a8b14c0fe11afe3b59b51b。另外，PHP 的 SESSION数据都是分别保存在本服务器的文件系统中。
+确定了问题所在之后，就可以着手进行解决了。想要共享 SESSION 数据，那就必须实现两个目标：一个是各个服务器对
+同一个客户端产生的SESSION ID 必须相同，并且可通过同一个 COOKIE 进行传递，也就是说各个服务器必须可以读取同一个
+名为 PHPSESSID的 COOKIE；另一个是 SESSION 数据的存储方式/位置必须保证各个服务器都能够访问到。简单地说就是
+多服务器共享客户端的SESSION ID，同时还必须共享服务器端的 SESSION 数据。
+第一个目标的实现其实很简单，只需要对 COOKIE 的域（domain）进行特殊地设置即可，默认情况下，COOKIE的域是当前
+服务器的域名/IP 地址，而域不同的话，各个服务器所设置的 COOKIE 是不能相互访问的，如 www.aaa.com的服务器是
+不能读写 www.bbb.com 服务器设置的 COOKIE的。这里我们所说的同一网站的服务器有其特殊性，那就是他们同属于同一个
+一级域，如：tieba.xiaoyuan.com 和www.xiaoyuan.com 都属于域 .xiaoyuan.com，那么我们就可以设置 COOKIE 的
+域为.xiaoyuan.com，这样 tieba.xiaoyuan.com、www.xiaoyuan.com 等等都可以访问此COOKIE。PHP 代码中的设置方法
+如下：
+<?php
+ini_set('session.cookie_domain', '.xiaoyuan.com');
+?>
+这样各个服务器共享同一客户端 SESSION ID 的目的就达到了。
+
+第二个目标的实现可以使用文件共享方式，有2种方式可以解决,一是用数据库存session,还有就是试用memcache。这里
+用MEMCACHE来解决.
