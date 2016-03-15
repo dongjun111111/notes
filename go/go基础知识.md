@@ -12568,5 +12568,20 @@ func main() {
     fmt.Printf("%q: {%d,%d}\n", q.Name, *q.X, *q.Y)
 }
 output==>
+"Pythagoras": {3,4}
+</pre>
+####自定义错误
+<pre>
+package main
 
+import (
+	"fmt"
+	"errors"
+)
+var err error = errors.New("Not found any error")
+func main(){
+	fmt.Println("error:",err)
+}
+output==>
+error: Not found any error
 </pre>
