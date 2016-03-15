@@ -12185,6 +12185,7 @@ The input is: 	}
 The input is: }
 <pre>
 ####将整个文件的内容写入字符串或另一个文件中
+关键在于ioutil.ReadFile与ioutil.WriteFile两个命令
 <pre>
 package main
 
