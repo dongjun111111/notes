@@ -1174,3 +1174,11 @@ SQL优化
 情况下去掉排序和分组对业务也没有多大影响。
 如何判断使用了临时表？
 使用explain查看执行计划，Extra列看到Using temporary就意味着使用了临时表。
+
+
++++++group by与distinct++++
+distinct用法：SELECT DISTINCT Company FROM Orders    //从 Company" 列中仅选取唯一不同的值
+加了索引之后 distinct 比没加索引的 distinct 快了 107倍。
+加了索引之后 group by 比没加索引的 group by 快了 43倍。
+再来对比 ：distinct  和 group by ：
+不管是加不加索引 group by 都比 distinct 快。因此使用的时候建议选 group by。
