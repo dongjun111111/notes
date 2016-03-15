@@ -11860,3 +11860,31 @@ output==>
 34
 29
 </pre>
+####方法
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type twoint struct {
+	a int 
+	b int
+}
+func (tn *twoint) AddThem() int{
+//这种方式很奇妙，将AddThem作为结构体twoint的方法
+	return tn.a + tn.b
+}
+func main(){
+	two :=new(twoint)
+	two.a = 23
+	two.b = 12
+	fmt.Println(two.a)
+	fmt.Println(two.b)
+	fmt.Println(two.AddThem())
+}
+output==>
+23
+12
+35
+</pre>
