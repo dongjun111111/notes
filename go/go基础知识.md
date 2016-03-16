@@ -12764,3 +12764,38 @@ End of shortWait()
 End of longWait()
 At the end if main()
 </pre>
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	ch :=make(chan string)
+	go sendData(ch)
+	go getData(ch)
+	time.Sleep(1e9)  //main()等待1秒让两个协程完成
+}
+//getData()使用了无限循环：它随着sendData()的发送完成和ch变空也结束了。
+func sendData(ch chan string){
+	ch <- "washington"
+	ch <- "trioli"
+	ch <- "london"
+	ch <- "beijing"
+	ch <- "tokyo"
+}
+func getData(ch chan string){
+	var input string
+	for {
+		input = <- ch
+		fmt.Println(input)
+	}
+}
+output==>
+washington
+trioli
+london
+beijing
+tokyo
+</pre>
