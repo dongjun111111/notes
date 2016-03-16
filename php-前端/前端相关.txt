@@ -7760,3 +7760,34 @@ if (button.addEventListener) {
     });
 }
 </script>
+
+
+++++CSS3 clip-path之polygon绘图与动画+++++
+.path1 {
+    clip-path: polygon(5px 10px, 16px 3px, 16px 17px);
+}
+.path2 {
+    clip-path: polygon(3px 5px, 17px 5px, 10px 16px);
+}
+.path3 {
+    clip-path: polygon(5px 10px, 16px 3px, 16px 10px, 26px 10px, 26px 3px, 37px 10px, 26px 17px, 26px 10px, 16px 10px, 16px 17px);
+}
+.path4 {
+    clip-path: polygon(5px 10px, 16px 3px, 16px 10px, 36px 10px, 36px 3px, 47px 10px, 36px 17px, 36px 10px, 16px 10px, 16px 17px);
+}
+.path5 {
+    clip-path: polygon(5px 10px, 16px 3px, 16px 9px, 36px 9px, 36px 3px, 47px 10px, 36px 17px, 36px 10px, 16px 10px, 16px 17px);
+}
+.path6 {
+    clip-path: polygon(5px 10px, 16px 3px, 16px 9px, 36px 9px, 36px 3px, 47px 10px, 36px 17px, 36px 11px, 16px 11px, 16px 17px);
+}
+.path7 {
+    clip-path: polygon(5px 11px, 5px 9px, 16px 3px, 26px 3px, 40px 9px, 48px 15px, 48px 5px, 40px 11px, 26px 17px, 16px 17px);
+}
+
+++++meta刷新与跳转+++
+<!--
+5秒刷新一次
+<meta http-equiv="refresh" content="5">
+2秒后跳到首页
+<meta http-equiv="refresh" content="2; url='/'">  -->
