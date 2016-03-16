@@ -7577,3 +7577,26 @@ $.fn.scrollUnique = function() {
 };
 
 $('#test').scrollUnique();
+
+
+++++Ajax++++
+了解ajax吗？用过吗？
+var xmlhttp = new XMLHttpRequest();
+var xmlhttp = new ActiveXObject(“Microsoft.XMLHttp”);
+xmlhttp.open(‘get’,url,true);
+xmlhttp.onreadystatechang=function(){
+if(xmlhttp.readyState ==4){
+if(xmlhttp.status==200){alert(xmlhttp.responseText);xmlhttp=null;}
+}
+}
+xmlhttp.send(null);
+
+Ajax.open(“POST”,url,true);
+//如果是POST方式提交数据，下两行必不可少
+Ajax.setrequestheader(“content-length”,sendData.length);
+Ajax.setRequestHeader(“Content-Type”,”application/x-www-form-urlencoded”);
+Ajax.send(sendData);//要POST的数据
+
+
++++从窗口B调用窗口A中的内容++++
+window.opener.document.getElementById()
