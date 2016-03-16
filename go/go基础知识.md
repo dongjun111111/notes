@@ -12729,3 +12729,38 @@ func wait(index int, inc *int32) {
 </pre>
 
 1e9  ==>    纳秒（ns，符号 1e9 表示 1 乘 10 的 9 次方，e=指数）
+<pre>
+package main
+
+import (
+	"time"
+	"fmt"
+)
+//main()，longWait() 和 shortWait() 三个函数作为独立的处理单元按顺序启动，然后开始并行运行
+func main(){
+	fmt.Println("In main()")	
+	go longWait()
+	go shortWait()
+	fmt.Println("About to sleep in main()")
+	time.Sleep(10 * 1e9)
+	fmt.Println("At the end if main()")
+}
+func longWait(){
+	fmt.Println("Beginning longWait()")
+	time.Sleep(5 * 1e9)
+	fmt.Println("End of longWait()")
+}
+func shortWait(){
+	fmt.Println("Beginning shortWait()")
+	time.Sleep(2 * 1e9)
+	fmt.Println("End of shortWait()")
+}
+output==>
+In main()
+About to sleep in main()
+Beginning longWait()
+Beginning shortWait()
+End of shortWait()
+End of longWait()
+At the end if main()
+</pre>
