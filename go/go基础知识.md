@@ -12974,3 +12974,39 @@ london
 bj
 tk
 </pre>
+####传统形式的接口设计
+经典实现中把迭代器需要的数据存在struct中，HasNext() Next()两个函数定义为Iterator的方法从而和数据绑定了起来；闭包实现中迭代器是一个匿名函数，它所需要的数据i Ints和index以闭包up value的形式绑定了起来，匿名函数返回的两个值正好对应经典实现中的Next()和HasNext()。
+<pre>
+package main
+//java形式的迭代器接口设计
+import "fmt"
+type Ints []int  //容器
+func (i Ints) Iterator() *Iterator{
+	return &Iterator{
+		data:i,
+		index:0,
+	}
+}
+type Iterator struct {
+	data Ints
+	index int
+}
+func (i *Iterator) HasNext() bool{
+	return i.index < len(i.data)
+}
+func (i *Iterator) Next() (v int){
+	v = i.data[i.index]
+	i.index++
+	return v
+}
+func main(){
+	ints := Ints{1,2,4}
+	for it :=ints.Iterator();it.HasNext();{
+		fmt.Println(it.Next())
+	}
+}
+output==>
+1
+2
+4
+</pre>
