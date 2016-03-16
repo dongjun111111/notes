@@ -7653,3 +7653,9 @@ a:hover::before { content: "\5B"; left: -10px; }
 a:hover::after { content: "\5D"; right:  -10px; }  
 HTML:
 <a href="">你好</a>
+
+
++++缩放之zoom和scale的区别++++
+zoom的缩放是相对于左上角的；而scale默认是居中缩放；
+zoom的缩放改变了元素占据的空间大小；而scale的缩放占据的原始尺寸不变，页面布局不会发生变化；
+zoom和scale对元素的渲染计算方法可能有差异
