@@ -7791,3 +7791,57 @@ if (button.addEventListener) {
 <meta http-equiv="refresh" content="5">
 2秒后跳到首页
 <meta http-equiv="refresh" content="2; url='/'">  -->
+
+
++++让IE支持自动获取焦点和支持placeholder++++
+<body>
+7:<input type="text" / >
+6:<input type="text" / >
+5:<input type="text" / >
+4:<input type="text"  autofocus="autofocus" placeholder="支持主流浏览器" id="inputId" />  
+3:<input type="text" / >
+2:<input type="text" / >
+1:<input type="text" / >
+<script src="jquery.min.js"></script>
+<script>
+var JPlaceHolder = {
+    //检测
+    _check : function(){
+        return 'placeholder' in document.createElement('input');
+    },
+    //初始化
+    init : function(){
+        if(!this._check()){
+            this.fix();
+        }
+    },
+    //修复
+    fix : function(){
+        jQuery(':input[placeholder]').each(function(index, element) {
+            var self = $(this), txt = self.attr('placeholder');
+            self.wrap($('<div></div>').css({position:'relative', zoom:'1', border:'none', background:'none', padding:'none', margin:'none'}));
+            var pos = self.position(), h = self.outerHeight(true), paddingleft = self.css('padding-left');
+            var holder = $('<span></span>').text(txt).css({position:'absolute', left:pos.left, top:pos.top, height:h, lienHeight:h, paddingLeft:paddingleft, color:'#aaa'}).appendTo(self.parent());
+            self.focusin(function(e) {
+                holder.hide();
+            }).focusout(function(e) {
+                if(!self.val()){
+                    holder.show();
+                }
+            });
+            holder.click(function(e) {
+                holder.hide();
+                self.focus();
+            });
+        });
+    }
+};
+
+window.onload=function(){  
+  init();  //让IE自动获取焦点
+  JPlaceHolder.init();     //让IE支持placeholder
+}
+function init(){
+document.getElementById("inputId").focus();
+} 
+</script>
