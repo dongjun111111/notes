@@ -12631,3 +12631,99 @@ The process id is &{2054 0}total 2056
 什么是线程安全?线程安全是怎么完成的(原理)? 
 线程安全就是说多线程访问同一代码，不会产生不确定的结果。编写线程安全的代码是低依靠线程同步。
 
+##横向同步问题-高并发###
+<b>并发状态要减少复杂性，就是要巧妙的设计一个方案，让状态回归</b>
+这个基本上100万个并发，消耗1s，比channel版本的有很大的提高。
+最终这个程序的result3 == 0 那么，就是wait写的没有问题。
+<pre>
+package main
+import "fmt"
+import "sync"
+import "sync/atomic"
+import "time"
+import "runtime"
+
+const N = 4
+const READY = int32(1 << (N - 1) - 1)
+const COMMIT = int32(1 << (N -1))
+var mutex sync.Mutex
+var inc int32
+
+var result1 int32
+var result2 int32
+var result3 int32
+
+func main() {
+	fmt.Println("ncpu = ", runtime.NumCPU())
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	 end := make(chan int)
+	 t := time.Now()
+	for i := 0; i < N; i++ {
+		 go run(i, end)
+	 }
+	for i := 0; i < N; i++ {
+		 <-end
+	}
+	fmt.Println(result3, time.Now().Sub(t))
+}
+
+func run(index int, end chan int) {
+	//fmt.Println("beg run", index)
+	 for i := 0; i < 1000000; i++ {
+		 Step1(i, index)
+		wait(index, &inc)
+		 Step2(i, index)
+		 wait(index, &inc)
+		Step3(i, index)
+		 wait(index, &inc)   
+	}
+	//fmt.Println("end run", index)
+	end <- 1
+}
+
+func Step1(i int, index int) {   
+ 	atomic.AddInt32(&result1, int32(i))
+  	//fmt.Println("step 1", index)
+}
+
+func Step2(i int, index int) {   
+ 	atomic.AddInt32(&result2, int32(i))
+ 	//fmt.Println("step 2", index)
+} 
+
+func Step3(i int, index int) {
+	mutex.Lock()
+	if result2 != result1 {
+		  //fmt.Println("error", result1, result2, result2 - result1, i, index)
+	}
+	atomic.AddInt32(&result3, result2)    
+	atomic.AddInt32(&result3, -result1)    
+	atomic.StoreInt32(&result2, 0)    
+	atomic.StoreInt32(&result1, 0)
+	mutex.Unlock()
+}
+
+//no chan wait. no lock. suport ncpu = 16, fast wait
+
+func wait(index int, inc *int32) {
+	if index == (N - 1) {
+		for {
+			if *inc == READY {
+				atomic.AddInt32(inc, READY << uint(N-1))
+				 break
+			 }
+			 runtime.Gosched()
+		}
+	} else {
+		  atomic.AddInt32(inc, 1 << uint(index))
+		  for {
+			if *inc & (COMMIT << uint(index)) == 0{
+				runtime.Gosched()
+				continue
+			}
+			 atomic.AddInt32(inc, -(COMMIT << uint(index) + 1 << uint(index)))
+			 break
+		 }
+	}
+}
+</pre>
