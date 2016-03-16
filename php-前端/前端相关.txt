@@ -7609,3 +7609,47 @@ window.opener.document.getElementById()
 
 word-spacing和white-space的区别
 word-spacing是单词之间间距的，white-space是字符是否换行显示的。
+
++++CSS ::before 和 ::after 伪元素用法+++
+第一种:
+CSS:
+a {  
+  position: relative;  
+  display: inline-block;  
+  outline: none;  
+  text-decoration: none;  
+  color: #000;  
+  font-size: 32px;  
+  padding: 0 10px;  
+}  
+a:hover::before{   
+    content: "";  
+    display: block;  
+    position: absolute;  
+    top: -10%;  
+    left: -10%;  
+    width: 120%;  
+    height: 120%;  
+    border-style: solid;  
+    border-width: 4px;  
+    border-color: red;  
+ }  
+HTML:
+<a href="">你好</a>
+第二种：
+CSS:
+a {  
+    position: relative;  
+    display: inline-block;  
+    outline: none;  
+    text-decoration: none;  
+    color: #000;  
+    font-size: 32px;  
+    padding: 5px 10px;  
+}  
+  
+a:hover::before, a:hover::after { position: absolute; }  
+a:hover::before { content: "\5B"; left: -10px; }  
+a:hover::after { content: "\5D"; right:  -10px; }  
+HTML:
+<a href="">你好</a>
