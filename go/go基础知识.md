@@ -12727,3 +12727,5 @@ func wait(index int, inc *int32) {
 	}
 }
 </pre>
+
+1e9  ==>    纳秒（ns，符号 1e9 表示 1 乘 10 的 9 次方，e=指数）
