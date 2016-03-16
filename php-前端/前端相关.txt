@@ -7659,3 +7659,33 @@ HTML:
 zoom的缩放是相对于左上角的；而scale默认是居中缩放；
 zoom的缩放改变了元素占据的空间大小；而scale的缩放占据的原始尺寸不变，页面布局不会发生变化；
 zoom和scale对元素的渲染计算方法可能有差异
+
+
+
++++中文或英文两端对齐的实现实例页面++++
+其实呢，要实现两端对齐很简单，使用text-align:justify, 但是align:justify是专门为英文设计的，对于中文有些无力。
+下面是实现中英文对齐的方法。
+CSS代码：
+.test_box {
+    width: 300px;
+    padding: 10px;
+    background-color: #e0e0e0;
+    font-family: 'microsoft yahei';
+    font-size: 14px;
+}
+HTML代码：
+<div id="testBox" class="test_box">
+    为了最大化组件的品质，组件的实现要讲求分工...主次。
+</div>
+<p><button id="testBtn">对齐变身</button></p>
+JS代码：
+var btn = document.getElementById("testBtn"),
+    box = document.getElementById("testBox");
+	
+if (btn && box) {
+    btn.onclick = function() {
+        box.style.textAlign = "justify";
+        box.style.letterSpacing = '-.15em';
+        box.innerHTML = box.innerHTML.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '').split("").join(" ").replace(/\s{3}/g, " &nbsp; ");
+    };
+}
