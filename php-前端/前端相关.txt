@@ -7689,3 +7689,33 @@ if (btn && box) {
         box.innerHTML = box.innerHTML.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '').split("").join(" ").replace(/\s{3}/g, " &nbsp; ");
     };
 }
+
++++了解CSS中的@ AT规则++++
+常规规则
+所谓“常规规则”指的是语法类似下面的规则：
+@[KEYWORD] (RULE);
+自定义字体:  //IE6也支持
+@font-face {
+  font-family: 'MyWebFont';
+  src:  url('myfont.woff2') format('woff2'),
+        url('myfont.woff') format('woff');
+}
+
+@media //媒介查询，解释非常常用的。响应式宽度啊，retina屏幕判断啦，打印屏幕啦，甚至IE7,IE8浏览器的hack啦，很多:
+@media all and (min-width: 1280px) {
+    /* 宽度大于1280干嘛干嘛嘞... */ 
+}
+@media 
+(-webkit-min-device-pixel-ratio: 1.5), 
+(min-resolution: 2dppx) { 
+    /* Retina屏幕干嘛干嘛嘞... */ 
+}
+@media print {
+    /* 闪开闪开，我要打印啦！ */ 
+}
+@media \0screen\,screen\9 {
+    /* IE7,IE8干嘛干嘛嘞... */ 
+}
+@media screen\9 {
+    /* IE7干嘛干嘛嘞... */ 
+}
