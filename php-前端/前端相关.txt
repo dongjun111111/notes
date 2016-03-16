@@ -7744,3 +7744,19 @@ if (window.addEventListener) {
         });
     }
 }
+
+
+++++++火狐浏览器下“未定义行为”++++
+<p>和谐版：</p>
+<a href="javascript:" class="active-btn">按下</a>
+<p>不和谐版：</p>
+<a href="javascript:" id="button" class="active-btn">按下</a>
+<script>
+var button = document.getElementById("button");
+if (button.addEventListener) {
+    button.addEventListener("mousedown", function(event) {
+        // 此处省略N行
+        event.preventDefault();    
+    });
+}
+</script>
