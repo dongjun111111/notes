@@ -12974,7 +12974,7 @@ london
 bj
 tk
 </pre>
-####传统形式的接口设计
+####传统形式的接口设计（对比下面的）
 经典实现中把迭代器需要的数据存在struct中，HasNext() Next()两个函数定义为Iterator的方法从而和数据绑定了起来；闭包实现中迭代器是一个匿名函数，它所需要的数据i Ints和index以闭包up value的形式绑定了起来，匿名函数返回的两个值正好对应经典实现中的Next()和HasNext()。
 <pre>
 package main
@@ -13004,6 +13004,95 @@ func main(){
 	for it :=ints.Iterator();it.HasNext();{
 		fmt.Println(it.Next())
 	}
+}
+output==>
+1
+2
+4
+</pre>
+####Go形式的迭代器接口设计（对此上面的）
+<pre>
+package main
+import "fmt"
+type Ints []int
+func (i Ints) Iterator() func() (int,bool){
+	index := 0
+	return func()(val int,ok bool){
+		if index >= len(i){
+			return 
+		}
+		val,ok = i[index],true
+		index++ 
+		return 
+	}
+}
+func main(){
+	ints :=Ints{1,2,4}
+	it :=ints.Iterator()
+	for {
+		val,ok := it()
+		if !ok{
+			break
+		}
+		fmt.Println(val)
+	}
+}
+output==>
+1
+2
+4
+</pre>
+####Go channel实现的迭代器，效率不如上面的
+优点是channel是可以用range接收的，所以调用方代码很简洁；缺点是goroutine上下文切换会有开销，这份实现无疑是最低效的，另外调用方必须接收完所有数据，如果只接收一半就中断掉发送方将永远阻塞。
+<pre>
+package main
+
+import "fmt"
+
+type Ints []int
+
+func (i Ints) Iterator() <-chan int {
+	c := make(chan int)
+	go func() {
+		for _, v := range i {
+			c <- v
+		}
+		close(c)
+	}()
+	return c
+}
+
+func main() {
+	ints := Ints{1, 2, 4}
+	for v := range ints.Iterator() {
+		fmt.Println(v)
+	}
+}
+output==>
+1
+2
+4
+</pre>
+####Go Do实现迭代器接口设计
+这份迭代器实现是最简洁的，代码也很直白，无须多言。如果想加上中断迭代的功能，可以将func(int)改为func(int)bool，Do中根据返回值决定是否退出迭代。
+<pre>
+package main
+
+import "fmt"
+
+type Ints []int
+
+func (i Ints) Do(fn func(int)) {
+	for _, v := range i {
+		fn(v)
+	}
+}
+
+func main() {
+	ints := Ints{1, 2, 4}
+	ints.Do(func(v int) {
+		fmt.Println(v)
+	})
 }
 output==>
 1
