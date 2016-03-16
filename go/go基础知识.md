@@ -12938,3 +12938,39 @@ func main(){
 output==>
 持续输出素数。。。
 </pre>
+非阻塞通道的读取
+<pre>
+package main 
+
+import (
+	"fmt"
+)
+func main(){
+	ch := make(chan string)
+	go senddata(ch)
+	getdata(ch)
+}
+func senddata(ch chan string){
+	ch <- "wst"
+	ch <- "tt"
+	ch <- "london"
+	ch <- "bj"
+	ch <- "tk"
+	close(ch) //防止出现死锁
+}
+func getdata(ch chan string){
+	for {
+		input,open := <- ch
+		if !open {
+			break //防止造成死循环，跳出for循环
+		}
+		fmt.Println(input)
+	}
+}
+output==>
+wst
+tt
+london
+bj
+tk
+</pre>
