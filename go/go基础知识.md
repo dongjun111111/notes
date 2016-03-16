@@ -12799,3 +12799,36 @@ london
 beijing
 tokyo
 </pre>
+不停的向通道中写入数据，等待0.1秒结束
+<pre>
+package main
+
+import (
+	"time"
+	"fmt"
+)
+func main(){
+	ch :=make(chan int)
+	go pump(ch)
+	go suck(ch)
+	time.Sleep(0.1 * 1e9)
+	fmt.Println(<-ch)
+}
+func pump(ch chan int){
+	for i:=0;;i++{
+		ch <- i
+	}
+}
+func suck(ch chan int){
+	for {
+		fmt.Println(<- ch)
+	}
+}
+output==>
+0
+1
+.
+.
+.
+21701
+</pre>
