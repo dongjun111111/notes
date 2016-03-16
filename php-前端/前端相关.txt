@@ -7600,3 +7600,12 @@ Ajax.send(sendData);//要POST的数据
 
 +++从窗口B调用窗口A中的内容++++
 window.opener.document.getElementById()
+
++word-break:break-all与word-wrap:break-wrap的区别++++
+可以发现，word-break:break-all正如其名字，所有的都换行。毫不留情，一点空隙都不放过。而word-wrap:break-word则
+带有怜悯之心，如果这一行文字有可以换行的点，如空格，或CJK(Chinese/Japanese/Korean)(中文/日文/韩文)之类的，则
+就不打英文单词或字符的主意了，让这些换行点换行，至于对不对齐，好不好看，则不关心，因此，很容易出现一片一片
+牛皮癣一样的空白的情况。
+
+word-spacing和white-space的区别
+word-spacing是单词之间间距的，white-space是字符是否换行显示的。
