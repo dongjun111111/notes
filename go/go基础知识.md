@@ -12867,3 +12867,39 @@ output==>
 .
 21195
 </pre>
+使用for-range输出通道
+<pre>
+package main
+
+import (
+	"time"
+	"fmt"
+)
+func suck(ch chan int){
+	go func(){
+		for v :=range ch {
+			fmt.Println(v)
+		}
+	}()
+}
+func pump() chan int {
+	ch := make(chan int)
+	go func(){
+		for i:=0;;i++{
+			ch <- i
+		}
+	}()
+	return ch
+}
+func main(){
+	suck(pump())
+	time.Sleep(0.1 * 1e9)
+}
+output==>
+0
+1
+.
+.
+.
+24183
+</pre>
