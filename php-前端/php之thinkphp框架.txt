@@ -1299,3 +1299,14 @@ $result=M("News")->add(array('name'=>'WBlog','content'=>'WBlog博客管理系统'));
 ++++<if>标签的注意点++++++
 遇到一个<if>标签的坑，特别记录一下：（里面是数组中的某个键值比较尽量用[]形式列出！）
 <if condition="$vo.mid eq $vo.id"> <===> <if condition="$vo['mid'] eq $vo['id']">这样就可以了！
+
+
++++thinkphp getLastSql()+++++
+模型调试
+在模型操作中 ，为了更好的查明错误，经常需要查看下最近使用的SQL语句，我们可以用getLastsql方法来输出上次执行的sql语句。例如：
+
+$User = M("User"); // 实例化User对象
+$User->find(1);
+echo $User->getLastSql();
+输出结果是
+SELECT * FROM think_user WHERE id = 1
