@@ -3211,3 +3211,7 @@ $obj = new MyClass1();
 $obj2 = new MyClass2();
 ?>
 __autoload() 是专门为 类的不存在 而设计的！！！很多框架利用这个函数，实现 类文件的自动加载 ！！
+
+
+++++php获取某网站的头文件信息++++
+print_r(get_headers("http://www.sina.com.cn"));

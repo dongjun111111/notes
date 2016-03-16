@@ -8590,3 +8590,314 @@ function md6($str='',$de=false){
  }
 $sttt ="hello world";
 echo md6($sttt);
+
+
+++++php多进程+++++
+//PHP使用socket多进程读取标题
+function read_title($url)
+{
+    $url_info = parse_url($url);
+    if (!isset($url_info['host']) || !isset($url_info['scheme'])) {
+     return false;
+    }
+    $host = $url_info['host'];
+    
+ $port = isset($url_info['port']) ? $url_info['port'] : null;
+ $path = isset($url_info['path']) ? $url_info['path']  : "/";
+ if(isset($url_info['query'])) $path .= "?".$url_info['query'];
+ if(empty($port)){
+  $port = 80;
+ }
+ if ($url_info['scheme'] == 'https'){
+  $port = 443;
+ }
+ if ($url_info['scheme'] == 'http') {
+  $port = 80;
+ }
+    $out = "GET $path HTTP/1.1\r\n";
+    $out .= "Host: $host\r\n";
+    $out .= "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.1.7)\r\n";
+    $out .= "Connection: Close\r\n\r\n";
+    $fp = fsockopen($host, $port, $errno, $errstr, 5);
+    if ($fp == NULL) {
+     error("get title from $url, error. $errno: $errstr \n");
+     return false;
+    }
+    fwrite($fp, $out);
+    $content = '';
+    while (!feof($fp)) {
+        $content .= fgets($fp, 1024);
+        if (preg_match("/<title>(.*?)<\/title>/is", $content, $matches)) {
+             fclose($fp);
+            return encode_to_utf8($matches[1]);
+        }
+    }
+    fclose($fp);
+    return false;
+}
+
+function encode_to_utf8($string) 
+{
+     return mb_convert_encoding($string, "UTF-8", mb_detect_encoding($string, "UTF-8, GB2312, ISO-8859-1", true));
+}
+
+echo read_title("http://www.sohu.com");
+//搜狐
+
+
+++++定制一个自己的服务器+++
+class Simple_Server 
+{   
+    private $sock;
+    
+    private $csock;
+    
+    private $isListen = true;
+    
+    private $callback;
+    
+    private $user;
+    
+    private $uid;
+    
+    private $gid;
+    
+    private $userHome;
+    
+    
+    private $scriptName = "simple-server";
+    
+    
+    
+    /**
+     * use $user set the user run the script.
+     * fock a thread, init the socket, and wait user to request.
+     *
+     */
+    function __construct($callback, $ip = '127.0.0.1', $port = '8086',$user = 'daemon')
+    {
+        error_reporting(E_ALL); 
+        ini_set("display_errors", 0);
+        set_time_limit(0); 
+        ob_implicit_flush();
+        declare(ticks = 1);
+        $this->callback = $callback;
+        $this->user = $user;
+        
+        $this->getUserInfo();
+        $this->changeIdentity();
+        $this->daemon();
+
+        pcntl_signal(SIGTERM, array($this, 'sigHandler'));
+        pcntl_signal(SIGINT,  array($this, 'sigHandler'));
+        pcntl_signal(SIGCHLD, array($this, 'sigHandler'));
+
+        $this->run($ip, $port);
+    }
+
+    function run($address, $port) 
+    { 
+        if(($this->sock = socket_create(AF_INET, SOCK_STREAM, 0)) === false) 
+        { 
+            $this->error("failed to create socket: ".socket_strerror($this->sock)); 
+        }
+        
+        $sock = $this->sock;
+        
+        if(($ret = socket_bind($sock, $address, $port)) === false) 
+        { 
+            $this->error("failed to bind socket: ".socket_strerror($ret));
+        }
+
+        if(($ret = socket_listen($sock, 0)) === false) 
+        { 
+            $this->error("failed to listen to socket: ".socket_strerror($ret));
+        }
+
+        socket_set_nonblock($sock); 
+
+        $this->log("waiting for clients to connect");
+
+        while ($this->isListen) 
+        { 
+            $this->csock = @socket_accept($sock); 
+            if ($this->csock === false) 
+            { 
+                usleep(1000); //1ms
+            } else if ($this->csock > 0) {
+                $this->client(); 
+            } else { 
+                $this->error("error: ".socket_strerror($this->csock));
+            }
+        }
+    }
+
+    /** 
+      * Handle a new client connection 
+      */ 
+    function client()
+    { 
+        $this->log('begin client');
+        $ssock = $this->sock;
+        $csock = $this->csock;
+        $pid = pcntl_fork(); 
+        if ($pid == -1) 
+        {
+            $this->error("fock clinet child error.");
+        } else if ($pid == 0)  {
+            $pid = posix_getpid();
+            $this->log("begin client child ($pid).");
+            /* child process */ 
+            $this->isListen = false;
+            $this->log("close sock in child");
+            socket_close($ssock);
+            $this->log("begin handle user logic.");
+            $callback = $this->callback;
+            call_user_func($callback, $csock, $this);
+            $this->log("end handle user logic.");
+            $this->log("close client sock in child.");
+            socket_close($csock);
+            $this->log("end client");
+        } else  {
+            $this->log("close csock in child");
+            socket_close($csock); 
+        }
+    }
+
+    function __destruct()
+    {
+        @socket_close($this->sock);
+        @socket_close($this->csock);
+        $pid = posix_getpid();
+        $this->log("end daemon in __destruct pid($pid).");
+    }
+
+    function getUserInfo()
+    {
+        $uid_name = posix_getpwnam($this->user);
+        $this->uid = $uid_name['uid'];
+        $this->gid = $uid_name['gid'];
+        $this->userHome = $uid_name['dir'];
+    }
+
+    function changeIdentity() 
+    {
+        if(!posix_setuid($this->uid)) 
+        { 
+            $this->error("Unable to setuid to " . $this->uid); 
+        }
+    }
+
+    /** 
+     * Signal handler 
+     */ 
+    function sigHandler($sig) 
+    { 
+        switch($sig) 
+        { 
+            case SIGTERM: 
+            case SIGINT: 
+                exit();
+            break; 
+
+            case SIGCHLD: 
+                pcntl_waitpid(-1, $status); 
+            break;
+        }
+    }
+
+    function error($msg)
+    {
+        $str = date("Y-m-d H:i:s") . " " . $msg . "\n";
+        file_put_contents(dirname(__FILE__) . "/error.log", $str, FILE_APPEND);
+        exit(0);
+    }
+
+    function log($msg)
+    {
+        $str = date("Y-m-d H:i:s") . " " . $msg . "\n";
+        file_put_contents(dirname(__FILE__) . "/message.log", $str, FILE_APPEND);
+    }
+
+    function daemon() 
+    { 
+        $ppid = posix_getpid();
+        $this->log("begin parent daemon pid ($ppid)");
+        $pid = pcntl_fork(); 
+        if ($pid == -1) 
+        {
+            /* fork failed */ 
+            $this->error("fork failure!"); 
+        } else if ($pid) { 
+            /* close the parent */
+            $this->log("end parent daemon pid($ppid) exit.");
+            exit(); 
+        } else  { 
+            /* child becomes our daemon */ 
+            posix_setsid(); 
+            chdir($this->userHome);
+            umask(0);
+            $pid = posix_getpid();
+            $this->log("begin child daemon pid($pid).");
+        }
+    }
+}
+
+function clientHandle($msgsock, $obj)
+{
+    /* Send instructions. */
+    $br = "\r\n";
+    $msg = "$br Welcome to the PHP Test Server. $br $br To quit, type 'quit'.$br# ";
+
+    $obj->log($msg);
+    socket_write($msgsock, $msg, strlen($msg));
+    $nbuf = '';
+    socket_set_block($msgsock);
+    bcscale(4);  // defalult 4 eg. 1 + 2.00001 = 3
+    do {
+        if (false === ($nbuf = socket_read($msgsock, 2048, PHP_NORMAL_READ))) {
+            $obj->error("socket_read() failed: reason: " . socket_strerror(socket_last_error($msgsock)));
+        }
+
+        if (!$nbuf = trim($nbuf)) {
+            continue;
+        }
+
+        if ($nbuf == 'quit') {
+            break;
+        }
+        if ($nbuf == 'shutdown') {
+            break;
+        }
+        
+        if (empty($nbuf)) continue;
+        
+        preg_match("/([\d.]+)[\s]*([+\-*\/x])[\s]*([\d.]+)/i", $nbuf , $matches);
+        $op   = @$matches[2];
+        $left = @$matches[1];
+        $right = @$matches[3];
+
+        $result = NULL;
+        if ($op == "+") {
+            $result = bcadd($left, $right);
+        } else if ($op == "-") {
+            $result = bcsub($left, $right);
+        } else if ($op == "x" || $op == "x" || $op == "*") {
+            $result = bcmul($left, $right);
+        } else if ($op == "/") {
+            $result = bcdiv($left, $right);
+        } else {
+            $talkback = "# error: expression \"$nbuf\" error.$br# ";
+        }
+        if ($result === NULL) {
+            socket_write($msgsock, $talkback, strlen($talkback));
+        } else {
+            $result = rtrim($result, ".0");
+            $talkback = "# result is : $result.$br# ";
+            socket_write($msgsock, $talkback, strlen($talkback));
+        }
+        $nbuf = '';
+    } while (true);
+}
+
+$server = new Simple_Server("clientHandle", "122.224.124.251");
