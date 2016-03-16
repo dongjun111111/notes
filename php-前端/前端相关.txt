@@ -7722,6 +7722,7 @@ if (btn && box) {
 
 
 ++++SVG实现圆环loading进度效果实例页面+++++++
+关键点：stroke-dasharray在SVG中表示描边是虚线，两个值，第一个是虚线的宽度，第二个是虚线之间的间距。
 CSS代码：
 circle {
     -webkit-transition: stroke-dasharray .25s;
