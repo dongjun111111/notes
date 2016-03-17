@@ -13122,3 +13122,32 @@ output==>
 main.go
 xwq.exe
 </pre>
+####filepath.Abs()
+<pre>
+package main
+//检测地址是否是绝对地址，是绝对地址直接返回，不是绝对地址，
+//会添加当前工作路径到参数path前，然后返回
+import (
+	"fmt"
+	"path/filepath"
+)
+func TestAbs(){
+	fpt,err :=filepath.Abs("/hello")//是绝对路径的写法
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(fpt)
+	
+	fpt,err =filepath.Abs("hellotest")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(fpt)
+}
+func main(){
+	TestAbs()
+}
+output==>
+C:\hello
+C:\mygo\src\xwq\hellotest
+</pre>
