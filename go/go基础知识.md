@@ -13065,6 +13065,7 @@ func (i Ints) Iterator() <-chan int {
 func main() {
 	ints := Ints{1, 2, 4}
 	for v := range ints.Iterator() {
+
 		fmt.Println(v)
 	}
 }
@@ -13098,4 +13099,26 @@ output==>
 1
 2
 4
+</pre>
+####filepath
+<pre>
+package main
+//filepath.Walk遍历指定目录下的所有文件
+import (
+	"path/filepath"
+	"fmt"
+	"os"
+)
+func walkFunc(path string ,info os.FileInfo,err error) error{
+	fmt.Println(path)
+	return nil
+}
+func main(){
+	//遍历打印所有的文件名
+	filepath.Walk("./",walkFunc)
+}
+output==>
+./
+main.go
+xwq.exe
 </pre>
