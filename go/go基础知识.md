@@ -13631,7 +13631,6 @@ output==>
 - 标志位操作 &^ :  a &^ b  =  (a^b) & b   其实就是清除标记位
 <pre>
 package main
-
 import (
 	. "fmt"
 )
