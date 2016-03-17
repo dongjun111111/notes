@@ -13450,3 +13450,17 @@ func main(){
 	}
 }
 </pre>
+####小tips
+<pre>
+package  main
+
+import (
+	"fmt"
+)
+func main(){
+	result := "jason" == "jason"
+	fmt.Println("hello",result)
+}
+output==>
+hello true
+</pre>
