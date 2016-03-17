@@ -322,3 +322,36 @@ consul-template \
     -wait 1s  \  # Avoid re-running multiple times on changes
     -template "app.ctmpl:/tmp/app.conf:./wrapper env"
 </pre>
+现在，您已经了解了模板化配置文件的所有优势。下面是一个示例：
+<pre>
+//模板化配置文件示例
+// app.ctmpl
+
+// store third-party service information in the environment
+db:'mongodb://'+ process.env.MONGO_HOST + ':'+ process.env.MONGO_PORT + '/test',
+
+// or you can leverage consul-template built-in service discovery
+{{ range service "mongo" }}
+      db2:'mongodb://{{ .Address }}:{{ .Port }}/test',
+{{ end}}
+
+// Use consul-template to fetch information from consul kv store
+// curl -X PUT "http://$CONSUL/v1/kv/hackathon/mailgun_user" -d "xavier"
+mailgun:{
+    user:'{{ key "hackathon/mailgun_user" }}',
+    password:'{{ key "hackathon/mailgun_password" }}'
+}
+</pre>
+这种体验需要更多的考虑。可能具有一些策略性，例如通过重启应用来更新服务知识。我们可以通过发送特定信息，使其能够轻松地处理变更。 不过，这要求我们进入到应用代码库中；到现在为止，我们无需了解任何知识便可实现这一点。此外，随着不可靠云服务提供商推出了越来越多的微服务，这更有利于我们运行无状态的容错应用。
+
+无论如何，强大的工具连同清晰的服务契约，有助于您将分布式应用集成到复杂的基础架构中，而不会使您局限于某个特定提供商或应用堆栈。
+###结论
+服务发现以及更广泛的服务统筹安排，是目前开发过程中最重要的挑战之一。资深开发人员以及开发人员社区，都正在迈入并推动着技术与理念时代的发展。
+
+借助于 Consul 和 Go，您便可朝着这个方向迈出一大步，并构建具有以下功能的系列服务：
+
+- 自注册
+- 自更新
+- 堆栈不可知
+- 普适型部署
+- 容器友好性
