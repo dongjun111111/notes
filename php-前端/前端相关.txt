@@ -8154,3 +8154,126 @@ HTML代码：
         <animate attributeName="x" dur="5s" values="0; 80; 160" keyTimes="0; .8; 1" calcMode="spline"  keySplines=".5 0 .5 1; 0 0 1 1" />
     </text>
 </svg>
+
+
++++CSS3图标图形生成攻略++++++
+这里有基本的图标，绝对够用
+CSS代码：
+.ico { display: inline-block; width: 20px; height: 20px; background: url(css3-icons.png) no-repeat -99em; vertical-align: -3px; }
+/* 以下为IE9+浏览器 */
+:root .ico { background-image: none; position: relative; }
+.ico::before, .ico::after, .ico > z, .ico > z::before, .ico > z::after { content: ''; position: absolute; }
+/* 自身为a标签，或父级包含a标签，hover时候边框色高亮 */
+a:hover .ico::before, a:hover .ico::after, 
+a:hover .ico z, a:hover .ico z::before, a:hover .ico z::after,
+a.ico:hover::before, a.ico:hover::after, 
+a.ico:hover z, a.ico:hover z::before, a.ico:hover z::after { border-color: #4D77C6; }
+
+/* 以下出现background-position的都是兼容IE7-IE8浏览器的 */
+.ico-list { background-position: 0 0; }
+a:hover .ico-list, a.ico-list:hover { background-position: -20px 0; }
+/* css3 */
+.ico-list::before { width: 2px; height: 8px; border-top: 2px solid #777; border-bottom: 2px solid #777; top: 5px; left: 2px; }
+.ico-list::after { width: 2px; border-top: 2px solid #777; top: 10px; left: 2px; }
+.ico-list z, .ico-list z::before, .ico-list z::after { width: 11px; border-top: 1px solid #626262; }
+.ico-list z { left: 6px; top: 6px; }
+.ico-list z::before { top: 4px; }
+.ico-list z::after { top: 9px; }
+
+.ico-repeat { background-position: 0 -20px; }
+a:hover .ico-repeat, a.ico-repeat:hover { background-position: -20px -20px; }
+/* css3 */
+.ico-repeat::before,
+.ico-repeat::after,
+.ico-repeat z { width: 3px; height: 7px; border-top: 3px solid #777; border-bottom: 3px solid #777; top: 5px; left: 3px; }
+.ico-repeat::before { left: 3px; }
+.ico-repeat::after { left: 13px; }
+.ico-repeat z { left: 8px; }
+.ico-repeat z::before { width: 7px; height: 3px; border-left: 3px solid #777; border-right: 3px solid #777; top: 2px; left: -5px; }
+.ico-repeat z::after { width: 3px; border-top: 3px solid #777; top: 2px; }
+
+
+.ico-open { background-position: 0 -40px; }
+a:hover .ico-open, a.ico-open:hover { background-position: -20px -40px; }
+/* css3 */
+.ico-open::before { width: 5px; height: 10px; border-top: 1px solid #777; border-left: 1px solid #777; left: 2px; top: 3px; }
+.ico-open::after { width: 7px; height: 1px; border-top: 1px solid #777; border-right: 1px solid #777; top: 4px; left: 7px; }
+.ico-open z { width: 12px; height: 8px; border: 1px solid #777; left: 4px; top: 6px; }
+
+
+.ico-copy { background-position: 0 -60px; }
+a:hover .ico-copy, a.ico-copy:hover { background-position: -20px -60px; }
+/* css3 */
+.ico-copy::before, .ico-copy::after { width: 9px; height: 11px; }
+.ico-copy::before { top: 4px; left: 7px; border-top: 1px solid #777; border-right: 1px solid #777; }
+.ico-copy::after { top: 7px; left: 3px; border: 1px solid #777; }
+.ico-copy z::before { width: 1px; height: 0; border-top: 3px solid #777; top: 4px; left: 6px; }
+.ico-copy z::after { width: 0; height: 1px; border-right: 3px solid #777; top: 16px; left: 14px; }
+
+.ico-note { background-position: 0 -80px; }
+a:hover .ico-note, a.ico-note:hover { background-position: -20px -80px; }
+/* css3 */
+.ico-note::before { width: 14px; height: 14px; border: 1px solid #777; border-radius: 14px; left: 3px; top: 5px; }
+.ico-note::after { width: 2px; height: 1px; border-top: 2px solid #878787; border-bottom: 5px solid #878787; left: 10px; top: 9px; }
+
+.ico-download { background-position: 0 -100px; }
+a:hover .ico-download, a.ico-download:hover { background-position: -20px -100px; }
+/* css3 */
+.ico-download::before { width: 5px; height: 1px; border-left: 5px solid #777; border-right: 5px solid #777; top: 9px; left: 2px; }
+.ico-download::after { width: 13px; height: 8px; border: 1px solid #777; border-top: 0; top: 10px; left: 2px; }
+.ico-download z::before { width: 0; height: 12px; border-left: 1px solid #777; left: 9px; top: 3px; }
+.ico-download z::after { width: 1px; height: 0; border: 3px solid; border-bottom-color: transparent!important;  border-left-color: transparent!important; border-right-color: transparent!important; border-top-color: #777; top: 13px; left: 6px; }
+
+.ico-share { background-position: 0 -120px; }
+a:hover .ico-share, a.ico-share:hover { background-position: -20px -120px; }
+/* css3 */
+.ico-share::before, .ico-share::after { border-top: 1px solid #6d6d6d; left: 7px; }
+.ico-share::before { width: 6px; -webkit-transform: rotate(30deg); -ms-transform: rotate(30deg); transform: rotate(30deg); top: 15px; }
+.ico-share::after { width: 7px; -webkit-transform: rotate(-30deg); -ms-transform: rotate(-30deg); transform: rotate(-30deg); top: 8px; }
+.ico-share z, .ico-share z::before, .ico-share z::after { border: 1px solid #5d5d5d; border-radius: 4px; }
+.ico-share z { width: 4px; height: 4px; left: 2px; top: 9px; }
+.ico-share z::before, .ico-share z::after { width: 3px; height: 3px; }
+.ico-share z::before { top: -6px; left: 10px; }
+.ico-share z::after { top: 5px; left: 9px; }
+
+.ico-comment { background-position: 0 -140px; }
+a:hover .ico-comment, a.ico-comment:hover { background-position: -20px -140px; }
+/* css3 */
+.ico-comment::before { width: 5px; height: 8px; border: 1px solid #777; border-right: 0; border-top-left-radius: 2px; border-bottom-left-radius: 2px; left: 4px; top: 5px; }
+.ico-comment::after { width: 3px; height: 8px; border: 1px solid #777; border-left: 0; border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 1px;  top: 5px; left: 13px; }
+.ico-comment z::before { width: 3px; border-top: 1px solid #777; top: 5px; left: 10px; }
+.ico-comment z::after { width: 3px; height: 3px; border-right: 1px solid #777; border-bottom: 1px solid #777; border-bottom-right-radius: 1px; border-bottom-right-radius: 1px; -webkit-transform: skewY(45deg); -ms-transform: skewY(45deg); transform: skewY(45deg); left: 10px; top: 13px; }
+
+.ico-send { background-position: 0 -160px; }
+a:hover .ico-send, a.ico-send:hover { background-position: -20px -160px; }
+/* css3 */
+.ico-send::before { width: 12px; height: 8px; border: solid #6d6d6d; border-width: 0 1px 1px; top: 11px; left: 3px; }
+.ico-send::after { width: 6px; height: 1px; border-left: 4px solid #6d6d6d; border-right: 4px solid #6d6d6d; top: 10px; left: 3px; }
+.ico-send z::before { width: 5px; height: 10px; border-top: 1px solid #6d6d6d; border-left: 1px solid #6d6d6d; border-top-left-radius: 5px 10px; border-bottom-left-radius: 5px 0; left: 9px; top: 5px; }
+.ico-send z::after { width: 4px; height: 4px; border-top: 1px solid #6d6d6d; border-right: 1px solid #6d6d6d; top: 4px; left: 10px; }
+
+.ico-cordown { background-position: 0 -180px; }
+a:hover .ico-cordown, a.ico-cordown:hover { background-position: -20px -180px; }
+/* css3 */
+.ico-cordown::before { height: 2px; width: 0; border-left: 1px solid #777; box-shadow: 1px -1px #777, 2px -2px #777, 3px -3px #777, -1px -1px #777, -2px -2px #777, -3px -3px #777; top: 13px; left: 9px; }
+a:hover .ico-cordown::before { box-shadow: 1px -1px #4D77C6, 2px -2px #4D77C6, 3px -3px #4D77C6, -1px -1px #4D77C6, -2px -2px #4D77C6, -3px -3px #4D77C6; }
+HTML代码：
+<a href="javascript:" class="btn btn-blue">点击我所有小图标2倍放大</a>
+<div class="mt20"><strong>点线攻略</strong></div>
+<p><a href="javascript:" class="ico-a"><i class="ico ico-list"><z></i>列表</a></p>
+<p><a href="javascript:" class="ico-a"><i class="ico ico-repeat"><z></i>平铺</a></p>
+<div class="mt20"><strong>矩形攻略</strong></div>
+<p><a href="javascript:" class="ico-a"><i class="ico ico-open"><z></i>打开文件夹</a></p>
+<p><a href="javascript:" class="ico-a"><i class="ico ico-copy"><z></i>复制该文件</a></p>
+<div class="mt20"><strong>圆形攻略</strong></div>
+<p>注意事项 <a href="javascript:" class="ico ico-note"></a></p>
+<div class="mt20"><strong>三角攻略</strong></div>
+<p><a href="javascript:" class="ico-a"><i class="ico ico-download"><z></i>下载该文件</a></p>
+<div class="mt20"><strong>旋转攻略</strong></div>
+<p><a href="javascript:" class="ico-a"><i class="ico ico-share"><z></i>分享该文件</a></p>
+<div class="mt20"><strong>拉伸攻略</strong></div>
+<p><a href="javascript:" class="ico-a"><i class="ico ico-comment"><z></i>发表评论</a></p>
+<div class="mt20"><strong>弧线攻略</strong></div>
+<p><a href="javascript:" class="ico-a"><i class="ico ico-send"><z></i>发送该文件</a></p>
+<div class="mt20"><strong>万能攻略</strong></div>
+<p><a href="javascript:" class="ico-a">更多操作<i class="ico ico-cordown"></i></a></p>
