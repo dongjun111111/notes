@@ -310,3 +310,15 @@ go build ./...
 export CONSUL=$CONSUL_IP:8500
 ./wrapper env
 </pre>
+在其他变量中，最后一个命令应打印为 MONGO_PORT=27017。此时，任何命令均应能够从其环境中读取服务数据。
+###动态地重新配置基础架构
+目前您可能遇到的一种情况是实施方面的挑战。Web 应用可能会象上述的那样启动，并成功连接到 MongoDB，但在数据库出现故障或迁移时，仍旧会出现意外。当基础架构出现正常或非预期变更时，我们希望能够以动态的方式更新应用知识。<br>
+尽管针对这个问题设计一款健全的解决方案可能需要单独的教程，但Consul Template 采用了一种非常有趣的方法。<br>
+Consul Template 会查询 Consul 实例并更新文件系统上指定模板的数量。此外，当某个模板更新完成时，Consul Template 还可执行任意命令。 因此，您可以使用 Consul Template 来监控服务（地址和健康状态），一旦检测到变更，便会自动重启应用。由于打包程序会获取服务数据，因此运行时环境将会映射基础架构的正确状态
+<pre>
+//使用 Consul Template 监控服务并重启应用
+consul-template \
+    -consul $CONSUL \
+    -wait 1s  \  # Avoid re-running multiple times on changes
+    -template "app.ctmpl:/tmp/app.conf:./wrapper env"
+</pre>
