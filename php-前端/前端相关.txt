@@ -7876,3 +7876,32 @@ if (eleRange) {
         document.getElementsByTagName("tbody")[0].style.opacity = this.value / 100;
     }
 }
+
+
+
+++++CSS中height:100%和height:inherit的异同++++
+CSS如下：
+.outer {
+    display: inline-block;
+    height: 200px; width: 40%;
+    border: 5px solid #cd0000;
+}
+.height-100 {
+    position: absolute;
+    height: 100%; width: 200px;
+    background-color: #beceeb;
+}
+.height-inherit {
+    position: absolute;
+    height: inherit; width: 200px;
+    background-color: #beceeb;
+}
+HTML如下：
+
+<div class="outer"><div class="height-100"></div></div>
+<div class="outer"><div class="height-inherit"></div></div>
+结果：
+height:100%，是深入地域地狱：
+而height:inherit却完美高度自适应没有定位特性的父级元素。
+总之，这里，height:inherit的强大好用可见一斑。回头，容器高度变化了，里面的绝对定位元素依然高度自适应。
+这是很赞的特性，因为如果页面很复杂，避免使用position: relative会让你少去很多z-index混乱层级覆盖的麻烦。
