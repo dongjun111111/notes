@@ -9152,3 +9152,22 @@ function array_search2(&$a,$id){
   return FALSE;
 }
 echo array_search2($var_arr,43); 
+
+
++++PHP抽象类理解+++
+/*抽象类的作用是，当你发现你的很多类里面用很多方法你不断的在重复写，那你就可以考虑使用抽象类了，你可能会说“我不是可以重写一个类每个公共类我个实例化一个这个公共类，调用相同的方法就可以了”，这里是可以，实际上抽象类做的工作也就是这个，不过他省去了你实例化的这个步骤*/
+abstract class people{
+  public function say(){
+    echo "Yes";
+  }
+  protected function run(){
+    echo "Run";
+  }
+}
+
+class jack extends people{
+  public function __construct() {
+    $this->say();
+  }
+}
+$jack = new jack();
