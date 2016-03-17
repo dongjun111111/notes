@@ -13624,3 +13624,37 @@ func main(){
 output==>
 2016-03-17 23:25:36
 </pre>
+####golang位运算
+<pre>
+package main
+
+import (
+	. "fmt"
+)
+
+func main() {
+	const a = 2   //0010
+	const b = 6   //0110
+	const c = 11  //1011
+	var d = a ^ c //1001 9
+	Println(d)
+
+	d = b &^ c // 0110  1011
+	Println(d) // 0100
+
+	var a1 = 0
+	a1 |= 1 << 2 //0100
+	Print(a1, " ")
+	a1 |= 1 << 3 // 1100  12  a1 + a1 * 2*2*2
+	Print(a1, " ")
+	a1 |= 1 << 4 //0001 1100 28
+	Print(a1, " ")
+
+	a1 = a1 &^ (1 << 2)
+	Println(a1) // 0001 1000 24
+}
+output==>
+9
+4
+4 12 28 24
+</pre>
