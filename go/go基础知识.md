@@ -13354,3 +13354,39 @@ func main(){
 output==>
 [56 7 6 6 5 5 5 4 4 4 3 3]
 </pre>
+<pre>
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+type person struct{
+	name string
+	age int
+}
+type personslice[] person
+func (a personslice) Len() int{
+	return len(a)
+}
+func (a personslice) Swap(i,j int){
+	a[i],a[j] = a[j],a[i]
+}
+func (a personslice) Less(i,j int)bool{
+	return a[j].age < a[i].age
+}
+func main(){
+	people :=[]person{
+		{"jason",12},
+		{"jack",34},
+		{"bob",33},
+	}
+	//按照age倒序排列
+	//sort.Sort(personslice(people))
+	//按照age升序排列
+	sort.Sort(sort.Reverse(personslice(people)))
+	fmt.Println(people)
+}
+output==>
+[{jason 12} {bob 33} {jack 34}]
+</pre>
