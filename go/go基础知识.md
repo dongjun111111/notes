@@ -13464,3 +13464,41 @@ func main(){
 output==>
 hello true
 </pre>
+####golang 密码与邮箱验证
+<pre>
+package  main
+import (
+	"regexp"
+	"fmt"
+)
+func ValidateEmail(email string) bool {
+	re := regexp.MustCompile(`^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$`)
+	return re.MatchString(email)
+}
+
+func ValidateLength(value string, min, max int) bool {
+	l := len(value)
+	if min > 0 && l < min {
+		return false
+	}	
+	if max > 0 && l > max {
+		return false
+	}
+	return true
+}
+
+func main(){
+	Email := "79787@qq.com"
+	res1 :=ValidateEmail(Email)
+	fmt.Println(res1)
+
+	Password := "4533ddd3656"
+	passwordMinLen := 4
+	passwordMaxLen  := 7
+	res2 :=ValidateLength(Password, passwordMinLen, passwordMaxLen)
+	fmt.Println(res2)
+}
+output==>
+true
+false
+</pre>
