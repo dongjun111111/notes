@@ -202,3 +202,111 @@ curl $CONSUL_IP:8500/v1/catalog/nodes
  - 写入服务并检查其在 Consul 配置目录中的定义。
  - 启动应用。
  - 使用另一代理或服务器的地址启动 Consul 代理。
+
+###创建基础架构感知应用
+现在，您已经构建了一个简便的非侵入式工作流，用来部署和注册新服务。下一步是将这些知识导出到依赖性应用之中。<br>
+Twelve-Factor App 是一种构建软件即服务应用的方法，适用于在环境中的存储配置。
+
+- 维持配置与不断变化的代码的严格分离。
+- 避免在资料库中签入（check in）敏感信息。
+- 确保语言和操作系统不可知。
+
+现在，我们需要编写一个打包程序，用以查询 Consul 终端设备是否能够提供服务，并将其连接属性导出到环境中，然后执行给定的命令。选择 Go 语言，不仅可为您提供一个潜在的交叉平台二进制库（如同其他工具），还可以使您访问正式客户端的 API
+<pre>
+//将服务打包到可复写的自注册容器中
+package main
+
+import (
+    "strconv"
+    "strings"
+    "flag"
+    "log"
+    "os"
+    "os/exec"
+    "fmt"
+
+    "github.com/hashicorp/consul/api"
+)
+
+// critical quits on errors with a debug message
+func critical(err error) {
+    if err != nil {
+        log.Printf("error:%v", err)
+        os.Exit(1)
+    }
+}
+
+// inject exports properties into runtime environment
+func inject(properties map[string]string) []string {
+    // read current process environment
+    processEnv := os.Environ()
+    // allocate and copy it
+    env := make([]string, len(processEnv), len(properties) + len(processEnv))
+    copy(env, processEnv)
+
+    for k, v := range properties {
+        // format key/value mapping as exec.Command and system style (i.e. KEY=VALUE)
+        env = append(env, fmt.Sprintf("%s=%s", k, v))
+    }
+    return env
+}
+
+// discoverServices queries Consul for services data
+func discoverServices(addr string, healthyOnly bool) map[string]string {
+    servicesEnv := make(map[string]string)
+    // initialize consul api client
+    consulConf := api.DefaultConfig()
+    consulConf.Address = addr
+    client, err := api.NewClient(consulConf)
+    critical(err)
+
+    // retrieve full list of services throughout our infrastructure
+    services, _, err := client.Catalog().Services(&api.QueryOptions{})
+    critical(err)
+    for name, _ := range services {
+        // query healthy services information
+        servicesData, _, err := client.Health().Service(name, "", healthyOnly, 
+&api.QueryOptions{})
+        critical(err)
+        // loop over this category of service
+        for _, entry := range servicesData {
+            // store connection information like environment variables :{"MONGO_HOST":
+"172.17.0.5"}
+            id := strings.ToUpper(entry.Service.ID)
+            servicesEnv[id + "_HOST"] = entry.Node.Address
+            servicesEnv[id + "_PORT"] = strconv.Itoa(entry.Service.Port)
+        }
+    }
+    return servicesEnv
+}
+
+func main() {
+  flag.Parse()
+  // keep it consistent and read consul service address from environment
+  consulAddress = os.Getenv("CONSUL")
+  command = flag.Args()
+
+  log.Printf("inspecting infrastructure")
+  services := discoverServices(consulAddress, true)
+  env := inject(services)
+
+  log.Printf("running `%s`", strings.Join(command, " "))
+  cmd := exec.Command(command[0], command[1:]...)
+  cmd.Stdout = os.Stdout
+  cmd.Stderr = os.Stderr
+  cmd.Env = env
+
+  critical(cmd.Start())
+  critical(cmd.Wait())
+}
+</pre>
+<pre>
+//编译并验证原型
+# install the single dependency
+go get github.com/hashicorp/consul
+# compile to `wrapper` (depends on your directory name)
+go build ./...
+
+export CONSUL=$CONSUL_IP:8500
+./wrapper env
+</pre>
