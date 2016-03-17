@@ -7905,3 +7905,59 @@ height:100%，是深入地域地狱：
 而height:inherit却完美高度自适应没有定位特性的父级元素。
 总之，这里，height:inherit的强大好用可见一斑。回头，容器高度变化了，里面的绝对定位元素依然高度自适应。
 这是很赞的特性，因为如果页面很复杂，避免使用position: relative会让你少去很多z-index混乱层级覆盖的麻烦。
+
+
+++鼠标hover元素scale/zoom中心点放大效果实例页面+++++
+就是鼠标放在上面就会使图片有放大效果。
+CSS代码：
+.box {
+    /* 可见视觉区域 */
+    width: 480px; height: 250px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+.size {
+    /* 广阔的海洋 */
+    width: 1000px; height: 1000px;
+    position: absolute; left: 50%; top: 50%;
+    margin: -500px 0 0 -500px;
+    /* 水平居中 */
+    text-align: center;
+}
+.zoom {
+    /* 缩放的元素 */
+    width: 480px; height: 250px;
+    vertical-align: middle;    
+    -webkit-transition: -webkit-transform .2s;
+    transition: transform .2s;
+}
+.box:hover .zoom {
+    /* hover放大 */
+    -webkit-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
+    zoom: 1.05;
+}
+:root .box:hover .zoom {
+    zoom: 1;
+}
+.middle {
+    /* 垂直居中 */
+    display: inline-block;
+    width: 0; height: 100%;
+    vertical-align: middle;
+}
+HTML代码：
+<h4>左上角定位</h4>
+<div class="box">
+	<img src="20150213142143589.png" class="zoom">
+</div>
+<h4>居中定位</h4>
+<div class="box">
+    <div class="size">
+        <img src="20150213142143589.png" class="zoom"><i class="middle"></i>
+    </div>
+</div>
+
+
