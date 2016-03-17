@@ -13634,7 +13634,6 @@ package main
 import (
 	. "fmt"
 )
-
 func main() {
 	const a = 2   //0010
 	const b = 6   //0110
