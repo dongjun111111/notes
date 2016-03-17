@@ -13151,3 +13151,15 @@ output==>
 C:\hello
 C:\mygo\src\xwq\hellotest
 </pre>
+####超简易文件服务器
+<pre>
+package main
+
+import (
+	"net/http"
+)
+//tmpfiles在实际的服务器的目录下就被忽略了，转而是/tmp这个目录来替代
+func main(){
+	http.Handle("/tmpfiles/",http.StripPrefix("/tmpfiles/",http.FileServer(http.Dir("/tmp"))))
+}
+</pre>
