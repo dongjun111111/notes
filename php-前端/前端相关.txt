@@ -8077,3 +8077,35 @@ a.grebtn:hover{background-color:#2C9D00; text-decoration:none; color:#fff;}
 </style>
 HTML:
 <a href="javascript:" class="grebtn">订单提交中<span class="dotting"></span></a>
+
+
+++++图片点击放大放小效果+++++
+CSS代码：
+.zoom {
+    display: inline-block;
+}
+.zoom-in {
+    cursor: zoom-in;
+}
+.zoom-out {
+    cursor: zoom-out;
+}
+HTML代码：
+<a href="javascript:" class="zoom zoom-in">
+    <img src="http://image.zhangxinxu.com/image/study/s/s256/mm1.jpg">
+</a>
+JS代码：
+if (document.getElementsByClassName) {
+    var zoom = document.getElementsByClassName("zoom")[0];
+    zoom.onclick = function() {
+        var img = this.getElementsByTagName("img")[0], cl = this.className;
+        if (/in/.test(cl)) {
+            img.src = img.src.replace("s256", "s512");
+            this.className = "zoom zoom-out";
+        } else {
+            img.src = img.src.replace("s512", "s256");
+            this.className = "zoom zoom-in";
+        }
+        return false;
+    };
+}
