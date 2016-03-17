@@ -8080,6 +8080,7 @@ HTML:
 
 
 ++++图片点击放大放小效果+++++
+cursor属性值zoom-in/zoom-out,grab/grabbing鼠标样式也会根据图片的大小改变。
 CSS代码：
 .zoom {
     display: inline-block;
