@@ -8131,3 +8131,26 @@ HTML代码：
      srcset="mm-width-128px.jpg 128w, mm-width-256px.jpg 256w, mm-width-512px.jpg 512w"
      sizes="(max-width: 360px) calc(100vw - 20px), 128px">
 <div class="content">当视图宽度不大于360像素的时候，左右布局变成上下布局，同时图片撑满屏幕显示。</div>
+
+
++++svg+++
+<svg width="320" height="100" xmlns="http://www.w3.org/2000/svg">
+    <text font-size="60" y="60" x="160">马
+        <animate attributeName="x" dur="5s" values="0; 20; 160" calcMode="linear" />
+    </text>
+</svg>
+<svg width="320" height="100" xmlns="http://www.w3.org/2000/svg">
+    <text font-size="60" y="60" x="160">马
+        <animate attributeName="x" dur="5s" values="0; 20; 160" calcMode="paced"/>
+    </text>
+</svg>
+<svg width="320" height="100" xmlns="http://www.w3.org/2000/svg">
+    <text font-size="60" y="60" x="160">马
+        <animate attributeName="x" dur="5s" values="0; 80; 160" keyTimes="0; .8; 1" calcMode="linear"/>
+    </text>
+</svg>
+<svg width="320" height="100" xmlns="http://www.w3.org/2000/svg">
+    <text font-size="60" y="60" x="160">马
+        <animate attributeName="x" dur="5s" values="0; 80; 160" keyTimes="0; .8; 1" calcMode="spline"  keySplines=".5 0 .5 1; 0 0 1 1" />
+    </text>
+</svg>
