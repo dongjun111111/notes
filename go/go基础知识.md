@@ -13336,3 +13336,21 @@ func main() {
 	fmt.Println("count", len(files))
 }
 </pre>
+####sort排序
+<pre>
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+func main(){
+	//sort.Ints(intList)正序，还有sort.Float64,sort.Strings
+	intList :=[]int{3,4,5,6,4,3,4,5,56,5,6,7}
+	//倒序 还有sort.Float64Slice ,sort.StringsSlice
+	sort.Sort(sort.Reverse(sort.IntSlice(intList)))
+	fmt.Println(intList)
+}
+output==>
+[56 7 6 6 5 5 5 4 4 4 3 3]
+</pre>
