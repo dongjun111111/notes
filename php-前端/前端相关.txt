@@ -7845,3 +7845,34 @@ function init(){
 document.getElementById("inputId").focus();
 } 
 </script>
+
+
++++border-collapse: collapse与单元格边框透明度实例页面++++
+CSS代码：
+.table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+.table th {
+  background-color: #f0f0f0;
+  text-align: left;
+  font-weight: normal;
+  font-style: normal;
+}
+.table td {
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  cursor: default;
+}
+.table td,
+.table th {
+  padding: 10px;
+}
+JS代码：
+var eleRange = window.addEventListener && document.querySelector("input[type=range]");
+if (eleRange) {
+    eleRange.onchange = function() {
+        document.getElementsByTagName("tbody")[0].style.opacity = this.value / 100;
+    }
+}
