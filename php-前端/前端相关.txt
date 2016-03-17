@@ -8046,3 +8046,34 @@ var funTransitionHeight = function(element, time) { // time, 数值，可缺省
     // 初始高度
     funTransitionHeight(box);	
 })();
+
+
++++CSS3 animation实现点点点loading动画++++++
+CSS:
+<style>
+.grebtn {display:inline-block; padding:0.25em 1.25em; border:1px solid; border-radius:2px; vertical-align:bottom; font-weight:inherit; border-color:#208000 #1F7F00; background-color:#289600; box-shadow:inset 0 0 1px rgba(255,255,255,.6), 0 1px #8DBF62; color:#fff; text-shadow:0 -1px #137900;text-decoration:none;}
+a.grebtn:hover{background-color:#2C9D00; text-decoration:none; color:#fff;}
+.dotting {
+    display: inline-block; min-width: 2px; min-height: 2px;
+    box-shadow: 2px 0 currentColor, 6px 0 currentColor, 10px 0 currentColor; 
+    -webkit-animation: dot 4s infinite step-start both;
+    animation: dot 4s infinite step-start both;
+    *zoom: expression(this.innerHTML = '...'); /* IE7 */
+}
+.dotting:before { content: '...'; } /* IE8 */
+.dotting::before { content: ''; }
+:root .dotting { margin-right: 8px; } /* IE9+,FF,CH,OP,SF */
+
+@-webkit-keyframes dot {
+    25% { box-shadow: none; }
+    50% { box-shadow: 2px 0 currentColor; }
+    75% { box-shadow: 2px 0 currentColor, 6px 0 currentColor; }
+}
+@keyframes dot {
+    25% { box-shadow: none; }
+    50% { box-shadow: 2px 0 currentColor; }
+    75% { box-shadow: 2px 0 currentColor, 6px 0 currentColor; }
+}
+</style>
+HTML:
+<a href="javascript:" class="grebtn">订单提交中<span class="dotting"></span></a>
