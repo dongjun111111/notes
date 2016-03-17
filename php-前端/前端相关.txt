@@ -7961,3 +7961,44 @@ HTML代码：
 </div>
 
 
++++++图片的局部高斯模糊效果-JS偏移计算实现实例页面+++++
+CSS代码：
+.box { 
+    width: 256px; height: 191px; 
+    background: url(http://image.zhangxinxu.com/image/study/s/s256/mm1.jpg) no-repeat; 
+    position: relative; 
+    overflow: hidden;
+}
+.drag { 
+    width: 100px; height: 100px;
+    background: inherit; 
+    -webkit-filter: blur(5px); -moz-filter: blur(5px); filter: blur(5px); 
+    cursor: -webkit-grab; cursor: -moz-grab; cursor: grab;
+    position: absolute; 
+    overflow: hidden;
+}
+.drag:active {
+    cursor: -webkit-grabbing; cursor: -moz-grabbing; cursor: grabbing;
+}
+HTML代码：
+<div class="box">
+    <div id="drag" class="drag"></div>
+</div>
+JS代码：
+var eleDrag = document.getElementById("drag");
+if (eleDrag) {
+    startDrag(eleDrag, eleDrag, function(x, y) {
+        eleDrag.style.backgroundPosition = (-1 * x) + "px " + (-1 * y) + "px";    
+    });
+}
+
+++++空格在文字布局中的应用实例页面+++++
+CSS代码：
+ul{list-style-type:none; font-size:12px;}
+.li{margin-top:10px; _font-family:'宋体';}
+HTML代码：
+<ul>
+    <li class="li">姓&emsp;&emsp;名：<input type="text" /></li>
+    <li class="li">手&ensp;机&ensp;号：<input type="text" /></li>
+    <li class="li">电子邮箱：<input type="text" /></li>
+</ul>
