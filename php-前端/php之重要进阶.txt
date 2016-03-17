@@ -9129,3 +9129,26 @@ pps:XCache简介
 XCache 是一个国人开发的又快又稳定的 PHP opcode 缓存器. 经过良好的测试并在大流量/高负载的生产机器上稳定运行。
 经过(在 linux 上)测试并支持所有现行 PHP 分支的最新发布版本。
 
+
++++二维数组的array_search++++
+$var_arr = array(
+     "shuxue"=>array(
+                   "5",//小学
+                   "17",//初一初二
+                   "23"//初三
+                 ),
+         "yingyu"=>array(
+                "16",//初一初二英语
+                "22",//初三英语
+                "37",//高一高二英语
+                "43"//高三英语
+                ),
+);
+function array_search2(&$a,$id){
+  foreach($a as $k=>$t){
+    if(in_array($id,$t))
+      return $k;
+  }
+  return FALSE;
+}
+echo array_search2($var_arr,43); 
