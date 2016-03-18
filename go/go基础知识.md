@@ -13809,7 +13809,7 @@ DNS Servers DNS服务器
 DNS服务器是用来将我们常用的以字母数字结合的网址变成对应IP的一个服务器。例如，你输入www.baidu.com，那么DNS服务器将此字符串转换成对应的百度服务器的IP地址，然后你就能上了百度的网站。
 IPv6设计的用于替代现行版本IP协议（IPv4）的下一代IP协议。因为现行的IPv4能包含的IP数量是有限的，也就是255四次方，实际上远远不够世界上每台电脑分配一个，就造成了现在所谓的IP资源枯竭。IPv6的出现主要就是解决这个问题，就好像以前手机号是十位的，后来都变成11位。当然，在技术上还有一些其他改进，例如安全性等方面，这些就属于话外，最大的作用就是能使用的IP数量大大增多。
 </pre>
-###net包域名解析
+####net包域名解析
 <pre>
 package main
 //将域名解析Ip地址  
@@ -13844,4 +13844,25 @@ output==>
  Zone:ip 
 %!(EXTRA string=)60.191.30.57
 183.134.9.59
+</pre>
+####net包查看主机服务器占用的端口
+<pre>
+package main
+//查看主机服务器（service）占用的端口,这些服务，都是tcp或者udp的  
+import (
+	"os"
+	"fmt"
+	"net"
+)
+func main(){
+	port ,err := net.LookupPort("tcp","telnet")//查看telnet服务器使用的端口
+	if err != nil {
+		fmt.Fprintf(os.Stderr,"未找到指定服务")
+		return
+	}
+	fmt.Fprintf(os.Stdout,"telent port:%d",port)
+	
+}
+output==>
+telent port:23
 </pre>
