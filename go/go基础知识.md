@@ -13883,6 +13883,34 @@ func main() {
     }
 }
 </pre>
+在网络编程中net.Dial函数是非常重要的，一旦你连接到远程系统，就会返回一个Conn类型接口，我们可以用它发送和接收数据。Dial函数巧妙的抽象了网络结构及传输。所以IPv4或者IPv6，TCP或者UDP都可以使用这个公用接口。
+
+下边这个示例先使用TCP协议连接远程80端口，然后使用UDP协议连接，最后使用TCP协议连接IPv6类型的地址：
+<pre>
+package main
+
+import (
+    "fmt"
+    "net"
+    "os"
+)
+
+func main() {
+    conn, err := net.Dial("tcp", "192.0.32.10:80") // tcp ipv4
+    checkConnection(conn, err)
+    conn, err = net.Dial("udp", "192.0.32.10:80") // udp
+    checkConnection(conn, err)
+    conn, err = net.Dial("tcp", "[2620:0:2d0:200::10]:80") // tcp ipv6
+    checkConnection(conn, err)
+}
+func checkConnection(conn net.Conn, err error) {
+    if err != nil {
+        fmt.Printf("error %v connecting!")
+        os.Exit(1)
+    }
+    fmt.Println("Connection is made with %v", conn)
+}
+</pre>
 
 利用net包编写压力测试程序
 <pre>
