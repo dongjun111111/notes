@@ -13748,6 +13748,61 @@ Accept-Language: zh-CN,zh;q=0.8
 Cookie: a9524_times=1
 Error reading EOF
 </pre>
+####服务器轮询监听(select实现)
+<pre>
+package main  
+//服务器轮询监听
+import (  
+    "net"  
+    "fmt"  
+    "os"  
+)  
+  
+/*  
+很多时候，服务器会处理多个端口的监听！可以使用select轮询处理这种情况  
+ */  
+func main() {  
+  
+    lsr, err := net.Listen("tcp", ":7070")  
+  
+    if err != nil {  
+        fmt.Fprintf(os.Stderr, "Error: %s", err.Error())  
+        return  
+    }  
+  
+    for {  
+        conn , err := lsr.Accept()  
+        if err != nil {  
+            fmt.Fprintf(os.Stderr, "Error: %s", err.Error())  
+            continue  
+        }  
+  
+        go connHandler(conn)  
+  
+    }  
+  
+    fmt.Println("Done !")  
+}  
+  
+func connHandler(conn net.Conn) {  
+    defer conn.Close()  
+  
+    var buf[512]byte  
+    for {  
+        n , err := conn.Read(buf[0:])  
+        if err != nil {  
+            fmt.Fprintf(os.Stderr, "Error: %s", err.Error())  
+            return  
+        }  
+        _, err = conn.Write(buf[0:n])  
+        if err != nil {  
+            fmt.Fprintf(os.Stderr, "Error: %s", err.Error())  
+            return  
+        }  
+    }  
+}  
+</pre>
+
 利用net包编写压力测试程序
 <pre>
 //下面是一个可以进行压力测试的客户端程序
