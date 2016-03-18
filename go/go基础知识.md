@@ -13911,6 +13911,51 @@ func checkConnection(conn net.Conn, err error) {
     fmt.Println("Connection is made with %v", conn)
 }
 </pre>
+一个使用net包从socket中打开，写入，读取数据的案例：
+将www.apache.org网站的源码读出来了。
+<pre>
+package main
+
+import (
+    "fmt"
+    "io"
+    "net"
+)
+
+func main() {
+    var (
+        host          = "www.apache.org"
+        port          = "80"
+        remote        = host + ":" + port
+        msg    string = "GET / \n"
+        data          = make([]uint8, 4096)
+        read          = true
+        count         = 0
+    )
+    // 创建一个socket
+    con, err := net.Dial("tcp", remote)
+    // 发送我们的消息，一个http GET请求
+    io.WriteString(con, msg)
+    // 读取服务器的响应
+    for read {
+        count, err = con.Read(data)
+        read = (err == nil)
+        fmt.Printf(string(data[0:count]))
+    }
+    con.Close()
+}
+output==>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Home page of The Apache Software Foundation">
+  
+  <link rel="apple-touch-icon" sizes="57x57" href="/favicons/apple-touch-icon-57x57.png">
+ ...
+</pre>
 
 利用net包编写压力测试程序
 <pre>
