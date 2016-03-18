@@ -13801,6 +13801,45 @@ func connHandler(conn net.Conn) {
     }  
 }  
 </pre>
+再写一遍tcp服务器
+<pre>
+package main
+//tcp服务器
+import (
+	"net"
+	"fmt"
+)
+func main() {
+	fmt.Println("starting the server ...")
+	//创建listener
+	listener,err :=net.Listen("tcp","localhost:5002")
+	if err != nil{
+		fmt.Println("Error listening",err.Error())
+		return //终止
+	}
+	//监听并接受来自客户端的连接
+	for {
+		conn,err := listener.Accept()
+		if err != nil{
+			fmt.Println("Error accepting",err.Error())
+			return
+		}
+		go doServerStuff(conn)
+	}
+}
+func doServerStuff(conn net.Conn){
+	for {
+		buf := make([]byte,512)
+		_,err:=conn.Read(buf)
+		if err != nil{
+			fmt.Println("Error reading",err.Error())
+			return
+		}
+		fmt.Printf("Received:%v",string(buf))
+	}
+	
+}
+</pre>
 
 利用net包编写压力测试程序
 <pre>
