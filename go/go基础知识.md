@@ -13840,6 +13840,49 @@ func doServerStuff(conn net.Conn){
 	
 }
 </pre>
+####tcp客户端
+客户端通过net.Dial创建了一个和服务器之间的连接
+
+它通过无限循环中的os.Stdin接收来自键盘的输入直到输入了“Q”。注意使用\r和\n换行符分割字符串（在windows平台下使用\r\n）。接下来分割后的输入通过connection的Write方法被发送到服务器。
+<pre>
+package main
+
+import (
+    "bufio"
+    "fmt"
+    "net"
+    "os"
+    "strings"
+)
+
+func main() {
+    //打开连接:
+    conn, err := net.Dial("tcp", "localhost:50000")
+    if err != nil {
+        //由于目标计算机积极拒绝而无法创建连接
+        fmt.Println("Error dialing", err.Error())
+        return // 终止程序
+    }
+
+    inputReader := bufio.NewReader(os.Stdin)
+    fmt.Println("First, what is your name?")
+    clientName, _ := inputReader.ReadString('\n')
+    // fmt.Printf("CLIENTNAME %s", clientName)
+    trimmedClient := strings.Trim(clientName, "\r\n") // Windows 平台下用 "\r\n"，Linux平台下使用 "\n"
+    // 给服务器发送信息直到程序退出：
+    for {
+        fmt.Println("What to send to the server? Type Q to quit.")
+        input, _ := inputReader.ReadString('\n')
+        trimmedInput := strings.Trim(input, "\r\n")
+        // fmt.Printf("input:--s%--", input)
+        // fmt.Printf("trimmedInput:--s%--", trimmedInput)
+        if trimmedInput == "Q" {
+            return
+        }
+        _, err = conn.Write([]byte(trimmedClient + " says: " + trimmedInput))
+    }
+}
+</pre>
 
 利用net包编写压力测试程序
 <pre>
