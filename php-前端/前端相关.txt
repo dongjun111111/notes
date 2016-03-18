@@ -8635,3 +8635,64 @@ HTML代码：
 </div>
 
 
+
++++JavaScript的6个重点++++
+1.类型与类型强制转换
+基础类型：object 、number、string、Boolean、null、undefined
+5 – “4”  //1
+5 + “4”   //54
++!{}[true] //1
++[1]  //1
++[1, 2]   //NaN
+7 – “a”  //NaN
+7 / 0 //Infinity
+…
+
+2.操作符 （特别是+ 与 ==）
+5 + “4”   //54
+5 + null   //5
+4 == “4.00”  //true
+4 === “4.00”  //false
+null == undefined   //true
+0 == false    //true
+0 == null     //false
+null == false    //false
+typeof 100 === “number”
+typeof true === “boolean”
+typeof function () {} === “function”
+typeof null === “object”
+typeof [1， 2] === “object”
+typeof new Object() === “object
+Object.prototype.toString.apply([]); === “[Object Array]”;
+Object.prototype.toString.apply(null); === “[Object Null]”;
+[1， 2] instanceof Array === true
+new Object() instanceof Array === false
+
+3.对象 & 基元类型
+var a = “string”;
+alert(a.length);
+a.t = 3;
+alert(a.t);
+
+4.函数 & 构造器
+function f() {};
+var a = f,
+b = f(),
+c = new f,
+d = f(f);
+
+5.闭包
+function add(a) {
+return function (b) {
+return a + b;
+};
+}
+add(3)(4) == 7
+var uniqueID = (function() {
+var id = 0;
+return function () {
+return id++;
+};
+})();
+
+6.原型
