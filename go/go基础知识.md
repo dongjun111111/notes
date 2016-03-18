@@ -14019,3 +14019,43 @@ func main(){
 	}
 }
 </pre>
+####UDP客户端
+<pre>
+package main
+import (
+	"os"
+	"fmt"
+	"net"
+)
+//UDP客户端 net.DialUDP("udp",nil,pUDPAddr)
+//pUDPConn.ReadFromUDP(buf)  
+func main(){
+	pUDPAddr,err :=net.ResolveUDPAddr("udp","127.0.01:7070")
+	if err != nil{
+		fmt.Fprintf(os.Stderr,"Error1:ResolveUDPAddr:%s",err.Error())
+		return
+	}
+	
+	pUDPConn,err :=net.DialUDP("udp",nil,pUDPAddr)
+	if err != nil{
+		fmt.Fprintf(os.Stderr,"Error2:DialUDP:%s",err.Error())
+		return
+	}
+	
+	n,err :=pUDPConn.Write([]byte("hello!  by Jason"))
+	if err != nil {
+		fmt.Fprintf(os.Stderr,"Error3: ReadFromUDP:%s",err.Error())
+		return
+	}
+	fmt.Fprintf(os.Stdout,"writed: %d", n) 
+	
+	buf := make([]byte, 1024)  
+    n, _, err = pUDPConn.ReadFromUDP(buf)  
+    if err != nil {  
+        fmt.Fprintf(os.Stderr, "Error4:ReadFromUDP: %s", err.Error())  
+        return  
+    }  
+  
+    fmt.Fprintf(os.Stdout, "readed: %d  %s \n", n, string(buf[:n]))  
+}
+</pre>
