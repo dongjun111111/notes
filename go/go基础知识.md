@@ -13978,3 +13978,44 @@ func main(){
 output==>
 www.baidu.com:80 IP:115.239.210.27 PORT:80  
 </pre>
+####UDP服务器
+<pre>
+package main
+//UDP服务器
+import (
+	"os"
+	"fmt"
+	"net"
+)
+func main(){
+	pUDPAddr,err := net.ResolveUDPAddr("udp",":7070")
+	if err != nil{
+		fmt.Fprintf(os.Stderr,"Error1:%s",err.Error())
+		return
+	}
+	
+	pUDPConn,err :=net.ListenUDP("udp",pUDPAddr)
+	if err != nil{
+		fmt.Fprintf(os.Stderr,"Error2:%s",err.Error())
+		return
+	}
+	defer pUDPConn.Close()
+	
+	for {
+		buf :=make([]byte,256)
+		n ,pUDPAddr,err :=pUDPConn.ReadFromUDP(buf)
+		if err != nil {
+			fmt.Fprintf(os.Stderr,"Error3:%s",err.Error())	
+			return
+		}
+		fmt.Fprintf(os.Stdout,"readed:%d",n)
+		
+		n, err = pUDPConn.WriteToUDP(buf,pUDPAddr)
+		if err != nil {
+			fmt.Fprintf(os.Stderr,"Error4:%s",err.Error())
+			return
+		}
+		fmt.Fprintf(os.Stdout,"Writed:%d",n)
+	}
+}
+</pre>
