@@ -13957,3 +13957,24 @@ a string
 Linux内核启动的时候默认打开的这三个I/O设备文件：标准输入文件stdin，标准输出文件stdout，标准错误输出文件stderr，分别得到文件描述符 0, 1, 2。
 
 stdin是标准输入，stdout是标准输出，stderr是标准错误输出。大多数的命令行程序从stdin输入，输出到stdout或stderr。
+####将一个host地址转换成TCPAddr
+<pre>
+package main
+import (
+	"os"
+	"fmt"
+	"net"
+)
+//将一个host地址转换成TCPAddr host = ip:port
+func main(){
+	pTCPAddr ,err :=net.ResolveTCPAddr("tcp","www.baidu.com:80")
+	if err != nil{
+		fmt.Fprintf(os.Stderr,"Error:%s",err.Error())
+		return
+	}
+	fmt.Fprintf(os.Stdout,"www.baidu.com:80 IP:%s PORT:%d  \n",pTCPAddr.IP.String(),pTCPAddr.Port)
+	
+}
+output==>
+www.baidu.com:80 IP:115.239.210.27 PORT:80  
+</pre>
