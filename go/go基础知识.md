@@ -13660,3 +13660,44 @@ output==>
 4
 4 12 28 24
 </pre>
+###定时器Time.Tick()
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	tick := time.Tick(1e8)
+	boom := time.After(5e8)
+	for {
+		select {
+			case  <- tick :
+			fmt.Println("tick.")
+			case  <- boom :
+			fmt.Println("Boom!")
+			return
+			default:
+			fmt.Println("      /*/")
+			time.Sleep(6e7)
+		}
+	}
+}
+output==>
+      /*/
+      /*/
+tick.
+      /*/
+      /*/
+tick.
+      /*/
+tick.
+      /*/
+      /*/
+tick.
+      /*/
+      /*/
+tick.
+Boom!
+</pre>
