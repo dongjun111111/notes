@@ -13747,5 +13747,33 @@ Accept-Encoding: gzip, deflate, sdch
 Accept-Language: zh-CN,zh;q=0.8
 Cookie: a9524_times=1
 Error reading EOF
-
+</pre>
+利用net包编写压力测试程序
+<pre>
+//下面是一个可以进行压力测试的客户端程序
+package main
+import (
+    "net"
+    "fmt"
+)
+func main() {
+    currency := 20 //并发数,记住，一个连接数是打开一个端口号，window和linux的端口号都是有限制的
+    count := 10 //每条连接发送多少次连接
+    for i:=0;i<currency;i++ {
+        go func(){
+            for j:=0;j<count;j++ {
+                sendMessage()
+            }
+        }()
+    }
+    select{}
+}
+func sendMessage() {
+    conn, err := net.Dial("tcp", "127.0.0.1:8080")
+    if(err != nil) {
+        panic("error")
+    }
+    header := "GET / HTTP/1.0\r\n\r\n"
+    fmt.Fprintf(conn, header)
+}
 </pre>
