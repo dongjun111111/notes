@@ -13951,3 +13951,9 @@ an error
 |foo   |b     |
 a string
 </pre>
+####关于os.Stdout os.Stderr os.Stdin
+在通常情况下，UNIX每个程序在开始运行的时刻，都会有3个已经打开的stream. 分别用来输入，输出，打印诊断和错误信息。通常他们会被连接到用户终端. 但也可以改变到其它文件或设备。
+
+Linux内核启动的时候默认打开的这三个I/O设备文件：标准输入文件stdin，标准输出文件stdout，标准错误输出文件stderr，分别得到文件描述符 0, 1, 2。
+
+stdin是标准输入，stdout是标准输出，stderr是标准错误输出。大多数的命令行程序从stdin输入，输出到stdout或stderr。
