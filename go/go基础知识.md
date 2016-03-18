@@ -13777,7 +13777,28 @@ func sendMessage() {
     fmt.Fprintf(conn, header)
 }
 </pre>
-哈哈，在看别人的go源码时，引发对下面知识的补习：
+<pre>
+package main
+//根据IP和掩码获得网络  
+import (
+	"os"
+	"fmt"
+	"net"
+)
+func main(){
+	name := "192.168.1.97"
+	ip :=net.ParseIP(name)
+	mask :=ip.DefaultMask()//掩码
+	network :=ip.Mask(mask)
+	fmt.Fprintf(os.Stdout,"network:%s",network.String())
+	//ip :192.168.1.97
+	//mask:255.255.255.0
+	//network:192.168.1.0
+}
+output==>
+192.168.1.0
+</pre>
+哈哈，在看上面的go源码时，引发对下面知识的补习：
 <pre>
 IP 网络地址
 Subnet Mask子网掩码
