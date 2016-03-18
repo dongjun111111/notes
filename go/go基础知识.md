@@ -13701,3 +13701,51 @@ tick.
 tick.
 Boom!
 </pre>
+###tcp服务器
+<pre>
+package main
+
+import (
+	"net"
+	"fmt"
+)
+func main(){
+	fmt.Println("Starting the server...")
+	listener,err := net.Listen("tcp","localhost:5000")
+	if err != nil{
+		fmt.Println("Error listening",err.Error())
+		return
+	}
+	for {
+		conn,err :=listener.Accept()
+		if err != nil {
+			fmt.Println("Error accepting",err.Error())
+			return 
+		}
+		go doServerStuff(conn)
+	}
+	
+}
+func doServerStuff(conn net.Conn){
+		for {
+			buf := make([]byte,512)
+			_,err :=conn.Read(buf)
+			if err != nil {
+				fmt.Println("Error reading",err.Error())
+				return
+			}
+			fmt.Println("received data :",string(buf))
+		}
+}
+output==>
+Starting the server...
+received data : GET /favicon.ico HTTP/1.1
+Host: localhost:5000
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.154 Safari/537.36 LBBROWSER
+Accept-Encoding: gzip, deflate, sdch
+Accept-Language: zh-CN,zh;q=0.8
+Cookie: a9524_times=1
+Error reading EOF
+
+</pre>
