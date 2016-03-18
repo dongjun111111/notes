@@ -13916,13 +13916,11 @@ func checkConnection(conn net.Conn, err error) {
 将www.apache.org网站的源码读出来了。
 <pre>
 package main
-
 import (
     "fmt"
     "io"
     "net"
 )
-
 func main() {
     var (
         host          = "www.apache.org"
