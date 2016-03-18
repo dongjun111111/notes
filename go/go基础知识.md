@@ -13911,6 +13911,7 @@ func checkConnection(conn net.Conn, err error) {
     fmt.Println("Connection is made with %v", conn)
 }
 </pre>
+####socket.go
 一个使用net包从socket中打开，写入，读取数据的案例：
 将www.apache.org网站的源码读出来了。
 <pre>
