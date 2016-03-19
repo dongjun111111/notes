@@ -14498,3 +14498,40 @@ output==>
 		<style>
 ...
 </pre>
+###http.Post(url,"application/x-www-form-urlencoded",strings.NewReader())
+第二个参数要设置成”application/x-www-form-urlencoded”，否则post参数无法传递！！！
+<pre>
+package main
+
+import (
+	"strings"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+)
+func httpPost(){
+	resp,err := http.Post("http://www.93jiang.com/","application/x-www-form-urlencoded",strings.NewReader("d=100054"))
+	if err != nil{
+		log.Fatal("err:",err.Error())
+		return 
+	}
+	defer resp.Body.Close()
+	
+	body,err:= ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal("Error:",err.Error())
+	}
+	fmt.Println(string(body))	
+}
+func main(){
+	httpPost()
+}
+output==>
+<p><span>擅长类目：</span>
+		                          			<span class="type_s_icon2 cate_1" title="服装内衣"></span><span class="type_s_icon2 cate_4" title="精品鞋包"></span><span class="type_s_icon2 cate_64" title="化妆美容"></span>		                          		</p>
+		                          		<p>
+		                          			<span>月薪要求：</span>
+		                          			<span><em style="font-weight: bold;">3300</em>&nbsp;元/月</span>
+...
+</pre>
