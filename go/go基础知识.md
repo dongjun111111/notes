@@ -14615,3 +14615,22 @@ output==>
 </body>
 </html>
 </pre>
+####最简易的http服务器
+<pre>
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+func helloserver(w http.ResponseWriter,r *http.Request){
+	fmt.Fprintf(w,"content")
+}
+func main(){
+	http.HandleFunc("/",helloserver)
+	http.ListenAndServe("localhost:8089",nil)
+
+}
+output==>
+content
+</pre>
