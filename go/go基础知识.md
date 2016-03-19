@@ -14643,3 +14643,9 @@ content
 - http.StatusForbidden        = 403
 - http.StatusNotFound     = 404
 - http.StatusInternalServerError  = 500
+golang网络常用设置
+r.Header.Set("Accept-Charset","GBK,utf-8;q=0.7,*;q=0.3") 
+r.Header.Set("Accept-Encoding","gzip,deflate,sdch") 
+r.Header.Set("Accept-Language","zh-CN,zh;q=0.8") 
+r.Header.Set("Cache-Control","max-age=0") 
+r.Header.Set("Connection","keep-alive") 
