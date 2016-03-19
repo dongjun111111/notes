@@ -5,3 +5,17 @@
 cookie := http.Cookie{Name: "admin_name", Value: rows[0].Str(res.Map("admin_name")), Path: "/"}
 http.SetCookie(w, &cookie)
 </pre>
+####http.FileServer()
+文件系统显示本地文件在网页上。
+<pre>
+package main
+
+import (
+    "net/http"
+)
+
+func main() {
+    http.Handle("/", http.FileServer(http.Dir("./")))
+    http.ListenAndServe(":8123", nil)
+}
+</pre>
