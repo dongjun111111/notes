@@ -14267,3 +14267,28 @@ func main(){
     fmt.Fprintf(os.Stdout, "readed: %d  %s \n", n, string(buf[:n]))  
 }
 </pre>
+####http网页服务器
+<pre>
+package main
+
+import (
+	"log"
+	"fmt"
+	"net/http"
+)
+func HelloServer(w http.ResponseWriter,req *http.Request){
+	fmt.Println("Inside helloserver handler")
+	fmt.Fprintf(w,"Hello,"+req.URL.Path[1:]) //req.URL.Path[]完整的是localhost:8086后面跟的所有内容
+}
+func main(){
+	http.HandleFunc("/",HelloServer)
+	err :=http.ListenAndServe("localhost:8086",nil)
+	if err != nil{
+		log.Fatal("ListenAndServe:",err.Error())
+	}
+}
+/*
+浏览器：localhost:8086/Jason
+Hello Jason
+*/
+</pre>
