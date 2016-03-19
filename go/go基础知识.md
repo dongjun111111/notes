@@ -14457,6 +14457,7 @@ http://www.163.com/  :  200
 http://www.sina.com/  :  200
 </pre>
 ###http.Get()
+通过http.Get()获取网页的详细内容，然后用ioutil.ReadAll(resp.Body)读取主要内容。
 <pre>
 package main
 
