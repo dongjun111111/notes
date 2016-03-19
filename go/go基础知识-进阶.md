@@ -30,3 +30,14 @@ Go语言的模板通过{{}}来包含需要在渲染时被替换的字段，{{.}}
 当前对象为struct类型时，对象的字段通过{{.FieldName}}读取，但是需要注意一点：这个字段必须是导出的(字段首字母必须是大写的)，否则在渲染的时候就会报错。这是因为对象的属性要遵循访问修饰符规则，私有属性外部不可访问，所以，会产生错误！
 
 当前对象为Map类型时，对象的字段通过{{.fieldName}}读取，这个字段则没有上述的限制。
+####OutputJson()
+<pre>
+func OutputJson(w http.ResponseWriter, ret int, reason string, i interface{}) {
+    out := &Result{ret, reason, i}
+    b, err := json.Marshal(out)
+    if err != nil {
+        return
+    }
+    w.Write(b)
+}
+</pre>
