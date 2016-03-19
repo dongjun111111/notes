@@ -14570,3 +14570,48 @@ output==>
 					                        		<i class="icon_s star_all"></i>
 ...
 </pre>
+####http.Do()
+有时需要在请求的时候设置头参数、cookie之类的数据，就可以使用http.Do方法。
+同post请求，必须要设定Content-Type为application/x-www-form-urlencoded，post参数才可正常传递。
+<pre>
+package main
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"strings"
+	"net/http"
+)
+func httpDo(){
+	client :=&http.Client{}
+	
+	req,err := http.NewRequest("POST","http://www.about.me",strings.NewReader("id=1"))
+	if err != nil{
+		log.Fatal("Error:",err.Error())
+	}
+	req.Header.Set("Content-Type","application/x-www-form-urlencoded")
+	req.Header.Set("Cookie","name=Jason")
+	
+	resp,err := client.Do(req)
+	if err != nil {
+		log.Fatal("ERROR:",err.Error())
+	}
+	defer resp.Body.Close()
+	body,err :=ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal("Error:",err.Error())
+	}
+	fmt.Println(string(body))
+}
+func main(){
+	httpDo()
+}
+output==>
+<html>
+<head><title>301 Moved Permanently</title></head>
+<body bgcolor="white">
+<center><h1>301 Moved Permanently</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+</pre>
