@@ -14292,3 +14292,21 @@ func main(){
 Hello Jason
 */
 </pre>
+简化上面的写法：
+<pre>
+package main
+import (
+    "fmt"
+    "net/http"
+)
+
+func HelloServer(w http.ResponseWriter, req *http.Request) {
+    fmt.Println("Inside HelloServer handler")
+    fmt.Fprintf(w, "Hello,"+req.URL.Path[1:])
+}
+
+func main() {
+    http.ListenAndServe(":8080", http.HandlerFunc(HelloServer))
+}
+</pre>
+简单的让人发指有没有！！！
