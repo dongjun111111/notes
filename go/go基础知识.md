@@ -14344,3 +14344,29 @@ HTTPS服务端在连接建立过程（ssl shaking握手协议）中，会将自�
 上述过程有一个问题，那就是双方握手过程中，如何保障HTTPS服务端发送给客户端的公钥信息没有被篡改呢？实际应用中，HTTPS并非直接 传输公钥信息，而是使用携带公钥信息的数字证书来保证公钥的安全性和完整性。
 
 居民身份证是由国家统一制作和颁发的，个人向户 口所在地公安机关申请，国家颁发的身份证才具有法律 效力，任何地方这个身份证都是有效和可被接纳的。大悦城的会员卡也是一种身份标识，但你若用大悦城的会员卡去买机票，对不起， 不卖。航空公司可不认大悦城的会员卡，只认居民身份证。网站的证书也是同样的道理。一般来说数字证书从受信的权威证书授权机构 (Certification Authority，证书授权机构)买来的（免费的很少）。一般浏览器在出厂时就内置了诸多知名CA（如Verisign、GoDaddy、美国国防部、 CNNIC等）的数字证书校验方法，只要是这些CA机构颁发的证书，浏览器都能校验。对于CA未知的证书，浏览器则会报错（就像上面那个截图一 样）。主流浏览器都有证书管理功能，但鉴于这些功能比较高级，一般用户是不用去关心的。
+<pre>
+//客户端跳过证书验证
+package main
+import (
+	"crypto/tls"
+	"io/ioutil"
+	"fmt"
+	"net/http"
+)
+func main(){
+	//
+	tr :=&http.Transport{
+		TLSClientConfig:&tls.Config{InsecureSkipVerify:true},
+	}
+	client :=&http.Client{Transport:tr}
+	resp,err := client.Get("https://locahost:8088")
+	if err != nil{
+		fmt.Println("Error:",err)
+		return
+	}
+	defer resp.Body.Close()
+	
+	body,err :=ioutil.ReadAll(resp.Body)
+	fmt.Println(string(body))
+}
+</pre>
