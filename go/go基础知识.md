@@ -14535,3 +14535,38 @@ output==>
 		                          			<span><em style="font-weight: bold;">3300</em>&nbsp;元/月</span>
 ...
 </pre>
+####http.PostForm()
+类似http.Post()获取网页，不过语法有所不同。请比对观看。
+<pre>
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/url"
+	"net/http"
+)
+func httpPostForm(){
+	resp,err :=http.PostForm("http://www.93jiang.com/list/",url.Values{"key":{"Value"},"d":{"31541"}})
+	if err != nil {
+		log.Fatal("Error:",err.Error())
+	}
+	defer resp.Body.Close()
+	
+	body,err :=ioutil.ReadAll(resp.Body)
+	if err != nil{
+		log.Fatal("err :",err.Error())
+	}
+	fmt.Println(string(body))
+}
+func main(){
+	httpPostForm()
+}
+output==>
+  <i class="icon_s star_all"></i>
+					                        		<i class="icon_s star_all"></i>
+					                        		<i class="icon_s star_all"></i>
+					                        		<i class="icon_s star_all"></i>
+...
+</pre>
