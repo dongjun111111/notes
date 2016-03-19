@@ -8666,8 +8666,7 @@ typeof new Object() === “object
 Object.prototype.toString.apply([]); === “[Object Array]”;
 Object.prototype.toString.apply(null); === “[Object Null]”;
 [1， 2] instanceof Array === true
-new Object() instanceof Array === false
-
+new Object() instanceof Array === false
 3.对象 & 基元类型
 var a = “string”;
 alert(a.length);
@@ -8696,3 +8695,10 @@ return id++;
 })();
 
 6.原型
+
+
+
++++++js中function(e)++++
+e是事件，在firefox中只能在事件现场使用window.event，所以只有把event传给函数使用。为了兼容FF和其它浏览器，一般会在函数里重新给e赋值：
+e = window.event || e;
+也就是说，如果window.event存在，则该浏览器支持直接使用window.event，否在就是不支持，不支持就使用传进来的e。
