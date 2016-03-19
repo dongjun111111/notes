@@ -14310,3 +14310,20 @@ func main() {
 }
 </pre>
 简单的让人发指有没有！！！
+####https安全网页服务器
+我们用http.ListenAndServeTLS替换掉了http.ListenAndServe，就将一个HTTP Server转换为HTTPS Web Server了。不过ListenAndServeTLS 新增了两个参数certFile和keyFile，需要我们传入两个文件路径。
+<pre>
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+func handler(w http.ResponseWriter, r *http.Request){
+	fmt.Fprintf(w,"Hi,This is an example of https service in golang!")
+}
+func main(){
+	http.HandleFunc("/",handler)
+	http.ListenAndServeTLS(":8081","server.crt","server.key",nil)
+}
+</pre>
