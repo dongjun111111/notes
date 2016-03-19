@@ -14312,6 +14312,10 @@ func main() {
 简单的让人发指有没有！！！
 ####https安全网页服务器
 我们用http.ListenAndServeTLS替换掉了http.ListenAndServe，就将一个HTTP Server转换为HTTPS Web Server了。不过ListenAndServeTLS 新增了两个参数certFile和keyFile，需要我们传入两个文件路径。
+#####about http https
+不过HTTP毕竟是明文的，在这样一个不安全的世界里，随时存在着窃听（sniffer工具可以简单办到）、篡改甚至是冒充等风险，因此对于一些 对安全比较care的站点或服务，它们需要一种安全的HTTP协议，于是就有了HTTPS。
+
+HTTPS只是我们在浏览器地址栏中看到协议标识，实际上它可以被理解为运行在SSL（Secure Sockets Layer）或TLS(Transport Layer Security)协议所构建的安全层之上的HTTP协议，协议的传输安全性以及内容完整性实际上是由SSL或TLS保证的。
 <pre>
 package main
 
