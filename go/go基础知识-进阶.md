@@ -9,13 +9,15 @@ http.SetCookie(w, &cookie)
 文件系统显示本地文件在网页上。
 <pre>
 package main
-
 import (
     "net/http"
 )
-
 func main() {
     http.Handle("/", http.FileServer(http.Dir("./")))
     http.ListenAndServe(":8123", nil)
 }
+</pre>
+当然用golang写一个文件服务很简单，比如上面的，但是如果想通过localhost:8123/doc（即自定义文件服务器入口）来进入文件目录，则需要
+<pre>
+http.Handle("/doc",http.StripPrefix("/doc",http.FileServer(http.Dir("./"))))   //在浏览器地址栏输入localhost:8123/doc ,显示同上面一样的结果
 </pre>
