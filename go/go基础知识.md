@@ -14428,5 +14428,31 @@ func main() {
         }
         log.Println("Wechat Service: Stop!")
 }
+</pre>
+####golang返回网站的状态码
+<pre>
+package main
 
+import (
+	"fmt"
+	"net/http"
+)
+var urls =[]string{
+	"http://www.qq.com/",
+	"http://www.163.com/",
+	"http://www.sina.com/",
+}
+func main(){
+	for _,url := range urls {
+		resp,err := http.Head(url) 
+		if err != nil {
+			fmt.Println("Error:",url,err)
+		}
+		fmt.Println(url," : ",resp.StatusCode)//状态码
+	}
+}
+output==>
+http://www.qq.com/  :  200
+http://www.163.com/  :  200
+http://www.sina.com/  :  200
 </pre>
