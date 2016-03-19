@@ -14649,3 +14649,16 @@ r.Header.Set("Accept-Encoding","gzip,deflate,sdch")
 r.Header.Set("Accept-Language","zh-CN,zh;q=0.8") 
 r.Header.Set("Cache-Control","max-age=0") 
 r.Header.Set("Connection","keep-alive") 
+//未找到网页重定向设置
+req.Header.Add("If-None-Match", `W/"wyzzy"`)
+要管理服务端的行为，可以创建一个自定义的Server：
+<pre>
+s := &http.Server{
+	Addr:           ":8080",
+	Handler:        myHandler,
+	ReadTimeout:    10 * time.Second,
+	WriteTimeout:   10 * time.Second,
+	MaxHeaderBytes: 1 << 20,
+}
+log.Fatal(s.ListenAndServe())
+</pre>
