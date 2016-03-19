@@ -14456,3 +14456,44 @@ http://www.qq.com/  :  200
 http://www.163.com/  :  200
 http://www.sina.com/  :  200
 </pre>
+###http.Get()
+<pre>
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+)
+func httpGet(){
+	resp,err := http.Get("http://dongjun111111.github.io/resume-v2.html")
+	if err != nil{
+		log.Fatal("Error:",err.Error())
+	}
+	defer resp.Body.Close()
+	body,err :=ioutil.ReadAll(resp.Body)
+	if err != nil{
+		log.Fatal("Err:",err.Error())
+	}
+	fmt.Println(string(body))
+}
+func main(){
+	httpGet()
+}
+output==>
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>董军-18855971036-dongjun903456@163.com</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		 <meta name="Keywords" content="简历,求职,工作,梦想">
+        <meta name="Description" content="这是一名黄山学院大四学生的关于职业的主要信息汇总,明明是一名化学狗，偏偏想要在互联网的世界里闯荡！结果会怎样呢，敬请期待···">
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+		<style>
+...
+</pre>
