@@ -14662,3 +14662,49 @@ s := &http.Server{
 }
 log.Fatal(s.ListenAndServe())
 </pre>
+简单网页输入框
+<pre>
+package main
+
+import (
+	"log"
+	"io"
+	"fmt"
+	"net/http"
+)
+const form = `
+	<html>
+	<head>
+	<meta charset="utf-8">
+	</head>
+		<body>
+			<form action="#" method="post" name="bar">
+				<input type="text" name="youguesswhathaha" />
+				<input type="submit" value="提交" />
+			</form>
+		</body>
+	</html>
+`
+func simpleserver(w http.ResponseWriter,r *http.Request){	
+	fmt.Fprintf(w,"<h1>Hello Jason</h1>")
+}
+func formserver(w http.ResponseWriter,r *http.Request){
+	w.Header().Set("Content-Type","text/html")
+	w.Header().Set("Accept-Charset","utf-8")
+	switch r.Method {
+		case "GET":
+		io.WriteString(w,form) //加载网页字符串
+		case "POST":
+	//在POST情况下，使用request.FormValue("inp")通过文本框的name属性youguesswhathaha来获取值并输出
+		io.WriteString(w,r.FormValue("youguesswhathaha"))
+	}
+}
+func main(){
+	http.HandleFunc("/test1",simpleserver)
+	http.HandleFunc("/test2",formserver)
+	err :=http.ListenAndServe("localhost:8789",nil)
+	if err != nil {
+		log.Fatal("Error : ",err.Error())
+	}
+}
+</pre>
