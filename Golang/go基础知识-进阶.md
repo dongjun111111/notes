@@ -104,3 +104,33 @@ func main() {
     }
 }
 </pre>
+####filepath.Walk filepath.Abs
+<pre>
+package main
+
+import (
+	"log"
+	"os"
+	"fmt"
+	"path/filepath"
+)
+func walkFunc(path string ,info os.FileInfo,err error)error{
+	fmt.Println(path)
+	return nil
+}
+func absFunc(){
+	abs,err := filepath.Abs("/hello")//检查是否是绝对路径
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(abs)
+}
+func ReadDirectory(srcDir string) {
+    files, _ := filepath.Glob(srcDir + "/[a-Z0-9]")
+    fmt.Println(files)
+}
+func main(){
+	filepath.Walk("./",walkFunc)
+	absFunc()
+}
+</pre>
