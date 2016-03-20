@@ -786,7 +786,7 @@ Linuxœ¬£¨”–“ª–©…Ë÷√£¨±Í√˜¡Àresources available to the shell and to processes°£ ø
 
 #ulimit -a ¿¥ø¥’‚–©…Ë÷√°£ (ulimit «bash built-in Command) 
 
-             -a     All current limits are reported
+              -a     All current limits are reported
               -c     The maximum size of core files created
               -d     The maximum size of a process‚Äôs data segment
               -e     The maximum scheduling priority ("nice")
