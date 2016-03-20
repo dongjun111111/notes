@@ -382,5 +382,4 @@ ini_set('session.cookie_domain', '.xiaoyuan.com');
 ?>
 这样各个服务器共享同一客户端 SESSION ID 的目的就达到了。
 
-第二个目标的实现可以使用文件共享方式，有2种方式可以解决,一是用数据库存session,还有就是试用memcache。这里
-用MEMCACHE来解决.
+第二个目标的实现可以使用文件共享方式，有2种方式可以解决,一是用数据库存session,还有就是试用memcache。这里用MEMCACHE来解决.
