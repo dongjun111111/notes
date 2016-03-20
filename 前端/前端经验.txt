@@ -256,3 +256,12 @@ defer和async(有兼容性问题,不推荐)
 5**(服务端错误类)：服务器不能正确执行一个正确的请求
 500 Internal Server Error 服务器遇到错误，最常见的服务器端错误。
 503 Service Unavailable 服务器端暂时无法处理请求（可能是过载或维护）。
+
+
+let 、var 区别:
+let 块级作用域，var 函数作用域
+let 暂时性死区的原因：
+var 会变量提升，let 不会。
+使用选择器查找页面内所有 div 元素
+getElementsByTagName('div')
+querySelectorAll('div') // ie9+
