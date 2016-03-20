@@ -28,7 +28,7 @@ ssh 安全增强方法;密码方式和rsa key 方式的配置。
 rpm/apt/yum/ports 装包，查询，删除的基本命令。
 Makefile的基本格式，gcc 编译，连接的命令,-O0 和-O3区别。
 gdb,strace,valgrind的基本使用.
-Linux查看当前文件夹下面占用空间最大的文件夹，就是这么简单：
+Linux查看当前文件夹下面占用空间最大的文件夹的方法：
 du --max-depth=1 -h
 Linux重启网卡命令：
 service network restart
