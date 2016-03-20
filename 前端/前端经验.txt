@@ -265,3 +265,27 @@ var 会变量提升，let 不会。
 使用选择器查找页面内所有 div 元素
 getElementsByTagName('div')
 querySelectorAll('div') // ie9+
+
+
+前端优化 - 雅虎14条军规
+第一条、尽可能的减少 HTTP 的请求数 （Make Fewer HTTP Requests ）
+常用的方法，合并css，js（将一个页面中的css和js文件分别合并）以及 Image maps和css sprites等。
+第二条、使用CDN（内容分发网络）: Use a Content Delivery Network
+第三条、 添加Expire/Cache-Control 头：Add an Expires Header
+通过设置Expires header 来缓存这些文件，多数的图片，flash在发布后都是不需要经常修改的，做了缓存以后这样浏览器以后就不需要再从服务器下载这些文件而是而直接从缓存中读取，这样再次访问页面的速度会大大加快。
+第四条、启用Gzip压缩：Gzip Components
+第五条、将css放在页面最上面 （ Put Stylesheets at the Top）
+第六条、将script放在页面最下面 （Put Scripts at the Bottom ）
+将脚本放在页面最下面的目的有那么两点：
+1、 因为防止script脚本的执行阻塞页面的下载。在页面loading的过程中，当浏览器读到js执行语句的时候一定会把它全部解释完毕后在会接下来读下 面的内容。
+2、脚本引起的第二个问题是它阻塞并行下载数量。HTTP/1.1规范建议浏览器每个主机的并行下载数不超过2个（IE只能为2个，其他浏览器如ff等都是默认设置为2个，不过新出的ie8可以达6个）。
+第七条、避免在CSS中使用Expressions （Avoid CSS Expressions ）
+第八条、把javascript和css都放到外部文件中 （Make JavaScript and CSS External ）
+第九条、减少DNS查询 (Reduce DNS Lookups)
+一次DNS的解析过程会消耗20-120毫秒的 时间,在dns查询结束之前，浏览器不会下载该域名下的任何东西。所以减少dns查询的时间可以加快页面的加载速度。
+第十条、压缩 JavaScript 和 CSS (Minify JavaScript )
+常用的压缩工具有JsMin、YUI compressor等。当然，压缩带来的一个弊端就是代码的可读性没了。目前采用的做法是在js和css发布的时候在 服务器端进行压缩。
+第十一条、避免重定向 (Avoid Redirects )
+第十二条、移除重复的脚本 (Remove Duplicate Scripts )
+第十三条、配置实体标签（ETags） (Configure ETags )
+第十四条、使 AJAX 缓存 (Make Ajax Cacheable )
