@@ -1,5 +1,3 @@
-Web前端代码规范与页面布局 (2013-07-25 00:20:23)转载▼
-标签： 代码规范 css it	分类： 2013年7月
 一、    规范目的：
 为提高工作效率，便于后台人员添加功能及前端后期优化维护，输出高质量的文档，在网站建设中，使结构更加清晰，代码简明有序，有一个更好的前端架构，有利于SEO优化。
 
@@ -33,7 +31,7 @@ Content=’-1’表示立即过期。
 （9）转义字符：特殊符号使用转义字符
 （10）页面架构时考虑扩展性
 
-2. Css
+2. CSS
 （1）页面内部尽量避免使用style属性
 （2）css放在head标签中，由link标签引入，使页面的结构与表现分离。
 （3）文件命名：以英文命名，后缀.css，共用：base.css，首页：index.css，其他页面样式依具体模块需求命名
@@ -114,3 +112,147 @@ Content=’-1’表示立即过期。
 
 4.      图片自适应
   img， object { max-width: 100%;}
+
+
+
++++对浏览器内核的理解++++
+主要分成两部分：渲染引擎(layout engineer或Rendering Engine)和JS引擎。
+渲染引擎：负责取得网页的内容（HTML、图像等等）、加入样式等信息（CSS等），以及计算网页的显示方式，然后输出
+JS引擎：解析和执行javascript来实现网页的动态效果。
+最开始渲染引擎和JS引擎并没有区分的很明确，后来JS引擎越来越独立，内核就倾向于只指渲染引擎。
+
+++++常见的浏览器内核++++++
+Trident 内核：IE,360,搜狗浏览器等。[又称MSHTML]
+Gecko 内核：FireFox等
+Webkit 内核：Safari,android Chrome,android,ios等。 [ Chrome的：Blink（WebKit的分支）]
+
++++++HTML5的离线储存++++
+原理
+HTML5的离线存储是基于一个新建的.appcache文件的缓存机制(不是存储技术)，通过这个文件上的解析清单离线存储资源，这些资源就会像cookie一样被存储了下来。之后当网络在处于离线状态下时，浏览器会通过被离线存储的数据进行页面展示。
+使用方法
+只要在你的页面头部像下面一样加入一个manifest的属性就可以了。
+<!DOCTYPE HTML>
+<html manifest = "cache.manifest">
+...
+</html>
+然后cache.manifest文件的书写方式，就像下面这样：
+CACHE MANIFEST
+CACHE:
+js/app.js
+css/style.css
+NETWORK:
+resourse/logo.png
+FALLBACK:
+/ /offline.html
+离线存储的manifest一般由三个部分组成:
+1.CACHE:表示需要离线存储的资源列表
+2.NETWORK:表示在它下面列出来的资源只有在在线的情况下才能访问，他们不会被离线存储
+3.FALLBACK:(示例里面'/ /'不是注释)表示如果访问第一个资源失败，那么就使用第二个资源来替换他，比如上面这个文件表示的就是如果访问根目录下任何一个资源失败了，那么就去访问offline.html。
+
+++++display position++++
+display
+none 这个太熟悉了吧；
+block 像块类型元素一样显示；
+inline 缺省值。像行内元素类型一样显示；
+inline-block 像行内元素一样显示，但其内容像块类型元素一样显示（可以设置 width height）；
+list-item 像块类型元素一样显示，并添加样式列表标记。
+position
+static:默认值。没有定位，元素出现在正常的流中（忽略 top, bottom, left, right z-index 声明）。
+relative:生成相对定位的元素，相对于其正常位置进行定位。
+absolute:生成绝对定位的元素，相对于 static 定位以外的第一个父元素进行定位。
+fixed:生成绝对定位的元素，相对于浏览器窗口进行定位。
+inherit:规定从父元素继承 position 属性的值。
+
+
++++一个通用的事件侦听器函数javascript++++
+markyun.Event = {
+    // 类似于 $.ready
+    readyEvent : function(fn) {
+        var oldonload = window.onload;
+        if (typeof window.onload !== 'function') {
+            window.onload = fn;
+        } else {
+            window.onload = function() {
+                oldonload();
+                fn();
+            };
+        }
+    },
+    // 兼容：视能力分别使用dom0||dom2||IE方式 来绑定事件
+    // 参数： 操作的元素,事件名称 ,事件处理程序
+    addEvent : function(element, type, handler) {
+        if (element.addEventListener) {
+            //事件类型、需要执行的函数、是否捕捉
+            element.addEventListener(type, handler, false);
+        } else if (element.attachEvent) {
+            element.attachEvent('on' + type, function() {
+                handler.call(element);
+            });
+        } else {
+            element['on' + type] = handler;
+        }
+    },
+    // 移除事件
+    removeEvent : function(element, type, handler) {
+        if (element.removeEventListener) {
+            element.removeEventListener(type, handler, false);
+        } else if (element.datachEvent) {
+            element.detachEvent('on' + type, handler);
+        } else {
+            element['on' + type] = null;
+        }
+    },
+    // 阻止事件 (主要是事件冒泡，因为IE不支持事件捕获)
+    stopPropagation : function(ev) {
+        if (ev.stopPropagation) {
+            ev.stopPropagation();
+        } else {
+            ev.cancelBubble = true;
+        }
+    },
+    // 取消事件的默认行为
+    preventDefault : function(event) {
+        if (event.preventDefault) {
+            event.preventDefault();
+        } else {
+            event.returnValue = false;
+        }
+    },
+    // 获取事件目标
+    getTarget : function(event) {
+        return event.target || event.srcElement;
+    }
+};
+
++++++++js延迟加载的方式+++++++
+动态创建DOM方式（用得最多，可以控制创建加载的时机,google analyze就用的它,这个方式几乎成了标准的异步载入js文件的方式）
+defer和async(有兼容性问题,不推荐)
+
+
++++++前端性能优化的方法+++++
+请求数量: 合并脚本和样式表, iconfont，拆分初始化负载，划分主域
+请求带宽: 开启 GZip，精简 JavaScript，移除重复脚本，图像优化
+缓存利用: 使用 CDN，使用外部 JavaScript 和 CSS，减少 DNS 查找
+页面结构: 将样式表(影响样式的内容)放在顶部，将脚本放在底部，尽早刷新文档的输出
+“拆分初始化负载”的目标是将页面一开始加载时不需要执行的资源从所有资源中分离出来，等到需要的时候再加载。
+划分主域 + 减少 DNS 查找：建议在一个网站里面使用至少2个域，但不多于4个域来提供资源
+
+++++常用http状态码++++
+1**(信息类)：表示接收到请求并且继续处理
+100 Continue 继续，一般在发送post请求时，已发送了http header之后服务端将返回此信息，表示确认，之后发送具体参数信息
+2**(响应成功)：表示动作被成功接收、理解和接受
+200 OK 正常返回信息
+201 Created 请求成功并且服务器创建了新的资源
+202 Accepted 服务器已接受请求，但尚未处理
+3**(重定向类)：为了完成指定的动作，必须接受进一步处理
+301 Moved Permanently 请求的网页已永久移动到新位置。
+302 Found 临时性重定向。
+303 See Other 临时性重定向，且总是使用 GET 请求新的 URI。
+304 Not Modified 自从上次请求后，请求的网页未修改过。
+4**(客户端错误类)：请求包含错误语法或不能正确执行
+401 Unauthorized 请求未授权验证。
+403 Forbidden 禁止访问。
+404 Not Found 找不到如何与 URI 相匹配的资源。
+5**(服务端错误类)：服务器不能正确执行一个正确的请求
+500 Internal Server Error 服务器遇到错误，最常见的服务器端错误。
+503 Service Unavailable 服务器端暂时无法处理请求（可能是过载或维护）。
