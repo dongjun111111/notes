@@ -1,4 +1,4 @@
-####这里介绍的是window下面的Redis使用体验。
+####这里介绍的是window下面的Redis使用体验
 Redis最为常用的数据类型主要有以下五种：
 
 * String
