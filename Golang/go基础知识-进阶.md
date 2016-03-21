@@ -134,3 +134,4 @@ func main(){
 	absFunc()
 }
 </pre>
+###golang中读写锁sync.RWMutex和互斥锁sync.Mutex区别
