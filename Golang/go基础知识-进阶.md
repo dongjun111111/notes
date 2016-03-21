@@ -481,7 +481,8 @@ id: 1 ticket: -3
 Exit
 </pre>
 上面出现ticket=-1还有-2的情况肯定是不愿意看到的，那并发安全的应该怎么写呢？
-当然答案已经有人说出来了，就是在每个goroutine上加一把锁保证数据同步：
+当然答案已经有人说出来了，第一种方案是：<br>
+是在每个goroutine上加一把锁保证数据同步.
 <pre>
 package main
 
@@ -547,4 +548,32 @@ id: 0 tickets: 1
 id: 0 tickets: 0
 !q
 Leaved: 0
+</pre>
+第二种方案是：<br>
+原子操作，保证数据同步。
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+	"time"
+)
+func main(){
+	var cnt uint32 = 0
+	for i:=0;i<5;i++{
+		go func(){
+			//每个goroutine都做20次加1操作
+			for i:=0;i<20;i++{
+				time.Sleep(time.Millisecond)
+				atomic.AddUint32(&cnt,1)
+			}
+		}()		
+	}
+	time.Sleep(time.Second)
+		cntFinal :=atomic.LoadUint32(&cnt)
+		fmt.Println("cnt:",cntFinal)
+}
+output==>
+100
 </pre>
