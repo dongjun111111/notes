@@ -412,3 +412,71 @@ Read i= 3 ,rsn= 2 ,data= [116 101 115 116 49 95 98 97 116 117]  success.
 </pre>
 ###Goroutine高并发安全性
 这里有一个经典的例子，介绍关于平时不会出现而在高并发情况下会出现的问题：
+<pre>
+package main 
+
+import (
+	"strings"
+	"os"
+	"runtime"
+	"fmt"
+	"math/rand"
+	"time"
+)
+var total_tickets int32 = 20
+func sell_tickets(i int){
+	for {
+		if total_tickets > 0 {
+			time.Sleep(time.Duration(rand.Intn(5))*time.Millisecond)
+			total_tickets--
+			fmt.Println("id:",i,"ticket:",total_tickets)
+		}else{
+			break
+		}
+	}
+}
+func main(){
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	rand.Seed(time.Now().Unix())
+	//产生5个goroutine来卖票
+	for i:=0;i<5;i++{
+		go sell_tickets(i)
+	}
+	A:
+	var input string
+	fmt.Scanln(&input)
+	if(strings.ToLower(input) == "!wq"){
+		fmt.Println("Exit")
+		os.Exit(0)
+	}else{
+		goto A
+	}
+	
+}
+output==>
+id: 3 ticket: 19
+id: 2 ticket: 18
+id: 1 ticket: 17
+id: 3 ticket: 16
+id: 4 ticket: 15
+id: 3 ticket: 14
+id: 3 ticket: 13
+id: 0 ticket: 12
+id: 2 ticket: 11
+id: 1 ticket: 10
+id: 1 ticket: 8
+id: 2 ticket: 9
+id: 4 ticket: 7
+id: 3 ticket: 6
+id: 3 ticket: 5
+id: 2 ticket: 4
+id: 1 ticket: 3
+id: 3 ticket: 2
+id: 0 ticket: 1
+id: 2 ticket: 0
+id: 4 ticket: -1
+id: 3 ticket: -2
+id: 1 ticket: -3
+!wq
+Exit
+</pre>
