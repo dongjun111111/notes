@@ -410,4 +410,4 @@ Read i= 1 ,rsn= 0 ,data= [98 97 116 117 95 116 101 115 116 49]  success.
 Read i= 2 ,rsn= 1 ,data= [98 97 116 117 95 116 101 115 116 50]  success.
 Read i= 3 ,rsn= 2 ,data= [116 101 115 116 49 95 98 97 116 117]  success.
 </pre>
-
+###Goroutine非并发安全性问题
