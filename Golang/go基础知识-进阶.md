@@ -411,6 +411,11 @@ Read i= 2 ,rsn= 1 ,data= [98 97 116 117 95 116 101 115 116 50]  success.
 Read i= 3 ,rsn= 2 ,data= [116 101 115 116 49 95 98 97 116 117]  success.
 </pre>
 ###Goroutine高并发安全性
+多个并发routine对一个共享变量进行操作有两种方法，channel和锁。
+这里当然使用channel也能起到原子操作的效果。sync包的atomic和sync的mutex都是锁的方式。
+所以说这里其实可以使用channel，mutex，atomic三种方法。
+
+
 这里有一个经典的例子，介绍关于平时不会出现而在高并发情况下会出现的问题：
 <pre>
 package main 
@@ -485,7 +490,6 @@ Exit
 是在每个goroutine上加一把锁保证数据同步.
 <pre>
 package main
-
 import (
 	"os"
 	"strings"
@@ -523,7 +527,6 @@ func main(){
 	}else{
 		goto B
 	}
-	
 }
 output==>
 id: 0 tickets: 19
