@@ -163,5 +163,23 @@ i
 适用场景：经常用于读次数远远多于写次数的场景．<br>
 示例：
 <pre>
+package main
+//程序中RUnlock()个数不得多于Rlock()的个数
+import (
+	"fmt"
+	"sync"
+)
+func main(){
+	var g *sync.RWMutex
+	g = new(sync.RWMutex)
+	g.RLock()
+	g.RLock()
+	g.RUnlock()
+	g.RLock()
+	fmt.Println("g")
+	g.RUnlock()	
+}
+output==>
+g
 </pre>
 
