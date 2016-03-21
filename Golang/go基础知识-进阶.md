@@ -158,6 +158,43 @@ func main() {
 output==>
 i
 </pre>
+在需要频繁读，少量写的时候，Mutex的性能比使用channel要高很多，同时还能保证读写同步。
+<pre>
+package main
+
+import (
+	"fmt"
+	"runtime"
+	"sync"
+)
+type counter struct{
+	mutex sync.Mutex
+	x int64
+}
+func (c *counter) Inc(){
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+	c.x++
+}
+func main(){
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	c := counter{}
+	var wait sync.WaitGroup
+	wait.Add(4)
+	for k :=4;k> 0;k--{
+		go func(){
+			for i :=200000;i>0;i--{
+				c.Inc()
+			}
+			wait.Done()
+		}()
+	}
+	wait.Wait()
+	fmt.Println(c.x)
+}
+output==>
+800000
+</pre>
 -RWMutex
 定义：RWMutex是一个读写锁，该锁可以加多个读锁或者一个写锁。写锁，如果在添加写锁之前已经有其他的读锁和写锁，则lock就会阻塞直到该锁可用，为确保该锁最终可用，已阻塞的 Lock 调用会从获得的锁中排除新的读取器，即写锁权限高于读锁，有写锁时优先进行写锁定。写锁解锁，如果没有进行写锁定，则就会引起一个运行时错误．<br>
 适用场景：经常用于读次数远远多于写次数的场景．<br>
