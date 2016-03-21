@@ -143,20 +143,37 @@ golang中sync包实现了两种锁Mutex （互斥锁）和RWMutex（读写锁）
 示例:
 <pre>
 package main
+
 import (
+	"time"
 	"fmt"
 	"sync"
 )
-
-func main() {
-	var i *sync.Mutex
-	i = new(sync.Mutex)
-	i.Lock()
-	defer i.Unlock()
-	fmt.Println("i")
+func main(){
+	var mutex sync.Mutex
+	fmt.Println("Lock the lock")
+	mutex.Lock()
+	fmt.Println("The lock is locked")
+	for i:=1;i<4;i++{
+		go func(i int){
+			fmt.Println("Not lock",i)
+			mutex.Lock()
+			fmt.Println("Locked",i)
+		}(i)
+	}
+	time.Sleep(time.Second)
+	fmt.Println("Unlock the lock")
+	mutex.Unlock()
+	time.Sleep(time.Second)
 }
 output==>
-i
+Lock the lock
+The lock is locked
+Not lock 1
+Not lock 2
+Not lock 3
+Unlock the lock
+Locked 1
 </pre>
 在需要频繁读，少量写的时候，Mutex的性能比使用channel要高很多，同时还能保证读写同步。
 <pre>
