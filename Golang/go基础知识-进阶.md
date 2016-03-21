@@ -483,4 +483,68 @@ Exit
 上面出现ticket=-1还有-2的情况肯定是不愿意看到的，那并发安全的应该怎么写呢？
 当然答案已经有人说出来了，就是在每个goroutine上加一把锁保证数据同步：
 <pre>
+package main
+
+import (
+	"os"
+	"strings"
+	"runtime"
+	"fmt"
+	"math/rand"
+	"time"
+	"sync"
+)
+var total_tickets int32 = 20
+var mutex = &sync.Mutex{}
+func sell_tickets(i int){
+	for total_tickets >0 {
+		mutex.Lock()
+		if total_tickets >0 {
+			time.Sleep(time.Duration(rand.Intn(5)) * time.Millisecond)
+			total_tickets--
+			fmt.Println("id:",i,"tickets:",total_tickets)
+		}
+		mutex.Unlock()
+	}
+}
+func main(){
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	rand.Seed(time.Now().Unix())
+	for i:=0;i<5;i++{
+		go sell_tickets(i)
+	}
+	B:
+	var input string
+	fmt.Scanln(&input)
+	if strings.ToLower(input) == "!q"{
+		fmt.Println("Leaved:",total_tickets)
+		os.Exit(0)
+	}else{
+		goto B
+	}
+	
+}
+output==>
+id: 0 tickets: 19
+id: 0 tickets: 18
+id: 0 tickets: 17
+id: 0 tickets: 16
+id: 0 tickets: 15
+id: 0 tickets: 14
+id: 0 tickets: 13
+id: 0 tickets: 12
+id: 0 tickets: 11
+id: 0 tickets: 10
+id: 0 tickets: 9
+id: 0 tickets: 8
+id: 0 tickets: 7
+id: 0 tickets: 6
+id: 0 tickets: 5
+id: 0 tickets: 4
+id: 0 tickets: 3
+id: 0 tickets: 2
+id: 0 tickets: 1
+id: 0 tickets: 0
+!q
+Leaved: 0
 </pre>
