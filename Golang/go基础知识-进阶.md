@@ -550,7 +550,8 @@ id: 0 tickets: 0
 Leaved: 0
 </pre>
 第二种方案是：<br>
-原子操作，保证数据同步。
+原子操作，保证数据同步。<br>
+原子操作即是进行过程中不能被中断的操作。针对某个值的原子操作在被进行的过程中，CPU绝不会再去进行其他的针对该值的操作。为了实现这样的严谨性，原子操作仅会由一个独立的CPU指令代表和完成。
 <pre>
 package main
 
@@ -576,4 +577,41 @@ func main(){
 }
 output==>
 100
+</pre>
+atomic Add操作
+<pre>
+package main
+import (
+	"fmt"
+	"sync/atomic"
+)
+func main(){
+	var i32 int32
+	fmt.Println("=====old i32 value=====")
+	fmt.Println(i32)
+	//第一个参数值必须是一个指针类型的值,因为该函数需要获得被操作值在内存中的存放位置,以便施加特殊的CPU指令
+	newI32 := atomic.AddInt32(&i32,3)
+	fmt.Println("=====new i32 value=====")
+	fmt.Println(i32)  //3
+	fmt.Println(newI32)  //3
+
+    var i64 int64
+	fmt.Println("=====old i64 value=====")
+	fmt.Println(i64)
+	newI64 := atomic.AddInt64(&i64,-3)
+	fmt.Println("=====new i64 value=====")
+	fmt.Println(i64)  //-3
+	fmt.Println(newI64) //-3
+}
+output==>
+=====old i32 value=====
+0
+=====new i32 value=====
+3
+3
+=====old i64 value=====
+0
+=====new i64 value=====
+-3
+-3
 </pre>
