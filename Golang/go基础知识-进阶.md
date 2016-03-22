@@ -1154,3 +1154,44 @@ close channel  9
 临时对象池与缓存池很类似，但是它却有着鲜明的特性。
 第一个特性是：临时对象池可以把由其中的对象值产生的存储压力进行分摊。更进一步说，它会专门为每一个与操作它的Goroutine相关联的P都生成一个本地池。在临时对象池的Get方法被调用的时候，它一般会先尝试从与本地P对应的那个本地池中获取一个对象值。如果获取失败，它就会试图从其他P的本地池中偷一个对象值并直接返回给调用方。如果依然未果，那它只能把希望寄托于当前的临时对象池的New字段代表的那个对象值生成函数了。注意，这个对象值生成函数产生的对象值永远不会被放置到池中。它会被直接返回给调用方。另一方面，临时对象池的Put方法会把它的参数值存放到与当前P对应的那个本地池中。每个P的本地池中的绝大多数对象值都是被同一个临时对象池中的所有本地池所共享的。也就是说，它们随时可能会被偷走。
 第二个突出特性：对垃圾回收友好。垃圾回收的执行一般会使临时对象池中的对象值被全部移除。也就是说，即使我们永远不会显式的从临时对象池取走某一个对象值，该对象值也不会永远待在临时对象池中。它的生命周期取决于垃圾回收任务下一次的执行时间。
+<pre>
+package main
+import (
+    "fmt"
+    "runtime"
+    "runtime/debug"
+    "sync"
+    "sync/atomic"
+)
+func main() {
+    // 禁用GC，并保证在main函数执行结束前恢复GC
+    defer debug.SetGCPercent(debug.SetGCPercent(-1))
+    var count int32
+    newFunc := func() interface{} {
+        return atomic.AddInt32(&count, 1)
+    }
+    pool := sync.Pool{New: newFunc}
+    // New 字段值的作用
+    v1 := pool.Get()
+    fmt.Printf("v1: %v\n", v1)
+    // 临时对象池的存取
+    pool.Put(newFunc())
+    pool.Put(newFunc())
+    pool.Put(newFunc())
+    v2 := pool.Get()
+    fmt.Printf("v2: %v\n", v2)
+    // 垃圾回收对临时对象池的影响
+    debug.SetGCPercent(100)
+    runtime.GC()
+    v3 := pool.Get()
+    fmt.Printf("v3: %v\n", v3)
+    pool.New = nil
+    v4 := pool.Get()
+    fmt.Printf("v4: %v\n", v4)
+}
+output==>
+v1: 1
+v2: 2
+v3: 5
+v4: <nil>
+</pre>
