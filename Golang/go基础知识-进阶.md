@@ -1271,7 +1271,7 @@ time.Sleep(10 * time.Second)
 close(ch)
 </pre>
 通过channel这种close broadcast机制，我们可以非常方便的实现一个timer，timer有一个channel ch，所有需要在某一个时间 “T” 收到通知的goroutine都可以尝试读该ch，当T到达时候，close该ch，那么所有的goroutine都能收到该事件了。
-时间轮算法：
+<b>时间轮算法</b>：
 <pre>
 package timingwheel
 //性能很好，转载自siddontang
@@ -1279,7 +1279,6 @@ import (
 	"sync"
 	"time"
 )
-
 type TimingWheel struct {
 	sync.Mutex
 
