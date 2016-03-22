@@ -658,6 +658,43 @@ output==>
 ======Store value=======
 10
 </pre>
+高并发下CAS:
+<pre>
+package main
+
+import (
+	"runtime"
+	"sync"
+	"sync/atomic"
+	"fmt"
+)
+func main(){
+	runtime.GOMAXPROCS(1000)
+    n := 100000
+    wg := new(sync.WaitGroup)
+    wg.Add(n)
+    
+    j := int32(0)
+	fmt.Println("开始j的值是：",j)
+    for i := 0; i < n; i++{
+        go func(){
+            if atomic.CompareAndSwapInt32(&j, 0, 1) {
+                fmt.Println("j to 1")
+				fmt.Println("结束j的值是：",j)
+            }
+            wg.Done()
+        }()
+    }
+    wg.Wait()
+
+    fmt.Println("Done")
+}
+output==>
+开始j的值是： 0
+j to 1
+结束j的值是： 1
+Done
+</pre>
 ###Golang发送邮件
 <pre>
 package main
