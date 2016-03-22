@@ -1270,6 +1270,98 @@ time.Sleep(10 * time.Second)
 
 close(ch)
 </pre>
+通过channel这种close broadcast机制，我们可以非常方便的实现一个timer，timer有一个channel ch，所有需要在某一个时间 “T” 收到通知的goroutine都可以尝试读该ch，当T到达时候，close该ch，那么所有的goroutine都能收到该事件了。
+时间轮算法：
+<pre>
+package timingwheel
+//性能很好，转载自siddontang
+import (
+	"sync"
+	"time"
+)
+
+type TimingWheel struct {
+	sync.Mutex
+
+	interval time.Duration
+
+	ticker *time.Ticker
+	quit   chan struct{}
+
+	maxTimeout time.Duration
+
+	cs []chan struct{}
+
+	pos int
+}
+
+func NewTimingWheel(interval time.Duration, buckets int) *TimingWheel {
+	w := new(TimingWheel)
+
+	w.interval = interval
+
+	w.quit = make(chan struct{})
+	w.pos = 0
+
+	w.maxTimeout = time.Duration(interval * (time.Duration(buckets)))
+
+	w.cs = make([]chan struct{}, buckets)
+
+	for i := range w.cs {
+		w.cs[i] = make(chan struct{})
+	}
+
+	w.ticker = time.NewTicker(interval)
+	go w.run()
+
+	return w
+}
+
+func (w *TimingWheel) Stop() {
+	close(w.quit)
+}
+
+func (w *TimingWheel) After(timeout time.Duration) <-chan struct{} {
+	if timeout >= w.maxTimeout {
+		panic("timeout too much, over maxtimeout")
+	}
+
+	w.Lock()
+
+	index := (w.pos + int(timeout/w.interval)) % len(w.cs)
+
+	b := w.cs[index]
+
+	w.Unlock()
+
+	return b
+}
+
+func (w *TimingWheel) run() {
+	for {
+		select {
+		case <-w.ticker.C:
+			w.onTicker()
+		case <-w.quit:
+			w.ticker.Stop()
+			return
+		}
+	}
+}
+
+func (w *TimingWheel) onTicker() {
+	w.Lock()
+
+	lastC := w.cs[w.pos]
+	w.cs[w.pos] = make(chan struct{})
+
+	w.pos = (w.pos + 1) % len(w.cs)
+
+	w.Unlock()
+
+	close(lastC)
+}
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
