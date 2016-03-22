@@ -994,3 +994,4 @@ func onced() {
     fmt.Println("onced")  
 }  
 </pre>
+###临时对象池
