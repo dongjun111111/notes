@@ -994,6 +994,154 @@ func onced() {
     fmt.Println("onced")  
 }  
 </pre>
+除了上面的例子，下面一个也是有关于sync.Once的介绍：
+<pre>
+package main  
+  
+import (  
+    "fmt"  
+    "sync"  
+    "time"  
+)  
+  
+var counter int = 0  
+  
+func main() {  
+    chls := make([]chan int, 10)  
+    for i := 0; i < 10; i++ {  
+  
+        chls[i] = make(chan int)  
+        go addCounter(chls[i])  
+  
+    }  
+  
+    for _, val := range chls {  
+        counter += <-val  
+    }  
+  
+    fmt.Println("---结果是:", counter)  
+  
+    //设置一个超时的chan,没有阻塞读超时，写超时，可由程序创建chan来判定是否有超时写入  
+    timeout := make(chan bool, 1)  
+    subChn := chls[:2]  
+    for i := 0; i < 2; i++ {  
+        go timeoutAdd(i, subChn[i], timeout)  
+    }  
+  
+    countDonw := 2  
+    for {  
+        select {  
+        case <-subChn[0]:  
+            fmt.Println("not time out ")  
+            countDonw--  
+        case <-timeout:  
+            fmt.Println("time out ")  
+            countDonw--  
+  
+        }  
+  
+        if countDonw <= 0 {  
+            break  
+        }  
+    }  
+  
+    //关闭channel  
+    for idx, ch := range chls {  
+        close(ch)  
+        _, ok := <-ch  
+        if !ok {  
+            fmt.Println("close channel ", idx)  
+        }  
+    }  
+  
+    // //单向读channel  
+    // onedirchl := make(<-chan int)  
+    // //我来试试写操作，会有什么现象呢  
+    // //go 会报invalid operation: onedirchl <- 1 (send to receive-only type <-chan int)  
+    // onedirchl <- close(onedirchl)  
+  
+    //全局唯一性操作,大爱啊，想想java在做系统初始化只需要执行一次并且是多线程并发情况下的代码怎么写？  
+    //Lock ？全局boolean的开关，我的神啊，复杂  
+  
+    var once sync.Once  
+  
+    completeChan := []chan bool{make(chan bool, 1), make(chan bool, 1)}  
+  
+    //注意啊这里一定要传入指针，不然会是once的一个副本  
+    go initConifg(&once, func() {  
+        fmt.Println("我是第一个初始化的channel!")  
+        completeChan[0] <- true  
+    })  
+  
+    go initConifg(&once, func() {  
+        fmt.Println("我是第二个完成初始化的channel!")  
+        completeChan[1] <- true  
+    })  
+  
+    for _, ch := range completeChan {  
+        <-ch  
+        close(ch)  
+    }  
+  
+}  
+  
+func initConifg(once *sync.Once, handler func()) {  
+    once.Do(func() {  
+        time.Sleep(5e9)  
+        fmt.Println("我这是初始化!,我等待了5S完成")  
+    })  
+  
+    handler()  
+  
+}  
+  
+func timeoutAdd(index int, chl chan int, timeout chan bool) {  
+    if index%2 != 0 {  
+        time.Sleep(5e9)  
+        fmt.Println("模拟超时了")  
+        timeout <- true  
+    } else {  
+        fmt.Println("正常输出..")  
+        chl <- 1  
+    }  
+  
+}  
+  
+func addCounter(chl chan int) {  
+    chl <- 1  
+    fmt.Println("countting")  
+  
+}  
+output==>
+countting
+---结果是: 10
+countting
+countting
+countting
+countting
+countting
+countting
+countting
+countting
+countting
+正常输出..
+not time out 
+模拟超时了
+time out 
+close channel  0
+close channel  1
+close channel  2
+close channel  3
+close channel  4
+close channel  5
+close channel  6
+close channel  7
+close channel  8
+close channel  9
+我这是初始化!,我等待了5S完成
+我是第一个初始化的channel!
+我是第二个完成初始化的channel!
+</pre>
 ###临时对象池
 主角是sync.Pool.我们可以把sync.Pool类型值看作是存放可被重复使用的值的容器。此类容器是自动伸缩的、高效的，同时也是并发安全的。为了描述方便，我们也会把sync.Pool类型的值称为临时对象池，而把存于其中的值称为对象值。
 
@@ -1004,4 +1152,5 @@ func onced() {
  通过Get方法获取到的值是任意的。如果一个临时对象池的Put方法未被调用过，且它的New字段也未曾被赋予一个非nil的函数值，那么它的Get方法返回的结果值就一定会是nil。我们稍后会讲到，Get方法返回的不一定就是存在于池中的值。不过，如果这个结果值是池中的，那么在该方法返回它之前就一定会把它从池中删除掉。
 
 临时对象池与缓存池很类似，但是它却有着鲜明的特性。
-第一个特性是：临时对象池可以把由其中的对象值产生的存储压力进行分摊。更进一步说，它会专门为每一个与操作它的Goroutine相关联的P都生成一个本地池。在临时对象池的Get方法被调用的时候，它一般会先尝试从与本地P对应的那个本地池中获取一个对象值。如果获取失败，它就会试图从其他P的本地池中偷一个对象值并直接返回给调用方。如果依然未果，那它只能把希望寄托于当前的临时对象池的New字段代表的那个对象值生成函数了。
+第一个特性是：临时对象池可以把由其中的对象值产生的存储压力进行分摊。更进一步说，它会专门为每一个与操作它的Goroutine相关联的P都生成一个本地池。在临时对象池的Get方法被调用的时候，它一般会先尝试从与本地P对应的那个本地池中获取一个对象值。如果获取失败，它就会试图从其他P的本地池中偷一个对象值并直接返回给调用方。如果依然未果，那它只能把希望寄托于当前的临时对象池的New字段代表的那个对象值生成函数了。注意，这个对象值生成函数产生的对象值永远不会被放置到池中。它会被直接返回给调用方。另一方面，临时对象池的Put方法会把它的参数值存放到与当前P对应的那个本地池中。每个P的本地池中的绝大多数对象值都是被同一个临时对象池中的所有本地池所共享的。也就是说，它们随时可能会被偷走。
+第二个突出特性：对垃圾回收友好。垃圾回收的执行一般会使临时对象池中的对象值被全部移除。也就是说，即使我们永远不会显式的从临时对象池取走某一个对象值，该对象值也不会永远待在临时对象池中。它的生命周期取决于垃圾回收任务下一次的执行时间。
