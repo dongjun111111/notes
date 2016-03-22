@@ -724,3 +724,68 @@ Content-Type: text/plain;charset=UTF-8
 
 Hello World , I am jason
 </pre>
+又一个UDP案例：
+<pre>
+package main  
+  
+import (  
+    "fmt"  
+    "net"  
+    "os"  
+)  
+  
+func main() {  
+    addr, err := net.ResolveUDPAddr("udp", ":6000")  
+    if err != nil {  
+        fmt.Println("net.ResolveUDPAddr fail.", err)  
+        os.Exit(1)  
+    }  
+  
+    conn, err := net.ListenUDP("udp", addr)  
+    if err != nil {  
+        fmt.Println("net.ListenUDP fail.", err)  
+        os.Exit(1)  
+    }  
+    defer conn.Close()  
+  
+    for {  
+        buf := make([]byte, 65535)  
+        rlen, remote, err := conn.ReadFromUDP(buf)  
+        if err != nil {  
+            fmt.Println("conn.ReadFromUDP fail.", err)  
+            continue  
+        }  
+        go handleConnection(conn, remote, buf[:rlen])  
+    }  
+}  
+  
+func handleConnection(conn *net.UDPConn, remote *net.UDPAddr, msg []byte) {  
+    service_addr, err := net.ResolveUDPAddr("udp", ":6001")  
+    if err != nil {  
+        fmt.Println("net.ResolveUDPAddr fail.", err)  
+        return  
+    }  
+  
+    service_conn, err := net.DialUDP("udp", nil, service_addr)  
+    if err != nil {  
+        fmt.Println("net.DialUDP fail.", err)  
+        return  
+    }  
+    defer service_conn.Close()  
+  
+    _, err = service_conn.Write([]byte("request servcie x"))  
+    if err != nil {  
+        fmt.Println("service_conn.Write fail.", err)  
+        return  
+    }  
+  
+    buf := make([]byte, 65535)  
+    rlen, err := service_conn.Read(buf)  
+    if err != nil {  
+        fmt.Println("service_conn.Read fail.", err)  
+        return  
+    }  
+  
+    conn.WriteToUDP(buf[:rlen], remote)  
+}  
+</pre>
