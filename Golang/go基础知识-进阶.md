@@ -2395,6 +2395,191 @@ func main() {
     }
 }
 </pre>
+这个程序使用runtime.ReadMemStats函数来获取堆大小的信息。这个函数会打印四个值：HeapSys （程序向操作系统请求的内存的字节数），HeapAlloc （当前堆中已经分配的字节数），HeapIdle （堆中未使用的字节数）和HeapReleased （归还给操作系统的字节数）。
+
+Go程序中垃圾收集运行的很频繁（查看GOGC环境变量来理解如何控制GC操作 ）。因此，在运行过程中，堆的大小会随着内存被标记为未使用（这回导致HeapAlloc 和HeapIdle 随之变化）而变化。收割线程只有在内存5分钟都没有使用才会释放内存，因此HeapReleased 并不经常变化。
+
+这类随着请求使用内存在垃圾收集程序中是很常见的（例如，论文Quantifying the Performance of Garbage Collection vs. Explicit Memory Management）。随着程序的运行，堆中未使用的内存又被重新利用，很少会被释放给操作系统。
+
+解决这种问题的一个方法就是在程序中部分地手动管理内存。比如，使用一个管道，可以单独维护一个不再使用字节数组的内存池，当需要新的字节数组时，从内存池中拿（当内存池为空就生成新的字节数组）。
+
+这个程序可以这样重写：
+<pre>
+
+package main
+ 
+import (
+    "fmt"
+    "math/rand"
+    "runtime"
+    "time"
+)
+ 
+func makeBuffer() []byte {
+    return make([]byte, rand.Intn(5000000)+5000000)
+}
+ 
+func main() {
+    pool := make([][]byte, 20)
+ 
+    buffer := make(chan []byte, 5)
+ 
+    var m runtime.MemStats
+    makes := 0
+    for {
+        var b []byte
+        select {
+        case b = <-buffer:
+        default:
+            makes += 1
+            b = makeBuffer()
+        }
+ 
+        i := rand.Intn(len(pool))
+        if pool[i] != nil {
+            select {
+            case buffer <- pool[i]:
+                pool[i] = nil
+            default:
+            }
+        }
+ 
+        pool[i] = b
+ 
+        time.Sleep(time.Second)
+ 
+        bytes := 0
+        for i := 0; i < len(pool); i++ {
+            if pool[i] != nil {
+                bytes += len(pool[i])
+            }
+        }
+ 
+        runtime.ReadMemStats(&m)
+        fmt.Printf("%d,%d,%d,%d,%d,%d\n", m.HeapSys, bytes, m.HeapAlloc,
+            m.HeapIdle, m.HeapReleased, makes)
+    }
+}
+</pre>
+这种内存复用机制的关键是一个缓存的管道buffer。上面的代码中可以存储5个字节数组。当程序需要一个字节数组时，优先使用select从缓存的管道中去取:
+<pre>
+
+select {
+    case b = <-buffer:
+    default:
+        b = makeBuffer()
+}
+</pre>
+select永远不会阻塞因为如果buffer 管道中有字节数组，第一个分支生效，字节数组赋给了 b。如果管道是空的话（也就意味着receive会阻塞），default 分支会执行，并分配了一个新的字节数组。把字节数组放回到管道中使用了类似的无阻塞模式:
+<pre>	
+select {
+    case buffer <- pool[i]:
+        pool[i] = nil
+    default:
+}
+</pre>
+如果buffer 管道已经满了，往管道里面发送就会阻塞。这种情况下，default分支执行，什么也不做。这种简单的机制可以用来安全的生成一个共享的内存池。由于管道通信对多go协程是安全的，这种机制也可以用于go协程的共享。
+
+实际上，我们在Go程序中使用了类似的技术。下面的代码是真实复用器的简化版。使用一个go协程处理字节数组的生成并在软件中共享给所有的go协程。两个管道get （获取一个新的字节数组）和give （返回字节数组到内存池中）在所有的通信中都被使用。
+
+复用器保存了一个返回的字节数组的链表，间断地丢弃那些时间太久，并不再会被复用（示例代码中，生命周期超过1分钟）的字节数组。这使得程序处理对字符数组的动态需求。
+<pre>
+
+package main
+ 
+import (
+    "container/list"
+    "fmt"
+    "math/rand"
+    "runtime"
+    "time"
+)
+ 
+var makes int
+var frees int
+ 
+func makeBuffer() []byte {
+    makes += 1
+    return make([]byte, rand.Intn(5000000)+5000000)
+}
+ 
+type queued struct {
+    when time.Time
+    slice []byte
+}
+ 
+func makeRecycler() (get, give chan []byte) {
+    get = make(chan []byte)
+    give = make(chan []byte)
+ 
+    go func() {
+        q := new(list.List)
+        for {
+            if q.Len() == 0 {
+                q.PushFront(queued{when: time.Now(), slice: makeBuffer()})
+            }
+ 
+            e := q.Front()
+ 
+            timeout := time.NewTimer(time.Minute)
+            select {
+            case b := <-give:
+                timeout.Stop()
+                q.PushFront(queued{when: time.Now(), slice: b})
+ 
+           case get <- e.Value.(queued).slice:
+               timeout.Stop()
+               q.Remove(e)
+ 
+           case <-timeout.C:
+               e := q.Front()
+               for e != nil {
+                   n := e.Next()
+                   if time.Since(e.Value.(queued).when) > time.Minute {
+                       q.Remove(e)
+                       e.Value = nil
+                   }
+                   e = n
+               }
+           }
+       }
+ 
+    }()
+ 
+    return
+}
+ 
+func main() {
+    pool := make([][]byte, 20)
+ 
+    get, give := makeRecycler()
+ 
+    var m runtime.MemStats
+    for {
+        b := <-get
+        i := rand.Intn(len(pool))
+        if pool[i] != nil {
+            give <- pool[i]
+        }
+ 
+        pool[i] = b
+ 
+        time.Sleep(time.Second)
+ 
+        bytes := 0
+        for i := 0; i < len(pool); i++ {
+            if pool[i] != nil {
+                bytes += len(pool[i])
+            }
+        }
+ 
+        runtime.ReadMemStats(&m)
+        fmt.Printf("%d,%d,%d,%d,%d,%d,%d\n", m.HeapSys, bytes, m.HeapAlloc
+             m.HeapIdle, m.HeapReleased, makes, frees)
+    }
+}
+
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
