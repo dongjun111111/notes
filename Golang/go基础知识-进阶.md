@@ -2230,7 +2230,9 @@ v := reflect.Zero(fn.Type().Out(0))
 
 - 代码
 原作者代码在<a href="https://github.com/siddontang/go/tree/master/rpc">感谢作者siddontang</a>
-###Golang Json
+###StructTag 
+如果希望手动配置结构体的成员和JSON字段的对应关系，可以在定义结构体的时候给成员打标签：
+使用omitempty熟悉，如果该字段为nil或0值（数字0,字符串"",空数组[]等），则打包的JSON结果不会有这个字段。
 <pre>
 package main
 
