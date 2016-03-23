@@ -6,7 +6,7 @@ cookie := http.Cookie{Name: "admin_name", Value: rows[0].Str(res.Map("admin_name
 http.SetCookie(w, &cookie)
 </pre>
 ####http.FileServer()
-文件系统显示本地文件在网页上。
+文件系统。将本地文件输出到网页
 <pre>
 package main
 import (
