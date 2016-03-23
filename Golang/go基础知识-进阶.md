@@ -2259,6 +2259,34 @@ func main(){
 output==>
 {"msg_name":"Alice"} 
 </pre>
+<pre>
+package main
+//go字符切片转成json
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
+type ColorGroup struct {  
+    ID     int  
+    Name   string  
+    Colors []string  
+}  
+func main(){
+	group := ColorGroup{  
+	    ID:     1,  
+	    Name:   "Reds",  
+	    Colors: []string{"Crimson", "Red", "Ruby", "Maroon"},  
+	}  
+	b, err := json.Marshal(group)  
+	if err != nil {  
+	    fmt.Println("error:", err)  
+	}  
+	os.Stdout.Write(b)  
+}
+output==>
+{"ID":1,"Name":"Reds","Colors":["Crimson","Red","Ruby","Maroon"]}
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
