@@ -2216,7 +2216,7 @@ if !b {
 但是，如果在MakeFunc里面直接返回error，会出现“reflect: function created by MakeFunc using closure returned wrong type: have *errors.errorString for error”这样的问题，主要在于reflect.Value需要知道我们error的接口类型.
 所以，我们通过如下方式对error进行处理，转成相应的reflect.Value
 <pre>
-v := reflect.ValueOf(&e).Elem()
+	v := reflect.ValueOf(&e).Elem()
 </pre>
 
 - nil处理
