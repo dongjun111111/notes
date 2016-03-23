@@ -1424,6 +1424,25 @@ func (s *Server) Close() error {
 }
 </pre>
 通过以上方法，我们能从容的关闭server.
+####可变参数args的地址跟实际外部slice的地址一样，用的同一个slice
+<pre>
+package main
+//可变参数args的地址跟实际外部slice的地址一样，用的同一个slice
+import (
+	"fmt"
+)
+func t(args ...int){
+	fmt.Printf("%p\n",args)
+}
+func main(){
+	a :=[]int{1,2,3}
+	b := a[1:]
+	t(a...)
+	t(b...)
+	fmt.Printf("%p\n",a)
+	fmt.Printf("%p\n",b)
+}
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
