@@ -2230,6 +2230,35 @@ v := reflect.Zero(fn.Type().Out(0))
 
 - 代码
 原作者代码在<a href="https://github.com/siddontang/go/tree/master/rpc">感谢作者siddontang</a>
+###Golang Json
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+type Message struct {  
+    Name string `json:"msg_name"`       // 对应JSON的msg_name  
+    Body string `json:"body,omitempty"` // omitempty 如果为空置则忽略字段  
+    Time int64  `json:"-"`              // 直接忽略字段  
+}  
+var m = Message{  
+    Name: "Alice",  
+    Body: "",  
+    Time: 1294706395881547000,  
+}  
+func main(){
+	data, err := json.Marshal(m)  
+	if err != nil {  
+	    fmt.Printf(err.Error())  
+	    return  
+	}  
+	fmt.Println(string(data)) 
+}
+output==>
+{"msg_name":"Alice"} 
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
