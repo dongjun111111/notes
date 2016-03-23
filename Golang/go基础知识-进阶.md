@@ -2287,6 +2287,33 @@ func main(){
 output==>
 {"ID":1,"Name":"Reds","Colors":["Crimson","Red","Ruby","Maroon"]}
 </pre>
+json转成go变量
+<pre>
+package main
+//json转成go变量
+import (
+	"encoding/json"
+	"fmt"
+)
+var jsonBlob = []byte(`[  
+    {"Name": "Platypus", "Order": "Monotremata"},  
+    {"Name": "Quoll",    "Order": "Dasyuromorphia"}  
+]`)  
+type Animal struct {  
+    Name  string  
+    Order string  
+}  
+func main(){
+	var animals []Animal  
+	err := json.Unmarshal(jsonBlob, &animals)  
+	if err != nil {  
+	    fmt.Println("error:", err)  
+	}  
+	fmt.Printf("%+v", animals) 
+}
+ouptut==>
+[{Name:Platypus Order:Monotremata} {Name:Quoll Order:Dasyuromorphia}]
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
