@@ -1310,3 +1310,11 @@ $User->find(1);
 echo $User->getLastSql();
 输出结果是
 SELECT * FROM think_user WHERE id = 1
+
+
++++++关于Paging方法使用+++
+if(isset($_GET['bytime'])){
+     $map['ctime'] = array(array('egt',$st),array('lt',$et));
+     $map['wjtime'] = array(array('egt',$st),array('lt',$et));
+     $pamap['bytime'] = 1;            pamap写的是需要带上的搜索参数，它会出现在分页的p的参数里面
+}
