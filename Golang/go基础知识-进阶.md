@@ -2314,6 +2314,40 @@ func main(){
 ouptut==>
 [{Name:Platypus Order:Monotremata} {Name:Quoll Order:Dasyuromorphia}]
 </pre>
+json与结构体
+结构体必须是<b>大写字母开头的成员</b>才会被JSON处理到，小写字母开头的成员不会有影响。
+<pre>
+package main
+//json转成go变量
+import (
+	"encoding/json"
+	"fmt"
+)
+type Message struct {  
+    Name  string  
+    Body  string  
+    Time  int64  
+    inner string  
+}  
+  
+var m = Message{  
+    Name:  "Alice",  
+    Body:  "Hello",  
+    Time:  1294706395881547000,  
+    inner: "ok",  
+}  
+func main(){
+	b := []byte(`{"nAmE":"Bob","Food":"Pickle", "inner":"changed"}`)  
+	err := json.Unmarshal(b, &m)  
+	if err != nil {  
+	    fmt.Printf(err.Error())  
+	    return  
+	}  
+	fmt.Printf("%v", m)  
+}
+output==>
+{Bob Hello 1294706395881547000 ok}
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
