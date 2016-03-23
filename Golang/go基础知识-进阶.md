@@ -2351,7 +2351,50 @@ output==>
 {Bob Hello 1294706395881547000 ok}
 </pre>
 ###复用Go内存buffer
+为了理解Go的内存管理，分析一些Go运行时代码还是有必要的。Go程序中有两个独立的线程用来标记不再被程序使用的内存（这就是垃圾收集）并在其不再被使用时返还给操作系统（在Go代码中称为收割，scavenging）.
 
+下面是一个小程序，会生成很多内存垃圾，每秒生成一个5MB到10MB的字节数组。它维护了一个20个这样字节数组大小的内存池，随机丢弃内存池中的字节数组。这个程序用来模拟程序中经常发生的场景：程序的各个部分每时每刻都会分配内存，一些分配的内存一直都在使用，大多数分配的内存都不再使用。在一个Go写的网络程序中，在处理网络链接或请求的Go协程里，这种情况很容易发生。常常是这样的，Go协程分配内存块（比如分配一个slices来存储接收的数据），然后就不再使用。随着时间的积累，会有一系列的内存块被正在被处理的网络链接占用，也会有一些累计的来自那些被处理过的链接的内存垃圾。
+<pre>
+package main
+ 
+import (  
+    "fmt"  
+    "math/rand"  
+    "runtime"  
+    "time"
+)
+ 
+func makeBuffer() []byte {  
+    return make([]byte, rand.Intn(5000000)+5000000)  
+}
+ 
+func main() {  
+    pool := make([][]byte, 20)
+ 
+    var m runtime.MemStats  
+    makes := 0  
+    for {  
+        b := makeBuffer()  
+        makes += 1
+        i := rand.Intn(len(pool))
+        pool[i] = b
+ 
+        time.Sleep(time.Second)
+ 
+        bytes := 0
+ 
+        for i := 0; i < len(pool); i++ {
+            if pool[i] != nil {
+                bytes += len(pool[i])
+            }
+        }
+ 
+        runtime.ReadMemStats(&m)
+        fmt.Printf("%d,%d,%d,%d,%d,%d\n", m.HeapSys, bytes, m.HeapAlloc,
+            m.HeapIdle, m.HeapReleased, makes)
+    }
+}
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
