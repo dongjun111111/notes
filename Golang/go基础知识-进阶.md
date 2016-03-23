@@ -1443,6 +1443,50 @@ func main(){
 	fmt.Printf("%p\n",b)
 }
 </pre>
+###Go使用pprof调试Goroutine
+<pre>
+package main
+import (
+    "net/http"
+    "runtime/pprof"
+)
+
+var quit chan struct{} = make(chan struct{})
+
+func f() {
+    <-quit
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "text/plain")
+
+    p := pprof.Lookup("goroutine")
+    p.WriteTo(w, 1)
+}
+
+func main() {
+    for i := 0; i < 10000; i++ {
+        go f()
+    }
+
+    http.HandleFunc("/", handler)
+    http.ListenAndServe(":11181", nil)
+}
+//在浏览器访问localhost:11181，可以看到此时goroutine运行状况：
+goroutine profile: total 10007
+1 @ 0x474b7d 0x474914 0x47099c 0x40112f 0x452e68 0x454604 0x454f91 0x45299e 0x43fd01
+#	0x474b7d	runtime/pprof.writeRuntimeProfile+0xdd	c:/go/src/runtime/pprof/pprof.go:540
+#	0x474914	runtime/pprof.writeGoroutine+0xa4	c:/go/src/runtime/pprof/pprof.go:502
+#	0x47099c	runtime/pprof.(*Profile).WriteTo+0xdc	c:/go/src/runtime/pprof/pprof.go:229
+#	0x40112f	main.handler+0xdf			C:/mygo/src/act/main.go:18
+#	0x452e68	net/http.HandlerFunc.ServeHTTP+0x48	c:/go/src/net/http/server.go:1265
+#	0x454604	net/http.(*ServeMux).ServeHTTP+0x184	c:/go/src/net/http/server.go:1541
+#	0x454f91	net/http.serverHandler.ServeHTTP+0x1a1	c:/go/src/net/http/server.go:1703
+#	0x45299e	net/http.(*conn).serve+0xb5e		c:/go/src/net/http/server.go:1204
+....
+</pre>
+可以看到，在main.f这个函数中，有10007个goroutine正在执行，符合我们的预期。
+转自siddontang.com,感谢原著者:)
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
