@@ -1483,10 +1483,10 @@ goroutine profile: total 10007
 #	0x454604	net/http.(*ServeMux).ServeHTTP+0x184	c:/go/src/net/http/server.go:1541
 #	0x454f91	net/http.serverHandler.ServeHTTP+0x1a1	c:/go/src/net/http/server.go:1703
 #	0x45299e	net/http.(*conn).serve+0xb5e		c:/go/src/net/http/server.go:1204
-....
+...
 </pre>
 可以看到，在main.f这个函数中，有10007个goroutine正在执行，符合我们的预期。
-转自siddontang.com,感谢原著者:)
+转自siddontang.com,感谢原作者:)
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
