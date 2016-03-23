@@ -1361,6 +1361,69 @@ func (w *TimingWheel) onTicker() {
 	close(lastC)
 }
 </pre>
+###优雅的关闭HTTP服务
+go提供了一个ConnState的hook，我们能通过这个来获取到对应的connection，这样在服务结束的时候我们就能够close掉这个connection了。该hook会在如下几种ConnState状态的时候调用。
+
+- StateNew：新的连接，并且马上准备发送请求了
+- StateActive：表明一个connection已经接收到一个或者多个字节的请求数据，在 server调用实际的handler之前调用hook。
+- StateIdle：表明一个connection已经处理完成一次请求，但因为是keepalived的，所以不会close，继续等待下一次请求。
+- StateHijacked：表明外部调用了hijack，最终状态。
+- StateClosed：表明connection已经结束掉了，最终状态。
+<pre>
+s.ConnState = func(conn net.Conn, state http.ConnState) {
+    switch state {
+    case http.StateNew:
+        // 新的连接，计数加1
+        s.wg.Add(1)
+    case http.StateActive:
+        // 有新的请求，从idle conn pool中移除
+        s.mu.Lock()
+        delete(s.conns, conn.LocalAddr().String())
+        s.mu.Unlock()
+    case http.StateIdle:
+        select {
+        case <-s.quit:
+            // 如果要关闭了，直接Close，否则加入idle conn pool中。
+            conn.Close()
+        default:
+            s.mu.Lock()
+            s.conns[conn.LocalAddr().String()] = conn
+            s.mu.Unlock()
+        }
+    case http.StateHijacked, http.StateClosed:
+        // conn已经closed了，计数减一
+        s.wg.Done()
+    }
+</pre>
+当结束的时候，会走如下流程：
+<pre>
+func (s *Server) Close() error {
+    // close quit channel, 广播我要结束啦
+    close(s.quit)
+
+    // 关闭keepalived，请求返回的时候会带上Close header。客户端就知道要close掉connection了。
+    s.SetKeepAlivesEnabled(false)
+    s.mu.Lock()
+
+    // close listenser
+    if err := s.l.Close(); err != nil {
+        return err 
+    }
+
+    //将当前idle的connections设置read timeout，便于后续关闭。
+    t := time.Now().Add(100 * time.Millisecond)
+    for _, c := range s.conns {
+        c.SetReadDeadline(t)
+    }
+    s.conns = make(map[string]net.Conn)
+    s.mu.Unlock()
+
+    // 等待所有连接结束
+    s.wg.Wait()
+    return nil
+}
+</pre>
+通过以上方法，我们能从容的关闭server.
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
