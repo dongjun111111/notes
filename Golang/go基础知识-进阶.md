@@ -1487,6 +1487,107 @@ goroutine profile: total 10007
 </pre>
 可以看到，在main.f这个函数中，有10007个goroutine正在执行，符合我们的预期。
 转自siddontang.com,感谢原作者:)
+###在Go中使用JSON作为主要配置
+- why json
+主要的原因在于go的json包有一个杀手级别的RawMessage实现。<br>
+RawMessage主要是用来告诉go延迟解析用的。当我们定义了某一个字段为RawMessage之后，go就不会解析这段json，这样我们就可以将其推后到各自的子模块单独解析。
+假设有一个功能，后台存储可能是redis或者mysql，但是只会使用一个，可能我们会按照如下方式写配置：
+<pre>
+redis_store : {
+    addr : 127.0.0.1
+    db : 0
+},
+
+mysql_store : {
+    addr : 127.0.0.1
+    db : test
+    password : admin
+    user : root
+}
+store : redis
+</pre>
+对应的class为
+<pre>
+type Config struct {
+    RedisStore struct {
+        Addr string
+        DB int
+    }
+
+    MysqlStore Struct {
+        Addr string
+        DB string
+        Password string
+        User string
+    }
+
+    Store string
+}
+</pre>
+如果这时候我们在增加了一种新的store，我们需要在Config文件里面在增加一个新的field，但是实际我们只会使用一种store，并不需要写这么多的配置。
+我们可以使用RawMessage来处理：
+<pre>
+type Config struct {
+    Store string
+    StoreConfig json.RawMessage
+}
+</pre>
+如果使用redis，对应的配置文件为:
+<pre>
+store: redis
+store_config: {
+    addr : 127.0.0.1
+    db : 0
+}
+</pre>
+如果使用mysql，对应的配置文件为:
+<pre>
+store: mysql
+store_config: {
+    addr : 127.0.0.1
+    db : test
+    password : admin
+    user : root
+}
+</pre>
+go读取配置文件之后，并不会处理RawMessage对应的东西，而是由我们代码自己对应的store模块去处理。这样无论配置文件怎么变动，store模块做了什么变动，都不会影响Config类。
+而在各个模块中，我们只需要自己定义相关config，然后可以将RawMessage直接解析映射到该config上面，譬如，对于redis，我们在模块中有如下定义:
+<pre>
+type RedisConfig config {
+    Addr string `json:"addr"`
+    DB int `json:"db"`
+}
+
+func NewConfig(m json.RawMessage) *RedisConfig {
+    c := new(RedisConfig)
+
+    json.Unmarshal(m, c)
+
+    return c
+}
+</pre>
+####json的不足
+最大的问题就在于注释，在json中，可不能这样写：
+<pre>
+{
+    //this is a comment
+    /*this is a comment*/ 
+}
+</pre>
+但是，我们又不可能不写一点注释来说明配置项是干啥的，所以，通常采用的是引入一个comment字段的方式，譬如：
+<pre>
+{
+    "_comment" : "this is a comment",
+    "key" : "value"
+}
+</pre>
+另外，json还需要注意的就是写的时候最后一项不能加上逗号，这样的json会因为格式错误无法解析的。
+<pre>
+{
+    "key" : "value",
+}
+</pre>
+最后那个逗号可是不能要的，但是实际写配置的时候我们可是经常性的随手加上了,需要注意，不要犯这样的错误。
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
