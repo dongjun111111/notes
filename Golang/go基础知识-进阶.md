@@ -2799,7 +2799,9 @@ Found 1 data race(s)
 exit status 66
 </pre>
 这个命令输出了Warning，告诉我们，goroutine5运行到第11行和main goroutine运行到13行的时候触发竞争了。而且goroutine5是在第12行的时候产生的。我们据此可以分析哪里出现了问题。
-
+###Error和Fatal的区别
+- Error ： Log() + Fail()  即记录当前错误，记录为失败，但是继续执行
+- Fatal ： Log() + FailNow() 即记录当前错误，记录为失败，不继续执行
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
