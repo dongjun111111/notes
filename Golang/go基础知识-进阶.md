@@ -2839,7 +2839,9 @@ output==>
 2016/03/24 23:56:38 exec folder absolute path: C:\mygo\src\act
 </pre>
 ####从文件中json解析
-尽量使用os.OpenFile直接获取reader，然后再从reader中使用Decoder来解析json
+第一种：
+
+使用os.OpenFile直接获取reader，然后再从reader中使用Decoder来解析json
 <pre>
 package main
  
@@ -2864,7 +2866,7 @@ func main() {
         os.Exit(1)
     }}
 </pre>
-别使用
+第二种：
 <pre>
 content, err := ioutil.ReadFile(filepath)
     if err != nil {
