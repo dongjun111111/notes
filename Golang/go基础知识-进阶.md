@@ -2759,6 +2759,47 @@ output==>
 3.9222244s
 4.405252s
 </pre>
+有比如下面的例子：
+<pre>
+package main
+import (
+	"time"
+	"fmt"
+)
+func main(){
+	a := 1
+	go func(){
+		a  = 2
+	}()
+	a = 3
+	fmt.Println("a is ",a)
+	time.Sleep(2 * time.Second)
+}
+</pre>
+可喜的是，golang在1.1之后引入了竞争检测的概念。我们可以使用go run -race 或者 go build -race 来进行竞争检测。
+golang语言内部大概的实现就是同时开启多个goroutine执行同一个命令，并且纪录每个变量的状态。
+<pre>
+runtime  go run -race race1.go
+a is  3
+==================
+WARNING: DATA RACE
+Write by goroutine 5:
+  main.func·001()
+      /Users/yejianfeng/Documents/workspace/go/src/runtime/race1.go:11 +0x3a
+
+Previous write by main goroutine:
+  main.main()
+      /Users/yejianfeng/Documents/workspace/go/src/runtime/race1.go:13 +0xe7
+
+Goroutine 5 (running) created at:
+  main.main()
+      /Users/yejianfeng/Documents/workspace/go/src/runtime/race1.go:12 +0xd7
+==================
+Found 1 data race(s)
+exit status 66
+</pre>
+这个命令输出了Warning，告诉我们，goroutine5运行到第11行和main goroutine运行到13行的时候触发竞争了。而且goroutine5是在第12行的时候产生的。我们据此可以分析哪里出现了问题。
+
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
