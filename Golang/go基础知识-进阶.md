@@ -2723,6 +2723,42 @@ func SingleHost(handler http.Handler, allowedHost string) http.Handler {
 >>>总结
 
 这篇文章的目的是吸引Go用户对中间件概念的注意以及展示使用Go写中间件的一些基本组件。尽管Go是一个相对年轻的开发语言，Go拥有非常漂亮的标准HTTP接口。这也是用Go写中间件是个非常简单甚至快乐的过程的原因之一。
+###golang中的race检测
+在本质上说，goroutine的使用增加了函数的危险系数论go语言中goroutine的使用。比如一个全局变量，如果没有加上锁，我们写一个比较庞大的项目下来，就根本不知道这个变量是不是会引起多个goroutine竞争。下面的是一个案例：
+<pre>
+package main
+
+import(
+    "time"
+    "fmt"
+    "math/rand"
+)
+
+func main() {
+    start := time.Now()
+    var t *time.Timer
+    t = time.AfterFunc(randomDuration(), func() {
+        fmt.Println(time.Now().Sub(start))
+        t.Reset(randomDuration())
+    })
+    time.Sleep(5 * time.Second)
+}
+
+func randomDuration() time.Duration {
+    return time.Duration(rand.Int63n(1e9))
+}
+output==>
+948.0543ms
+1.0330591s
+1.7000973s
+1.9351107s
+2.2231272s
+2.7731587s
+3.4061949s
+3.7382139s
+3.9222244s
+4.405252s
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
