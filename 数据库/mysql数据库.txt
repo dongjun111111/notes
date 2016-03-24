@@ -1274,3 +1274,14 @@ distinctÓÃ·¨£ºSELECT DISTINCT Company FROM Orders    //´Ó Company" ÁÐÖÐ½öÑ¡È¡Î¨Ò
 ¼ÓÁËË÷ÒýÖ®ºó group by ±ÈÃ»¼ÓË÷ÒýµÄ group by ¿ìÁË 43±¶¡£
 ÔÙÀ´¶Ô±È £ºdistinct  ºÍ group by £º
 ²»¹ÜÊÇ¼Ó²»¼ÓË÷Òý group by ¶¼±È distinct ¿ì¡£Òò´ËÊ¹ÓÃµÄÊ±ºò½¨ÒéÑ¡ group by¡£
+
+
++++mysqlÖ÷¼üidÀàÐÍÑ¡ÔñµÄÎÊÌâ+++
+Ö÷¼üidÀàÐÍÑ¡ÔñµÄÎÊÌâ£¬ÒòÎªinnodb²ÉÓÃµÄÊÇb+treeÀ´½øÐÐÊý¾ÝµÄ´æ´¢£¬ÍøÉÏ¶ÔÓÚÊÇ·ñ²ÉÓÃ×ÔÔöid»òÕßguidÕâÖÖÕùÂÛÂúÌì
+·É£¬ÏÖÔÚÎÒµÄÏë·¨ÈçÏÂ£º
+guid»áµ¼ÖÂÖ÷¼ü¹ýÓÚ·ÖÉ¢£¬ÒÔÖÁÓÚÔÚÊý¾Ý½øÐÐ²åÈë£¬É¾³ý£¬¸üÐÂµÄÊ±ºò»á½øÐÐb+treeµÄÆµ·±·ÖÁÑ£¬Í¬Ê±¶ÁÈ¡Êý¾ÝµÄÊ±ºòÒòÎª
+¹ýÓÚ·ÖÉ¢»áµ¼ÖÂioËæ¼´¶ÁÈ¡£¬ÐÔÄÜ²»¸ß¡£
+×ÔÔöidËäÈ»ÄÜÈÃio½øÐÐË³Ðò¶ÁÈ¡£¬µ«ÊÇÈç¹û·þÎñÆ÷Êý¾ÝÁ¿Ì«´óÔì³É·Ö±íÁË£¬¶ÔÓÚÃ¿ÕÅ±íµÄauto incrementµÄ³õÊ¼ÖµÎ¬»¤Ò²
+ÊÇÒ»¼þºÜ·³µÄÊÂÇé¡£
+¼øÓÚÉÏÃæÄÇÖÖÇé¿ö£¬ÎÒÃÇÏÖÔÚ¿¼ÂÇµÄ×ö·¨¾ÍÊÇÌá¹©Ò»¸öidÉú³ÉÆ÷£¬ÓÃÀ´±£Ö¤Ö÷¼üµÄË³ÐòµÝÔö£¬Í¬Ê±ÓÖ±£Ö¤È«¾ÖµÄÍêÈ«
+Î¨Ò»¡£Õâ¸öidÉú³ÉÆ÷ºÜÈÝÒ×£¬Ê¹ÓÃredisµÄincr¾Í¿ÉÒÔ¸ã¶¨£¬¶øÇÒ»¹¿ÉÒÔÍ¨¹ýincrby½øÐÐÅúÁ¿ÉêÇë£¬ÐÔÄÜÍ×Í×µÄ¡£
