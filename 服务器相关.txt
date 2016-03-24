@@ -95,6 +95,8 @@ Internal Server Error ½â¾ö°ì·¨£º
 1.±£Ö¤£ºÎÄ¼þ¼ÐÈ¨ÏÞÒªÉèÖÃÎª755»òÕß¸üµÍ,ÎÄ¼þÈ¨ÏÞÒªÉèÖÃÎª644»òÕß¸üµÍ¡£
 2.Èç¹ûÎÄ¼þÈ¨ÏÞÊÇ644µ«ÊÇPHP³ÌÐò¹¦ÄÜ»¹ÊÇ²»ºÃÓÃ£¬ÌáÊ¾ÎÄ¼þÈ¨ÏÞ²»¹»£¬ÄÇÃ´¿ÉÒÔÁªÏµ¿Í·þ£¬ÈÃËûÃÇ½«°²È«Ä£¿é½ûÓÃ¡£
 
+
+
 ++³£¼û×´Ì¬Âë++++
  static $_status = array(
         // Success 2xx
@@ -124,6 +126,7 @@ Internal Server Error ½â¾ö°ì·¨£º
 µÄ´«Êä£¬Èô°ÑÊµÏÖÕâÐ©Ð­ÒéµÄÓ²¼þºÍÈí¼þµÄ¼Óµ½Á´Â·ÉÏ£¬¾Í½Ð×öÊý¾ÝÁ´Â·£»×î³£ÓÃµÄÊÇ-----ÍøÂçÊÊÅäÆ÷¡£Ò»°ãÊÊÅäÆ÷¶¼
 °üº¬ÁËÊý¾ÝÁ´Â·²ãºÍÎïÀí²ãÕâÁ½²ãµÄ¹¦ÄÜ----ÓÖ³ÆÎªÂß¼­Á´Â·¡£
 
+
 +++TCPÕ³°üºÍ²ð°üÎÊÌâ+++++
 ÎÊÌâ²úÉú
 Ò»¸öÍêÕûµÄÒµÎñ¿ÉÄÜ»á±»TCP²ð·Ö³É¶à¸ö°ü½øÐÐ·¢ËÍ£¬Ò²ÓÐ¿ÉÄÜ°Ñ¶à¸öÐ¡µÄ°ü·â×°³ÉÒ»¸ö´óµÄÊý¾Ý°ü·¢ËÍ£¬Õâ¸ö¾ÍÊÇTCPµÄ²ð°üºÍ·â°üÎÊÌâ¡£
@@ -143,6 +146,8 @@ TCPÕ³°üºÍ²ð°üµÄ½â¾ö²ßÂÔ
 2. ÔÚ°üÎ²²¿Ôö¼Ó»Ø³µ»òÕß¿Õ¸ñ·ûµÈÌØÊâ×Ö·û½øÐÐ·Ö¸î£¬µäÐÍµÄÈçFTPÐ­Òé
 3. ½«ÏûÏ¢·ÖÎªÏûÏ¢Í·ºÍÏûÏ¢Î²¡£
 4. ÆäËü¸´ÔÓµÄÐ­Òé£¬ÈçRTMPÐ­ÒéµÈ¡£
+
+
 
 ++++ÍøÂçIOÄ£ÐÍ++++
 ÍøÂçIOÄ£ÐÍ½éÉÜ
@@ -210,6 +215,7 @@ IO multiplexingÕâ¸ö´Ê¿ÉÄÜÓÐµãÄ°Éú£¬µ«ÊÇÈç¹ûÎÒËµselect/epoll£¬´ó¸Å¾Í¶¼ÄÜÃ÷°×ÁË¡£Ó
     »¹ÓÐÒ»ÖÖ²»³£ÓÃµÄsignal driven IO£¬¼´ÐÅºÅÇý¶¯IO¡£×ÜµÄÀ´Ëµ£¬UNPÖÐ×Ü½áµÄIOÄ£ÐÍÓÐ5ÖÖÖ®¶à£º×èÈûIO£¬·Ç×èÈûIO£¬IO¸´ÓÃ£¬ÐÅºÅÇý¶¯IO£¬Òì²½IO¡£Ç°ËÄÖÖ¶¼ÊôÓÚÍ¬²½IO¡£×èÈûIO²»±ØËµÁË¡£·Ç×èÈûIO £¬IOÇëÇóÊ±¼ÓÉÏO_NONBLOCKÒ»ÀàµÄ±êÖ¾Î»£¬Á¢¿Ì·µ»Ø£¬IOÃ»ÓÐ¾ÍÐ÷»á·µ»Ø´íÎó£¬ÐèÒªÇëÇó½ø³ÌÖ÷¶¯ÂÖÑ¯²»¶Ï·¢IOÇëÇóÖ±µ½·µ»ØÕýÈ·¡£IO¸´ÓÃÍ¬·Ç×èÈûIO±¾ÖÊÒ»Ñù£¬²»¹ýÀûÓÃÁËÐÂµÄselectÏµÍ³µ÷ÓÃ£¬ÓÉÄÚºËÀ´¸ºÔð±¾À´ÊÇÇëÇó½ø³Ì¸Ã×öµÄÂÖÑ¯²Ù×÷¡£¿´ËÆ±È·Ç×èÈûIO»¹¶àÁËÒ»¸öÏµÍ³µ÷ÓÃ¿ªÏú£¬²»¹ýÒòÎª¿ÉÒÔÖ§³Ö¶àÂ·IO£¬²ÅËãÌá¸ßÁËÐ§ÂÊ¡£ÐÅºÅÇý¶¯IO£¬µ÷ÓÃsigaltionÏµÍ³µ÷ÓÃ£¬µ±ÄÚºËÖÐIOÊý¾Ý¾ÍÐ÷Ê±ÒÔSIGIOÐÅºÅÍ¨ÖªÇëÇó½ø³Ì£¬ÇëÇó½ø³ÌÔÙ°ÑÊý¾Ý´ÓÄÚºË¶ÁÈëµ½ÓÃ»§¿Õ¼ä£¬ÕâÒ»²½ÊÇ×èÈûµÄ¡£
 Òì²½IO£¬Èç¶¨ÒåËùËµ£¬²»»áÒòÎªIO²Ù×÷×èÈû£¬IO²Ù×÷È«²¿Íê³É²ÅÍ¨ÖªÇëÇó½ø³Ì¡£
   ¾­¹ýÉÏÃæµÄ½éÉÜ£¬»á·¢ÏÖnon-blocking IOºÍasynchronous IOµÄÇø±ð»¹ÊÇºÜÃ÷ÏÔµÄ¡£ÔÚnon-blocking IOÖÐ£¬ËäÈ»½ø³Ì´ó²¿·ÖÊ±¼ä¶¼²»»á±»block£¬µ«ÊÇËüÈÔÈ»ÒªÇó½ø³ÌÈ¥Ö÷¶¯µÄcheck£¬²¢ÇÒµ±Êý¾Ý×¼±¸Íê³ÉÒÔºó£¬Ò²ÐèÒª½ø³ÌÖ÷¶¯µÄÔÙ´Îµ÷ÓÃrecvfromÀ´½«Êý¾Ý¿½±´µ½ÓÃ»§ÄÚ´æ¡£¶øasynchronous IOÔòÍêÈ«²»Í¬¡£Ëü¾ÍÏñÊÇÓÃ»§½ø³Ì½«Õû¸öIO²Ù×÷½»¸øÁËËûÈË£¨kernel£©Íê³É£¬È»ºóËûÈË×öÍêºó·¢ÐÅºÅÍ¨Öª¡£ÔÚ´ËÆÚ¼ä£¬ÓÃ»§½ø³Ì²»ÐèÒªÈ¥¼ì²éIO²Ù×÷µÄ×´Ì¬£¬Ò²²»ÐèÒªÖ÷¶¯µÄÈ¥¿½±´Êý¾Ý¡£
+
 
 
 +++¹ØÓÚº£Á¿Êý¾Ý´¦Àí+++++
