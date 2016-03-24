@@ -2803,6 +2803,41 @@ exit status 66
 - Error ： Log() + Fail()  即记录当前错误，记录为失败，但是继续执行
 - Fatal ： Log() + FailNow() 即记录当前错误，记录为失败，不继续执行
 ####linux下获取进程信息是使用/proc/pid/
+####获取go的各种路径
+1 执行用户当前所在路径：
+
+os.Getwd()
+
+2 执行程序所在路径：
+
+执行程序文件相对路径：
+
+file, _ := exec.LookPath(os.Args[0])
+<pre>
+package main
+import(
+        "os"
+        "log"
+        "os/exec"
+        "path"
+)
+func main() {
+        file, _ := os.Getwd()
+        log.Println("current path:", file)
+        file, _ = exec.LookPath(os.Args[0])
+        log.Println("exec path:", file)
+        dir,_ := path.Split(file)
+        log.Println("exec folder relative path:", dir)
+        os.Chdir(dir)
+        wd, _ := os.Getwd()
+        log.Println("exec folder absolute path:", wd)
+}
+output==>
+2016/03/24 23:56:38 current path: C:\mygo\src\act
+2016/03/24 23:56:38 exec path: C:\mygo\src\act\act.exe
+2016/03/24 23:56:38 exec folder relative path: 
+2016/03/24 23:56:38 exec folder absolute path: C:\mygo\src\act
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
