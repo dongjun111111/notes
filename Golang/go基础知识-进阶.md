@@ -2696,6 +2696,29 @@ ServeHTTP 函数仅仅检查请求中的Host头：
 singleHosted = NewSingleHost(myHandler, "example.com")
 http.ListenAndServe(":8080", singleHosted)
 </pre>
+
+另外一种方法
+
+刚才写的中间件实在是太简单了，只有仅仅15行代码。为了写这样的中间件，引入了一个不太通用的方法。由于Go支持函数第一型和闭包，并且拥有简洁的http.HandlerFunc包装器，我们可以将其实现为一个简单的函数，而不是写一个单独的类型。下面是基于函数的中间件版本。
+<pre>
+func SingleHost(handler http.Handler, allowedHost string) http.Handler {
+    ourFunc := func(w http.ResponseWriter, r *http.Request) {
+        host := r.Host
+        if host == allowedHost {
+            handler.ServeHTTP(w, r)
+        } else {
+            w.WriteHeader(403)
+        }
+    }
+    return http.HandlerFunc(ourFunc)
+}
+</pre>
+
+这里我们声明了一个叫做SingleHost的简单函数，接受一个Handler和允许的主机名。在函数内部，我们创建了一个类似之前版本ServeHTTP的函数。这个内部函数其实是一个闭包，所以它可以从SingleHost外部访问。最终，我们通过HandlerFunc把这个函数用作http.Handler。
+
+使用Handler还是定义一个http.Handler类型完全取决于你。对简单的情况而已，一个函数就足够了。但是随着中间件功能的复杂，你应该考虑定义自己的数据结构，把逻辑独立到多个方法中。
+
+实际上，标准库这两种方法都用了。StripPrefix 是一个返回HandlerFunc的函数。虽然TimeoutHandler也是一个函数，但它返回了处理请求的自定义的类型。
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
