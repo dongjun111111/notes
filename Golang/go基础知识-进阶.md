@@ -2641,8 +2641,29 @@ func main() {
 - 添加HSTS, X-Frame-Options头
 - 从异常中优雅恢复
 - 以及其他等等。
+####写一个简单的中间件
+写了一个中间件，只允许用户从特定的域（在HTTP的Host头中有域信息）来访问服务器。
 
+定义类型
 
+为了方便，让我们为这个中间件定义一种类型，叫做SingleHost。
+<pre>
+type SingleHost struct {
+    handler     http.Handler
+    allowedHost string
+}
+</pre>
+只包含两个字段：
+
+- 封装的Handler。如果是有效的Host访问，我们就调用这个Handler。
+- 允许的主机值。
+
+由于我们把字段名小写了，使得该字段只对我们自己的包可见。我们还应该写一个初始化函数
+<pre>	
+func NewSingleHost(handler http.Handler, allowedHost string) *SingleHost {
+    return &SingleHost{handler: handler, allowedHost: allowedHost}
+}
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
