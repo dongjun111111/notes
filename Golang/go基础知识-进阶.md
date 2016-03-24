@@ -2684,6 +2684,18 @@ func (s *SingleHost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 }
 </pre>
+ServeHTTP 函数仅仅检查请求中的Host头：
+
+- 如果Host头匹配初始化函数设置的allowedHost ，就调用封装handler的ServeHTTP方法。
+- 如果Host头不匹配，就返回403状态码（禁止访问）。
+
+在后一种情况中，封装handler的ServeHTTP方法根本就不会被调用。因此封装的handler根本不会有任何输出，实际上它根本就不知道有这样一个请求到来。
+
+现在我们已经完成了自己的中间件，来把它放到应用中。这次我们不把Handler直接放到net/http服务中，而是先把Handler封装到中间件中。
+<pre>
+singleHosted = NewSingleHost(myHandler, "example.com")
+http.ListenAndServe(":8080", singleHosted)
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
