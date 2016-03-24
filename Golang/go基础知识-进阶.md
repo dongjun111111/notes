@@ -2838,6 +2838,45 @@ output==>
 2016/03/24 23:56:38 exec folder relative path: 
 2016/03/24 23:56:38 exec folder absolute path: C:\mygo\src\act
 </pre>
+####从文件中json解析
+尽量使用os.OpenFile直接获取reader，然后再从reader中使用Decoder来解析json
+<pre>
+package main
+ 
+import (
+    "fmt"
+    "encoding/json"
+    "os")
+ 
+func main() {
+    pathToFile := "jsondata.txt"
+ 
+    file, err := os.OpenFile(pathToFile, os.O_RDONLY, 0644)
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }
+ 
+    configs := make(map[string]map[string][]Service, 0)
+    err = json.NewDecoder(file).Decode(&configs)
+    if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+    }}
+</pre>
+别使用
+<pre>
+content, err := ioutil.ReadFile(filepath)
+    if err != nil {
+        return nil, err
+    }
+ 
+    configs := make(map[string]map[string][]Service, 0)
+    err = json.Unmarshal(content, configs)
+    if err != nil {
+        return nil, err
+}
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
