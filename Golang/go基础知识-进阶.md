@@ -2719,6 +2719,10 @@ func SingleHost(handler http.Handler, allowedHost string) http.Handler {
 使用Handler还是定义一个http.Handler类型完全取决于你。对简单的情况而已，一个函数就足够了。但是随着中间件功能的复杂，你应该考虑定义自己的数据结构，把逻辑独立到多个方法中。
 
 实际上，标准库这两种方法都用了。StripPrefix 是一个返回HandlerFunc的函数。虽然TimeoutHandler也是一个函数，但它返回了处理请求的自定义的类型。
+
+总结
+
+这篇文章的目的是吸引Go用户对中间件概念的注意以及展示使用Go写中间件的一些基本组件。尽管Go是一个相对年轻的开发语言，Go拥有非常漂亮的标准HTTP接口。这也是用Go写中间件是个非常简单甚至快乐的过程的原因之一。
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
