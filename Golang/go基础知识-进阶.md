@@ -2664,6 +2664,26 @@ func NewSingleHost(handler http.Handler, allowedHost string) *SingleHost {
     return &SingleHost{handler: handler, allowedHost: allowedHost}
 }
 </pre>
+
+处理请求
+
+现在才是实际的逻辑。为了实现http.Handler，我们的类型秩序实现一个方法：
+<pre>
+type Handler interface {
+     ServeHTTP(ResponseWriter, *Request)
+}
+</pre>
+具体实现的方法：
+<pre>
+func (s *SingleHost) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    host := r.Host
+    if host == s.allowedHost {
+        s.handler.ServeHTTP(w, r)
+    } else {
+        w.WriteHeader(403)
+    }
+}
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
