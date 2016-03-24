@@ -1,574 +1,574 @@
-++++++++Linux����ϵͳ��ѧ�ߵ�ѧϰ��·ͼ++++++++
-���������ѧϰLinux����ϵͳ����֪���������֣����Բο����������9�㽨��.
-1.��������50�����ϵĳ������
-���磺��װ�͵�¼���login�� shutdown�� halt�� reboot ��mount��umount ��chsh
-�ļ��������file�� mkdir�� grep��dd�� find�� mv ��ls ��diff�� cat�� ln
-ϵͳ���������� df�� top�� free�� quota ��at�� lp�� adduser�� groupadd kill�� crontab�� tar�� unzip�� gunzip ��last
-����������ifconfig�� ip ��ping �� netstat ��telnet�� ftp�� route�� rlogin rcp ��finger ��mail ��nslookup
-ϵͳ��ȫ������ passwd ��su�� umask ��chgrp�� chmod��chown��chattr��sudo�� pswho
-2.��ϤGnome/KDE��X-windows���滷��������
-3.����.tgz��.rpm���������ĳ��ð�װ������
-4.ѧϰ�������裬��װ�豸��������(������������
-5.��ϤGrub/Lilo�����估�򵥵��޸�������
-6.��ϤLinux�ģ���ϵͳ��Ŀ¼�ṹ�� 
-7.����vi��gcc��gdb�ȳ��ñ༭��������������������
-8.����shell�������ܵ���I/O�ض������������Լ�shell�ű���̡�
-9.ѧϰLinux�����µ�������
+﻿++++++++Linux操作系统初学者的学习线路图++++++++
+如果你正在学习Linux操作系统，不知从哪里入手，可以参考下面给出的9点建议.
+1.掌握至少50个以上的常用命令。
+比如：安装和登录命令：login、 shutdown、 halt、 reboot 、mount、umount 、chsh
+文件处理命令：file、 mkdir、 grep、dd、 find、 mv 、ls 、diff、 cat、 ln
+系统管理相关命令： df、 top、 free、 quota 、at、 lp、 adduser、 groupadd kill、 crontab、 tar、 unzip、 gunzip 、last
+网络操作命令：ifconfig、 ip 、ping 、 netstat 、telnet、 ftp、 route、 rlogin rcp 、finger 、mail 、nslookup
+系统安全相关命令： passwd 、su、 umask 、chgrp、 chmod、chown、chattr、sudo、 pswho
+2.熟悉Gnome/KDE等X-windows桌面环境操作。
+3.掌握.tgz、.rpm等软件包的常用安装方法。
+4.学习添加外设，安装设备驱动程序(比如网卡）。
+5.熟悉Grub/Lilo引导其及简单的修复操作。
+6.熟悉Linux文，件系统和目录结构。 
+7.掌握vi、gcc、gdb等常用编辑器，编译器，调试器。
+8.理解shell别名、管道、I/O重定向、输入和输出以及shell脚本编程。
+9.学习Linux环境下的组网。
 
- +++++++++++����˳�� +++++++++++
-1) BIOS: BIOS��д�������ϵĳ������������Ӳ�̵�MBR��
-2) MBR: �������������ڰ���Boot Loader
-3) Boot Loader: ���û�ѡ���ȡ����ϵͳ�ں˳���
-4) Kernel: �ں˳������У�����
-Tips �� ��װWindows��Linux˫ϵͳ��Ӧ���Ȱ�װWindows�ٰ�װLinux����Ϊ�Ȱ�װLinux����Windows��װʱ�Ḳ��MBR����дBoot Loader���������ᵼ��Loader�޷����ҵ�Linux����Linux�ڰ�װʱ�����ֶ�ѡ��װLoader�����������������������Loader����������˵����������ƻ�Windows��loader����Ȼ�����װ��Linux��MBR�����Ǻ�Ҳ������������ʽ���޸�MBR��
+ +++++++++++开机顺序 +++++++++++
+1) BIOS: BIOS是写在主板上的程序，他负责查找硬盘的MBR。
+2) MBR: 主引导分区，内包含Boot Loader
+3) Boot Loader: 按用户选择读取操作系统内核程序
+4) Kernel: 内核程序运行，开机
+Tips ： 安装Windows和Linux双系统，应该先安装Windows再安装Linux，因为先安装Linux，在Windows安装时会覆盖MBR，重写Boot Loader程序，这样会导致Loader无法查找到Linux。而Linux在安装时可以手动选择安装Loader程序的启动扇区，或者设置Loader程序的启动菜单，而不会破坏Windows的loader。当然如果先装了Linux，MBR被覆盖后也可以用其他方式来修复MBR。
 
 
-++++++unix/linux ����ʹ��++++++++
-ssh ��ȫ��ǿ����;���뷽ʽ��rsa key ��ʽ�����á�
-rpm/apt/yum/ports װ������ѯ��ɾ���Ļ������
-Makefile�Ļ�����ʽ��gcc ���룬���ӵ�����,-O0 ��-O3����
-gdb,strace,valgrind�Ļ���ʹ��.
-Linux�鿴��ǰ�ļ�������ռ�ÿռ������ļ��еķ�����
+++++++unix/linux 基本使用++++++++
+ssh 安全增强方法;密码方式和rsa key 方式的配置。
+rpm/apt/yum/ports 装包，查询，删除的基本命令。
+Makefile的基本格式，gcc 编译，连接的命令,-O0 和-O3区别。
+gdb,strace,valgrind的基本使用.
+Linux查看当前文件夹下面占用空间最大的文件夹的方法：
 du --max-depth=1 -h
-Linux�����������
+Linux重启网卡命令：
 service network restart
 
 
-++++++linuxϵͳ��Ŀ+++++++
-3. �����Linux�����ϸ���ϵͳ�¼����ػ���������ʲô��
-�𰸣���syslogd�������������ϵͳ��Ϣ������������־�洢���ض�����־�ļ��
-4. ��/root��������'fsck'��������Ҫ����ʲô��
-�𰸣�/root�����������Ϊֻ��ģʽ�������Ƕ�дģʽ
-7.����֪��Linux����˭�ڰ��Ź�����
-�𰸣�ʹ�á�at��������ϡ�-l��ѡ��Ϳ��Բ����
-8. ����ڲ���ѹtar����ǰ���£��鿴��������ݣ�
-�𰸣�ʹ�á�tar -tvf����ѡ�t��(��ʾ����)����v������ϸ����tar�������ļ���Ϣ����
-��f����ʹ�õ����ļ������豸����
-less ����
-һ��ֻ����ʾһ��ҳ����ı�����ǰ��ҳ����Ҫ�� Page Up, ���� ��b��������ҳ�����
-��Page Down, ���� �ո񡣴�д��G����ת���ı���ĩβ��1G����ת���ı��Ŀ��ˡ�/�ַ������ı�
-������ָ���ַ������磬��������� /suse ��������Ѱ�����ı����е� suse ����ǳ�������
-n ���ظ�ִ�����������h����ʾ���е�ѡ�h������������˼����
-python����
-�������������һ��ͨ��HTTP��ʾ�ļ��нṹ���ļ���ҳ������ͨ��������ڶ˿�8000���ʣ�ֱ�������ж��źš�
+++++++linux系统题目+++++++
+3. 在你的Linux机器上跟踪系统事件的守护进程名是什么？
+答案：’syslogd’，它负责跟踪系统信息，并将跟踪日志存储在特定的日志文件里。
+4. 在/root分区运行'fsck'命令的最低要求是什么？
+答案：/root分区必须挂载为只读模式，而不是读写模式
+7.怎样知道Linux中是谁在安排工作？
+答案：使用’at’命令加上’-l’选项，就可以查出。
+8. 如何在不解压tar包的前提下，查看包里的内容？
+答案：使用’tar -tvf’。选项‘t’(显示内容)，‘v’（详细报告tar处理的文件信息），
+‘f’（使用档案文件或者设备）。
+less 命令
+一次只会显示一个页面的文本。往前翻页你需要按 Page Up, 或者 ‘b’。往后翻页你可以
+按Page Down, 或者 空格。大写的G会跳转到文本的末尾，1G会跳转到文本的开端。/字符会在文本
+内搜索指定字符（例如，如果你输入 /suse ，它会找寻所有文本含有的 suse 并标记出来）。
+n 会重复执行你的搜索，h会显示所有的选项（h，即帮助的意思）。
+python命令
+下面的命令生产一个通过HTTP显示文件夹结构树的简单网页，可以通过浏览器在端口8000访问，直到发出中断信号。
 # python -m SimpleHTTPServer
-4. Ctrl+x+e����
-���������ڹ���Ա�Ϳ����߷ǳ����á�Ϊ��ʹÿ��������Զ���������Ա��Ҫͨ������vi��vim��nano�ȴ򿪱༭����
-�����������п��ٵ��û���Ctrl-x-e�����Ϳ����ڱ༭���п�ʼ�����ˡ�
-10. tree����
-����ʽ�ĸ�ʽ�õ���ǰ�ļ��еĽṹ��
+4. Ctrl+x+e命令
+这个命令对于管理员和开发者非常有用。为了使每天的任务自动化，管理员需要通过输入vi、vim、nano等打开编辑器。
+仅仅从命令行快速的敲击“Ctrl-x-e”，就可以在编辑器中开始工作了。
+10. tree命令
+以树式的格式得到当前文件夹的结构。
 11. pstree
-���������ʾ��ǰ���е����н��̼�����ص��ӽ��̣�����������ơ�tree���������״��ʽ��
-8. last����
-��last��������ʾ�����ϴε�¼�û�����ʷ��Ϣ��
-7. ss����
-��ss����ʾsocketͳ�ơ�����������socket����ʾ����netstat�������Ϣ�������Ա�����������ʾ�����TCP��״̬��Ϣ��
-23. ����: man
-��man����ϵͳ����ҳ��Man�ṩ��������ѡ��÷��������ĵ����������е���������ǵİ���ҳ��
-24. ����: ps
-ps��������������е�ĳ�����̵�״̬��ÿ���������ض���id��ΪPID��
-26. ����: whereis
-whereis��������������λ����Ķ������ļ�\��Դ\���߰���ҳ.������˵,���ls��kill����Ķ������ļ�/��Դ�Լ�����ҳ:
-28. ����: alias
-alias��һ��ϵͳ�Խ���shell���������Ϊ���ֱȽϳ��Ļ��߾���ʹ�õ�����ָ��������
-�Ҿ����á�ls -l�������������ַ��������ո񣩡�������Ϊ��������һ��������l����
-29.����: df
-����ϵͳ�Ĵ���ʹ��������ڸ��ٴ���ʹ��������������ͨ�û���ϵͳ����Ա�������á� 
-��df�� ͨ�����Ŀ¼��С����������һ��ֵ�����ļ��ر�ʱ�ŵõ����¡�
-2. host ����
-�����������������鿴������ IP ��Ϣ�����磺
+这个命令显示当前运行的所有进程及其相关的子进程，输出的是类似‘tree’命令的树状格式。
+8. last命令
+“last”命令显示的是上次登录用户的历史信息。
+7. ss命令
+“ss”表示socket统计。这个命令调查socket，显示类似netstat命令的信息。它可以比其他工具显示更多的TCP和状态信息。
+23. 命令: man
+‘man‘是系统帮助页。Man提供命令所有选项及用法的在线文档。几乎所有的命令都有它们的帮助页，
+24. 命令: ps
+ps命令给出正在运行的某个进程的状态，每个进程有特定的id成为PID。
+26. 命令: whereis
+whereis的作用是用来定位命令的二进制文件\资源\或者帮助页.举例来说,获得ls和kill命令的二进制文件/资源以及帮助页:
+28. 命令: alias
+alias是一个系统自建的shell命令，允许你为名字比较长的或者经常使用的命令指定别名。
+我经常用‘ls -l‘命令，它有五个字符（包括空格）。于是我为它创建了一个别名‘l’。
+29.命令: df
+报告系统的磁盘使用情况。在跟踪磁盘使用情况方面对于普通用户和系统管理员都很有用。 
+‘df‘ 通过检查目录大小工作，但这一数值仅当文件关闭时才得到更新。
+2. host 命令
+这个命令可以让您来查看主机的 IP 信息。比如：
 $ host google.com
-3.  arch ����
-���������������õ�ϵͳ�Ĵ�����ϵͳ������Ϣ��
-4. uname ����
-����� arch ֻ�ܵõ�ϵͳ�ļ���Ϣ�������õ��������Ϣ�����Ǿ���Ҫʹ�� uname �����ˣ�uname ������Ի�ȡ������ϵͳ���ơ��ں����ơ��ں˰汾��������������ڵ����Ϣ��
-5. dig ����
-dig ������ DNS �鿴���ߣ�ʹ�ô�������Բ鿴������������������ַ
+3.  arch 命令
+这个命令可以让您得到系统的处理器系统构架信息。
+4. uname 命令
+上面的 arch 只能得到系统的简单信息，如果想得到更多的信息，我们就需要使用 uname 命令了，uname 命令可以获取到操作系统名称、内核名称、内核版本、主机名、网络节点等信息。
+5. dig 命令
+dig 命令是 DNS 查看工具，使用此命令可以查看域名服务器的主机地址
 $ dig google.com
-1��linux�²鿴ssh�û��ĵ�¼��־��
+1、linux下查看ssh用户的登录日志：
 less secure
-1. ʹ��pgrep���ٲ���PID
-pgrep�������ǰ���еĽ��̣��г����ϲ��������Ľ���ID��
+1. 使用pgrep快速查找PID
+pgrep会遍历当前运行的进程，列出符合查找条件的进程ID。
 pgrep ssh
-����������г�������ssh�йصĽ���ID��
-2. ִ���ϴ�ִ�й�������
-���������Щ�ƿڣ����������������ȷ��������һ�㡣
+这条命令会列出所有与ssh有关的进程ID。
+2. 执行上次执行过的命令
+这个标题有些绕口，但下面这条命令的确能做到这一点。
 !!
-�������ִ��������������ִ�й�����һ�����
-3. ִ�����һ�����ض���ĸ��ͷ������
-����ִ����������ʷ��һ��s��ͷ���������ʹ���������
+该命令会执行你在命令行中执行过的上一条命令。
+3. 执行最近一次以特定字母开头的命令
+如欲执行命令行历史中一个s开头的命令，可以使用如下命令：
 !s
-�������ִ�����һ�������������ù���������ĸs��ͷ�����
-4. ����ִ��һ���������Ļ�����
-watch�ᷴ��ִ��һ�����������Ļ�ϴ�ӡ���������Խ�˹۲�һ��ʱ���ڳ��������仯�����򣨼�ʾ���е�ls -l��Ĭ��ÿ2������һ��.watch������tail����ǳ����ơ�
+该命令会执行最近一次在命令行中用过的且以字母s开头的命令。
+4. 反复执行一个命令并在屏幕上输出
+watch会反复执行一个命令，并在屏幕上打印输出。你可以借此观察一段时间内程序的输出变化。程序（即示例中的ls -l）默认每2秒运行一次.watch命令与tail命令非常相似。
 watch -d ls -l
-�����������ӵ�ǰĿ¼�������ļ���ɾ���޸ģ��ͻ������ʾĿ¼�仯��
-5. ��VI/VIM�п��ٱ���
-Ҫæ�Ű���������ʱ������ʹ��Shift + zz������ס��������������z���������˳�vi����ģʽ��
-6. �����˳��ն˻Ự
-ʹ��CTRL+D���Կ����˳��ն˻Ự��
-7. ������һ�����ڵ�Ŀ¼
-ʹ������cd -���Է�����һ�����ڵ�Ŀ¼��
-8. �������Ŀ¼
-����mkdir -p /home/adam/make/all/of/these/directories/�������Ҫ���������ڵ�Ŀ¼���ο�Ҫ�˷�ʱ��������ɵ���أ�mkdir make �� cd make �� mkdir all �� cd all �� mkdir of �� cd of �� ����Ҫ����ʹ��
+这条命令会监视当前目录，如有文件增删或修改，就会高亮显示目录变化。
+5. 在VI/VIM中快速保存
+要忙着办其他事情时，可以使用Shift + zz（即按住换档键，敲两下z键）快速退出vi插入模式。
+6. 快速退出终端会话
+使用CTRL+D可以快速退出终端会话。
+7. 返回上一次所在的目录
+使用命令cd -可以返回上一次所在的目录：
+8. 巧妙创建父目录
+命令mkdir -p /home/adam/make/all/of/these/directories/会根据需要创建不存在的目录。何苦要浪费时间做这种傻事呢：mkdir make ； cd make ； mkdir all ； cd all ； mkdir of ； cd of … 切中要害，使用
 mkdir -p!
-9. ɾ��һ����
-������һ��������ֲ���Ҫ�ˣ�����ʹ��CTRL+Uɾ����һ���С�����ע����겻����βʱ����������CTRL+E��λ����β����
-10. �趨�ļ���ʱ���
-����touch -c -t 0801010800 filename.c�Ὣ�ļ���ʱ����趨Ϊ2008-01-01 8:00����ʽΪ(YYMMDDhhmm)��
+9. 删除一整行
+输入了一长串命令但又不想要了，可以使用CTRL+U删除这一整行。（译注：光标不在行尾时，可以先用CTRL+E定位到行尾。）
+10. 设定文件的时间戳
+命令touch -c -t 0801010800 filename.c会将文件的时间戳设定为2008-01-01 8:00，格式为(YYMMDDhhmm)。
 
 
-+++++Linux ����������+++++++
-��һ�׶Σ�BIOS���������׶�
-�ڸù�����ʵ��Ӳ���ĳ�ʼ���Լ�������������
-��MBR��װ������������������GRUB�������и�������������
-�ڶ��׶Σ�GRUB���������׶�
-װ��stage1
-װ��stage1.5
-װ��stage2
-��ȡ/boot/grub.conf�ļ�����ʾ�����˵�
-װ����ѡ��kernel��initrd�ļ����ڴ���
-�����׶Σ��ں˽׶�
-�����ں���������
-��ѹinitrd�ļ�������initd�ļ�ϵͳ��װ�ر��������
-���ظ��ļ�ϵͳ
-���Ľ׶Σ�Sys V init��ʼ���׶�
-����/sbin/init����
-����rc.sysinit�ű�������ϵͳ����������swap���������͹����ļ�ϵͳ
-��ȡ/etc/inittab�ļ���������/et/rc.d/rc<#>.d�ж���Ĳ�ͬ���м���ķ����ʼ���ű�
-���ַ��ն�1-6�ſ���̨/��ͼ����ʾ������7�ſ���̨
-�������̺�ϸ�����
-����BIOS ==> bootloader ==> kernel & initrd.img ==> /sbin/init
-����1.bootloader ��grub��
-����/boot/grub/grub.conf  <�C grub�������ļ�������ʹ���ĸ�kernel��initrd.img
-������/boot/grubĿ¼��������stage�ļ������У�
-��������stage1  <�� ��С��512�ֽڣ�����ļ��ᱻд��MBR��
-��������stage2  <�� stage1������֮�󣬻��������ļ�
-�������grub����������ܻ������������
-����a.�޷�����grub����Ļ���Ͻ�ֻ����һ����ꡣ�����������������MBR�Ѿ����ƻ�����Ҫ����rescueģʽ�����޸���
-�����C> chroot������ִ�� ��grub-install /boot���ڷ����� �����޸�
-�����C> ��grub�������ʱ����װgrub.rpm�����лָ�
-�����C> /bootĿ¼������ص�vmlinuz��initrd.img�ļ�ʱ����װkernel.rpm�������޸�
-�����C> ��grub.confʱ��Ҫ�ֹ��޸�
-����b.grub�ɹ����أ���Ļ���֡�grub>������ʾ�����ļ�grub.conf�Ҳ�����
-�����C> �ֹ��޸�
-����2.kernel & initrd.img
-�����ڼ���vmlinuz��initrdʱ���֣�kernel panic�����������grub.conf���ò��������⡣
-���������C> ���grub.conf��д�Ƿ��������
-���������C> Ҳ�п����Ƿ������û���Ӳ���𻵵����⣬��Ҫ����rescueģʽ���
-����3./sbin/init
-����/sbin/init�������ļ���/etc/inittab
-����������������ļ���ϵͳ������ִ�����½ű���
-����������> /etc/rc.d/rc.sysinit
-��������hostname,���¹��ظ����������ظ�ģ��
-����������> /etc/rc.d/rc[0-6].d/Ŀ¼����S��ͷ�Ľű�
-����������runlevel�ķ���
-����������> mingetty /dev/tty[1-6]
-���������ն�
++++++Linux 的启动流程+++++++
+第一阶段：BIOS启动引导阶段
+在该过程中实现硬件的初始化以及查找启动介质
+从MBR中装载启动引导管理器（GRUB）并运行该启动引导管理
+第二阶段：GRUB启动引导阶段
+装载stage1
+装载stage1.5
+装载stage2
+读取/boot/grub.conf文件并显示启动菜单
+装载所选的kernel和initrd文件到内存中
+第三阶段：内核阶段
+运行内核启动参数
+解压initrd文件并挂载initd文件系统，装载必须的驱动
+挂载根文件系统
+第四阶段：Sys V init初始化阶段
+启动/sbin/init程序
+运行rc.sysinit脚本，设置系统环境，启动swap分区，检查和挂载文件系统
+读取/etc/inittab文件，运行在/et/rc.d/rc<#>.d中定义的不同运行级别的服务初始化脚本
+打开字符终端1-6号控制台/打开图形显示管理的7号控制台
+启动流程和细节详解
+　　BIOS ==> bootloader ==> kernel & initrd.img ==> /sbin/init
+　　1.bootloader （grub）
+　　/boot/grub/grub.conf  <– grub的配置文件，决定使用哪个kernel和initrd.img
+　　在/boot/grub目录中有两个stage文件，其中：
+　　　　stage1  <— 大小是512字节，这个文件会被写进MBR中
+　　　　stage2  <— stage1被引导之后，会调用这个文件
+　　如果grub出现问题可能会有两种情况：
+　　a.无法进入grub，屏幕左上角只出现一个光标。出现这种情况基本上MBR已经被破坏，需要进入rescue模式进行修复。
+　　–> chroot环境，执行 “grub-install /boot所在分区” 进行修复
+　　–> 无grub相关命令时，安装grub.rpm包进行恢复
+　　–> /boot目录下无相关的vmlinuz和initrd.img文件时，安装kernel.rpm包进行修复
+　　–> 无grub.conf时需要手工修复
+　　b.grub成功加载，屏幕出现“grub>”，表示配置文件grub.conf找不到。
+　　–> 手工修复
+　　2.kernel & initrd.img
+　　在加载vmlinuz和initrd时出现：kernel panic情况，基本是grub.conf设置参数出问题。
+　　　　–> 检查grub.conf编写是否出现问题
+　　　　–> 也有可能是分区设置或者硬盘损坏等问题，需要进入rescue模式检查
+　　3./sbin/init
+　　/sbin/init的配置文件是/etc/inittab
+　　按照这个配置文件，系统会依次执行以下脚本：
+　　　　—> /etc/rc.d/rc.sysinit
+　　定义hostname,重新挂载各分区，加载各模块
+　　　　—> /etc/rc.d/rc[0-6].d/目录下以S开头的脚本
+　　启动各runlevel的服务
+　　　　—> mingetty /dev/tty[1-6]
+　　启用终端
 
  
-++++16��Linux�������������+++++
+++++16个Linux服务器监控命令+++++
 iostat
-iostat ����������ʾ�洢��ϵͳ����ϸ��Ϣ��ͨ����������ش��� I/O �������Ҫ�ر�ע�� iostat ͳ�ƽ���е� %iowait ֵ��̫���˱������ϵͳ�洢��ϵͳ���ܵ��¡�
-meminfo �� free
-Meminfo �������ȡ�ڴ����ϸ��Ϣ�������ʹ�� cat �� grep ��������ʾ meminfo ��Ϣ�����������ʹ�� free ��������ʾ��̬���ڴ�ʹ����Ϣ��free ֻ�Ǹ����ŵ��ڴ���Ϣ���� meminfo �ṩ����Ϣ������ϸ��
+iostat 命令用来显示存储子系统的详细信息，通常用它来监控磁盘 I/O 的情况。要特别注意 iostat 统计结果中的 %iowait 值，太大了表明你的系统存储子系统性能低下。
+meminfo 和 free
+Meminfo 可让你获取内存的详细信息，你可以使用 cat 和 grep 命令来显示 meminfo 信息。另外你可以使用 free 命令来显示动态的内存使用信息，free 只是给你大概的内存信息，而 meminfo 提供的信息更加详细。
 mpstat
-mpstat mpstat��MultiProcessor Statistics����д����ʵʱϵͳ��ع��ߡ��䱨����CPU��һЩͳ����Ϣ��
-��Щ��Ϣ�����/proc/stat�ļ��С��ڶ�CPUsϵͳ��䲻���ܲ鿴����CPU��ƽ��״����Ϣ�������ܹ��鿴�ض�CPU����Ϣ��
+mpstat mpstat是MultiProcessor Statistics的缩写，是实时系统监控工具。其报告与CPU的一些统计信息，
+这些信息存放在/proc/stat文件中。在多CPUs系统里，其不但能查看所有CPU的平均状况信息，而且能够查看特定CPU的信息。
 netstat
-Netstat �� ps �������ƣ��� Linux ����Ա������ÿ�춼���õĹ��ߣ�����ʾ�˴�����������ص���Ϣ��
+Netstat 和 ps 命令类似，是 Linux 管理员基本上每天都会用的工具，它显示了大量跟网络相关的信息。
 nmon
-Nmon, �� Nigel��s Monitor ����д����һ��ʹ�ú��ձ�Ŀ�Դ���ߣ����Լ�� Linux ϵͳ�����ܡ�Nmon ��ض����ϵͳ���������ݣ�
-���紦������ʹ���ʡ��ڴ�ʹ���ʡ����С�����I/Oͳ�ơ�����I/Oͳ�ơ��ڴ�ҳ�����ͽ�����Ϣ��
-Ҫ���� nmon�������������������������Ȼ��ѡ��Ҫ��ص���ϵͳ����Щ��ϵͳ����Ӧ��һ����ݼ����������� c �ɲ鿴 CPU ��Ϣ��m����
-�鿴�ڴ棬d�����鿴������Ϣ�ȣ���Ҳ����ʹ�� -f ��� nmon ��ִ�н�����浽һ�� CSV �ļ��У������պ������
+Nmon, 是 Nigel’s Monitor 的缩写，是一个使用很普遍的开源工具，用以监控 Linux 系统的性能。Nmon 监控多个子系统的性能数据，
+例如处理器的使用率、内存使用率、队列、磁盘I/O统计、网络I/O统计、内存页处理和进程信息。
+要运行 nmon，你可以在命令行中启动它，然后选择要监控的子系统，这些子系统都对应有一个快捷键，例如输入 c 可查看 CPU 信息，m用于
+查看内存，d用来查看磁盘信息等，你也可以使用 -f 命令将 nmon 的执行结果保存到一个 CSV 文件中，便于日后分析。
 pmap
-pmap ������������ÿ������ռ���ڴ����ϸ��������������Ƿ��н��̳�֧�ˣ���������Ҫ���� id ��Ϊ������
-ps �� pstree
-ps �� pstree ������ Linux ϵͳ����Ա��õ����ѣ������������б��������е����н��̡�ps ������ÿ������ռ�õ��ڴ�� CPU ����ʱ�䣬
-�� pstree ��ʾ����Ϣû��ô��ϸ�����������νṹ��ʾ����֮���������ϵ�������ӽ�����Ϣ��һ������ĳ�����������⣬�����ʹ�� kill ��ɱ������
+pmap 命令用来报告每个进程占用内存的详细情况，可用来看是否有进程超支了，该命令需要进程 id 作为参数。
+ps 和 pstree
+ps 和 pstree 命令是 Linux 系统管理员最好的朋友，都可以用来列表正在运行的所有进程。ps 告诉你每个进程占用的内存和 CPU 处理时间，
+而 pstree 显示的信息没那么详细，但它以树形结构显示进程之间的依赖关系，包括子进程信息。一旦发现某个进程有问题，你可以使用 kill 来杀掉它。
 sar
-sar ������ϵͳ��ع��������ʿ�������ó�������������ߣ�sar ������ʾ���ݣ�sa1 �� sa2 �����ռ����ݲ����档sar ��������ʾ CPU ʹ���ʡ��ڴ�ҳ���ݡ�
-���� I/O �ʹ���ͳ�ơ����̴�����ʹ����豸�Ļ���顣sar �� nmon ���Ĳ�ͬ���� sar ���ʺ��������ڵļ�أ��� nmon ����������ٵ��˽�ϵͳ��ǰ״̬��
+sar 程序是系统监控工具里的瑞士军刀。该程序包含三个工具：sar 用来显示数据，sa1 和 sa2 用来收集数据并保存。sar 可用来显示 CPU 使用率、内存页数据、
+网络 I/O 和传输统计、进程创建活动和磁盘设备的活动详情。sar 和 nmon 最大的不同就是 sar 跟适合用作长期的监控，而 nmon 可以让你快速的了解系统当前状态。
 strace
-strace ��������Ϊ�ǳ���Ա���ԵĹ��ߣ�����ֹ��ˡ������Լ�¼���̽���ϵͳ���õ����飬�����Ҳ��һ���ǳ��õ���Ϲ��ߣ����������ʹ�������ҳ�ĳ���������ڴ�ĳ�������ļ���
-Strace Ҳ��һ��ȱ�ݣ������ڸ���ĳ������ʱ���øý��̵����ܱ�÷ǳ����������ʹ�á�
+strace 经常被认为是程序员调试的工具，但不止如此。它可以记录进程进行系统调用的详情，因此它也是一个非常好的诊断工具，例如你可以使用它来找出某个程序正在打开某个配置文件。
+Strace 也有一个缺陷，但它在跟踪某个进程时会让该进程的性能变得非常差，因此请谨慎使用。
 tcpdump
-Tcpdump ��һ���򵥡��ɿ��������ع��ߣ�������������Э�������������Щ������ʹ�������Լ����ʹ�����硣��Ȼ�������Ҫ��ȡ����ϸ����Ϣ����Ӧ��ʹ�� Wireshark .
+Tcpdump 是一个简单、可靠的网络监控工具，用来做基本的协议分析，看看那些进程在使用网络以及如何使用网络。当然，如果你要获取跟详细的信息，你应该使用 Wireshark .
 top
-top ������ʾ��ǰ�Ļ���̣�Ĭ�����ǰ����� CPU �������̶Ƚ�������ÿ5����ˢ��һ���б�����Ҳ����ѡ��ͬ������ʽ������ m �ǰ��ڴ�ռ�÷�ʽ��������Ŀ�ݼ���
+top 命令显示当前的活动进程，默认它是按消耗 CPU 的厉害程度进行排序，每5秒钟刷新一次列表，你也可以选择不同的排序方式，例如 m 是按内存占用方式进行排序的快捷键。
 uptime
-uptime �����������̨�������ӿ��������������Ѿ������˶೤ʱ���ˡ�ͬʱҲ�����˴����������ڷ�������ƽ�����������
+uptime 命令告诉你这台服务器从开机启动到现在已经运行了多长时间了。同时也包含了从启动到现在服务器的平均负载情况。
 vmstat
-�����ʹ�� vmstat ����������ڴ棬һ�� Linux �ϵĿ�����ϲ��ʹ�������ڴ��������ѵĴ洢���ܡ������������ں��̡߳������ڴ桢���̡������ CPU ���ͳ����Ϣ��
-�� vmstat �������ɵı����������ƽ��ϵͳ���ػ��ϵͳ��Χ�ڵ���Щͳ����Ϣ�����еĴ������У���������԰ٷֱȱ�ʾ��ƽ��ֵ�����߼������ܺ͡�
+你可以使用 vmstat 来监控虚拟内存，一般 Linux 上的开发者喜欢使用虚拟内存来获得最佳的存储性能。该命令报告关于内核线程、虚拟内存、磁盘、陷阱和 CPU 活动的统计信息。
+由 vmstat 命令生成的报告可以用于平衡系统负载活动。系统范围内的这些统计信息（所有的处理器中）都计算出以百分比表示的平均值，或者计算其总和。
 Wireshark
-Wireshark, ǰ���� Ethereal ����һ������Э��������������ɳ���ץȡ���е���վ�������Ѷ������ÿһ������������ݡ���Ѷ��������ϵͳ��ϵ����,����鿴�����TCP session��̬�ȵ�.
+Wireshark, 前身是 Ethereal ，是一个网络协议检测程序，让您经由程序抓取运行的网站的相关资讯，包括每一封包流向及其内容、资讯可依操作系统语系看出,方便查看、监控TCP session动态等等.
 
 
-+++++��Linux��������.htaccess֧��++++++
-���ڵĺܶ�Linux������Ĭ���ǲ�����.htaccess�ģ��Ӷ����²�֧��α��̬����������������������϶���֧�ִ˷���ģ��������ʹ����ڵ������ṩ��
-Ϊ�β�����.htaccess�������ǵĻش�ܿ�Ц��˵�Ǽ���������ĸ������ǣ������Ƿ������й��Ĺ��飬�����㲻֪�Ժ������Է���֮��
-�����һЩ����ɨɨä���ܶ�վ������������Ϊ.htaccess����α��̬����.htaccess����α��̬�Ĵ����ʣ���Ϊ.htaccess����.htaccess�����ã���ʵ�������ñ�������Ĵ�ö࣬
-����α��̬������������֪��404����301��ת���ȣ�������ͨ��.htaccess��ʵ�֣�����������ҽ���һ�������Linux�������¿���.htaccess��֧�֣�ǰ���������Ȩ�ޣ�
-һ�������Ե��Ƿ���������VPS������������������û�ţ�������Ҫ���ṩ�̰��㿪������һ���������ЩͯЬ�ڱ��شPHP+MySQL+Apache��ʱ���õ��Ŵ˷�����
-���ص�һ����װ����xampp��phpnow�ȣ��Ҹ����Ƽ�ʹ��phpnow�������ã���ȫɵ��ʽ�������ʹ��phpnow��Ļ���Ͳ������¿��ˣ���ΪĬ���ǿ����ġ�
-�������£�
-��һ����Apache�ļ����µ�conf�ļ������ҵ�httpd.conf�����±��������Ƶı༭���ߴ򿪺�Ctrl+F���ҡ�LoadModule rewrite_module����
-�ҵ���LoadModule rewrite_module modules/mod_rewrite.so�����ڵ���һ�У�ȷ����һ��ǰ��û��#����˵���Ѿ�������α��̬ģ�飬������һ��ǰ����#����ȥ����phpnow��װ��Ĭ����û��#�ġ�
-�ڶ�����Apache������֧��.htaccess��������Լ��ı���Apache������֧�֡�.htaccess����?��ʵֻҪ���޸�һ��apache��httpd.conf����
-�Ϳ�����֧��.htaccess�ˡ���httpd.conf�ļ������ı��༭���򿪺�,����
++++++让Linux主机开启.htaccess支持++++++
+国内的很多Linux型主机默认是不开启.htaccess的，从而导致不支持伪静态。而国外的虚拟主机基本上都是支持此服务的，我曾经问过国内的主机提供商
+为何不开启.htaccess服务，他们的回答很可笑，说是减轻服务器的负担，呵，这真是符合了中国的国情，真让你不知以何种语言反击之。
+这里给一些菜鸟扫扫盲，很多站长都单纯的以为.htaccess就是伪静态，把.htaccess当成伪静态的代名词，以为.htaccess就起到.htaccess的作用，其实它的作用比你想象的大得多，
+除了伪静态，还有我们熟知的404啊、301跳转啊等，都可以通过.htaccess来实现，下面来给大家介绍一下如何在Linux型主机下开启.htaccess的支持，前提你有这个权限，
+一般这个针对的是服务器或者VPS，虚拟主机基本上是没门，除非你要求提供商帮你开启。另一种情况是有些童鞋在本地搭建PHP+MySQL+Apache的时候用得着此方法，
+本地的一键安装包有xampp和phpnow等，我个人推荐使用phpnow，简单易用，完全傻瓜式。如果你使用phpnow搭建的话你就不用往下看了，因为默认是开启的。
+方法如下：
+第一：在Apache文件夹下的conf文件夹中找到httpd.conf，记事本或者类似的编辑工具打开后Ctrl+F查找“LoadModule rewrite_module”，
+找到“LoadModule rewrite_module modules/mod_rewrite.so”所在的那一行，确定这一行前面没有#，就说明已经加载了伪静态模块，假如这一行前面有#，请去掉，phpnow安装后默认是没有#的。
+第二：让Apache服务器支持.htaccess，如何让自己的本地Apache服务器支持”.htaccess”呢?其实只要简单修改一下apache的httpd.conf设置
+就可以让支持.htaccess了。打开httpd.conf文件，用文本编辑器打开后,查找
 Options FollowSymLinks
 AllowOverride None
-��Ϊ
+改为
 Options FollowSymLinks
 AllowOverride All
-��һ��ȷ���Ƿ��Ѿ�������α��̬ģ�飬�ڶ����޸���һ�������á�����������һ��.htaccess�Ƿ�����Ч���绹δ��Ч��������Apache����
+第一是确定是否已经加载了伪静态模块，第二是修改这一处的设置。操作完后测试一下.htaccess是否已生效，如还未生效，请重启Apache服务。
 
 
-++++.htaccess������������֩��+++++
-.htaccessҲ����������������֩���ˣ�����޸�robots.txt��ͬ��������ţ�Ƽ�������Σ�
-���Ҳ������ױ��˷��֡�
+++++.htaccess屏蔽搜索引擎蜘蛛+++++
+.htaccess也可以屏蔽搜索引擎蜘蛛了，这和修改robots.txt不同，这属于牛逼级别的屏蔽，
+并且不会轻易被人发现。
 RewriteEngine On 
 RewriteCond %{HTTP_USER_AGENT} (baiduspider|googlebot|soso|bing|sogou|yahoo|sohu-search|yodao|robozilla|msnbot) [NC] 
 RewriteRule ^(.*)$ http://www.zoneself.org/ [R=301,L]
 
 
 
-++++++DNS,A��¼,������,CNAME����,MX��¼,TXT��¼,SRV ��¼,TTLֵ,������(������),����ת��,������++++++++
+++++++DNS,A记录,子域名,CNAME别名,MX记录,TXT记录,SRV 记录,TTL值,泛域名(泛解析),域名转向,域名绑定++++++++
 DNS
-DNS��Domain Name System����Domain Name Service������ϵͳ�����������񣩡�����ϵͳΪInternet�ϵ���������������ַ��IP��ַ�����������еļ�����������и�IP��ַ��
-��ʶ��,����֮�����ͨ��,�������Ǽ�סһ�󴮵�IP��ַ��������վ��Ȼ�ǲ����ܵ�,�����û�ʹ��������ַ����DNSϵͳ�Ĺ��ܾ����Զ���������ַ����ΪIP��ַ��������������������
-ϵͳ��Internet���ߡ�ִ����������ķ�������֮ΪDNS��������ͨ��DNS��������Ӧ����������Ĳ�ѯ��
-1��DNS���������������������������ȷ�������Ľ���������A��¼MX��¼�ȵȡ�2���κ�������������һ��DNS��һ����2������ΪʲôҪ2�������أ���ΪDNS�����ֻش�����������һ������ʧ�ܿ����ҵڶ���������ֻҪ��һ��DNS�����������Ͳ���Ӱ��������
-����ʹ�á�
-3�����ȷ��������DNS
-�ܼ򵥵�[url]www.internic.net/whois.html[/url]������Ҫ��ѯ�������Ϳ��Կ����ˡ�����ǹ��������������ġ�Ψһ��Ȩ����ֻҪ�����ܲ鵽ĳ���������ͱ�ʾ��������Ч�ġ���˵��
-ʲôʱ���ڣ�����ʲôʱ���ڡ�
-4����Ч��DNS��ʾ��ǰ���������õ�DNS��������˭�������ѯ�����NS.XINNETDNS.COM��NS.XINNET.CN(�����ź�)�ͱ�ʾ��ǰ��������NS.XINNETDNS.COM��NS.XINNET.CN(�����ź�
-)�������������δ��ʾ��DNS�����ã�������Ч�ġ�
-5��DNS�ǿ����޸ĵġ��޸��Ժ���Ҫ24-72Сʱ�Ժ�ȫ���緶Χ������DNS����������ˢ�¹�����internic����Ϣһ����24Сʱ�Ժ���Կ��������⣬�޸ĵĹ��̣�������ʾ������
-ֹͣ������ֻҪ����2�߶������˽����������Ч�˾����µ�DNS�������á����û��Ч�����Ǿɵ�DNS�������á�Ҫô��Ч��Ҫô����Ч��������2�����������õ�ʱ�䡣������������������
-�жϡ�ǰ�������߶����˽�����
-A��¼
-A (Address) ��¼������ָ��������������������Ӧ��IP��ַ��¼���û����Խ��������µ���վ������ָ���Լ���web server�ϡ�ͬʱҲ������������������������ͨ����˵A��¼��
-�Ƿ�������IP,������A��¼���Ǹ���DNS,��������������ʱ�����������������DNS��A��¼����Ӧ�ķ�����
-��������
-������������ͬ���������������ȶ��������������죬�������Ǽ�����չ��������������������������Ϊbbs.at,��ô�Ϳ��Խ���һ������������bbs.at.abc.com����ȻҲ���Խ����ļ�
-����bbs.at.go.abc.com���弶����bbs.at.go.home.abc.com�������������ƣ����Խ������޼��������������ͳ����Щ����Ϊ��������abc.com����������
-CNAME����ָ���¼
-NAME (Canonical Name)��¼��ͨ���Ʊ���ָ������������Զ���һ��������������������ftp.***.com������ָ��һ������www.***.com,��ô�Ժ�Ϳ�����FTP.***.com������
-����www.***.com�ˡ�
-MX��¼
-MX��¼Ҳ�����ʼ�·�ɼ�¼���û����Խ��������µ��ʼ�������ָ���Լ���mail server�ϣ�Ȼ�󼴿����вٿ����е��������á���ֻ��������д����������IP��ַ�����ɽ�������
-�µ��ʼ�ȫ��ת�����Լ��趨��Ӧ���ʼ��������ϡ�
-�򵥵�˵��ͨ������MX��¼�����ſ��Եõ�����������β���ʾ֡�
-TXT ��¼
-TXT ��¼��һ��ָΪĳ�����������������õ�˵�����磺
-admin IN TXT ������Ա, �绰�� 13901234567��
-mail IN TXT ���ʼ�����, �����xxx , �����ˣ�AAA��
-Jim IN TXT ��contact: abc@mailserver.com��
-Ҳ�������������� TXT ���Ա�ʹ������ϵ����
-SRV ��¼
-SRV ��¼��һ����ΪMicrosoft�ĻĿ¼����ʱ��Ӧ�á�DNS���Զ����ڻĿ¼�����ǻĿ¼������DNS�İ������ܹ�����Ϊ�˻Ŀ¼�ܹ������Ĺ�����DNS����������֧�ַ���
-��λ��SRV����Դ��¼����Դ��¼�ѷ�������ӳ��Ϊ�ṩ����ķ��������֡��Ŀ¼�ͻ����������ʹ��SRV��Դ��¼�������������IP��ַ��
-TTLֵ
-TTLֵȫ���ǡ�����ʱ�䣨Time To Live)�����򵥵�˵����ʾDNS��¼��DNS�������ϻ���ʱ�䡣Ҫ����TTLֵ�����ȿ������һ�����ӣ�
-���裬������һ������myhost.abc.com����ʵ�������һ��DNS��¼��ͨ����ʾ��abc.com������һ̨��Ϊmyhost����������ӦIP��ַΪ1.1.1.1������TTLΪ10���ӡ�����������������¼�洢
-��һ̨��Ϊdns.abc.com��DNS�������ϡ�
-������һ���û���������м���һ�µ�ַ���ֳ�URL����[url]http://myhost.abc.com[/url] ��ʱ�ᷢ��ʲô�أ�
-�÷�����ָ����DNS����������������ISP,������������, ��̬���������)8.8.8.8�ͻ���ͼΪ������myhost.abc.com����Ȼ8.8.8.8��̨DNS����������û�а���myhost.abc.com������Ϣ��
-����޷���������������ͨ��ȫ��DNS�ĵݹ��ѯ�����ն�λ��dns.abc.com��̨DNS��������dns.abc.com��̨DNS��������myhost.abc.com��Ӧ��IP��ַ1.1.1.1����8.8.8.8��̨DNS��������
-Ȼ������8.8.8.8�����û������8.8.8.8Ϊ���Ժ�ӿ��myhost.abc.com������¼�Ľ������ͽ��ղŵ�1.1.1.1�������һ��ʱ�䣬�����TTLʱ�䣬�����ʱ��������û����ж�myhost.abc.com
-������¼�Ľ�����������ֱ�Ӹ����û�1.1.1.1����TTL�������ֻ��ظ�����Ĺ���
-�������뷺����
-��������ָ��һ���������£��� *.Domain.com ����ʽ��ʾ�������������δ��������������
-�������ǰ�*.Domain.com ��A ��¼������ĳ��IP ��ַ��,Ȼ�����ͨ�������ǰ׺.domain.com���ʶ��ܷ��ʵ��������վ����
-    ����
-�������� name.com ֻ������ [url]www.name.com[/url] �� name.com ������������¼�� 
-��ô ftp.name.com mail.name.com bbs.name.com ��������¼�ǲ����ڵģ�
-��Ϊ������ name.com ������������¼ *.name.com ��
-*.name.com �ͺ����� ftp.name.com mail.name.com bbs.name.com �����в����ڵ���������¼�� 
-�����Զ��� *.name.com ָ��һ�� IP ����ô������������������ ftp.name.com mail.name.com �� bbs.name.com ��ʱ��
-�����߶���ֱ�ӷ��������� *.name.com ���Ǹ� IP ��
-������
-ʲô��������
-��������ָ����������ָ����������(��ĳ��������)�Ŀռ���й�����,��ʵ��������������������û���WEB�����������ã�ʹһ��������������������ϵ�ĳһ�ض��ռ�
-��ĳһ���ض�վ�㣩�������߷������������ʱ��ͻ�������ڸÿռ��ϵ���ҳ������˵��ʵ���ǰ�����������������IP,Ȼ���ڷ����������ø�������Ȩ�޷��ʵĹ��̡�һ����������
-�п����������а����������û��������Ҫ�Լ��ڷ������ϵ�IIS��������
-����ת��
-��������ת�������ֳ�Ϊ����(URL)ָ�������ת�������û���ַ����������������ʱ�������Զ���ת������ָ������һ�������ַ��URL����
-��������abc.com����ע�����������ͨ��URLת���������ʵ�ֵ��û�����[url]http://www.abc.com[/url]ʱ���Զ�ת���������һ��URL����:�ҵĿռ䲻֧�ְ󶨵�Ŀ¼����,����Ϊ��
-���������,�Ҿ�����:[url]http://bbs.bnxb.com[/url]������,�����������ͨ��URLת������ת����[url]http://www.bnxb.com/bbs[/url]������ʵ�ֵģ��������Ϳ�������ʵ�ֶ������
-ָ��һ����վ����վ��Ŀ¼�����⣬ͨ��URLת�����񣬿��Է����ʵ�ֽ��������������������Զ�ת��������Ӣ��������վ�㡣����ת��������һ���ô����ǿ��԰ѳ�����ѹ��,�ö�������
-ת�����,����ķÿͲ���������ô��������
-IIS������
-     IIS������ָ������������ʲô��˼�أ�
-     Ҫ�ּ������������100M�ռ�50������Ϊ����
-     A �û�������������ļ��������������Ͽ�����Щ�����ǰ���˲�����ģ�����˵��50�˵���վ˲����Խ���ͬʱ50��������
-     B �û������ҳ�棬����ͣ���ڸ�ҳ�棬��ʱ����ҳ�Ѿ���������û�жԷ������ٷ����κ�������ô���û���ȫ�����ҳ���ʱ������һ�����ߣ���ҳ����ȫ�򿪺�IIS���������ͷš�
-    C ����B������û�������ͬһ����վ������ҳ�棬��ô�������������û����һ�ε�����������󣩼��㣬�����ʱ���ڲ����û���ô����������´��ڴ򿪣�������һ�����ߡ�
-    D �����ҳ���ڴ��ڿ��(Iframe)����ôÿ��һ����ܾ�Ҫ��һ�������ߣ���Ϊ���൱���û�ͬһʱ��������������˶��ҳ�档
-    E ���û���ҳ��Ȼ�������ر���������û�����������Ҳ�����������
+DNS，Domain Name System或者Domain Name Service（域名系统或者域名服务）。域名系统为Internet上的主机分配域名地址和IP地址。由于网络中的计算机都必须有个IP地址，
+来识别,互相之间才能通信,但让我们记住一大串的IP地址来访问网站显然是不可能的,所以用户使用域名地址，而DNS系统的功能就是自动把域名地址翻译为IP地址。域名服务是运行域名
+系统的Internet工具。执行域名服务的服务器称之为DNS服务器，通过DNS服务器来应答域名服务的查询。
+1、DNS就是域名服务器，他的任务就是确定域名的解析，比如A记录MX记录等等。2、任何域名都至少有一个DNS，一般是2个。但为什么要2个以上呢？因为DNS可以轮回处理，这样第一个解析失败可以找第二个。这样只要有一个DNS解析正常，就不会影响域名的
+正常使用。
+3、如何确定域名的DNS
+很简单到[url]www.internic.net/whois.html[/url]输入你要查询的域名就可以看到了。这个是国际域名管理中心。唯一的权威。只要这里能查到某个域名，就表示域名是生效的。它说你
+什么时候到期，就是什么时候到期。
+4、有效的DNS表示当前正在起作用的DNS服务器是谁，比如查询结果是NS.XINNETDNS.COM、NS.XINNET.CN(新网信海)就表示当前域名是由NS.XINNETDNS.COM、NS.XINNET.CN(新网信海
+)负责解析。其他未显示的DNS的设置，都是无效的。
+5、DNS是可以修改的。修改以后需要24-72小时以后，全世界范围的所有DNS服务器才能刷新过来。internic的信息一般在24小时以后可以看到。另外，修改的过程，并不表示域名会
+停止解析，只要你在2边都做好了解析。如果生效了就是新的DNS在起作用。如果没生效。就是旧的DNS在起作用。要么生效，要么不生效。不存在2个都不起作用的时间。所以域名解析，不会
+中断。前提是两边都做了解析。
+A记录
+A (Address) 记录是用来指定主机名（或域名）对应的IP地址记录。用户可以将该域名下的网站服务器指向到自己的web server上。同时也可以设置您域名的子域名。通俗来说A记录就
+是服务器的IP,域名绑定A记录就是告诉DNS,当你输入域名的时候给你引导向设置在DNS的A记录所对应的服务器
+子域名。
+子域名道理等同二级域名，不过比二级域名更加延伸，比如我们继续扩展该域名的主机名，设置主机名为bbs.at,那么就可以建立一个三级域名：bbs.at.abc.com，当然也可以建立四级
+域名bbs.at.go.abc.com，五级域名bbs.at.go.home.abc.com……，依次类推，可以建立无限级别的域名，我们统称这些域名为顶级域名abc.com的子域名。
+CNAME别名指向记录
+NAME (Canonical Name)记录，通常称别名指向。在这里，您可以定义一个主机别名，比如设置ftp.***.com，用来指向一个主机www.***.com,那么以后就可以用FTP.***.com来代替
+访问www.***.com了。
+MX记录
+MX记录也叫做邮件路由记录，用户可以将该域名下的邮件服务器指向到自己的mail server上，然后即可自行操控所有的邮箱设置。您只需在线填写您服务器的IP地址，即可将您域名
+下的邮件全部转到您自己设定相应的邮件服务器上。
+简单的说，通过操作MX记录，您才可以得到以您域名结尾的邮局。
+TXT 记录
+TXT 记录，一般指为某个主机名或域名设置的说明，如：
+admin IN TXT “管理员, 电话： 13901234567″
+mail IN TXT “邮件主机, 存放在xxx , 管理人：AAA”
+Jim IN TXT “contact: abc@mailserver.com”
+也就是您可以设置 TXT ，以便使别人联系到您
+SRV 记录
+SRV 记录：一般是为Microsoft的活动目录设置时的应用。DNS可以独立于活动目录，但是活动目录必须有DNS的帮助才能工作。为了活动目录能够正常的工作，DNS服务器必须支持服务
+定位（SRV）资源记录，资源记录把服务名字映射为提供服务的服务器名字。活动目录客户和域控制器使用SRV资源记录决定域控制器的IP地址。
+TTL值
+TTL值全称是“生存时间（Time To Live)”，简单的说它表示DNS记录在DNS服务器上缓存时间。要理解TTL值，请先看下面的一个例子：
+假设，有这样一个域名myhost.abc.com（其实，这就是一条DNS记录，通常表示在abc.com域中有一台名为myhost的主机）对应IP地址为1.1.1.1，它的TTL为10分钟。这个域名或称这条记录存储
+在一台名为dns.abc.com的DNS服务器上。
+现在有一个用户在浏览器中键入一下地址（又称URL）：[url]http://myhost.abc.com[/url] 这时会发生什么呢？
+该访问者指定的DNS服务器（或是他的ISP,互联网服务商, 动态分配给他的)8.8.8.8就会试图为他解释myhost.abc.com，当然8.8.8.8这台DNS服务器由于没有包含myhost.abc.com这条信息，
+因此无法立即解析，但是通过全球DNS的递归查询后，最终定位到dns.abc.com这台DNS服务器，dns.abc.com这台DNS服务器将myhost.abc.com对应的IP地址1.1.1.1告诉8.8.8.8这台DNS服务器，
+然有再由8.8.8.8告诉用户结果。8.8.8.8为了以后加快对myhost.abc.com这条记录的解析，就将刚才的1.1.1.1结果保留一段时间，这就是TTL时间，在这段时间内如果用户又有对myhost.abc.com
+这条记录的解析请求，它就直接告诉用户1.1.1.1，当TTL到期则又会重复上面的过程
+泛域名与泛解析
+泛域名是指在一个域名根下，以 *.Domain.com 的形式表示这个域名根所有未建立的子域名。
+泛解析是把*.Domain.com 的A 记录解析到某个IP 地址上,然后别人通过任意的前缀.domain.com访问都能访问到你解析的站点上
+    例：
+域名根　 name.com 只建立了 [url]www.name.com[/url] 和 name.com 这两个域名记录， 
+那么 ftp.name.com mail.name.com bbs.name.com 等域名记录是不存在的，
+但为域名根 name.com 建立泛域名记录 *.name.com 后，
+*.name.com 就涵盖了 ftp.name.com mail.name.com bbs.name.com 等所有不存在的子域名记录。 
+您可以定义 *.name.com 指向一个 IP ，那么当访问者无论是输入 ftp.name.com mail.name.com 或 bbs.name.com 的时候，
+访问者都将直接访问您定义 *.name.com 的那个 IP 。
+域名绑定
+什么是域名绑定
+域名绑定是指，域名绑定是指域名和主机(即某个服务器)的空间进行关联绑定,其实就是在虚拟服务器上设置或者WEB服务器上设置，使一个域名被引导向服务器上的某一特定空间
+（某一个特定站点），访问者访问你的域名的时候就会打开你存放在该空间上的网页，简单来说其实就是把域名解析到服务器IP,然后在服务器上设置该域名有权限访问的过程。一般虚拟主机
+有控制面板给进行绑定域名，如果没有面板就需要自己在服务器上的IIS里面设置
+域名转向
+　　域名转向我们又称为域名(URL)指向或域名转发，当用户地址栏中输入您的域名时，将会自动跳转到您所指定的另一个网络地址（URL）。
+　　假设abc.com是您注册的域名，则通过URL转发服务可以实现当用户访问[url]http://www.abc.com[/url]时，自动转向访问另外一个URL，如:我的空间不支持绑定到目录功能,所以为了
+方便访问者,我就设置:[url]http://bbs.bnxb.com[/url]来访问,这个是设置了通过URL转发服务转发到[url]http://www.bnxb.com/bbs[/url]上面来实现的，这样您就可以轻松实现多个域名
+指向一个网站或网站子目录；另外，通过URL转发服务，可以方便的实现将您的中文域名，设置自动转发到您的英文域名主站点。域名转发的另外一个好处就是可以把长域名压缩,用短域名的
+转向代替,让你的访客不需输入那么长的域名
+IIS连接数
+     IIS连接数指并发连接数，什么意思呢？
+     要分几种情况：（以100M空间50人在线为例）
+     A 用户单点下载你的文件，结束后正常断开，这些连接是按照瞬间计算的，就是说你50人的网站瞬间可以接受同时50个点下载
+     B 用户打开你的页面，就算停留在该页面，这时候网页已经加载完了没有对服务器再发出任何请求，那么在用户完全打开这个页面的时间内算一个在线，在页面完全打开后IIS连接数就释放。
+    C 上面B的情况用户继续打开同一个网站的其他页面，那么在线人数按照用户最后一次点击（发出请求）计算，在这个时间内不管用户怎么点击（包括新窗口打开）都还是一人在线。
+    D 当你的页面内存在框架(Iframe)，那么每多一个框架就要多一倍的在线！因为这相当于用户同一时间向服务器请求了多个页面。
+    E 当用户打开页面然后正常关闭浏览器，用户的在线人数也会马上清除。
 
 
 ++++CMD++++++
-�鿴������������IP��ַ���û�����net view(�û���); arp -a (����IP);
+查看局域网内所有IP地址和用户名：net view(用户名); arp -a (所有IP);
 
 
-++++linux����+++++
-diff ������ linux�Ϸǳ���Ҫ�Ĺ��ߣ����ڱȽ��ļ������ݣ��ر��ǱȽ������汾��ͬ���ļ����ҵ��Ķ��ĵط���diff���������д�ӡÿһ���еĸĶ���
+++++linux命令+++++
+diff 命令是 linux上非常重要的工具，用于比较文件的内容，特别是比较两个版本不同的文件以找到改动的地方。diff在命令行中打印每一个行的改动。
 Example:diff log2014.log log2013.log 
 
 
-++++++++��������++++++++
-C++ / Java ���������
-�Ҹ�����Ϊѧ��C++��JavaҲ���Ǿ���֮�͡�����C++��ѧϰ�����൱�Ķ����������Ҿ���C++������Ҫѧ�õ������ˡ��ο���ƪȤ�ġ�C++ѧϰ����ͼ�� �͡�21��ѧ��C++��
-ѧϰ����ʡ������ѿγ̣�C++���������
-���ҵ� �����ѧ��C++�������Ƽ�����Щ�������������ϣ�������C++�������ܹ����뵽������д�ġ�C++�麯�������������ǡ�C++�����ڴ��֡������ǡ�C/C++�����ڲ���̬��Ա�����塷�Ǿͷǳ������ˣ�
-Ȼ��˼ΪʲôC++Ҫ�ɳ�������Java���ǣ���һ��Ҫѧ��Ա�C++��Java�Ĳ�ͬ�����磬Java�еĳ�ʼ�����������գ��ӿڣ��쳣���麯�����ȵȡ�
-ʵ������
-��C++ʵ��һ��BigInt��֧��128λ�����εļӼ��˳��Ĳ�����
-��C++��װһ�����ݽṹ������������hash table��
-��C++��װ��ʵ��һ������ָ�루һ��Ҫʹ��ģ�壩��
-�����ģʽ������һ�����������ϣ�˼��һ�£���23��ģʽ��Ӧ�ó�������Ҫ�����㣺1���Ӱ���϶����Ǽ̳У�2���Ӱ��ӿڶ�����ʵ�֡���Ҳ�Ƽ�������ǳ�����ģʽ����
-ʵ������
-ʹ�ù���ģʽʵ��һ���ڴ�ء�
-ʹ�ò���ģʽ����һ��������԰��ı��ļ���������룬�Ҷ�����ж��롣
-ʹ������ģʽʵ��һ�������м���������֧��undo��redo��
-ʹ������ģʽʵ��һ���Ƶ�ķ���۸񶩼۲��ԡ�������������VIP�������š���Ӱ��۸�����ء�
-ѧϰSTL���÷�������Ƹ���  �C �������㷨���������������ӡ�������ܣ����һ����Դ�롣
-ʵ�����񣺳���ʹ���������STL�����ģʽ����WindowsSDKͼ�α�̵ĸ��ּ���
-��һ��̰���߻��Ƕ���˹�������Ϸ��֧�ֲ�ͬ�ļ�����Ѷȡ�
-��һ���ļ���������������Ŀ¼�µ��ļ��������ԶԲ�ͬ���ļ��в�ͬ�Ĳ������ı��ļ����Դ򿪱༭��ִ���ļ���ִ��֮��mp3��avi�ļ����Բ��ţ�ͼƬ�ļ�����չʾͼƬ��
-ѧϰC++��һЩ������ƣ��磺 MFC�����������ʦ�ġ�����ǳ��MFC���� ��Boost, ACE,  CPPUnit��STL ��STL���ܻ�̫���ˣ�������������˽����е����ģʽ������Ǿ�̫���ˣ�
-����������뵽��д�ġ�STL string���дʱ�����������Ǿͷǳ������ˣ�ACE��Ҫ��ǿ�ڵ�ϵͳ֪ʶ���μ�����ġ���ǿ��ϵͳ���˽⡱��
-Java�������������������ԣ�Java�����ģʽ��ò����ٶ࣬Ҳ������ѧϰ�����������ģʽ����������ˣ��ο�Java�е����ģʽ����
-�Ƽ��Ķ���Effective Java�� and ��Java���
-ѧϰJava�Ŀ�ܣ�Java�Ŀ��Ҳ�Ƕ࣬��Spring, Hibernate��Struts �ȵȣ���Ҫ��ѧϰJava����ƣ���IoC�ȡ�
-Java�ļ���Ҳ���ö࣬�ص�ѧϰJ2EE�ܹ��Լ�JMS�� RMI, ����Ϣ���ݺ�Զ�̵��õļ�����
-ѧϰʹ��Java��Web Service ���ٷ��̳������
-ʵ������ ������Spring��Hibernate����¹���һ���������Web Service��Զ�̵��ó��򣬲�����������Service��ͨ��JMS������Ϣ��
-C++��Java���������ڶ�ʱ������ѧ�õģ�C++���ǵ��Java����ǹ㣬�ҽ�������ѡһ�����Ҹ��˵�ѧϰ�����ǣ�
-�C++�����C/C++��ʮ�����ˣ�ѧϰJava�ĸ������ģʽ��
+++++++++乱入内容++++++++
+C++ / Java 和面向对象
+我个人以为学好C++，Java也就是举手之劳。但是C++的学习曲线相当的陡。不过，我觉得C++是最需要学好的语言了。参看两篇趣文“C++学习信心图” 和“21天学好C++”
+学习（麻省理工免费课程）C++面向对象编程
+读我的 “如何学好C++”中所推荐的那些书至少两遍以上（如果你对C++的理解能够深入到像我所写的《C++虚函数表解析》或是《C++对象内存存局》，或是《C/C++返回内部静态成员的陷阱》那就非常不错了）
+然后反思为什么C++要干成这样，Java则不是？你一定要学会对比C++和Java的不同。比如，Java中的初始化，垃圾回收，接口，异常，虚函数，等等。
+实践任务：
+用C++实现一个BigInt，支持128位的整形的加减乘除的操作。
+用C++封装一个数据结构的容量，比如hash table。
+用C++封装并实现一个智能指针（一定要使用模板）。
+《设计模式》必需一读，两遍以上，思考一下，这23个模式的应用场景。主要是两点：1）钟爱组合而不是继承，2）钟爱接口而不是实现。（也推荐《深入浅出设计模式》）
+实践任务：
+使用工厂模式实现一个内存池。
+使用策略模式制做一个类其可以把文本文件进行左对齐，右对齐和中对齐。
+使用命令模式实现一个命令行计算器，并支持undo和redo。
+使用修饰模式实现一个酒店的房间价格订价策略——旺季，服务，VIP、旅行团、等影响价格的因素。
+学习STL的用法和其设计概念  – 容器，算法，迭代器，函数子。如果可能，请读一下其源码。
+实践任务：尝试使用面向对象、STL，设计模式、和WindowsSDK图形编程的各种技能
+做一个贪吃蛇或是俄罗斯方块的游戏。支持不同的级别和难度。
+做一个文件浏览器，可以浏览目录下的文件，并可以对不同的文件有不同的操作，文本文件可以打开编辑，执行文件则执行之，mp3或avi文件可以播放，图片文件可以展示图片。
+学习C++的一些类库的设计，如： MFC（看看候捷老师的《深入浅出MFC》） ，Boost, ACE,  CPPUnit，STL （STL可能会太难了，但是如果你能了解其中的设计模式和设计那就太好了，
+如果你能深入到我写的《STL string类的写时拷贝技术》那就非常不错了，ACE需要很强在的系统知识，参见后面的“加强对系统的了解”）
+Java是真正的面向对象的语言，Java的设计模式多得不能再多，也是用来学习面向对象的设计模式的最佳语言了（参看Java中的设计模式）。
+推荐阅读《Effective Java》 and 《Java解惑》
+学习Java的框架，Java的框架也是多，如Spring, Hibernate，Struts 等等，主要是学习Java的设计，如IoC等。
+Java的技术也是烂多，重点学习J2EE架构以及JMS， RMI, 等消息传递和远程调用的技术。
+学习使用Java做Web Service （官方教程在这里）
+实践任务： 尝试在Spring或Hibernate框架下构建一个有网络的Web Service的远程调用程序，并可以在两个Service中通过JMS传递消息。
+C++和Java都不是能在短时间内能学好的，C++玩是的深，Java玩的是广，我建议两者选一个。我个人的学习经历是：
+深究C++（我深究C/C++了十来年了）学习Java的各种设计模式。
 
 +++Rune+++
-Rune�ǡ��ַ����ĸ�������ϵ��������Ե��ַ���Unicode�������Ѿ������˲�ͬ�ı��룬����Ҳ�в�ͬ���ֽڳ��ȡ�Ӣ����1���ֽڳ��ȣ�������3���ֽڳ��ȡ���plan9�в���ʹ��char����ʾ�ַ�����ʹ��rune����ʾ�ַ����ַ���ʹ�õ����������б�ʾ������"��"��'��'�������Ǵ�����ͬ�ĺ��壬�����ŵ�������������ַ���˫���Ŵ���������������ַ���������UTF-8���ַ�����
+Rune是“字符”的概念。世界上的所有语言的字符在Unicode编码中已经分配了不同的编码，而且也有不同的字节长度。英语是1个字节长度，中文是3个字节长度。在plan9中不是使用char来表示字符，是使用rune来表示字符。字符是使用单引号来进行表示，比如"你"和'你'这两个是代表不同的含义，单引号的是你这个中文字符，双引号代表将你这个中文字符当作三个UTF-8的字符串。
 Buffer IO
-����ϵͳ���ļ����������֣�buffer IO�ͷ�buffer IO��buffer IO���Ƕ�ȡ�ļ�ǰ���Ƚ��ļ���ȡ���ڴ��У�Ȼ����ڴ���������ߴ����뵽�ڴ��С������ڴ�Ķ�д�ٶȱȴ��̿죬����Buffer IO�Ǳȷ�buffer IO�죬�����еĲ������п��ܻ�����ݣ����Ҳ�������ڴ��е������Ƿǳ־û��ġ�
-��׼��C������û��buffer IO�ģ�����plan9������һ��<bio.h>ר�Ÿ���buffer IO�Ĺ��ܡ�
+操作系统的文件操作有两种：buffer IO和非buffer IO。buffer IO就是读取文件前都先将文件读取到内存中，然后从内存再输出或者从输入到内存中。由于内存的读写速度比磁盘快，所以Buffer IO是比非buffer IO快，但是有的不足是有可能会掉数据，这个也是由于内存中的数据是非持久化的。
+标准的C库中是没有buffer IO的，于是plan9就有了一个<bio.h>专门负责buffer IO的功能。
 
 
-+++�̰߳�ȫ++++
-�̰߳�ȫ����˵���̷߳���ͬһ���룬���������ȷ���Ľ������д�̰߳�ȫ�Ĵ����ǵ������߳�ͬ����
-�̰߳�ȫһ�㶼�漰��synchronized ����һ�δ���ͬʱֻ����һ���߳������� ��Ȼ�м���̿��ܻ��������Ԥ�ƵĽ����
-�����Ĵ������ڵĽ������ж���߳���ͬʱ���У�����Щ�߳̿��ܻ�ͬʱ������δ��롣���ÿ�����н���͵��߳�
-���еĽ����һ���ģ����������ı�����ֵҲ��Ԥ�ڵ���һ���ģ������̰߳�ȫ�ġ�
++++线程安全++++
+线程安全就是说多线程访问同一代码，不会产生不确定的结果。编写线程安全的代码是低依靠线程同步。
+线程安全一般都涉及到synchronized 就是一段代码同时只能有一个线程来操作 不然中间过程可能会产生不可预制的结果。
+如果你的代码所在的进程中有多个线程在同时运行，而这些线程可能会同时运行这段代码。如果每次运行结果和单线程
+运行的结果是一样的，而且其他的变量的值也和预期的是一样的，就是线程安全的。
 
 
-+++http����ѯ�����ѯ+++
-http Э����ܣ�
-http Э��������/��Ӧ��ʽ��, ÿһ�� http ��Ӧ������һ����Ӧ�� http ���������; http Э������״̬��, ��� http ����֮����û�й�ϵ��.
-http �����ӣ�
-Ŀǰ http Э���ձ�ʹ�õ��� 1.1 �汾, ֮ǰ�и� 1.0 �汾, ����֮���һ�������� 1.1 ֧�� http ������, ���߽г־�����.1.0 ��֧�� http ������, ÿ��һ�� http ������Ӧ�󶼹ر� tcp ����, �¸� http ��������½��� tcp ����.
-��ν http ������, ���Ƕ�� http ������һ�� tcp ����; �������Լ��ٶ���ٽ� http ������ tcp �����ر���������ʱ������. http 1.1 ��������ͷ����Ӧͷ���� connection�ֶα�ʶ�Ƿ��� http ������, connection: keep-alive, ������ http ������; connection:closed, �����������ر� tcp ����
-�� connection ��Ӧ��һ���ֶ��� keep-live, http ��Ӧͷ�г���, ���ĸ�ʽ�� timeout=30, max=5, timeout ������ http ���󱣳ֵ�ʱ��(s), , max ����� tcp �������Ϊ���� http ��������
-http ����ѯ��
-http ����ѯ�Ƿ������յ���������������, ������Ӧ����; ���û�����ݾͻ� hold һ��ʱ��, ���ʱ�������������������Ӧ����; ���ʱ�䵽�˻�û������, ����Ӧ http ����;������ܵ� http ��Ӧ�����ڷ���һ��ͬ�� http �����ѯ�Ƿ�������;
-http ����ѯ�ľ���:
-������˶�ͳһ������ͬʱ http �������������, ���ͬһ�û�ֻ����һ������ѯ;
-��������û������ hold ס����ʱ������˷�, ���ײ���������ƿ��;
-http ����ѯ��
-http����ѯ�Ƿ������յ����󲻹��Ƿ������ݶ�ֱ����Ӧ http ����; ������ܵ� http ��Ӧ��һ��ʱ���ڷ���ͬ���� http �����ѯ�Ƿ�������;
-http ����ѯ�ľ�����ʵʱ�Ե�;
-������ͬ�㣺
-���Կ��� http ����ѯ�� http ����ѯ�Ķ��� hold һ��ʱ��;
-���߲�ͬ��
-��������ڷ���˻����������: http ����ѯ����˻� hold һ��ʱ��, http ����ѯ��������� ��hold�� һ��ʱ��;
-Ӧ�ã�
-����ѯһ������ web im, im ʵʱ��Ҫ���, http ����ѯ�Ŀ���Ȩһֱ�ڷ�������, ���������ڷ������˵�, ���ʵʱ�Ը�;
-������΢����im, �������� im �Լ� webQQ ������ http ����ѯʵ�ֵ�;
-NodeJS ���첽����ò�ƿ��ԺܺõĴ��� http ����ѯ���µķ�����ƿ������, ����д��о�.
-http ����ѯһ������ʵʱ��Ҫ�󲻸ߵĵط�, ��������΢����δ��������ѯ�����������ÿ��һ��ʱ���ѯ��.
-������
-���� http ������һ�������Ƿ�����������������, ����� http Э�������޷�ʵ�ֵ�, ��Ϊ http ����/��Ӧ��ʽ������, http �з������������ݱ���Ҫ��һ��������˵������Ӧ, �������޷��������͸����������.
-���� http ����ѯ���� http ����ѯ ��֤ͬһ���û��ڶ� tab ��ֻ����һ����ʱ��ѯ���кô���, �����ͨ����������˻������ݽ��, �� http ��Ӧ����������˻�������, ������һ����Ч��, Ȼ����ÿ�η��� http ����ʱ����Ƿ�����Ч����, û�����������ȡ
++++http长轮询与短轮询+++
+http 协议介绍：
+http 协议是请求/响应范式的, 每一个 http 响应都是由一个对应的 http 请求产生的; http 协议是无状态的, 多个 http 请求之间是没有关系的.
+http 长连接：
+目前 http 协议普遍使用的是 1.1 版本, 之前有个 1.0 版本, 两者之间的一个区别是 1.1 支持 http 长连接, 或者叫持久连接.1.0 不支持 http 长连接, 每次一个 http 请求响应后都关闭 tcp 连接, 下个 http 请求会重新建立 tcp 连接.
+所谓 http 长连接, 就是多个 http 请求共用一个 tcp 连接; 这样可以减少多次临近 http 请求导致 tcp 建立关闭所产生的时间消耗. http 1.1 中在请求头和相应头中用 connection字段标识是否是 http 长连接, connection: keep-alive, 表明是 http 长连接; connection:closed, 表明服务器关闭 tcp 连接
+与 connection 对应的一个字段是 keep-live, http 响应头中出现, 他的格式是 timeout=30, max=5, timeout 是两次 http 请求保持的时间(s), , max 是这个 tcp 连接最多为几个 http 请求重用
+http 长轮询：
+http 长轮询是服务器收到请求后如果有数据, 立刻响应请求; 如果没有数据就会 hold 一段时间, 这段时间内如果有数据立刻响应请求; 如果时间到了还没有数据, 则响应 http 请求;浏览器受到 http 响应后立在发送一个同样 http 请求查询是否有数据;
+http 长轮询的局限:
+浏览器端对统一服务器同时 http 连接有最大限制, 最好同一用户只存在一个长轮询;
+服务器端没有数据 hold 住连接时会造成浪费, 容易产生服务器瓶颈;
+http 短轮询：
+http端轮询是服务器收到请求不管是否有数据都直接响应 http 请求; 浏览器受到 http 响应隔一段时间在发送同样的 http 请求查询是否有数据;
+http 短轮询的局限是实时性低;
+两者相同点：
+可以看出 http 长轮询和 http 短轮询的都会 hold 一段时间;
+两者不同点
+间隔发生在服务端还是浏览器端: http 长轮询在务端会 hold 一段时间, http 短轮询在浏览器端 “hold” 一段时间;
+应用：
+长轮询一般用在 web im, im 实时性要求高, http 长轮询的控制权一直在服务器端, 而数据是在服务器端的, 因此实时性高;
+像新浪微薄的im, 朋友网的 im 以及 webQQ 都是用 http 长轮询实现的;
+NodeJS 的异步机制貌似可以很好的处理 http 长轮询导致的服务器瓶颈问题, 这个有待研究.
+http 短轮询一般用在实时性要求不高的地方, 比如新浪微薄的未读条数查询就是浏览器端每隔一段时间查询的.
+其他：
+关于 http 长连接一个误解就是服务器主动推送数据, 这个在 http 协议下是无法实现的, 因为 http 请求/响应范式决定的, http 中服务器返回数据必须要有一个浏览器端的请求对应, 服务器无法主动推送给浏览器数据.
+不管 http 长轮询还是 http 短轮询 保证同一个用户在多 tab 下只存在一个定时查询是有好处的, 这可以通过在浏览器端缓存数据解决, 在 http 响应后在浏览器端缓存数据, 并设置一个有效期, 然后在每次发送 http 请求时检查是否有有效数据, 没有则发送请求获取
 
 
-+++linux�༭�ļ�����ֻ���ļ�ʱ��Ĵ�����ʽ++++
-�����ʱ�����ʾ��û��Root Permission 
-���������·��������
-����ʱ���ϣ�
++++linux编辑文件遇到只读文件时候的处理方式++++
+保存的时候会提示：没有Root Permission 
+可以用如下方法解决：
+保存时加上：
 :w !sudo tee %
 
-linux �������
-whoami �鿴��ǰ�û�
-df ��ʾϵͳ��Ӳ����Ϣ
-pwd ��ʾ��ǰ·��
-cat more less �����Բ鿴һ�����߶���ĵ���������cat���Խ�����ļ���
-tac filename �����һ�п�ʼ����鿴����filename�������ݲ���һ�𿴣�
-cat -n 1.txt��ʾ1.txt�ļ�����ǰ����ʾ�кŶ�more��less���ܺϲ���һ���ļ��鿴.
-od 1.txt ��������ʽ��ʾ�ļ�1.txt
-mkdir /home/test �����ļ��� /home/test
-chown oracle /home/test ��ʾ�ı�Ŀ¼������Ϊoracle�˻�
-chgrp dba /home/test �ı�/home/testĿ¼Ϊdba����
-rmdir /home/test ɾ��home/testĿ¼
-hostname�鿴linux�ļ������
-su - �л�Ϊroot��߹���Ա�˻�
-su �˻��� �л�Ϊָ���˻�
-rm -f filename ɾ��һ����filename���ļ�
-rmdir testdir ɾ��һ����testdir��Ŀ¼
-mv dir1 new_dir �ƶ�/������һ��Ŀ¼
-cp file1 file2 ����һ���ļ�
-cp -a /tmp/dir1 ����/tmp/dir1���������ļ�����ǰ����Ŀ¼
-cp -a dir1 dir2 ����һ��Ŀ¼��dir2Ŀ¼
-find / -name 1.txt ������ļ�ϵͳ������1.txt���ļ���Ŀ¼
-find / -user dongjun ���������û�dongjun�������ļ���Ŀ¼
-find /hone/user1 -name \*.bin ��Ŀ¼ '/ home/user1' ����������'.bin' ��β���ļ� 
-find /new/ -type f -mtime -10 ������10����/new/Ŀ¼�±����������޸Ĺ����ļ�
-groupadd group_name ����һ�����û��� 
-groupdel group_name ɾ��һ���û��� 
-useradd dj ����һ�����û�dj
-userdel -r dj ɾ��һ���û�dj (���������-r ,Ŀ�����ų���Ŀ¼)
-passwd �޸ĵ�ǰ�˺ŵ�����
-passwd user1 �޸�����Ϊuser1�û������루ֻ�е�ǰ�û���root����Ч��
-ls -lh ��ʾ����Ȩ�޵��ļ�
-head -2 file1 �鿴һ���ļ���ǰ���� 
-tail -1 file1 �鿴һ���ļ������һ��
-grep llo 1.txt ��1.txt�ļ��в��ҹؼ��� llo
-grep ^llo 1.txt��1.txt�ļ��в�����llo��ͷ�ĵ���
-grep [0-9] 1.txt ��1.txt�ļ��в������а������ֵ���
-grep Aug -R /var/log/* ��Ŀ¼ '/var/log' ������Ŀ¼�������ַ���"Aug" 
-paste file1 file2�ϲ������ļ�������
-sort file1 file2 ���������ļ�������
-comm -1 file1 file2 �Ƚ������ļ�������ֻɾ�� 'file1' ������������ 
-comm -2 file1 file2 �Ƚ������ļ�������ֻɾ�� 'file2' ������������ 
-comm -3 file1 file2 �Ƚ������ļ�������ֻɾ�������ļ����еĲ��� 
-ps aux �г�ϵͳ����
-whereis filename ��ʾ�ļ�filename������λ��
-runlevel�鿴���ڵ����м���
-free��ʾ�ڴ�CPU��ʹ�����
-top��̬�۲����
-id �����鿴�˻�����Ϣ
-dmesg��ʾ������Ϣ
-source /etc/profile  ˢ�����û�����Ϣ
-�鿴linux�ں˰汾3�ַ�����
+linux 常用命令：
+whoami 查看当前用户
+df 显示系统的硬件信息
+pwd 显示当前路径
+cat more less 都可以查看一个或者多个文档，区别是cat可以将多个文件合
+tac filename 从最后一行开始反向查看名叫filename的文内容并在一起看，
+cat -n 1.txt显示1.txt文件并且前面显示行号而more与less不能合并成一个文件查看.
+od 1.txt 二进制形式显示文件1.txt
+mkdir /home/test 创建文件夹 /home/test
+chown oracle /home/test 表示改变目录所有者为oracle账户
+chgrp dba /home/test 改变/home/test目录为dba所有
+rmdir /home/test 删除home/test目录
+hostname查看linux的计算机名
+su - 切换为root最高管理员账户
+su 账户名 切换为指定账户
+rm -f filename 删除一个叫filename的文件
+rmdir testdir 删除一个叫testdir的目录
+mv dir1 new_dir 移动/重命名一个目录
+cp file1 file2 复制一个文件
+cp -a /tmp/dir1 复制/tmp/dir1下面所有文件到当前工作目录
+cp -a dir1 dir2 复制一个目录到dir2目录
+find / -name 1.txt 进入根文件系统搜索叫1.txt的文件和目录
+find / -user dongjun 搜索属于用户dongjun的所有文件与目录
+find /hone/user1 -name \*.bin 在目录 '/ home/user1' 中搜索带有'.bin' 结尾的文件 
+find /new/ -type f -mtime -10 搜索在10天内/new/目录下被创建或者修改过的文件
+groupadd group_name 创建一个新用户组 
+groupdel group_name 删除一个用户组 
+useradd dj 创建一个新用户dj
+userdel -r dj 删除一个用户dj (这里必须有-r ,目的是排除主目录)
+passwd 修改当前账号的密码
+passwd user1 修改名字为user1用户的密码（只有当前用户是root才有效）
+ls -lh 显示带有权限的文件
+head -2 file1 查看一个文件的前两行 
+tail -1 file1 查看一个文件的最后一行
+grep llo 1.txt 在1.txt文件中查找关键字 llo
+grep ^llo 1.txt在1.txt文件中查找以llo开头的单词
+grep [0-9] 1.txt 在1.txt文件中查找所有包含数字的行
+grep Aug -R /var/log/* 在目录 '/var/log' 及随后的目录中搜索字符串"Aug" 
+paste file1 file2合并两个文件的内容
+sort file1 file2 排序两个文件的内容
+comm -1 file1 file2 比较两个文件的内容只删除 'file1' 所包含的内容 
+comm -2 file1 file2 比较两个文件的内容只删除 'file2' 所包含的内容 
+comm -3 file1 file2 比较两个文件的内容只删除两个文件共有的部分 
+ps aux 列出系统进程
+whereis filename 显示文件filename的所在位置
+runlevel查看现在的运行级别
+free显示内存CPU的使用情况
+top动态观察进程
+id 用来查看账户的信息
+dmesg显示启动信息
+source /etc/profile  刷新配置环境信息
+查看linux内核版本3种方法：
 cat /proc/version      uname -a         uname -r 
-�鿴linux�汾���г����а汾��Ϣ��
+查看linux版本，列出所有版本信息：
 lsb_release -a     cat /etc/issue
-�鿴ϵͳ��64λ����32λ:
+查看系统是64位还是32位:
 getconf LONG_BIT      
-���� ��ɾ��-MyISAM
+主库 增删改-MyISAM
 query_cache_size = 512M
-#ָ��������ѯ�ܹ�ʹ�õĻ�������С��ȱʡΪ1M
+#指定单个查询能够使用的缓冲区大小，缺省为1M
 query_cache_limit = 2M
-�鿴�޷�ɾ�����ļ�����ռ��Դ 
+查看无法删除的文件，被占资源 
 lsof |grep deleted  
 
 
-+++Linux�ر����ں�֪ʶ+++++
++++Linux必备的内核知识+++++
 
-�û�ģʽ���ں�ģʽ
-ִ�н��̵�ģʽ�����֣��û�ģʽ���ں�ģʽ�����д�Ĵ����ִ�������ӵĿ��������û�ģʽ�¡���Ҫ�ں˷���ʱִ�е��ں˴���ֻ�����ں�ģʽ�����С�����Ϊ�˰�ȫ�Կ��ǣ��û�ģʽ����ȷ��һ������ֻ�ܷ����Լ����ڴ�ռ䣬����ƻ����Լ��ڲ��ṹ����Ҳֻ��Ӱ�쵽�Լ��������漰�����Ľ��̣�������Ӱ�쵽����ϵͳ�����û�ģʽ�£������ܷ��ʵ��ڴ��Ϊ�û��ռ䡣
+用户模式和内核模式
+执行进程的模式有两种：用户模式和内核模式。你编写的代码和执行所链接的库运行在用户模式下。需要内核服务时执行的内核代码只能在内核模式下运行。这是为了安全性考虑，用户模式可以确保一个进程只能访问自己的内存空间，如果破坏了自己内部结构，它也只能影响到自己，而不涉及其它的进程，更不会影响到整个系统。在用户模式下，进程能访问的内存称为用户空间。
 
-�ں���Ҫά�����ݽṹ�Կ���ϵͳ��ÿ�����̣����ṩ��һ�����н��̹������ڴ�����Ϊ�˱�֤��ȫ�ԣ��ں˴�������ݽṹ�����ϸ�������û���������ݣ�ֻ���ڴ����������ں�ģʽ�����У����ʵĹ����ں������Լ�ִ��Ȩ��ָ��ѽ������ں�ģʽ�·��ʵ��ڴ���������ں˿ռ䡣�ں˿ռ�ֻ��һ�������ں�ģʽ�µĽ��̲��ܷ��ʣ������ں˿ռ���ÿ�����������еġ�
+内核需要维护数据结构以控制系统中每个进程，它提供了一个所有进程共享的内存区域，为了保证安全性，内核代码和数据结构必须严格独立于用户代码和数据，只有内存代码可以在内核模式下运行，访问的共享内核数据以及执行权限指令。把进程在内核模式下访问的内存区域叫做内核空间。内核空间只有一个，在内核模式下的进程才能访问，但是内核空间是每个进程所特有的。
 
-���͵�32�����µ������ַ��3G/1G���䷽ʽ����
+典型的32环境下的虚拟地址（3G/1G分配方式）：
 
 0xFFFFFFFF
 
-Linux�ں�               �ں˿ռ䣨�ڴ�1G��
+Linux内核               内核空间（内存1G）
 
 0xC0000000
 
 0xBFFFFFFFF
 
-����A|B|C              �û��ռ䣨�ڴ�3G��
+进程A|B|C              用户空间（内存3G）
 
 0x00000000
 
-ϵͳ����
-       ����ͨ��ϵͳ���ý�����˳��ں�ģʽ������POSIX������ϵͳ���õļ򵥷�װ����open��close��ictol��write��read�ȡ������豸ֻ�����ں�ģʽ��ִ�У�Ӧ�ó�����ֱ�ӵ����豸�������򣬶���ʹ��Ԥ�����ϵͳ���ü�ӵķ�������������롣
+系统调用
+       进程通过系统调用进入和退出内核模式，许多POSIX函数是系统调用的简单封装，如open，close，ictol，write和read等。驱动设备只能在内核模式下执行，应用程序不能直接调用设备驱动程序，而是使用预定义的系统调用间接的访问驱动程序代码。
 
-       ������ϵͳ����read��һ�����ӣ�
+       下面是系统调用read的一个例子：
 
 #include <syscall.h>
 
-��.
+….
 
 n = syscall(SYS_read, fd, buffer, length)
 
-       Linux�ṩ��ϵͳ�����б����ں˰汾���������Ҳ���ʱ��仯���仯��Ȼ�������ڴ���ϵͳ���õĻ���ȴ����Ϊ��ͬ��������ϵ�ṹ����ͬ��ϵͳ���ú�����һ�����ڴ���ϵͳ���õĻ�����ķ�װ������strace����׷��ϵͳ���÷ǳ����ã���Ϊ����������֪����ǰ����ִ�е������
+       Linux提供的系统调用列表由内核版本决定，并且不随时间变化而变化。然而，用于创建系统调用的机制却会因为不同处理器体系结构而不同。系统调用函数是一个用于创建系统调用的汇编代码的封装。命令strace对于追踪系统调用非常有用，因为利用它可以知道当前任务执行的情况。
 
-ͨ���û������Ƚ�����ѹ���ջ���߱�����Ԥ����ļĴ����У�Ȼ����ʹ���жϵ���ϵͳ���ô��������жϴ�����������ת�뵽�ں�ģʽ���������ʵ���ϵͳ���á����ں�ģʽ�£����ӼĴ����ж�ȡ������ʹ���ض��ĺ������û��ռ临�Ʋ���������ֲ������ֱ��ʹ��ϵͳ���ã�����������Ϊ��ʵ��ϵͳ���á�ϵͳ�������Ų���ϵͳ�汾�仯���仯����ĵ�����������Щ�仯��
+通常用户代码先将参数压入堆栈或者保存在预定义的寄存器中，然后在使用中断调用系统调用处理器。中断处理器将进程转入到内核模式，并调用适当的系统调用。在内核模式下，它从寄存器中读取参数或使用特定的函数从用户空间复制参数。可移植程序不能直接使用系统调用，而是依赖库为其实现系统调用。系统调用随着操作系统版本变化而变化，库的调用则无需这些变化。
 
-Linuxʹ��syscall������ΪӦ�ó�������ƽӿ�(ABI)����������Linux�����еġ��ü�������������������ϵͳ��������BOISϵͳ������API�ǲ�ͬ�ģ�APIҪ�����Ӽ��ݵĺ�������ABI��Ҫ�����Ӳ���Ҫ���еĴ��롣���ǿ�ִ�г��������ؽ��Ϳ��������಻ͬ�ں������е�ԭ��֮һ��һ��������2.2�ں��µľ�̬���ӵĿ�ִ�г��������2.6�ں�����Ȼ�������У���Ϊ�����������ϵͳ���ýӿڴӲ���仯��
+Linux使用syscall技术称为应用程序二进制接口(ABI)，它并不是Linux所独有的。该技术可以用于其它操作系统，甚至是BOIS系统。它与API是不同的，API要求链接兼容的函数，而ABI步要求链接步需要运行的代码。这是可执行程序无需重建就可以在许多不同内核中运行的原因之一。一个运行在2.2内核下的静态链接的可执行程序可能在2.6内核下仍然可以运行，因为大多数常见的系统调用接口从不会变化。
 
-�û��ռ���ں˿ռ�����ݴ���
-�û�ģʽ�µ��ں˿ռ��ǲ��ɼ��ģ��������û��ռ�ʱ���ں�ģʽҲ�������ע�⡣��ˣ�ͨ��ϵͳ���ô������ݷǳ����鷳����Ȼ�򵥵Ĳ�������ͨ���Ĵ������ݣ����Ǵ��͵��ڴ����ͨ�����ƣ�����Ч���൱�ĵ��¡�һЩϵͳ���ã�read/write����Ҫ���û�ģʽ���ں�ģʽ֮�䴫�ݴ������ݣ���Ȼ��Щ����ĸ������ò��󣬵�������ά���ں˿ռ���û��ռ����Զ�����
+用户空间和内核空间的数据传递
+用户模式下的内核空间是不可见的，当访问用户空间时，内核模式也必须格外注意。因此，通过系统调用传送数据非常的麻烦。虽然简单的参数可以通过寄存器传递，但是大型的内存必须通过复制，导致效率相当的低下。一些系统调用（read/write）需要在用户模式和内核模式之间传递大量数据，虽然这些额外的复制作用不大，但是它能维持内核空间和用户空间的相对独立。
 
-��Ȼ�����ڶ��ڿ����ή�ͳ�������ܣ����ӳ�Զ���������������ܵ���ߣ������ļ�ϵͳ���ٻ��棬������д���ļ�ʱ�����ݱ�д�����֮ǰ����д�뵽�ں˿ռ䣬����write������������ں�̨��ɣ�Ӧ�ó������ͨ��flush��ˢ���û��ռ�Ļ��壬ʹ�ó������ִ�С�
+虽然复制在短期看来会降低程序的性能，但从长远来看它有助于性能的提高，例如文件系统高速缓存，当数据写入文件时，数据被写入磁盘之前会先写入到内核空间，所以write这个动作可以在后台完成，应用程序可以通过flush来刷新用户空间的缓冲，使得程序继续执行。
 
-���̵��ȳ���
-������������ϵͳ������㷨����������ȣ�Scheduler����Linux�ں��ṩ���ֵ����㷨�����������û���ϵͳ��װʱѡ����ʵĵ����㷨��
+进程调度程序
+解决多任务操作系统问题的算法叫做程序调度（Scheduler），Linux内核提供多种调度算法，并且允许用户在系统安装时选择合适的调度算法。
 
-���ȳ���ĵ���ͨ��Ƕ�뵽ϵͳ�����У����ڽ�����Ҫ�ȴ��¼�ʱ������һ�����豸���д���ͨ�ŵĽ��̻ᾭ�����õ��ȳ��������豸���ٶȺ��������̵Ĵ󲿷�����ʱ�䶼�˷��ڵȴ������У���������ʱ����ķ�̫���CPUʱ�䡣
+调度程序的调用通常嵌入到系统调用中，并在进程需要等待事件时发生。一个与设备进行大量通信的进程会经常调用调度程序，由于设备的速度很慢，进程的大部分运行时间都浪费在等待过程中，这样运行时不会耗费太多的CPU时间。
 
-ע����ΪЭͬ����������Cooperativer multitasking����
+注：何为协同多任务处理（Cooperativer multitasking）。
 
-һ��������������I/O���Ǿͻ�ռ�ô�����CPUʱ�䣬�Ӷ�ʹ�����������޷�ʹ��CPU����ʱ��Ҫ������ռʽ��������Preemptive multitasking����
+一个进程若不进行I/O，那就会占用大量的CPU时间，从而使得其它进程无法使用CPU，此时需要采用抢占式任务处理（Preemptive multitasking）。
 
-ÿ��Linux���̶���һ��ִ��ʱ��Ƭ��quantum����һ��������Ϊʱ��Ƭʹ���걻�ں�ִֹͣ��ʱ��������̱���ռ�������һ�����и������ȼ��Ľ����ھ��������У��ں�ͬ��������ռ����ִ�еĽ��̡�һ������Ҳ�����Զ�����CPU������ͨ��sched_yieldϵͳ����������CPU��Ҳ����ͨ������ϵͳ���ã�sleep����ʵ�ֶ�CPU�ķ��������������ں�ģʽ�µȴ�һ���¼�ʱ����Ϊ������blocking����һ���������̼Ȳ���ռ��CPU��Ҳ���ᱻ���ȳ���ʹ�á�
+每个Linux进程都有一个执行时间片或quantum，当一个进程因为时间片使用完被内核停止执行时，这个进程被抢占，如果有一个享有更高优先级的进程在就绪队列中，内核同样可以抢占正在执行的进程。一个进程也可以自动放弃CPU，可以通过sched_yield系统调用来放弃CPU。也可以通过其它系统调用（sleep）来实现对CPU的放弃。当进程在内核模式下等待一个事件时，称为阻塞（blocking）。一个阻塞进程既不会占用CPU，也不会被调度程序使用。
 
-������ռʽ������������ϵͳ��ʵ���˰����ȼ����Ȳ��ԡ�������Ȩ�Ľ������Ǳȵ����ȼ��Ľ����ȱ����ȡ���Ȼ�û�����Ӱ����̵����ȼ��������̵����ȼ����ջ������ں˾�����Linux�ں�ͨ��ʹ�ö�̬���ȼ���Dynamic Priority����������ߺͽ����������н��̵����ȼ����Ӷ�ʹ�õ����ȼ��Ľ���Ҳ�����С�
+所有抢占式多任务处理操作系统都实现了按优先级调度策略。高优先权的进程总是比低优先级的进程先被调度。虽然用户可以影响进程的优先级，但进程的优先级最终还是由内核决定。Linux内核通过使用动态优先级（Dynamic Priority），不断提高和降低正在运行进程的优先级，从而使得低优先级的进程也能运行。
 
-Linux�ں˵��Ȳ���һ����ҪĿ���Ǳ�֤���н��̶��л��ᱻ���ȣ�Ҳ����˵ÿ����������Ӧ��ʹ��CPU��ʱ�䡣���̵���Ч���ȼ����Ǿ�̬���ȼ��Ͷ���ֵ֮�ͣ��������ֵ�����ɸ���
+Linux内核调度策略一个重要目的是保证所有进程都有机会被调度，也就是说每个任务都有相应的使用CPU的时间。进程的有效优先级就是静态优先级和额外值之和，这个额外值可正可负。
 
-ps����ѡ����-C��ʾ�����������������-C <proc_name>��-o���ڿ�������ĸ�ʽ����etime,pid,pri,cmd��
+ps命令选项中-C显示进程与参数的配对项，如-C <proc_name>，-o用于控制输出的格式，如etime,pid,pri,cmd。
 
-�ں������û�ͨ��ʹ��һ����Ϊnice����ֵ��Ӱ����ȳ���������ȼ��ĵ��ȡ�����nice���Խ������ȼ�������nice����������ȼ�����鿴ice��renice���
+内核允许用户通过使用一个名为nice的数值来影响调度程序关于优先级的调度。正的nice可以降低优先级，负的nice可以提高优先级。请查看ice和renice命令。
 
-ʵʱ����Ȩ
-��Ӧʱ����ָ������Ӧ�ⲿ�¼���ʱ�䣬�����жϡ��ϸ����Ӧʱ���Ӧ�ó���ͨ������ΪʵʱӦ�ó���Linux��ʵʱ���̵����ȼ���Χ��41-139��ʵʱ���ȼ�Խ�����ȼ�Խ�ߡ�ʵʱ���ȼ�����������������ֵ�ǲ���ġ�
+实时优先权
+响应时间是指软件响应外部事件的时间，比如中断。严格的响应时间的应用程序通常被称为实时应用程序。Linux中实时进程的优先级范围是41-139，实时优先级越大，优先级越高。实时优先级在整个生命周期中值是不变的。
 
-�����ʵʱ����ʱ������ȷ�����ĵ��Ȳ��ԣ�POSIXΪʵʱ����ָ�������ֲ��ԣ��Ƚ��ȳ���FIFO����ʱ��Ƭ����round robin����
+在设计实时进程时，必须确定它的调度策略，POSIX为实时进程指定了两种策略：先进先出（FIFO）和时间片法（round robin）。
 
-����ʵʱ���̵ķ�������ʹ��chrt���chrt���ڲ�����fork��exec��POSIX�������������ȼ����������£�
+创建实时进程的方法就是使用chrt命令，chrt在内部调用fork和exec和POSIX函数来设置优先级，函数如下：
 
 int sched_setscheduler(pid_t pid, int policy, const struct sched_param*p);
 
 int pthread_setschedparam(pthread_t thread, int policy, const struct sched_param*p);
 
-int sched_get_priority_min/max(int policy)��
+int sched_get_priority_min/max(int policy)；
 
-��һ��Ϊ���̷��񣬵ڶ���Ϊ�̷߳���
+第一个为进程服务，第二个为线程服务。
 
 # sodu chrt --fifo 50 ./chewer &
 
-����״̬
-�ڽ��̵����������У����̾������ֲ�ͬ��״̬��ʹ��ps�����cat /proc�ļ�ϵͳ�鿴������״̬���£�
+进程状态
+在进程的生命周期中，进程经历几种不同的状态，使用ps命令或cat /proc文件系统查看，进程状态如下：
 
-R-���л�Ҫ����
+R-运行或将要运行
 
-S-���жϵȴ�һ���¼������ܻᱻһ���źż���
+S-被中断等待一个事件，可能会被一个信号激活
 
-D-���жϵȴ�һ���¼������ᱻ�źż���
+D-被中断等待一个事件，不会被信号激活
 
-T-��������Ŀ��ƻ����ⲿ׷�ٶ�����ֹ������ptrace
+T-由于任务的控制或者外部追踪而被终止，比如ptrace
 
-Z-�������������ĸ�����û�е���wait������
+Z-僵死，但是它的父进程没有调用wait函数。
 
-һ�����̴��ڲ����ж�״̬��һ��Σ�յ����飬ֻ��������������޲���
+一个进程处于不可中断状态是一件危险的事情，只能重启计算机来修补。
 
-��һ�������˳�ʱ������ȫСʱ�����ǵȵ������̷���waitϵͳ���òŻ���ȫ��ʧ������һֱ�ᴦ�ڽ���״̬���ȴ����ĸ�������ֹ�����������̲�ռ���ڴ�ͽ�����Դ�����ǿ���ͭ��ps������ʾ����������init������adopted����init���̻ᶨ�ڵĵ���wait������������Щδ�������Ľ��̡�
+当一个进程退出时并不完全小时，而是等到父进程发出wait系统调用才会完全消失，否则一直会处于僵死状态，等待它的父进程终止它。僵死进程步占用内存和进程资源，但是可以铜鼓ps命令显示出来，它被init收养（adopted），init进程会定期的调用wait命令来回收这些未被撤销的进程。
 
-�ں���׷��ÿ�����̵�����ʱ�䣬�ں˼�¼ÿ�����̷ֱ������û��ռ���ں˿ռ��ʱ�䣬����time�����á�����������û��ռ�ķ�̫��ʱ�䣬�Ͳ��ܱ�Թ�ںˡ���������Ľ�������Ǵ���������ӵĿ⺯�����⣬�������ں˵�ԭ����strace������Ϊ�λ���ϵͳ�����Ϻķ�̫���ʱ������⡣���������Ϊ�豸��������ϵͳ���ö�����̫��������û��ʲô����������ߴ���������ٶȣ���ñ�������Щ���ã�Ҳ������һ�Զ�Ӧ�ó�������̷߳��������첽I/O������
+内核能追踪每个进程的运行时间，内核记录每个进程分别用在用户空间和内核空间的时间，命令time很有用。如果进程在用户空间耗费太多时间，就不能抱怨内核。造成这样的结果可能是代码或者连接的库函数问题，而不是内核的原因。用strace来跟踪为何会在系统调用上耗费太多的时间的问题。如果代码因为设备阻塞或者系统调用而运行太慢，几乎没有什么方法可以提高代码的运行速度，最好避免做那些调用，也可以试一试对应用程序采用线程方法或者异步I/O操作。
 
-Linux�ں�ʱ�ӱ�׼��λΪjiffy���ڲ�ʱ����Ӳ����������һ��Ƶ�ʲ����жϵõ������Ƶ�����ں˱���ʱ�Ѿ�ȷ�������洢��HZ�ĺ��С��ж�Ƶ�ʵ���߻�����CPU��ʹ�ã��ӿ����ĵ�صĵ����ٶȡ�����ʹ��make memuconfig����ʱ��Ƶ�����á�
+Linux内核时钟标准单位为jiffy，内部时钟有硬件计数器以一定频率产生中断得到，这个频率在内核编译时已经确定，它存储在HZ的宏中。中断频率的提高会增加CPU的使用，加快消耗电池的电量速度。可以使用make memuconfig进行时间频率设置。
 
-ʹ��sysfs��ʾ����һ������׷���ڲ�ʱ�ӵ�Сģ�顣
+使用sysfs的示例：一个用于追踪内部时钟的小模块。
 
-Hz.c��
+Hz.c：
 
 #include "linux/module.h"
 
@@ -594,7 +594,7 @@ all:
 
 obj-m+=hz.o
 
-���롢��װ�Ͳ鿴��
+编译、安装和查看：
 
 # make
 
@@ -606,187 +606,187 @@ obj-m+=hz.o
 
  
 
-Intel��������ַ��չ��PAE��
-�ڵ����ϰ�װ��RAM�����������ƣ�ֻ�������������ϵ�DIMM����������������ѡַ�������ڴ��������ޡ�ͨ����CPU���ֳ�������������ƣ�һ��32Ϊ����ֻ�ܴ洢32λ��ָ�룬���������ַ����Ϊ4GB��
+Intel的物理地址扩展（PAE）
+在电脑上安装的RAM数量不受限制，只是受制于主板上的DIMM数量，处理器可以选址的物理内存数量受限。通常，CPU的字长决定了这个限制，一个32为机器只能存储32位的指针，因此物理地址限制为4GB。
 
 
-����Ҫ����DRAM����4GB�Ľ���취��ת��Ϊ64λ��ϵ�ṹ������ζ���������Ӧ�ó���ŵ�һ���µ�ƽ̨�ϣ����Ǹ��൱�ߵĽ��������
+当需要增加DRAM大于4GB的解决办法是转换为64位体系结构，这意味着你的所有应用程序放到一个新的平台上，这是个相当高的解决方案。
 
-Intel��˾��Physical Address Extension��PAE����������������ͨ��ҳ���ַ��20bit��չ��24bit���Ӷ�����Ѱַ64GB��RAM��ҳ���С���Ըı䣬����ƫ������ȻΪ12bit������ζ����Ч������ַΪ36bits����Ϊ�߼���ַ�������32Ϊ�Ĵ�������������Ȼֻ��ѡַ4GB�������ڴ档
+Intel公司的Physical Address Extension（PAE）技术允许处理器通过页面地址从20bit扩展到24bit，从而可以寻址64GB的RAM，页面大小可以改变，所以偏移量仍然为12bit，这意味着有效物理地址为36bits。因为逻辑地址必须符合32为寄存器，处理器仍然只能选址4GB的虚拟内存。
 
-MMU�Ͳ���ϵͳʹ��ҳ���ַ����ҳ�棬���Է����������߽���ҳ��ʱ�򣬲���ϵͳ��������ʹ��24bits��ҳ���ַ����ˣ�ϵͳ�����õ������ڴ�����Ч��64GB��
+MMU和操作系统使用页面地址管理页面，所以分配给缓存或者进程页面时候，操作系统可以随意使用24bits的页面地址，因此，系统可以用的虚拟内存是有效的64GB。
 
-ע��pmap����鿴�ڴ���䣬# jobs -x pmap %1
+注：pmap命令查看内存分配，# jobs -x pmap %1
 
-�ں˵��Թ��ߣ�
+内核调试工具：
 
-# mkswap, swapon, swapoff �C ���ڷ��������Ĺ���
+# mkswap, swapon, swapoff – 用于分区交换的工具
 
-# nice��renice��chrt �C ����Ӱ�������Ϊ�Ĺ���
+# nice，renice，chrt – 用于影响调度行为的工具
 
-# pmap �C ������ʾ���������ڴ�Ĺ���
+# pmap – 用于显示进程虚拟内存的工具
 
-# ps��time��times �C ������ʾ�������û�̬���ں�̬�Ļ���ʱ��
+# ps，time，times – 用于显示进程在用户态和内核态的花费时间
 
-# strace �C ���ڷ����������ϵͳ������Ϊ��һ�־��ѹ���
+# strace – 用于分析程序进行系统调用行为的一种绝佳工具
 
-�ں˵���API:
+内核调试API:
 
-# clock_getres, clock_gettime �C �߷ֱ��ʵ�POSIXʱ��
+# clock_getres, clock_gettime – 高分辨率的POSIX时钟
 
-# getrusage,times �C �鿴��Դʹ������Ŀ⺯��
+# getrusage,times – 查看资源使用情况的库函数
 
-# mallopt �C ����GNU��API���������ö�̬�����ڴ���Ϊ
+# mallopt – 属于GNU的API，用于设置动态分配内存行为
 
-# mlock, munlock �C ������ram������ҳ
+# mlock, munlock – 用于在ram总锁定页
 
-# mmap, msync, madvise �C �ڴ���RAM�ʹ���������ͷ�
+# mmap, msync, madvise – 内存在RAM和磁盘上如何释放
 
-# pthread_setschedparam �C Ϊ�߳�ѡ��һ��ʱ���Ų���
+# pthread_setschedparam – 为线程选择一个时序安排策略
 
-# sysconf �C ��ʾϵͳ����������ϸ������
+# sysconf – 显示系统常量的配置细节内容
 
 
-++++Linux�ڴ����Slab������++++++
-һ������
+++++Linux内存管理Slab分配器++++++
+一：概述
 
-���û���㷨�����ڴ�ʱ��ÿ�����ٷ���һ��ҳ�档�������������ڴ��СΪ��ʮ���ֽڻ򼸰ٸ��ֽ�ʱӦ����δ����������һ��ҳ���з���С���ڴ�����С�ڴ����ķ���������������Ƭ����ν����Linux����Slab��
+采用伙伴算法分配内存时，每次至少分配一个页面。但当请求分配的内存大小为几十个字节或几百个字节时应该如何处理？如何在一个页面中分配小的内存区，小内存区的分配所产生的内碎片又如何解决？Linux采用Slab。
 
-Linux ��ʹ�õ� slab �������Ļ����� Jeff Bonwick Ϊ SunOS ����ϵͳ�״������һ���㷨��Jeff �ķ�������Χ�ƶ��󻺴���еġ����ں��У���Ϊ���޵Ķ��󼯣������ļ������������������ṹ����������ڴ档Jeff ���ֶ��ں�����ͨ������г�ʼ�������ʱ�䳬���˶�����з�����ͷ������ʱ�䡣������Ľ����ǲ�Ӧ�ý��ڴ��ͷŻ�һ��ȫ�ֵ��ڴ�أ����ǽ��ڴ汣��Ϊ����ض�Ŀ����ʼ����״̬�����磬����ڴ汻�������һ������������ôֻ����Ϊ�������״η����ڴ�ʱִ��һ�λ�������ʼ��������mutex_init�����ɡ��������ڴ���䲻��Ҫִ�������ʼ����������Ϊ���ϴ��ͷź͵�������֮�����Ѿ����������״̬����
+Linux 所使用的 slab 分配器的基础是 Jeff Bonwick 为 SunOS 操作系统首次引入的一种算法。Jeff 的分配器是围绕对象缓存进行的。在内核中，会为有限的对象集（例如文件描述符和其他常见结构）分配大量内存。Jeff 发现对内核中普通对象进行初始化所需的时间超过了对其进行分配和释放所需的时间。因此他的结论是不应该将内存释放回一个全局的内存池，而是将内存保持为针对特定目而初始化的状态。例如，如果内存被分配给了一个互斥锁，那么只需在为互斥锁首次分配内存时执行一次互斥锁初始化函数（mutex_init）即可。后续的内存分配不需要执行这个初始化函数，因为从上次释放和调用析构之后，它已经处于所需的状态中了
 
-Linux slab ������ʹ��������˼�������һЩ˼��������һ���ڿռ��ʱ���϶����и�Ч�Ե��ڴ��������
+Linux slab 分配器使用了这种思想和其他一些思想来构建一个在空间和时间上都具有高效性的内存分配器。
 
-ͼ 1 ������ slab �ṹ�ĸ߲���֯�ṹ������߲��� cache_chain������һ�� slab ����������б�������� best-fit �㷨�ǳ����ã����������������ʺ�����Ҫ�ķ����С�Ļ��棨�����б�����cache_chain ��ÿ��Ԫ�ض���һ�� kmem_cache �ṹ�����ã���Ϊһ�� cache������������һ��Ҫ�����ĸ�����С�Ķ���ء�
-ÿ�����涼������һ�� slabs �б�������һ���������ڴ�飨ͨ������ҳ�棩������ 3 �� slab��
+图 1 给出了 slab 结构的高层组织结构。在最高层是 cache_chain，这是一个 slab 缓存的链接列表。这对于 best-fit 算法非常有用，可以用来查找最适合所需要的分配大小的缓存（遍历列表）。cache_chain 的每个元素都是一个 kmem_cache 结构的引用（称为一个 cache）。它定义了一个要管理的给定大小的对象池。
+每个缓存都包含了一个 slabs 列表，这是一段连续的内存块（通常都是页面）。存在 3 种 slab：
 
-slabs_full����ȫ����� slab
+slabs_full：完全分配的 slab
 
-slabs_partial�����ַ���� slab
+slabs_partial：部分分配的 slab
 
-slabs_free���� slab������û�ж��󱻷���
+slabs_free：空 slab，或者没有对象被分配
 
-ע�� slabs_free �б��е� slab �ǽ��л��գ�reaping������Ҫ��ѡ��������ͨ���˹��̣�slab ��ʹ�õ��ڴ汻���ظ�����ϵͳ�������û�ʹ�á�
+注意 slabs_free 列表中的 slab 是进行回收（reaping）的主要备选对象。正是通过此过程，slab 所使用的内存被返回给操作系统供其他用户使用。
 
-slab �б��е�ÿ�� slab ����һ���������ڴ�飨һ����������ҳ�������Ǳ����ֳ�һ����������Щ�����Ǵ��ض������н��з�����ͷŵĻ���Ԫ�ء�ע�� slab �� slab ���������в�������С���䵥λ����������Ҫ�� slab ������չ����Ҳ��������չ����Сֵ��ͨ����˵��ÿ�� slab ������Ϊ�������
+slab 列表中的每个 slab 都是一个连续的内存块（一个或多个连续页），它们被划分成一个个对象。这些对象是从特定缓存中进行分配和释放的基本元素。注意 slab 是 slab 分配器进行操作的最小分配单位，因此如果需要对 slab 进行扩展，这也就是所扩展的最小值。通常来说，每个 slab 被分配为多个对象。
 
-���ڶ����Ǵ� slab �н��з�����ͷŵģ���˵��� slab ������ slab �б�֮������ƶ������磬��һ�� slab �е����ж��󶼱�ʹ����ʱ���ʹ� slabs_partial �б����ƶ��� slabs_full �б��С���һ�� slab ��ȫ�����䲢���ж����ͷź󣬾ʹ� slabs_full �б����ƶ��� slabs_partial �б��С������ж��󶼱��ͷ�֮�󣬾ʹ� slabs_partial �б��ƶ��� slabs_free �б��С�
-ÿ��Slab���ײ�����һ��СС�������ǲ��õģ���Ϊ����ɫ����coloring area��������ɫ���Ĵ�СʹSlab�е�ÿ���������ʼ��ַ�������ٻ����еġ������У�cache line������С���ж��루80386��һ�����ٻ����д�СΪ16�ֽڣ�PentiumΪ32�ֽڣ�����ΪSlab����1��ҳ�����ҳ�棨���Ϊ32����ɣ���ˣ�ÿ��Slab���Ǵ�һ��ҳ��߽翪ʼ�ģ�����Ȼ�����ٻ���Ļ����ж��롣���ǣ�Slab�еĶ����С��ȷ����������ɫ����Ŀ�ľ��ǽ�Slab�е�һ���������ʼ��ַ�����Ƶ��뻺���ж����λ�á���Ϊһ�����������ж��Slab����ˣ�Ӧ�ð�ÿ���������еĸ���Slab��ɫ���Ĵ�С�������ųɲ�ͬ�Ĵ�С����������ʹ���ڲ�ͬ��Slab�У�����ͬһ���λ�õĶ����������ڸ��ٻ����е���ʼ��ַ�໥�����������Ϳ��Ը��Ƹ��ٻ���Ĵ�ȡЧ�ʡ�
+由于对象是从 slab 中进行分配和释放的，因此单个 slab 可以在 slab 列表之间进行移动。例如，当一个 slab 中的所有对象都被使用完时，就从 slabs_partial 列表中移动到 slabs_full 列表中。当一个 slab 完全被分配并且有对象被释放后，就从 slabs_full 列表中移动到 slabs_partial 列表中。当所有对象都被释放之后，就从 slabs_partial 列表移动到 slabs_free 列表中。
+每个Slab的首部都有一个小小的区域是不用的，称为“着色区（coloring area）”。着色区的大小使Slab中的每个对象的起始地址都按高速缓存中的”缓存行（cache line）”大小进行对齐（80386的一级高速缓存行大小为16字节，Pentium为32字节）。因为Slab是由1个页面或多个页面（最多为32）组成，因此，每个Slab都是从一个页面边界开始的，它自然按高速缓存的缓冲行对齐。但是，Slab中的对象大小不确定，设置着色区的目的就是将Slab中第一个对象的起始地址往后推到与缓冲行对齐的位置。因为一个缓冲区中有多个Slab，因此，应该把每个缓冲区中的各个Slab着色区的大小尽量安排成不同的大小，这样可以使得在不同的Slab中，处于同一相对位置的对象，让它们在高速缓存中的起始地址相互错开，这样就可以改善高速缓存的存取效率。
 
-ÿ��Slab�����һ�������Ժ�Ҳ�и�СС�ķ������ǲ��õģ����Ƕ���ɫ����С�Ĳ��������Сȡ������ɫ���Ĵ�С���Լ�Slab����ÿ���������Դ�С��������������ɫ�����ܺͶ���ͬһ�ֶ���ĸ���Slab�Ǹ�������
+每个Slab上最后一个对象以后也有个小小的废料区是不用的，这是对着色区大小的补偿，其大小取决于着色区的大小，以及Slab与其每个对象的相对大小。但该区域与着色区的总和对于同一种对象的各个Slab是个常数。
 
-ÿ������Ĵ�С���������������ݽṹ�Ĵ�С��ֻ�е����ݽṹ�Ĵ�С������ٻ����еĻ����ж���ʱ�������������ֽ�ʹ����롣���ԣ�һ��Slab�ϵ����ж������ʼ��ַ����Ȼ�ǰ����ٻ����еĻ����ж���ġ�
+每个对象的大小基本上是所需数据结构的大小。只有当数据结构的大小不与高速缓存中的缓冲行对齐时，才增加若干字节使其对齐。所以，一个Slab上的所有对象的起始地址都必然是按高速缓存中的缓冲行对齐的。
 
-�봫ͳ���ڴ����ģʽ��ȣ� slab ����������ṩ�˺ܶ��ŵ㡣���ȣ��ں�ͨ�������ڶ�С����ķ��䣬���ǻ���ϵͳ���������ڽ��������η��䡣slab ���������ͨ�������ƴ�С�Ķ�����л�����ṩ���ֹ��ܣ��Ӷ������˳�������Ƭ���⡣slab ��������֧��ͨ�ö���ĳ�ʼ�����Ӷ�������ΪͬһĿ����һ�������ظ����г�ʼ�������slab ������������֧��Ӳ������������ɫ����������ͬ�����еĶ���ռ����ͬ�Ļ����У��Ӷ���߻���������ʲ���ø��õ����ܡ�
+与传统的内存管理模式相比， slab 缓存分配器提供了很多优点。首先，内核通常依赖于对小对象的分配，它们会在系统生命周期内进行无数次分配。slab 缓存分配器通过对类似大小的对象进行缓存而提供这种功能，从而避免了常见的碎片问题。slab 分配器还支持通用对象的初始化，从而避免了为同一目而对一个对象重复进行初始化。最后，slab 分配器还可以支持硬件缓存对齐和着色，这允许不同缓存中的对象占用相同的缓存行，从而提高缓存的利用率并获得更好的性能。
 
-������ʼ��
+二：初始化
 
-����������slabϵͳ�ĳ�ʼ�������ر��鷳����Ϊ���ϵͳ�Ѿ���ȫ���ã��ں�û���ܵ������ر�����ơ�������ˣ�����slab�������Ľṹ���£�������һ�����뵰�����⡣Ϊ��ʼ��slab���ݽṹ���ں���Ҫ����ԶС��һ��ҳ���ڴ�飬��Щ���ʺ���kmalloc���䡣�����ǹؼ����ڣ�ֻ����slabϵͳ�Ѿ�����֮�󣬲���ʹ��kmalloc����ȷ�е�˵���������漰kmalloc��Per-CPU����ĳ�ʼ��������Щ�����ܳ�ʼ��֮ǰ��kmalloc���������������������ڴ�ռ䣬��kmalloc����Ҳ���ڳ�ʼ���Ĺ����У���������һ����������ɵĳ������ں˱������һЩ���ɡ��ں���ʹ��kmem_cache_init�������ڳ�ʼ��slab�������������ں˳�ʼ���׶�(start_kernel)�����ϵͳ����֮����á�kmem_cache_init������һ���ಽ��Ĺ��̣��𲽼���slab��������
+初看起来，slab系统的初始化不是特别麻烦，因为伙伴系统已经完全启用，内核没有受到其他特别的限制。尽管如此，由于slab分配器的结构所致，这里有一个鸡与蛋的问题。为初始化slab数据结构，内核需要若干远小于一整页的内存块，这些最适合由kmalloc分配。这里是关键所在：只有在slab系统已经启用之后，才能使用kmalloc。更确切的说，该问题涉及kmalloc的Per-CPU缓存的初始化。在这些缓存能初始化之前，kmalloc必须可以用来分配所需的内存空间，而kmalloc自身也处于初始化的过程中，所以这是一个不可能完成的场景，内核必须借助一些技巧。内核中使用kmem_cache_init函数用于初始化slab分配器。它在内核初始化阶段(start_kernel)、伙伴系统启用之后调用。kmem_cache_init采用了一个多步骤的过程，逐步激活slab分配器。
 
-kmem_cache_init���Է�Ϊ�����׶Σ�
+kmem_cache_init可以分为六个阶段：
 
-��һ���׶Σ��Ǹ���kmem_cache������cache_cache���ֶ�ֵ��
+第一个阶段：是根据kmem_cache来设置cache_cache的字段值；
 
-�ڶ����׶Σ������Ǵ���arraycache_init��Ӧ�ĸ��ٻ��棬ͬʱҲ�������kmem_cache_create�ĵ��ù����У����������ڱ���cache��kmem_cache��slab������ʼ����slab�еĸ�������;
+第二个阶段：首先是创建arraycache_init对应的高速缓存，同时也是在这个kmem_cache_create的调用过程中，创建了用于保存cache的kmem_cache的slab，并初始化了slab中的各个对象;
 
-�������׶Σ�����kmem_list3��Ӧ�ĸ��ٻ��棬������Ҫע���һ���ǣ����sizeof(arraycache_t)��sizeof(kmem_list3)�Ĵ�Сһ������ô�Ͳ���ʹ��kmem_cache_create��Ϊkmem_list3����cache�ˣ���Ϊ���������ȵĻ������߾Ϳ���ʹ��ͬһ��cache;
+第三个阶段：创建kmem_list3对应的高速缓存，在这里要注意的一点是，如果sizeof(arraycache_t)和sizeof(kmem_list3)的大小一样大，那么就不再使用kmem_cache_create来为kmem_list3创建cache了，因为如果两者相等的话，两者就可以使用同一个cache;
 
-���ĸ��׶Σ���������ʼ�����е�ͨ��cache��dma cache;
+第四个阶段：创建并初始化所有的通用cache和dma cache;
 
-������׶Σ���������arraycache_init���󣬷ֱ�ȡ��cache_cache�е�array�ֶκ�malloc_sizes[INDEX_AC].cs_cachep->array�ֶ�;
+第五个阶段：创建两个arraycache_init对象，分别取代cache_cache中的array字段和malloc_sizes[INDEX_AC].cs_cachep->array字段;
 
-�������׶Σ���������kmem_list3����ȡ��cache_cache�е�kmem_list3�ֶκ�malloc_sizes[INDEX_AC].cs_cachep->nodelist3�ֶ�.���һ������������������׶κ����еĳ�ʼ��������������ˡ�
+第六个阶段：创建两个kmem_list3对象，取代cache_cache中的kmem_list3字段和malloc_sizes[INDEX_AC].cs_cachep->nodelist3字段.如此一来，经过上面的六个阶段后，所有的初始化工作基本完成了。
 
-+++linux�̳߳ؼ��ڴ��++++++
-Linux��ͨ���̳߳صĴ�����ʹ��
-���ĸ�����һ��ͨ�õ��̳߳ؿ�ܣ��ÿ�ܽ����߳�ִ����ص���������˸߲�εĳ���ʹ֮������ִ�������޹ء�������̳߳ؾ��ж�̬�����ԣ����ܸ���ִ������������Զ������̳߳����̵߳����������µ�������Ǹ���һ����ʾ������ͨ����ʾ���������ǻᷢ�֣�ͨ�����̳߳ؿ��ִ�ж��߳������Ƕ�ô�ļ򵥡�
++++linux线程池及内存池++++++
+Linux下通用线程池的创建与使用
+本文给出了一个通用的线程池框架，该框架将与线程执行相关的任务进行了高层次的抽象，使之与具体的执行任务无关。另外该线程池具有动态伸缩性，它能根据执行任务的轻重自动调整线程池中线程的数量。文章的最后，我们给出一个简单示例程序，通过该示例程序，我们会发现，通过该线程池框架执行多线程任务是多么的简单。
  
-Ϊʲô��Ҫ�̳߳�
-Ŀǰ�Ĵ�������������������Web��������Email�������Լ����ݿ�������ȶ�����һ����ͬ�㣬���ǵ�λʱ���ڱ��봦����Ŀ�޴���������󣬵�����ʱ��ȴ��Խ϶̡�
-��ͳ���̷߳��������ǲ��õķ�����ģ������һ�����ܵ�����֮�󣬼�����һ���µ��̣߳��ɸ��߳�ִ����������ִ����Ϻ��߳��˳���������ǡ���ʱ��������ʱ���١��Ĳ��ԡ������봴��������ȣ������̵߳�ʱ���Ѿ��������̣���������ύ���̵߳�������ִ��ʱ��϶̣�����ִ�д�������Ƶ������ô�����������ڲ�ͣ�Ĵ����̣߳������̵߳�״̬��
-���ǽ���ͳ�����е��߳�ִ�й��̷�Ϊ�������̣�T1��T2��T3��
-T1���̴߳���ʱ��
-T2���߳�ִ��ʱ�䣬�����̵߳�ͬ����ʱ��
-T3���߳�����ʱ��
-��ô���ǿ��Կ������̱߳����Ŀ�����ռ�ı���Ϊ(T1+T3) / (T1+T2+T3)������߳�ִ�е�ʱ��̵ܶĻ�����ȿ�������ռ��20%-50%���ҡ��������ִ��ʱ���Ƶ���Ļ�����ʿ������ǲ��ɺ��Եġ�
-����֮�⣬�̳߳��ܹ����ٴ������̸߳�����ͨ���̳߳��������Ĳ����߳������Ͻ�ģ����ͬʱ���У����ͬʱ������ĿΪ2000����ô�����£�ϵͳ������Ҫ����200���̡߳������ⲻ��һ���ܴ����Ŀ������Ҳ�в��ֻ������ܴﲻ������Ҫ��
-����̳߳صĳ������������ڼ����̳߳ر��������Ŀ������̳߳ز���Ԥ�����ļ�������Ӧ�ó�������֮�󣬽���������һ���������߳�(N1)��������ж����С���Щ�̶߳��Ǵ���������Suspended��״̬��������CPU����ռ�ý�С���ڴ�ռ䡣���������󣬻����ѡ��һ�������̣߳�����������߳������С���N1���̶߳��ڴ�������󣬻�����Զ�����һ�����������̣߳����ڴ������������������ִ����Ϻ��߳�Ҳ���˳������Ǽ��������ڳ��еȴ���һ�ε����񡣵�ϵͳ�ȽϿ���ʱ���󲿷��̶߳�һֱ������ͣ״̬���̳߳��Զ�����һ�����̣߳�����ϵͳ��Դ��
-��������Ԥ�����������̳߳ؽ��̴߳��������ٱ����������Ŀ�����̯���˸�������������ϣ�ִ�д���Խ�࣬ÿ���������ֵ������̱߳���������ԽС�������������������Ҫ���ǽ�ȥ�߳�֮��ͬ���������Ŀ�����
+为什么需要线程池
+目前的大多数网络服务器，包括Web服务器、Email服务器以及数据库服务器等都具有一个共同点，就是单位时间内必须处理数目巨大的连接请求，但处理时间却相对较短。
+传统多线程方案中我们采用的服务器模型则是一旦接受到请求之后，即创建一个新的线程，由该线程执行任务。任务执行完毕后，线程退出，这就是是“即时创建，即时销毁”的策略。尽管与创建进程相比，创建线程的时间已经大大的缩短，但是如果提交给线程的任务是执行时间较短，而且执行次数极其频繁，那么服务器将处于不停的创建线程，销毁线程的状态。
+我们将传统方案中的线程执行过程分为三个过程：T1、T2、T3。
+T1：线程创建时间
+T2：线程执行时间，包括线程的同步等时间
+T3：线程销毁时间
+那么我们可以看出，线程本身的开销所占的比例为(T1+T3) / (T1+T2+T3)。如果线程执行的时间很短的话，这比开销可能占到20%-50%左右。如果任务执行时间很频繁的话，这笔开销将是不可忽略的。
+除此之外，线程池能够减少创建的线程个数。通常线程池所允许的并发线程是有上界的，如果同时案中，如果同时请求数目为2000，那么最坏情况下，系统可能需要产生200个线程。尽管这不是一个很大的数目，但是也有部分机器可能达不到这种要求。
+因此线程池的出现正是着眼于减少线程池本身带来的开销。线程池采用预创建的技术，在应用程序启动之后，将立即创建一定数量的线程(N1)，放入空闲队列中。这些线程都是处于阻塞（Suspended）状态，不消耗CPU，但占用较小的内存空间。当任务到来后，缓冲池选择一个空闲线程，把任务传入此线程中运行。当N1个线程都在处理任务后，缓冲池自动创建一定数量的新线程，用于处理更多的任务。在任务执行完毕后线程也不退出，而是继续保持在池中等待下一次的任务。当系统比较空闲时，大部分线程都一直处于暂停状态，线程池自动销毁一部分线程，回收系统资源。
+基于这种预创建技术，线程池将线程创建和销毁本身所带来的开销分摊到了各个具体的任务上，执行次数越多，每个任务所分担到的线程本身开销则越小，不过我们另外可能需要考虑进去线程之间同步所带来的开销。
  
-�����̳߳ؿ��
-һ���̳߳ض�����߱����漸����ɲ��֣�
-�̳߳ع�����:���ڴ����������̳߳�
-�����߳�: �̳߳���ʵ��ִ�е��߳�
-����ӿ�: �����̳߳ش���������������֧��������������������ǽ��߳�ִ�е��������������γ�����ӿڣ��Ӷ��ǵ��̳߳������������޹ء�
-�������:�̳߳صĸ�����嵽ʵ��������Ƕ��У�����֮������ݽṹ�����б���ִ���̡߳�
-����ʵ�ֵ�ͨ���̳߳ؿ���������Ҫ�������CThreadManage��CThreadPool��CThread��CJob��CWorkerThread������֮�����л������߳�ͬ��ʹ�õ���CThreadMutex��CCondition��
-CJob�����е�����Ļ��࣬���ṩһ���ӿ�Run�����е������඼����Ӹ���̳У�ͬʱʵ��Run�������÷�����ʵ�־���������߼���
-CThread��Linux���̵߳İ�װ�����װ��Linux�߳����ʹ�õ����Ժͷ�������Ҳ��һ�������࣬�������߳���Ļ��࣬����һ���ӿ�Run��
-CWorkerThread��ʵ�ʱ����Ⱥ�ִ�е��߳��࣬���CThread�̳ж�����ʵ����CThread�е�Run������
-CThreadPool���̳߳��࣬�为�𱣴��̣߳��ͷ��߳��Լ������̡߳�
-CThreadManage���̳߳����û���ֱ�ӽӿڣ����������ڲ��ľ���ʵ�֡�
-CThreadMutex�����߳�֮��Ļ��⡣
-CCondition�������������ķ�װ�������߳�֮���ͬ����
+构建线程池框架
+一般线程池都必须具备下面几个组成部分：
+线程池管理器:用于创建并管理线程池
+工作线程: 线程池中实际执行的线程
+任务接口: 尽管线程池大多数情况下是用来支持网络服务器，但是我们将线程执行的任务抽象出来，形成任务接口，从而是的线程池与具体的任务无关。
+任务队列:线程池的概念具体到实现则可能是队列，链表之类的数据结构，其中保存执行线程。
+我们实现的通用线程池框架由五个重要部分组成CThreadManage，CThreadPool，CThread，CJob，CWorkerThread，除此之外框架中还包括线程同步使用的类CThreadMutex和CCondition。
+CJob是所有的任务的基类，其提供一个接口Run，所有的任务类都必须从该类继承，同时实现Run方法。该方法中实现具体的任务逻辑。
+CThread是Linux中线程的包装，其封装了Linux线程最经常使用的属性和方法，它也是一个抽象类，是所有线程类的基类，具有一个接口Run。
+CWorkerThread是实际被调度和执行的线程类，其从CThread继承而来，实现了CThread中的Run方法。
+CThreadPool是线程池类，其负责保存线程，释放线程以及调度线程。
+CThreadManage是线程池与用户的直接接口，其屏蔽了内部的具体实现。
+CThreadMutex用于线程之间的互斥。
+CCondition则是条件变量的封装，用于线程之间的同步。
 
 
-++++��̬++++
-��̬��������ʱ��ͬһʵ������ͬһ��Ϣ������ͬ��Ӧ
+++++多态++++
+多态就是运行时向同一实例发送同一消息产生不同响应
 
 
-++++Linux core�ļ�����+++++
-1. core�ļ��ļ򵥽���
-��һ���������ʱ����һ�����ָ��Ŀ¼������һ��core�ļ���core�ļ�������һ���ڴ�ӳ��(ͬʱ���ϵ�����Ϣ)����Ҫ���������Եġ� 
+++++Linux core文件介绍+++++
+1. core文件的简单介绍
+在一个程序崩溃时，它一般会在指定目录下生成一个core文件。core文件仅仅是一个内存映象(同时加上调试信息)，主要是用来调试的。 
 
-2. ������ر�core�ļ�������
-��������������ֹϵͳ����core�ļ�:
+2. 开启或关闭core文件的生成
+用以下命令来阻止系统生成core文件:
 ulimit -c 0
-�����������Լ������core�ļ���ѡ���Ƿ��:
+下面的命令可以检查生成core文件的选项是否打开:
 ulimit -a
-�������ʾ���е��û����ƣ�����ѡ��-a������all���� 
+该命令将显示所有的用户定制，其中选项-a代表“all”。 
 
-Ҳ�����޸�ϵͳ�ļ�������coreѡ��
-��/etc/profileͨ����������һ�仰����ֹ����core�ļ���ͨ�����������Ǻ�����:
+也可以修改系统文件来调整core选项
+在/etc/profile通常会有这样一句话来禁止产生core文件，通常这种设置是合理的:
 # No core files by default
 ulimit -S -c 0 > /dev/null 2>&1
-�����ڿ�����������ʱΪ�˵������⣬������Ҫ���ض����û������´�core�ļ�����������
-���û���~/.bash_profile�����ulimit -c unlimited�����ض����û����Բ���core�ļ�
-���ulimit -c 0 ��Ҳ�ǽ�ֹ����core�ļ�����ulimit -c 1024�����Ʋ�����core�ļ��Ĵ�С���ܳ���1024kb 
+但是在开发过程中有时为了调试问题，还是需要在特定的用户环境下打开core文件产生的设置
+在用户的~/.bash_profile里加上ulimit -c unlimited来让特定的用户可以产生core文件
+如果ulimit -c 0 则也是禁止产生core文件，而ulimit -c 1024则限制产生的core文件的大小不能超过1024kb 
 
-3. ����Core Dump�ĺ���ת���ļ�Ŀ¼����������
-/proc/sys/kernel/core_uses_pid���Կ��Ʋ�����core�ļ����ļ������Ƿ�����pid��Ϊ��չ������������ļ�����Ϊ1������Ϊ0
-/proc/sys/kernel/core_pattern�������ø�ʽ����core�ļ�����λ�û��ļ���������ԭ���ļ�������core-%e
-���������޸�:
+3. 设置Core Dump的核心转储文件目录和命名规则
+/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0
+/proc/sys/kernel/core_pattern可以设置格式化的core文件保存位置或文件名，比如原来文件内容是core-%e
+可以这样修改:
 echo "/corefile/core-%e-%p-%t" > /proc/sys/kernel/core_pattern
-���������������core�ļ����ŵ�/corefileĿ¼�£��������ļ���Ϊcore-������-pid-ʱ���
-�����ǲ����б�:
-    %p - insert pid into filename ����pid
-    %u - insert current uid into filename ���ӵ�ǰuid
-    %g - insert current gid into filename ���ӵ�ǰgid
-    %s - insert signal that caused the coredump into the filename ���ӵ��²���core���ź�
-    %t - insert UNIX time that the coredump occurred into filename ����core�ļ�����ʱ��unixʱ��
-    %h - insert hostname where the coredump happened into filename ����������
-    %e - insert coredumping executable name into filename ���������� 
+将会控制所产生的core文件会存放到/corefile目录下，产生的文件名为core-命令名-pid-时间戳
+以下是参数列表:
+    %p - insert pid into filename 添加pid
+    %u - insert current uid into filename 添加当前uid
+    %g - insert current gid into filename 添加当前gid
+    %s - insert signal that caused the coredump into the filename 添加导致产生core的信号
+    %t - insert UNIX time that the coredump occurred into filename 添加core文件生成时的unix时间
+    %h - insert hostname where the coredump happened into filename 添加主机名
+    %e - insert coredumping executable name into filename 添加命令名 
 
-4. ʹ��core�ļ�
-��core�ļ�����Ŀ¼�¼���:
+4. 使用core文件
+在core文件所在目录下键入:
 gdb -c core
-��������GNU�ĵ�������������core�ļ������һ���ʾ���ɴ�core�ļ��ĳ���������ֹ�˳�����źŵȵ�
-������Ѿ�֪������ʲô�������ɴ�core�ļ��ģ�����MyServer����������core.12345����ô�ô�ָ�����:
+它会启动GNU的调试器，来调试core文件，并且会显示生成此core文件的程序名，中止此程序的信号等等
+如果你已经知道是由什么程序生成此core文件的，比如MyServer崩溃了生成core.12345，那么用此指令调试:
 gdb -c core MyServer
-������ô��͸�ȥѧϰgdb��ʹ���� 
+以下怎么办就该去学习gdb的使用了 
 
-5. һ��С���������Բ���core�ļ�
-ֱ������ָ��:
+5. 一个小方法来测试产生core文件
+直接输入指令:
 kill -s SIGSEGV $$ 
 
-6. Ϊ����ʱ����Down�ˣ�ȴû���� Core�ļ��� 
+6. 为何有时程序Down了，却没生成 Core文件。 
 
-Linux�£���һЩ���ã�������resources available to the shell and to processes�� ����ʹ�� 
+Linux下，有一些设置，标明了resources available to the shell and to processes。 可以使用 
 
-#ulimit -a ������Щ���á� (ulimit��bash built-in Command) 
+#ulimit -a 来看这些设置。 (ulimit是bash built-in Command) 
 
               -a     All current limits are reported
               -c     The maximum size of core files created
-              -d     The maximum size of a process’s data segment
+              -d     The maximum size of a process鈥檚 data segment
               -e     The maximum scheduling priority ("nice")
               -f     The maximum size of files written by the shell and its children
               -i     The maximum number of pending signals
@@ -802,14 +802,86 @@ Linux�£���һЩ���ã�������resources available to the shell and to processes�� �
               -v     The maximum amount of virtual memory available to the shell
               -x     The maximum number of file locks 
 
-��������Կ�������� -c����ʾ��core file size          (blocks, -c) 
+从这里可以看出，如果 -c是显示：core file size          (blocks, -c) 
 
-������ֵΪ0�����޷�����core�ļ������Կ���ʹ�ã� 
+如果这个值为0，则无法生成core文件。所以可以使用： 
 
-#ulimit -c 1024 ���� #ulimit -c unlimited ��ʹ�� core�ļ��� 
+#ulimit -c 1024 或者 #ulimit -c unlimited 来使能 core文件。 
 
-����������ʱ����Core �ļ��������ʾSegmentation fault (core dumped)�� 
+如果程序出错时生成Core 文件，则会显示Segmentation fault (core dumped)。 
 
-7. Core Dump�ĺ���ת���ļ�Ŀ¼����������:
-/proc/sys/kernel/core_uses_pid���Կ��Ʋ�����core�ļ����ļ������Ƿ�����pid��Ϊ��չ������������ļ�����Ϊ1������Ϊ0 
+7. Core Dump的核心转储文件目录和命名规则:
+/proc/sys/kernel/core_uses_pid可以控制产生的core文件的文件名中是否添加pid作为扩展，如果添加则文件内容为1，否则为0 
 
+
++++CPU相关+++++
+CPU的指令集是什么
+
+指令集是底层软件与硬件交互的语言。一台计算机的全部指令称为该计算机的指令集。
+
+现在的常见的指令集有：
+
+MIPS指令集
+
+ARM指令集
+
+Intel x86指令集
+
+ 
+
+指令集有两种形式，一种是人类可以编程书写的形式（也就是平时所说的汇编语言），另一种是计算机所能识别的形式（就是汇编语言对应计算机的机器语言）。
+
+下面是一个典型的MIPS汇编语言：
+
+add s1,
+
+s2,$3
+
+汇编语言和高级语言不一样，变量不能任意指定，它只能操作寄存器中的变量，寄存器的个数在计算机中是有限制的，一般是32个。不同的指令集按照寄存器的顺序给他们排列编号0,1,2... 并且用号来表示寄存器。比如MIPS是使用
+s0-s7表示寄存器16−23，
+
+t0-$t7表示寄存器8-15。
+寄存器的长度
+
+寄存器一个字的长度有32和64，由于寄存器是CPU一次运算执行的变量单元，因此我们说的32位机器和64位机器最本质的区别就在于寄存器字的长度是32还是64。
+
+寄存器中存的可能是值，也可能是一个地址。
+什么是程序计数器（PC）
+
+储存当前程序运行指令的寄存器就是程序计数器。
+指令集的寻址方式
+
+其实就是说如何根据寄存器找到一个值。比如MIPS的PC相对寻址，就是说要获取的值的地址是PC（程序计数器）的值与指令中常数的和。
+CPU架构
+
+CPU架构指的是全套CPU的机制，包括用什么CPU指令集，用什么寄存器，有什么寻址方式。一般一种指令集对应一种CPU架构。
+
+ARM指令集
+
+ARM指令集是在嵌入式设备中最常用到的指令集，像苹果和三星的移动设备都是使用这个ARM 架构。
+
+Intel X86指令集
+
+这个是PC中最常用到的指令集了，比如平常说的Intel 8086是第一款寄存器为16位长的体系结构。Intel 80386是第一款寄存器为32位长的指令集。
+
+AMD64 指令集
+
+AMD64是64位的。由AMD公司开发。更多用于服务器上。其后也为Intel所采用，称为Intel X86-64
+具体产品
+
+举具体产品的例子，iphone4使用的cpu是苹果A4处理器，iphone5使用的是苹果A5处理器，这两个实质上都是ARM架构。三星应用在智能手机和平板电脑上的Exynos处理器也是基于ARM架构的，由自家公司研发改造的。
+
+Intel公司生产的所有CPU都兼容x86指令集，只不过后来它开发出了很多扩展指令集，比如酷睿系列i3/5/7就支持Intel avx扩展指令集，MMX（多媒体扩展指令集）。
+
+比如戴尔的Inspiron笔记本电脑系列多使用AMD的CPU架构。
+go中的5g/6g/8g
+
+go编译器支持三种指令集：
+
+amd64（即Intel x86-64或AMD64）: 6g，最成熟的实现
+
+386（即Intel X86-32） : 8g，是amd64到386机器的完美移植
+
+arm： 5g，所以说go本质是支持在移动终端的开发
+
+5g, 5l, 5c, 5a 分别表示 arm的go编译器，链接器，c编译器，汇编编译器
