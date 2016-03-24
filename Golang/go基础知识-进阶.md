@@ -2759,7 +2759,7 @@ output==>
 3.9222244s
 4.405252s
 </pre>
-有比如下面的例子：
+再比如下面的例子：
 <pre>
 package main
 import (
