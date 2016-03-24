@@ -2582,7 +2582,48 @@ func main() {
 这些技术可以在程序员知道内存会被复用而不需要垃圾收集器参与时用来复用内存。它可以显著的减少程序需要内存的大小。并不仅限于字节数组。任何Go类型都可以用类似的行为进行复用。
 ###Go并发模式：管道和显式取消
 Go并发原语使得构建流式数据管道，高效利用I/O和多核变得简单。
+管道的阶段：
 
+- 第一步：gen函数,是一个将数字列表转换到一个channel中的函数。Gen函数启动了一个goroutine，将数字发送到channel，并在所有数字都发送完后关闭channel；
+<pre>
+func gen(nums ...int) <-chan int {
+    out := make(chan int)
+    go func() {
+        for _, n := range nums {
+            out <- n
+        }
+        close(out)
+    }()
+    return out
+}
+</pre>
+
+- 第二步：sq，从上面的channel接收数字，并返回一个包含所有收到数字的平方的channel。在上游channel关闭后，这个阶段已经往下游发送完所有的结果，然后关闭输出channel：
+<pre>
+func sq(in <-chan int) <-chan int {
+    out := make(chan int)
+    go func() {
+        for n := range in {
+            out <- n * n
+        }
+        close(out)
+    }()
+    return out
+}
+</pre>
+
+- 第三步：main函数建立这个管道，并执行第一个阶段，从第二个阶段接收结果并逐个打印，直到channel被关闭。
+<pre>
+func main() {
+    // Set up the pipeline.
+    c := gen(2, 3)
+    out := sq(c)
+ 
+    // Consume the output.
+    fmt.Println(<-out) // 4
+    fmt.Println(<-out) // 9
+}
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
