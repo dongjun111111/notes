@@ -2720,7 +2720,7 @@ func SingleHost(handler http.Handler, allowedHost string) http.Handler {
 
 实际上，标准库这两种方法都用了。StripPrefix 是一个返回HandlerFunc的函数。虽然TimeoutHandler也是一个函数，但它返回了处理请求的自定义的类型。
 
-总结
+>>>总结
 
 这篇文章的目的是吸引Go用户对中间件概念的注意以及展示使用Go写中间件的一些基本组件。尽管Go是一个相对年轻的开发语言，Go拥有非常漂亮的标准HTTP接口。这也是用Go写中间件是个非常简单甚至快乐的过程的原因之一。
 ###条件变量
