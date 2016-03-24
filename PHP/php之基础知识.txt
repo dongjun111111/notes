@@ -3215,3 +3215,9 @@ __autoload() 是专门为 类的不存在 而设计的！！！很多框架利�
 
 ++++php获取某网站的头文件信息++++
 print_r(get_headers("http://www.sina.com.cn"));
+
+
++++++php获取完整的网址+++++
+$url='http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
+echo $url;
+结果是：http://think.myjiang.com/test.php
