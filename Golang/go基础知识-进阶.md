@@ -2879,6 +2879,32 @@ content, err := ioutil.ReadFile(filepath)
         return nil, err
 }
 </pre>
+###
+<pre>
+package main
+import(
+    "reflect"
+)
+type A struct {
+}
+func (self A)Run() {
+    c := reflect.ValueOf(self)
+    method := c.MethodByName("Test")
+    println(method.IsValid())
+}
+type B struct {
+    A
+}
+func (self B)Test(s string){
+    println("b")
+}
+func main() {
+    b := new(B)
+    b.Run()
+}
+output==>
+false
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
