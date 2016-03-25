@@ -3023,14 +3023,13 @@ output==>
 2016-03-25 22:36:55.3701881 +0800 +0800
 2016年03月25日
 </pre>
+输出标准时间
 <pre>
 package main
-
 import (
     "fmt"
     "time"
 )
-
 func main() {
     //格式化字符串为时间
     test, _ := time.Parse("2006-01-02", "2020-03-21")
@@ -3045,6 +3044,22 @@ func main() {
 output==>
 2020-03-21 00:15:00 +0000 UTC
 2020-03-21 00:15:00
+</pre>
+输出星期
+<pre>
+package main
+import(
+    "fmt"
+    "time"
+)
+func main() {
+    //时间戳
+    t := time.Now()
+    fmt.Println(t.Weekday().String())
+ 
+}
+output==>
+Friday
 </pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
