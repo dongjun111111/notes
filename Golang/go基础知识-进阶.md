@@ -2957,6 +2957,35 @@ output==>
 </pre>
 http.Client和http.NewRequest来模拟请求:
 <pre>
+package main
+ 
+import (
+    "net/http"
+    "io/ioutil"
+    "fmt"
+)
+ 
+func main() {
+    client := &http.Client{}
+    reqest, _ := http.NewRequest("GET", "http://www.baidu.com", nil)
+     
+    reqest.Header.Set("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+    reqest.Header.Set("Accept-Charset","GBK,utf-8;q=0.7,*;q=0.3")
+    reqest.Header.Set("Accept-Encoding","gzip,deflate,sdch")
+    reqest.Header.Set("Accept-Language","zh-CN,zh;q=0.8")
+    reqest.Header.Set("Cache-Control","max-age=0")
+    reqest.Header.Set("Connection","keep-alive")
+     
+    response,_ := client.Do(reqest)
+    if response.StatusCode == 200 {
+        body, _ := ioutil.ReadAll(response.Body)
+        bodystr := string(body);
+        fmt.Println(bodystr)
+    }
+}
+output==>
+�
+...
 </pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
