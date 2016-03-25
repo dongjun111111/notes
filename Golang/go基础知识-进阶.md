@@ -2879,7 +2879,7 @@ content, err := ioutil.ReadFile(filepath)
         return nil, err
 }
 </pre>
-###
+###继承
 <pre>
 package main
 import(
