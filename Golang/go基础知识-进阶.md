@@ -3061,6 +3061,38 @@ func main() {
 output==>
 Friday
 </pre>
+下面是单核情况下4个goroutine并发
+<pre>
+package main
+import (
+	"fmt"
+	"time"
+)
+var c chan int
+func ready(w string, sec time.Duration){
+	time.Sleep(sec * 1e9)
+	fmt.Println(w,"is ready!")
+	c <- 1
+}
+func main(){
+	c = make(chan int)
+	go ready("Tee",1)
+	go ready("Coffee",1)
+	go ready("Kele",1)
+	go ready("Kele",1)
+	fmt.Println("I am waiting")
+	<- c
+	<- c
+	<- c
+	<- c
+}
+output==>
+I am waiting
+Tee is ready!
+Kele is ready!
+Kele is ready!
+Coffee is ready!
+</pre>
 ###条件变量
 在Go语言中，sync.Cond类型代表了条件变量。与互斥锁和读写锁不同，简单的声明无法创建出一个可用的条件变量。为了得到这样一个条件变量，我们需要用到sync.NewCond函数。该函数的声明如下：
 <pre>
