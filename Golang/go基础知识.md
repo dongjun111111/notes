@@ -542,6 +542,30 @@ func main (){
 Output==>
 map[k1:7 k2:13]
 </pre>
+<pre>
+package main
+ 
+import(
+    "fmt"
+)
+ 
+func main() {
+    m := map[string]string{"key1":"val1"}
+    fmt.Println(m)
+    m["key2"] = "val2"
+    fmt.Println(m)
+    p := m["key1"]
+    fmt.Println(p)
+    delete(m, "key1")
+    fmt.Println(m)
+ 
+}
+output==>
+map[key1:val1]
+map[key1:val1 key2:val2]
+val1
+map[key2:val2]
+</pre>
 map声明。创建。赋值。使用的实例：
 <pre>
 package main 
