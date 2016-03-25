@@ -3093,7 +3093,7 @@ Kele is ready!
 Kele is ready!
 Coffee is ready!
 </pre>
-###理解Golang中的：panic，recover
+###理解Golang中的panic、recover
 Panic和Recover我们可以将他们看成是JAVA中的throw和catch.
 <pre>
 package main
