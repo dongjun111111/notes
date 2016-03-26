@@ -3225,4 +3225,38 @@ broadcast
 38
 39
 </pre>
-
+在一个线程等待另一个线程这个场景里，条件变量和channel两种方式的区别。
+使用sync.Cond
+<pre>
+package main
+//使用sync.Cond
+import (
+	"fmt"
+	"sync"
+)
+func main(){
+	cv := sync.NewCond(new(sync.Mutex))
+	done := false
+	go func(){
+		cv.L.Lock()
+		done = true
+		for i:=0;i< 5;i++{
+			fmt.Println("I am doing something")
+		}
+		cv.Signal()
+		cv.L.Unlock()
+	}()
+	//等待事情结束
+	cv.L.Lock()
+	for !done {
+		cv.Wait()
+	}
+	cv.L.Unlock() //事情已经结束
+}
+output==>
+I am doing something
+I am doing something
+I am doing something
+I am doing something
+I am doing something
+</pre>
