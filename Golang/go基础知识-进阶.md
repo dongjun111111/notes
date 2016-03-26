@@ -3636,7 +3636,7 @@ func twoprint() {
 }
 </pre>
 上面的代码虽然调用两次doprint()，但实际上setup只会执行一次，并且并发的once.Do(setup)都会等待setup返回后再继续执行。
-###Golang之Groupcache
+###初识Golang之Groupcache
 Groupcache是使用Go语言编写的缓存及缓存过滤库，作为memcached许多场景下的替代版本。同时，它也基于memcached进行了性能提升。对比老版本memcached，groupcache去掉了缓存有效期及缓存回收机制，随之而来的是通过自动备份来均衡负载。
 
 首先，groupcache与memcached的相似之处：通过key分片，并且通过key来查询响应的peer。
@@ -3663,6 +3663,6 @@ Groupcache是使用Go语言编写的缓存及缓存过滤库，作为memcached�
 
 3.  首先确定key “fool”是否归属自己N个机器集合的peer中，如果是，就直接加载。如果有其它的调用者介入（通过相同的进程或者是peer的RPC请求，这些请求将会被阻塞，而处理结束后，他们将直接获得相同的结果）。如果不是，将key的所有者RPC到相应的peer。如果RPC失败，那么直接在本地加载（仍然通过备份来应对负载）。
 
-采用情况
+使用情况
 
 groupcache已经在dl.Google.com、Blogger、Google Code、Google Fiber、Google生产监视系统等项目中投入使用。
