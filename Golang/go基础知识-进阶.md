@@ -3260,3 +3260,28 @@ I am doing something
 I am doing something
 I am doing something
 </pre>
+使用channel
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	done :=make(chan struct{})
+	go func(){
+		for i:=0;i<5;i++{
+			fmt.Println("I am doing something")
+		}
+		close(done)
+	}()
+	<- done
+	//事情已经结束
+}
+output==>
+I am doing something
+I am doing something
+I am doing something
+I am doing something
+I am doing something
+</pre>
