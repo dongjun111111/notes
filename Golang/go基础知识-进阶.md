@@ -3366,3 +3366,82 @@ Go语言提供的字典类型并不是并发安全的。因此，我们需要使
 	TailMap(fromKey interface{}) OrderedMap
 	}
 </pre>
+有了GenericMap接口类型之后，我们的ConcurrentMap接口类型的声明就相当简单了。由于后者没有任何特殊的行为，所以我们只要简单地将前者嵌入到后者的声明中即可:
+<pre>
+type ConcurrentMap interface {
+	GenericMap
+}
+</pre>
+下面我们来编写该接口类型的实现类型。我们依然使用一个结构体类型来充当，并把它命名为myConcurrentMap。myConcurrentMap类型的基本结构如下：
+<pre>
+type myConcurrentMap struct {
+    m     map[interface{}]interface{}
+	keyType reflect.Type
+	elemType reflect.Type
+	rwmutex sync.RWMutex
+}
+</pre>
+有了编写myOrderedMap类型（还记得吗？它的指针类型是OrderedMap的实现类型）的经验，写出myConcurrentMap类型的基本结构也是一件比较容易的事情。可以看到，在基本需要之外，我们只为myConcurrentMap类型加入了一个代表了读写锁的rwmutex字段。此外，我们需要为myConcurrentMap类型添加的那些指针方法的实现代码实际上也可以以myOrderedMap类型中的相应方法为蓝本。不过，在实现前者的过程中要注意合理运用同步方法以保证它们的并发安全性。下面，我们就开始编写它们。
+
+首先，我们来看Put、Remove和Clear这几个方法。它们都属于写操作，都会改变myConcurrentMap类型的m字段的值。
+
+方法Put的功能是向myConcurrentMap类型值添加一个键值对。那么，我们在这个操作的前后一定要分别锁定和解锁rwmutex的写锁。Put方法的实现如下：
+<pre>
+func (cmap *myConcurrentMap) Put(key interface{}, elem interface{}) (interface{}, bool) {
+	if !cmap.isAcceptablePair(key, elem) {
+	return nil, false
+	}
+	cmap.rwmutex.Lock()
+	defer cmap.rwmutex.Unlock()
+	oldElem := cmap.m[key]
+	cmap.m[key] = elem
+	return oldElem, true
+}
+</pre>
+该实现中的isAcceptablePair方法的功能是检查参数值key和elem是否均不为nil且它们的类型是否均与当前值允许的键类型和元素类型一致。在通过该检查之后，我们就需要对rwmutex进行锁定了。相应的，我们使用defer语句来保证对它的及时解锁。与此类似，我们在Remove和Clear方法的实现中也应该加入相同的操作。
+
+与这些代表着写操作的方法相对应的，是代表读操作的方法。在ConcurrentMap接口类型中，此类方法有Get、Len、Contains、Keys、Elems和ToMap。我们需要分别在这些方法的实现中加入对rwmutex的读锁的锁定和解锁操作。以Get方法为例，我们应该这样来实现它：
+<pre>
+func (cmap *myConcurrentMap) Get(key interface{}) interface{} {
+	cmap.rwmutex.RLock()
+	defer cmap.rwmutex.RUnlock()
+	return cmap.m[key]
+}
+</pre>
+这里有两点需要特别注意：<br>
+我们在使用写锁的时候，要注意方法间的调用关系。比如，一个代表写操作的方法中调用了另一个代表写操作的方法。显然，我们在这两个方法中都会用到读写锁中的写锁。但如果使用不当，我们就会使前者被永远锁住。当然，对于代表写操作的方法调用代表读操作的方法的这种情况来说，也会是这样。请看下面的示例：
+<pre>
+func (cmap *myConcurrentMap) Remove(key interface{}) interface{} {
+	cmap.rwmutex.Lock() 
+	defer cmap.rwmutex.Unlock() 
+	oldElem := cmap.Get()
+	delete(cmap.m, key)
+	return oldElem 
+}
+</pre>
+可以看到，我们在Remove方法中调用了Get方法。并且，在这个调用之前，我们已经锁定了rwmutex的写锁。然而，由前面的展示可知，我们在Get方法的开始处对rwmutex的读锁进行了锁定。由于这两个锁定操作之间的互斥性，所以我们一旦调用这个Remove方法就会使当前Goroutine永远陷入阻塞。更严重的是，在这之后，其他Goroutine在调用该*myConcurrentMap类型值的一些方法（涉及到其中的rwmutex字段的读锁或写锁）的时候也会立即被阻塞住。
+
+我们应该避免这种情况的方式。这里有两种解决方案。第一种解决方案是，把Remove方法中的oldElem := cmap.Get()语句与在它前面的那两条语句的位置互换，即变为：
+<pre>
+	oldElem := cmap.Get() 
+	cmap.rwmutex.Lock()
+	defer cmap.rwmutex.Unlock()
+</pre>
+这样可以保证在解锁读锁之后才会去锁定写锁。相比之下，第二种解决方案更加彻底一些，即：消除掉方法间的调用。也就是说，我们需要把oldElem := cmap.Get()语句替换掉。在Get方法中，体现其功能的语句是oldElem := cmap.m[key]。因此，我们把后者作为前者的替代品。若如此，那么我们必须保证该语句出现在对写锁的锁定操作之后。这样，我们才能依然确保其在锁的保护之下。实际上，通过这样的修改，我们升级了Remove方法中的被用来保护从m字段中获取对应元素值的这一操作的锁（由读锁升级至写锁）。
+
+对于rwmutex字段的读锁来说，虽然锁定它的操作之间不是互斥的，但是这些操作与相应的写锁的锁定操作之间却是互斥的。我们在上一条注意事项中已经说明了这一点。因此，为了最小化对写操作的性能的影响，我们应该在锁定读锁之后尽快的对其进行解锁。也就是说，我们要在相关的方法中尽量减少持有读锁的时间。这需要我们综合的考量。
+
+依据前面的示例和注意事项说明，读者可以试着实现Remove、Clear、Len、Contains、Keys、Elems和ToMap方法。它们实现起来并不困难。注意，我们想让*myConcurrentMap类型成为ConcurrentMap接口类型的实现类型。因此，这些方法都必须是myConcurrentMap类型的指针方法。这包括马上要提及的那两个方法。
+
+方法KeyType和ElemType的实现极其简单。我们可以直接分别返回myConcurrentMap类型的keyType字段和elemType字段的值。这两个字段的值应该是在myConcurrentMap类型值的使用方初始化它的时候给出的。
+
+按照惯例，我们理应提供一个可以方便的创建和初始化并发安全的字典值的函数。我们把它命名为NewConcurrentMap，其实现如下：
+<pre>
+func NewConcurrentMap(keyType, elemType reflect.Type) ConcurrentMap {
+	return &amp;amp;myConcurrentMap{
+	keyType: keyType,
+	elemType: elemType,
+	m:       make(map[interface{}]interface{})}
+}
+</pre>
+这个函数并没有什么特别之处。由于myConcurrentMap类型的rwmutex字段并不需要额外的初始化，所以它并没有出现在该函数中的那个复合字面量中。此外，为了遵循面向接口编程的原则，我们把该函数的结果的类型声明为了ConcurrentMap，而不是它的实现类型*myConcurrentMap。如果将来我们编写出了另一个ConcurrentMap接口类型的实现类型，那么就应该考虑调整该函数的名称。比如变更为NewDefaultConcurrentMap，或者其他。
