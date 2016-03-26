@@ -3285,3 +3285,4 @@ I am doing something
 I am doing something
 I am doing something
 </pre>
+对于很多情况下，我们既可以使用锁机制，也可以使用 Channel 来实现同一个目标，然而实际针对某个特定问题时，可能使用 Channel 会更加方便，但另外一些问题，使用锁机制会更加方便。Channel 和锁机制在 golang 中不是替代和被替代的关系,而是根据实际情况选择最方便的那一个。Use whichever is most expressive and/or most simple.
