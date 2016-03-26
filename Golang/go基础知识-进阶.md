@@ -3263,7 +3263,6 @@ I am doing something
 使用channel
 <pre>
 package main
-
 import (
 	"fmt"
 )
