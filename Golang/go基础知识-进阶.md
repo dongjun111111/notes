@@ -3316,3 +3316,4 @@ output==>
 New Value
 map[2:New Value]
 </pre>
+###Golang构造一个并发安全的字典/Map类型
