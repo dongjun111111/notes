@@ -3152,7 +3152,6 @@ cond锁定期唤醒锁。cond的主要作用就是获取锁之后，wait()方法
 案例：
 <pre>
 package main
-
 import (
         "fmt"
         "sync"
