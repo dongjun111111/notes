@@ -3445,3 +3445,134 @@ func NewConcurrentMap(keyType, elemType reflect.Type) ConcurrentMap {
 }
 </pre>
 这个函数并没有什么特别之处。由于myConcurrentMap类型的rwmutex字段并不需要额外的初始化，所以它并没有出现在该函数中的那个复合字面量中。此外，为了遵循面向接口编程的原则，我们把该函数的结果的类型声明为了ConcurrentMap，而不是它的实现类型*myConcurrentMap。如果将来我们编写出了另一个ConcurrentMap接口类型的实现类型，那么就应该考虑调整该函数的名称。比如变更为NewDefaultConcurrentMap，或者其他。
+###Go语言内存模型
+####名词定义
+执行体 - Go里的Goroutine或Java中的Thread
+####背景介绍
+内存模型的目的是为了定义清楚变量的读写在不同执行体里的可见性。理解内存模型在并发编程中非常重要，因为代码的执行顺序和书写的逻辑顺序并不会完全一致，甚至在编译期间编译器也有可能重排代码以最优化CPU执行, 另外还因为有CPU缓存的存在，内存的数据不一定会及时更新，这样对内存中的同一个变量读和写也不一定和期望一样。
+
+和Java的内存模型规范类似，Go语言也有一个内存模型，相对JMM来说，Go的内存模型比较简单，Go的并发模型是基于CSP（Communicating Sequential Process）的，不同的Goroutine通过一种叫Channel的数据结构来通信；Java的并发模型则基于多线程和共享内存，有较多的概念（violatie, lock, final, construct, thread, atomic等）和场景，当然java.util.concurrent并发工具包大大简化了Java并发编程。
+
+Go内存模型规范了在什么条件下一个Goroutine对某个变量的修改一定对其它Goroutine可见。
+
+####Happens Before
+在一个单独的Goroutine里，对变量的读写和代码的书写顺序一致。比如以下的代码:
+<pre>
+package main
+import (
+    "log"
+)
+var a, b, c int
+func main() {
+    a = 1
+    b = 2
+    c = a + 2
+    log.Println(a, b, c)
+}
+</pre>
+尽管在编译期和执行期，编译器和CPU都有可能重排代码，比如，先执行b=2，再执行a=1，但c=a+2是保证在a=1后执行的。这样最后的执行结果一定是1 2 3，不会是1 2 2。但下面的代码则可能会输出0 0 0，1 2 2, 0 2 3 (b=2比a=1先执行), 1 2 3等各种可能。
+<pre>
+package main
+import (
+    "log"
+)
+var a, b, c int
+func main() {
+    go func() {
+        a = 1
+        b = 2
+    }()
+    go func() {
+        c = a + 2
+    }()
+    log.Println(a, b, c)
+}
+</pre>
+####Happens-before 定义
+Happens-before用来指明Go程序里的内存操作的局部顺序。如果一个内存操作事件e1 happens-before e2，则e2 happens-after e1也成立；如果e1不是happens-before e2,也不是happens-after e2，则e1和e2是并发的。
+
+在这个定义之下，如果以下情况满足，则对变量（v）的内存写操作（w）对一个内存读操作（r）来说允许可见的：
+
+r不在w开始之前发生（可以是之后或并发）；
+w和r之间没有另一个写操作(w’)发生；
+为了保证对变量（v）的一个特定写操作（w）对一个读操作（r）可见，就需要确保w是r唯一允许的写操作，于是如果以下情况满足，则对变量（v）的内存写操作（w）对一个内存读操作（r）来说保证可见的：
+
+w在r开始之前发生；
+所有其它对v的写操作只在w之前或r之后发生；
+可以看出后一种约定情况比前一种更严格，这种情况要求没有w或r没有其他的并发写操作。
+
+在单个Goroutine里，因为肯定没有并发，上面两种情况是等价的。对变量v的读操作可以读到最近一次写操作的值（这个应该很容易理解）。但在多个Goroutine里如果要访问一个共享变量，我们就必须使用同步工具来建立happens-before条件，来保证对该变量的读操作能读到期望的修改值。
+
+要保证并行执行体对共享变量的顺序访问方法就是用锁。Java和Go在这点上是一致的。
+
+以下是具体的可被利用的Go语言的happens-before规则，从本质上来讲，happens-before规则确定了CPU缓冲和主存的同步时间点（通过内存屏障等指令），从而使得对变量的读写顺序可被确定–也就是我们通常说的“同步”。
+
+####同步方法
+初始化<br>
+
+- 如果package p 引用了package q，q的init()方法 happens-before p （Java工程师可以对比一下final变量的happens-before规则）
+- main.main()方法 happens-after所有package的init()方法结束。
+
+创建Goroutine<br>
+go语句创建新的goroutine happens-before 该goroutine执行（这个应该很容易理解）
+<pre>
+package main
+import (
+    "log"
+    "time"
+)
+var a, b, c int
+func main() {
+    a = 1
+    b = 2
+    go func() {
+        c = a + 2
+        log.Println(a, b, c)
+    }()
+    time.Sleep(1 * time.Second)
+}
+</pre>
+利用这条happens-before，我们可以确定c=a+2是happens-aftera=1和b=2，所以结果输出是可以确定的1 2 3，但如果是下面这样的代码，输出就不确定了，有可能是1 2 3或0 0 2
+<pre>
+func main() {
+    go func() {
+        c = a + 2
+        log.Println(a, b, c)
+    }()
+    a = 1
+    b = 2
+    time.Sleep(1 * time.Second)
+}
+</pre>
+销毁Goroutine<br>
+Goroutine的退出并不保证happens-before任何事件。
+<pre>
+var a string
+func hello() {
+    go func() { a = "hello" }()
+    print(a)
+}
+</pre>
+上面代码因为a="hello" 没有使用同步事件，并不能保证这个赋值被主goroutine可见。事实上，极度优化的Go编译器甚至可以完全删除这行代码go func() { a = "hello" }()。
+
+Goroutine对变量的修改需要让对其它Goroutine可见，除了使用锁来同步外还可以用Channel。
+
+####Channel通信
+在Go编程中，Channel是被推荐的执行体间通信的方法，Go的编译器和运行态都会尽力对其优化。
+
+- 对一个Channel的发送操作(send) happens-before 相应Channel的接收操作完成
+- 关闭一个Channel happens-before 从该Channel接收到最后的返回值0
+- 不带缓冲的Channel的接收操作（receive） happens-before 相应Channel的发送操作完成
+<pre>
+var c = make(chan int, 10)
+var a string
+func f() {
+    a = "hello, world"
+    c <- 0
+}
+func main() {
+    go f()
+    <-c
+    print(a)
+}
+</pre>
