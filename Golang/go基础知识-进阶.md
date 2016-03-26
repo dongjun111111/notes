@@ -3148,7 +3148,82 @@ func NewCond(l Locker) *Cond
 方法Wait会自动的对与该条件变量关联的那个锁进行解锁，并且使调用方所在的Goroutine被阻塞。一旦该方法收到通知，就会试图再次锁定该锁。如果锁定成功，它就会唤醒那个被它阻塞的Goroutine。否则，该方法会等待下一个通知，那个Goroutine也会继续被阻塞。而方法Signal和Broadcast的作用都是发送通知以唤醒正在为此而被阻塞的Goroutine。不同的是，前者的目标只有一个，而后者的目标则是所有。
 
 在Read方法中，我们使用一个for循环来达到重新尝试获取数据块的目的。为此，我们添加了若干条重复的语句、降低了程序的性能，还造成了一个潜在的问题——在某个情况下读写锁fmutex不会被读解锁。为了解决这一系列新生的问题，我们使用代表条件变量的字段rcond。
+cond锁定期唤醒锁。cond的主要作用就是获取锁之后，wait()方法会等待一个通知，来进行下一步锁释放等操作，以此控制锁合适释放，释放频率。
 案例：
+<pre>
+package main
 
+import (
+        "fmt"
+        "sync"
+        "time"
+)
+var locker = new(sync.Mutex)
+var cond = sync.NewCond(locker)
 
+func test(x int) {
+        cond.L.Lock() //获取锁
+        cond.Wait()//等待通知  暂时阻塞
+        fmt.Println(x)
+        time.Sleep(time.Second * 1)
+        cond.L.Unlock()//释放锁
+}
+func main() {
+        for i := 0; i < 40; i++ {
+                go test(i)
+        }
+        fmt.Println("start all")
+        time.Sleep(time.Second * 3)
+        fmt.Println("broadcast")
+        cond.Signal()   // 下发一个通知给已经获取锁的goroutine
+        time.Sleep(time.Second * 3)
+        cond.Signal()// 3秒之后 下发一个通知给已经获取锁的goroutine
+        time.Sleep(time.Second * 3)
+        cond.Broadcast()//3秒之后 下发广播给所有等待的goroutine
+        time.Sleep(time.Second * 60)
+}
+output==>
+start all
+broadcast
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre>
 
