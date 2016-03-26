@@ -3318,4 +3318,51 @@ map[2:New Value]
 </pre>
 ###Golang构造一个并发安全的字典/Map类型
 ####基本思路：
-Go语言提供的字典类型并不是并发安全的。因此，我们需要使用一些同步方法对它进行扩展。这看起来并不困难。我们只要使用读写锁将针对一个字典类型值的读操作和写操作保护起来就可以了。
+Go语言提供的字典类型并不是并发安全的。因此，我们需要使用一些同步方法对它进行扩展。这看起来并不困难。我们只要使用读写锁将针对一个字典类型值的读操作和写操作保护起来就可以了。确实，读写锁应该是我们首先想到的同步工具。不过，我们还不能确定只使用它是否就足够了。不管怎样，让我们先来编写并发安全的字典类型的第一个版本。
+
+- 先确定并发安全的字典类型的行为
+我们可以借鉴OrderedMap接口类型的声明并编写出需要在这里声明的接口类型ConcurrentMap。实际上，ConcurrentMap接口类型的方法集合应该是OrderedMap接口类型的方法集合的一个子集。我们只需从OrderedMap中去除那些代表有序Map特有行为的方法声明即可。既然是这样，我何不从这两个自定义的字典接口类型中抽出一个公共接口呢？
+<pre>
+	// 泛化的Map的接口类型
+	type GenericMap interface {
+	// 获取给定键值对应的元素值。若没有对应元素值则返回nil
+	Get(key interface{}) interface{}
+	// 添加键值对，并返回与给定键值对应的旧的元素值。若没有旧元素值则返回(nil, true)
+	Put(key interface{}, elem interface{}) (interface{}, bool)
+	// 删除与给定键值对应的键值对，并返回旧的元素值。若没有旧元素值则返回nil
+	Remove(key interface{}) interface{}
+	// 清除所有的键值对
+	Clear()
+	// 获取键值对的数量
+	Len() int
+	// 判断是否包含给定的键值
+	Contains(key interface{}) bool
+	// 获取已排序的键值所组成的切片值
+	Keys() []interface{}
+	// 获取已排序的元素值所组成的切片值
+	Elems() []interface{}
+	// 获取已包含的键值对所组成的字典值
+	ToMap() map[interface{}]interface{}
+	// 获取键的类型
+	KeyType() reflect.Type
+	// 获取元素的类型
+	ElemType() reflect.Type
+	}
+</pre>
+然后，我们把这个名为GenericMap的字典接口类型嵌入到OrderedMap接口类型中，并去掉后者中的已在前者内声明的那些方法。修改后的OrderedMap接口类型如下：
+<pre>
+	// 有序的Map的接口类型
+	type OrderedMap interface {
+	GenericMap // 泛化的Map接口
+	// 获取第一个键值。若无任何键值对则返回nil
+	FirstKey() interface{}
+	// 获取最后一个键值。若无任何键值对则返回nil
+	LastKey() interface{}
+	// 获取由小于键值toKey的键值所对应的键值对组成的OrderedMap类型值
+	HeadMap(toKey interface{}) OrderedMap
+	// 获取由小于键值toKey且大于等于键值fromKey的键值所对应的键值对组成的OrderedMap类型值
+	SubMap(fromKey interface{}, toKey interface{}) OrderedMap
+	// 获取由大于等于键值fromKey的键值所对应的键值对组成的OrderedMap类型值
+	TailMap(fromKey interface{}) OrderedMap
+	}
+</pre>
