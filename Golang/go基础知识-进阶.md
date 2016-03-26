@@ -3636,3 +3636,4 @@ func twoprint() {
 }
 </pre>
 上面的代码虽然调用两次doprint()，但实际上setup只会执行一次，并且并发的once.Do(setup)都会等待setup返回后再继续执行。
+###Golang之Groupcache
