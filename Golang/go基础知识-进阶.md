@@ -3576,3 +3576,63 @@ func main() {
     print(a)
 }
 </pre>
+上述代码可以确保输出hello, world，因为a = "hello, world" happens-before c <- 0，print(a) happens-after <-c， 根据上面的规则1）以及happens-before的可传递性，a = "hello, world" happens-beforeprint(a)。
+
+根据规则2）把c<-0替换成close(c)也能保证输出hello,world，因为关闭操作在<-c接收到0之前发送。
+<pre>
+var c = make(chan int)
+var a string
+func f() {
+    a = "hello, world"
+    <-c
+}
+func main() {
+    go f()
+    c <- 0
+    print(a)
+}
+</pre>
+根据规则3），因为c是不带缓冲的Channel，a = "hello, world" happens-before <-c happens-before c <- 0 happens-before print(a)， 但如果c是缓冲队列，如定义c = make(chan int, 1), 那结果就不确定了。
+####锁
+sync 包实现了两种锁数据结构:
+
+- sync.Mutex -> java.util.concurrent.ReentrantLock
+- sync.RWMutex -> java.util.concurrent.locks.ReadWriteLock
+其happens-before规则和Java的也类似：
+
+- 任何sync.Mutex或sync.RWMutex 变量（l），定义 n < m， 第n次 l.Unlock() happens-before 第m次l.lock()调用返回.
+<pre>
+var l sync.Mutex
+var a string
+func f() {
+    a = "hello, world"
+    l.Unlock()
+}
+func main() {
+    l.Lock()
+    go f()
+    l.Lock()
+    print(a)
+}
+</pre>
+a = "hello, world" happens-before l.Unlock() happens-before 第二个 l.Lock() happens-before print(a)
+####Once
+sync包还提供了一个安全的初始化工具Once。还记得Java的Singleton设计模式，double-check，甚至triple-check的各种单例初始化方法吗？Go则提供了一个标准的方法。
+
+- once.Do(f)中的f() happens-before 任何多个once.Do(f)调用的返回，且f()有且只有一次调用。
+<pre>
+var a string
+var once sync.Once
+func setup() {
+    a = "hello, world"
+}
+func doprint() {
+    once.Do(setup)
+    print(a)
+}
+func twoprint() {
+    go doprint()
+    go doprint()
+}
+</pre>
+上面的代码虽然调用两次doprint()，但实际上setup只会执行一次，并且并发的once.Do(setup)都会等待setup返回后再继续执行。
