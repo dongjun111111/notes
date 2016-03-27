@@ -3915,7 +3915,16 @@ func main() {
     u.school["highSchool"].Name = "XX第二中学"//错误 
     fmt.Println(u) 
 } 
+output==>
+cannot assign to u.school["highSchool"].Name
 </pre>
+错误分析：
+原因出在user 中的 map[string]school  这里， u.school["highSchool"] 访问到这里都没有问题，问题在于后面的 “ .Name ” ，因为map[string]school 中储存的school是数值拷贝，当要修改school里面的Name时，就发生了不可寻址的错误。
+
+解决方法：
+
+1. 重新覆盖，既然无法单独修改里面的某一项，那就全部都替换掉，u.school["highSchool"] = school{Teacher:"曹老师", Name:"XX第二中学"}
+2. 2. 改为储存指针，把map[string]school 改为 map[string]*school，把school的指针存进去，这样go就可以寻址，从而可以修改里面的值
 ###Gorouter一个轻量级高性能的路由(from[stutostu.com])
 
 - 改善了url正则匹配的，使其匹配更多模式，更加可以自由定制
