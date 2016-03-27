@@ -3704,9 +3704,14 @@ func main() {
     //tmplaftergo16()
 }
 output==>
+//这是没有加新特性的效果，出现多余的空白
  <ul>
+
         <li>one</li>
+
         <li>two</li>
+
         <li>three</li>
+
  </ul>
 </pre>
