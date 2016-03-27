@@ -3796,7 +3796,9 @@ value = 1  pInt = 826814767824  *pInt = 1
 value = 222  pInt = 826814767824  *pInt = 222 
 value = 222  pInt = 826814767904  *pInt = 123 
 </pre>
- ####Go语言中有两个分配内存的机制，分别是内建的函数new和make
+
+####Go语言中有两个分配内存的机制
+Go语言中有两个分配内存的机制，分别是内建的函数new和make.<br>
 new(T)函数是一个分配内存的内建函数，但是不同于其他语言中内建new函数所做的工作，在Go语言中，new只是将内存清零，并没有初始化内存。所以在Go语言中，new(T)所做的工作是为T类型分配了值为零的内存空间并返回其地址，即返回*T。也就是说，new(T)返回一个指向新分配的类型T的零值指针.
 
 make(T, args)函数与new(T)函数的目的不同。make(T, args)仅用于创建切片、map和channel(消息管道)，make(T, args)返回类型T的一个被初始化了的实例。而new（T）返回指向类型T的零值指针。也就是说new函数返回的是*T的未初始化零值指针，而make函数返回的是T的初始化了的实例.
@@ -3850,4 +3852,194 @@ output==>
 Summary(address)地址: &map[focus(project):[UE Agile Methodology Software Engineering] hobby(life):[Basketball Movies Travel] name:[Harry] profession:[Java programmer Project Manager] interest(lang):[Clojure Python Go]]
 Summary(content)值: map[profession:[Java programmer Project Manager] interest(lang):[Clojure Python Go] focus(project):[UE Agile Methodology Software Engineering] hobby(life):[Basketball Movies Travel] name:[Harry]]
 成功: 进程退出代码 0.
+</pre>
+
+###Gorouter一个轻量级高性能的路由(from[stutostu.com])
+
+- 改善了url正则匹配的，使其匹配更多模式，更加可以自由定制
+- 提高了匹配时查找的性能，使用路由的前缀和http方法做hashtable查找，路由再多，查找平均也是o(1)的时间复杂度
+<pre>
+package goRouter
+
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+	"regexp"
+	"strings"
+)
+
+// http method
+const (
+	CONNECT = "CONNECT"
+	DELETE  = "DELETE"
+	GET     = "GET"
+	HEAD    = "HEAD"
+	OPTIONS = "OPTIONS"
+	PATCH   = "PATCH"
+	POST    = "POST"
+	PUT     = "PUT"
+	TRACE   = "TRACE"
+)
+
+//mime-types
+const (
+	applicationJson = "application/json"
+	applicationXml  = "application/xml"
+	textXml         = "text/xml"
+)
+
+type Mux struct {
+	beforeMatch   http.HandlerFunc
+	afterMatch    http.HandlerFunc
+	beforeExecute http.HandlerFunc
+	afterExecute  http.HandlerFunc
+	routes        map[string]map[string][]*route
+}
+
+type route struct {
+	pattern *regexp.Regexp
+	params  []string
+	handler http.HandlerFunc
+}
+
+var muxInstance = &Mux{
+	beforeMatch:   func(rw http.ResponseWriter, req *http.Request) {},
+	afterMatch:    func(rw http.ResponseWriter, req *http.Request) {},
+	beforeExecute: func(rw http.ResponseWriter, req *http.Request) {},
+	afterExecute:  func(rw http.ResponseWriter, req *http.Request) {},
+	routes:        make(map[string]map[string][]*route),
+}
+
+var config = map[string]string{
+	//路由匹配规则
+	"matchReg": `^%s$`,
+	//默认参数匹配规则
+	"defaultParamsReg": `([^/]+)`,
+	//查找参数规则
+	"findParamsReg": `(:\w+)`,
+	//处理没有带正则规则的参数规则
+	"processParamsReg": `:\w+`,
+	//处理带正则规则的参数规则
+	"processParamsWithReg": `:\w+(\(.*?\))`,
+}
+
+func init() {
+}
+
+func GetMuxInstance() *Mux {
+	return muxInstance
+}
+
+func (m *Mux) Get(pattern string, handler http.HandlerFunc) {
+	m.AddRoute(pattern, handler, GET)
+}
+
+func (m *Mux) Post(pattern string, handler http.HandlerFunc) {
+	m.AddRoute(pattern, handler, POST)
+}
+
+func (m *Mux) Put(pattern string, handler http.HandlerFunc) {
+	m.AddRoute(pattern, handler, PUT)
+}
+
+func (m *Mux) Delete(pattern string, handler http.HandlerFunc) {
+	m.AddRoute(pattern, handler, DELETE)
+}
+
+func (m *Mux) AddRoute(pattern string, handler http.HandlerFunc, method string) {
+	pattern = strings.TrimRight(pattern, `/`)
+	parts := strings.Split(pattern, `/`)
+	var prefix []string
+	for _, part := range parts {
+		if strings.Index(part, ":") == -1 {
+			prefix = append(prefix, part)
+		} else {
+			break
+		}
+	}
+
+	//找出所有需要匹配的参数
+	findParamReg := regexp.MustCompile(config["findParamsReg"])
+	params := findParamReg.FindAllString(pattern, -1)
+
+	//先处理带正则规则限定的参数
+	replaceReg := regexp.MustCompile(config["processParamsWithReg"])
+	pattern = replaceReg.ReplaceAllString(pattern, "$1")
+
+	//没有正则限定的参数，使用默认正则规则来匹配
+	replaceReg = regexp.MustCompile(config["processParamsReg"])
+	pattern = replaceReg.ReplaceAllString(pattern, config["defaultParamsReg"])
+
+	regex := regexp.MustCompile(fmt.Sprintf(config["matchReg"], pattern))
+
+	if _, exist := m.routes[method]; !exist {
+		m.routes[method] = map[string][]*route{}
+	}
+
+	prefixUrl := strings.Join(prefix, `/`)
+	if _, exist := m.routes[method][prefixUrl]; !exist {
+		m.routes[method][prefixUrl] = []*route{}
+	}
+
+	m.routes[method][prefixUrl] = append(m.routes[method][prefixUrl], &route{
+		pattern: regex,
+		handler: handler,
+		params:  params,
+	})
+}
+
+func (m *Mux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	m.beforeMatch(w, r)
+
+	handler, isMatch := m.match(strings.TrimRight(r.URL.Path, `/`), r)
+	if !isMatch {
+		http.NotFound(w, r)
+		return
+	}
+	m.afterMatch(w, r)
+	m.beforeExecute(w, r)
+	handler(w, r)
+	m.afterExecute(w, r)
+}
+
+func (m *Mux) match(requestPath string, r *http.Request) (http.HandlerFunc, bool) {
+	paths := strings.Split(requestPath, `/`)
+
+	if _, ok := m.routes[r.Method]; !ok {
+		return nil, false
+	}
+
+	var path string
+	for i := len(paths); i > 0; i-- {
+		path = strings.Join(paths[:i], `/`)
+		if routes, ok := m.routes[r.Method][path]; ok {
+			for _, route := range routes {
+				if !route.pattern.MatchString(requestPath) {
+					continue
+				}
+
+				//whether need to match the parameters
+				if len(route.params) > 0 {
+					matches := route.pattern.FindStringSubmatch(requestPath)
+					if len(matches) < 2 || len(matches[1:]) != len(route.params) {
+						// panic("Parameters do not match")
+						return nil, false
+					}
+
+					values := r.URL.Query()
+					for i, match := range matches[1:] {
+						values.Add(route.params[i], match)
+					}
+
+					//reassemble query params and add to RawQuery
+					r.URL.RawQuery = url.Values(values).Encode() + "&" + r.URL.RawQuery
+				}
+
+				return route.handler, true
+			}
+		}
+	}
+	return nil, false
+}
 </pre>
