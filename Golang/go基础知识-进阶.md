@@ -3823,3 +3823,31 @@ output==>
 []
 [0 0 0 0 0 0 0 0 0 0]
 </pre>
+<pre>
+package main
+
+import "fmt"
+
+type S map[string][]string
+
+func Summary(param string) (s *S) {
+  s = &S{
+    "name": []string{param},
+    "profession": []string{"Java programmer", "Project Manager"},
+    "interest(lang)": []string{"Clojure", "Python", "Go"},
+    "focus(project)": []string{"UE", "Agile Methodology", "Software Engineering"},
+    "hobby(life)": []string{"Basketball", "Movies", "Travel"},
+  }
+  return s
+}
+
+func main() {
+  s := Summary("Harry")
+  fmt.Println("Summary(address)地址:",s)
+  fmt.Printf("Summary(content)值: %v\n", *s)
+}
+output==>
+Summary(address)地址: &map[focus(project):[UE Agile Methodology Software Engineering] hobby(life):[Basketball Movies Travel] name:[Harry] profession:[Java programmer Project Manager] interest(lang):[Clojure Python Go]]
+Summary(content)值: map[profession:[Java programmer Project Manager] interest(lang):[Clojure Python Go] focus(project):[UE Agile Methodology Software Engineering] hobby(life):[Basketball Movies Travel] name:[Harry]]
+成功: 进程退出代码 0.
+</pre>
