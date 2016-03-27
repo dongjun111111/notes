@@ -1250,6 +1250,7 @@ CREATE TABLE sales (
     PARTITION p_2011 VALUES LESS THAN (2011),
     PARTITION p_2012 VALUES LESS THAN (2012),
     PARTITION p_catchall VALUES LESS THAN MAXVALUE);
+
 这段语句表示将表内数据按照order_dy的年份范围进行分区,2010年一个区,2011一个,2012一个,剩下的一个.
 　要注意如果这么做,则order_day必须包含在主键中,且会产生一个问题,就是当年份超过阈值,到了2013,2014时,需要手动创建这些分区
 　替代方法就是使用HASH
@@ -1285,3 +1286,17 @@ guid会导致主键过于分散，以至于在数据进行插入，删除，更新的时候会进行b+tree的频繁
 是一件很烦的事情。
 鉴于上面那种情况，可以考虑的做法就是提供一个id生成器，用来保证主键的顺序递增，同时又保证全局的完全
 唯一。这个id生成器很容易，使用redis的incr就可以搞定，而且还可以通过incrby进行批量申请，性能妥妥的。
+
+
++++++减少mysql的内存占用+++++
+[mysqld]
+max_connections = 10
+key_buffer_size = 16K
+max_allowed_packet = 1M
+table_open_cache = 4
+sort_buffer_size = 64K
+read_buffer_size = 256K
+read_rnd_buffer_size = 256K
+net_buffer_length = 2K
+thread_stack = 128K
+重启mysql，内存占用降到了70M
