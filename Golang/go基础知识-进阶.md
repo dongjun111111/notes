@@ -3769,3 +3769,30 @@ func Call(a *Struct) uint64 {
     return a.Ba
 }
 </pre>
+golang中的指针：
+<pre>
+package main  
+  
+import "fmt"  
+  
+func main() {  
+    var value int = 1  
+    //指向int型的指针  
+    var pInt *int = &value  
+    //打印相关信息  
+fmt.Printf("value = %d  pInt = %d  *pInt = %d \n", value, pInt, *pInt)  
+  
+    //通过指针修改指针指向的值  
+    *pInt = 222  
+fmt.Printf("value = %d  pInt = %d  *pInt = %d \n", value, pInt, *pInt)  
+  
+    //使指针指向别的地址  
+    var m int = 123  
+    pInt = &m  
+    fmt.Printf("value = %d  pInt = %d  *pInt = %d \n", value, pInt, *pInt)  
+}  
+output==>
+value = 1  pInt = 826814767824  *pInt = 1 
+value = 222  pInt = 826814767824  *pInt = 222 
+value = 222  pInt = 826814767904  *pInt = 123 
+</pre>
