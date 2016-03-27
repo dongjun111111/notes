@@ -49,7 +49,6 @@ import (
     "fmt"
     "strings"
 )
- 
 /*
  *  user : example@example.com login smtp server user
  *  password: xxxxx login smtp server password
@@ -59,8 +58,6 @@ import (
  *  body: The content of mail
  *  mailtyoe: mail type html or text
  */
- 
- 
 func SendMail(user, password, host, to, subject, body, mailtype string) error{
     hp := strings.Split(host, ":")
     auth := smtp.PlainAuth("", user, password, hp[0])
