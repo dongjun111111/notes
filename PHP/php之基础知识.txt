@@ -3232,3 +3232,33 @@ var_dump(isset($a['xx'])); //bool(false)
   
 # 应该使用这个来判断  
 var_dump(array_key_exists('xx', $a)); //bool(true)
+
+
+++++慎用PHP内置的Math函数++++
+用最基础的四则运算：
+$start = microtime(TRUE);  
+for ($i=0; $i < 200000; $i++)  
+{  
+    $s = 0;  
+    for ($j=0; $j < 3; $j++)  
+    {   
+       $s += ($j+$i+1) * ($j+$i+1);  
+    }  
+}  
+echo microtime(TRUE) - $start;  
+# output: 0.33167719841003 
+
+用PHP的math类：
+$start = microtime(TRUE);  
+for ($i=0; $i < 200000; $i++)  
+{  
+    $s = 0;  
+    for ($j=0; $j < 3; $j++)  
+    {   
+       $s += pow($j+$i+1, 2);  
+    }  
+}  
+echo microtime(TRUE) - $start;  
+# output: 0.87528896331787 
+像取绝对值abs，最大值max最小值min等效率都不如原生的 if判断来得快。
+总的来说，php运算的确是很慢，真心不适合做大规模的算法运算。
