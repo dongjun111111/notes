@@ -3892,6 +3892,30 @@ func main() {
 output==>
 m[1][2]
 </pre>
+再看一个类似的例子：
+<pre>
+package main 
+ 
+import "fmt" 
+ 
+type user struct { 
+    name string 
+    age  int 
+    school map[string]school 
+} 
+ 
+type school struct { 
+    Teacher string 
+    Name string 
+} 
+ 
+func main() { 
+    s := map[string]school{"primarySchool":{Teacher:"李老师", Name:"XX小学"}, "highSchool":{Teacher:"曹老师", Name:"XX中学"}} 
+    u := user{name:"张三",age:12,school:s} 
+    u.school["highSchool"].Name = "XX第二中学"//错误 
+    fmt.Println(u) 
+} 
+</pre>
 ###Gorouter一个轻量级高性能的路由(from[stutostu.com])
 
 - 改善了url正则匹配的，使其匹配更多模式，更加可以自由定制
