@@ -3758,3 +3758,10 @@ case InterfaceA:
 }
 </pre>
 这三组方法性能逐个下降，最好的方式是直接进行类型引用,也就是第一种。
+####指针传参效率更高
+指针传参会减少对象复制过程，效率更高。
+<pre>
+func Call(a *Struct) uint64 {
+    return a.Ba
+}
+</pre>
