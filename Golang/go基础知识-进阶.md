@@ -3715,3 +3715,31 @@ output==>
 
  </ul>
 </pre>
+map race detect
+Go原生的map类型是goroutine-unsafe的，长久以来，这给很多的gophers带来烦恼。这次go1.6中runtime增加了对并发访问map的检测以降低gopher使用哦map的心智负担。
+<pre>
+package main
+/*
+Go原生的map类型是goroutine-unsafe的，长久以来，这给很多Gophers
+带来了烦恼。这次Go 1.6中Runtime增加了对并发访问map的检测以降低
+gopher们使用map时的心智负担。该程序在go1.5上运行正常，在1.6则会报错。
+*/
+import "sync"
+
+func main() {
+    const workers = 100
+
+    var wg sync.WaitGroup
+    wg.Add(workers)
+    m := map[int]int{}
+    for i := 1; i <= workers; i++ {
+        go func(i int) {
+            for j := 0; j < i; j++ {
+                m[i]++
+            }
+            wg.Done()
+        }(i)
+    }
+    wg.Wait()
+}
+</pre>
