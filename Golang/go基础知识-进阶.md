@@ -3853,7 +3853,45 @@ Summary(address)地址: &map[focus(project):[UE Agile Methodology Software Engin
 Summary(content)值: map[profession:[Java programmer Project Manager] interest(lang):[Clojure Python Go] focus(project):[UE Agile Methodology Software Engineering] hobby(life):[Basketball Movies Travel] name:[Harry]]
 成功: 进程退出代码 0.
 </pre>
+###Golang多维map读写操作的问题
+<pre>
+package main 
 
+import "fmt" 
+ 
+func main() { 
+    m := make(map[int][2]int) 
+    m[0] = [2]int{1, 3} 
+    m[0][1] = 2 //错误 
+    fmt.Println(m[0][1]) 
+} 
+output==>
+ cannot assign to  m[0][1]
+</pre>
+因为在map[0]中的元素是array，当你把数组赋值给map时，传递的是
+array的数值拷贝，也就是说map[0]中储存的是array的数值拷贝，
+当你要修改m[0][1]的值，也就是要修改array[1]中的值时，
+是不可寻址的，就是说go不知道array[1]的值对应的内存地址是什么，
+所以导致赋值 cannot assign to  m[0][1]错误。
+
+解决方法：
+
+ 1. 改为储存指针
+ 2. 把array改为slice or map这种天然引用类型的值。这样赋值的时候，go就能找到对应的变量储存地址，然后修改它。
+<pre>
+package main 
+ 
+import "fmt" 
+ 
+func main() { 
+    m := make(map[int]map[int]int) 
+    m[0] = map[int]int{1:3} 
+    m[0][1] = 2 //正确 
+    fmt.Println(m[0]) 
+} 
+output==>
+m[1][2]
+</pre>
 ###Gorouter一个轻量级高性能的路由(from[stutostu.com])
 
 - 改善了url正则匹配的，使其匹配更多模式，更加可以自由定制
