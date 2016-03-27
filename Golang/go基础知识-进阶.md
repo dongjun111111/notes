@@ -3743,3 +3743,5 @@ func main() {
     wg.Wait()
 }
 </pre>
+###Golang经验
+####interface{}的使用
