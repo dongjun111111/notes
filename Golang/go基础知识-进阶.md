@@ -3657,4 +3657,56 @@ Groupcache是使用Go语言编写的缓存及缓存过滤库，作为memcached�
 使用情况
 
 groupcache已经在dl.Google.com、Blogger、Google Code、Google Fiber、Google生产监视系统等项目中投入使用。
+###Golang1.6新特性
+<pre>
+package main
 
+import (
+    "log"
+    "os"
+    "text/template"
+)
+
+var items = []string{"one", "two", "three"}
+
+func tmplbefore15() {
+    var t = template.Must(template.New("tmpl").Parse(`
+    <ul>
+    {{range . }}
+        <li>{{.}}</li>
+    {{end }}
+    </ul>
+    `))
+
+    err := t.Execute(os.Stdout, items)
+    if err != nil {
+        log.Println("executing template:", err)
+    }
+}
+/*go1.6新特性:{{-和-}}去除action前后的空白字符
+func tmplaftergo16() {
+    var t = template.Must(template.New("tmpl").Parse(`
+    <ul>
+    {{range . -}}
+        <li>{{.}}</li>
+    {{end -}}
+    </ul>
+    `))
+
+    err := t.Execute(os.Stdout, items)
+    if err != nil {
+        log.Println("executing template:", err)
+    }
+}
+*/
+func main() {
+    tmplbefore15()
+    //tmplaftergo16()
+}
+output==>
+ <ul>
+        <li>one</li>
+        <li>two</li>
+        <li>three</li>
+ </ul>
+</pre>
