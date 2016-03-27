@@ -3745,3 +3745,16 @@ func main() {
 </pre>
 ###Golang经验
 ####interface{}的使用
+interface{}提供了golang中的interface类似于java的interface、PHP的interface或C++的纯虚基类。通过这种方式可以提供更快捷的编码。但是这种方式也带来了一些问题，最大的问题还是性能问题。
+<pre>
+// method 1
+a.AA()
+// method 2
+v.(InterfaceA).AA()
+// method 3
+switch v.(type) {
+case InterfaceA:
+    v.(InterfaceA).AA()
+}
+</pre>
+这三组方法性能逐个下降，最好的方式是直接进行类型引用,也就是第一种。
