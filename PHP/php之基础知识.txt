@@ -3221,3 +3221,14 @@ print_r(get_headers("http://www.sina.com.cn"));
 $url='http://'.$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"];
 echo $url;
 结果是：http://think.myjiang.com/test.php
+
++++php中慎用isset来判断数组是否存在key++++
+$a['hello'] = '123';  
+$a['xx'] = NULL;  
+  
+var_dump(isset($a['hello'])); //bool(true)  
+  
+var_dump(isset($a['xx'])); //bool(false)  
+  
+# 应该使用这个来判断  
+var_dump(array_key_exists('xx', $a)); //bool(true)
