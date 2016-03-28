@@ -4317,3 +4317,11 @@ func Decode(reader *bufio.Reader) (string, error) {
     return string(pack[4:]), nil
 }
 </pre>
+###Golang中slice不支持比较操作的原因
+为什么Go语言不支持slice的比较运算呢？第一个原因，slice是引用类型，一个slice甚至可以引用自身。虽然有很多解决办法，但是没有一个是简单有效的。第二个原因，因为slice是间接引用，因此一个slice在不同时间可能包含不同的元素－底层数组的元素可能被修改。只要一个数据类型可以做相等比较，那么就可以用来做map的key,map这种数据结构对key的要求是：如果最开始时key是相等的，那在map的生命周期内，key要一直相等，因此这里key是不可变的。而对于指针或chan这类引用类型，==可以判断两个指针是否引用了想同的对象，是有用的，但是slice的相等测试充满了不确定性，因此，安全的做法是禁止slice之间的比较操作。
+
+唯一例外：slice可以和nil进行比较，例如:
+<pre>
+if summer == nil { /* ... */ }
+</pre>
+slice是引用类型，因此它的零值是nil。一个nil slice是没有底层数组的，长度和容量都是0，但是也有非nil的slice,长度和容量也是0，例如[]int{}或make([]int, 3)[3:]。我们可以通过[]int(nil)这种类型转换生成一个[]int类型的nil值。
