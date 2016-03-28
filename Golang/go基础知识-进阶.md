@@ -3869,6 +3869,8 @@ Summary(content)值: map[profession:[Java programmer Project Manager] interest(l
 成功: 进程退出代码 0.
 </pre>
 ###Golang多维map读写操作的问题
+关于map：
+map中的元素不是变量，因此不能寻址。不能寻址的原因是：map可能会随着元素的增多重新分配更大的内存空间，旧值都会拷贝到新的内存空间，因此之前的地址就会失效。
 <pre>
 package main 
 
