@@ -4181,3 +4181,71 @@ func putUser(w http.ResponseWriter, r *http.Request) {
     w.Write([]byte(fmt.Sprintf(`UPDATE a user by id: %s, form data: %s`, r.URL.Query().Get(":id"), fmt.Sprintln(r.PostForm))))
 }
 </pre>
+###动态规划问题
+<pre>
+package main
+
+import (
+"fmt"
+)
+
+/*求最小服务时长，每次1单位1单位的切，得到的是最小解*/
+func smin(n int32) int32 {
+if n&1 == 0 {
+return (n / 2) * (n - 1)
+}
+return (n - 1) / 2 * n
+}
+
+/*求每个顾客的时间*/
+func serverTime(s, lenght []int32, maxLen int32) {
+for i := range lenght {
+s[i] = smin(lenght[i])
+}
+}
+
+/*求二者最大值*/
+func maxInt32(a, b int32) int32 {
+if a > b {
+return a
+}
+return b
+}
+
+/*DP问题核心 作者：天之 CSDN博客：http://blog.csdn.net/WAPWO?viewmode=contents*/
+func dptz(i, t int32, r, s []int32) int32 {
+if i == 0 {
+if t >= r[0]+s[0] {
+return 1
+}
+return 0
+}
+if t >= r[i]+s[i] {
+return maxInt32(dptz(i-1, r[i], r, s)+1, dptz(i-1, t, r, s))
+}
+return dptz(i-1, t, r, s)
+}
+
+/*求最后结束时间*/
+func endTime(r, s []int32) int32 {
+var max, tmp int32 = 0, 0
+for i := range r {
+tmp = r[i] + s[i]
+if max < tmp {
+max = tmp
+}
+}
+return max
+}
+
+func main() {
+//蛋糕长度、先来后到的时间和服务时间
+length := []int32{2, 2, 3, 4}
+r := []int32{5, 5, 6, 10}
+s := make([]int32, 4)
+serverTime(s, length, 4)
+fmt.Println(dptz(3, endTime(r, s), r, s))
+}
+output==>
+3
+</pre>
