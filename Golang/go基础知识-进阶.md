@@ -3744,6 +3744,19 @@ func main() {
 }
 </pre>
 ###Golang经验
+####range遍历
+常见的range是：
+<pre>
+for k,v := range data{
+	fmt.Println(v)	
+}
+</pre>
+但是，实际上下面这个方法会更快，原因是这里面节省了v的拷贝，速度要比拷贝更快：
+<pre>
+for k,_ := range data {
+    fmt.Println(data[k])
+}
+</pre>
 ####interface{}的使用
 interface{}提供了golang中的interface类似于java的interface、PHP的interface或C++的纯虚基类。通过这种方式可以提供更快捷的编码。但是这种方式也带来了一些问题，最大的问题还是性能问题。
 <pre>
