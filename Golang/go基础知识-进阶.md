@@ -4187,7 +4187,6 @@ func putUser(w http.ResponseWriter, r *http.Request) {
 详情见：https://github.com/dongjun111111/blog/issues/11
 <pre>
 package main
-
 import (
 "fmt"
 )
