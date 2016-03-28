@@ -4213,7 +4213,6 @@ return a
 return b
 }
 
-/*DP问题核心 作者：天之 CSDN博客：http://blog.csdn.net/WAPWO?viewmode=contents*/
 func dptz(i, t int32, r, s []int32) int32 {
 if i == 0 {
 if t >= r[0]+s[0] {
