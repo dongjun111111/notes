@@ -4331,3 +4331,59 @@ s = []int(nil) // len(s) == 0, s == nil
 s = []int{}    // len(s) == 0, s != nil
 </pre>
 由上可知，如果要测试一个slice是否为空，要使用len(s) == 0。除了可以和nil做相等比较外，nil slice的使用和0长度slice的使用方式相同：例如，前文的函数reverse(nil)就是安全的。除非包文档特别说明，否则所有的Go函数都应该以相同的方式对待nil slice和0长度slice(byte包中的部分函数会对nil值slice做特殊处理)。
+
+####
+<pre>
+package main
+
+import (
+	"fmt"
+)
+var (
+	a [3000]byte
+	prog = "++++++++++[>++++++++++<-]>++++.+."
+	p,pc int
+)
+func loop(inc int){
+	for i:=inc;i != 0;pc += inc{
+		switch prog[pc+inc]{
+			case '[':
+			i++
+			case ']':
+			i--
+		}
+	}
+}
+func main(){
+	for {
+		switch prog[pc] {
+			case '>':
+			p++
+			case '<':
+			p--
+			case '+':
+			a[p]++
+			case '-':
+			a[p]--
+			case '.':
+			fmt.Print(string(a[p]))
+			case '[':
+			if a[p] == 0 {
+				loop(1)
+			}
+			case ']':
+			if a[p] != 0 {
+				loop(-1)
+			}
+			default:
+			fmt.Println("Illegal instruction")
+		}
+		pc++
+		if pc == len(prog){
+			return
+		}
+	}
+}
+output==>
+hi
+</pre>
