@@ -4325,3 +4325,9 @@ func Decode(reader *bufio.Reader) (string, error) {
 if summer == nil { /* ... */ }
 </pre>
 slice是引用类型，因此它的零值是nil。一个nil slice是没有底层数组的，长度和容量都是0，但是也有非nil的slice,长度和容量也是0，例如[]int{}或make([]int, 3)[3:]。我们可以通过[]int(nil)这种类型转换生成一个[]int类型的nil值。
+<pre>
+var s []int    // len(s) == 0, s == nil
+s = nil        // len(s) == 0, s == nil
+s = []int(nil) // len(s) == 0, s == nil
+s = []int{}    // len(s) == 0, s != nil
+</pre>
