@@ -3757,6 +3757,8 @@ for k,_ := range data {
     fmt.Println(data[k])
 }
 </pre>
+####reflect反射
+除非必要情况下，减少反射可以提升程序的整体性能。
 ####interface{}的使用
 interface{}提供了golang中的interface类似于java的interface、PHP的interface或C++的纯虚基类。通过这种方式可以提供更快捷的编码。但是这种方式也带来了一些问题，最大的问题还是性能问题。
 <pre>
