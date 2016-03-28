@@ -3759,6 +3759,8 @@ for k,_ := range data {
 </pre>
 ####reflect反射
 除非必要情况下，减少反射可以提升程序的整体性能。
+####避免大量重复创建对象
+连续小内存分配会导致大量的cpu消耗在scanblock这个函数上；连续make([]T, size)来分配slice还会额外导致cpu消耗在 runtime.memclr函数上。
 ####interface{}的使用
 interface{}提供了golang中的interface类似于java的interface、PHP的interface或C++的纯虚基类。通过这种方式可以提供更快捷的编码。但是这种方式也带来了一些问题，最大的问题还是性能问题。
 <pre>
