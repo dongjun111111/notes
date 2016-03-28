@@ -4182,6 +4182,7 @@ func putUser(w http.ResponseWriter, r *http.Request) {
 }
 </pre>
 ###动态规划问题
+详情见：https://github.com/dongjun111111/blog/issues/11
 <pre>
 package main
 
