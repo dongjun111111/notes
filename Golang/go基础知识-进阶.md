@@ -3791,7 +3791,6 @@ golang中的指针：
 package main  
   
 import "fmt"  
-  
 func main() {  
     var value int = 1  
     //指向int型的指针  
@@ -3802,7 +3801,6 @@ fmt.Printf("value = %d  pInt = %d  *pInt = %d \n", value, pInt, *pInt)
     //通过指针修改指针指向的值  
     *pInt = 222  
 fmt.Printf("value = %d  pInt = %d  *pInt = %d \n", value, pInt, *pInt)  
-  
     //使指针指向别的地址  
     var m int = 123  
     pInt = &m  
