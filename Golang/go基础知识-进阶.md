@@ -4897,3 +4897,26 @@ func main() {
 output==>
 5
 </pre>
+继承特性:
+<pre>
+package main  
+import "fmt"  
+type parent struct {
+    val int  
+}  
+type child struct {  
+    parent  
+    num int  
+}  
+func main() {  
+  
+    var c child  
+  
+    c = child{parent{1}, 2}  
+    fmt.Println(c.num)  
+    fmt.Println(c.val)  
+}  
+output==>
+1
+2
+</pre>
