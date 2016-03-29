@@ -4403,3 +4403,82 @@ output==>
 hi
 </pre>
 程序一开始的变量a是我们图灵机的数据内存，prog是指令内存，p与pc分别是这两个内存的指针，代表当前数据单元和当前指令。
+<pre>
+package main
+
+import (
+	"os/exec"
+	"io"
+	"strconv"
+	"net/http"
+	"log"
+	"os"
+)
+var uniq = make(chan int)
+const frontPage =`
+<!doctype html>
+<html>
+<head>
+
+</head>
+<body>
+<textarea rows="15" cols="40" id="edit" spellcheck="false">
+package main
+import "fmt"
+func main(){
+	fmt.Println("hello world")
+}
+</textarea>
+<button onclick="compile();">run</button>
+<div id="output"></div>
+
+</body>
+</html>
+`
+func init(){
+	go func(){
+		for i:=0;;i++{
+			uniq <- i
+		}
+	}()
+	if err := os.Chdir(os.TempDir());err != nil{
+		log.Fatal(err)
+	}
+	http.HandleFunc("/",FrontPage)
+	http.HandleFunc("/compile",Compile)
+	log.Fatal(http.ListenAndServe("127.0.0.1:1234",nil))
+}
+func FrontPage(w http.ResponseWriter,_ *http.Request){
+	w.Write([]byte(frontPage))
+}
+func err(w http.ResponseWriter,e error) bool{
+	if e != nil{
+		w.Write([]byte(e.Error()))		
+	}
+	return true
+}
+func Compile(w http.ResponseWriter,req *http.Request){
+	x := "play_" + strconv.Itoa(<-uniq) + ".go"
+	f , e := os.Create(x)
+	if err(w,e){
+		return
+	}
+	defer os.Remove(x)
+	defer f.Close()
+	_,e =io.Copy(f,req.Body)
+	if err(w,e){
+		return
+	}
+	f.Close()
+	cmd := exec.Command("go","run",x)
+	o,e :=cmd.CombinedOutput()
+	if err(w,e){
+		return
+	}
+	w.Write(o)
+}
+func main(){
+}
+output==>
+//127.0.0.1:1234/自己看看
+</pre>
