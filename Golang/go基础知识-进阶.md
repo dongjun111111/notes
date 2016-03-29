@@ -4923,7 +4923,6 @@ output==>
 多态特性:
 <pre>
 package main  
-  
 import "fmt"  
   
 type act interface {  
