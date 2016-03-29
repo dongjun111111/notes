@@ -9317,3 +9317,18 @@ function say($start='')
     return $allWord;
 }
 ?>
+
+++++R方法+++++
+R方法用于调用某个控制器中的方法：
+通过R方法在其他控制器里面调用这个操作方法（一般R方法用于跨模块调用）
+$data = R('User/detail',array('5'));//带有参数的形式
+
+表示调用User控制器的detail方法（detail方法必须是public类型），返回值就是查询id为5的一个用户数据。
+如果你要调用的操作方法是没有任何参数的话，第二个参数则可以留空，直接使用：
+$data = R('User/detail');
+
+也可以支持跨分组和项目调用，例如：
+R('Admin/User/detail',array('5'));
+
+表示调用Admin分组下面的User控制器的detail方法。
+R('Admin://User/detail',array('5'));
