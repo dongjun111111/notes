@@ -5005,3 +5005,27 @@ output==>
 55
 quit
 </pre>
+###输出格式
+<pre>
+package main
+
+import (
+	"math"
+	"fmt"
+)
+func main(){
+	fmt.Printf("二进制：%b\n",255)
+	fmt.Printf("八进制：%o\n",255)
+	fmt.Printf("十六进制：%X\n",255)
+	fmt.Printf("十进制：%d\n",255)
+	fmt.Printf("浮点数：%f\n",math.Pi)
+	fmt.Printf("字符串：%s\n","hi")
+}
+output==>
+二进制：11111111
+八进制：377
+十六进制：FF
+十进制：255
+浮点数：3.141593
+字符串：hi
+</pre>
