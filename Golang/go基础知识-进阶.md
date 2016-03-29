@@ -4791,3 +4791,83 @@ output==>
 简单选择排序： [0 0 1 1 2 2 3 4 4 7 7 9 11 11 11 11 12 12 13]
 堆排序： [0 0 1 1 2 2 3 4 4 7 7 9 11 11 11 11 12 12 13]
 </pre>
+链表排序
+<pre>
+package main 
+import ( 
+    "container/list"
+    "fmt"
+) 
+type SortedLinkedList struct { 
+    *list.List 
+    Limit int
+    compareFunc func (old, new interface{}) bool 
+} 
+func NewSortedLinkedList(limit int, compare func (old, new interface{}) bool) *SortedLinkedList { 
+    return &SortedLinkedList{list.New(), limit, compare} 
+} 
+func (this SortedLinkedList) findInsertPlaceElement(value interface{}) *list.Element { 
+    for element := this.Front(); element != nil; element = element.Next() { 
+        tempValue := element.Value 
+        if this.compareFunc(tempValue, value) { 
+            return element 
+        } 
+    } 
+    return nil 
+} 
+func (this SortedLinkedList) PutOnTop(value interface{}) { 
+    if this.List.Len() == 0 { 
+        this.PushFront(value) 
+        return
+    } 
+    if this.List.Len() < this.Limit && this.compareFunc(value, this.Back().Value) { 
+        this.PushBack(value) 
+        return
+    } 
+    if this.compareFunc(this.List.Front().Value, value) { 
+        this.PushFront(value) 
+    } else if this.compareFunc(this.List.Back().Value, value) && this.compareFunc(value, this.Front().Value) { 
+        element := this.findInsertPlaceElement(value) 
+        if element != nil { 
+            this.InsertBefore(value, element) 
+        } 
+    } 
+    if this.Len() > this.Limit { 
+        this.Remove(this.Back()) 
+    } 
+}
+
+type WordCount struct { 
+    Word  string 
+    Count int
+} 
+func compareValue(old, new interface {}) bool { 
+    if new.(WordCount).Count > old.(WordCount).Count { 
+        return true
+    } 
+    return false
+} 
+func main() { 
+    wordCounts := []WordCount{ 
+        WordCount{"kate", 87}, 
+        WordCount{"herry", 92}, 
+        WordCount{"james", 81},
+        WordCount{"jason",67},
+        WordCount{"jack",97},
+        WordCount{"bob",107}}
+    var aSortedLinkedList = NewSortedLinkedList(10, compareValue) 
+    for _, wordCount := range wordCounts { 
+        aSortedLinkedList.PutOnTop(wordCount) 
+    } 
+    for element := aSortedLinkedList.List.Front(); element != nil; element = element.Next() { 
+        fmt.Println(element.Value.(WordCount)) 
+    } 
+}
+output==>
+{bob 107}
+{jack 97}
+{herry 92}
+{kate 87}
+{james 81}
+{jason 67}
+</pre>
