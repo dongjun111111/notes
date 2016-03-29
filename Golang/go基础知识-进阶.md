@@ -4924,7 +4924,6 @@ output==>
 <pre>
 package main  
 import "fmt"  
-  
 type act interface {  
  	 write()  
 }  
