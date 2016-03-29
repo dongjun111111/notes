@@ -4934,8 +4934,7 @@ type xiaofang struct {
 func (xm *xiaoming) write() {  
     fmt.Println("xiaoming write")  
 }  
-func (xf *xiaofang) write() {  
-      
+func (xf *xiaofang) write() {    
     fmt.Println("xiaofang write")  
 }  
 func main() {  
