@@ -4955,3 +4955,56 @@ output==>
 xiaoming write
 xiaofang write
 </pre>
+###多个channel
+<pre>
+package main  
+  
+import (
+	"fmt"  
+	"os"
+)
+import "time"  
+  
+func fibonacci(c, quit chan int) { 
+    x, y := 1, 1  
+
+    for {  
+            select {  
+
+                    case c <- x:  
+                            x, y = y, x+y  
+
+                    case <- quit:  
+                            fmt.Println("quit")  
+                            os.Exit(0)  
+            }  
+    }  
+}  
+func show(c, quit chan int) {  
+    for i := 0; i < 10; i ++ {  
+           fmt.Println(<- c)  
+    }  
+    quit <- 0  
+}  
+func main() {  
+    data := make(chan int)  
+    leave := make(chan int)  
+    go show(data, leave)  
+    go fibonacci(data, leave)  
+    for {  
+            time.Sleep(100)  
+    }  
+} 
+output==>
+1
+1
+2
+3
+5
+8
+13
+21
+34
+55
+quit
+</pre>
