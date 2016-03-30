@@ -5075,6 +5075,8 @@ output==>
 3
 4
 </pre>
+
+
 string ==>int形式的map：
 <pre>
 package main
@@ -5204,6 +5206,9 @@ There are 7productivity  views for 7
 There are 8hn  views for 8
 There are 9reddit  views for 9
 </pre>
+
+
+
 <pre>
 package main
 import (
