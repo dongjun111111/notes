@@ -5331,6 +5331,7 @@ output==>
 5040
 </pre>
 结构体方法
+将一个方法作为结构体的属性（在js或者java面对对象中的属性概念）
 <pre>
 package main
 
