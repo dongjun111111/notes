@@ -5108,3 +5108,18 @@ one => 1
 two => 2
 three => 3
 </pre>
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){	
+	//&取出某变量对应的内存地址，*通过内存地址找到变量的值
+	r := 5
+	fmt.Println(&r,*&r)
+	
+}
+output==>
+0xc0820022d0 5
+</pre>
