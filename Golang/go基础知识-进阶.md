@@ -5029,3 +5029,21 @@ output==>
 浮点数：3.141593
 字符串：hi
 </pre>
+切片
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	a := [5]int{1,2,3,4,5}
+	b := a[2:4]
+	fmt.Println(b)
+	b = a[:4]
+	fmt.Println(b)
+}
+output==>
+[3 4]
+[1 2 3 4]
+</pre>
