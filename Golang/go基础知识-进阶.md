@@ -5124,6 +5124,45 @@ func main(){
 output==>
 [Ok No]
 </pre>
+map的range循环输出是随机的，所以不要以为会按照map中元素的顺序排列输出，如下：
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	blog :=map[string]int{
+	  "unix": 0,
+      "python": 1,
+      "go": 2,
+      "javascript": 3,
+      "testing": 4,
+      "philosophy": 5,
+      "startups": 6,
+      "productivity": 7,
+      "hn": 8,
+      "reddit": 9,
+      "C++": 10,
+	}
+	for k,v := range blog{
+		fmt.Println("There are",k,",views for",v)
+	}
+}
+output==>
+There are javascript ,views for 3
+There are philosophy ,views for 5
+There are C++ ,views for 10
+There are startups ,views for 6
+There are productivity ,views for 7
+There are hn ,views for 8
+There are reddit ,views for 9
+There are unix ,views for 0
+There are python ,views for 1
+There are go ,views for 2
+There are testing ,views for 4
+</pre>
+
 <pre>
 package main
 import (
