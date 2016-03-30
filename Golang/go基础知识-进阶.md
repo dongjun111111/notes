@@ -5047,3 +5047,23 @@ output==>
 [3 4]
 [1 2 3 4]
 </pre>
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	i := 1
+	//精简的for语句
+	for i<5{
+		fmt.Println(i)
+		i++
+	}
+}
+output==>
+1
+2
+3
+4
+</pre>
