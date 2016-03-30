@@ -5129,40 +5129,81 @@ map的range循环输出是随机的，所以不要以为会按照map中元素的
 package main
 
 import (
+	_"sort"
 	"fmt"
 )
 func main(){
 	blog :=map[string]int{
-	  "unix": 0,
-      "python": 1,
-      "go": 2,
-      "javascript": 3,
-      "testing": 4,
-      "philosophy": 5,
-      "startups": 6,
-      "productivity": 7,
-      "hn": 8,
-      "reddit": 9,
-      "C++": 10,
+	  "0unix": 0,
+      "1python": 1,
+      "2go": 2,
+      "3javascript": 3,
+      "4testing": 4,
+      "5philosophy": 5,
+      "6startups": 6,
+      "7productivity": 7,
+      "8hn": 8,
+      "9reddit": 9,
+      "10C++": 10,
 	}
-	for k,v := range blog{
-		fmt.Println("There are",k,",views for",v)
-	}
+	 for key, views := range blog {
+      fmt.Println("There are", views, "views for", key)
+  }
 }
 output==>
-There are javascript ,views for 3
-There are philosophy ,views for 5
-There are C++ ,views for 10
-There are startups ,views for 6
-There are productivity ,views for 7
-There are hn ,views for 8
-There are reddit ,views for 9
-There are unix ,views for 0
-There are python ,views for 1
-There are go ,views for 2
-There are testing ,views for 4
+There are 1 views for 1python
+There are 7 views for 7productivity
+There are 9 views for 9reddit
+There are 8 views for 8hn
+There are 0 views for 0unix
+There are 2 views for 2go
+There are 3 views for 3javascript
+There are 4 views for 4testing
+There are 5 views for 5philosophy
+There are 6 views for 6startups
 </pre>
+那么如何获得依次排列的map呢：
+<pre>
+package main
 
+import (
+	"sort"
+	"fmt"
+)
+func main(){
+	blog :=map[string]int{
+	  "0unix": 0,
+      "1python": 1,
+      "2go": 2,
+      "3javascript": 3,
+      "4testing": 4,
+      "5philosophy": 5,
+      "6startups": 6,
+      "7productivity": 7,
+      "8hn": 8,
+      "9reddit": 9,
+	}
+	var keys []string
+	for k := range blog {
+		keys =append(keys,k)
+	}
+	sort.Strings(keys)
+	 for _,k:= range keys {
+      fmt.Println("There are", k, " views for", blog[k])
+  }
+}
+output==>
+There are 0unix  views for 0
+There are 1python  views for 1
+There are 2go  views for 2
+There are 3javascript  views for 3
+There are 4testing  views for 4
+There are 5philosophy  views for 5
+There are 6startups  views for 6
+There are 7productivity  views for 7
+There are 8hn  views for 8
+There are 9reddit  views for 9
+</pre>
 <pre>
 package main
 import (
