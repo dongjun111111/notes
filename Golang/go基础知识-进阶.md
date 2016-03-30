@@ -5262,3 +5262,26 @@ func main(){
 output==>
 2 true
 </pre>
+不定参数
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func sum(nums ...int){
+	//不定参数
+	fmt.Println(nums,"")//输出如[1, 2, 3]之类的数组
+	total := 0
+	for _,num :=range nums {
+		total += num
+	}
+	fmt.Println(total)
+}
+func main(){
+	sum(1,2,4,5,6,6,6)
+}
+output==>
+[1 2 4 5 6 6 6] 
+total is : 30
+</pre>
