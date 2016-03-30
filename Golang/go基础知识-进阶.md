@@ -5110,7 +5110,6 @@ three => 3
 </pre>
 <pre>
 package main
-
 import (
 	"fmt"
 )
