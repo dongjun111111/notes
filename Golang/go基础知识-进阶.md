@@ -5140,3 +5140,24 @@ func main(){
 output==>
 5
 </pre>
+函数多返回值，一般情况下，一个是需要返回的值，另一个是错误信息：
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func multireturn(key string)(int, bool){
+	m :=map[string]int{"one":1,"two":2,"three":3}
+	var err bool
+	var val int
+	val,err =m[key]
+	return val ,err
+}
+func main(){
+	v,e :=multireturn("two")
+	fmt.Println(v,e)
+}
+output==>
+2 true
+</pre>
