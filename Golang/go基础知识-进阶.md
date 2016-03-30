@@ -5330,3 +5330,33 @@ func main(){
 output==>
 5040
 </pre>
+结构体方法
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type rect struct {
+	width,height int
+}
+func (r *rect)area() int{
+	return r.width * r.height
+}
+func (r *rect)perimeter()int{
+	return 2*(r.width + r.height)
+}
+func main(){
+	r :=rect{width:2,height:4}
+	fmt.Println("面积：",r.area())
+	fmt.Println("周长：",r.perimeter())
+	rp := &r
+    fmt.Println("面积: ", rp.area())
+    fmt.Println("周长: ", rp.perimeter())
+}
+output==>
+面积： 8
+周长： 12
+面积:  8
+周长:  12
+</pre>
