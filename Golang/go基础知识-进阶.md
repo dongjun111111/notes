@@ -5122,3 +5122,20 @@ func main(){
 output==>
 0xc0820022d0 5
 </pre>
+new关键字分配内存的内建函数，但不同于其他语言中同名的new所作的工作，它只是将内存清零，而不是初始化内存。
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){	
+	var p *[]int =new([]int)//为切片结构分配内存
+	*p =make([]int,10,10)
+	(*p)[2] = 5
+	fmt.Println((*p)[2])
+	
+}
+output==>
+5
+</pre>
