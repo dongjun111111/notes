@@ -5060,6 +5060,14 @@ func main(){
 		fmt.Println(i)
 		i++
 	}
+	/*这一种也是同样效果
+	for {
+		if i>=5{
+			break
+		}
+		fmt.Println(i)
+		i++
+	}*/
 }
 output==>
 1
