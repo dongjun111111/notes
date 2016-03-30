@@ -5265,7 +5265,6 @@ output==>
 不定参数
 <pre>
 package main
-
 import (
 	"fmt"
 )
