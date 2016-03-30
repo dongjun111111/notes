@@ -5075,9 +5075,9 @@ output==>
 3
 4
 </pre>
+string ==>int形式的map：
 <pre>
 package main
-
 import (
 	"fmt"
 )
@@ -5107,6 +5107,22 @@ map[one:1 two:2 three:3]
 one => 1
 two => 2
 three => 3
+</pre>
+string ==> []string形式的map
+<pre>
+package main
+import (
+	"fmt"
+)
+func main(){
+	var abs map[string][]string
+	abs =make(map[string][]string)
+	abs["two"] = []string{"Two","Three"}
+	abs["three"] =[]string{"Ok","No"}
+	fmt.Println(abs["three"])
+}
+output==>
+[Ok No]
 </pre>
 <pre>
 package main
