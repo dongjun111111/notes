@@ -5244,7 +5244,6 @@ output==>
 函数多返回值，一般情况下，一个是需要返回的值，另一个是错误信息：
 <pre>
 package main
-
 import (
 	"fmt"
 )
