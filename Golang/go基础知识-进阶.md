@@ -5283,3 +5283,31 @@ output==>
 [1 2 4 5 6 6 6] 
 total is : 30
 </pre>
+函数闭包：
+<pre>
+package main
+//一个斐波拉契数
+import (
+	"fmt"
+)
+func next()func() int{
+	i,j := 1,1
+	return func() int{
+		var tmp = i+j
+		i,j = j,tmp
+		return tmp
+	}
+}
+func main(){
+	nextfunc :=next()
+	for i:=0;i<5;i++{
+		fmt.Println(nextfunc())
+	}
+}
+output==>
+2
+3
+5
+8
+13
+</pre>
