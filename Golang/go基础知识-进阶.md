@@ -5311,3 +5311,22 @@ output==>
 8
 13
 </pre>
+函数递归
+<pre>
+package main
+//递归，适用于有重复使用的方法或者参数
+import (
+	"fmt"
+)
+func fact(n int) int{
+	if n == 0{
+		return 1
+	}
+	return n*fact(n-1)
+}
+func main(){
+	fmt.Println(fact(7))
+}
+output==>
+5040
+</pre>
