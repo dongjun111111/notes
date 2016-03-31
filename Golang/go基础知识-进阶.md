@@ -5597,3 +5597,4 @@ func main(){
 output==>
 hello
 </pre>
+####Channel的阻塞
