@@ -5639,3 +5639,144 @@ Reader: world
 write "channel"done!
 Reader: channel
 </pre>
+####利用channel阻塞实现golang版线程池
+<pre>
+package main
+/*
+任务：go语言实现一个线程池，主要功能是：添加total个任务到线程池中，
+线程池开启number个线程，每个线程从任务队列中取出一个任务执行，
+执行完成后取下一个任务，全部执行完成后回调一个函数。
+思路：将任务放到channel里，每个线程不停的从channel中取出任务执行，
+并把执行结果写入另一个channel，当得到total个结果后，回调函数。
+*/
+import (
+	"time"
+	"io"
+	"strings"
+	"os"
+	"net/http"
+	"fmt"
+)
+
+type GoroutinePool struct {
+      Queue  chan func() error
+      Number int
+      Total  int
+      result         chan error
+      finishCallback func()
+ }
+ 
+ // 初始化
+func (self *GoroutinePool) Init(number int, total int) {
+     self.Queue = make(chan func() error, total)
+     self.Number = number
+     self.Total = total
+     self.result = make(chan error, total)
+ }
+ 
+ // 开门接客
+ func (self *GoroutinePool) Start() {
+     // 开启Number个goroutine
+     for i := 0; i < self.Number; i++ {
+        go func() {
+             for {
+                task, ok := <-self.Queue
+                if !ok {
+                     break              
+			    }
+                err := task()
+                self.result <- err
+             }         
+		}()
+     }
+ 
+     // 获得每个work的执行结果
+     for j := 0; j < self.Total; j++ {
+         res, ok := <-self.result
+        if !ok {
+             break
+        }
+        if res != nil {
+           fmt.Println(res)   
+        }
+}    // 所有任务都执行完成，回调函数
+    if self.finishCallback != nil {     
+	   self.finishCallback()
+    }
+}
+// 关门送客
+func (self *GoroutinePool) Stop() {
+    close(self.Queue)
+    close(self.result)
+}
+
+// 添加任务
+func (self *GoroutinePool) AddTask(task func() error) {
+    self.Queue <- task
+}
+// 设置结束回调
+func (self *GoroutinePool) SetFinishCallback(callback func()) {
+    self.finishCallback = callback
+ }
+
+func Download_test() {
+      urls := []string{
+          "http://dlsw.baidu.com/sw-search-sp/soft/44/17448/Baidusd_Setup_4.2.0.7666.1436769697.exe",
+          "http://dlsw.baidu.com/sw-search-sp/soft/3a/12350/QQ_V7.4.15197.0_setup.1436951158.exe",
+          "http://dlsw.baidu.com/sw-search-sp/soft/9d/14744/ChromeStandalone_V43.0.2357.134_Setup.1436927123.exe",
+		}
+     pool := new(GoroutinePool)
+     pool.Init(3, len(urls))
+ 
+     for i := range urls {
+         url := urls[i]
+         pool.AddTask(func() error {
+             return download(url)
+         })
+     }
+	 isFinish := false
+	pool.SetFinishCallback(func() {
+		func(isFinish *bool) {
+			 *isFinish = true
+		}(&isFinish)
+	})
+	pool.Start()
+	 for !isFinish {
+         time.Sleep(time.Millisecond * 100)
+     }
+	 pool.Stop()
+     fmt.Println("所有操作已完成！")
+}
+func download(url string) error {
+    fmt.Println("开始下载... ", url)
+
+     sp := strings.Split(url, "/")
+     filename := sp[len(sp)-1]
+ 
+     file, err := os.Create("./aa/" + filename)
+     if err != nil {
+         return err
+     }
+      res, err := http.Get(url)
+     if err != nil {
+         return err
+     }
+ 
+     length, err := io.Copy(file, res.Body)
+     if err != nil {
+         return err
+     }
+ 
+     fmt.Println("## 下载完成！ ", url, " 文件长度：", length)
+     return nil
+}
+func main(){
+	Download_test()
+}
+output==>
+开始下载...  http://dlsw.baidu.com/sw-search-sp/soft/44/17448/Baidusd_Setup_4.2.0.7666.1436769697.exe
+开始下载...  http://dlsw.baidu.com/sw-search-sp/soft/3a/12350/QQ_V7.4.15197.0_setup.1436951158.exe
+开始下载...  http://dlsw.baidu.com/sw-search-sp/soft/9d/14744/ChromeStandalone_V43.0.2357.134_Setup.1436927123.exe
+## 下载完成！  http://dlsw.baidu.com/sw-search-sp/soft/44/17448/Baidusd_Setup_4.2.0.7666.1436769697.exe  文件长度： 28500944
+[然后所有文件下载在./aa目录下]
+</pre>
