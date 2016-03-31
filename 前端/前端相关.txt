@@ -8719,3 +8719,97 @@ function compile(){
     req.send(prog);
 }
 </script>
+
+
+
++++++css轮播|用css实现轮播效果+++++++
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CSS3实现轮播图效果</title>
+<style>
+    @-webkit-keyframes slide {
+        0% {
+            background-position: 0 0;
+        }
+        10%, 25% {
+            background-position: -600px 0;
+        }
+        35%, 50% {
+            background-position: -1200px 0;
+        }
+        60%, 75% {
+            background-position: -1800px 0;
+        }
+        85%, 100% {
+            background-position: 0 0;
+        }
+    }
+    @-moz-keyframes slide {
+        0% {
+            background-position: 0 0;
+        }
+        10%, 25% {
+            background-position: -600px 0;
+        }
+        35%, 50% {
+            background-position: -1200px 0;
+        }
+        60%, 75% {
+            background-position: -1800px 0;
+        }
+        85%, 100% {
+            background-position: 0 0;
+        }
+    }
+    @-o-keyframes slide {
+        0% {
+            background-position: 0 0;
+        }
+        10%, 25% {
+            background-position: -600px 0;
+        }
+        35%, 50% {
+            background-position: -1200px 0;
+        }
+        60%, 75% {
+            background-position: -1800px 0;
+        }
+        85%, 100% {
+            background-position: 0 0;
+        }
+    }
+    @keyframes slide {
+        0% {
+            background-position: 0 0;
+        }
+        10%, 25% {
+            background-position: -600px 0;
+        }
+        35%, 50% {
+            background-position: -1200px 0;
+        }
+        60%, 75% {
+            background-position: -1800px 0;
+        }
+        85%, 100% {
+            background-position: 0 0;
+        }
+    }
+    .slide-box {
+        margin: 0 auto;
+        width: 600px;
+        height: 400px;
+        border: 1px solid #ddd;
+        background: url(http://sandbox.runjs.cn/uploads/rs/376/uazzmdfd/bg.png) 0 0 no-repeat;
+        -webkit-animation: slide 8s linear infinite;
+        -o-animation: slide 8s linear infinite;
+        animation: slide 8s linear infinite;
+    }
+</style>
+</head>
+<body>
+    <div class="slide-box"></div>
+</body>
+</html>
