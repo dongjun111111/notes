@@ -5598,3 +5598,44 @@ output==>
 hello
 </pre>
 ####Channel的阻塞
+<pre>
+package main
+
+import (
+	"time"
+	"fmt"
+)
+func main(){
+	channel :=make(chan string)
+	go func(){
+		channel <- "hello"
+		fmt.Println("write \"hello\"done!")
+		channel <- "world" //Reader在Sleep，这里在阻塞
+		fmt.Println("write\"world\"done!")
+		fmt.Println("write go sleep ...")
+		time.Sleep(3*time.Second)
+		channel <- "channel"
+		fmt.Println("write \"channel\"done!")
+	}()
+	time.Sleep(2*time.Second)
+	fmt.Println("Reader wake up ...")
+	
+	msg :=<-channel
+	fmt.Println("Reader:",msg)
+	
+	msg =<-channel
+	fmt.Println("Reader:",msg)
+	
+	msg =<-channel //Writer在Sleep，这里在阻塞
+	fmt.Println("Reader:",msg)
+}
+output==>
+Reader wake up ...
+Reader: hello
+write "hello"done!
+write"world"done!
+write go sleep ...
+Reader: world
+write "channel"done!
+Reader: channel
+</pre>
