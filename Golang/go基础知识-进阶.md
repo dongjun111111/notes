@@ -5261,7 +5261,7 @@ func main(){
 output==>
 2 true
 </pre>
-不定参数
+####不定参数
 <pre>
 package main
 import (
@@ -5283,7 +5283,7 @@ output==>
 [1 2 4 5 6 6 6] 
 total is : 30
 </pre>
-函数闭包：
+####函数闭包
 <pre>
 package main
 //一个斐波拉契数
@@ -5311,7 +5311,7 @@ output==>
 8
 13
 </pre>
-函数递归
+####函数递归
 <pre>
 package main
 //递归，适用于有重复使用的方法或者参数
@@ -5330,7 +5330,7 @@ func main(){
 output==>
 5040
 </pre>
-结构体方法
+####结构体方法
 将一个方法作为结构体的属性（在js或者java面对对象中的属性概念）
 <pre>
 package main
@@ -5361,7 +5361,7 @@ output==>
 面积:  8
 周长:  12
 </pre>
-错误处理-Error接口
+####错误处理-Error接口
 <pre>
 package main
 
@@ -5400,3 +5400,5 @@ success: 1
 faild: Bad Arguments - negtive
 faild: Bad Arguments - negtive
 </pre>
+####错误处理 – Panic/Recover
+对于不可恢复的错误，Go提供了一个内建的panic函数，它将创建一个运行时错误并使程序停止（相当暴力）。该函数接收一个任意类型（往往是字符串）作为程序死亡时要打印的东西。当编译器在函数的结尾处检查到一个panic时，就会停止进行常规的return语句检查。
