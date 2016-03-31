@@ -5551,3 +5551,30 @@ id: 1  tickets: 0
 g
 0 done
 </pre>
+####原子操作
+10个goroutine，每个会对cnt变量累加20次，所以，最后的cnt应该是200。如果没有atomic的原子操作，那么cnt将有可能得到一个小于200的数。
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+	"time"
+)
+func main(){
+	var cnt uint32 = 0
+	for i:=0;i<10;i++{
+		go func(){
+			for i:=0;i<10;i++{
+				time.Sleep(time.Millisecond)
+				atomic.AddUint32(&cnt,1)
+			}
+		}()
+	}
+	time.Sleep(time.Second)
+	cntFinal := atomic.LoadUint32(&cnt)
+	fmt.Println("cnt:",cntFinal)
+}
+output==>
+cnt: 100
+</pre>
