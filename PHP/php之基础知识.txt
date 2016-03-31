@@ -3359,3 +3359,9 @@ r_info?'
 }  
  
 /* end of Qq_sdk.php */
+
+
+++++去除右侧指定字符+++++
+$str="123456789";
+$str=rtrim($str,"89");
+echo $str;
