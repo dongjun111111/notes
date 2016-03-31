@@ -5578,3 +5578,5 @@ func main(){
 output==>
 cnt: 100
 </pre>
+####Channel 信道
+Channal就是用来通信的，就像Unix下的管道一样，在Go中是这样使用Channel的。
