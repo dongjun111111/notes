@@ -5363,5 +5363,40 @@ output==>
 </pre>
 错误处理-Error接口
 <pre>
+package main
 
+import (
+	"errors"
+	"fmt"
+)
+//自定义错误结构
+type myerror struct {
+	arg int
+	errMsg string
+}
+//实现Error接口
+func (e *myerror) Error() string{
+	return fmt.Sprintf("%d - %s",e.arg,e.errMsg)
+}
+func error_test(arg int)(int,error){
+	if arg > 0 {
+		return -1,errors.New("Bad Arguments - negtive")
+	}else if arg >256{
+		return -1,&myerror{arg,"Bad Argments - too large"}
+	}
+	return arg*arg,nil
+}
+func main(){
+	for _,i :=range []int{-1,4,100}{
+		if r,e:=error_test(i);e != nil {
+			fmt.Println("faild:",e)
+		}else{
+			fmt.Println("success:",r)
+		}
+	}
+}
+output==>
+success: 1
+faild: Bad Arguments - negtive
+faild: Bad Arguments - negtive
 </pre>
