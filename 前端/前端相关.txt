@@ -8813,3 +8813,91 @@ function compile(){
     <div class="slide-box"></div>
 </body>
 </html>
+
+
++++css选项卡|用css实现选项卡效果+++++
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<title>完全css-tab切换</title> 
+<style> 
+<!-- 
+*{ 
+margin:0;padding:0;list-style:none;font-size:12px;} 
+
+#content{ 
+width:300px;margin:10px auto;position:relative;border:1px solid #666;} 
+
+ul{ 
+width:20px;height:100px;position:absolute;right:5px;top:100px;} 
+
+ul li{height:33px;} 
+
+ul li a{ 
+display:block;width:20px;height:20px;line-height:20px;text-align:center;color:#000;background:#ccc;text-decoration:none;} 
+
+ul li a:hover{color:#fff;background:#666;} 
+
+#tabTxt{height:300px;overflow:hidden;} 
+
+#a1,#a2,#a3{width:300px;height:300px;} 
+--> 
+</style> 
+<script>
+//倒计时
+/*
+var timeout = 60*60;
+minutes = Math.floor(timeout/60);
+if(minutes < 10){
+		minutes = "0"+minutes;
+	}
+seconds = timeout%60;
+if(seconds < 10){
+		seconds = "0"+seconds;
+	}
+document.body.innerHTML="<b><p  style='font-size:32px;text-align:center;color:red;margin-top:200px;'>还有"+minutes+"分"+seconds+"秒</p></b>";
+function sett()
+{
+	timeout =timeout - 1;
+	minutes =  Math.floor(timeout/60);
+	seconds = timeout%60;
+	if(minutes < 10){
+		minutes = "0"+minutes;
+	}
+	if(seconds < 10){
+		seconds = "0"+seconds;
+	}
+	document.body.innerHTML="<b><b><p  style='font-size:32px;text-align:center;color:red;margin-top:200px;'>还有"+minutes+"分"+seconds+"秒</p></b>";
+	if(timeout <= 0){
+		clearInterval(inter);
+		alert("您的需求小匠已经收到可能由于需求过多无法按时联系到您");
+	}
+}
+var inter=setInterval("sett();", 1000);   */
+</script>
+</head> 
+<body> 
+<div id="content"> 
+<ul> 
+  <li><a href="#a1">1</a></li> 
+  <li><a href="#a2">2</a></li> 
+  <li><a href="#a3">3</a></li> 
+</ul> 
+<div id="tabTxt"> 
+  <div id="a1" style="background:#f00"> 
+  1 
+  </div> 
+  <div id="a2" style="background:#080"> 
+  2 
+  </div> 
+  <div id="a3" style="background:#009;"> 
+  3 
+  </div> 
+</div> 
+</div> 
+
+</body> 
+</html>
+
+
