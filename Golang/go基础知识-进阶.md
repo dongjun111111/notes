@@ -5498,3 +5498,56 @@ f
 exit
 </pre>
 ####goroutine的并发安全性|锁Mutex|mutex
+<pre>
+package main
+
+import (
+	"sync"
+	"os"
+	"runtime"
+	"fmt"
+	"math/rand"
+	"time"
+)
+var total_tickets int32 = 10
+var mutex = &sync.Mutex{}
+func sell_tickets(i int){
+	for total_tickets>0 {
+		mutex.Lock()
+		if total_tickets > 0 {
+			time.Sleep(time.Duration(rand.Intn(5))*time.Millisecond)
+			total_tickets--
+			fmt.Println("id:",i," tickets:",total_tickets)
+		}else{
+			break
+		}
+		mutex.Unlock()
+	}
+}
+func main(){
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	fmt.Println(runtime.NumCPU())
+	rand.Seed(time.Now().Unix())
+	for i:=0;i<5;i++{
+		go sell_tickets(i)
+	}
+	var input string
+	fmt.Scanln(&input)
+	fmt.Println(total_tickets,"done")
+	os.Exit(0)
+}
+output==>
+4
+id: 1  tickets: 9
+id: 1  tickets: 8
+id: 1  tickets: 7
+id: 1  tickets: 6
+id: 1  tickets: 5
+id: 1  tickets: 4
+id: 1  tickets: 3
+id: 1  tickets: 2
+id: 1  tickets: 1
+id: 1  tickets: 0
+g
+0 done
+</pre>
