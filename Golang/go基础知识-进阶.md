@@ -5571,8 +5571,8 @@ func main(){
 			}
 		}()
 	}
-	time.Sleep(time.Second)
-	cntFinal := atomic.LoadUint32(&cnt)
+	time.Sleep(time.Second) //等一秒钟让goroutine完成
+	cntFinal := atomic.LoadUint32(&cnt)//取出数据
 	fmt.Println("cnt:",cntFinal)
 }
 output==>
