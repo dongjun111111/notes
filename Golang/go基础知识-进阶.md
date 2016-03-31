@@ -5497,3 +5497,4 @@ ff
 f
 exit
 </pre>
+####goroutine的并发安全性|锁Mutex|mutex
