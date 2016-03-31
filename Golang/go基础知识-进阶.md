@@ -5402,3 +5402,45 @@ faild: Bad Arguments - negtive
 </pre>
 ####错误处理 – Panic/Recover
 对于不可恢复的错误，Go提供了一个内建的panic函数，它将创建一个运行时错误并使程序停止（相当暴力）。该函数接收一个任意类型（往往是字符串）作为程序死亡时要打印的东西。当编译器在函数的结尾处检查到一个panic时，就会停止进行常规的return语句检查。
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func g(i int) {
+    if i>1 {
+        fmt.Println("Panic!")
+        panic(fmt.Sprintf("%v", i))
+    }
+ 
+}
+ 
+func f() {
+    defer func() {
+        if r := recover(); r != nil {
+            fmt.Println("Recovered in f", r)
+        }
+    }()
+ 
+    for i := 0; i < 4; i++ {
+        fmt.Println("Calling g with ", i)
+        g(i)
+        fmt.Println("Returned normally from g.")
+     }
+}
+ 
+func main() {
+    f()
+    fmt.Println("Returned normally from f.")
+}
+output==>
+Calling g with  0
+Returned normally from g.
+Calling g with  1
+Returned normally from g.
+Calling g with  2
+Panic!
+Recovered in f 2
+Returned normally from f.
+</pre>
