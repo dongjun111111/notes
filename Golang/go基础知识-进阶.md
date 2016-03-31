@@ -5444,3 +5444,57 @@ Panic!
 Recovered in f 2
 Returned normally from f.
 </pre>
+####goroutine
+下面的示例包括时间处理，随机数处理，还有goroutine:
+<pre>
+package main
+
+import (
+	"os"
+	_"os"
+	"math/rand"
+	"fmt"
+	"time"
+)
+func routine(name string,delay time.Duration){
+	t0 :=time.Now()
+	fmt.Println(name,"start at",t0)
+	time.Sleep(delay)
+	t1 :=time.Now()
+	fmt.Println(name,"end at",t1)
+	fmt.Println(name,"lasted ",t1.Sub(t0))
+}
+func main(){
+	rand.Seed(time.Now().Unix())
+	var name string
+	for i:=0;i<3;i++{
+		name = fmt.Sprintf("go %d",i) //生成ID
+		go routine(name,time.Duration(rand.Intn(5)) * time.Second)
+	}
+	A:
+	var input string
+	fmt.Scanln(&input)
+	ex := &input
+	if *ex =="exit"{
+		os.Exit(0)
+	}else{
+		goto A
+	}
+}
+output==>
+go 0 start at 2016-03-31 21:41:13.1557936 +0800 +0800
+go 1 start at 2016-03-31 21:41:13.1567936 +0800 +0800
+go 2 start at 2016-03-31 21:41:13.1567936 +0800 +0800
+go 2 end at 2016-03-31 21:41:13.1567936 +0800 +0800
+go 2 lasted  0
+go 1 end at 2016-03-31 21:41:16.1569652 +0800 +0800
+go 1 lasted  3.0001716s
+go 0 end at 2016-03-31 21:41:17.1570224 +0800 +0800
+go 0 lasted  4.0012288s
+vf
+ff
+
+ff
+f
+exit
+</pre>
