@@ -5780,3 +5780,35 @@ output==>
 ## 下载完成！  http://dlsw.baidu.com/sw-search-sp/soft/44/17448/Baidusd_Setup_4.2.0.7666.1436769697.exe  文件长度： 28500944
 [然后所有文件下载在./aa目录下]
 </pre>
+####多个Channel的select
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	c1 :=make(chan string)
+	c2 :=make(chan string)
+	go func(){
+		time.Sleep(time.Second*1)
+		c1 <- "hello"
+	}()
+	go func(){
+		time.Sleep(time.Second*1)
+		c2<- "world"
+	}()
+	for i:=0;i<2;i++{
+		select {
+			case msg1 :=<- c1:
+			fmt.Println("received:",msg1)
+			case msg2 :=<- c2:
+			fmt.Println("received:",msg2)
+		}
+	}
+}
+output==>
+received: hello
+received: world
+</pre>
