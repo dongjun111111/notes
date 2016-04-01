@@ -5982,3 +5982,25 @@ output==>
 2016-04-01 22:37:10.6028531 +0800 +0800
 timer expired!
 </pre>
+环境变量
+<pre>
+package main
+//遍历环境变量
+import (
+	"fmt"
+	"strings"
+	"os"
+)
+func main(){
+	for _,env :=range os.Environ(){
+		e := strings.Split(env,"=")
+		fmt.Println(e[0],"=",e[1])
+	}
+}
+output==>
+GOEXE = .exe
+PROCESSOR_ARCHITECTURE = AMD64
+COMPUTERNAME = JASON
+FP_NO_HOST_CHECK = NO
+...
+</pre>
