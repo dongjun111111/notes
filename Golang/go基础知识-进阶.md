@@ -5925,3 +5925,25 @@ test timer2
 test timer1
 ...
 </pre>
+Ticker打点器
+<pre>
+package main
+//需要持续通知，通过ticker打点器实现
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	ticker :=time.NewTicker(time.Second)
+	for t:=range ticker.C {
+		fmt.Println("Tick at",t)
+	}
+}
+output==>
+Tick at 2016-04-01 22:27:27.4815005 +0800 +0800
+Tick at 2016-04-01 22:27:28.4815577 +0800 +0800
+Tick at 2016-04-01 22:27:29.4816149 +0800 +0800
+Tick at 2016-04-01 22:27:30.4816721 +0800 +0800
+Tick at 2016-04-01 22:27:31.4817293 +0800 +0800
+...
+</pre>
