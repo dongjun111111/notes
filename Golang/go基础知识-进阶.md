@@ -5950,10 +5950,8 @@ Tick at 2016-04-01 22:27:31.4817293 +0800 +0800
 上面的程序会进入一个死循环中，我们为了实现可控，可以将它放入一个goroutine中：
 <pre>
 package main
- 
 import "time"
 import "fmt"
- 
 func main() {
  
     ticker := time.NewTicker(time.Second)
