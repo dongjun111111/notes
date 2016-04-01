@@ -6005,3 +6005,33 @@ PROCESSOR_ARCHITECTURE = AMD64
 COMPUTERNAME = JASON
 ...
 </pre>
+<pre>
+package main
+import "flag"
+import "fmt"
+ 
+func main() {
+ 
+    //第一个参数是“参数名”，第二个是“默认值”，第三个是“说明”。返回的是指针
+    host := flag.String("host", "baidu.com", "a host name ")
+    port := flag.Int("port", 80, "a port number")
+    debug := flag.Bool("d", false, "enable/disable debug mode")
+ 
+    //正式开始Parse命令行参数
+    flag.Parse()
+ 
+    fmt.Println("host:", *host)
+    fmt.Println("port:", *port)
+    fmt.Println("debug:", *debug)
+}
+output==>
+host: baidu.com
+port: 80
+debug: false
+用法是：
+#指定了参数名后的情况
+$ go run flagtest.go -host=localhost -port=22 -d
+host: localhost
+port: 22
+debug: true
+</pre>
