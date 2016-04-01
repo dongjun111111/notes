@@ -5857,3 +5857,20 @@ message- 1
 message- 2
 channel closed!
 </pre>
+####定时器
+Go语言中可以使用time.NewTimer或time.NewTicker来设置一个定时器，这个定时器会绑定在你的当前channel中，通过channel的阻塞通知机器来通知你的程序。
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	timer:=time.NewTimer(2*time.Second)
+	<- timer.C
+	fmt.Println("timer expired!")
+}
+output==>
+timer expired!
+</pre>
