@@ -5992,6 +5992,7 @@ import (
 	"os"
 )
 func main(){
+	os.Setenv("Jason","dj")//设置环境变量
 	for _,env :=range os.Environ(){
 		e := strings.Split(env,"=")
 		fmt.Println(e[0],"=",e[1])
@@ -5999,8 +6000,8 @@ func main(){
 }
 output==>
 GOEXE = .exe
+Jason = dj
 PROCESSOR_ARCHITECTURE = AMD64
 COMPUTERNAME = JASON
-FP_NO_HOST_CHECK = NO
 ...
 </pre>
