@@ -6196,3 +6196,22 @@ login.gtpl
 </body>  
 </html> 
 </pre>
+Golang中的字符串
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	str := "高贵不发"
+	for i,s:=range str {
+		fmt.Println(i,"unicode(",s,") string=",string(s))
+	}
+}
+output==>
+0 unicode( 39640 ) string= 高
+3 unicode( 36149 ) string= 贵
+6 unicode( 19981 ) string= 不
+9 unicode( 21457 ) string= 发
+</pre>
