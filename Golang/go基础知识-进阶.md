@@ -6099,8 +6099,7 @@ func htmlHandler(w http.ResponseWriter, r *http.Request) {
     fmt.Printf("ext %s, ct = %s\n", fileext, contype)
      
     w.Header().Set("Content-Type", contype)
-    fmt.Fprintf(w, "%s", content)
-     
+    fmt.Fprintf(w, "%s", content)   
 }
 
 </pre>
