@@ -6127,14 +6127,14 @@ func htmlHandler(w http.ResponseWriter, r *http.Request) {
 - 通过实例走近函数式编程：
 首先是一个非函数式：
 <pre>
-int cnt;
-void increment(){
+var cnt int
+func increment(){
     cnt++;
 }
 </pre>
 接着是一个函数式：
 <pre>
-int increment(int cnt){
+func increment(cnt int){
     return cnt+1;
 }
 </pre>
