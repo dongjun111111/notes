@@ -6140,3 +6140,59 @@ func increment(cnt int){
 通过上面的比较可以得出：<b>不依赖于外部的数据，而且也不改变外部数据的值，而是返回一个新的值给你</b>。<br>
 还有一个特点：<b>把函数当成变量来用，关注于描述问题而不是怎么实现，这样可以让代码更易读</b>。
 ###带有表单处理的web服务器
+main.go
+<pre>
+package main
+
+import (
+	"html/template"
+	"fmt"
+	"net/http"
+)
+func hi(w http.ResponseWriter,r *http.Request){
+	fmt.Fprintf(w,"hello wolrd")
+}
+func login(w http.ResponseWriter,r *http.Request){
+	if r.Method == "GET"{
+		t,_:=template.ParseFiles("login.gtpl")
+		t.Execute(w,nil)
+	}else{
+		r.ParseForm()
+		username := r.Form["username"]
+		password := r.Form["password"]
+		user := ""
+		pass := ""
+		for _,s :=range username{
+			user +=s
+		}
+		for _,s :=range password{
+			pass +=s
+		}
+		fmt.Fprintf(w,"username:",user)
+		fmt.Fprintf(w,"password:",pass)
+		//fmt.Println("username:",r.Form["username"])
+		//fmt.Println("password:",r.Form["password"])
+	}
+}
+func main(){
+	http.HandleFunc("/",hi)
+	http.HandleFunc("/login",login)
+	http.ListenAndServe(":9099",nil)
+}
+</pre>
+login.gtpl
+<pre>
+<html>  
+<head>  
+<title> </title>  
+</head>  
+  
+<body>  
+<form action="http://127.0.0.1:9099/login" method="post">  
+        user: <input type="text" name ="username">  
+        pass: <input type="password" name="password">  
+        <input type="submit" value="login">  
+</form>  
+</body>  
+</html> 
+</pre>
