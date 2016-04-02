@@ -6215,3 +6215,62 @@ output==>
 6 unicode( 19981 ) string= 不
 9 unicode( 21457 ) string= 发
 </pre>
+###strings包
+Golang字符串处理函数
+<pre>
+package main
+
+import (
+	"strings"
+	"fmt"
+)
+func main(){
+	str := "hello,董军"
+	sli :=[]string{"H","I"}
+	fmt.Println(strings.Count(str,"l"))//统计字符串指定字符的个数
+	fmt.Println(strings.Contains(str,"he"))//存在true,反之false
+	fmt.Println(strings.Contains("", "")) //注意    
+	fmt.Println(strings.ContainsAny("", ""))// false
+	fmt.Println(strings.ContainsAny(str,"e&o")) //true检测是否同时存在多个元素
+	fmt.Println(strings.ContainsRune(str,'董'))//第二个是字符
+	fmt.Println(strings.EqualFold("GO","go"))//大小写忽略的情况下判断两个字符串是否相等 
+	fmt.Println(strings.HasPrefix(str,"he"))//判断字符串前缀是否是指定字符
+	fmt.Println(strings.HasSuffix(str,"军"))//判断字符串后缀是否是指定字符
+	fmt.Println(strings.Index(str,"军"))//指定字符第一次出现的位置|中文占2个字符
+	fmt.Println(strings.LastIndex(str, "l")) //指定字符最后一次出现的位置
+	fmt.Println(strings.IndexAny(str, "军"))//指定字符的位置|中文占2个字符
+	fmt.Println(strings.IndexRune(str, '军'))//指定字符的位置|中文占2个字符
+	fmt.Println(strings.Join(sli,""))//将数组或切片按照指定连接符连接成字符串
+	fmt.Println("ba" + strings.Repeat("na", 2))//重复指定次数的字符串
+	fmt.Println(strings.Replace(str,"l","L",1))//替换指定字符指定个数|heLlo,董军
+	fmt.Println(strings.Replace(str,"l","L",2))//heLLo,董军
+	fmt.Println(strings.Split(str,",")) //[hello 董军]
+	fmt.Println(strings.ToLower(str))//hello,董军
+	fmt.Println(strings.ToUpper(str))//HELLO,董军HELLO,董军
+	fmt.Println(strings.Trim("!!!Achtung!!!", "!"))//删除左右指定字符|Achtung|同理有trimLeft,trimRight
+	fmt.Println(strings.TrimSpace(" \t\n Achtung \n\t\r\n"))//删除空格Achtung
+}
+output==>
+2
+true
+true
+false
+true
+true
+true
+true
+true
+9
+3
+9
+9
+HI
+banana
+heLlo,董军
+heLLo,董军
+[hello 董军]
+hello,董军
+HELLO,董军
+Achtung
+Achtung
+</pre>
