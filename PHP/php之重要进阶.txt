@@ -9332,3 +9332,21 @@ R('Admin/User/detail',array('5'));
 
 表示调用Admin分组下面的User控制器的detail方法。
 R('Admin://User/detail',array('5'));
+
+
+++++PHP移除字符中的emoji表情字符+++++
+正则实现移除字符中的emoji表情字符
+/* 移除字符中的emoji字符 */
+function removeEmoji($text){
+    $cleanText = "";
+    // Match Emoticons
+    $regexEmoticons = '/[\x{1F600}-\x{1F64F}]/u';
+    $cleanText = preg_replace($regexEmoticons, '', $text);
+    // Match Miscellaneous Symbols and Pictographs
+    $regexSymbols = '/[\x{1F300}-\x{1F5FF}]/u';
+    $cleanText = preg_replace($regexSymbols, '', $cleanText);
+    // Match Transport And Map Symbols
+    $regexTransport = '/[\x{1F680}-\x{1F6FF}]/u';
+    $cleanText = preg_replace($regexTransport, '', $cleanText);
+    return $cleanText;
+}
