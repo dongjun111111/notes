@@ -6308,3 +6308,24 @@ func main(){
 output==>
 jason
 </pre>
+另一个例子：
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func CallBack(f func(int) int){
+	fmt.Println(f)
+	f(32)
+}
+func main(){
+	CallBack(func(m int)int{
+		fmt.Println(m)
+		return m
+	})
+}
+output==>
+0x401110
+32
+</pre>
