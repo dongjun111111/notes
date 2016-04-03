@@ -8930,3 +8930,94 @@ ws.onopen = function () {
         }, 3000);
 }
 
+
++++++css制作冒泡提示框++++
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+        <meta charset="utf-8">
+        <style>
+        /*
+           对话气泡
+           用法：使用.speech-bubble和.speech-bubble-DIRECTION类
+           <div class="speech-bubble speech-bubble-top">Hi there</div>
+        */
+         
+        .speech-bubble {
+          position: relative;
+          background-color: #292929;
+          width: 200px;
+          height: auto;
+          line-height: 150px;/* 垂直居中 */
+          color: white;
+          text-align: center; 
+          border-radius: 5px;
+          font-family: sans-serif;
+          font-size:13px;
+        }
+         
+        .speech-bubble:after {
+          content: '';
+          position: absolute;
+         
+          width: 0;
+          height: 0;
+         
+          border: 15px solid;
+        }
+         
+        /* 箭头的位置 */
+        .speech-bubble-top:after {
+          border-bottom-color: #292929;
+          left: 50%;
+          bottom: 100%;
+          margin-left: -15px;  
+        }
+        .speech-bubble-right:after {
+          border-left-color: #292929;
+         
+          left: 100%;
+          top: 50%;
+          margin-top: -15px;   
+        }
+         
+        .speech-bubble-bottom:after {
+          border-top-color: #292929;
+          top: 100%;
+          left: 50%;
+          margin-left: -15px;  
+        }
+         
+        .speech-bubble-left:after {
+          border-right-color: #292929;
+          top: 50%;
+          right: 100%;
+          margin-top: -15px;   
+        }
+        </style>
+    </head>
+    <body>
+        <div class="speech-bubble speech-bubble-top">
+            箭头在顶部
+        </div>
+         <br/> 
+        <div class="speech-bubble speech-bubble-bottom">
+            箭头在底部
+        </div>
+        <br/>
+        <div class="speech-bubble speech-bubble-left">
+            箭头在左侧
+        </div>
+         <br/>
+        <div class="speech-bubble speech-bubble-right">
+            箭头在右侧
+        </div> 
+        <script>
+
+        </script>
+    </body>
+</html>
+
+ 
+
