@@ -6329,3 +6329,166 @@ output==>
 0x401110
 32
 </pre>
+####Golang处理支付宝的回调
+<pre>
+package main
+
+import (
+    "crypto"
+    "crypto/rsa"
+    "crypto/sha1"
+    "crypto/x509"
+    "encoding/base64"
+    "encoding/hex"
+    "encoding/pem"
+    "fmt"
+    "io"
+    "net/url"
+    "sort"
+)
+
+const (
+    //支付宝公钥
+    ALIPAY_PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----  
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRA
+FljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQE
+B/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5Ksi
+NG9zpgmLCUYuLkxpLQIDAQAB 
+-----END PUBLIC KEY-----
+`
+)
+
+func main() {
+    //这是我从支付宝callback的http body部分读取出来的一段参数列表。
+    paramerStr := `discount=0.00&payment_type=1&subject=%E7%BC%B4%E7%BA%B3%E4%BF%9D%E8%AF%81%E9%87%91&trade_no=2015122121001004460085270336&buyer_email=xxaqch%40163.com&gmt_create=2015-12-21+13%3A13%3A28&notify_type=trade_status_sync&quantity=1&out_trade_no=a378c684be7a4f99be1bf3b56e6d38fd&seller_id=2088121529348920&notify_time=2015-12-21+13%3A17%3A45&body=%E7%BC%B4%E7%BA%B3%E4%BF%9D%E8%AF%81%E9%87%91&trade_status=TRADE_SUCCESS&is_total_fee_adjust=N&total_fee=0.01&gmt_payment=2015-12-21+13%3A13%3A28&seller_email=172886370%40qq.com&price=0.01&buyer_id=2088002578894463&notify_id=5104b719303162e2b79d577aeaa5494jjs&use_coupon=N&sign_type=RSA&sign=YeshUpQO1GsR4KxQtAlPzdlqKUMlTfEunQmwmNI%2BMJ1T2qzd9WuA6bkoHYMM8BpHxtp5mnFM3rXlfgETVsQcNIiqwCCn1401J%2FubOkLi2O%2Fmta2KLxUcmssQ0OnkFIMjjNQuU9N3eIC1Z6SzDkocK092w%2Ff3un4bxkIfILgdRr0%3D`
+
+    //调用url.ParseQuery来获取到参数列表，url.ParseQuery还会自动做url safe decode
+    values_m, _err := url.ParseQuery(string(paramerStr))
+    if _err != nil {
+        fmt.Println("error parse parameter, reason:", _err)
+        return
+    }
+    var m map[string]interface{}
+    m = make(map[string]interface{}, 0)
+
+    for k, v := range values_m {
+        if k == "sign" || k == "sign_type" { //不要'sign'和'sign_type'
+            continue
+        }
+        m[k] = v[0]
+    }
+
+    sign := values_m["sign"][0]
+    fmt.Println("Parsed Sign:", []byte(sign))
+
+    //获取要进行计算哈希的sign string
+    strPreSign, _err := genAlipaySignString(m)
+    if _err != nil {
+        fmt.Println("error get sign string, reason:", _err)
+        return
+    }
+
+    fmt.Println("Presign string:", strPreSign)
+
+    //进行rsa verify
+    pass, _err := RSAVerify([]byte(strPreSign), []byte(sign))
+
+    if pass {
+        fmt.Println("verify sig pass.")
+    } else {
+        fmt.Println("verify sig not pass. error:", _err)
+    }
+}
+/***************************************************************
+*函数目的：获得从参数列表拼接而成的待签名字符串
+*mapBody：是我们从HTTP request body parse出来的参数的一个map
+*返回值：sign是拼接好排序后的待签名字串。
+***************************************************************/
+func genAlipaySignString(mapBody map[string]interface{}) (sign string, err error) {
+    sorted_keys := make([]string, 0)
+    for k, _ := range mapBody {
+        sorted_keys = append(sorted_keys, k)
+    }
+    sort.Strings(sorted_keys)
+    var signStrings string
+
+    index := 0
+    for _, k := range sorted_keys {
+        fmt.Println("k=", k, "v =", mapBody[k])
+        value := fmt.Sprintf("%v", mapBody[k])
+        if value != "" {
+            signStrings = signStrings + k + "=" + value
+        }
+        //最后一项后面不要&
+        if index < len(sorted_keys)-1 {
+            signStrings = signStrings + "&"
+        }
+        index++
+    }
+
+    return signStrings, nil
+}
+
+/***************************************************************
+*RSA签名验证
+*src:待验证的字串，sign:支付宝返回的签名
+*pass:返回true表示验证通过
+*err :当pass返回false时，err是出错的原因
+****************************************************************/
+func RSAVerify(src []byte, sign []byte) (pass bool, err error) {
+    //步骤1，加载RSA的公钥
+    block, _ := pem.Decode([]byte(ALIPAY_PUBLIC_KEY))
+    pub, err := x509.ParsePKIXPublicKey(block.Bytes)
+    if err != nil {
+        fmt.Printf("Failed to parse RSA public key: %s\n", err)
+        return
+    }
+    rsaPub, _ := pub.(*rsa.PublicKey)
+
+    //步骤2，计算代签名字串的SHA1哈希
+    t := sha1.New()
+    io.WriteString(t, string(src))
+    digest := t.Sum(nil)
+
+    //步骤3，base64 decode,必须步骤，支付宝对返回的签名做过base64 encode必须要反过来decode才能通过验证
+    data, _ := base64.StdEncoding.DecodeString(string(sign))
+
+    hexSig := hex.EncodeToString(data)
+    fmt.Printf("base decoder: %v, %v\n", string(sign), hexSig)
+
+    //步骤4，调用rsa包的VerifyPKCS1v15验证签名有效性
+    err = rsa.VerifyPKCS1v15(rsaPub, crypto.SHA1, digest, data)
+    if err != nil {
+        fmt.Println("Verify sig error, reason: ", err)
+        return false, err
+    }
+
+    return true, nil
+}
+output==>
+Parsed Sign: [89 101 115 104 85 112 81 79 49 71 115 82 52 75 120 81 116 65 108 80 122 100 108 113 75 85 77 108 84 102 69 117 110 81 109 119 109 78 73 43 77 74 49 84 50 113 122 100 57 87 117 65 54 98 107 111 72 89 77 77 56 66 112 72 120 116 112 53 109 110 70 77 51 114 88 108 102 103 69 84 86 115 81 99 78 73 105 113 119 67 67 110 49 52 48 49 74 47 117 98 79 107 76 105 50 79 47 109 116 97 50 75 76 120 85 99 109 115 115 81 48 79 110 107 70 73 77 106 106 78 81 117 85 57 78 51 101 73 67 49 90 54 83 122 68 107 111 99 75 48 57 50 119 47 102 51 117 110 52 98 120 107 73 102 73 76 103 100 82 114 48 61]
+k= body v = 缴纳保证金
+k= buyer_email v = xxaqch@163.com
+k= buyer_id v = 2088002578894463
+k= discount v = 0.00
+k= gmt_create v = 2015-12-21 13:13:28
+k= gmt_payment v = 2015-12-21 13:13:28
+k= is_total_fee_adjust v = N
+k= notify_id v = 5104b719303162e2b79d577aeaa5494jjs
+k= notify_time v = 2015-12-21 13:17:45
+k= notify_type v = trade_status_sync
+k= out_trade_no v = a378c684be7a4f99be1bf3b56e6d38fd
+k= payment_type v = 1
+k= price v = 0.01
+k= quantity v = 1
+k= seller_email v = 172886370@qq.com
+k= seller_id v = 2088121529348920
+k= subject v = 缴纳保证金
+k= total_fee v = 0.01
+k= trade_no v = 2015122121001004460085270336
+k= trade_status v = TRADE_SUCCESS
+k= use_coupon v = N
+Presign string: body=缴纳保证金&buyer_email=xxaqch@163.com&buyer_id=2088002578894463&discount=0.00&gmt_create=2015-12-21 13:13:28&gmt_payment=2015-12-21 13:13:28&is_total_fee_adjust=N&notify_id=5104b719303162e2b79d577aeaa5494jjs&notify_time=2015-12-21 13:17:45&notify_type=trade_status_sync&out_trade_no=a378c684be7a4f99be1bf3b56e6d38fd&payment_type=1&price=0.01&quantity=1&seller_email=172886370@qq.com&seller_id=2088121529348920&subject=缴纳保证金&total_fee=0.01&trade_no=2015122121001004460085270336&trade_status=TRADE_SUCCESS&use_coupon=N
+base decoder: YeshUpQO1GsR4KxQtAlPzdlqKUMlTfEunQmwmNI+MJ1T2qzd9WuA6bkoHYMM8BpHxtp5mnFM3rXlfgETVsQcNIiqwCCn1401J/ubOkLi2O/mta2KLxUcmssQ0OnkFIMjjNQuU9N3eIC1Z6SzDkocK092w/f3un4bxkIfILgdRr0=, 61eb2152940ed46b11e0ac50b4094fcdd96a2943254df12e9d09b098d23e309d53daacddf56b80e9b9281d830cf01a47c6da799a714cdeb5e57e011356c41c3488aac020a7d78d3527fb9b3a42e2d8efe6b5ad8a2f151c9acb10d0e9e41483238cd42e53d3777880b567a4b30e4a1c2b4f76c3f7f7ba7e1bc6421f20b81d46bd
+verify sig pass.
+</pre>
