@@ -9350,3 +9350,301 @@ function removeEmoji($text){
     $cleanText = preg_replace($regexTransport, '', $cleanText);
     return $cleanText;
 }
+
+
++++PHP推荐算法++++++
+1、配置如下文件
+
+    //’test’ => 2,
+    //项目名称=>执行周期（小时）
+
+    $commend = array(
+
+    ‘test’ => 2,
+    ‘my’ => 3,
+    ‘photo’ => 54,
+
+    );
+
+2、在日志存储方面、需按照项目、按照周期、进行存储
+
+    //存储时间周期
+    $eHour = intval((time()/(60*60))/$logTime);
+    $this->logTime = date(‘Y-m-d-H’,$eHour*$logTime*60*60).’_’.date(‘Y-m-d-H’,($eHour+1)*$logTime*60*60);
+
+    //当前项目目录
+    $myLogDir = $this->baseLogUrl.’/’.$this->prLine.’/';
+
+    //日志地址
+    $myLogUrl = $myLogDir.$this->logTime.’.txt';
+
+3、启动一个crontab 每小时一次、根据周期检查 是否需要更新数据放可
+
+性能报告:
+
+100W的文本日志，根据核心算法只需要6s，方可计算出结果…
+
+如果在数据库存储方面使用伯克利数据库、加上memcache、然后合理的API；使用起来还是很不错的…
+
+相关核心代码:
+
+    mysql = mysql_connect($this->host, $this->user, $this->password);
+    mysql_select_db($this->database, $this->mysql);
+    }
+
+    public function getError()
+    {
+    return $this->error;
+    }
+
+    //取得推荐数据
+    public function getCommend($prId,$prLine)
+    {
+
+    $this->prLine =mysql_real_escape_string(trim($prLine));
+    $this->prId =mysql_real_escape_string(trim($prId));
+
+    //读取此项目的表
+    $sql =’SELECT * FROM ‘.$this->prLine.’ WHERE prid = “‘.$this->prId.'”;';
+
+    $sqlResult = mysql_query($sql);
+
+    $sqlResultArray = mysql_fetch_array($sqlResult);
+
+    if(!empty($sqlResultArray[‘comendid’]))
+    {
+    $result= explode(‘|’, $sqlResultArray[‘comendid’]);
+    }
+
+    return $result;
+    }
+
+    //记录用户日志
+    public function recordLog($userId,$prId,$prLine,$logTime=”)
+    {
+
+    $this->userId = trim($userId);
+    $this->prId = trim($prId);
+    $this->prLine = trim($prLine);
+
+    if(empty($logTime))
+    {
+    //如果没有日志记录时间，则为一天记录一个文件
+    $this->logTime = date(‘Y-m-d’);
+    }
+    else
+    {
+
+    $eHour = intval((time()/(60*60))/$logTime);
+
+    $this->logTime = date(‘Y-m-d-H’,$eHour*$logTime*60*60).’_’.date(‘Y-m-d-H’,($eHour+1)*$logTime*60*60);
+    }
+
+    //当前项目目录
+    $myLogDir = $this->baseLogUrl.’/’.$this->prLine.’/';
+
+    //是否存在此目录
+    if(!is_dir($myLogDir))
+    {
+    umask(0);
+    mkdir($myLogDir);
+    }
+
+    //日志地址
+    $myLogUrl = $myLogDir.$this->logTime.’.txt';
+
+    //当前时间
+    $time = explode(‘ ‘,microtime());
+
+    //日志内容
+    $myLogContent = $this->userId.’|’.$time[‘1′].$time[‘0′].’|’.$this->prId.”\r\n”;
+
+    $result = file_put_contents($myLogUrl,$myLogContent,FILE_APPEND);
+
+    return $result;
+    }
+
+    //流程控制、外部调用、将日志转化外外部可调用数据
+    public function createCommend($prLine,$logTime=”)
+    {
+
+    $this->prLine = trim($prLine);
+
+    if(empty($logTime))
+    {
+    //如果没有日志记录时间，则为一天记录一个文件
+    $this->logTime = date(‘Y-m-d’);
+    }
+    else
+    {
+    $eHour = intval((time()/(60*60))/$logTime);
+
+    $this->logTime = date(‘Y-m-d-H’,$eHour*$logTime*60*60).’_’.date(‘Y-m-d-H’,($eHour+1)*$logTime*60*60);
+    }
+
+    //当前项目目录
+    $myLogDir = $this->baseLogUrl.’/’.$this->prLine.’/';
+
+    //是否存在此目录
+    if(!is_dir($myLogDir))
+    {
+    //直接退出
+    $this->error = ‘日志目录不存在！';
+    return false;
+    }
+
+    //日志地址
+    $myLogUrl = $myLogDir.$this->logTime.’.txt';
+
+    //排序后日志文件地址
+    $mySortLogUrl = $myLogDir.$this->logTime.’_sort’.’.txt';
+
+    //日志分析
+    $this->analyzeLog($myLogUrl,$mySortLogUrl);
+
+    //日志转成推荐数组
+    $commendList = $this->logToCommend($mySortLogUrl);
+
+    var_export($commendList);
+    exit;
+
+    if(is_array($commendList)&&!empty($commendList))
+    {
+    //得到字串
+    foreach($commendList as $key => $val)
+    {
+    if(empty($key)||empty($val))
+    {
+    continue;
+    }
+    else
+    {
+    $value .= ‘(“‘.trim($key).'”,”‘.implode(‘|’,array_keys($val)).'”),';
+    }
+    }
+
+    //存入数据库
+    $result = $this->insertCommend(trim($value,’,’),$prLine);
+
+    return $result;
+    }
+    else
+    {
+    //结果为空
+    $this->error = ‘木有推荐数据！';
+    return false;
+    }
+    }
+
+    //执行日志分析
+    private function analyzeLog($myLogUrl,$mySortLogUrl)
+    {
+    $this->myLogUrl = trim($myLogUrl);
+    $this->mySortLogUrl = trim($mySortLogUrl);
+
+    //shell命令:排序
+    $shell = ‘sort -t”|” -n ‘.$myLogUrl.’>> ‘.$mySortLogUrl;
+
+    //执行
+    $result = exec($shell);
+
+    return $result;
+    }
+
+    //日志转成推荐数组
+    private function logToCommend($fileUrl)
+    {
+    $fileUrl = trim($fileUrl);
+
+    //载入日志
+    $mydata = file($fileUrl);
+
+    if(is_array($mydata)&&!empty($mydata))
+    {
+    foreach ($mydata as $key => $val)
+    {
+    //切分当前行
+    $now_data = explode(‘|’,trim($mydata[$key]));
+
+    //切分下一行
+    $next_data = explode(‘|’,trim($mydata[$key+1]));
+
+    //两条记录不是同一用户行为,下一条
+    if($now_data[‘0′]!=$next_data[‘0′])
+    {
+    //echo $now_data[‘0′].’||';
+    continue;
+    }
+
+    //两条记录为统一统计ID,下一条
+    if($now_data[‘2′]==$next_data[‘2′])
+    {
+    //echo $now_data[‘2′].’||';
+    continue;
+    }
+
+    //保证本条推荐记录已存在
+    if(!is_array($like[$now_data[‘2′]]))
+    {
+    $like[$now_data[‘2′]] = array();
+    }
+
+    //此条记录是否已成为上条记录有效数据
+    if(array_key_exists($next_data[‘2′],$like[$now_data[‘2′]]))
+    {
+    //推荐值++
+    $like[$now_data[‘2′]][$next_data[‘2′]] ++;
+    }
+    else
+    {
+    //初始默认
+    $like[$now_data[‘2′]][$next_data[‘2′]] = 1;
+    }
+    }
+
+    //对数组排序
+    foreach($like as $key => $val)
+    {
+    arsort($like[$key]);
+    }
+
+    return $like;
+
+    }
+    }
+
+    //存入推荐数据
+    private function insertCommend($value,$prLine)
+    {
+
+    $this->prId = mysql_real_escape_string(trim($prId));
+    $this->commendId = mysql_real_escape_string(trim($commendId));
+    $this->prLine = mysql_real_escape_string(trim($prLine));
+
+    //如果不存在此表，则创建之
+    if(!mysql_num_rows(mysql_query(“SHOW TABLES LIKE ‘”.$this->prLine.”‘”)))
+    {
+    $sql = “CREATE TABLE IF NOT EXISTS “.$this->prLine.” (`id` int(11) NOT NULL auto_increment,`prid` varchar(20) NOT NULL,`comendid` varchar(200) NOT NULL,PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1″;
+    mysql_query($sql);
+    }
+
+    //清空此表
+    $sql = ‘TRUNCATE TABLE ‘.$this->prLine;
+    mysql_query($sql);
+
+    //写入此表
+    $sql = ‘INSERT INTO ‘.$this->prLine.’ (prid, comendid) VALUES ‘.$value.';';
+
+    $result = mysql_query($sql);
+
+    return $result;
+    }
+
+    public function __destruct()
+    {
+    $this->mysql >mysql_close();
+    }
+
+    }
+
+    ?> 
