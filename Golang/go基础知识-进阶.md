@@ -6491,3 +6491,27 @@ Presign string: body=缴纳保证金&buyer_email=xxaqch@163.com&buyer_id=2088002
 base decoder: YeshUpQO1GsR4KxQtAlPzdlqKUMlTfEunQmwmNI+MJ1T2qzd9WuA6bkoHYMM8BpHxtp5mnFM3rXlfgETVsQcNIiqwCCn1401J/ubOkLi2O/mta2KLxUcmssQ0OnkFIMjjNQuU9N3eIC1Z6SzDkocK092w/f3un4bxkIfILgdRr0=, 61eb2152940ed46b11e0ac50b4094fcdd96a2943254df12e9d09b098d23e309d53daacddf56b80e9b9281d830cf01a47c6da799a714cdeb5e57e011356c41c3488aac020a7d78d3527fb9b3a42e2d8efe6b5ad8a2f151c9acb10d0e9e41483238cd42e53d3777880b567a4b30e4a1c2b4f76c3f7f7ba7e1bc6421f20b81d46bd
 verify sig pass.
 </pre>
+####Golang显示本机IP
+<pre>
+package main
+//显示本机IP代码
+import (
+	"fmt"
+	"net"
+)
+func main(){
+	addrs ,err :=net.InterfaceAddrs()
+	if err != nil{
+		panic(err)
+	}
+	for _,addr :=range addrs{
+		fmt.Println(addr.String())
+	}
+}
+output==>
+0.0.0.0
+0.0.0.0
+192.168.1.110
+192.168.209.1
+192.168.171.1
+</pre>
