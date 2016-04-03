@@ -1080,3 +1080,32 @@ function getCookie(name) {
 function unsetCookie(name) {
     document.cookie = name + "= ; expires=" + new Date(0);
 }
+
+
+++++++++
+1.问下面的<span>的文本颜色是什么？
+<style type="text/css">
+        .a1{color: red;}
+        .a2{color:blue;}
+        .a3{color:yellow;}
+</style>
+<span class="a3 a2 a1">测试</span>
+答：yellow.浏览器对样式解析是从右往左开始解析，若遇到同名的属性，则后者会覆盖前者。
+2.问弹出的是什么？
+var a = 100;
+(
+    function()
+    {
+        alert(a);
+        var a = 10;
+    }
+)();
+答：undefined。虽然在全局中声明了一个a，但是函数是自执行函数，有自己的函数作用域。在JavaScript中，对于变量不存在提升声明，所以a是undefined。也可以从闭包的角度来理解这个问题。
+3.枚举出foo是哪些值时，能够执行alert代码。
+var foo;
+if(!foo)
+{
+    alert("Hello");
+}
+答：false、0、null、“ ”、undefined(NaN也被认为是false)
+
