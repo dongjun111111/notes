@@ -6357,7 +6357,6 @@ NG9zpgmLCUYuLkxpLQIDAQAB
 -----END PUBLIC KEY-----
 `
 )
-
 func main() {
     //这是我从支付宝callback的http body部分读取出来的一段参数列表。
     paramerStr := `discount=0.00&payment_type=1&subject=%E7%BC%B4%E7%BA%B3%E4%BF%9D%E8%AF%81%E9%87%91&trade_no=2015122121001004460085270336&buyer_email=xxaqch%40163.com&gmt_create=2015-12-21+13%3A13%3A28&notify_type=trade_status_sync&quantity=1&out_trade_no=a378c684be7a4f99be1bf3b56e6d38fd&seller_id=2088121529348920&notify_time=2015-12-21+13%3A17%3A45&body=%E7%BC%B4%E7%BA%B3%E4%BF%9D%E8%AF%81%E9%87%91&trade_status=TRADE_SUCCESS&is_total_fee_adjust=N&total_fee=0.01&gmt_payment=2015-12-21+13%3A13%3A28&seller_email=172886370%40qq.com&price=0.01&buyer_id=2088002578894463&notify_id=5104b719303162e2b79d577aeaa5494jjs&use_coupon=N&sign_type=RSA&sign=YeshUpQO1GsR4KxQtAlPzdlqKUMlTfEunQmwmNI%2BMJ1T2qzd9WuA6bkoHYMM8BpHxtp5mnFM3rXlfgETVsQcNIiqwCCn1401J%2FubOkLi2O%2Fmta2KLxUcmssQ0OnkFIMjjNQuU9N3eIC1Z6SzDkocK092w%2Ff3un4bxkIfILgdRr0%3D`
