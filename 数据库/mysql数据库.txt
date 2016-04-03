@@ -1300,3 +1300,23 @@ read_rnd_buffer_size = 256K
 net_buffer_length = 2K
 thread_stack = 128K
 重启mysql，内存占用降到了70M
+
+
++++++mysql开启远程连接|远程访问MySQL数据库++++
+方法1：
+修改MySQL配置文件
+如果MySQL配置文件中开启了bind-address选项，需要将该选项注释掉。
+#bind-address           = 127.0.0.1
+#skip-networking
+
+GRANT授权访问
+授权所有主机可以远程访问
+GRANT ALL PRIVILEGES ON *.* TO 'USERNAME'@'%' IDENTIFIED BY 'PASSWORD' WITH GRANT OPTION;
+或者授权指定主机可以远程访问
+GRANT ALL PRIVILEGES ON *.* TO 'USERNAME'@'1.2.3.4' IDENTIFIED BY 'PASSWORD' WITH GRANT OPTION;
+
+刷新系统权限：
+FLUSH PRIVILEGES;
+
+方法2：
+修改MySQL数据库的用户表
