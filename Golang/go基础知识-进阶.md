@@ -6285,3 +6285,26 @@ Achtung
 
 还有人这样理解回调：<br>
 回调函数，就是由你自己写的。你需要调用另外一个函数，而这个函数的其中一个参数，就是你的这个回调函数名。这样，系统在必要的时候，就会调用你写的回调函数，这样你就可以在回调函数里完成你要做的事。
+
+Golang回调函数示例：
+<pre>
+package main
+
+import (
+	"fmt"
+)
+type testStruct struct {}
+func (object *testStruct)test(msg string){
+	fmt.Println(msg)
+}
+type callBack func(msg string)
+func calBackTest(backfunc callBack){
+	backfunc("jason")
+}
+func main(){
+	object := new(testStruct)
+	calBackTest(object.test)
+}
+output==>
+jason
+</pre>
