@@ -3365,3 +3365,14 @@ r_info?'
 $str="123456789";
 $str=rtrim($str,"89");
 echo $str;
+
+
+++8个很有用的PHP安全函数++++
+1.mysql_real_escape_string()对一些例如单引号、双引号、反斜杠等特殊字符添加一个反斜杠以确保在查询这些数据之前，用户提供的输入是干净的。但要注意，你是在连接数据库的前提下使用这个函数。现在已经不推荐使用mysql_real_escape_string()了，所有新的应用应该使用像PDO一样的函数库执行数据库操作
+2.addslashes原理跟mysql_real_escape_string()相似
+3.htmlentities()将一些特殊字符转换为HTML实体
+4.htmlspecialchars()一些特定字符有特殊的含义，如果要保持字符原来的含义，就应该转换为HTML实体
+5.strip_tags()去除字符串中所有的HTML，JavaScript和PHP标签，当然你也可以通过设置该函数的第二个参数，让一些特定的标签出现
+6.md5()函数可以产生给定字符串的32个字符的md5散列，而且这个过程不可逆
+7.sha1()使用了不同的算法来产生40个字符的SHA-1散列（md5产生的是32个字符的散列）
+8.intval()。intval()函数是将变量转成整数类型，你可以用这个函数让你的PHP代码更安全，特别是当你在解析id，年龄这样的数据时。
