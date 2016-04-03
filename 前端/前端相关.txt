@@ -8901,3 +8901,32 @@ var inter=setInterval("sett();", 1000);   */
 </html>
 
 
+++++js发送心跳包websocket|webSocket++++++
+//间隔发送心跳包数据给服务器，服务器在一定时间内发回心跳包响应，对比超时限定，如果超过设定的超时时间，则认为当前与服务器的websocket连接已经断开，关闭当前web socket连接，善后处理，例如重新连接，或者弹出提示……
+function keepalive(ws) {
+    var time = new Date();
+    if (last_health != -1 && (time.getTime() - last_health > health_timeout)) {
+        //连接断开，可设置重连或者关闭连接
+        $("#keeplive_box").html("服务器没有响应.").css({
+            "color" : "red"
+        });
+        //ws.close();
+    } else {
+        $("#keeplive_box").html("连接正常").css({
+            "color" : "green"
+        });
+        if (ws.bufferedAmount == 0) {
+            ws.send('~H#C~');
+        }
+    }
+}
+ 
+var ws = new WebSocket(to_url);
+ws.onopen = function () {
+    $("#statustxt").html("connected.");
+    $("#send_btn").attr("disabled", false);
+    heartbeat_timer = setInterval(function () {
+            keepalive(ws)
+        }, 3000);
+}
+
