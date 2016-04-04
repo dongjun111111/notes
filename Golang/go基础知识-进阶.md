@@ -6516,3 +6516,33 @@ output==>
 192.168.209.1
 192.168.171.1
 </pre>
+####Golang实现数据结构-栈
+container/list
+<pre>
+package main
+
+import (
+	"fmt"
+	"container/list"
+)
+func main(){
+	// 生成队列
+	l :=list.New()
+	//入队，入栈
+	l.PushBack(1)
+	l.PushBack(2)
+	l.PushBack(3)
+	//队首元素出队
+	lf :=l.Front() //队首元素
+	l.Remove(lf)
+	fmt.Println(lf.Value)
+	//队尾元素出栈
+	lb :=l.Back()  //队尾元素
+	l.Remove(lb)
+	fmt.Println(lb.Value)
+	
+}
+output==>
+1
+3
+</pre>
