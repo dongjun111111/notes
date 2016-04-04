@@ -8336,3 +8336,79 @@ func main() {
     fmt.Println("Time:", strTime, "\n", msg.Detail)  
 } 
 </pre>
+###Golang自定义错误等级
+满屏的error处理会是个悲剧，也不利于对错误进行区分处理。建议在项目中多用自定义错误，再对错误集中处理。
+<pre>
+package main  
+  
+//error处理方式演示  
+
+import "fmt"  
+import "errors"  
+  
+func main() {  
+  
+    errType(test0())  
+    errType(test1(" test1 "))  
+    errType(test2(500))  
+    errType(test3(" test3 "))  
+    errType(test4(" test4 "))  
+}  
+  
+type Error1 struct {  
+    arg    int  
+    errMsg string  
+}  
+  
+func (e *Error1) Error() string {  
+    return fmt.Sprintf("%s", e.errMsg)  
+}  
+  
+type Error2 struct {  
+    arg    string  
+    errMsg string  
+}  
+  
+func (e *Error2) Error() string {  
+    return fmt.Sprintf("%s", e.errMsg)  
+}  
+  
+func test0() error {  
+    return errors.New("errors.New() - test0()")  
+}  
+  
+func test1(arg string) error {  
+    return fmt.Errorf("fmt.Errorf() - test1()")  
+}  
+  
+func test2(arg int) *Error1 {  
+    return &Error1{arg, "Error1{} - test2()"}  
+}  
+  
+func test3(arg string) error {  
+    return &Error2{arg, "Error2{} - test3()"}  
+}  
+  
+func test4(arg string) *Error2 {  
+    return &Error2{arg, "Error2{} - test4() "}  
+}  
+  
+func errType(err interface{}) {  
+    switch e := err.(type) {  
+    case *Error1:  
+        fmt.Println("Type:Error1 ", e)  
+    case *Error2:  
+        fmt.Println("Type:Error2 ", e)  
+    case error:  
+        fmt.Println("Type:error ", e)  
+    default:  
+        fmt.Println("Type:default ", e)  
+    }  
+}  
+output==>
+Type:error  errors.New() - test0()
+Type:error  fmt.Errorf() - test1()
+Type:Error1  Error1{} - test2()
+Type:Error2  Error2{} - test3()
+Type:Error2  Error2{} - test4() 
+</pre>
