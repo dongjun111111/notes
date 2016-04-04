@@ -6587,7 +6587,7 @@ func main(){
 	for h.Len()>0{
 		fmt.Print(heap.Pop(h),"\n")
 	}
-	fmt.Println("使用sort.Sort排序：")
+	fmt.Println("使用sort.Sort把h2排序：")
 	h2 :=IntHeap{100,455,7,1,445,787,67,5,4,55,6,7,787,54,65}
 	sort.Sort(h2)
 	for _,v :=range h2{
@@ -6603,6 +6603,6 @@ Heap sort:
 4 5 5 6 6 7 44 46 55 56 100 
 Push(h,3),然后再看看堆：
 3
-使用sort.Sort排序：
+使用sort.Sort把h2排序:
 1 4 5 6 7 7 54 55 65 67 100 445 455 787 787 
 </pre>
