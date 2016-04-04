@@ -6826,6 +6826,34 @@ output==>
 白羊座
 猴
 </pre>
+####Golang获取本机mac地址
+<pre>
+package main
+
+import (
+	"fmt"
+	"net"
+)
+func mac(){
+	interfaces,err :=net.Interfaces()
+	if err != nil {
+		panic("Poor soul,here is what you got:"+err.Error())
+	}
+	for _,inter:=range interfaces{
+		mac :=inter.HardwareAddr
+		fmt.Println("MAC:",mac)
+	}
+}
+func main(){
+	mac()
+}
+output==>
+MAC: e6:46:19:57:5c:a2
+MAC: c4:46:19:57:5c:a2
+MAC: 88:ae:1d:3c:38:fc
+MAC: 00:50:56:c0:00:01
+MAC: 00:50:56:c0:00:08
+</pre>
 ###Golang实现数据结构-堆栈
 ####栈
 container/list
