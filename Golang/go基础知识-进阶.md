@@ -7150,7 +7150,26 @@ func init() {
        fmt.Print("Starting Up\n")
 }
 </pre>
-
+####Golang重写文件
+<pre>
+package  main
+import "fmt"
+import "os"
+//重写文件，覆盖
+func main() {
+    fileName := "test.dat"
+    dstFile,err := os.Create(fileName)
+    if err!=nil{
+        fmt.Println(err.Error())   
+        return
+    }  
+ 
+    defer dstFile.Close()
+    s:="hello world"
+    dstFile.WriteString(s + "\n")
+ 
+}
+</pre>
 ###Golang实现数据结构-堆栈
 ####栈
 container/list
