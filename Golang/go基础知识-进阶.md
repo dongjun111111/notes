@@ -6777,3 +6777,39 @@ Remove()掉idx为3即值 4 后:
 HeapSort()后:
 [100 90 70 36 30 22 16 12 8 5 4]
 </pre>
+####Golang异常打印堆栈错误信息
+<pre>
+package main
+
+import (
+	"runtime/debug"
+)
+func main(){
+	defer func(){
+		if err := recover();err !=nil{
+			debug.PrintStack()
+		}
+	}()
+	value := 11
+	zero := 0
+	value =value/zero
+	
+}
+output==>
+C:/mygo/src/act/main.go:9 (0x4010be)
+	func.001: debug.PrintStack()
+c:/go/src/runtime/asm_amd64.s:401 (0x436b0c)
+	call16: CALLFN(·call16, 16)
+c:/go/src/runtime/panic.go:387 (0x40fd1f)
+	gopanic: reflectcall(unsafe.Pointer(d.fn), deferArgs(d), uint32(d.siz), uint32(d.siz))
+c:/go/src/runtime/panic.go:24 (0x40eef5)
+	panicdivide: panic(divideError)
+c:/go/src/runtime/os_windows.go:47 (0x40edc2)
+	sigpanic: panicdivide()
+C:/mygo/src/act/main.go:14 (0x401048)
+	main: value =value/zero
+c:/go/src/runtime/proc.go:63 (0x4118da)
+	main: main_main()
+c:/go/src/runtime/asm_amd64.s:2232 (0x438ae1)
+	goexit: 
+</pre>
