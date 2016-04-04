@@ -6874,6 +6874,34 @@ defer conn.Close()
 output==>
 192.168.1.110
 </pre>
+####Golang计算两个时间的时间差
+<pre>
+package main
+ 
+import (
+    "fmt"
+    "time"
+)
+ 
+func main() {
+    //Add方法和Sub方法是相反的，获取t0和t1的时间距离d是使用Sub，将t0加d获取t1就是使用Add方法
+    k := time.Now()
+    //一天之前
+    d, _ := time.ParseDuration("-24h")
+    fmt.Println(k.Add(d))
+ 
+    //一周之前
+    fmt.Println(k.Add(d * 7))
+ 
+    //一月之前
+    fmt.Println(k.Add(d * 30))
+ 
+}
+output==>
+2016-04-03 13:09:04.0291987 +0800 +0800
+2016-03-28 13:09:04.0291987 +0800 +0800
+2016-03-05 13:09:04.0291987 +0800 +0800
+</pre>
 ###Golang实现数据结构-堆栈
 ####栈
 container/list
