@@ -8107,7 +8107,7 @@ func displayConfig(quit chan bool) {
 ###flag参数解析
 <pre>
 package main  
-  
+//常见用法
 import (  
     "flag"  
     "fmt"  
