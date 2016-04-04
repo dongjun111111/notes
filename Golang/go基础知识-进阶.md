@@ -9364,6 +9364,8 @@ set()  value= 13  idx= 1  pos= 5 00100000
 1 2 3 4 5 13 17
 </pre>
 ###Golang实现Rabin-Karp算法
+字符串匹配。<br>
+为什么是16777619：字符串哈希，会经常用到FNV哈希算法。FNV哈希算法如下：将字符串看作是字符串长度的整数，这个数的进制是一个质数。计算出来结果之后，按照哈希的范围求余数，结果就是哈希结果。继续看Golang的代码，字符串字串匹配用的是无符号32位整数，那就是32位长度，自然，质数就需要选16777619了。结果会按照32位最大的整数求余，在这里，因为是将结果存在uint32里面的，所以超出范围的会被丢弃，也可以认为是求余操作。
 <pre>
 package main   
   
@@ -9534,4 +9536,258 @@ b h == 520
 c h == 520
 found n== 2  lastmatch== 13
 count== 2
+</pre>
+###strings.NewReplacer,replacer.Replace()
+对传入参数,能依优先级替换,并能处理中文字符串参数.
+<pre>
+package main   
+        
+import (  
+    "fmt"  
+    "strings"  
+)  
+  
+func main(){  
+  
+   patterns := []string{    
+            "y","25",  
+            "中","国",  
+            "中工","家伙",  
+        }    
+          
+    replacer := strings.NewReplacer(patterns...)  
+  
+    format := "中(国)--中工(家伙)"  
+    strfmt := replacer.Replace(format)      
+    NewReplacer(patterns...);  
+    fmt.Println("\nmain() replacer.Replace old=",format)  
+    fmt.Println("main() replacer.Replace new=",strfmt)  
+}  
+ 
+func NewReplacer(oldnew ...string){  
+  
+   r :=  makeGenericReplacer(oldnew)  
+  
+   val,keylen,found := r.lookup("中",true)  
+   fmt.Println("\nNewReplacer() 中   val:",val," keylen:",keylen," found:",found)  
+  
+   val,keylen,found = r.lookup("中工",true)  
+   fmt.Println("NewReplacer() 中工 val:",val," keylen:",keylen," found:",found)  
+  
+   val,keylen,found = r.lookup("y",false)  
+   fmt.Println("NewReplacer() y    val:",val," keylen:",keylen," found:",found)  
+
+}  
+  
+  
+type genericReplacer struct {  
+    root trieNode  //一个字典树  
+    // tableSize is the size of a trie node's lookup table. It is the number  
+    // of unique key bytes.  
+    tableSize int  
+    // mapping maps from key bytes to a dense index for trieNode.table.  
+    mapping [256]byte    
+}  
+  
+func makeGenericReplacer(oldnew []string) *genericReplacer {  
+    r := new(genericReplacer)  
+    // Find each byte used, then assign them each an index.  
+    for i := 0; i < len(oldnew); i += 2 { //步长2. 第一个为pattern   
+        key := oldnew[i]  
+        fmt.Println("\nmakeGenericReplacer() for key=",key)  
+  
+        //key[j]=utf8存储汉字的三个编码位置中的一个如228,则将其对应位置设置为1  
+        //即 r.mapping[228] = 1  
+        for j := 0; j < len(key); j++ {  
+            r.mapping[key[j]] = 1     
+            fmt.Println("makeGenericReplacer() key[",j,"]=",key[j])  
+        }  
+    }  
+  
+    for _, b := range r.mapping {   
+        r.tableSize += int(b)    
+    }  
+    fmt.Println("makeGenericReplacer()  r.tableSize=",r.tableSize)  
+   
+    var index byte  
+    for i, b := range r.mapping {  
+        if b == 0 {  
+            r.mapping[i] = byte(r.tableSize)  
+        } else {  
+            //依数组字符编码位置,建立索引  
+            r.mapping[i] = index  
+            fmt.Println("makeGenericReplacer()  r.mapping[",i,"] =",r.mapping[i] )   
+            index++  
+        }  
+    }  
+    // Ensure root node uses a lookup table (for performance).  
+    r.root.table = make([]*trieNode, r.tableSize)   
+      
+    //将key,val放入字典树,注意priority=len(oldnew)-i,即越数组前面的,值越大.级别越高  
+    for i := 0; i < len(oldnew); i += 2 {  
+        r.root.add(oldnew[i], oldnew[i+1], len(oldnew)-i, r)   
+    }  
+    return r  
+}  
+  
+type trieNode struct {  
+    value string  
+    priority int  
+  
+    prefix string  
+    next   *trieNode  
+    table []*trieNode   
+}  
+  
+func (t *trieNode) add(key, val string, priority int, r *genericReplacer) {  
+     fmt.Println("trieNode->add() val=",val," key=",key)  
+     if key == "" {  
+        if t.priority == 0 {  
+            t.value = val  
+            t.priority = priority  
+            fmt.Println("trieNode->add() t.priority==",priority)  
+        }  
+        return  
+    }  
+  
+    if t.prefix != "" { //处理已有前缀的node     
+        // Need to split the prefix among multiple nodes.  
+        var n int // length of the longest common prefix  
+        for ; n < len(t.prefix) && n < len(key); n++ { //prefix与key的比较  
+            if t.prefix[n] != key[n] {  
+                break  
+            }  
+        }  
+        if n == len(t.prefix) {  //相同,继续放下面  
+            t.next.add(key[n:], val, priority, r)  
+        } else if n == 0 { //没一个相同  
+            // First byte differs, start a new lookup table here. Looking up  
+            // what is currently t.prefix[0] will lead to prefixNode, and  
+            // looking up key[0] will lead to keyNode.  
+            var prefixNode *trieNode  
+            if len(t.prefix) == 1 {  //如果prefix只是一个字节的字符编码,则挂在节点下面  
+                prefixNode = t.next  
+            } else {                    //如果不是,将余下的新建一个trie树  
+                prefixNode = &trieNode{  
+                    prefix: t.prefix[1:],  
+                    next:   t.next,  
+                }  
+            }  
+            keyNode := new(trieNode)  
+            t.table = make([]*trieNode, r.tableSize) //lookup()中的if node.table != nil   
+  
+            t.table[r.mapping[t.prefix[0]]] = prefixNode   
+            t.table[r.mapping[key[0]]] = keyNode      
+            t.prefix = ""  
+            t.next = nil  
+            keyNode.add(key[1:], val, priority, r)   
+        } else {  
+            // Insert new node after the common section of the prefix.  
+            next := &trieNode{  
+                prefix: t.prefix[n:],  
+                next:   t.next,  
+            }  
+            t.prefix = t.prefix[:n]  
+            t.next = next  
+            next.add(key[n:], val, priority, r)  
+        }  
+    } else if t.table != nil {  
+        // Insert into existing table.  
+        m := r.mapping[key[0]]  
+        if t.table[m] == nil {  
+            t.table[m] = new(trieNode)  
+        }  
+        t.table[m].add(key[1:], val, priority, r) //构建树        
+    } else {    
+        t.prefix = key  
+        t.next = new(trieNode)  
+        t.next.add("", val, priority, r)  
+    }  
+}  
+  
+func (r *genericReplacer) lookup(s string, ignoreRoot bool) (val string, keylen int,found bool) {  
+    // Iterate down the trie to the end, and grab the value and keylen with  
+    // the highest priority.  
+    bestPriority := 0  
+    node := &r.root  
+    n := 0  
+  
+    for node != nil {  
+         if node.priority > bestPriority && !(ignoreRoot && node == &r.root) {  
+            bestPriority = node.priority  
+            val = node.value  
+            keylen = n  
+            found = true  
+        }  
+  
+        if s == "" {  
+            break  
+        }  
+  
+        if node.table != nil {  
+            index := r.mapping[s[0]]  
+            if int(index) == r.tableSize { //字符编码第一个字节就没在table中,中断查找  
+                break  
+            }  
+            node = node.table[index]   
+            s = s[1:]  
+            n++  
+        } else if node.prefix != "" && HasPrefix(s, node.prefix) {   
+            //字符编码非第一个字节的节点会保留key在prefix中,所以通过分析prefix来继续找其它字节  
+            n += len(node.prefix)  
+            s = s[len(node.prefix):]  
+            node = node.next //继续找相同prefix以外其它字符  
+        } else {  
+            break  
+        }  
+    }  
+    return  
+}  
+// HasPrefix tests whether the string s begins with prefix.  
+func HasPrefix(s, prefix string) bool {  
+    return len(s) >= len(prefix) && s[0:len(prefix)] == prefix  
+}  
+output==>
+makeGenericReplacer() for key= y
+makeGenericReplacer() key[ 0 ]= 121
+
+makeGenericReplacer() for key= 中
+makeGenericReplacer() key[ 0 ]= 228
+makeGenericReplacer() key[ 1 ]= 184
+makeGenericReplacer() key[ 2 ]= 173
+
+makeGenericReplacer() for key= 中工
+makeGenericReplacer() key[ 0 ]= 228
+makeGenericReplacer() key[ 1 ]= 184
+makeGenericReplacer() key[ 2 ]= 173
+makeGenericReplacer() key[ 3 ]= 229
+makeGenericReplacer() key[ 4 ]= 183
+makeGenericReplacer() key[ 5 ]= 165
+makeGenericReplacer()  r.tableSize= 7
+makeGenericReplacer()  r.mapping[ 121 ] = 0
+makeGenericReplacer()  r.mapping[ 165 ] = 1
+makeGenericReplacer()  r.mapping[ 173 ] = 2
+makeGenericReplacer()  r.mapping[ 183 ] = 3
+makeGenericReplacer()  r.mapping[ 184 ] = 4
+makeGenericReplacer()  r.mapping[ 228 ] = 5
+makeGenericReplacer()  r.mapping[ 229 ] = 6
+trieNode->add() val= 25  key= y
+trieNode->add() val= 25  key= 
+trieNode->add() t.priority== 6
+trieNode->add() val= 国  key= 中
+trieNode->add() val= 国  key= ��
+trieNode->add() val= 国  key= 
+trieNode->add() t.priority== 4
+trieNode->add() val= 家伙  key= 中工
+trieNode->add() val= 家伙  key= ��工
+trieNode->add() val= 家伙  key= 工
+trieNode->add() val= 家伙  key= 
+trieNode->add() t.priority== 2
+
+NewReplacer() 中   val: 国  keylen: 3  found: true
+NewReplacer() 中工 val: 国  keylen: 3  found: true
+NewReplacer() y    val: 25  keylen: 1  found: true
+
+main() replacer.Replace old= 中(国)--中工(家伙)
+main() replacer.Replace new= 国(国)--国工(家伙)
 </pre>
