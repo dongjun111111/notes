@@ -10157,3 +10157,106 @@ func main() {
     fmt.Println(White("White()"))  
 }  
 </pre>
+###sync.WaitGroup|select发送任务命令到各个客户端
+sync.WaitGroup是Golang提供的一种简单的同步方法集合。它有三个方法.
+
+- Add() 添加计数,数目可以为一个,也可以为多个。
+- Done() 减掉一个计数,如果计数不为0,则Wait()会阻塞在那,直到全部为0
+- Wait() 等待计数为0.
+用一个for{}，让用户在作业执行过程中，可以输入指令退出执行。并且，在退出过程中，各个IP也会作相关的取消处理。以保证不会因
+强制中断而出现一些不必要的麻烦。
+<pre>
+package main  
+  
+import (  
+    "bufio"  
+    "fmt"  
+    "os"  
+    "sync"  
+    "time"  
+)  
+  
+var waitGrp sync.WaitGroup  
+  
+func main() {  
+  
+    ch := make(chan bool)  
+  
+    go schedule(ch)  
+  
+    r := bufio.NewReader(os.Stdin)  
+    for {  
+        time.Sleep(time.Second)  
+  
+        fmt.Print("Command:> ")  
+        ln, _, _ := r.ReadLine()  
+        cmd := string(ln)  
+  
+        if "q" == cmd || "quit" == cmd {  
+            close(ch)  
+            break  
+        } else {  
+            fmt.Println(" = cmd = ", cmd, "\n")  
+        }  
+    }  
+  
+    waitGrp.Wait()  
+    fmt.Println("main() end.")  
+}  
+  
+func schedule(ch chan bool) {  
+  
+    for _, ip := range []string{"ip1", "ip2"} {  
+        waitGrp.Add(1)  
+  
+        go doJobs(ip, ch)  
+        fmt.Println("schedule() IP = ", ip)  
+    }  
+    fmt.Println("schedule() end.")  
+    return  
+}  
+  
+func doJobs(ip string, ch chan bool) {  
+  
+    defer waitGrp.Done()  
+  
+    for i := 0; i < 10; i++ {  
+  
+        select {  
+        case <-ch:  
+            fmt.Println("doJobs() ", ip, "=>Job Cancel......")  
+            return  
+        default:  
+        }  
+  
+        fmt.Println("doJobs()...... ", ip, " for:", i)  
+        time.Sleep(time.Second)  
+    }  
+}  
+output==>
+schedule() IP =  ip1
+schedule() IP =  ip2
+schedule() end.
+doJobs()......  ip1  for: 0
+doJobs()......  ip2  for: 0
+Command:> doJobs()......  ip2  for: 1
+doJobs()......  ip1  for: 1
+doJobs()......  ip2  for: 2
+doJobs()......  ip1  for: 2
+doJobs()......  ip2  for: 3
+doJobs()......  ip1  for: 3
+doJobs()......  ip2  for: 4
+doJobs()......  ip1  for: 4
+doJobs()......  ip2  for: 5
+doJobs()......  ip1  for: 5
+doJobs()......  ip2  for: 6
+doJobs()......  ip1  for: 6
+doJobs()......  ip2  for: 7
+doJobs()......  ip1  for: 7
+doJobs()......  ip2  for: 8
+doJobs()......  ip1  for: 8
+doJobs()......  ip2  for: 9
+doJobs()......  ip1  for: 9
+q
+main() end.
+</pre>
