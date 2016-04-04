@@ -6516,6 +6516,44 @@ output==>
 192.168.209.1
 192.168.171.1
 </pre>
+Golang版long2ip与ip2long
+<pre>
+package main
+
+import (
+	"fmt"
+	"strconv"
+	"regexp"
+)
+func ip2long(ipstr string)(ip uint32){
+	r := `^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})`
+	reg,err :=regexp.Compile(r)
+	if err != nil{
+		return 
+	}
+	ips := reg.FindStringSubmatch(ipstr)
+	if ips == nil{
+		return
+	}
+	ip1,_:=strconv.Atoi(ips[1])
+	ip2,_:=strconv.Atoi(ips[2])
+	ip3,_:=strconv.Atoi(ips[3])
+	ip4,_:=strconv.Atoi(ips[4])
+	if ip1>255||ip2>255||ip3>255||ip4>255{
+		return
+	}
+	ip += uint32(ip1 * 0x1000000)
+	ip += uint32(ip2 * 0x10000)
+    ip += uint32(ip3 * 0x100)
+    ip += uint32(ip4)
+	return 
+}
+func long2ip(ip uint32) string{
+	return fmt.Sprintf("%d.%d.%d.%d",ip>>24,ip<<8>>24,ip<<16>>24,ip<<24>>24)
+}
+func main(){
+}
+</pre>
 ###Golang实现数据结构-堆栈
 ####栈
 container/list
@@ -6616,10 +6654,6 @@ Push(h,3),然后再看看堆：
 这样基础库清爽了,使用堆时也不会再感到缚手缚脚了.
 <pre>
 package main
-
-//Heap
-//author:Xiong Chuan Liang
-//date:2015-2-4
 
 import (
 	"fmt"
