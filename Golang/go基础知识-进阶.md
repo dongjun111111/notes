@@ -7643,7 +7643,6 @@ Marshal: {"AppID":"testid","Timestamp":1459765387,"Package":"xxcents=100\u0026ba
 ###七牛文件hash值算法
 <pre>
 package main
-
 import (
 	"fmt"
 	"io"
