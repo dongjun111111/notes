@@ -6516,7 +6516,8 @@ output==>
 192.168.209.1
 192.168.171.1
 </pre>
-####Golang实现数据结构-栈
+###Golang实现数据结构-堆栈
+####栈
 container/list
 <pre>
 package main
@@ -6545,4 +6546,63 @@ func main(){
 output==>
 1
 3
+</pre>
+####堆
+<pre>
+package main
+
+import (
+	"sort"
+	"container/heap"
+	"fmt"
+)
+type IntHeap []int
+func (h IntHeap) Len() int {return len(h)}
+func (h IntHeap) Less(i,j int) bool{return h[i] < h[j]}
+func (h IntHeap) Swap(i,j int) {h[i],h[j] = h[j],h[i]}
+func (h *IntHeap) Push(x interface{}){
+	*h =append(*h,x.(int))
+}
+func (h *IntHeap) Pop() interface{}{
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h =old[0:n-1]
+	return x
+}
+func main(){
+	h :=&IntHeap{100,46,5,6,4,44,5,6,7,56,55}
+	fmt.Println("Heap:\n",*h)
+	heap.Init(h)
+	fmt.Println("最小值:\n",(*h)[0])
+	fmt.Println("Heap sort:")
+	//for(Pop)依次输出最小值,则相当于执行了HeapSort
+	for h.Len() >0{
+		fmt.Print(heap.Pop(h)," ")
+	}
+	fmt.Println()
+	//增加一个新值
+	fmt.Println("Push(h,3),然后再看看堆：")
+	heap.Push(h,3)
+	for h.Len()>0{
+		fmt.Print(heap.Pop(h),"\n")
+	}
+	fmt.Println("使用sort.Sort排序：")
+	h2 :=IntHeap{100,455,7,1,445,787,67,5,4,55,6,7,787,54,65}
+	sort.Sort(h2)
+	for _,v :=range h2{
+		fmt.Print(v," ")
+	}
+}
+output==>
+Heap:
+ [100 46 5 6 4 44 5 6 7 56 55]
+最小值:
+ 4
+Heap sort:
+4 5 5 6 6 7 44 46 55 56 100 
+Push(h,3),然后再看看堆：
+3
+使用sort.Sort排序：
+1 4 5 6 7 7 54 55 65 67 100 445 455 787 787 
 </pre>
