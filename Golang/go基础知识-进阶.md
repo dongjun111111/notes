@@ -8773,3 +8773,43 @@ doprint()...
 doprint()...
 Gid: 1
 </pre>
+Golang的sync.Once后面不允许直接传参数，但可以通过以下方法来变通。 
+<pre>
+package main  
+  
+import (  
+    "fmt"  
+    "sync"  
+    "time"  
+)  
+  
+var once sync.Once  
+var Gid int  
+  
+func doprint(parm string) {  
+    setup := func() {  
+        Gid++  
+        fmt.Println("Called once! parm:", parm)  
+    }  
+    once.Do(setup)  
+    fmt.Println("doprint()...")  
+}  
+  
+func main() {  
+  
+    go doprint("1")  
+    go doprint("2")  
+    go doprint("3")  
+    go doprint("4")  
+  
+    time.Sleep(time.Second)  
+    fmt.Println("Gid:", Gid)  
+}  
+output==>
+Called once! parm: 1
+doprint()...
+doprint()...
+doprint()...
+doprint()...
+Gid: 1
+</pre>
