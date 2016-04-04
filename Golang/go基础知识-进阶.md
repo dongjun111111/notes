@@ -8731,3 +8731,45 @@ Hash: 1984168000  IP: 172.18.1.9
 Hash: 3099132525  IP: 172.18.1.9
 ...
 </pre>
+###sync.Once
+Golang中的sync.Once，用于实现"只执行一次"的功能。
+<pre>
+package main  
+  
+import (  
+    "fmt"  
+    "sync"  
+    "time"  
+)  
+  
+var once sync.Once  
+var Gid int  
+  
+func setup() {  
+    Gid++  
+    fmt.Println("Called once")  
+}  
+  
+func doprint() {  
+    once.Do(setup)  
+    fmt.Println("doprint()...")  
+}  
+  
+func main() {  
+  
+    go doprint()  
+    go doprint()  
+    go doprint()  
+    go doprint()  
+  
+    time.Sleep(time.Second)  
+    fmt.Println("Gid:", Gid)  
+}  
+output==>
+Called once
+doprint()...
+doprint()...
+doprint()...
+doprint()...
+Gid: 1
+</pre>
