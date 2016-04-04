@@ -8476,3 +8476,257 @@ ready......
 ready......
 //听说按ctrl+c停止，反正我在win7下测试失败。。。 
 </pre>
+###Golang一致性哈希
+<pre>
+package main  
+  
+//一致性哈希(Consistent Hashing)  
+  
+import (  
+    "fmt"  
+    "hash/crc32"  
+    "sort"  
+    "strconv"  
+    "sync"  
+)  
+  
+const DEFAULT_REPLICAS = 160  
+  
+type HashRing []uint32  
+  
+func (c HashRing) Len() int {  
+    return len(c)  
+}  
+  
+func (c HashRing) Less(i, j int) bool {  
+    return c[i] < c[j]  
+}  
+  
+func (c HashRing) Swap(i, j int) {  
+    c[i], c[j] = c[j], c[i]  
+}  
+  
+type Node struct {  
+    Id       int  
+    Ip       string  
+    Port     int  
+    HostName string  
+    Weight   int  
+}  
+  
+func NewNode(id int, ip string, port int, name string, weight int) *Node {  
+    return &Node{  
+        Id:       id,  
+        Ip:       ip,  
+        Port:     port,  
+        HostName: name,  
+        Weight:   weight,  
+    }  
+}  
+  
+type Consistent struct {  
+    Nodes     map[uint32]Node  
+    numReps   int  
+    Resources map[int]bool  
+    ring      HashRing  
+    sync.RWMutex  
+}  
+  
+func NewConsistent() *Consistent {  
+    return &Consistent{  
+        Nodes:     make(map[uint32]Node),  
+        numReps:   DEFAULT_REPLICAS,  
+        Resources: make(map[int]bool),  
+        ring:      HashRing{},  
+    }  
+}  
+  
+func (c *Consistent) Add(node *Node) bool {  
+    c.Lock()  
+    defer c.Unlock()  
+  
+    if _, ok := c.Resources[node.Id]; ok {  
+        return false  
+    }  
+  
+    count := c.numReps * node.Weight  
+    for i := 0; i < count; i++ {  
+        str := c.joinStr(i, node)  
+        c.Nodes[c.hashStr(str)] = *(node)  
+    }  
+    c.Resources[node.Id] = true  
+    c.sortHashRing()  
+    return true  
+}  
+  
+func (c *Consistent) sortHashRing() {  
+    c.ring = HashRing{}  
+    for k := range c.Nodes {  
+        c.ring = append(c.ring, k)  
+    }  
+    sort.Sort(c.ring)  
+}  
+  
+func (c *Consistent) joinStr(i int, node *Node) string {  
+    return node.Ip + "*" + strconv.Itoa(node.Weight) +  
+        "-" + strconv.Itoa(i) +  
+        "-" + strconv.Itoa(node.Id)  
+}  
+  
+// MurMurHash算法 :https://github.com/spaolacci/murmur3  
+func (c *Consistent) hashStr(key string) uint32 {  
+    return crc32.ChecksumIEEE([]byte(key))  
+}  
+  
+func (c *Consistent) Get(key string) Node {  
+    c.RLock()  
+    defer c.RUnlock()  
+  
+    hash := c.hashStr(key)  
+    i := c.search(hash)  
+  
+    return c.Nodes[c.ring[i]]  
+}  
+  
+func (c *Consistent) search(hash uint32) int {  
+  
+    i := sort.Search(len(c.ring), func(i int) bool { return c.ring[i] >= hash })  
+    if i < len(c.ring) {  
+        if i == len(c.ring)-1 {  
+            return 0  
+        } else {  
+            return i  
+        }  
+    } else {  
+        return len(c.ring) - 1  
+    }  
+}  
+  
+func (c *Consistent) Remove(node *Node) {  
+    c.Lock()  
+    defer c.Unlock()  
+  
+    if _, ok := c.Resources[node.Id]; !ok {  
+        return  
+    }  
+  
+    delete(c.Resources, node.Id)  
+  
+    count := c.numReps * node.Weight  
+    for i := 0; i < count; i++ {  
+        str := c.joinStr(i, node)  
+        delete(c.Nodes, c.hashStr(str))  
+    }  
+    c.sortHashRing()  
+}  
+  
+func main() {  
+  
+    cHashRing := NewConsistent()  
+  
+    for i := 0; i < 10; i++ {  
+        si := fmt.Sprintf("%d", i)  
+        cHashRing.Add(NewNode(i, "172.18.1."+si, 8080, "host_"+si, 1))  
+    }  
+  
+    for k, v := range cHashRing.Nodes {  
+        fmt.Println("Hash:", k, " IP:", v.Ip)  
+    }  
+  
+    ipMap := make(map[string]int, 0)  
+    for i := 0; i < 1000; i++ {  
+        si := fmt.Sprintf("key%d", i)  
+        k := cHashRing.Get(si)  
+        if _, ok := ipMap[k.Ip]; ok {  
+            ipMap[k.Ip] += 1  
+        } else {  
+            ipMap[k.Ip] = 1  
+        }  
+    }  
+  
+    for k, v := range ipMap {  
+        fmt.Println("Node IP:", k, " count:", v)  
+    }  
+}  
+output==>
+Hash: 639784443  IP: 172.18.1.2
+Hash: 3682251441  IP: 172.18.1.3
+Hash: 2670724558  IP: 172.18.1.5
+Hash: 156374651  IP: 172.18.1.7
+Hash: 2948123901  IP: 172.18.1.8
+Hash: 1109271580  IP: 172.18.1.9
+Hash: 575030648  IP: 172.18.1.0
+Hash: 2620094433  IP: 172.18.1.2
+Hash: 3640551135  IP: 172.18.1.3
+Hash: 685271154  IP: 172.18.1.0
+Hash: 3131212918  IP: 172.18.1.3
+Hash: 4254065535  IP: 172.18.1.4
+Hash: 2154741956  IP: 172.18.1.6
+Hash: 3956006673  IP: 172.18.1.7
+Hash: 2890459947  IP: 172.18.1.7
+Hash: 2795648409  IP: 172.18.1.8
+Hash: 3155536303  IP: 172.18.1.0
+Hash: 239008809  IP: 172.18.1.1
+Hash: 389506850  IP: 172.18.1.2
+Hash: 2857473473  IP: 172.18.1.3
+Hash: 414058768  IP: 172.18.1.8
+Hash: 1753815575  IP: 172.18.1.0
+Hash: 812018069  IP: 172.18.1.1
+Hash: 931573112  IP: 172.18.1.3
+Hash: 2791843655  IP: 172.18.1.4
+Hash: 4126764660  IP: 172.18.1.6
+Hash: 485364041  IP: 172.18.1.7
+Hash: 2068186773  IP: 172.18.1.8
+Hash: 4168187427  IP: 172.18.1.8
+Hash: 4286109439  IP: 172.18.1.8
+Hash: 194091380  IP: 172.18.1.2
+Hash: 404072331  IP: 172.18.1.2
+Hash: 662027471  IP: 172.18.1.3
+Hash: 3414795014  IP: 172.18.1.3
+Hash: 3063625456  IP: 172.18.1.4
+Hash: 312588205  IP: 172.18.1.6
+Hash: 1321327999  IP: 172.18.1.6
+Hash: 1237874083  IP: 172.18.1.6
+Hash: 832557970  IP: 172.18.1.7
+Hash: 4264509387  IP: 172.18.1.9
+Hash: 293620475  IP: 172.18.1.1
+Hash: 2467890461  IP: 172.18.1.6
+Hash: 4226432972  IP: 172.18.1.6
+Hash: 4011579018  IP: 172.18.1.8
+Hash: 3476688146  IP: 172.18.1.9
+Hash: 282567631  IP: 172.18.1.0
+Hash: 3323219705  IP: 172.18.1.0
+Hash: 1832288372  IP: 172.18.1.2
+Hash: 3531821005  IP: 172.18.1.2
+Hash: 880676919  IP: 172.18.1.3
+Hash: 110337953  IP: 172.18.1.3
+Hash: 2339799632  IP: 172.18.1.4
+Hash: 3704903351  IP: 172.18.1.5
+Hash: 346226969  IP: 172.18.1.6
+Hash: 3936106021  IP: 172.18.1.6
+Hash: 1476052166  IP: 172.18.1.7
+Hash: 3754499237  IP: 172.18.1.9
+Hash: 3141391875  IP: 172.18.1.9
+Hash: 2628019189  IP: 172.18.1.1
+Hash: 178924839  IP: 172.18.1.4
+Hash: 2306095520  IP: 172.18.1.6
+Hash: 4075865768  IP: 172.18.1.6
+Hash: 3247911638  IP: 172.18.1.7
+Hash: 2955680553  IP: 172.18.1.7
+Hash: 2354541122  IP: 172.18.1.1
+Hash: 2883981101  IP: 172.18.1.1
+Hash: 2199573799  IP: 172.18.1.1
+Hash: 3944577709  IP: 172.18.1.2
+Hash: 919684172  IP: 172.18.1.2
+Hash: 3791902495  IP: 172.18.1.6
+Hash: 1391277483  IP: 172.18.1.9
+Hash: 2117970591  IP: 172.18.1.1
+Hash: 3095544330  IP: 172.18.1.2
+Hash: 2207710104  IP: 172.18.1.5
+Hash: 2513618934  IP: 172.18.1.6
+Hash: 957402518  IP: 172.18.1.6
+Hash: 1449515992  IP: 172.18.1.8
+Hash: 1984168000  IP: 172.18.1.9
+Hash: 3099132525  IP: 172.18.1.9
+...
+</pre>
