@@ -7597,7 +7597,8 @@ c:/go/src/runtime/asm_amd64.s:2232 (0x438ae1)
 	goexit: 
 </pre>
 ###Golang之JSON序列化
-JSON序列化时,Go语言序列化会自动对一些特殊字符会作编码处理。
+JSON序列化时,Go语言序列化会自动对一些特殊字符会作编码处理。<br>
+字符串编码为json字符串。角括号"<"和">"会转义为"\u003c"和"\u003e"以避免某些浏览器吧json输出错误理解为HTML。基于同样的原因，"&"转义为"\u0026"。用Golang开发这类接口的时候需要注意这些。
 <pre>
 package main  
   
