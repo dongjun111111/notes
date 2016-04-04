@@ -7725,3 +7725,247 @@ func main() {
 	fmt.Println(etag)
 }
 </pre>
+##Golang批量替换和转移目录程序UpUpUp
+使用Json文件作为配置文件，遍历指定目录(包含子目录)，对于指定扩展名的文件， 查找并替换文件内容中的指定字符串，并将其输出到新的目录(包含子目录）下。原文件内容不变。至于其它非指定的文件，也一并复制一份到新目录下。
+<pre>
+//配置文件 flag.json
+ {  
+"sourcedir":"C:\\mygo\\src\\act\\aa\\",  
+"destdir":"C:\\mygo\\src\\act\\bb\\",  
+"fileext":[".go",".conf"],  
+"replacewhere":[{  
+        "findwhat":"parseFile",  
+        "replacewith":"----parseFile----"  
+    },  
+    {  
+        "findwhat":"172.18.1.101",  
+        "replacewith":"192.168.1.101"  
+    }]  
+}  
+</pre> 
+<pre>
+//主程序 main.go
+package main  
+  
+import (  
+    "bufio"  
+    "encoding/json"  
+    "fmt"  
+    "io"  
+    "io/ioutil"  
+    "os"  
+    "path/filepath"  
+    "runtime"  
+    "strings"  
+    "sync"  
+    "time"  
+)  
+  
+const (  
+    flagFile = "flag.json"  
+)  
+  
+type RWhere struct {  
+    FindWhat    string `json:"findwhat"`  
+    ReplaceWith string `json:"replacewith"`  
+}  
+  
+type ReplaceConf struct {  
+    SourceDir     string   `json:"sourcedir"`  
+    DestDir       string   `json:"destdir"`  
+    FileExtension []string `json:"fileext"`  
+    ReplaceWhere  []RWhere `json:"replacewhere"`  
+    CaseSensitive bool     `json:"casesensitive,omitempty"`  
+}  
+  
+var repConf ReplaceConf  
+var repReplacer *strings.Replacer  
+var extFileNum, otherFileNum int  
+var maxGoroutines int  
+  
+func init() {  
+    maxGoroutines = 10  
+}  
+  
+func main() {  
+    now := time.Now()  
+    runtime.GOMAXPROCS(runtime.NumCPU())  
+  
+    parseJsonFile()  
+  
+    findSourceFiles(repConf.SourceDir)  
+  
+    end_time := time.Now()  
+    var dur_time time.Duration = end_time.Sub(now)  
+    fmt.Printf("elapsed %f seconds\n", dur_time.Seconds())  
+    fmt.Println("处理统计")  
+    fmt.Println("  处理指定类型文件:", extFileNum)  
+    fmt.Println("  处理其它文件:", otherFileNum)  
+}  
+  
+func findSourceFiles(dirname string) {  
+    waiter := &sync.WaitGroup{}  
+    fmt.Println("dirname:", dirname)  
+    filepath.Walk(dirname, sourceWalkFunc(waiter))  
+    waiter.Wait()  
+}  
+  
+func sourceWalkFunc(waiter *sync.WaitGroup) func(string, os.FileInfo, error) error {  
+    return func(path string, info os.FileInfo, err error) error {  
+  
+        if err == nil && info.Size() > 0 && !info.IsDir() {  
+            if runtime.NumGoroutine() > maxGoroutines {  
+                parseFile(path, nil)  
+            } else {  
+                waiter.Add(1)  
+                go parseFile(path, func() { waiter.Done() })  
+            }  
+        } else {  
+            fmt.Println("[sourceWalkFunc] err:", err)  
+        }  
+        return nil  
+    }  
+}  
+  
+func parseFile(currfile string, done func()) {  
+    if done != nil {  
+        defer done()  
+    }  
+  
+    //这地方要注意，配置要对。  
+    destFile := strings.Replace(currfile, repConf.SourceDir, repConf.DestDir, -1)  
+    if destFile == currfile {  
+        panic("[parseFile] ERROR 没有替换对. SourceDir与DestDir配置出问题了。请检查Json配置.")  
+    }  
+    destDir := filepath.Dir(destFile)  
+    if _, er := os.Stat(destDir); os.IsNotExist(er) {  
+        if err := os.MkdirAll(destDir, 0700); err != nil {  
+            fmt.Println("[parseFile] MkdirAll ", destDir)  
+            panic(err)  
+        }  
+    }  
+    fmt.Println("[parseFile] 源文件:", currfile)  
+    fmt.Println("[parseFile] 目标文件:", destFile)  
+    /////////////////////////////////////////////////  
+  
+    oldFile, err := os.Open(currfile)  
+    if err != nil {  
+        fmt.Println("[parseFile] Failed to open the input file ", oldFile)  
+        return  
+    }  
+    defer oldFile.Close()  
+  
+    newFile, err := os.Create(destFile)  
+    if err != nil {  
+        panic(err)  
+    }  
+    defer newFile.Close()  
+  
+    f1 := func(ext string) bool {  
+        for _, e := range repConf.FileExtension {  
+            if ext == e {  
+                return true  
+            }  
+        }  
+        return false  
+    }  
+  
+    if f1(filepath.Ext(currfile)) {  
+        copyRepFile(newFile, oldFile)  
+        extFileNum++  
+    } else {  
+        if _, err := io.Copy(newFile, oldFile); err != nil {  
+            panic(err)  
+        }  
+        otherFileNum++  
+    }  
+}  
+  
+func copyRepFile(newFile, oldFile *os.File) {  
+    br := bufio.NewReader(oldFile)  
+    bw := bufio.NewWriter(newFile)  
+  
+    for {  
+        row, err1 := br.ReadString(byte('\n'))  
+        if err1 != nil {  
+            break  
+        }  
+  
+        str := string(row)  
+        if str == "" {  
+            continue  
+        }  
+  
+        ret := repReplacer.Replace(str)  
+        //fmt.Println("[copyRepFile] str:", str)  
+        //fmt.Println("[copyRepFile] ret:", ret)  
+        if _, err := bw.WriteString(ret); err != nil {  
+            panic(err)  
+        }  
+    }  
+    bw.Flush()  
+}  
+  
+func parseJsonFile() {  
+    f, err := os.Open(flagFile)  
+    if err != nil {  
+        panic("[parseJsonFile] open failed!")  
+    }  
+    defer f.Close()  
+  
+    j, err := ioutil.ReadAll(f)  
+    if err != nil {  
+        panic("[parseJsonFile] ReadAll failed!")  
+    }  
+  
+    err = json.Unmarshal(j, &repConf)  
+    if err != nil {  
+        fmt.Println("[parseJsonFile] json err:", err)  
+        panic("[parseJsonFile] Unmarshal failed!")  
+    }  
+  
+    fmt.Println(" ------------------------------------------------------")  
+    fmt.Println(" 源目录:", repConf.SourceDir)  
+    fmt.Println(" 目标目录:", repConf.DestDir)  
+    fmt.Println(" 仅包含的指定扩展名的文件:", repConf.FileExtension)  
+    for _, e := range repConf.FileExtension {  
+        fmt.Println(" 文件扩展名:", e)  
+    }  
+  
+    arr := make([]string, 0, 1)  
+    for _, v := range repConf.ReplaceWhere {  
+        fmt.Println(" 原文本:", v.FindWhat, " 替换为:", v.ReplaceWith)  
+        arr = append(arr, v.FindWhat)  
+        arr = append(arr, v.ReplaceWith)  
+    }  
+    repReplacer = strings.NewReplacer(arr...)  
+    fmt.Println(" ------------------------------------------------------")  
+  
+    if repConf.SourceDir == "" || repConf.DestDir == "" {  
+        panic("[parseJsonFile] 目录设置不对!")  
+    }  
+}
+output==>
+ 源目录: C:\mygo\src\act\aa\
+ 目标目录: C:\mygo\src\act\bb\
+ 仅包含的指定扩展名的文件: [.go .conf]
+ 文件扩展名: .go
+ 文件扩展名: .conf
+ 原文本: parseFile  替换为: ----parseFile----
+ 原文本: 172.18.1.101  替换为: 192.168.1.101
+ ------------------------------------------------------
+dirname: C:\mygo\src\act\aa\
+[sourceWalkFunc] err: <nil>
+[sourceWalkFunc] err: <nil>
+[sourceWalkFunc] err: <nil>
+[parseFile] 源文件: C:\mygo\src\act\aa\Baidusd_Setup_4.2.0.7666.1436769697.exe
+[parseFile] 目标文件: C:\mygo\src\act\bb\Baidusd_Setup_4.2.0.7666.1436769697.exe
+[parseFile] 源文件: C:\mygo\src\act\aa\ChromeStandalone_V43.0.2357.134_Setup.1436927123.exe
+[parseFile] 目标文件: C:\mygo\src\act\bb\ChromeStandalone_V43.0.2357.134_Setup.1436927123.exe
+[parseFile] 源文件: C:\mygo\src\act\aa\QQ_V7.4.15197.0_setup.1436951158.exe
+[parseFile] 目标文件: C:\mygo\src\act\bb\QQ_V7.4.15197.0_setup.1436951158.exe
+elapsed 6.946397 seconds
+处理统计
+  处理指定类型文件: 0
+  处理其它文件: 3
+</pre>
