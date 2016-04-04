@@ -8813,3 +8813,146 @@ doprint()...
 doprint()...
 Gid: 1
 </pre>
+###缓存淘汰算法|LRU算法
+LRU（Least recently used，最近最少使用）算法根据数据的历史访问记录来进行淘汰数据，其核心思想是“如果数据最近被访问过，那么将来被访问的几率也更高”。<br>
+内存管理的一种页面置换算法，对于在内存中但又不用的数据块（内存块）叫做LRU，操作系统会根据哪些数据属于LRU而将其移出内存而腾出空间来加载另外的数据。
+####实现
+1. 新数据插入到链表头部；
+2. 每当缓存命中（即缓存数据被访问），则将数据移到链表头部；
+3. 当链表满的时候，将链表尾部的数据丢弃。
+####分析
+【命中率】
+
+当存在热点数据时，LRU的效率很好，但偶发性的、周期性的批量操作会导致LRU命中率急剧下降，缓存污染情况比较严重。
+
+【复杂度】
+
+实现简单
+
+【代价】
+
+命中时需要遍历链表，找到命中的数据块索引，然后需要将数据移到头部。
+<pre>
+package main  
+  
+  
+//LRU Cache  
+  
+import (  
+    "fmt"   
+	"container/list"  
+    "errors" 
+)  
+  
+type CacheNode struct {  
+    Key,Value interface{}     
+}  
+  
+func (cnode *CacheNode)NewCacheNode(k,v interface{})*CacheNode{  
+    return &CacheNode{k,v}  
+}  
+  
+type LRUCache struct {  
+    Capacity int      
+    dlist *list.List  
+    cacheMap map[interface{}]*list.Element  
+}  
+  
+func NewLRUCache(cap int)(*LRUCache){  
+    return &LRUCache{  
+                Capacity:cap,  
+                dlist: list.New(),  
+                cacheMap: make(map[interface{}]*list.Element)}  
+}  
+  
+func (lru *LRUCache)Size()(int){  
+    return lru.dlist.Len()  
+}  
+  
+func (lru *LRUCache)Set(k,v interface{})(error){  
+  
+    if lru.dlist == nil {  
+        return errors.New("LRUCache结构体未初始化.")         
+    }  
+  
+    if pElement,ok := lru.cacheMap[k]; ok {       
+        lru.dlist.MoveToFront(pElement)  
+        pElement.Value.(*CacheNode).Value = v  
+        return nil  
+    }  
+  
+    newElement := lru.dlist.PushFront( &CacheNode{k,v} )  
+    lru.cacheMap[k] = newElement  
+  
+    if lru.dlist.Len() > lru.Capacity {        
+        //移掉最后一个  
+        lastElement := lru.dlist.Back()  
+        if lastElement == nil {  
+            return nil  
+        }  
+        cacheNode := lastElement.Value.(*CacheNode)  
+        delete(lru.cacheMap,cacheNode.Key)  
+        lru.dlist.Remove(lastElement)  
+    }  
+    return nil  
+}  
+  
+  
+func (lru *LRUCache)Get(k interface{})(v interface{},ret bool,err error){  
+  
+    if lru.cacheMap == nil {  
+        return v,false,errors.New("LRUCache结构体未初始化.")         
+    }  
+  
+    if pElement,ok := lru.cacheMap[k]; ok {       
+        lru.dlist.MoveToFront(pElement)       
+        return pElement.Value.(*CacheNode).Value,true,nil  
+    }  
+    return v,false,nil  
+}  
+  
+  
+func (lru *LRUCache)Remove(k interface{})(bool){  
+  
+    if lru.cacheMap == nil {  
+        return false  
+    }  
+  
+    if pElement,ok := lru.cacheMap[k]; ok {  
+        cacheNode := pElement.Value.(*CacheNode)  
+        delete(lru.cacheMap,cacheNode.Key)        
+        lru.dlist.Remove(pElement)  
+        return true  
+    }  
+    return false  
+}  
+
+func main(){  
+  
+    lru := NewLRUCache(3)  
+  
+    lru.Set(10,"value1")  
+    lru.Set(20,"value2")  
+    lru.Set(30,"value3")  
+    lru.Set(10,"value4")  
+    lru.Set(50,"value5")  
+  
+    fmt.Println("LRU Size:",lru.Size())  
+    v,ret,_ := lru.Get(30)  
+    if ret  {  
+        fmt.Println("Get(30) : ",v)  
+    }  
+  
+    if lru.Remove(30) {  
+        fmt.Println("Remove(30) : true ")  
+    }else{  
+        fmt.Println("Remove(30) : false ")  
+    }  
+    fmt.Println("LRU Size:",lru.Size())  
+}  
+output==>
+LRU Size: 3
+Get(30) :  value3
+Remove(30) : true 
+LRU Size: 2
+</pre>
