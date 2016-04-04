@@ -7170,6 +7170,82 @@ func main() {
  
 }
 </pre>
+####Golang指针运算
+<pre>
+package main
+/*
+Go语言的语法上是不支持指针运算的，所有指针都在可控的一个范围内
+使用，没有C语言的*void然后随意转换指针类型这样的东西。最近在
+思考Go如何操作共享内存，共享内存就需要把指针转成不同类型或者
+对指针进行运算再获取数据。
+*/
+import "fmt"
+import "unsafe"
+ 
+type Data struct {
+    Col1 byte
+    Col2 int
+    Col3 string
+    Col4 int
+}
+ 
+func main() {
+    var v Data
+ 
+    fmt.Println(unsafe.Sizeof(v))
+ 
+    fmt.Println("**************")
+ 
+    fmt.Println(unsafe.Alignof(v.Col1))
+    fmt.Println(unsafe.Alignof(v.Col2))
+    fmt.Println(unsafe.Alignof(v.Col3))
+    fmt.Println(unsafe.Alignof(v.Col4))
+ 
+    fmt.Println("**************")
+ 
+    fmt.Println(unsafe.Offsetof(v.Col1))
+    fmt.Println(unsafe.Offsetof(v.Col2))
+    fmt.Println(unsafe.Offsetof(v.Col3))
+    fmt.Println(unsafe.Offsetof(v.Col4))
+ 
+    fmt.Println("**************")
+ 
+    v.Col1 = 98
+    v.Col2 = 77
+    v.Col3 = "1234567890abcdef"
+    v.Col4 = 23
+ 
+    fmt.Println(unsafe.Sizeof(v))
+ 
+    fmt.Println("**************")
+ 
+    x := unsafe.Pointer(&v)
+ 
+    fmt.Println(*(*byte)(x))
+    fmt.Println(*(*int)(unsafe.Pointer(uintptr(x) + unsafe.Offsetof(v.Col2))))
+    fmt.Println(*(*string)(unsafe.Pointer(uintptr(x) + unsafe.Offsetof(v.Col3))))
+    fmt.Println(*(*int)(unsafe.Pointer(uintptr(x) + unsafe.Offsetof(v.Col4))))
+}
+output==>
+40
+**************
+1
+8
+8
+8
+**************
+0
+8
+16
+32
+**************
+40
+**************
+98
+77
+1234567890abcdef
+23
+</pre>
 ###Golang实现数据结构-堆栈
 ####栈
 container/list
