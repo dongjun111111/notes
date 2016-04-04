@@ -9363,3 +9363,175 @@ set()  value= 13  idx= 1  pos= 5 00100000
 排序后:
 1 2 3 4 5 13 17
 </pre>
+###Golang实现Rabin-Karp算法
+<pre>
+package main   
+  
+import (  
+    "fmt"  
+    "unicode/utf8"     
+)  
+  
+  
+func main(){  
+    count := Count("9876520210520","520")  
+    fmt.Println("count==",count)  
+}  
+  
+  
+//primeRK is the prime base used in Rabin-Karp algorithm.  
+//primeRK相当于进制  
+//本例中,只用到0-9这10个数字,即所有字符的总个数为10,所以定为10  
+//源码中是16777619,即相当于16777619进制  
+//The magic is in the interesting relationship between the special prime   
+ //16777619 (2^24 + 403) and 2^32 and 2^8.   
+const primeRK = 10 // 16777619   
+  
+// hashStr returns the hash and the appropriate multiplicative  
+// factor for use in Rabin-Karp algorithm.  
+func hashStr(sep string) (uint32, uint32) {  
+    hash := uint32(0)  
+    charcode := [...]uint32{5,2,0}   
+  
+    for i := 0; i < len(sep); i++ {  
+        //hash = hash*primeRK + uint32(sep[i])  
+        hash = hash*primeRK + charcode[i]   
+    }  
+  
+    //即相当于千位->百位->十位,得到乘数因子(pow),本例中的520,得到的pow是1000  
+    var pow, sq uint32 = 1, primeRK  
+    for i := len(sep); i > 0; i >>= 1 { //len(sep)=3 i>>{1,0} sq:{10,100}  
+        if i&1 != 0 {   
+            pow *= sq  
+        }  
+        sq *= sq  
+    }  
+    /* 
+    var pow uint32 = 1   
+    for i := len(sep); i > 0; i-- {       
+        pow *= primeRK       
+    } 
+    */  
+    fmt.Println("hashStr() sep:",sep," hash:",hash," pow:",pow)  
+    return hash, pow  
+}  
+  
+  
+// Count counts the number of non-overlapping instances of sep in s.  
+func Count(s, sep string) int {  
+    fmt.Println("Count() s:",s," sep:",sep)  
+  
+    n := 0  
+    // special cases  
+    switch {  
+    case len(sep) == 0: //seq为空,返回总数加1  
+        return utf8.RuneCountInString(s) + 1  
+    case len(sep) == 1: //seq为单个字符,直接遍历比较即可  
+        // special case worth making fast  
+        c := sep[0]  
+        for i := 0; i < len(s); i++ {  
+            if s[i] == c {  
+                n++  
+            }  
+        }  
+        return n  
+    case len(sep) > len(s):  
+        return 0  
+    case len(sep) == len(s):  
+        if sep == s {  
+            return 1  
+        }  
+        return 0  
+    }  
+    // Rabin-Karp search  
+    hashsep, pow := hashStr(sep)   
+  
+    lastmatch := 0 //最后一次匹配的位置  
+    charcode := [...]uint32{9,8,7,6,5,2,0,2,1,0,5,2,0} //对应字符串"9876520210520"  
+  
+  
+    //验证s字符串 0 - len(sep)是不是匹配的  
+    h := uint32(0)  
+    for i := 0; i < len(sep); i++ {   
+        //h = h*primeRK + uint32(s[i])  
+        h = h*primeRK +  charcode[i]   
+    }  
+  
+    //如初始s的len(seq)内容是匹配的,n++, lastmatch指向len(seq)位置   
+    if h == hashsep && s[:len(sep)] == sep {  
+        n++  
+        lastmatch = len(sep)  
+    }  
+  
+    for i := len(sep); i < len(s); {   
+  
+        fmt.Println("\na h ==",h )  
+        h *= primeRK  
+  
+        //加上新的  
+        //h += uint32(s[i])   
+        h += charcode[i]   
+        fmt.Println("b h ==",h )  
+  
+        // 去掉旧的  
+        //h -= pow * uint32(s[i-len(sep)])    
+        h -= pow * charcode[i-len(sep)]  
+        fmt.Println("c h ==",h )          
+        i++  
+  
+        if h == hashsep && lastmatch <= i-len(sep) && s[i-len(sep):i] == sep {         
+            n++  
+            lastmatch = i         
+            fmt.Println("found n==",n ," lastmatch==",lastmatch)      
+  
+        }  
+    }  
+    return n  
+}  
+output==>
+Count() s: 9876520210520  sep: 520
+hashStr() sep: 520  hash: 520  pow: 1000
+
+a h == 987
+b h == 9876
+c h == 876
+
+a h == 876
+b h == 8765
+c h == 765
+
+a h == 765
+b h == 7652
+c h == 652
+
+a h == 652
+b h == 6520
+c h == 520
+found n== 1  lastmatch== 7
+
+a h == 520
+b h == 5202
+c h == 202
+
+a h == 202
+b h == 2021
+c h == 21
+
+a h == 21
+b h == 210
+c h == 210
+
+a h == 210
+b h == 2105
+c h == 105
+
+a h == 105
+b h == 1052
+c h == 52
+
+a h == 52
+b h == 520
+c h == 520
+found n== 2  lastmatch== 13
+count== 2
+</pre>
