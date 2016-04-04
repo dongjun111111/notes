@@ -6554,6 +6554,46 @@ func long2ip(ip uint32) string{
 func main(){
 }
 </pre>
+####Golang字符串截取函数substr
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func substr(str string,start,length int)string{
+	rs :=[]rune(str)
+	rl :=len(rs)
+	end := 0
+	
+	if start <0 {
+		start = rl -1 +start
+	}
+	end = start +length
+	if start >end {
+		start,end =end,start
+	}
+	if start <0 {
+		start = 0
+	}
+	if start >rl{
+		start = rl
+	}
+	if end <0{
+		end = 0
+	}
+	if end >rl{
+		end =rl
+	}
+	return string(rs[start:end])
+}
+func main(){
+	str := "hello,jason"
+	fmt.Println(substr(str,6,5))
+}
+output==>
+jason
+</pre>
 ###Golang实现数据结构-堆栈
 ####栈
 container/list
