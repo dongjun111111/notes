@@ -8412,3 +8412,67 @@ Type:Error1  Error1{} - test2()
 Type:Error2  Error2{} - test3()
 Type:Error2  Error2{} - test4() 
 </pre>
+###信号量与定时器
+<pre>
+    package main  
+      
+    //信号量与定时器  
+      
+    import "fmt"  
+    import "os"  
+    import "os/signal"  
+    import "time"  
+      
+    func main() {  
+      
+        sigs := make(chan os.Signal, 1)  
+        done := make(chan bool, 1)  
+      
+        signal.Notify(sigs, os.Interrupt, os.Kill)  
+      
+        go func() {  
+            sig := <-sigs  
+            switch sig {  
+            case os.Interrupt:  
+                fmt.Println("signal: Interrupt")  
+            case os.Kill:  
+                fmt.Println("signal: Kill")  
+            default:  
+                fmt.Println("signal: Others")  
+            }  
+            done <- true  
+        }()  
+      
+        fmt.Println("awaiting signal")  
+      
+        //main()....  
+        go JobTicker(done)  
+        <-done  
+        close(done)  
+        //app.Exit()  
+        fmt.Println("exiting")  
+    }  
+      
+    func JobTicker(done <-chan bool) {  
+        ticker := time.NewTicker(time.Second)  
+        defer ticker.Stop()  
+      
+        for {  
+            select {  
+            case <-done:  
+                return  
+            case <-ticker.C:  
+                fmt.Println("ready......")  
+            }  
+        }  
+    } 
+
+output==>
+awaiting signal
+ready......
+ready......
+ready......
+ready......
+ready......
+//听说按ctrl+c停止，反正我在win7下测试失败。。。 
+</pre>
