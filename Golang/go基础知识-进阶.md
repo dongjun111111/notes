@@ -7596,3 +7596,46 @@ c:/go/src/runtime/proc.go:63 (0x4118da)
 c:/go/src/runtime/asm_amd64.s:2232 (0x438ae1)
 	goexit: 
 </pre>
+###Golang之JSON序列化
+JSON序列化时,Go语言序列化会自动对一些特殊字符会作编码处理。
+<pre>
+package main  
+  
+import (  
+    "bytes"  
+    "encoding/json"  
+    "fmt"  
+    "time"  
+)  
+  
+type Query struct {  
+    AppID     string `json:"AppID"`  
+    Timestamp int64  `json:"Timestamp"`  
+    Package   string `json:"Package"`  
+}  
+  
+func main() {  
+    MarshalDemo()  
+}  
+  
+func MarshalDemo() {  
+    v := &Query{}  
+    v.AppID = "testid"  
+    v.Timestamp = time.Now().Unix()  
+    v.Package = "xxcents=100&bank=666"  
+  
+    data, _ := json.Marshal(v)  
+    fmt.Println("Marshal:", string(data))  
+  
+    data = bytes.Replace(data, []byte("\\u0026"), []byte("&"), -1)  
+    data = bytes.Replace(data, []byte("\\u003c"), []byte("<"), -1)  
+    data = bytes.Replace(data, []byte("\\u003e"), []byte(">"), -1)  
+    data = bytes.Replace(data, []byte("\\u003d"), []byte("="), -1)  
+  
+    fmt.Println("处理后:", string(data))  
+}  
+ 
+output==>
+Marshal: {"AppID":"testid","Timestamp":1459765387,"Package":"xxcents=100\u0026bank=666"}
+处理后: {"AppID":"testid","Timestamp":1459765387,"Package":"xxcents=100&bank=666"}
+</pre>
