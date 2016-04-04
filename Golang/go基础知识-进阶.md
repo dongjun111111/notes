@@ -6854,6 +6854,26 @@ MAC: 88:ae:1d:3c:38:fc
 MAC: 00:50:56:c0:00:01
 MAC: 00:50:56:c0:00:08
 </pre>
+####Golang获取IP地址
+<pre>
+package main
+import (
+	"net"
+	"fmt"
+	"strings"
+)
+func main() {
+	conn, err := net.Dial("udp","google.com:80")
+ 	if err != nil {
+	fmt.Println(err.Error())
+	return
+}
+defer conn.Close()
+	fmt.Println(strings.Split(conn.LocalAddr().String(),":")[0])
+}
+output==>
+192.168.1.110
+</pre>
 ###Golang实现数据结构-堆栈
 ####栈
 container/list
