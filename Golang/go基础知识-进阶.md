@@ -6665,6 +6665,33 @@ func EarthDistance(lat1, lng1, lat2, lng2 float64) float64 {
 output==>
 16670.904273268756
 </pre>
+####Golang使用时间作为种子生成随机数
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+	"math/rand"
+)
+func main(){
+	r :=rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i:=0;i<10;i++{
+		fmt.Println(r.Intn(100))
+	}
+}
+output==>
+16
+42
+33
+51
+33
+83
+20
+95
+56
+64
+</pre>
 ###Golang实现数据结构-堆栈
 ####栈
 container/list
