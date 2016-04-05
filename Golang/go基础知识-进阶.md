@@ -10282,3 +10282,38 @@ output==>
 
 ####Golang的一个ORM库
 地址：https://github.com/donnie4w/gdao/blob/master/gdao.go
+
+###Golang动态调用方法
+<pre>
+package main
+
+import (
+	"reflect"
+	"fmt"
+)
+type YourT struct {
+}
+func (y *YourT)MethodBar(){
+	fmt.Println("MethodBar called")
+}
+type YourT2 struct{
+}
+func (y *YourT2)MethodFoo(i int,oo string){
+	fmt.Println("MethodFoo called",i,oo)
+}
+//调用
+func InvokeObjectMethod(object interface{},methodName string,args ...interface{}){
+	inputs :=make([]reflect.Value,len(args))
+	for i,_:=range args{
+		inputs[i] = reflect.ValueOf(args[i])
+	}
+	reflect.ValueOf(object).MethodByName(methodName).Call(inputs)
+}
+func main(){
+	InvokeObjectMethod(new(YourT2),"MethodFoo",10,"abc")
+	InvokeObjectMethod(new(YourT),"MethodBar")
+}
+output==>
+MethodFoo called 10 abc
+MethodBar called
+</pre> 
