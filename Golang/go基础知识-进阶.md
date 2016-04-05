@@ -10279,3 +10279,6 @@ output==>
 3 9
 </pre>
 可以看出，在对有中文的字符串进行计算长度的时候，len()没有utf8.RuneCountInString()来的准确。
+
+####Golang的一个ORM库
+地址：https://github.com/donnie4w/gdao/blob/master/gdao.go
