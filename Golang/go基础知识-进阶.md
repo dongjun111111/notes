@@ -10317,3 +10317,80 @@ output==>
 MethodFoo called 10 abc
 MethodBar called
 </pre> 
+##理解Goroutine
+<pre>
+package main
+ 
+import (
+	"fmt"
+	"runtime"
+)
+ 
+func say(s string) {
+	for i := 0; i < 2; i++ {
+ 
+		if s == "hello" {
+ 
+			fmt.Println("~~ hello")
+		} else {
+ 
+			fmt.Println("~~ world")
+		}
+ 
+		runtime.Gosched()
+		fmt.Println(s)
+ 
+		if s == "hello" {
+ 
+			fmt.Println("2~~ hello")
+		} else {
+ 
+			fmt.Println("2~~ world")
+		}
+ 
+	}
+}
+ 
+func main() {
+	go say("world")
+ 
+	say("hello")
+ 
+}
+output==>
+~~ hello
+~~ world
+hello
+2~~ hello
+~~ hello
+world
+2~~ world
+~~ world
+hello
+2~~ hello
+</pre>
+代码解析：
+
+1、启goroutine
+
+2、主线程继续执行say(“hello”)
+
+3、主线程输出 ~~hello
+
+4、主线程遇到runtime.Goshed，切换CPU去执行goroutine——say(“world”)
+
+5、输出 ~~world
+
+6、goroutine遇到runtime.Goshed，切换CPU去执行主线程
+
+7、主线程继续向下执行输出 hello，及2~~hello
+
+8、主线程第一次for循环结束，将i++，并输出 ~~hello
+
+9、主线程遇到runtime.Goshed，切换CPU去执行goroutine
+
+10、输出 world及2~~world，第一次for循环结束，输出~~world
+
+11、goroutine再次遇到runtime.Goshed，切换CPU去执行主线程
+
+12、主线程输出hello及2~~hello，将i++已经>2，主线程结束循环退出
