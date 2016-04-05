@@ -10260,3 +10260,22 @@ doJobs()......  ip1  for: 9
 q
 main() end.
 </pre>
+###获取中文字符串正确长度的方法
+<pre>
+package main
+
+import (
+	"unicode/utf8"
+	"fmt"
+)
+func main(){
+	a :="jason"
+	b :="中韩国"
+	fmt.Println(utf8.RuneCountInString(a),len(a))
+	fmt.Println(utf8.RuneCountInString(b),len(b))
+}
+output==>
+5 5
+3 9
+</pre>
+可以看出，在对有中文的字符串进行计算长度的时候，len()没有utf8.RuneCountInString()来的准确。
