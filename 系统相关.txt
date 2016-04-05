@@ -1047,3 +1047,369 @@ d. 页面淘汰算法
 
 只有在具备足够内存的情况下，才能有效的实现多道程序设计
 
+
+
++++Lucene++++
+全文检索与Lucene学习（一）
+
+1 概述... 1
+
+2 Lucene概述... 3
+
+3 Lucene的索引和检索... 5
+
+4 查询方式总结... 8
+
+4.1 查询API 8
+
+TermQuery（词查询）... 9
+
+BooleanQuery （布尔查询）... 9
+
+WildcardQuery（通配符查询）... 9
+
+PhraseQuery（词组查询）... 10
+
+PrefixQuery（前缀搜索）... 11
+
+TermRangeQuery（非数字范围查询）... 11
+
+NumericRangeQuery（数字范围查询）... 11
+
+FuzzyQuery（模糊查询 ）... 12
+
+MatchAllDocsQuery（查询所有Document）... 12
+
+MultiPhraseQuery（多词组查询）... 13
+
+SpanQuery (跨度搜索，又细分为很多类) 14
+
+4.2 QueryParser语法查询... 16
+
+5 理解得分”Score”（摘自网络）... 18
+
+1 概述
+概念：Lucene不是一个完整的全文索引应用，而是是一个用Java写的全文索引引擎工具包，它可以方便的嵌入到各种应用中实现针对应用的全文索引/检索功能。
+
+当前的版本有：Java版的，.NET版的（不完全），网上也有C++重写的，其他各类语言大部分也都有重写的。
+
+简单地说它就两个功能：索引和检索。
+
+主要应用：全文检索，顾名思义即在文件文本中搜索是否含有某个词之类的。（实质不一定是大文本）
+
+全文检索是指计算机索引程序通过扫描文章中的每一个词，对每一个词建立一个索引，指明该词在文章中出现的次数和位置，当用户查询时，检索程序就根据事先建立的索引进行查找，并将查找的结果反馈给用户的检索方式。这个过程类似于通过字典中的检索字表查字的过程。
+
+全文检索使用的理由：执行模糊查询都需要对全表扫描或索引扫描意味着消耗大量IO，如果模糊查询经常发生，会造成数据库性能恶化。（当然不一定非得是对大文件的检索，字段的模糊检索也是如此）
+
+通常比较厚的书籍后面常常附关键词索引表（比如：北京：12, 34页， 上海：3,77页……），它能够帮助读者比较快地找到相关内容的页码。而数据库索引能够大大提高查询的速度原理也是一样，想像一下通过书后面的索引查找的速度要比一页一页地翻内容高多少倍……而索引之所以效率高，另外一个原因是它是排好序的。对于检索系统来说核心是一个排序问题。
+
+由于数据库索引不是为全文索引设计的，因此，使用like "%keyword%"时，数据库索引是不起作用的，在使用like查询时，搜索过程又变成类似于一页页翻书的遍历过程了，所以对于含有模糊查询的数据库服务来说，LIKE对性能的危害是极大的。如果是需要对多个关键词进行模糊匹配：like"%keyword1%" and like "%keyword2%" ...其效率也就可想而知了。
+
+全文检索：
+
+全文检索的方法主要分为按字检索和按词检索两种。按字检索是指对于文章中的每一个字都建立索引，检索时将词分解为字的组合。对于各种不同的语言而言，字有不同的含义，比如英文中字与词实际上是合一的，而中文中字与词有很大分别。按词检索指对文章中的词，即语义单位建立索引，检索时按词检索，并且可以处理同义项等。英文等西方文字由于按照空白切分词，因此实现上与按字处理类似，添加同义处理也很容易。中文等东方文字则需要切分字词，以达到按词索引的目的，关于这方面的问题，是当前全文检索技术尤其是中文全文检索技术中的难点。
+
+全文检索系统是按照全文检索理论建立起来的用于提供全文检索服务的软件系统。一般来说，全文检索需要具备建立索引和提供查询的基本功能，此外现代的全文检索系统还需要具有方便的用户接口、面向WWW的开发接口、二次应用开发接口等等。功能上，全文检索系统核心具有建立索引、处理查询返回结果集、增加索引、优化索引结构等等功能，外围则由各种不同应用具有的功能组成。结构上，全文检索系统核心具有索引引擎、查询引擎、文本分析引擎、对外接口等等，加上各种外围应用系统等等共同构成了全文检索系统。下图展示了上述全文检索系统的结构与功能。
+
+
+全文检索系统中最为关键的部分是全文检索引擎，各种应用程序都需要建立在这个引擎之上。一个全文检索应用的优异程度，根本上由全文检索引擎来决定。因此提升全文检索引擎的效率即是我们提升全文检索应用的根本。另一个方面，一个优异的全文检索引擎，在做到效率优化的同时，还需要具有开放的体系结构，以方便程序员对整个系统进行优化改造，或者是添加原有系统没有的功能。比如在当今多语言处理的环境下，有时需要给全文检索系统添加处理某种语言或者文本格式的功能，比如在英文系统中添加中文处理功能，在纯文本系统中添加XML或者HTML格式的文本处理功能，系统的开放性和扩充性就十分的重要。
+
+Lucene是纯Java的，是相对比较成熟的，速度也还是可以的，而对于其他的有很多是C++写的，速度甚至会更好，但是成熟性还不够，不过考虑效率的话完全可以选择一些C++版本的全文检索工具。
+
+2 Lucene概述
+Lucene索引index由若干段(segment)组成，每一段由若干的文档（document）组成，每一个文档由若干的域（field）组成，每一个域由若干的项（term）组成。项是最小的索引概念单位，它直接代表了一个字符串以及其在文件中的位置、出现次数等信息。域是一个关联的元组，由一个域名和一个域值组成，域名是一个字串，域值是一个项，比如将“标题”和实际标题的项组成的域。文档是提取了某个文件中的所有信息之后的结果，这些组成了段，或者称为一个子索引。子索引可以组合为索引，也可以合并为一个新的包含了所有合并项内部元素的子索引。我们可以清楚的看出，Lucene的索引结构在概念上即为传统的倒排索引（倒排文件或倒排索引是指索引对象是文档或者文档集合中的单词等，用来存储这些单词在一个文档或者一组文档中的存储位置，是对文档或者文档集合的一种最常用的索引机制。）结构。
+
+主要的索引文件及功能：
+
+1、segment_*：描述一组索引的参数，使用文件头固定格式描述后面的内容，包括每个独立新建索引的大小，属性等。
+
+2、fnm：索引域描述文件，一个独立的索引（PerIndex）叫做一个segment（索引段），一个fnm文件描述了本索引的File数，各个 Field的属性编号。
+
+3、fdx：文档域值索引文件，采用定长方式存储，根据docid排序，可直接定位。用来记录每个文档的Stored fields值的存储位置。
+
+4、fdt：文档域值存储文件，存储Stored fields值的文件。通过fdx中记录的便宜访问。
+
+5、tis：存储每个term在文档中的分布信息，如文档频率，每个含term文档出现次数记录的偏移和位置记录的偏移排列顺序。先按Field名字字典 排序，在每个Field按term字典排序。
+
+6、tii：该文件是tis文件的索引和精简，排列格式一样，但不含有每个term属性的信息。这个文件可以完全读入到内存中。
+
+7、frq：该文件是tis文件的扩展。记录每个term在每个包含文件中具体出现频率。
+
+8、prx：该文件是tis文件的延伸，记录每个term在每个文档偏移信息。这个文档省略类docid，必须配合frq文件使用。
+
+9、tvx，tvd，tvf：用来索引和保持每一个文档的向量化字段的信息。
+
+命名规则：更新或创建都会修改文件名字 0-9a-z来进行命名，36进制命名规则。
+
+3 Lucene的索引和检索
+在此我做了一个简单的Demo，先以demo为例来讲述一下大体流程：
+
+比如咱现在要将一些报警信息进行索引并用于检索，报警信息格式（简略演示）如下：
+
+PCIP：xx.xx.xx.xx
+
+DeviceIP：xx.xx.xx.xx
+
+DeviceSerialNum：xxxxxxxx
+
+AlarmType：移动侦测
+
+AlarmDatetime:xxxxxx
+
+为了读取待索引数据方便，将一些条目保存到记事本里面：
+
+172.7.14.198 172.7.19.71 DS-2DF1-4010020090611AACH290005648WC移动侦测 2011/9/1
+
+172.7.14.198 172.7.19.71 DS-2DF1-4010020090611AACH290005648WC移动侦测 2011/9/1
+
+172.7.14.198 172.7.24.51 DS-9016HF-S1620100809BBRR401273372WCVU移动侦测 2011/9/1
+
+172.7.14.198 172.7.24.51 DS-9016HF-S1620100809BBRR401273372WCVUC移动侦测 2011/9/1
+
+…
+
+…
+
+建项目：
+
+引入最新的Lucene包（3.3.0）lucene-core-3.3.0.jar到工程
+
+建索引：
+
+使用的对象和基本步骤：
+
+Analyzer，解析器。
+
+IndexWriter，需要对象IndexWriter来进行索引的创建与更新。
+
+Document，写入的文档，是IndexWriter的基本对象。（一条报警可以用一个文档表示）
+
+Field，一个Document可以有多个Field，这是我们存储的基本单位。（PCIP等都可以视为Field）注：field默认域名区分大小写，最好统一。
+
+A. 创建写对象IndexWriter，它依赖于Analyzer、存储路径，可通过IndexWriterConfig对其进行参数设置。
+
+B. 创建空文档Document doc = newDocument();
+
+C. 向空文档里面添加若干个Field，doc.add(new Field("PCIP", fields[0],Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
+
+注：
+
+Field参数STORE，与索引无关，是否额外存储原文 ，可以在搜索结果后调用出来，
+
+NO不额外存储；
+
+YES，额外存储。
+
+Field参数INDEX，
+
+NO，不索引；
+
+ANALYZED，分词后索引；
+
+NOT_ANALYZED，不分词索引
+
+ANALYZED_NO_NORMS，分词索引，不存储NORMS；
+
+NOT_ANALYZED_NO_NORMS，不分词，索引，不存储NORMS。
+
+除了NO外都算索引，可以搜索。NORMS存储了boost所需信息，包含了NORM可能会占用更多内存。
+
+D. 向IndexWriter添加Document，writer.addDocument(doc);
+
+E. 优化索引（优化相对比较慢，可以选择进行，优化之后可以达到最大查询速度，//writer.optimize();//优化索引
+
+注：实质上一个Document里面的同一个Field可以多次添加，也就是一个数组，这也可以理解为一个Document又可以添加自己的子集，例如下面的例子：
+
+TeacherId: 1
+
+StuFirstName: james
+
+StuLastName: jones
+
+TeacherId: 2
+
+StuFirstName: james
+
+StuLastName: smith
+
+StuFirstName: sally
+
+StuLastName: jones
+
+TeacherId: 3
+
+StuFirstName: james
+
+StuLastName: smith
+
+StuFirstName: keith
+
+StuLastName: keith
+
+StuFirstName: keith
+
+StuLastName: keith
+
+StuFirstName: sally
+
+StuLastName: jones
+
+三个老师，每个老师拥有的同学个数不一样，可以创建三个Document去存储，当然也可以创建更多的Document去处理，这个视实际的需要定。
+
+检索：
+
+IndexSearcher：由于检索的检索器
+
+Analyzer：查询条件对象使用的解析器
+
+QueryParser：将查询字符串转为查询条件对象
+
+Query（或者SpanQuery）：由于查询的查询条件对象。
+
+TopDocs：获取结果集的最靠前的若干项。
+
+ScoreDoc：获取结果集中的结果。
+
+Document：每一条结果的文档对象，也就是所要查询的结果项，可以由它继续获取它所包含的所有Field等。
+
+A． 创建检索对象IndexSearcher，IndexSearcher searcher = new IndexSearcher(FSDirectory.open(new File(indexFilePath)));
+
+B． 创建查询条件对象Query（方式很多，也较复杂），它的详细类型在后面的查询方式总结中细述了。
+
+C． 开始查询：TopDocs results = searcher.search(query, 5 * hitsPerPage);
+
+D． 获取查询结果集：ScoreDoc[] hits = results.scoreDocs;
+
+E． 获取文档并对文档信息进行处理：
+
+以上就是一个简单的索引和检索过程，实质上可以利用一些其他的类实现一些比较复杂的索引和查询，其功能是十分强大的。我写了很多的的Demo源码，大家可以传一下作为参考，依赖包为：lucene-core-3.3.0.jar。
+
+对于IndexReader性能资源讨论
+
+IndexReader封装了底层的API操作，reader的open操作非常耗费资源，因此reader应该重用。
+
+但是reader打开后便不能获悉之后更新的Index，因此可reopen：
+
+reopen将尝试尽量重用 ，如果无法重用将创建新的IndexReader，因此需要判断。
+
+IndexReader newReader = reader.reopen();
+if (reader != newReader) {
+reader.close();
+reader = newReader;
+searcher = new IndexSearcher(reader);
+}
+
+执行搜索
+
+IndexSearcher提供了很多API，下述几个均可以。
+
+TopDocs search(Query query, int n)
+
+TopDocs search(Query query, Filter filter, int n)
+
+TopFieldDocs search(Query query, Filter filter, int n, Sort sort)
+
+TopDocs
+
+多数search直接返回一个TopDocs作为搜索的结果（已经按照相似度排序） ，它包含三个属性（方法）：
+
+totalHits：有多少个Document被匹配
+
+scoreDocs：每一个具体的搜索结果（含分、Document等）
+
+结果的分页
+
+在Lucene中，常用的解决方法有：
+
+1、在第一次就把很多结果都抓取过来，然后根据用户的分页请求来显示
+
+2、每次重新查询
+
+一般来说，Web是“无状态协议”，重新查询可回避状态的存储，是一种较好的选择。每次用户选择后面的页后，将“n”的数值加大，即可显示后面的内容。
+
+“实时搜索”
+
+实时搜索的关键是：不要自己创建Directory->IndexReader，而是使用下述办法：
+
+IndexWriter.getReader()：这可以不需要重新commit 索引就立即获得更新。
+
+IndexReader newReader = reader.reopen()：重用reader，比起open非常快捷，但是注意如果reader!=oldReader，则需要关闭oldReader。
+
+4 查询方式总结
+查询方式总体来讲分两类：查询API查询和语法查询
+
+建议：依据咱项目的需要我觉得可以着重看一下这几种：语法查询（QueryParser），TermQuery，BooleanQuery，WildcardQuery，PrefixQuery，PhraseQuery ，SpanTermQuery ，FieldMaskingSpanQuery。
+
+4.1 查询API
+注：对于查询时的Field名一定要大小写对应，默认情况下要查询的关键字要转成小写，这在lucene建索引的时候做过特殊处理。可以采用 QueryParser.setLowercaseExpandedTerms(boolean flag)来设置是否将其转为小写。最好将查询的关键词转为小写来检索。
+
+基类是Query，继承自Query类的一些类即可实现很多复杂的查询，这些查询包括：TermQuery，MultiTermQuery，BooleanQuery，WildcardQuery，PhraseQuery，PrefixQuery，MultiPhraseQuery，FuzzyQuery，TermRangeQuery，NumericRangeQuery，SpanQuery（又包括：SpanTermQuery、SpanFirstQuery、SpanNearQuery、SpanNotQuery、SpanOrQuery、 FieldMaskingSpanQuery、SpanMultiTermQueryWrapper）、MatchAllDocsQuery ，
+
+其中：NumericRangeQuery，FuzzyQuery，NumericRangeQuery，PrefixQuery,TermRangeQuery,WildcardQuery,SpanMultiTermQueryWrapper 属于多term查询，继承自MultiTermQuery,我们也可以自定义实现我们自己的查询，下面我们来详细了解各种查询，并每一种都有对应的 demo，最好结合Demo去理解各种查询。
+
+TermQuery（词查询）
+TermQuery是Lucene里面最基本的一种原子查询，它基本就是在某个Field里面查找某个词，如果查询到这个词就将对应的Document返回到结果集。
+
+BooleanQuery （布尔查询）
+布尔查询其实就是将各种查询的结果再进行布尔运算，最后在得到查询结果。一个查询中可以添加很多的布尔查询进行帅选。布尔查询在对于按条件查询记录的时候特别方便。
+
+查询条件的限制方式：MUST、SHOULD、MUST_NOT
+
+限制组合的意义：
+
+1．MUST和MUST：取得连个查询子句的交集。
+
+2．MUST和MUST_NOT：表示查询结果中不能包含MUST_NOT所对应得查询子句的检索结果。
+
+3．SHOULD与MUST_NOT：连用时，功能同MUST和MUST_NOT。
+
+4．SHOULD与MUST连用时，结果为MUST子句的检索结果,但是SHOULD可影响排序。
+
+5．SHOULD与SHOULD：表示“或”关系，最终检索结果为所有检索子句的并集。
+
+6．MUST_NOT和MUST_NOT：无意义，检索无结果。
+
+PhraseQuery（词组查询）
+PhraseQuery支持多个关键字的搜索，slop用于表示“距离”，设定PhraseQuery的slop可控制多关键词的检索。相连的两词，将总被检索出来，无论slop为多少。对于slop距离的理解：对于“移动侦测”这个在不使用中文分词的技术时，被理解为4个词，现在以“移、侦、测”三个词为例：
+
+'移’当前处于位置1，实际位置1
+
+'侦’当前处于位置2，实际位置3
+
+'测’当前处于位置3，实际位置4
+
+只需要移动一步就可以构成：移*侦测
+
+所以slop最小为1.
+
+假如现在给的关键字序列是：测、侦、移
+
+'移’当前处于位置3，实际位置1
+
+'侦’当前处于位置2，实际位置3
+
+'测’当前处于位置1，实际位置4
+
+需要移动的步数最少是几呢？
+
+1. 测侦移
+
+2. 侦测移
+
+3. 侦移测
+
+4. 移侦测
+
+5. 移*侦测
+
+这是最少的移动方式，需要5次，所以slop最小为5时才可以检索到词组：移动侦测
+
+综上我们了解到实质上slop是移动距离：将一个Query经过移动多少步可以符合另一个 。
+
+
+
+
+
+
+
+
