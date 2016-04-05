@@ -10317,7 +10317,7 @@ output==>
 MethodFoo called 10 abc
 MethodBar called
 </pre> 
-##理解Goroutine
+##理解Goroutine|深入理解goroutine
 <pre>
 package main
  
