@@ -10438,3 +10438,23 @@ func main(){
 访问http://localhost:8080/fff
 /fff
 </pre>
+<pre>
+package main
+
+import (
+	"io"
+	"net/http"
+)
+type a struct{}
+
+//这里ServeHTTP必须写成ServeHTTP,类似serverHTTP的都是错误
+func (*a) ServeHTTP(w http.ResponseWriter,r *http.Request){
+	path := r.UserAgent()
+	io.WriteString(w,path)
+}
+func main(){
+	http.ListenAndServe(":8080",&a{})
+}
+//访问http://localhost:8080
+Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0
+</pre>
