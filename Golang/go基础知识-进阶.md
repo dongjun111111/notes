@@ -10514,3 +10514,32 @@ Hello
 ServeHTTP方法执行时，会检查map表（表里有一条数据，key是“/hello”，value是&b{}的ServeHTTP方法）.<br>
 如果用户访问/h的话，mux因为匹配上了，mux的ServeHTTP方法会去调用&b{}的 ServeHTTP方法，从而打印hello.<br>
 如果用户访问/abc的话，mux因为没有匹配上，从而打印404 page not found.
+
+通过观察上面的示例，我们可以发现struct a 仅仅是为了装一个ServeHTTP而存在，所以可以将struct a 省略掉，直接用过HandleFunc来实现。如下：
+<pre>
+package main
+
+import (
+	"io"
+	"net/http"
+)
+func main(){
+	mux := http.NewServeMux()
+	mux.HandleFunc("/abc",func(w http.ResponseWriter,r *http.Request){
+		io.WriteString(w,"ABC")
+	})
+	mux.HandleFunc("/hi",func(w http.ResponseWriter,r *http.Request){
+		io.WriteString(w,"hi")
+	})
+	mux.HandleFunc("/jason",func(w http.ResponseWriter,r *http.Request){
+		io.WriteString(w,"I am Jason")
+	})
+	mux.HandleFunc("/xwq",xwq)
+	http.ListenAndServe(":8089",mux)
+}
+func xwq(w http.ResponseWriter,r *http.Request){
+	io.WriteString(w,"Xwq")
+}
+
+//访问可以得到结果：）
+</pre>
