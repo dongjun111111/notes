@@ -1316,5 +1316,5 @@ SELECT * FROM think_user WHERE id = 1
 if(isset($_GET['bytime'])){
      $map['ctime'] = array(array('egt',$st),array('lt',$et));
      $map['wjtime'] = array(array('egt',$st),array('lt',$et));
-     $pamap['bytime'] = 1;            pamap写的是需要带上的搜索参数，它会出现在分页的p的参数里面
+     $pamap['bytime'] = 1;            pamap写的是需要带上的搜索参数，它会出现在分页的p的一排参数里面
 }
