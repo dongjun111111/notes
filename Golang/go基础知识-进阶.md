@@ -10415,3 +10415,6 @@ func main() {
 //浏览器打印
 hello Jason.
 </pre>
+解析：<br>
+当http.ListenAndServe(":8080", &a{})后，开始等待有访问请求
+一旦有访问请求过来，http包帮我们处理了一系列动作后，最后他会去调用a的ServeHTTP这个方法，并把自己已经处理好http.ResponseWriter,*http.Request传进去；而a的ServeHTTP这个方法，拿到*http.ResponseWriter后，并往里面写东西，客户端的网页就显示出来了.
