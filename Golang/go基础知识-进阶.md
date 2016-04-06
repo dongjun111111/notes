@@ -10558,7 +10558,8 @@ func xwq(w http.ResponseWriter,r *http.Request){
 
 bytes.buffer是一个缓冲byte类型的缓冲器，这个缓冲器里存放着都是byte.
 
-下面用一个例子解释创建于写入一个缓冲器：
+下面用一个例子解释创建与写入一个缓冲器：<br>
+使用Write方法写入，将一个byte类型的slice写入缓冲器尾部
 <pre>
 package main
 
@@ -10577,4 +10578,22 @@ func main(){
 output==>
 hello
 helloworld
+</pre>
+使用WriteString方法写入，将一个字符串写入到缓冲器的尾部
+<pre>
+package main
+
+import (
+	"fmt"
+	"bytes"
+)
+func main(){
+	s :="jason"
+	buf := bytes.NewBufferString("hi")
+	buf.WriteString(s)
+	fmt.Println(buf.String())
+	
+}
+output==>
+hijason
 </pre>
