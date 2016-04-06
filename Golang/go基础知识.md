@@ -1,23 +1,69 @@
-19
-0
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18##不可变字符串
+##Linux下Go安装方法（以Linux64为例）
+###确定环境
+<pre>
+go在运行时会读取环境变量，如未读到相关环境变量，则按默认值运行
+例如${GOROOT}表示为安装位置，如未正确设置，会无法使用。
+<pre>
+在根目录（~）下的.bashrc文件最后加入以下内容
+
+$ vi .bashrc
+</pre>
+###下载安装
+把每个golang版本都有保存在golang目录里，可以方便切换使用
+<pre>
+$ wget https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz
+$ cd ~
+$ mkdir golang
+$ cd golang
+$ wget https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz
+$ tar zxf go1.1rc1.linux-amd64.tar.gz
+如果GOROOT是指向$HOME/golang/go的话，go已经安装好了，因为我要用多版本，所以多一步
+
+我先按版本来改名
+$ mv go go1.1
+$ cd ~
+做一个软连接，来搭配上一节的“GOROOT=$HOME/go”
+$ ln -s golang/go1.4 go
+
+go安装好了，测试一下
+$ go version
+如果显示"go version go1.4 linux/amd64"表示成功
+</pre>
+继续做个Go1.3.3:
+<pre>
+$ wget https://storage.googleapis.com/golang/go1.3.3.linux-amd64.tar.gz
+$ wget https://storage.googleapis.com/golang/go1.3.3.linux-amd64.tar.gz
+$ tar zxf go1.3.3.linux-amd64.tar.gz
+$ mv go go1.3.3
+上面几行表示下载好并解压好了，现在开始切换
+
+$ cd ~
+把指向go1.1的软连接删掉
+$ rm go
+把新的连接指向1.0.3
+$ ln -s golang/go1.0.3 go
+
+go安装好了，测试一下
+$ go version
+如果显示"go version go1.3.3"表示安装并切换成功
+</pre>
+####Ok
+完
+#go安装的位置
+export GOROOT=$HOME/go
+#类似工作空间
+export GOPATH=$HOME/mygo
+#将bin目录加入环境变量
+export PATH=${PATH}:${GOPATH}/bin:$GOROOT/bin
+#声明32位还是64位
+export GOARCH=amd64
+#声明操作系统类型
+export GOOS=linux
+
+source一下，使上面新设置的环境生效
+$ source .bashrc
+</pre>
+##不可变字符串
 <pre>
 package main 
 import "fmt"
