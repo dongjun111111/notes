@@ -10393,3 +10393,25 @@ hello
 11、goroutine再次遇到runtime.Goshed，切换CPU去执行主线程
 
 12、主线程输出hello及2~~hello，将i++已经>2，主线程结束循环退出
+
+###自己实现一个serverHTTP方法
+<pre>
+package main
+
+import (
+    "io"
+    "net/http"
+)
+
+type a struct{}
+
+func (*a) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    io.WriteString(w, "hello Jason.")
+}
+
+func main() {
+    http.ListenAndServe(":8080", &a{})//第2个参数需要实现Hander的struct，a满足
+}
+//浏览器打印
+hello Jason.
+</pre>
