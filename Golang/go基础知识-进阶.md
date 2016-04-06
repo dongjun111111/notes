@@ -10487,3 +10487,25 @@ ABC
 </pre>
 上面的switch实现一个类似路由的功能，但是一旦是一个稍微有一点规模的网站，这种做法效率非常低。有问题，自然有对策，ServeMux就登场了。<br>
 ServeMux大致作用是，他有一张map表，map里的key记录的是r.URL.String()，而value记录的是一个方法，这个方法和ServeHTTP是一样的，这个方法有一个别名，叫HandlerFunc.ServeMux还有一个方法名字是Handle，他是用来注册HandlerFunc 的ServeMux还有另一个方法名字是ServeHTTP，这样ServeMux是实现Handler接口的，否者无法当http.ListenAndServe的第二个参数传输.
+<pre>
+//ServeMux实现Golang规则路由
+package main
+
+import (
+	"io"
+	"net/http"
+)
+type a struct{}
+func (*a)ServeHTTP(w http.ResponseWriter,r *http.Request){
+	io.WriteString(w,"Hello")
+}
+func main(){
+	mux := http.NewServeMux()
+	mux.Handle("/hello",&a{})
+	http.ListenAndServe(":8089",mux)
+}
+//访问 localhost:8089
+404 page not found
+//访问 localhost:8089/hello
+Hello
+</pre>
