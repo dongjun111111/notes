@@ -10653,3 +10653,28 @@ func main(){
 	//fmt.Fprintf(file,buf.String())效果同WriteTo	
 }
 </pre>
+###读出缓冲器
+使用Read方法
+<pre>
+package main
+import(
+    "fmt"
+    "bytes"
+)
+
+func main() {
+    s1:=[]byte("hello")//声明一个slice为s1
+    buff:=bytes.NewBuffer(s1)//new一个缓冲器buff，里面存着hello这5个byte
+    s2:=[]byte(" world")//声明另一个slice为s2
+    buff.Write(s2)//把s2写入添加到buff缓冲器内
+    fmt.Println(buff.String()) 
+	s3 :=make([]byte,5)//声明一个空的slice,长度为5
+	buff.Read(s3)//将buffer内容读入到s3中，当然只读了5个rune过来,同时原buffer会从头部减少5个字符
+	fmt.Println(string(s3))
+	fmt.Println(buff.String())//头部开始的5个字符被读出，剩下 world
+}
+output==>
+hello world
+hello
+ world
+</pre>
