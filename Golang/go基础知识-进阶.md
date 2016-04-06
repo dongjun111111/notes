@@ -10617,3 +10617,23 @@ output==>
 hello
 hello!
 </pre>
+使用WriteRune方法，将一个rune类型的数据放到缓冲器的尾部
+<pre>
+package main
+
+import (
+    "bytes"
+    "fmt"
+)
+
+func main() {
+    var s rune = '好'
+    buf := bytes.NewBufferString("hello")
+    fmt.Println(buf.String())  //buf.String()方法是吧buf里的内容转成string，以便于打印
+    buf.WriteRune(s) //将s这个string写到buf的尾部
+    fmt.Println(buf.String())  //打印 hello好
+}
+output==>
+hello
+hello好
+</pre>
