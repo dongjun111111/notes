@@ -10500,12 +10500,17 @@ func (*a)ServeHTTP(w http.ResponseWriter,r *http.Request){
 	io.WriteString(w,"Hello")
 }
 func main(){
-	mux := http.NewServeMux()
-	mux.Handle("/hello",&a{})
-	http.ListenAndServe(":8089",mux)
+	mux := http.NewServeMux() //新建一个ServeMux
+	mux.Handle("/hello",&a{})//注册路由，把"/hello"注册给a这个实现Handler接口的struct，注册到map表中
+	http.ListenAndServe(":8089",mux) //)第二个参数是mux
 }
 //访问 localhost:8089
 404 page not found
 //访问 localhost:8089/hello
 Hello
 </pre>
+上文解析：<br>
+运行时，因为第二个参数是mux，所以http会调用mux的ServeHTTP方法。
+ServeHTTP方法执行时，会检查map表（表里有一条数据，key是“/hello”，value是&b{}的ServeHTTP方法）.<br>
+如果用户访问/h的话，mux因为匹配上了，mux的ServeHTTP方法会去调用&b{}的 ServeHTTP方法，从而打印hello.<br>
+如果用户访问/abc的话，mux因为没有匹配上，从而打印404 page not found.
