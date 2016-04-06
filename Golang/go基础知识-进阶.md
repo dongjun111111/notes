@@ -10729,3 +10729,25 @@ ello
 h
 1
 </pre>
+ReadBytes和ReadByte根本就不是一回事，ReadBytes需要一个byte作为分隔符，读的时候从缓冲器里找第一个出现的分隔符（delim），找到后，把从缓冲器头部开始到分隔符之间的所有byte进行返回，作为byte类型的slice，返回后，缓冲器也会空掉一部分.
+<pre>
+package main
+
+import (
+    "bytes"
+    "fmt"
+)
+
+func main() {
+    var d byte = 'e' //分隔符为e
+    buf := bytes.NewBufferString("hello")
+    fmt.Println(buf.String()) //buf.String()方法是吧buf里的内容转成string，以便于打印
+    b, _ := buf.ReadBytes(d)  //读到分隔符，并返回给b
+    fmt.Println(buf.String()) //打印 llo，缓冲器被取走一些数据
+    fmt.Println(string(b))    //打印 he，找到e了，将缓冲器从头开始，到e的内容都返回给b
+}
+output==>
+hello
+llo
+he
+</pre>
