@@ -10773,3 +10773,23 @@ hello
 llo
 he
 </pre>
+###读入缓冲器
+跟WriteTo相对的就是这个ReadForm.从一个实现io.Reader接口的r，把r里的内容读到缓冲器里，n返回读的数量.可以把文件里面的内容写入buffer中。
+<pre>
+package main
+
+import (
+    "bytes"
+    "fmt"
+    "os"
+)
+
+func main() {
+    file, _ := os.Open("test.txt")  //test.txt的内容是“world”
+    buf := bytes.NewBufferString("hello ")
+    buf.ReadFrom(file)              //将text.txt内容追加到缓冲器的尾部
+    fmt.Println(buf.String())    //打印“hello world”
+}
+output==>
+hello world
+</pre>
