@@ -10458,3 +10458,31 @@ func main(){
 //访问http://localhost:8080
 Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0
 </pre>
+简单网站雏形
+<pre>
+package main
+
+import (
+	"io"
+	"net/http"
+)
+type a struct{}
+func (*a) ServeHTTP(w http.ResponseWriter,r *http.Request){
+	path := r.URL.String()
+	switch path {
+		case "/":
+		io.WriteString(w,"Jason Index")
+		case "/abc":
+		io.WriteString(w,"ABC")
+	}
+}
+func main(){
+	http.ListenAndServe(":8089",&a{})
+}
+//
+访问：localhost:8089
+Jason index
+访问：localhost:8089/abc
+ABC
+</pre>
+上面的switch实现一个类似路由的功能，但是一旦是一个稍微有一点规模的网站，这种做法效率非常低。有问题，自然有对策，ServeMux就登场了。
