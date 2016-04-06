@@ -10597,3 +10597,23 @@ func main(){
 output==>
 hijason
 </pre>
+使用WriteByte方法写入,将一个byte类型的数据写入到缓冲器的尾部
+<pre>
+package main
+
+import (
+    "bytes"
+    "fmt"
+)
+
+func main() {
+    var s byte = '!'
+    buf := bytes.NewBufferString("hello")
+    fmt.Println(buf.String())  //buf.String()方法是吧buf里的内容转成string，以便于打印
+    buf.WriteByte(s) //将s这个string写到buf的尾部
+    fmt.Println(buf.String())  //打印 hello!
+}
+output==>
+hello
+hello!
+</pre>
