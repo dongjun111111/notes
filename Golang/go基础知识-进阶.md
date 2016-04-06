@@ -10637,3 +10637,19 @@ output==>
 hello
 hello好
 </pre>
+使用WriteTo方法，将一个缓冲器的数据写到w里，w是实现io.Writer的，比如os.File就是实现io.Writer,可以将缓冲器的内容导出到文件
+<pre>
+package main
+
+import (
+	"fmt"
+	"bytes"
+	"os"
+)
+func main(){
+	file,_ :=os.Create("jason.txt")
+	buf :=bytes.NewBufferString("Json")
+	buf.WriteTo(file)//这一步已经把buffer内容导出到jason.txt
+	//fmt.Fprintf(file,buf.String())效果同WriteTo	
+}
+</pre>
