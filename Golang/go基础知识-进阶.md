@@ -10552,3 +10552,29 @@ func xwq(w http.ResponseWriter,r *http.Request){
 注意点：两个符号抵消顺序
 
 *&可以在任何时间抵消掉，但&*不可以被抵消的，因为顺序不对.
+
+###Golang中bytes.buffer
+定义
+
+bytes.buffer是一个缓冲byte类型的缓冲器，这个缓冲器里存放着都是byte.
+
+下面用一个例子解释创建于写入一个缓冲器：
+<pre>
+package main
+
+import (
+	"fmt"
+	"bytes"
+)
+
+func main(){
+	s := []byte("world")
+	buf :=bytes.NewBufferString("hello") //创建
+	fmt.Println(buf.String())//将buffer里面的数据转成string
+	buf.Write(s) //将s这个slice写到buffer的尾部
+	fmt.Println(buf.String())
+}
+output==>
+hello
+helloworld
+</pre>
