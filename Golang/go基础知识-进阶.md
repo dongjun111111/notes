@@ -10543,3 +10543,8 @@ func xwq(w http.ResponseWriter,r *http.Request){
 
 //访问可以得到结果：）
 </pre>
+###Golang指针符号的*和&
+理论
+
+&符号的意思是对变量取地址，如：变量a的地址是&a
+*符号的意思是对指针取值，如:*&a，就是a变量所在地址的值，当然也就是a的值
