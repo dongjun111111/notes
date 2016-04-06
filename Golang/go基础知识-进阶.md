@@ -10678,3 +10678,54 @@ hello world
 hello
  world
 </pre>
+使用ReadByte方法，返回缓冲器头部的第一个byte，缓冲器头部第一个byte被拿掉
+<pre>
+package main
+
+import (
+    "bytes"
+    "fmt"
+)
+
+func main() {
+    buf := bytes.NewBufferString("hello")
+    fmt.Println(buf.String()) //buf.String()方法是吧buf里的内容转成string，>以便于打印
+    b, _ := buf.ReadByte()    //读取第一个byte，赋值给b
+    fmt.Println(buf.String()) //打印 ello，缓冲器头部第一个h被拿掉
+    fmt.Println(string(b))    //打印 h
+}
+output==>
+hello
+ello
+h
+</pre>
+使用ReadRune方法，返回缓冲器头部的第一个rune，缓冲器头部第一个rune被拿掉
+<pre>
+package main
+
+import (
+    "bytes"
+    "fmt"
+)
+
+func main() {
+    buf := bytes.NewBufferString("好hello")
+    fmt.Println(buf.String()) //buf.String()方法是吧buf里的内容转成string，>以便于打印
+    b, n, _ := buf.ReadRune() //读取第一个rune，赋值给b
+    fmt.Println(buf.String()) //打印 hello
+    fmt.Println(string(b))    //打印中文字： 好，缓冲器头部第一个“好”被拿掉
+    fmt.Println(n)            //打印3，“好”作为utf8储存占3个byte
+    b, n, _ = buf.ReadRune()  //再读取第一个rune，赋值给b
+    fmt.Println(buf.String()) //打印 ello
+    fmt.Println(string(b))    //打印h，缓冲器头部第一个h被拿掉
+    fmt.Println(n)            //打印 1，“h”作为utf8储存占1个byte
+}
+output==>
+好hello
+hello
+好
+3
+ello
+h
+1
+</pre>
