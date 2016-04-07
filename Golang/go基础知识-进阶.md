@@ -11047,3 +11047,4 @@ struct Hmap
     byte    *oldbuckets;  // 前一个buckets，只有当正在扩容时才不为空
 };
 </pre>
+上面给出的结构体只是Hmap的部分的域。需要注意到的是，这里直接使用的是Bucket的数组，而不是Bucket*指针的数组。这意味着，第一个Bucket和后面溢出链的Bucket分配有些不同。第一个Bucket是用的一段连续的内存空间，而后面溢出链的Bucket的空间是使用mallocgc分配的。
