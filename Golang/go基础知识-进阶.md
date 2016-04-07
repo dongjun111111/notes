@@ -11079,7 +11079,7 @@ struct Bucket
 2. 如果存在old table, 首先在old table中查找，如果找到的bucket已经evacuated，转到步骤3。 反之，返回其对应的value。
 3. 在new table中查找对应的value。
 
-这里一个细节需要注意一下。不认真看可能会以为低位用于定位bucket在数组的index，那么高位就是用于key/valule在bucket内部的offset。事实上高8位不是用作offset的，而是用于加快key的比较的。
+这里一个细节需要注意一下。不认真看可能会以为低位用于定位bucket在数组的index，那么高位就是用于key/valule在bucket内部的offset。事实上高8位不是用作offset的，而是用于加快key的比较的.
 <pre>
 do { //对每个桶b
     //依次比较桶内的每一项存放的tophash与所求的hash值高位是否相等
