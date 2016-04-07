@@ -11035,3 +11035,15 @@ sliceHeader.Data = uintptr(ptr)
 </pre>
 ####map的实现
 Go中的map在底层是用哈希表实现的.
+#####数据结构
+哈希表的数据结构中一些关键的域如下所示：
+<pre>
+struct Hmap
+{
+    uint8   B;    // 可以容纳2^B个项
+    uint16  bucketsize;   // 每个桶的大小
+
+    byte    *buckets;     // 2^B个Buckets的数组
+    byte    *oldbuckets;  // 前一个buckets，只有当正在扩容时才不为空
+};
+</pre>
