@@ -11033,3 +11033,5 @@ sliceHeader.Cap = length
 sliceHeader.Len = length
 sliceHeader.Data = uintptr(ptr)
 </pre>
+####map的实现
+Go中的map在底层是用哈希表实现的.
