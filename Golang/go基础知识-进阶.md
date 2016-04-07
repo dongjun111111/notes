@@ -11035,7 +11035,7 @@ sliceHeader.Data = uintptr(ptr)
 </pre>
 ####map的实现
 Go中的map在底层是用哈希表实现的.
-#####数据结构
+####数据结构
 哈希表的数据结构中一些关键的域如下所示：
 <pre>
 struct Hmap
@@ -11048,3 +11048,51 @@ struct Hmap
 };
 </pre>
 上面给出的结构体只是Hmap的部分的域。需要注意到的是，这里直接使用的是Bucket的数组，而不是Bucket*指针的数组。这意味着，第一个Bucket和后面溢出链的Bucket分配有些不同。第一个Bucket是用的一段连续的内存空间，而后面溢出链的Bucket的空间是使用mallocgc分配的。
+
+这个hash结构使用的是一个可扩展哈希的算法，由hash值mod当前hash表大小决定某一个值属于哪个桶，而hash表大小是2的指数，即上面结构体中的2^B。每次扩容，会增大到上次大小的两倍。结构体中有一个buckets和一个oldbuckets是用来实现增量扩容的。正常情况下直接使用buckets，而oldbuckets为空。如果当前哈希表正在扩容中，则oldbuckets不为空，并且buckets大小是oldbuckets大小的两倍。
+
+具体的Bucket结构如下所示：
+<pre>
+struct Bucket
+{
+    uint8  tophash[BUCKETSIZE]; // hash值的高8位....低位从bucket的array定位到bucket
+    Bucket *overflow;           // 溢出桶链表，如果有
+    byte   data[1];             // BUCKETSIZE keys followed by BUCKETSIZE values
+};
+</pre>
+其中BUCKETSIZE是用宏定义的8，每个bucket中存放最多8个key/value对, 如果多于8个，那么会申请一个新的bucket，并将它与之前的bucket链起来。
+
+按key的类型不同会采用相应不同的hash算法得到key的hash值。将hash值的低位当作Hmap结构体中buckets数组的index，找到key所在的bucket。将hash的高8位存储在了bucket的tophash中。注意，这里高8位不是用来当作在key/value在bucket内部的offset的，而是作为一个主键，在查找时是对tophash数组的每一项进行顺序匹配的。先比较hash值高位与bucket的tophash[i]是否相等，如果相等则再比较bucket的第i个的key与所给的key是否相等。如果相等，则返回其对应的value，反之，在overflow buckets中按照上述方法继续寻找。
+
+####增量扩容
+<b>大家都知道哈希表表就是以空间换时间，访问速度是直接跟填充因子相关的</b>，所以当哈希表太满之后就需要进行扩容。
+
+如果扩容前的哈希表大小为2^B，扩容之后的大小为2^(B+1)，每次扩容都变为原来大小的两倍，哈希表大小始终为2的指数倍，则有(hash mod 2^B)等价于(hash & (2^B-1))。这样可以简化运算，避免了取余操作。
+
+为什么会增量扩容呢？主要是缩短map容器的响应时间。假如我们直接将map用作某个响应实时性要求非常高的web应用存储，如果不采用增量扩容，当map里面存储的元素很多之后，扩容时系统就会卡往，导致较长一段时间内无法响应请求。不过增量扩容本质上还是将总的扩容时间分摊到了每一次哈希操作上面。
+
+扩容会建立一个大小是原来2倍的新的表，将旧的bucket搬到新的表中之后，并不会将旧的bucket从oldbucket中删除，而是加上一个已删除的标记。
+
+正是由于这个工作是逐渐完成的，这样就会导致一部分数据在old table中，一部分在new table中， 所以对于hash table的insert, remove, lookup操作的处理逻辑产生影响。只有当所有的bucket都从旧表移到新表之后，才会将oldbucket释放掉。
+####查找过程
+1. 根据key计算出hash值。
+2. 如果存在old table, 首先在old table中查找，如果找到的bucket已经evacuated，转到步骤3。 反之，返回其对应的value。
+3. 在new table中查找对应的value。
+
+这里一个细节需要注意一下。不认真看可能会以为低位用于定位bucket在数组的index，那么高位就是用于key/valule在bucket内部的offset。事实上高8位不是用作offset的，而是用于加快key的比较的。
+<pre>
+do { //对每个桶b
+    //依次比较桶内的每一项存放的tophash与所求的hash值高位是否相等
+    for(i = 0, k = b->data, v = k + h->keysize * BUCKETSIZE; i < BUCKETSIZE; i++, k += h->keysize, v += h->valuesize) {
+        if(b->tophash[i] == top) { 
+            k2 = IK(h, k);
+            t->key->alg->equal(&eq, t->key->size, key, k2);
+            if(eq) { //相等的情况下再去做key比较...
+                *keyp = k2;
+                return IV(h, v);
+            }
+        }
+    }
+    b = b->overflow; //b设置为它的下一下溢出链
+} while(b != nil);
+</pre>
