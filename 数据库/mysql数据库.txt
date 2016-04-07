@@ -1345,3 +1345,42 @@ MySQL 复制的基本过程如下：
 
 所以，在后期的改造中，新版本的 MySQL 为了尽量减小这个风险，并提高复制的性能，将 Slave端的复制改为两个线程来完成，也就是前面所提到的 SQL 线程和 IO线程。最早提出这个改进方案的是Yahoo!的一位工程师“JeremyZawodny”。通过这样的改造，这样既在很大程度上解决了性能问题，缩短了异步的延时时间，同时也减少了潜在的数据丢失量。
 当然，即使是换成了现在这样两个线程来协作处理之后，同样也还是存在 Slave数据延时以及数据丢失的可能性的，毕竟这个复制是异步的。只要数据的更改不是在一个事务中，这些问题都是存在的。
+
+
+
+++++++
+从一个文件加载数据到 MYSQL，将数据导入到mysql数据库:
+load data infile '文件' into tables 表名 [fields terminated by '字符']
+导出 MYSQL 数据成一个文件，将mysql数据库数据导出到文件:
+select * from 表名 into outfile '文件'
+查看表结构字段:
+desc tablesname;
+添加新的表字段：
+alter table test add name varchar(20);  #添加一个name的字段
+alter table test add f_name varchar(20) after id;  #在id之后添加一个name的字段
+alter table test add sid int first;           #在最前面加入一个字段
+alter table test add primary key(id);  #添加一个primary主键
+删除表中的字段：
+alter table test drop name; #删除
+alter table test add primary key; #删除主键 
+设置表中字段的默认值：
+alter table test alter name set default '不知道';
+修改字段名：
+alter table test change name l_anme varchar(10);  #修改字段名,数据类型要写上
+常用查询函数：
+concat(字符连接)
+distinct(去掉重复数据)
+as(别名)
+limit 3,2 (控制显示数,如前现示从第三个起,拿二个数据)
+MYSQL 中使用正则来查找数据：
+select 'abc' regexp '^a.*c$';
+改变mysql管理员的密码：
+方法1: 在/usr/local/mysql/bin/下，
+	$ mysqladmin -u root password 'new_password'
+方法2:
+	在mysql状态下，
+	mysql>UPDATE user SET password=PASSWORD('new_password') WHERE user='root';
+	mysql>FLUSH PRIVILEGES;
+方法3:
+	在mysql状态下，
+	mysql>SET PASSWORD FOR root=PASSWORD('new_password');
