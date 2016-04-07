@@ -10978,7 +10978,7 @@ C/C++ 等都是编译型语言，而Java，C#等都是解释型语言。
 虽然Java程序在运行之前也有一个编译过程，但是并不是将程序编译成机器语言，而是将它编译成字节码（可以理解为一个中间语言）。在运行的时候，由JVM将字节码再翻译成机器语言。
 
 注：脚本语言一般都有相应的脚本引擎来解释执行。 他们一般需要解释器才能运行。JAVASCRIPT,ASP,PHP,PERL,Nuva都是脚本语言。C/C++编译、链接后，可形成独立执行的exe文件。
-###最基本数据结构
+##最基本数据结构
 slice不是一个指针，它在栈中是占三个机器字节的。
 
 字符串在Go语言内存模型中用一个2字长的数据结构表示。它包含一个指向字符串存储数据的指针和一个长度数据。因为string类型是不可变的，对于多字符串共享同一个存储数据是安全的。切分操作str[i:j]会得到一个新的2字长结构，一个可能不同的但仍指向同一个字节序列(即上文说的存储数据)的指针和长度数据。这意味着字符串切分可以在不涉及内存分配或复制操作。这使得字符串切分的效率等同于传递下标。
@@ -11096,7 +11096,65 @@ do { //对每个桶b
     b = b->overflow; //b设置为它的下一下溢出链
 } while(b != nil);
 </pre>
+
+####插入过程分析
+
+1. 根据key算出hash值，进而得出对应的bucket。
+2. 如果bucket在old table中，将其重新散列到new table中。
+3. 在bucket中，查找空闲的位置，如果已经存在需要插入的key，更新其对应的value。
+4. 根据table中元素的个数，判断是否grow table。
+5. 如果对应的bucket已经full，重新申请新的bucket作为overbucket。
+6. 将key/value pair插入到bucket中。
+7. 
+这里也有几个细节需要注意一下。
+
+在扩容过程中，oldbucket是被冻结的，查找时会在oldbucket中查找，但不会在oldbucket中插入数据。如果在oldbucket是找到了相应的key，做法是将它迁移到新bucket后加入evalucated标记。并且来会额外的迁移另一个pair。
+
+然后就是只要在某个bucket中找到第一个空位，就会将key/value插入到这个位置。也就是位置位于bucket前面的会覆盖后面的(类似于存储系统设计中做删除时的常用的技巧之一，直接用新数据追加方式写，新版本数据覆盖老版本数据)。找到了相同的key或者找到第一个空位就可以结束遍历了。不过这也意味着做删除时必须完全的遍历bucket所有溢出链，将所有的相同key数据都删除。所以目前map的设计是为插入而优化的，删除效率会比插入低一些。
+####map设计中的性能优化
+HMap中是Bucket的数组，而不是Bucket指针的数组。好的方面是可以一次分配较大内存，减少了分配次数，避免多次调用mallocgc。但相应的缺点，其一是可扩展哈希的算法并没有发生作用，扩容时会造成对整个数组的值拷贝(如果实现上用Bucket指针的数组就是指针拷贝了，代价小很多)。其二是首个bucket与后面产生了不一致性。这个会使删除逻辑变得复杂一点。比如删除后面的溢出链可以直接删除，而对于首个bucket，要等到evalucated完毕后，整个oldbucket删除时进行。
+
+没有重用设freelist重用删除的结点。作者把这个加了一个TODO的注释，不过想了一下觉得这个做的意义不大。因为一方面，bucket大小并不一致，重用比较麻烦。另一方面，下层存储已经做过内存池的实现了，所以这里不做重用也会在内存分配那一层被重用的，
+
+bucket直接key/value和间接key/value优化。这个优化做得蛮好的。注意看代码会发现，如果key或value小于128字节，则它们的值是直接使用的bucket作为存储的。否则bucket中存储的是指向实际key/value数据的指针，
+
+bucket存8个key/value对。查找时进行顺序比较。第一次发现高位居然不是用作offset，而是用于加快比较的。定位到bucket之后，居然是一个顺序比较的查找过程。后面仔细想了想，觉得还行。由于bucket只有8个，顺序比较下来也不算过分。仍然是O(1)只不过前面系数大一点点罢了。相当于hash到一个小范围之后，在这个小范围内顺序查找。
+
+插入删除的优化。前面已经提过了，插入只要找到相同的key或者第一个空位，bucket中如果存在一个以上的相同key，前面覆盖后面的(只是如果，实际上不会发生)。而删除就需要遍历完所有bucket溢出链了。这样map的设计就是为插入优化的。考虑到一般的应用场景，这个应该算是很合理的。
 ###nil的语义
 代表的是空值的语义。
 
 按照Go语言规范，任何类型在未初始化时都对应一个零值：布尔类型是false，整型是0，字符串是""，而指针，函数，interface，slice，channel和map的零值都是nil。
+####interface
+一个interface在没有进行初始化时，对应的值是nil。也就是说var v interface{}，此时v就是一个nil。在底层存储上，它是一个空指针。与之不同的情况是，interface值为空。比如：
+<pre>
+var v *T
+var i interface{}
+i = v
+</pre>
+此时i是一个interface，它的值是nil，但它自身不为nil。
+
+Go中的error其实就是一个实现了Error方法的接口：
+<pre>
+type error interface {
+	Error() string
+}
+</pre>
+据此，我们可以自定义一个error：
+<pre>
+type Error struct {
+    errCode uint8
+}
+func (e *Error) Error() string {
+        switch e.errCode {
+        case 1:
+                return "file not found"
+        case 2:
+                return "time out"
+        case 3:
+                return "permission denied"
+        default:
+                return "unknown error"
+         }
+}
+</pre>
