@@ -10939,7 +10939,6 @@ type tableB struct {
         xxoo int
         ooxx int
 }
-
 // 每个玩家只有一条tableC记录
 type tableC struct {
         _is_nil bool
@@ -10958,8 +10957,7 @@ type tableC struct {
 
 如果要逼近有着同样良好设计的C/C++的高性能，需要严格注意频繁分配小块内存的情况。
 
-尤其是对于cpu密集型的应用来说，否则gc的运行会导致大量的cpu消耗在scanblock这个函数上。
-如果你是通过 make([]T, size)来分配slice，还会有相当一部分的cpu会消耗在 runtime.memclr函数上。
+尤其是对于cpu密集型的应用来说，否则gc的运行会导致大量的cpu消耗在scanblock这个函数上。如果你是通过 make([]T, size)来分配slice，还会有相当一部分的cpu会消耗在 runtime.memclr函数上。
 
 因此，最好使用sync.Pool (since go1.3) 或者利用chan 来写一个对象池。这样能够有效减少gc的负担，将cpu更合理地利用起来。
 
