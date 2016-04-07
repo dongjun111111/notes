@@ -205,3 +205,14 @@ checkError(e)
 </pre>
 ####string和slice
 string的空值是""，它是不能跟nil比较的。即使是空的string，它的大小也是两个机器字长的(ptr,len)。slice也类似，slice的空值是nil,它的空值并不是一个空指针，而是结构体中的指针域为空，空的slice的大小也是三个机器字长的(ptr,len,cap)。
+####channel和map
+
+channel跟string或slice有些不同，它在栈上只是一个指针，实际的数据都是由指针所指向的堆上面。
+
+跟channel相关的操作有：初始化/读/写/关闭。channel未初始化值就是nil，未初始化的channel是不能使用的。下面是一些操作规则：
+
+- 读或者写一个nil的channel的操作会永远阻塞。
+- 读一个关闭的channel会立刻返回一个channel元素类型的零值。
+- 写一个关闭的channel会导致panic。
+
+map也是指针，实际数据在堆中，未初始化的值是nil。
