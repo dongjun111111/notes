@@ -203,3 +203,5 @@ func checkError(err error) {
 var e *Error
 checkError(e)
 </pre>
+####string和slice
+string的空值是""，它是不能跟nil比较的。即使是空的string，它的大小也是两个机器字长的(ptr,len)。slice也类似，slice的空值是nil,它的空值并不是一个空指针，而是结构体中的指针域为空，空的slice的大小也是三个机器字长的(ptr,len,cap)。
