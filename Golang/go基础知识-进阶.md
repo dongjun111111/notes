@@ -11096,3 +11096,7 @@ do { //对每个桶b
     b = b->overflow; //b设置为它的下一下溢出链
 } while(b != nil);
 </pre>
+###nil的语义
+代表的是空值的语义。
+
+按照Go语言规范，任何类型在未初始化时都对应一个零值：布尔类型是false，整型是0，字符串是""，而指针，函数，interface，slice，channel和map的零值都是nil。
