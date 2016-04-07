@@ -1513,6 +1513,33 @@ Yes。从库接收到日志后，会先写relay log
 5.binlog和relaylog的SQL是否一致？
 在网络传输正确性可靠的前提下，yes
 
+一个比较困扰的问题：
+既然mysql是先做数据操作、再写binlog，如果写binlog的时候失败，mysql又crash，数据怎么办？
+
+答案是由存储引擎决定数据。
+可以把mysql和它的存储引擎分开看，因为mysql只是一个框架，而不是一个实现。
+binlog是mysql自己的日志，而事务是由存储引擎本身保证的。
+以update为例，mysql做的事情简单分为：
+1. 修改数据update
+2. 写binlog
+3. 如果当前处理的表是一个事务性的表，则commit或rollback
+注意此处的update和commit/rollback都由存储引擎实现，mysql只是站在逻辑的高度上理解这些操作。
+
+对于事务型的引擎innodb，它本身有日志保证数据的一致性。在innodb的实现中，update修改数据之前，
+会新建一个事务，并建立一个回滚点。而在innodb提供的commit/rollback接口会提交/回滚事务。
+
+因此对innodb而言，每条SQL语句的事务，其实包含了binlog的写操作。然而即使是这样，innodb仍然无法保证
+
+binlog和数据的一致性，因为innodb在写commit成功后crash，回滚操作不会回滚binlog。按照手册上的说法，
+
+把--innodb-support-xa设置为1，同时保证sync_binlog=1，才能保证innodb的binlog和数据一致。
+
+
+对于非事务型的引擎myisam，没有commit/rollback的机会，因此在异常情况下，数据会和binlog不一致。
+那么新的问题出现了：myisam如何处理这个不一致呢？
+
+
+
 
 +++WAL预写日志系统+++++
 WAL: Write-Ahead Logging[1]  预写日志系统
