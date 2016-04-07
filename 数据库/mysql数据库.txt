@@ -1348,7 +1348,7 @@ MySQL 复制的基本过程如下：
 
 
 
-++++++
+++mysql基本知识++++
 从一个文件加载数据到 MYSQL，将数据导入到mysql数据库:
 load data infile '文件' into tables 表名 [fields terminated by '字符']
 导出 MYSQL 数据成一个文件，将mysql数据库数据导出到文件:
@@ -1384,3 +1384,115 @@ select 'abc' regexp '^a.*c$';
 方法3:
 	在mysql状态下，
 	mysql>SET PASSWORD FOR root=PASSWORD('new_password');
+
+
++++MySQL Binlog的介绍+++
+binlog基本定义：二进制日志，也成为二进制日志，记录对数据发生或潜在发生更改的SQL语句，并以二进制的形式保存在
+磁盘中；
+
+作用：MySQL的作用类似于Oracle的归档日志，可以用来查看数据库的变更历史（具体的时间点所有的SQL操作）、数据库
+增量备份和恢复（增量备份和基于时间点的恢复）、Mysql的复制（主主数据库的复制、主从数据库的复制）
+
+二进制日志的信息：
+
+文件位置：默认存放位置为数据库文件所在目录下
+
+文件的命名方式： 名称为hostname-bin.xxxxx （重启mysql一次将会自动生成一个新的binlog）
+
+状态的查看：mysql> show variables like '%log_bin%';
+
+mysql> show variables like '%log_bin%';
+
++---------------------------------+-------+
+
+| Variable_name | Value |
+
++---------------------------------+-------+
+
+| log_bin | ON | //表示当前已开启二进制日志//
+
+| log_bin_trust_function_creators | OFF |
+
+| sql_log_bin | ON |
+
++---------------------------------+-------+
+
+3 rows in set (0.00 sec)
+
+ 
+
+二进制日志的管理：
+
+1、开启二进制日志配置
+
+方法一、修改my.cnf参数文件，该方法需要重启
+
+ 
+
+log-bin = mysql-bin #打开日志(主机需要打开)，这个mysql-bin也可以自定义，这里也可以加上路径，
+如：/home/www/mysql_bin_log/mysql-bin
+
+关闭二进制日志的方法：log-bin = mysql-bin注释掉即可
+ 
+ 
+
+方法二、不重启修改二进制日志配置，该方法mysql的版本需要5.6以上
+
+SET @@global.log_bin=1|0  （1为开启，0为关闭）
+
+SET @@global.binlog_size=37268(单位bytes)
+
+ 
+
+3、暂停二进制日志
+
+SET sql_log_bin={0|1}
+
+ 
+
+4、修改二进制日志的大小
+
+修改my.cnf参数文件中的max_binlog_size的值；
+
+说明：如果你的二进制文件的大小超过了max_binlog_size，它就是自动创建新的二进制文件。当然如果恰好在日志文件
+到达它的最大尺寸时写入了大的事务，那么日志文件还是会超过max_binlog_size的大小
+
+ 
+5、进行二进制日志的切换，默认情况下当二进制日志写满了或者数据库重启了才会进行切换，但是也可以手工的进行切换
+的动作
+
+mysql> flush logs;
+
+ 
+
+6、其他参数：
+
+binlog-cache-size=100m 设置二进制日志缓存大小
+
+sync-binlog=N（每个N秒将缓存中的二进制日志记录写回硬盘，默认值为0。不过，你经常会陷入group commit函数与
+I/O之间二选一的矛盾。如果在replication环境中，由于考虑到耐久性与一致性，则需要设置1。同时，还需要设置
+innodb_flush_log_at_trx_commit=1以及innodb-support-xa=1默认开启；）
+
+二进制日志的写入过程
+
+查看二进制日志的内容：
+
+binlog不能直接用文本的方式打开，mysql提供了相应的查看工具：mysqlbinlog，直接查看单个二进制日志文件：mysqlbinlog    filename
+
+例如： mysqlbinlog /data/mysql/mysql-bin.000001
+
+当然也可以通过二进制日志完成数据库的恢复，具体的使用将在数据库的备份还原中介绍。
+
+删除二进制日志
+
+二进制日志会不断的增长,并产生多个文件。因此,需要制定备份计划和管理策略.无用的二进制日志要记得及时删除。
+
+删除慢查询日志有三种方法:
+
+1、操作系统命令直接删除
+
+2、reset master
+
+3、PURGE BINARY LOGS BEFORE '2014-07-09 12:40:26′;
+
+总结：二进制日志用途广泛也很重要，大多少情况下会开启，对于业务操作频繁的数据库需要制定相应的备份策略和删除策略.
