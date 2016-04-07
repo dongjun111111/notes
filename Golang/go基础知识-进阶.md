@@ -11269,9 +11269,7 @@ func TypeConversion(value string, ntype string) (reflect.Value, error) {
 		i, err := strconv.ParseFloat(value, 64)
 		return reflect.ValueOf(i), err
 	}
-
 	//else if .......增加其他一些类型的转换
-
 	return reflect.ValueOf(value), errors.New("未知的类型：" + ntype)
 }
 output==>
