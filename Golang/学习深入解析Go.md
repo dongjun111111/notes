@@ -193,3 +193,13 @@ func (e *Error) Error() string {
          }
 }
 </pre>
+如果我们这样使用它：
+<pre>
+func checkError(err error) {
+    if err != nil {
+        panic(err)
+    }
+}
+var e *Error
+checkError(e)
+</pre>
