@@ -11466,12 +11466,79 @@ func main() {
 
 </pre>
 ###Golang UDP
-下面的解决了传统的两个问题：
+传统方法：
+<pre>
+package main  
+  
+import (  
+    "fmt"  
+    "net"  
+    "os"  
+)  
+  
+func main() {  
+    addr, err := net.ResolveUDPAddr("udp", ":6000")  
+    if err != nil {  
+        fmt.Println("net.ResolveUDPAddr fail.", err)  
+        os.Exit(1)  
+    }  
+  
+    conn, err := net.ListenUDP("udp", addr)  
+    if err != nil {  
+        fmt.Println("net.ListenUDP fail.", err)  
+        os.Exit(1)  
+    }  
+    defer conn.Close()  
+  
+    for {  
+        buf := make([]byte, 65535)  
+        rlen, remote, err := conn.ReadFromUDP(buf)  
+        if err != nil {  
+            fmt.Println("conn.ReadFromUDP fail.", err)  
+            continue  
+        }  
+        go handleConnection(conn, remote, buf[:rlen])  
+    }  
+}  
+  
+func handleConnection(conn *net.UDPConn, remote *net.UDPAddr, msg []byte) {  
+    service_addr, err := net.ResolveUDPAddr("udp", ":6001")  
+    if err != nil {  
+        fmt.Println("net.ResolveUDPAddr fail.", err)  
+        return  
+    }  
+  
+    service_conn, err := net.DialUDP("udp", nil, service_addr)  
+    if err != nil {  
+        fmt.Println("net.DialUDP fail.", err)  
+        return  
+    }  
+    defer service_conn.Close()  
+  
+    _, err = service_conn.Write([]byte("request servcie x"))  
+    if err != nil {  
+        fmt.Println("service_conn.Write fail.", err)  
+        return  
+    }  
+  
+    buf := make([]byte, 65535)  
+    rlen, err := service_conn.Read(buf)  
+    if err != nil {  
+        fmt.Println("service_conn.Read fail.", err)  
+        return  
+    }  
+  
+    conn.WriteToUDP(buf[:rlen], remote)  
+}  
+</pre>
+下面的解决了传统方法的两个问题：
 
 1. 延时(Latency)：Server与后端Service之间采用短链接通信，对于UDP类无连接方式影响不大，但是对于TCP类有连接方式，开销还是比较客观的，增加了请求的响应延时
 2. 并发(Concurrency)：16位的端口号数量有限，如果每次后端交互都需要新建连接，理论上来说，同时请求后端Service的Goroutine数量无法超过65535这个硬性限制，在如今这个动辄“十万”“百万”高并发时代，最高6w并发貌似不太拿得出手
 
-使用过多线程并发模型的同学应该已经注意到，这两个问题在多线程模型中同样存在，只是不如golang如此突出：创建的线程数量一般是受控的，不会达到端口上限，但是goer显然不能满足于这个量级的并发度。
+使用过多线程并发模型的同学应该已经注意到，这两个问题在多线程模型中同样存在，只是不如Golang如此突出：创建的线程数量一般是受控的，不会达到端口上限，但是Goer显然不能满足于这个量级的并发度。
+
+改进方法：
 <pre>
 package main  
  /*
