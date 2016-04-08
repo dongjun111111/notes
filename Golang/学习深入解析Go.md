@@ -221,3 +221,35 @@ map也是指针，实际数据在堆中，未初始化的值是nil。
 
 参见：https://github.com/dongjun111111/blog/issues/24
 
+###defer使用注意点
+先来看看几个例子。例1：
+<pre>
+func f() (result int) {
+    defer func() {
+        result++
+    }()
+    return 0
+}
+</pre>
+例2：
+<pre>
+func f() (r int) {
+     t := 5
+     defer func() {
+       t = t + 5
+     }()
+     return t
+}
+</pre>
+例3：
+<pre>
+func f() (r int) {
+    defer func(r int) {
+          r = r + 5
+    }(r)
+    return 1
+}
+</pre>
+函数返回的过程是这样的：先给返回值赋值，然后调用defer表达式，最后才是返回到调用函数中。
+
+defer表达式可能会在设置函数返回值之后，在返回到调用函数之前，修改返回值，使最终的函数返回值与你想象的不一致。
