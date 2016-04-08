@@ -11359,3 +11359,47 @@ func get_zuijin(this int,arr []int) int{
 output==>
 89
 </pre>
+###Golang写文件读文件
+<pre>
+package main
+ //追加文件
+import (
+    "io/ioutil"
+    "os"
+ 
+    "fmt"
+)
+ //这里若a.txt不存在会报错
+func main() {
+    file_write("hello world!\n", "a.txt")
+    content := file_read("a.txt")
+    fmt.Println(content)
+}
+ 
+func file_read(path string) string {
+    fi, err := os.Open(path)
+    if err != nil {
+		panic(err)
+
+    }
+    defer fi.Close()
+    fd, err := ioutil.ReadAll(fi)
+    fmt.Println(err)
+    return string(fd)
+}
+ 
+func file_write(context, file string) {
+    f, err := os.OpenFile(file, os.O_APPEND, 0644)
+    if err != nil {
+        panic(err)
+    }
+    defer f.Close()
+    f.WriteString(context)
+}
+output==>
+<nil>
+hello world!
+hello world!
+hello world!
+hello world!
+</pre>
