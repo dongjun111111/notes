@@ -11775,4 +11775,4 @@ func main(){
 死锁解决方法：
 
 - 很简单，把没有取走的数据取走，没放入的数据放入,因为无缓冲channel不能存储数据；
-- 将无缓冲channel变成缓冲channel，保证cap值大于等于channel里面将要处理的数据量。
+- 将无缓冲channel变成缓冲channel，保证cap值大于等于channel里面将要处理的数据量。思路类似与Python中的队列Queue.
