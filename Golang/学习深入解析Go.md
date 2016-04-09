@@ -395,6 +395,59 @@ output==>
 - Go语言支持闭包
 - Go语言能通过escape analyze识别出变量的作用域，自动将变量在堆上分配。将闭包环境变量在堆上分配是Go实现闭包的基础。
 - 返回闭包时并不是单纯返回一个结构体，而是返回了一个结构体，记录下函数返回地址和引用的环境中的变量地址。
+###设计与演化
+为了理解goroutine的本质，这里将从最基本的线程池讲起，谈谈Go调度设计背后的故事，讲清楚它为什么是这样子。
+####线程池
+把每个工作线程叫worker的话，每条线程运行一个worker，每个worker做的事情就是不停地从队列中取出任务并执行：
+<pre>
+while(!empty(queue)) {
+    q = get(queue); //从任务队列中取一个(涉及加锁等)
+    q->callback(); //执行该任务
+}
+</pre>
+当然，这是最简单的情形，但是一个很明显的问题就是一个进入callback之后，就失去了控制权。因为没有一个调度器层的东西，一个任务可以执行很长很长时间一直占用的worker线程，或者阻塞于io之类的。
+也许用Go语言表述会更地道一些。好吧，那么让我们用Go语言来描述。假设我们有一些“任务”，任务是一个可运行的东西，也就是只要满足Run函数，它就是一个任务。所以我们就把这个任务叫作接口G吧。
+<pre>
+type G interface {
+    Run() 
+}
+</pre>
+我们有一个全局的任务队列，里面包含很多可运行的任务。线程池的各个线程从全局的任务队列中取任务时，显然是需要并发保护的，所以有下面这个结构体：
+<pre>
+type Sched struct {
+    allg  []G
+    lock    *sync.Mutex
+}
+</pre>
+以及它的变量
+<pre>
+	var sched Sched
+</pre>
+每条线程是一个worker，这里我们给worker换个名字，就把它叫M吧。前面已经说过了，worker做的事情就是不停的去任务队列中取一个任务出来执行。于是用Go语言大概可以写成这样子：
+<pre>
+func M() {
+    for {
+        sched.lock.Lock()    //互斥地从就绪G队列中取一个g出来运行
+        if sched.allg > 0 {
+            g := sched.allg[0]
+            sched.allg = sched.allg[1:]
+            sched.lock.Unlock()
+            g.Run()        //运行它
+        } else {
+            sched.lock.Unlock()
+        }
+    }
+}
+</pre>
+接下来，将整个系统启动：
+<pre>
+for i:=0; i<GOMAXPROCS; i++ {
+    go M()
+}
+</pre>
+假定我们有一个满足G接口的main，然后它在自己的Run中不断地将新的任务挂到sched.allg中，这个线程池+任务队列的系统模型就会一直运行下去。
+
+可以看到，这里在代码取中故意地用Go语言中的G，M，甚至包括GOMAXPROCS等取名字。其实本质上，Go语言的调度层无非就是这样一个工作模式的：几条物理线程，不停地取goroutine运行。
 
 
 
