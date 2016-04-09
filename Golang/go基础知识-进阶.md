@@ -11730,3 +11730,20 @@ func main(){
 	fmt.Println("This is Great")
 }
 </pre>
+- 主线等ch1中的数据流出，ch1等ch2的数据流出，但是ch2等待数据流入，两个goroutine都在等，也就是死锁
+<pre>
+package main
+import "fmt"
+var ch1 chan int = make(chan int)
+var ch2 chan int = make(chan int)
+
+func say(s string) {
+    fmt.Println(s)
+    ch1 <- <- ch2 // ch1 等待 ch2流出的数据
+}
+
+func main() {
+    go say("hello")
+    <- ch1  // 堵塞主线
+}
+</pre>
