@@ -352,7 +352,34 @@ runtime.newstack函数的主要功能是分配空间，装饰此空间，将旧�
 使用gogocall的方式切换到新分配的栈，gogocall使用的JMP返回到被中断的函数
 继续执行遇到RET指令时会返回到runtime.less，less做的事情跟more相反，它要准备好从newstack到old　stack
 整个过程有点像一次中断，中断处理时保存当时的现场，弄个新的栈，中断恢复时恢复到新栈中运行。栈的收缩是垃圾回收的过程中实现的．当检测到栈只使用了不到1/4时，栈缩小为原来的1/2.
-
+###Golang闭包
+看下面的例子就知道了：
+<pre>
+package main
+//go闭包
+import (
+	"fmt"
+)
+func f(i int) func() int{
+	return func() int{
+		i++
+		return i
+	}
+}
+func main(){
+	c1 := f(0)
+	fmt.Println(c1())
+	fmt.Println(c1())
+	c2 :=f(5)
+	fmt.Println(c2())
+	fmt.Println(c2())
+}
+output==>
+1
+2
+6
+7
+</pre>
 
 
 
