@@ -11747,3 +11747,17 @@ func main() {
     <- ch1  // 堵塞主线
 }
 </pre>
+
+- 非缓冲信道上如果发生流入无流出，或者流出无流入，导致发生死锁
+<pre>
+package main
+
+func main(){
+	c, quit := make(chan int), make(chan int)
+	go func() {
+	  c <- 1  // c通道的数据没有被其他goroutine读取走，堵塞当前goroutine
+	  quit <- 0 // quit始终没有办法写入数据
+	}()
+	<- quit // quit 等待数据的写
+}
+</pre>
