@@ -269,7 +269,6 @@ Go语言支持goroutine，每个goroutine需要能够运行，所以它们都有
 
 函数在新的栈中继续运行了，但是还有个问题：函数如何返回。因为函数返回后栈是要缩小的，否则就会内存浪费空间了，所以还需要在函数返回时处理栈缩小的问题。
 ####具体细节
-
 如何捕获到函数的栈空间不足
 
 Go语言和C不同，不是使用栈指针寄存器和栈基址寄存器确定函数的栈的。在Go的运行时库中，每个goroutine对应一个结构体G，大致相当于进程控制块的概念。这个结构体中存了stackbase和stackguard，用于确定这个goroutine使用的栈空间信息。每个Go函数调用的前几条指令，先比较栈指针寄存器跟g->stackguard，检测是否发生栈溢出。如果栈指针寄存器值超越了stackguard就需要扩展栈空间。
@@ -321,7 +320,6 @@ void runtime.morestack() {
 </pre>
 需要注意的就是newstack是切换到m->g0的栈中去调用的。m->g0是调度器栈，go的运行时库的调度器使用的都是m->g0。
 ####旧栈数据复制到新栈
-
 runtime.morestack会调用于runtime.newstack，newstack做的事情很好理解：分配一个足够大的新的空间，将旧的栈中的数据复制到新的栈中，进行适当的修饰，伪装成调用过runtime.lessstack的样子（这样当函数返回时就会调用于runtime.lessstack再次进入runtime中做一些栈收缩的处理）。
 
 这里有一个技术难点：旧栈数据复制到新栈的过程，要考虑指针失效问题。
@@ -348,7 +346,6 @@ label = top->gobuf; //从结构体中取出Gobuf
 runtime·gogo(&label, cret); //通过Gobuf恢复上下文
 </pre>
 ####小结
-
 使用分段栈的函数头几个指令检测%esp和stackguard，调用于runtime.morestack
 runtime.more函数的主要功能是保存当前的栈的一些信息，然后转换成调度器的栈了调用runtime.newstack
 runtime.newstack函数的主要功能是分配空间，装饰此空间，将旧的frame和arg弄到新空间
