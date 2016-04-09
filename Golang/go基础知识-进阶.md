@@ -11682,3 +11682,38 @@ func recvHandler(conn *net.UDPConn, recvChan chan<- []byte) {
     }  
 }  
 </pre>
+###使用channel控制并发
+<pre>
+package main
+
+import (
+	"fmt"
+)
+var quit chan int
+func foo(id int){
+	fmt.Println(id)
+	quit <- 0
+}
+func main(){
+	count := 10
+	quit = make(chan int)
+	for i:=0;i<count;i++{
+		go foo(i)
+	}
+	for i:=0;i<count;i++{
+		<- quit
+	}
+
+}
+output==>
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre>
