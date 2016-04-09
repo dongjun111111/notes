@@ -11717,3 +11717,16 @@ output==>
 8
 9
 </pre>
+###关于死锁
+会发生死锁的几种情况：
+
+- 只在单一的goroutine里操作无缓冲信道，一定死锁。比如你只在main函数里操作信道
+<pre>
+package main
+import "fmt"
+func main(){
+	ch := make(chan int)
+	ch <- 1
+	fmt.Println("This is Great")
+}
+</pre>
