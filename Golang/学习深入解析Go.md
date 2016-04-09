@@ -261,3 +261,33 @@ Go语言支持goroutine，每个goroutine需要能够运行，所以它们都有
 ####基本原理
 
 每次执行函数调用时Go的runtime都会进行检测，若当前栈的大小不够用，则会触发“中断”，从当前函数进入到Go的运行时库，Go的运行时库会保存此时的函数上下文环境，然后分配一个新的足够大的栈空间，将旧栈的内容拷贝到新栈中，并做一些设置，使得当函数恢复运行时，函数会在新分配的栈中继续执行，仿佛整个过程都没发生过一样，这个函数会觉得自己使用的是一块大小“无限”的栈空间。
+
+
+####乱入内容 - C语言中的malloc
+extern void *malloc(unsigned int num_bytes);
+
+头文件：#include <malloc.h> 或 #include <alloc.h> (注意：alloc.h 与 malloc.h 的内容是完全一致的。)
+
+功能：分配长度为num_bytes字节的内存块
+
+说明：如果分配成功则返回指向被分配内存的指针，否则返回空指针NULL。
+
+当内存不再使用时，应使用free()函数将内存块释放。
+
+示例：
+<pre>
+#include<stdio.h>  
+#include<malloc.h>  
+int main()  
+{  
+    char *p;  
+   
+    p=(char *)malloc(100);  
+    if(p)  
+        printf("Memory Allocated at: %x/n",p);  
+    else  
+        printf("Not Enough Memory!/n");  
+    free(p);  
+    return 0;  
+}  
+</pre>
