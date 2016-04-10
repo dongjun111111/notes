@@ -73,15 +73,12 @@ func SendMail(user, password, host, to, subject, body, mailtype string) error{
     err := smtp.SendMail(host, auth, user, send_to, msg)
     return err
 }
- 
 func main() {
     user := "xxxx@163.com"
     password := "xxxx"
     host := "smtp.163.com:25"
     to := "xxxx@gmail.com;ssssss@gmail.com"
- 
     subject := "Test send email by golang"
- 
     body := `
     <html>
     <body>
