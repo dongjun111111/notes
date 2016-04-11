@@ -708,3 +708,40 @@ Channel:
 1.io是面向流的，也就是读取数据的时候是从流上逐个读取，所以数据不能进行整体以为，没有缓冲区;nio是面向缓冲区的，数据是存储在缓冲区中，读取数据是在缓冲区中进行，所以进行数据的偏移操作更加方便
 2，io是阻塞的，当一个线程操作io时如果当前没有数据可读，那么线程阻塞，nio由于是对通道操作io，所以是非阻塞，当一个通道无数据可读，可切换通道处理其他io
 3，nio有selecter选择器，就是线程通过选择器可以选择多个通道，而io只能处理一个
+<pre>
+package sample;  
+  
+import java.io.FileInputStream;  
+import java.io.FileOutputStream;  
+import java.nio.ByteBuffer;  
+import java.nio.channels.FileChannel;  
+  
+public class CopyFile {  
+    public static void main(String[] args) throws Exception {  
+        String infile = "C:\\copy.sql";  
+        String outfile = "C:\\copy.txt";  
+        // 获取源文件和目标文件的输入输出流  
+        FileInputStream fin = new FileInputStream(infile);  
+        FileOutputStream fout = new FileOutputStream(outfile);  
+        // 获取输入输出通道  
+        FileChannel fcin = fin.getChannel();  
+        FileChannel fcout = fout.getChannel();  
+        // 创建缓冲区  
+        ByteBuffer buffer = ByteBuffer.allocate(1024);  
+        while (true) {  
+            // clear方法重设缓冲区，使它可以接受读入的数据  
+            buffer.clear();  
+            // 从输入通道中将数据读到缓冲区  
+            int r = fcin.read(buffer);  
+            // read方法返回读取的字节数，可能为零，如果该通道已到达流的末尾，则返回-1  
+            if (r == -1) {  
+                break;  
+            }  
+            // flip方法让缓冲区可以将新读入的数据写入另一个通道  
+            buffer.flip();  
+            // 从输出通道中将数据写入缓冲区  
+            fcout.write(buffer);  
+        }  
+    }  
+}  
+</pre>
