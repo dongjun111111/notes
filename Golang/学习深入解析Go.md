@@ -596,6 +596,9 @@ MTypes_Bytes:
 
 
 
+
+
+
 ####乱入内容 - C语言中的malloc
 extern void *malloc(unsigned int num_bytes);
 
