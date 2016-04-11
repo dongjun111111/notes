@@ -599,6 +599,8 @@ MTypes_Bytes:
 
 
 
+
+
 ####乱入内容 - C语言中的malloc
 extern void *malloc(unsigned int num_bytes);
 
@@ -690,7 +692,7 @@ B-Tree中一次检索最多需要h-1次I/O（根节点常驻内存），渐进�
 综上所述，用B-Tree作为索引结构效率是非常高的。
 
 而红黑树这种结构，h明显要深的多。由于逻辑上很近的节点（父子）物理上可能很远，无法利用局部性，所以红黑树的I/O渐进复杂度也为O(h)，效率明显比B-Tree差很多。
-####nio 简介
+####nio简介
 nio 是 java New IO 的简称，在 jdk1.4 里提供的新 api 。 Sun 官方标榜的特性如下：
 –     为所有的原始类型提供 (Buffer) 缓存支持。
 –     字符集编码解码解决方案。

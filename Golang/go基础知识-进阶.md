@@ -11773,3 +11773,82 @@ func main(){
 
 - 很简单，把没有取走的数据取走，没放入的数据放入,因为无缓冲channel不能存储数据；
 - 将无缓冲channel变成缓冲channel，保证cap值大于等于channel里面将要处理的数据量。缓冲信道是先进先出的，我们可以把缓冲信道看作为一个线程安全的队列.类似于Python中的队列Queue.
+###Go非侵入式接口<-Go语言编程
+要想了解Golang在接口方面独特的魅力，那还必须了解其他高级语言接口设计的理念。下面是现在常见的接口实现方式：
+<pre>
+//抽象接口
+interface IFly{
+	virtual void Fly() = 0;
+};
+//实现类
+class Bird:public IFly{
+	public :Bird(){}
+	virtual ~Bird(){}
+	public :void Fly(){
+		//以鸟的方式飞行
+	}
+}
+void main(){
+	IFly* pFly = new Bird();
+	pFly->Fly();
+	delete pFly;
+}
+</pre>
+显然，在实现一个接口之前必须先定义该接口，并且类型与接口紧密绑定，即接口的修改会影响到所有实现了该接口的类型，而Golang的接口体系则避免了这类问题：
+<pre>
+type Bird struct{
+	...
+}
+func (b *Bird) Fly(){
+	//以鸟的方式飞行
+}
+</pre>
+我们在实现Bird类型时完全没有任何IFly的信息。我们可以在另外一个地方定义这个IFly()接口：
+<pre>
+type IFly() interface{
+	Fly()
+}
+</pre>
+这两者目前看起来完全没有关系，现在我们如何使用它们：
+<pre>
+func main(){
+	var fly IFly() = new(Bird)
+	fly.Fly()
+}
+</pre>
+可以看出，虽然Bird类型与接口实现的时候，没有声明与接口IFly()的关系，但接口与类可以直接转换，甚至接口的定义都不用再类型声明之前，这种比较松散的对应关系可以大幅降低因为接口调整而导致的大量代码调整工作。
+####并发编程<- Go语言编程
+Go语言实现了CSP(Communicating Sequential Process)模型来作为goroutine间的推荐通信方式。在CSP模型中，一个并发系统由若干并行运行的顺序进程组成，每个进程不能对其他进程的变量赋值。进程之间只能通过一对通信原语实现协作。Go语言用channel这个概念轻巧地实现了CSP模型。channel的使用方比较接近Unix系统中的管道概念，可以方便地进行跨goroutine的通信。
+
+另外，由于一个进程内创建的所有goroutine运行在同一个内存地址空间中， 因此如果不同的goroutine不得不去访问共享的内存变量。访问前应该先获取相应的读写锁。Go中的sync包提供了完备的读写锁功能。
+
+一个使用goroutine与channel进行并行计算的示例：
+<pre>
+package main
+import "fmt"
+func sum(values []int, resultChan chan int){
+	sum := 0
+	for _,value := range values {
+		sum +=value
+	}
+	resultChan <- sum //将计算结果写入resultChan中
+}
+func main(){
+	values := []int{1,2,3,4,5,6,7,8,9,10}
+	go sum(values[:len(values)/2],resultChan)
+	go sum(values[len(values)/2:],resultChan)
+	sum1,sum2 := <-resultChan,<- resultChan 
+	fmt.Println("Result：",sum1,sum2,sum1+sum2)
+}
+</pre>
+####GDB调试<- Go语言编程
+不用设置什么编译选项，Go语言编译的二进制程序直接支持GDB调试，比如之前用go build test.go编译出来的可执行文test,就可以使用下面命调试模式运行:
+<pre>
+gdb test
+</pre>
+需要注意的是，Go编译器生成的调试信息格式为DWARFv3，只要版本高于7.1的GDB应该都支持它。
+
+
+
+
+
