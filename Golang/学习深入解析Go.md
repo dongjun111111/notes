@@ -942,10 +942,9 @@ extern void *malloc(unsigned int num_bytes);
 说明：如果分配成功则返回指向被分配内存的指针，否则返回空指针NULL。
 
 当内存不再使用时，应使用free()函数将内存块释放。
-
-
-void *malloc(int size);
-
+<pre>
+	void *malloc(int size);
+</pre>
 说明：malloc 向系统申请分配指定size个字节的内存空间。返回类型是 void* 类型。void* 表示未确定类型的指针。C,C++规定，void* 类型可以强制转换为任何其它类型的指针。
 
 示例：
