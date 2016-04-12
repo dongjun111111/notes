@@ -12069,3 +12069,32 @@ func main() {
 }
 </pre>
 这些技术可以在程序员知道内存会被复用而不需要垃圾收集器参与时用来复用内存。它可以显著的减少程序需要内存的大小。并不仅限于字节数组。任何Go类型都可以用类似的行为进行复用。
+###Golang实战经验总结
+####变量作用域
+重名的变量，由于作用域的不同导致错误。比如：
+<pre>
+var err error
+for i:=0;i<3;i++{
+	socket,err := getSocket()
+	if err !=nil{
+		continue
+	}
+	socket.Write(...)
+	socket.Read(...)
+}
+return err
+</pre>
+上面的代码循环内的err和循环外的err不是同一个，即使出现网络异常，外面的err任然是nil.下面这样做才是正确的。
+<pre>
+var err error
+var socket Socket
+for i:=0;i<3;i++{
+	socket,err := getSocket()
+	if err != nil {
+		continue
+	}
+	socket.Write(...)
+	socket.Read(...)
+}
+return err
+</pre>
