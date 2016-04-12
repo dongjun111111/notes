@@ -684,7 +684,8 @@ gcpercent的值是通过环境变量GOGC获取的，如果不设置这个环境�
 
 
 
-####乱入内容 - C语言中的malloc
+
+####乱入内容 - C语言中的malloc|常用分配内存函数
 extern void *malloc(unsigned int num_bytes);
 
 头文件：#include <malloc.h> 或 #include <alloc.h> (注意：alloc.h 与 malloc.h 的内容是完全一致的。)
