@@ -927,6 +927,73 @@ reflect就是给定一个接口类型的数据，得到它的具体类型的类�
     v, ok := i.(T)
 </pre>
 这样的语法，也是判断一个接口i的具体类型是否为类型T，如果是则将其值返回给v。这跟上面的类型转换一样，也会检测转换是否合法。不过这里的检测是在运行时执行的。在runtime下的iface.c文件中，有一系统的assetX2X函数，比如runtime.assetE2T，runtime.assetI2T等等。这个实现起来比较简单，只需要比较Iface中的Itab的type是否与给定Type为同一个。
+###方法调用
+对象的方法调用
+
+根据Go语言文档，对象的方法调用相当于普通函数调用的一个语法糖衣。
+<pre>
+type T struct {
+    a int
+}
+func (tv  T) Mv(a int) int         { return 0 }  // value receiver
+func (tp *T) Mp(f float32) float32 { return 1 }  // pointer receiver
+
+var t T
+</pre>
+表达式
+<pre>
+	T.Mv
+</pre>
+得到一个函数，这个函数等价于Mv但是带一个显示的接收者作为第一个参数，也就是
+<pre>
+	func(tv T, a int) int
+</pre>
+下面这些调用是等价的：
+<pre>
+t.Mv(7)
+T.Mv(t, 7)
+(T).Mv(t, 7)
+f1 := T.Mv; f1(t, 7)
+f2 := (T).Mv; f2(t, 7)
+</pre>
+可以看了一下方法调用用生成的汇编代码：
+<pre>
+type T int
+func (t T) f() {
+    fmt.Println("hello world!\n")
+}
+
+func main() {
+    var v T
+    v.f()
+    return
+}
+</pre>
+将它进行汇编：
+<pre>
+	go tool 6g -S test.go
+</pre>
+得到的汇编代码是：
+<pre>
+0044 (sum.go:15) TEXT    main+0(SB),$8-0
+0045 (sum.go:15) FUNCDATA $0,gcargs·1+0(SB)
+0046 (sum.go:15) FUNCDATA $1,gclocals·1+0(SB)
+0047 (sum.go:16) MOVQ    $0,AX
+0048 (sum.go:17) MOVQ    AX,(SP)
+0049 (sum.go:17) CALL    ,T.f+0(SB)
+0050 (sum.go:18) RET     ,
+</pre>
+从这段汇编代码中可以看出，方法调用跟普通函数调用完全没有区别，这里就是把v作为第一个参数调用函数T.f()。
+####组合对象的方法调用
+在Go中没有继承，但是有结构体嵌入的概念。将一个带方法的类型匿名嵌入到另一个结构体中，则这个结构体也会拥有嵌入的类型的方法。
+
+这个功能是如何实现的呢？其实很简单。当一个类型被匿名嵌入结构体时，它的方法表会被拷贝到嵌入结构体的Type的方法表中。这个过程也是在编译时就可以完成的。对组合对象的方法调用同样也仅仅是普通函数调用的语法糖衣。
+####接口的方法调用
+接口的方法调用跟上述情况略有不同，不同之处在于它是根据接口中的方法表得到对应的函数指针，然后调用的，而前面是直接调用的函数地址。
+
+对象的方法调用，等价于普通函数调用，函数地址是在编译时就可以确定的。而接口的方法调用，函数地址要在运行时才能确定。将具体值赋值给接口时，会将Type中的方法表复制到接口的方法表中，然后接口方法的函数地址才会确定下来。因此，接口的方法调用的代价比普通函数调用和对象的方法调用略高，多了几条指令。
+
+
 
 
 
