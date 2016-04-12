@@ -12098,3 +12098,33 @@ for i:=0;i<3;i++{
 }
 return err
 </pre>
+####先检查错误才能defer
+如果不先检查错误，defer的程序可能panic,错误示例如下：
+<pre>
+f,err := os.Open(filename)
+defer f.Close()//如果文件打开失败，此处会panic
+if err !=nil{
+	return err
+}
+</pre>
+正确应该是
+<pre>
+f,err := os.Open(filename)
+if err !=nil{
+	return err
+}
+defer f.Close()
+</pre>
+####defer在函数调用结束后才会被调用
+由于defer在函数调用结束后才会被调用，因此在循环中使用defer会影响性能
+<pre>
+func Process(){
+	for i := 0;i<10;i++{
+		defer fmt.Println(i)
+	}
+	fmt.Println("end")
+}
+output==>
+end 
+987654321
+</pre>
