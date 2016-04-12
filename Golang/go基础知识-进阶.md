@@ -12154,3 +12154,26 @@ four = 4
 one = 1
 two = 2
 </pre>
+####Golang之racket版本
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func 我是(x string,n int)[]string{
+	if n == 0{
+		return make([]string,0)
+	}else{
+		return append(我是(x,n-1),x)
+	}
+}
+func main(){
+	三 := 3
+	猪头 := "猪头"
+	s :=我是(猪头,三)
+	fmt.Println(s)
+}
+output==>
+[猪头 猪头 猪头]
+</pre>
