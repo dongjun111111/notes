@@ -11844,7 +11844,7 @@ func main(){
 ####GDB调试<- Go语言编程
 不用设置什么编译选项，Go语言编译的二进制程序直接支持GDB调试，比如之前用go build test.go编译出来的可执行文test,就可以使用下面命调试模式运行:
 <pre>
-gdb test
+	gdb test
 </pre>
 需要注意的是，Go编译器生成的调试信息格式为DWARFv3，只要版本高于7.1的GDB应该都支持它。
 ###关于Golang内存管理(复用内存Buffer)
