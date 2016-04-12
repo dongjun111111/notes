@@ -12128,3 +12128,29 @@ output==>
 end 
 987654321
 </pre>
+####Golang中的map顺序是随机
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	numbers := map[string]int{
+		"one":1,
+		"two":2,
+		"three":3,
+		"four":4,
+	}
+	for i:=0;i<2;i++{
+		for k,v:=range numbers{
+			fmt.Println(k,"=",v)
+		}
+	}
+}
+output==>
+three = 3
+four = 4
+one = 1
+two = 2
+</pre>
