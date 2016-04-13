@@ -12246,3 +12246,5 @@ go安装目录在C:\go文件夹下面；go的工作目录在D:\gopath文件夹�
 Path加上
 
 - PATH:c:\go\bin;d:\gopath\bin(如果在最后分号不要加上)
+##安装Go-sublime
+http://blog.csdn.net/kenkao/article/details/49488833
