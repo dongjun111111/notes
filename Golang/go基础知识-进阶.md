@@ -12236,4 +12236,4 @@ func lissajous(out io.Writer) {
 }
 </pre>
 #Golang开发环境本地配置
-go安装在C:\go文件夹下面，go的工作目录在D:\gopath文件夹下，现在gopath目录下有pkg与src文件夹。pkg文件夹下是第三方包的存放地点，src下是第三方包与主要主要编码区。
+go安装在C:\go文件夹下面，go的工作目录在D:\gopath文件夹下，现在gopath目录下有pkg与src文件夹。pkg文件夹下是第三方包（一般是github.com文件夹下）的存放地点，src下是第三方包（一般是github.com文件夹下）与主要编码区（例如test文件夹下）。
