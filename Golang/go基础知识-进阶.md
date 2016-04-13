@@ -12232,7 +12232,7 @@ func lissajous(out io.Writer) {
         anim.Delay = append(anim.Delay, delay)
         anim.Image = append(anim.Image, img)
     }
-    gif.EncodeAll(out, &anim) // NOTE: ignoring encoding errors
+    gif.EncodeAll(out, &anim) //NOTE: ignoring encoding errors
 }
 </pre>
 #Golang开发环境本地配置（顶，由果子帮忙实现）
