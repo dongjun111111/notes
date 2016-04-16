@@ -1565,6 +1565,89 @@ linux ssh远程登录原理及中断原理
 　　从上例中可以看出，新提交的进程的父 ID（PPID）为1（init 进程的 PID），并不是当前终端的进程 ID.因此并不属于当前终端的子进程，从而也就不会受到当前终端的 HUP 信号的影响了。
 
 
++++收藏的一些常用Linux命令+++++
+抓取某个进程:ps -eaf | grep xxx ，一般用作ps -aux | grep xxx
+ctrl+r:搜索某个以前输入过的命令 或者!command
+sudo !!执行最近输入的一次命令
+输入错误命令全部取消，重新输入：ctrl+c
+set、env、export的区别：
+set是shell变量，env是环境变量，export是一个将shell变量导入到env变量集合的工具。
+打开一个shell后，操作系统会分配一个记忆块给shell使用，此内存内的变量可让子进程取用；若在父进程利用export功能，可以让自定义变量的内容写到上述的记忆块中（环境变量）；当加载另一个shell时（启动子shell，离开父shell，可通过echo $$查看该shell的PID），子shell可以将父shell的环境变量所在的记忆块导入自己的环境变量块当中。
+tar是打包命令，不压缩，但一般使用中有z压缩成gzip和j压缩成bzip2.
+tar -jtv -f a.bzip2 查看包内文件
+tar -jcv -f DES 新建压缩包
+ar -jxv -f DES 解压包
+scp命令是linux主机间的文件传输命令。格式为
+scp local_file user@remote_ip:$DIR(本地到远端)
+scp user@remote_ip:file $DIR(远端到本地)
+linux的rpm机制 在linux下，几乎所有的软件都是通过rpm方式来进行安装、卸载、管理的。RPM的全称为redhat package manager，是由redhat公司提出的，用于管理linux下软件的软件。rpm一般分为5个模式：安装、卸载、升级、查询、验证。
+rpm安装：rpm -ivh example.rpm //安装 example.rpm 包并在安装过程中显示正在安装的文件信息及安装进度；
+rpm卸载：rpm -e tomcat4 //卸载 tomcat4 软件包(一般先使用rpm查询安装包是否存在、安装目录什么的)
+rpm升级：rpm -Uvh example.rpm //升级 example.rpm 软件包
+rpm查询：rpm -qa | grep tomcat4 //查看 tomcat4 是否被安装；rpm -qpl packagename //查看rpm包中的内容
+rpm验证：rpm -Vf /etc/tomcat4/tomcat4.conf //验证rpm包的修改信息等
+在一个文件夹中需要找到某个变量的定义，可以使用这个命令（其实是脚本）:
+for file in ls;do echo file;grep‘CQueryFeed′file;grep‘CQueryFeed′file;done
+在学了find,grep之后，功力暴涨：find ./* -exec grep -Hn ‘keyword’ {} \;
+从当前目录开始查找所有扩展名为.js的文本文件，并找出包含logout的行
+find . -type f -name “*.js” | xargs grep “logout”
+安装源码包后，无法找到动态库：这个首先需要了解动态库和静态库的区别，然后需要了解/etc/ld.so.conf，默认情况下，编译器寻找动态库只会到/lib和/usr/lib下寻找，如果我们我们没有使用—prefix指定安装目录，那么会安装到/usr/local下，这时我们可以把/usr/local/lib加入到/etc/ld.so.conf中，然后用/sbin/ldconfig命令将新安装的库缓存到/etc/ld.so.cache中，这样编译器就能找到新安装的库了。第二种解决方法就是改变PKG_CONFIG_PATH，这个ls /usr/lib/pkgconfig看到的*.pc就会明白这个变量的作用了。
+在Ubuntu中创建新用户，通常会用到两个命令：useradd和adduser。虽然作用一样，但用法却不尽相同：
+使用useradd时，如果后面不添加任何参数选项，例如：#sudo useradd test创建出来的用户将是默认“三无”用户：一无Home Directory，二无密码，三无系统Shell。
+使用adduser时，创建用户的过程更像是一种人机对话，系统会提示你输入各种信息，然后会根据这些信息帮你创建新用户。
+mbr是硬盘的一个引导区，而grub是一个引导程序！在mbr中有一段空间需要编写引导程序！grub只是引导程序的一种！如果grub够小的话，直接写在mbr中，就可以引导操作系统了！如果grub太大，在只能写一部分在mbr了！如果装windows则硬盘中的grub程序就不能运行了！不是不行，而是微软不愿兼容其它操作系统程序！
+ubuntu下的鼠标有时候设置起来不是很管用，这时候我们可以通过xset m a b来设置，a代表加速多少倍，b代表移动多少像素。这个命令的意思就是在移动b个像素之后鼠标加速a倍。如果你的鼠标灵敏度太高，就可以把b调到很大，这样鼠标肯定就不能加速，鼠标速度就能慢下来了。
+在命令提示符中输入命令，难免会输错。有几个命令会很常用：
+ctrl + c :直接停止当前命令行编辑，转到下一行
+ctrl + u:删除本行的命令
+ctrl + a:到命令头
+ctrl + e:到命令尾
+ctrl+w:删除当前字段
+在查看某个服务的log时，经常使用tail -f命令循环查看log的实时信息，同样，还有一个watch -d ls -l命令，默认2秒检测一下ls -l的情况，如果有变动就会高亮显示。另外，在查看进程时，ps是查看某个时间点，而top如tail -f和watch -d一样，也可以动态查看。
+如果我们需要知道某些服务的进程号时，一般会使用ps aux | grep ssh这样的命令，然后再去看看各个进程的PID，其实有pgrep ssh这个命令，直接查找所有ssh的进程ID。
+上传文件只需在shell终端仿真器中输入命令“rz”，即可从弹出的对话框中选择本地磁盘上的文件，利用Zmodem上传到服务器。下载文件只需在shell终端仿真器中输入命令“sz 文件名”，即可利用Zmodem将文件下载到“路径\SecureCRT-5.1.3\download\”目录下。通过“File Transfer”可以修改上传和下载的默认路径。
+cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c查看CPU；free -g查看内存
+当一个文件夹内log信息太多时，使用rm -f .log会显示augument list too long，这时可以使用find -name ‘.log’ | xargs rm -rf应该就可以了，或者写一个for的shell脚本也可以。
+vim匹配汉字[^\x00-\x7f]+，然后如果替换3个字段中间那个，其他2个保持不变，可使用:1,$s(…)X(…)/\1Y\2/g即可。
+awk -F “:” ‘/something_to_sum/ {sum += $5}; END {print sum}’ /data1/log/a.log，统计在a.log以：分隔的第五个字段的总和。cat a.log | grep ‘hello’ | wc -l 统计a.log中hello字段出现的总行数。当然，在vim中也可以统计，命令是”:%s/hello//gn”然后下方会提示有多少个match（只统计hello出现次数，与在不在同一行无关。所以统计行数时候有可能2个hello处在同一行，这样结果就不对了）【复制的时候看看双引号是不是被搞成中文了。。】
+用vim操作后，当需要保存文件时我常用的是:wq命令，看到同事有用:x的。今天查了一下区别：
+:wq 强制性写入文件并退出。即使文件没有被修改也强制写入，并更新文件的修改时间。
+:x 写入文件并退出。仅当文件被修改时才写入，并更新文件修改时间，否则不会更新文件修改时间。 区别不大，但是当用make之类根据文件修改时间进行操作的工具时就有了影响。这点考虑到就可以了。
+有时候用vim会遇到权限问题，比如一个root的文件，你用一个普通用户编辑了半天，等保存时候猛然发现，你没有权限。。。这是多么蛋疼的情景啊。不过当你试过这个命令就笑了“:w !sudo tee %”，解释一下：把当前编辑的文件的内容当做标准输入输入到命令sudo tee 文件名里去也就是sudo保存为当前文件名（%代表当前文件名）
+在java中一般使用jdbc.properties配置mysql数据库。从中可以得到4个信息：name,pwd,url,port。name/pwd/port都直接标出来了，url就是mysql://:3746中间的部分。然后命令行登陆为> mysql -uname -ppwd -hurl -Pport。
+对数据库中某个字段（a）的所有记录中的另一个字段求和（b）：select SUM(b) from tablename where (Id=’a’) and (createTime like ‘20130926%’); 其中还用到了like，如果date不是date类型的，而是varchar的，就可以使用like，其中%代表mysql的通配符，然后你懂的。
+发现/usr的空间全满了，可以使用du -sh * 查看当前目录下某个文件夹的大小。我使用的ll -h，原来以为是列出当前目录下面的所有文件/目录的总大小，其实对文件来说，是列出文件的大小（以人类易读的方式，如2k,3M,5G）,但是对于目录，目录保存的仅仅是下面文件的inode占用空间。（一般一个目录带下为4K），而如
+果想要知道目录下所有文件占用的总空间，就得使用du（相当于统计的命令）
+统计最常用的top ten命令：
+history | awk ‘{CMD[$2]++;count++;} END { for(a in CMD) {print CMD[a] “ “ CMD[a]/count*100 “% “ a}}’ \
+pipe> | grep -v “./“ | column -c3 -s “ “ -t | sort -nr | nl | head -n10
+linux查看设置的语言：/etc/sysconfig/i18n下。
+有时候需要把一个文件排序，但是名字可能是固定的不想修改，你使用>定向（sort 1 > 1会把文件清空），而sort -o选项可以把结果写到原文件。比如sort -n 1 -o 1
+使用cat合并文件，如cat 1.txt 2.txt 3.txt > 4.txt；如果1/2/3.txt中存在多个空行，最终保存到4.txt时，连续的空行会被替换为1行。如果我们希望去掉空行，可以使用如下：cat -s 1.txt 2.txt 3.txt | sed ‘/^[[:space:]]*$/d’ > 4.txt
+vim的virtual模式分为3种：
+用v命令进入的字符可视化模式（Characterwise visual mode)。文本选择是以字符为单位的。
+用V命令进入的行可视化模式（Linewise visual mode)。文本选择是以行为单位的。
+用ctrl-V进入的块可视化模式（Blockwise visual mode）。可以选择一个矩形内的文本。（注意： 在Windows中，ctrl-V可能已经被影射为粘贴操作，可以使用ctrl-Q进入块可视化模式。）
+在使用diff命令的时候有3种显示，但是如果我们仅仅需要查看2个文件所有不同的记录，去掉diff加上的123a124或者>或者<,可以先diff a b > difflog，然后使用grep+sed：cat difflog | grep -v ‘^[0-9]’ | sed -e ‘s/[^ ]* //‘ > difflog2
+管道是实现“将前面的标准输出作为后面的标准输入”xargs是实现“将标准输入作为命令的参数”
+我们写完shell脚本一般会使用三种方式来执行
+source 1.sh：当前shell执行
+sh 1.sh：子shell执行
+./1.sh：子shell执行 很明显，子shell执行后对父shell没有任何影响，就好像局部变量。比如你1.sh起作用的是cd /data0/niushuai，那么你用后两种执行后，还是在当前目录（因为子shell进入/data0/niushuai后完成任务退出后，不会给父shell任何影响）；如果想对当前shell影响，就必须使用source。这就是配置.bashrc后需要source的原因。
+查询数据库某个表的大小（字节为单位）
+use information_schema;
+select TABLE_NAME,DATA_LENGTH+INDEX_LENGTH,TABLE_ROWS FROM TABLES WHERE TABLE_SCHEMA=’数据库名’ AND TABLE_NAME=’表名’;
+mysql通过root新建数据库后，必须给某一用户通过grant授权后，用户才能正常使用。
+vim将匹配的行全部删除:g/^2013#/d，删除所有以2013#开头的行。:g/^#/d删除空行。
+获取本机某块网卡IP地址的命令：ifconfig eth0 | grep ‘inet addr’ | sed ‘s/^.addr://‘ | sed ‘s/ B.//‘但是当一台机器有多个网卡且只有一个工作的时候，可以使用这个命令来获得当前机器提供网络服务的IP地址：grep//‘但是当一台机器有多个网卡且只有一个工作的时候，可以使用这个命令来获得当前机器提供网络服务的IP地址：grep(hostname) /etc/hosts| awk ‘{print $1}’ 然后又碰到了逆天一样简单的hostname -i
+有时候查看log日志时候，想抓取随机几行。但是log太大的时候，打开都不容易。我们可以使用sed -n ‘20,60p’ log > temp.log。其中-n是安静模式（不在stdout输出）
+监控某台服务器的cpu load信息（设置5s）：top -b -d 5 | grep —line-buffered ‘load’ > cpuload &
+查看服务器CPU数目： cat /proc/cpuinfo | grep -c ‘model name’
+查看当前内存使用情况可以使用top或者free来查看。
+查看cpu使用情况：sar -u 5 720 > cpu.out &
+查看cpu是几核的，详细信息： cat /proc/cpuinfo | grep ‘model name’
+最新到位了新机器，修改了/etc/profile,root后用non login登陆的话，source /etc/profile发现只在当前shell生效，退出登陆还是不行。然后问了一下运维，才知道这个必须完全切换到root才能全局生效。由之前的sudo su切换变为login的sudo su -然后再source就可以了。
+
 
 
 
