@@ -12289,10 +12289,6 @@ NIO（非阻塞IO）是一种IO编程模型，Golang中的IO底层实现方式�
 
 由于goroutine 的轻便，你可以将请求和goroutine 一一对应起来，不用考虑将请求在线程之间换来换去，只关心你的业务逻辑，这就是goroutine 的好处。
 
-
 总结：
 
-
 golang的goroutine让你比java更容易编写并发程序，但性能不会有差别（目前来说，golang性能还不能和java比，看过代码就知道了，GC弱到爆），代码不会减少，该写的逻辑还得写。ps，其实golang的(sched)go程切换代码虽然原理和java的fork-join框架一样，但是fork-join比golang的sched代码牛逼不少，开始膜拜Doug Lea吧，golang还有很长的路要走。
-编辑于 2014-01-02
-作者保留权利
