@@ -12280,7 +12280,7 @@ CPU消耗的主要点
 ###Golang的垃圾回收机制GC停止的原因
 golang垃圾回收时暂停程序防止收集时产生新的垃圾
 
-###java线程与golang协程区别|golang并发与java并发区别
+###java线程与golang协程区别|golang并发与java并发的区别
 NIO（非阻塞IO）是一种IO编程模型，Golang中的IO底层实现方式和java NIO模型一致，通俗点说就是都采用了EPOLL。 你在使用golang读文件的时候，goroutine 会默默的挂起，只是你不知道，当读完毕了，goroutine 再次恢复，但你不用担心，goroutine 的挂起和恢复没有java线程那样可怕，你可以认为goroutine 的挂起和恢复就是保存和恢复几个变量的值，其实也是这样的。
 
 剩下的就是goroutine 和 java线程的区别了，goroutine是用户态的线程切换，java采用的是系统线程切换，用汇编语言描述是一个(java)调用int 80软中断,一个没有。 意味着goroutine更轻量级，可以同时相应成千上万的线程切换，java你创造上千个线程就有些吃力了。
