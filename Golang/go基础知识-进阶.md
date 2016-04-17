@@ -12294,7 +12294,7 @@ NIO（非阻塞IO）是一种IO编程模型，Golang中的IO底层实现方式�
 golang的goroutine让你比java更容易编写并发程序，但性能不会有差别（目前来说，golang性能还不能和java比，看过代码就知道了，GC弱到爆），代码不会减少，该写的逻辑还得写。ps，其实golang的(sched)go程切换代码虽然原理和java的fork-join框架一样，但是fork-join比golang的sched代码牛逼不少，开始膜拜Doug Lea吧，golang还有很长的路要走。
 
 ##goroutine背后的系统知识
-Go语言从诞生到普及已经三年了，先行者大都是Web开发的背景，也有了一些普及型的书籍，可系统开发背景的人在学习这些书籍的时候，总有语焉不详的感觉，网上也有若干流传甚广的文章，可其中或多或少总有些与事实不符的技术描述。希望这篇文章能为比较缺少系统编程背景的Web开发人员介绍一下goroutine背后的系统知识。
+写这篇文章初衷是希望能为比较缺少系统编程背景的Web开发人员介绍一下goroutine背后的系统知识。
 
 1. 操作系统与运行库
 2. 并发与并行 (Concurrency and Parallelism)
