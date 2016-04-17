@@ -12405,7 +12405,6 @@ struct chan {
     bool ready,
     int data
 };
-
 int read (struct chan *c) {
     while (1) {
         if (c->ready) {
@@ -12416,7 +12415,6 @@ int read (struct chan *c) {
         }
     }
 }
-
 void write (struct chan *c, int i) {
     while (1) {
         if (c->ready) {
