@@ -12500,7 +12500,7 @@ _ = ioutil.WriteFile("./output2.jpg.txt", dist, 0666) //直接写入到文件就
 
 
 ###Golang GC调优总结经验
-总结以下几点给打算用go开发项目或已经在用go开发项目的朋友：
+总结为以下几点：
 
 - 尽早的用memprof、cpuprof、GCTRACE来观察程序。
 - 关注请求处理时间，特别是开发新功能的时候，有助于发现设计上的问题。
