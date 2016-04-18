@@ -12497,3 +12497,12 @@ base64.StdEncoding.Encode(bufstore, ff)               // 文件转base64
 _ = ioutil.WriteFile("./output2.jpg.txt", dist, 0666) //直接写入到文件就ok完活了。
 </pre>
 大概就是这些代码基本上一些小网站都够用。 缩放什么的可以先靠前端。后端有个裁剪就够了。
+
+
+###Golang GC调优总结经验
+总结以下几点给打算用go开发项目或已经在用go开发项目的朋友：
+
+- 尽早的用memprof、cpuprof、GCTRACE来观察程序。
+- 关注请求处理时间，特别是开发新功能的时候，有助于发现设计上的问题。
+- 尽量避免频繁创建对象(&abc{}、new(abc{})、make())，在频繁调用的地方可以做对象重用。
+- 尽量不要用go管理大量对象，内存数据库可以完全用c实现好通过cgo来调用。
