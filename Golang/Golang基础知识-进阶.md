@@ -12758,6 +12758,13 @@ map map[k1:5 k2:4]
 5 true
 </pre>
 ###Golang 可变参数函数（From yushuangqi.com）
+可变参数函数。可以用任意数量的参数调用。例如，fmt.Println 是一个常见的变参函数。
+
+这个函数使用任意数目的 int 作为参数。
+
+变参函数使用常规的调用方式，除了参数比较特殊。
+
+如果你的 slice 已经有了多个值，想把它们作为变参使用，你要这样调用 func(slice...)。
 <pre>
 package main
 
