@@ -12529,7 +12529,7 @@ func main(){
 	fmt.Println("Golang版本:",runtime.Version())
 }
 </pre>
-###Golang循环
+###Golang循环for（From yushuangqi.com）
 for 是 Go 中唯一的循环结构。这里有 for 循环的三个基本使用方式。最常用的方式，带单个循环条件。经典的初始化/条件/后续形式 for 循环。不带条件的 for 循环将一直执行，直到在循环体内使用了 break 或者 return 来跳出循环。
 <pre>
 // `for` 是 Go 中唯一的循环结构。这里有 `for` 循环
@@ -12568,4 +12568,62 @@ output==>
 8
 9
 loop
+</pre>
+###Golang 数组 (From  yushuangqi.com)
+在 Go 中，数组 是一个固定长度的数列。
+
+这里我们创建了一个数组 a 来存放刚好 5 个 int。元素的类型和长度都是数组类型的一部分。数组默认是零值的，对于 int 数组来说也就是 0。
+
+我们可以使用 array[index] = value 语法来设置数组指定位置的值，或者用 array[index] 得到值。
+
+使用内置函数 len 返回数组的长度
+
+使用这个语法在一行内初始化一个数组
+
+数组的存储类型是单一的，但是你可以组合这些数据来构造多维的数据结构。
+<pre>
+// 在 Go 中，_数组_ 是一个固定长度的数列。
+
+package main
+
+import "fmt"
+
+func main() {
+
+	// 这里我们创建了一个数组 `a` 来存放刚好 5 个 `int`。
+	// 元素的类型和长度都是数组类型的一部分。数组默认是
+	// 零值的，对于 `int` 数组来说也就是 `0`。
+	var a [5]int
+	fmt.Println("emp:", a)
+
+	// 我们可以使用 `array[index] = value` 语法来设置数组
+	// 指定位置的值，或者用 `array[index]` 得到值。
+	a[4] = 100
+	fmt.Println("set:", a)
+	fmt.Println("get:", a[4])
+
+	// 使用内置函数 `len` 返回数组的长度
+	fmt.Println("len:", len(a))
+
+	// 使用这个语法在一行内初始化一个数组
+	b := [5]int{1, 2, 3, 4, 5}
+	fmt.Println("dcl:", b)
+
+	// 数组的存储类型是单一的，但是你可以组合这些数据
+	// 来构造多维的数据结构。
+	var twoD [2][3]int
+	for i := 0; i < 2; i++ {
+		for j := 0; j < 3; j++ {
+			twoD[i][j] = i + j
+		}
+	}
+	fmt.Println("2d: ", twoD)
+}
+output==>
+emp: [0 0 0 0 0]
+set: [0 0 0 0 100]
+get: 100
+len: 5
+dcl: [1 2 3 4 5]
+2d:  [[0 1 2] [1 2 3]]
 </pre>
