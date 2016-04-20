@@ -12780,5 +12780,5 @@ output==>
 2
 1
 </pre>
-
+Golang中的struct和数组一样，也是值类型。
 
