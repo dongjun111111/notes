@@ -12791,6 +12791,13 @@ output==>
 66
 </pre>
 ###Golang 闭包（From yushuangqi.com）
+Go 支持通过 闭包来使用 匿名函数。匿名函数在你想定义一个不需要命名的内联函数时是很实用的。
+
+这个 intSeq 函数返回另一个在 intSeq 函数体内定义的匿名函数。这个返回的函数使用闭包的方式 隐藏 变量 i。
+
+我们调用 intSeq 函数，将返回值（也是一个函数）赋给nextInt。这个函数的值包含了自己的值 i，这样在每次调用 nextInt 是都会更新 i 的值。
+
+通过多次调用 nextInt 来看看闭包的效果。
 <pre>
 package main
 
