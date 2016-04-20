@@ -12585,6 +12585,7 @@ dcl: [1 2 3 4 5]
 2d:  [[0 1 2] [1 2 3]]
 </pre>
 ###Golang 切片 (From  yushuangqi.com)
+使用append时，如果slice的容量(即对应array的长度)不够，go会创建一个新的array(长度通常为之前的两倍)以容纳新添加的数据，所有旧的array数据都会被拷贝到新的array里。需要频繁使用append时，需要考虑到其效率问题。
 <pre>
 // _Slice_ 是 Go 中一个关键的数据类型，是一个比数组更
 // 加强大的序列接口
