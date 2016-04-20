@@ -12517,3 +12517,15 @@ Go的内存模型对于并发安全有两种保护措施。 一种是通过加�
 
 Go语言编程中， 当有多个goroutine并发操作同一个变量时，除非是全都是只读操作， 否则就得【加锁】或者【使用channel】来保证并发安全。 不要觉得加锁麻烦，但是它能保证并发安全。
 
+###获取Golang版本
+<pre>
+package main
+
+import (
+	"runtime"
+	"fmt"
+)
+func main(){
+	fmt.Println("Golang版本:",runtime.Version())
+}
+</pre>
