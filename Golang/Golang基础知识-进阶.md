@@ -12712,3 +12712,31 @@ sl3: [c d e f]
 dcl: [g h i]
 2d:  [[0] [1 2] [2 3 4]]
 </pre>
+###Golang 字典(From yushuangqi.com)
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func main(){
+	m :=make(map[string]int)
+	m["k1"] = 5
+	m["k2"] = 4
+	fmt.Println("map",m)
+	v :=m["k2"]
+	fmt.Println(v)
+	delete(m,"k2")
+	v2 := m["k2"]
+	fmt.Println(v)
+	fmt.Println(v2)
+	value,isexist :=m["k1"]
+	fmt.Println(value,isexist)
+}
+output==>
+map map[k1:5 k2:4]
+4
+4
+0
+5 true
+</pre>
