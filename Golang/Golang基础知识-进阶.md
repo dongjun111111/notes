@@ -12782,3 +12782,5 @@ output==>
 </pre>
 Golang中的struct和数组一样，也是值类型。
 
+Channel与锁都可以实现并发安全，但是Channel和锁谁轻量? 一句话告诉你: Channel本身用锁实现的. 因此在迫不得已时, 还是尽量减少使用Channel, 但Channel属于语言层支持, 适度使用, 可以改善代码可读写
+
