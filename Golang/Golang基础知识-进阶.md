@@ -12790,4 +12790,29 @@ output==>
 [3 6 5 44 5 3]  
 66
 </pre>
-###Golang 
+###Golang 闭包（From yushuangqi.com）
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func intSeq() func() int{
+	i := 0
+	return func() int{
+		i += 1
+		return i
+	}
+}
+func main(){
+	nextInt := intSeq()
+	fmt.Println(nextInt())
+	fmt.Println(nextInt())
+	nextInts := intSeq()
+	fmt.Println(nextInts())
+}
+output==>
+1
+2
+1
+</pre>
