@@ -12757,3 +12757,29 @@ map map[k1:5 k2:4]
 0
 5 true
 </pre>
+###Golang 可变参数函数（From yushuangqi.com）
+<pre>
+package main
+
+import (
+	"fmt"
+)
+func sum(nums ...int){
+	fmt.Println(nums," ")
+	total := 0
+	for _,num := range nums{
+		total +=num
+	}
+	fmt.Println(total)
+}
+func main(){
+	sum(4,5,6,7,8,5)
+	nums := []int{3,6,5,44,5,3}
+	sum(nums...)
+}
+output==>
+[4 5 6 7 8 5]  
+35
+[3 6 5 44 5 3]  
+66
+</pre>
