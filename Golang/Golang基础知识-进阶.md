@@ -13002,3 +13002,28 @@ func (p *x) Geta() int {
     return p.a
 }
 </pre>
+###GO在一个没有返回值的方法中增加slice的长度,并且能根据下标进行修改
+<pre>
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    b := make([]string, 0, 1000)
+    apppppend(&b)
+    fmt.Println(b)
+}
+
+func apppppend(b *[]string) {
+    *b = append(*b, "first_element")  // 可以进行append
+    *b = append(*b, "second_element") // 可以进行append
+    (*b)[0] = "1st_element"           // []的优先级比*高,所以通过下标修改必须这样写
+
+    // 但是总的来说..不能有返回值的函数在golang里面实在是太奇葩了
+    // 建议别这样
+}
+output==>
+[1st_element second_element]
+</pre>
