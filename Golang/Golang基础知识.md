@@ -1,3 +1,19 @@
+#Golang开发环境本地配置（顶，由果子帮忙实现）
+go安装目录在C:\go文件夹下面；go的工作目录在D:\gopath文件夹下。现在gopath目录下有pkg与src文件夹。pkg文件夹下是第三方包（一般是github.com文件夹下）的存放地点，src下是第三方包（一般是github.com文件夹下）与主要编码区（例如test文件夹下）。
+
+对应的环境变量是：
+
+- GOPATH:D：\gopath
+- GOROOT:C:\go
+
+Path加上
+
+- PATH:c:\go\bin;d:\gopath\bin(如果在最后分号不要加上)
+
+F7 -- 呼出sublime的golang调试控制台
+##安装Go-sublime
+http://blog.csdn.net/kenkao/article/details/49488833
+
 ##Linux下Go安装方法（以Linux64为例）
 ###确定环境
 <pre>
