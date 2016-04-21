@@ -13062,4 +13062,4 @@ var buf bytes.Buffer
 	cmd.Stderr = os.Stderr // 重定向标准输出
 	err = cmd.Run()
 </pre>
-Ok, 搞定, 接下来执行golang源码src下的all.bash重新编译golang,编译要些时间, 编译完后使用go get试试。
+Ok,搞定,接下来执行golang源码src下的all.bash重新编译golang,编译要些时间, 编译完后使用go get试试。
