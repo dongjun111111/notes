@@ -12987,3 +12987,18 @@ output==>
  string
 afa6a745c81b4be08a6681769fc3ff2a1f03e9fe
 </pre>
+###Golang对结构体中单个数据加锁
+下面是给结构体x中的a加锁
+<pre>
+type x struct {
+    a int
+    lock_a sync.Mutex
+    b int
+}
+
+func (p *x) Geta() int {
+    p.lock_a.Lock()
+    defer p.lock_a.Unlock()
+    return p.a
+}
+</pre>
