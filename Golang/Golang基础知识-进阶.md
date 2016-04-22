@@ -13177,3 +13177,4 @@ https://github.com/wg/wrk
 
 ###Golang GC优化
 go没有像jvm那样多的可以调整的参数，并且不是分代回收。优化gc的方式仅仅只能是通过优化程序。但go有一个优势：有真正的array（而仅仅是an array of referece）。go的gc算法是mark and sweep，array对此是友好的：整个array一次性被处理。可以用一个array用open addressing的方式实现map，以此优化gc，也会减少内存的使用。
+根据前面的知识，应对GC抖动的策略是，减少对象数，用海量array代替海量struct。
