@@ -13065,5 +13065,61 @@ var buf bytes.Buffer
 Ok,搞定,接下来执行golang源码src下的all.bash重新编译golang,编译要些时间, 编译完后使用go get试试。
 
 ###Golang热更新
-首先强类型的golang自己没有从语言层面支持热更新，也就是说大家可以理解为golang自身不支持热更新。不过有第三方的库让golang支持热更新，比如：https://github.com/rcrowley/goagain与https://github.com/facebookgo/grace，这两个都是star在1k以上的，可用性稳定性应该不错（自己还没有尝试使用过-.-）。当然还有人提出使用C的方式来支持热更新。具体是通过编译成so共享库文件（so 为共享库,是shared object,用于动态连接,和window下动态链接库文件dll差不多），
+首先强类型的golang自己没有从语言层面支持热更新，也就是说大家可以理解为golang自身不支持热更新。不过有第三方的库让golang支持热更新，比如：https://github.com/rcrowley/goagain与https://github.com/facebookgo/grace，这两个都是star在1k以上的，可用性稳定性应该不错（自己还没有尝试使用过-.-）。当然还有人提出使用C的方式来支持热更新。具体是通过编译成so共享库文件（so 为共享库,是shared object,用于Linux下动态链接文件,和window下动态链接库文件dll差不多。特点：ELF格式文件，共享库（动态库），类似于DLL。节约资源，加快速度，代码升级简化），例如：
 
+主程序：
+<pre>
+package main
+/*
+#include <dlfcn.h>
+#cgo LDFLAGS: -ldl
+
+void (*foo)(int);
+
+void set_foo(void* fn) {
+	foo = fn;
+}
+
+void call_foo(int i) {
+	foo(i);
+}
+*/
+import "C"
+import "fmt"
+
+func main() {
+	n := 0
+	var bar string
+	for {
+		hd := C.dlopen(C.CString(fmt.Sprintf("./foo-%d.so", n)), C.RTLD_LAZY)
+		if hd == nil {
+			panic("dlopen")
+		}
+		foo := C.dlsym(hd, C.CString("foo"))
+		if foo == nil {
+			panic("dlsym")
+		}
+		fmt.Printf("%v\n", foo)
+		C.set_foo(foo)
+		C.call_foo(42)
+		fmt.Scanf("%s", &bar)
+		n++
+	}
+}
+</pre>
+so源码：
+<pre>
+package main
+
+import "fmt"
+import "C"
+
+func main() {
+}
+
+//export foo
+func foo(i C.int) {
+	fmt.Printf("%d-2\n", i)
+}
+</pre>
+用 go build -buildmode=c-shared -o foo-1.so mod.go 编译。需要golang编译器版本>=1.5。这是借助C的机制来实现的，go的execution modes文档提到会有go原生的plugin模式。不过这种的可行性有待考究。
