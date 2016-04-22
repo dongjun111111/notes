@@ -13065,3 +13065,4 @@ var buf bytes.Buffer
 Ok,搞定,接下来执行golang源码src下的all.bash重新编译golang,编译要些时间, 编译完后使用go get试试。
 
 ###Golang热更新
+首先强类型的golang自己没有从语言层面支持热更新，也就是说大家可以理解为golang自身不支持热更新。不过有第三方的库让golang支持热更新，比如：https://github.com/rcrowley/goagain与https://github.com/facebookgo/grace，这两个都是star在1k以上的，可用性应该不错（自己还没有尝试使用过-.-）。
