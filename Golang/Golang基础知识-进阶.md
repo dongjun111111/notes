@@ -13040,7 +13040,7 @@ output==>
 
 一、 修改git clone命令, 找到如下代码, 在createdCmd修改为 clone --progress {repo} {dir}
 
-其它命令hg, svn...添加进度方法类似
+其它命令hg,svn...添加进度方法类似
 <pre>
 // vcsGit describes how to use Git.
 var vcsGit = &vcsCmd{
