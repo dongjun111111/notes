@@ -13227,3 +13227,45 @@ func main() {
 	wg.Wait()
 }
 </pre>
+
+##Golang实现一个速度快内存占用小的一致性哈希算法
+<pre>
+package main
+import "fmt"
+func JumpHash(key uint64, buckets int) int {
+	var b, j int64	
+	if buckets <= 0 {
+			buckets = 1
+	}
+	for j < int64(buckets) {
+			b = j		
+			key = key*2862933555777941757 + 1
+			j = int64(float64(b+1) * (float64(int64(1)<<31) / float64((key>>33)+1)))
+	}	
+	return int(b)
+}
+
+func main() {
+	buckets := make(map[int]int, 10)	
+	count := 10	
+	for i := uint64(0); i < 120000; i++ {	
+		b := JumpHash(i, count)		
+		buckets[b] = buckets[b] + 1
+	}	
+	fmt.Printf("buckets: %v\n", buckets)//add two buckets
+	count = 12	
+	for i := uint64(0); i < 120000; i++ {	
+		oldBucket := JumpHash(i, count-2)	
+		newBucket := JumpHash(i, count)//如果对象需要移动到新的bucket中,则首先从原来的bucket删除，再移动
+		if oldBucket != newBucket {		
+			buckets[oldBucket] = buckets[oldBucket] - 1			
+			buckets[newBucket] = buckets[newBucket] + 1		
+		}	
+	}	
+	fmt.Printf("buckets after add two servers: %v\n", buckets)
+}
+output==>
+buckets: map[1:12001 7:12071 2:12012 3:11997 0:11992 6:11989 8:11908 4:12009 9:12054 5:11967]
+buckets after add two servers: map[2:10024 3:10003 1:9997 7:10086 8:9950 4:10016 9:10028 5:9971 10:9973 11:9967 0:9998 6:9987]
+成功: 进程退出代码 0.		
+</pre>
