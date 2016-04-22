@@ -13178,3 +13178,52 @@ https://github.com/wg/wrk
 ###Golang GC优化
 go没有像jvm那样多的可以调整的参数，并且不是分代回收。优化gc的方式仅仅只能是通过优化程序。但go有一个优势：有真正的array（而仅仅是an array of referece）。go的gc算法是mark and sweep，array对此是友好的：整个array一次性被处理。可以用一个array用open addressing的方式实现map，以此优化gc，也会减少内存的使用。
 根据前面的知识，应对GC抖动的策略是，减少对象数，用海量array代替海量struct。
+
+###获取golang goroutine的id
+原理：
+
+利用runtime.Stack的堆栈信息。runtime.Stack(buf []byte, all bool) int会
+将当前的堆栈信息写入到一个slice中，堆栈的第一行为goroutine #### [.....
+其中####就是当前的gororutine id。
+
+需要注意的是，获取堆栈信息会影响性能，所以建议你在debug的时候才用它。
+
+<pre>
+package main
+import (
+	"fmt"
+	"runtime"
+	"strconv"
+	"strings"
+	"sync"
+)
+/*
+利用runtime.Stack的堆栈信息。runtime.Stack(buf []byte, all bool) int会
+将当前的堆栈信息写入到一个slice中，堆栈的第一行为goroutine #### [.....
+其中####就是当前的gororutine id。
+需要注意的是，获取堆栈信息会影响性能，所以建议你在debug的时候才用它。
+*/
+func GoID() int {
+	var buf [64]byte
+	n := runtime.Stack(buf[:], false)
+	idField := strings.Fields(strings.TrimPrefix(string(buf[:n]), "goroutine "))[0]
+	id, err := strconv.Atoi(idField)
+	if err != nil {
+		panic(fmt.Sprintf("cannot get goroutine id: %v", err))
+	}
+	return id
+}
+func main() {
+	fmt.Println("main", GoID())
+	var wg sync.WaitGroup
+	for i := 0; i < 10; i++ {
+		i := i
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			fmt.Println(i, "Goroutine ID:",GoID())
+		}()
+	}
+	wg.Wait()
+}
+</pre>
