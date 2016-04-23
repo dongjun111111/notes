@@ -13487,3 +13487,68 @@ isatap.{C86C9321-0E23-416F-A979-B0A1103AB743} 00:00:00:00:00:00:00:e0
 isatap.{99DBEBBA-0E54-488B-91B5-21352C7C5B2F} 00:00:00:00:00:00:00:e0
 isatap.{BBBEE258-288E-4756-9DC0-E23D3819D958} 00:00:00:00:00:00:00:e0
 </pre>
+##Golang重试机制的实现
+<pre>
+package main
+
+import (
+	"errors"
+	"fmt"
+	_ "github.com/astaxie/beego"
+	_ "github.com/huichen/sego"
+	_ "github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/matryer/try"
+	_ "gopkg.in/redis.v3"
+	"math/rand"
+	_ "stathat.com/c/consistent"
+	"time"
+)
+
+/*
+func main() {
+	db, err := gorm.Open("mysql", "root:123456@/testdb?charset=utf8&parseTime=True&loc=Local")
+	if err != nil {
+		panic(err)
+	}
+	if err = db.DB().Ping(); err != nil {
+		panic(err.Error())
+	}
+} */
+func main() {
+	var value string
+
+	err := try.Do(func(attempt int) (bool, error) {
+		var err error
+		value, err = SomeFunction()
+		if err != nil {
+			fmt.Println("Run error - ", err)
+		} else {
+			fmt.Println("Run ok - ", value)
+		}
+
+		return attempt < 5, err // 重试5次
+	})
+
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+}
+
+func SomeFunction() (string, error) {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	//如果生成随机数大于90，返回成功
+	if r.Intn(100) > 90 {
+		return "ok", nil
+	} else {
+		return "", errors.New("network error")
+	}
+}
+output==>
+Run error -  network error
+Run error -  network error
+Run error -  network error
+Run error -  network error
+Run error -  network error
+error: network error
+</pre>
