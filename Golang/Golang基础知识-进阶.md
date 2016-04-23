@@ -13420,3 +13420,70 @@ func main() {
     fmt.Println(s)
 }
 </pre>
+##Golang获取系统信息|MAC|IP|GOROOT|CPU|操作系统|架构|有线网络连接|无线网络连接
+<pre>
+package main
+
+import (
+    "fmt"
+    "net"
+    "runtime"
+)
+
+func main() {
+    //操作系统
+    fmt.Println("GOOS:", runtime.GOOS)
+    //架构
+    fmt.Println("GOARCH:", runtime.GOARCH)
+    //GOROOT
+    fmt.Println("GOROOT:", runtime.GOROOT())
+    //go版本
+    fmt.Println("Version:", runtime.Version())
+    //cpu数
+    fmt.Println("NumCPU:", runtime.NumCPU())
+    fmt.Println()
+
+    //MAC和IP地址
+    interfaces, err := net.Interfaces()
+    if err != nil {
+        panic("Poor soul, here is what you got: " + err.Error())
+    }
+    for _, inter := range interfaces {
+        fmt.Println(inter.Name, inter.HardwareAddr)
+
+        addrs, _ := inter.Addrs()
+        for _, addr := range addrs {
+            fmt.Println("  ", addr.String())
+        }
+    }
+}
+output==>
+GOOS: windows
+GOARCH: amd64
+GOROOT: C:\go
+Version: go1.6.1
+NumCPU: 4
+
+无线网络连接 15 26:46:19:57:5c:a2
+   fe80::e4e5:fbfe:7dad:8576/64
+   192.168.191.1/24
+无线网络连接 c4:46:19:57:5c:a2
+   fe80::d1a3:6c2b:4ecc:f643/64
+   10.110.1.186/16
+VMware Network Adapter VMnet1 00:50:56:c0:00:01
+   fe80::2970:5fe:d4f1:e60b/64
+   192.168.209.1/24
+VMware Network Adapter VMnet8 00:50:56:c0:00:08
+   fe80::945a:8b61:f8a7:cb8e/64
+   192.168.171.1/24
+Loopback Pseudo-Interface 1 
+   ::1/128
+   127.0.0.1/8
+isatap.wireless 00:00:00:00:00:00:00:e0
+   fe80::5efe:a6e:1ba/128
+本地连接* 10 00:00:00:00:00:00:00:e0
+   fe80::e0:0:0:0/64
+isatap.{C86C9321-0E23-416F-A979-B0A1103AB743} 00:00:00:00:00:00:00:e0
+isatap.{99DBEBBA-0E54-488B-91B5-21352C7C5B2F} 00:00:00:00:00:00:00:e0
+isatap.{BBBEE258-288E-4756-9DC0-E23D3819D958} 00:00:00:00:00:00:00:e0
+</pre>
