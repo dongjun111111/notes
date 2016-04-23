@@ -13631,3 +13631,5 @@ jesse
 </pre>
 ##Golang database/sql数据库连接类
 官方实现的database/sql包中的DB和Stmt是协程安全的，因为内部实现是连接池。
+##Golang 高性能分布式数据库influxDB
+https://github.com/influxdata/influxdb
