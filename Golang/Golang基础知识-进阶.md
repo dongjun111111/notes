@@ -13332,3 +13332,69 @@ func DoSomething() {
 </pre>
 ###Golang更新第三方包
 将第三方包升级到最新版本，直接go get -u github.com/xxx/xxx。
+###Golang一致性哈希库consistent
+stathat.com/c/consistent是一个一致性哈希库。一致性哈希是为了解决在分布式系统中，数据存取时选择哪一个具体节点的问题。
+
+比如，系统中有五个节点，大量用户信息分别存在不同的节点上，具体到某一个用户，其信息应该确定的存在一个节点上，不能两次请求，分别去不同的节点上取数据。最简单的思路，可以拿用户ID和节点数求余数，比如用户ID是 1、6、11、16的在第一个节点上，2、7、12、17的在第二个节点上，依此类推。
+
+但是，如果系统中某一个节点坏掉了，变成4个了。如果再按4求余的话，会导致大量数据需要重新初始化。比如用户6，原来在第1个节点上，坏掉一个以后6%4=2，用户数据跑到第2个节点上去了。
+
+如果系统中增加了新的节点，同样也会导致这个问题。
+<pre>
+package main
+
+import (
+	"fmt"
+	_ "github.com/astaxie/beego"
+	_ "github.com/huichen/sego"
+	_ "github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "gopkg.in/redis.v3"
+	"stathat.com/c/consistent"
+)
+
+/*
+func main() {
+	db, err := gorm.Open("mysql", "root:123456@/testdb?charset=utf8&parseTime=True&loc=Local")
+	if err != nil {
+		panic(err)
+	}
+	if err = db.DB().Ping(); err != nil {
+		panic(err.Error())
+	}
+} */
+func main() {
+	cons := consistent.New()
+	cons.Add("cacheA")
+	cons.Add("cacheB")
+	cons.Add("cacheC")
+
+	server1, err := cons.Get("user_1")
+	server2, err := cons.Get("user_2")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("server1:", server1) //输出 server1: cacheC
+	fmt.Println("server2:", server2) //输出 server2: cacheA
+
+	fmt.Println()
+
+	//user_1在cacheA上，把cacheA删掉后看下效果
+	cons.Remove("cacheA")
+	server1, err = cons.Get("user_1")
+	server2, err = cons.Get("user_2")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("server1:", server1) //输出 server1: cacheC,和删除之前一样，在同一个server上
+	fmt.Println("server2:", server2) //输出 server2: cacheB,换到另一个server了
+}
+output==>
+server1: cacheC
+server2: cacheA
+	
+server1: cacheC
+server2: cacheB
+</pre>
