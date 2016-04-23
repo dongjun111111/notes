@@ -13632,4 +13632,4 @@ jesse
 ##Golang database/sql数据库连接类
 官方实现的database/sql包中的DB和Stmt是协程安全的，因为内部实现是连接池。
 ##Golang 高性能分布式数据库influxDB
-https://github.com/influxdata/influxdb
+开源分布式的时序、事件和指标数据库，无需外部依赖。其设计目标是实现分布式和水平伸缩扩展。https://github.com/influxdata/influxdb
