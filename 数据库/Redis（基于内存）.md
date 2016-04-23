@@ -142,3 +142,9 @@ Redis sorted set的内部使用HashMap和跳跃表(SkipList)来保证数据的�
 127.0.0.1:6379 >zcard group       //返回元素个数
 <integer>3
 </pre>
+
+
+##Redis与memcached
+Redis是一个高性能的key-value存储系统，和Memcached类似，它支持存储的value类型相对更多，包括string（字符串）、list（链表）、set（集合）和zset（有序集合）。与memcached一样，为了保证效率，数据都是缓存在内存中，区别的是Redis会周期性的把更新的数据写入磁盘或者把修改操作写入追加的记录文件，并且在此基础上实现了主从同步。 
+
+Redis的出现，很大程度补偿了memcached这类key/value存储的不足，在部分场合可以对关系数据库起到很好的补充作用。
