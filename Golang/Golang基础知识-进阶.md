@@ -13398,3 +13398,5 @@ server2: cacheA
 server1: cacheC
 server2: cacheB
 </pre>
+###Golang session Session
+https://github.com/gorilla/sessions
