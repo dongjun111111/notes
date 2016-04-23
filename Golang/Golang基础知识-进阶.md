@@ -13398,5 +13398,25 @@ server2: cacheA
 server1: cacheC
 server2: cacheB
 </pre>
-###Golang session Session
+##Golang session Session
 https://github.com/gorilla/sessions
+##Golang删除slice中元素
+<pre>
+package main
+
+import (
+    "fmt"
+)
+
+//删除slice元素函数
+func remove(s []string, i int) []string {
+    return append(s[:i], s[i+1:]...)
+}
+
+func main() {
+    s := []string{"a", "b", "c"}
+    fmt.Println(s)
+    s = remove(s, 1)
+    fmt.Println(s)
+}
+</pre>
