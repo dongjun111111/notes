@@ -13330,3 +13330,5 @@ func DoSomething() {
    }
 }
 </pre>
+###Golang更新第三方包
+将第三方包升级到最新版本，直接go get -u github.com/xxx/xxx。
