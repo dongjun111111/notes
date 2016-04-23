@@ -13310,3 +13310,23 @@ func JumpHash(key uint64, buckets int, checkAlive func(int) bool) int {
 	return int(b)
 }
 </pre>
+###Golang一段典型的请求超时退出代码
+<pre>
+func DoSomething() {
+   done := make(chan error)
+   go func() {
+      done <- DoThing()
+   }()
+
+   select {
+   case <-time.After(time.Second*10):
+      Close()//中止DoThing()的执行，比如关闭网络连接
+      return fmt.Errorf("Timeout")
+   case err := <-done:
+      if err != nil {
+         err = fmt.Errorf("call failed, err %v", err)
+      }
+      return err
+   }
+}
+</pre>
