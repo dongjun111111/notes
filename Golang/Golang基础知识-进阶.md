@@ -13609,3 +13609,23 @@ My Gid :  S-1-5-21-2855060091-2234719249-1014910425-513
 My HomeDir :  C:\Users\Administrator
 My Name :  
 </pre>
+###可变函数
+<pre>
+package main
+import "fmt"
+
+func Greeting(who ...string) {
+    //接收到who是一个数组，可以用for遍历。
+    for _, name := range who {
+        fmt.Println(name)
+    }
+}
+func main() {
+    Greeting("Hello:", "tom", "mike", "jesse")
+}
+output==>
+Hello:
+tom
+mike
+jesse
+</pre>
