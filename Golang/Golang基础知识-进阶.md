@@ -13584,3 +13584,28 @@ output==>
 %x [48 158 204 72 156 18 214 235 76 196 15 80 201 2 242 180 208 237 119 238 81 26 124 122 155 205 60 168 109 76 216 111 152 157 211 91 197 255 73 150 112 218 52 37 91 69 176 207 216 48 232 31 96 93 207 125 197 84 46 147 174 156 215 111]
 %x [94 182 59 187 224 30 238 208 147 203 34 187 143 90 205 195]
 </pre>
+##Golang获取系统用户信息|Go user包
+Go提供了os/user包，用来查询系统用户的信息。
+<pre>
+package main
+
+import (
+    "fmt"
+    "os/user"
+)
+
+func main() {
+    me, _ := user.Current()
+    fmt.Println("My Uid : ", me.Uid)
+    fmt.Println("My Username : ", me.Username)
+    fmt.Println("My Gid : ", me.Gid)
+    fmt.Println("My HomeDir : ", me.HomeDir)
+    fmt.Println("My Name : ", me.Name)
+}
+output==>
+My Uid :  S-1-5-21-2855060091-2234719249-1014910425-500
+My Username :  JASON\Administrator
+My Gid :  S-1-5-21-2855060091-2234719249-1014910425-513
+My HomeDir :  C:\Users\Administrator
+My Name :  
+</pre>
