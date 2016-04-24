@@ -13613,7 +13613,6 @@ My Name :
 <pre>
 package main
 import "fmt"
-
 func Greeting(who ...string) {
     //接收到who是一个数组，可以用for遍历。
     for _, name := range who {
