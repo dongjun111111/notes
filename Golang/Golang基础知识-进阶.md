@@ -13638,3 +13638,48 @@ https://github.com/male110/SimpleDb（代码量不多，适合拿来学习模仿
 race检测
 ##制作APP接口
 通过restful规范，按照团队约定返回加密数据。
+##一个查询手机号码归属地,运营商,区号信息的Golang库
+通过手机号码（中国大陆）查询归属地、运营商等信息
+<pre>
+package main
+
+import (
+	_ "errors"
+	"fmt"
+	_ "github.com/astaxie/beego"
+	_ "github.com/huichen/sego"
+	_ "github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/matryer/try"
+	"github.com/zheng-ji/gophone"
+	_ "gopkg.in/redis.v3"
+	_ "math/rand"
+	_ "stathat.com/c/consistent"
+	_ "time"
+)
+
+func main() {
+	//打印所有关于该号码的信息
+	pr, err := gophone.Find("18855971036")
+	if err == nil {
+		fmt.Println(pr)
+	}
+	/*也可以单独获取该号码各个属性
+	pr, err = gophone.Find("18855971036")
+	if err == nil {
+		fmt.Println(pr.PhoneNum)
+		fmt.Println(pr.Province)
+		fmt.Println(pr.AreaZone)
+		fmt.Println(pr.City)
+		fmt.Println(pr.ZipCode)
+	}
+	*/
+}
+output==>
+PhoneNum: 18855971036
+AreaZone: 0559
+CardType: 移动虚拟运营商
+City: 黄山
+ZipCode: 242700
+Province: 安徽
+</pre>
