@@ -13634,3 +13634,5 @@ jesse
 开源分布式的时序、事件和指标数据库，无需外部依赖。其设计目标是实现分布式和水平伸缩扩展。https://github.com/influxdata/influxdb
 ##某一位知友自己用Golang实现的k_v数据库
 https://github.com/male110/SimpleDb（代码量不多，适合拿来学习模仿）
+##golang多协程操作同一全局变量
+race检测
