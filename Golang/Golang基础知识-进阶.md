@@ -13636,5 +13636,5 @@ jesse
 https://github.com/male110/SimpleDb（代码量不多，适合拿来学习模仿）
 ##golang多协程操作同一全局变量
 race检测
-##制做APP接口
+##制作APP接口
 通过restful规范，按照团队约定返回加密数据。
