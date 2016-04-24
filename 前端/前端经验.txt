@@ -289,3 +289,22 @@ querySelectorAll('div') // ie9+
 第十二条、移除重复的脚本 (Remove Duplicate Scripts )
 第十三条、配置实体标签（ETags） (Configure ETags )
 第十四条、使 AJAX 缓存 (Make Ajax Cacheable )
+
+++++react框架优点++++
+首先react通过介绍新的声明式语法JSX来重新定义视图开发，优点其实官网就有，不过我可以简单说两句：
+
+
+
+第一，学会了react以及这个JSX语法，你不光可以通过react写web；也可以通过react-native写ios或者android的应用；甚至可以通过react-blessed写terminal可视化应用；当然也可以通过react-native-desktop写桌面应用。因为JSX这种声明式语法实际是在构建一个抽象的视图层，这种抽象可以通过不同适配器适配到各种显示终端，这总够屌吧？
+
+
+
+第二，说回到web版的react，她有virtual dom，这个东西的好处是减少DOM操作，减少DOM操作的目的是提高浏览器的渲染性能，这听起来也够屌吧？
+
+
+
+第三，她倡导使用flux模式来进行组件间数据传输，这种做法叫unidirectional data flow(单向数据流)，单向数据流的好处是与之前angularJS提出的two-way data binding相比较而言，因为单向，所以各种变化都是可预计、可控制的。不像two-way data binding那样，变化一但复杂起来，大家都互相触发变化，到最后一个地方变了，你根本猜不出来她还会导致其他什么地方跟着一起变。这个需要大量实践才能有所感受，如果你初学，那听听就算了，不必死磕。
+
+第四，她倡导使用immutable object(不可变数据)，不可变的好处是大大节约了脏检查的消耗，有兴趣可以看我翻译的[译]JavaScript中的不可变性(Immutability)
+
+可能还有其他，不过我现在能想到就这些吧，是否符合你自己预期，自己多实践，有了心得之后再来回顾这些好处更有价值
