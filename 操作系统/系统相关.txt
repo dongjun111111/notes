@@ -1654,6 +1654,106 @@ print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" \
 | column -c3 -s " " -t | sort -nr | nl | head -n10
 
 
+++++常见的Linux命令++++
+用到的一些常见的Linux命令，在这里记录一下。
+1. curl
+查看网页源码
+
+  curl mnhkahn.github.io
+显示网页头
+
+  curl -i mnhkahn.github.io
+头信息（后面的Body省略）：
+
+  HTTP/1.1 200 OK
+  Server: GitHub.com
+  Content-Type: text/html; charset=utf-8
+  Last-Modified: Wed, 17 Sep 2014 14:02:08 GMT
+  Expires: Thu, 25 Sep 2014 03:42:26 GMT
+  Cache-Control: max-age=600
+  Content-Length: 13070
+  Accept-Ranges: bytes
+  Date: Thu, 25 Sep 2014 03:33:37 GMT
+  Via: 1.1 varnish
+  Age: 72
+  Connection: keep-alive
+  X-Served-By: cache-lo83-LHR
+  X-Cache: HIT
+  X-Cache-Hits: 1
+  X-Timer: S1411616017.770794,VS0,VE0
+  Vary: Accept-Encoding
+显示通信过程
+
+  curl -v http://mnhkahn.github.io/pages.html
+  * About to connect() to mnhkahn.github.io port 80 (#0)
+  *   Trying 199.27.79.133... connected
+  * Connected to mnhkahn.github.io (199.27.79.133) port 80 (#0)
+  > GET /pages.html HTTP/1.1
+  > User-Agent: curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.13.1.0 zlib/1.2.3 libidn/1.18 libssh2/1.2.2
+  > Host: mnhkahn.github.io
+  > Accept: */*
+
+  curl --trace output.txt mnhkahn.github.io
+设置UserAgent
+
+  curl -i -A "Cyeam" http://blog.cyeam.com/linux/2014/01/22/linux/
+安静模式-s。只显示结果。
+
+2. grep
+查找文件里符合条件的字符串
+
+grep -n "/cyeam" -r .
+-n，显示行号。
+-r，递归查找。
+-c，显示数目。
+3. git
+Force Synchronize
+
+git reset –hard HEAD git clean -f git pull
+
+Commit
+
+git add -A git status git commit -a”” git push origin master
+
+4. mysql
+create user 'bryce'@'localhost' identified by '';
+	mysqldump -u root -p ROOT > C:/Users/Bryce/Documents/GitHub/Cyeam/data/cyeam.sql
+mysql -u bryce -p ROOT < C:/Users/Bryce/Documents/GitHub/Cyeam/data/cyeam.sql
+5. unzip
+	unzip upload.zip -d [DIRECTRY]
+6. lsof
+list of open files
+
+-i select IPv[46] files查看占用端口
+
+lsof -i:8080
+
+7. kill
+kill -9 [pid]
+8. history
+Linux系统当你在shell(控制台)中输入并执行命令时，shell会自动把你的命令记录到历史列表中，一般保存在用户目录下的.bash_history文件中。默认保存1000条，你也可以更改这个值。
+
+9. aptitude
+sudo aptitude install
+sudo aptitude remove #用于完整删除软件
+10. file
+通过file指令，我们得以辨识该文件的类型
+
+11. lsusb
+查看系统中的USB设备
+
+12. cat
+一次显示整个文件
+从键盘创建一个文件。
+
+$ cat > filename
+
+Cat命令将几个文件合并为一个文件。
+
+$cat file1 file2 > file
+
+13. top
+top命令是Linux下常用的性能分析工具，能够实时显示系统中各个进程的资源占用状况，类似于Windows的任务管理器。
 
 
 
