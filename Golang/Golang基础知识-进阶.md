@@ -13996,3 +13996,37 @@ outout==>
 Hello, 世界
 界世 ,olleH
 </pre>
+##Golang自己实现ToUpper函数|转换成大写
+把一个字符串中的字符从小写转为大写
+<pre>
+package main
+
+import "fmt"
+
+const MaxASCII = '\u007F'
+
+func toUpper(r rune) rune {
+	if r <= MaxASCII {
+		if 'a' <= r && r <= 'z' {
+			r -= 'a' - 'A'
+		}
+		return r
+	}
+	return r
+}
+
+func ToUpper(s []rune) (res []rune) {
+	for i := 0; i < len(s); i++ {
+		res = append(res, toUpper(s[i]))
+	}
+	return res
+}
+
+func main() {
+	a := "Hello, 世界"
+	fmt.Println(string(ToUpper([]rune(a))))
+
+}
+output==>
+HELLO, 世界
+</pre>
