@@ -13748,7 +13748,7 @@ func main(){
 	
 }
 </pre>
-##gogoprotobuf
+##gogoprotobuf(https://github.com/gogo/protobuf/)
 磁盘上存储所有的数据都使用了protobuf,然而我们并没有使用Google官方的protobuf类库，我们强烈推荐使用一个叫做gogoprotobuf的第三方包。
 
 gogoprotobuf遵循了很多我们上面提到的关于避免不必要的内存分配的原则。尤其是，它允许将数据编码到一个后端使用数组的字节切片以避免多次内存分配。此外，非空注解允许你直接嵌入消息而无需额外的内存分配开销，这在始终需要嵌入消息时是非常有用的。
