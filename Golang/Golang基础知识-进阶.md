@@ -13976,3 +13976,23 @@ type Interface interface {
 output==>
 [13 27 38 49 49 65 76 97]
 </pre>
+###Golang实现反转字符串|字符串反转
+<pre>
+package main
+
+func Reverse(s string) string {
+	r := []rune(s)
+	for i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {
+		r[i], r[j] = r[j], r[i]
+	}
+	return string(r)
+}
+func main() {
+	a := "Hello, 世界"
+	println(a)
+	println(Reverse(a))
+}
+outout==>
+Hello, 世界
+界世 ,olleH
+</pre>
