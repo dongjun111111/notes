@@ -1648,7 +1648,10 @@ vim将匹配的行全部删除:g/^2013#/d，删除所有以2013#开头的行。:
 查看cpu是几核的，详细信息： cat /proc/cpuinfo | grep ‘model name’
 最新到位了新机器，修改了/etc/profile,root后用non login登陆的话，source /etc/profile发现只在当前shell生效，退出登陆还是不行。然后问了一下运维，才知道这个必须完全切换到root才能全局生效。由之前的sudo su切换变为login的sudo su -然后再source就可以了。
 
-
++++查看历史使用过的Linux命令的top 10++++
+history | awk '{CMD[$2]++;count++;}END { for (a in CMD)\
+print CMD[a] " " CMD[a]/count*100 "% " a;}' | grep -v "./" \
+| column -c3 -s " " -t | sort -nr | nl | head -n10
 
 
 
