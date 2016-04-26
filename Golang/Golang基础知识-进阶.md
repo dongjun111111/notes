@@ -19,7 +19,7 @@ http://blog.csdn.net/kenkao/article/details/49488833
 ####如何设置Cookie
 <pre>
 cookie := http.Cookie{Name: "admin_name", Value: rows[0].Str(res.Map("admin_name")), Path: "/"}
-http.SetCookie(w, &cookie)
+http.SetCookie(w,&cookie)
 </pre>
 ####http.FileServer()
 文件系统。将本地文件输出到网页
