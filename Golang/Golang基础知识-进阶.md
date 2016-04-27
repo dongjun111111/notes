@@ -14250,3 +14250,5 @@ https://github.com/rcrowley/goagain（star>1k）
 基本原理：
 
 goagain会监控2个系统信号，一个为SIGTERM，接收到这个信号，程序就停止运行。另一个信号为SIGUSR2，接收到这个信号的行为是，当前进程，也就是父进程会新建一个子进程，然后把父进程的pid保存到一个名为GOAGAIN_PPID的环境变量；子进程启动的时候会检索GOAGAIN_PPID这个变量，来判断程序是否要重启，通过这个变量来关闭父进程，来达到平滑重启的效果。
+###Golang通过遗传算法找出相近的图片的第三方库
+https://github.com/armhold/polygen
