@@ -14245,7 +14245,7 @@ func main() {
 //控制客户端连接数量
 </pre>
 ###让Golang程序达到平滑重启的第三方库
-https://github.com/rcrowley/goagain（star>1k）
+https://github.com/rcrowley/goagain（stars>1k）
 
 基本原理：
 
