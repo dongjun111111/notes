@@ -57,7 +57,7 @@ func OutputJson(w http.ResponseWriter, ret int, reason string, i interface{}) {
     w.Write(b)
 }
 </pre>
-####Golang发送email邮件
+####Golang发送Email邮件
 <pre>
 package main
 import (
