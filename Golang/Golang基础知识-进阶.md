@@ -35,7 +35,7 @@ func main() {
 </pre>
 当然用golang写一个文件服务很简单，比如上面的，但是如果想通过localhost:8123/doc（即自定义文件服务器入口）来进入文件目录，则需要
 <pre>
-http.Handle("/doc",http.StripPrefix("/doc",http.FileServer(http.Dir("./"))))   //在浏览器地址栏输入localhost:8123/doc ,显示同上面一样的结果
+http.Handle("/doc",http.StripPrefix("/doc",http.FileServer(http.Dir("./")))) //在浏览器地址栏输入localhost:8123/doc ,显示同上面一样的结果
 </pre>
 ####template包
 template包（html/template）实现了数据驱动的模板，用于生成可对抗代码注入的安全HTML输出。本包提供了和text/template包相同的接口，无论何时当输出是HTML的时候都应使用本包。
