@@ -10,7 +10,7 @@ Path加上
 
 - PATH:c:\go\bin;d:\gopath\bin(如果在最后分号不要加上)
 
-F7 -- 呼出sublime的golang调试控制台
+F7 --> 呼出sublime的golang调试控制台
 ##安装Go-sublime
 http://blog.csdn.net/kenkao/article/details/49488833
 
