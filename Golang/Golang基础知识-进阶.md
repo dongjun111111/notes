@@ -14545,10 +14545,12 @@ func ModifiersDown() Modifiers {
 	}
 	return m
 }
+
 type Shortcut struct {
 	Modifiers Modifiers
 	Key       Key
 }
+
 func (s Shortcut) String() string {
 	m := s.Modifiers.String()
 	if m == "" {
