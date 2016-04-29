@@ -14291,3 +14291,284 @@ output==>
 Go开发高性能MySQL Proxy项目，kingshard在满足基本的读写分离的功能上，致力于简化MySQL分库分表操作；能够让DBA通过kingshard轻松平滑地实现MySQL数据库扩容。 kingshard的性能大约是直连MySQL性能的80%以上。
 
 https://github.com/flike/kingshard
+###Goang调用dll实现OPENGL与window GUI开发
+最近晚上没有事情的时候，研究下了开源的walk-master源码，自己简单的分析了下，如果在
+<pre>
+import (
+	"github.com/lxn/win"
+)
+<pre>
+包有的情况下，就已经可以实现了windows的GUI编程，简单以键盘操作为例：
+
+源码在文章结尾，但是可惜的是GIT根本没有"github.com/lxn/win"的包，我估计是涉及到微软的API可能存在风险的问题，已经找不到第三方包。
+
+我可以设想其他的办法实现，同样我们调用windows的DLL来实现就是OK的,GO语言调用windows的DLL的实际例子.
+<pre>
+package main
+import (
+    "syscall"
+)
+func callDll(){
+    dll32 := syscall.NewLazyDLL("example2.dll")
+    println("call dll:",dll32.Name)
+    g:=dll32.NewProc("gcd")
+    ret, _, _ :=g.Call(uintptr(4),uintptr(8))
+    println()
+    println("get the result:",ret)
+}
+func main() {
+    callDll()
+}
+</pre>
+这样我们就可以利用windows的API了，同样可以做GUI的编程了。那样我们就可以在windows下用GO语言实现曾经的键盘记录等好玩的软件了.
+
+源码：
+<pre>
+package walk
+import (
+	"bytes"
+)
+import (
+	"github.com/lxn/win"
+)
+
+type Key uint16
+
+func (k Key) String() string {
+	return key2string[k]
+}
+
+const (
+	KeyLButton           Key = win.VK_LBUTTON
+	KeyRButton           Key = win.VK_RBUTTON
+	KeyCancel            Key = win.VK_CANCEL
+	KeyMButton           Key = win.VK_MBUTTON
+	KeyXButton1          Key = win.VK_XBUTTON1
+	KeyXButton2          Key = win.VK_XBUTTON2
+	KeyBack              Key = win.VK_BACK
+	KeyTab               Key = win.VK_TAB
+	KeyClear             Key = win.VK_CLEAR
+	KeyReturn            Key = win.VK_RETURN
+	KeyShift             Key = win.VK_SHIFT
+	KeyControl           Key = win.VK_CONTROL
+	KeyAlt               Key = win.VK_MENU
+	KeyMenu              Key = win.VK_MENU
+	KeyPause             Key = win.VK_PAUSE
+	KeyCapital           Key = win.VK_CAPITAL
+	KeyKana              Key = win.VK_KANA
+	KeyHangul            Key = win.VK_HANGUL
+	KeyJunja             Key = win.VK_JUNJA
+	KeyFinal             Key = win.VK_FINAL
+	KeyHanja             Key = win.VK_HANJA
+	KeyKanji             Key = win.VK_KANJI
+	KeyEscape            Key = win.VK_ESCAPE
+	KeyConvert           Key = win.VK_CONVERT
+	KeyNonconvert        Key = win.VK_NONCONVERT
+	KeyAccept            Key = win.VK_ACCEPT
+	KeyModeChange        Key = win.VK_MODECHANGE
+	KeySpace             Key = win.VK_SPACE
+	KeyPrior             Key = win.VK_PRIOR
+	KeyNext              Key = win.VK_NEXT
+	KeyEnd               Key = win.VK_END
+	KeyHome              Key = win.VK_HOME
+	KeyLeft              Key = win.VK_LEFT
+	KeyUp                Key = win.VK_UP
+	KeyRight             Key = win.VK_RIGHT
+	KeyDown              Key = win.VK_DOWN
+	KeySelect            Key = win.VK_SELECT
+	KeyPrint             Key = win.VK_PRINT
+	KeyExecute           Key = win.VK_EXECUTE
+	KeySnapshot          Key = win.VK_SNAPSHOT
+	KeyInsert            Key = win.VK_INSERT
+	KeyDelete            Key = win.VK_DELETE
+	KeyHelp              Key = win.VK_HELP
+	Key0                 Key = 0x30
+	Key1                 Key = 0x31
+	Key2                 Key = 0x32
+	Key3                 Key = 0x33
+	Key4                 Key = 0x34
+	Key5                 Key = 0x35
+	Key6                 Key = 0x36
+	Key7                 Key = 0x37
+	Key8                 Key = 0x38
+	Key9                 Key = 0x39
+	KeyA                 Key = 0x41
+	KeyB                 Key = 0x42
+	KeyC                 Key = 0x43
+	KeyD                 Key = 0x44
+	KeyE                 Key = 0x45
+	KeyF                 Key = 0x46
+	KeyG                 Key = 0x47
+	KeyH                 Key = 0x48
+	KeyI                 Key = 0x49
+	KeyJ                 Key = 0x4A
+	KeyK                 Key = 0x4B
+	KeyL                 Key = 0x4C
+	KeyM                 Key = 0x4D
+	KeyN                 Key = 0x4E
+	KeyO                 Key = 0x4F
+	KeyP                 Key = 0x50
+	KeyQ                 Key = 0x51
+	KeyR                 Key = 0x52
+	KeyS                 Key = 0x53
+	KeyT                 Key = 0x54
+	KeyU                 Key = 0x55
+	KeyV                 Key = 0x56
+	KeyW                 Key = 0x57
+	KeyX                 Key = 0x58
+	KeyY                 Key = 0x59
+	KeyZ                 Key = 0x5A
+	KeyLWin              Key = win.VK_LWIN
+	KeyRWin              Key = win.VK_RWIN
+	KeyApps              Key = win.VK_APPS
+	KeySleep             Key = win.VK_SLEEP
+	KeyNumpad0           Key = win.VK_NUMPAD0
+	KeyNumpad1           Key = win.VK_NUMPAD1
+	KeyNumpad2           Key = win.VK_NUMPAD2
+	KeyNumpad3           Key = win.VK_NUMPAD3
+	KeyNumpad4           Key = win.VK_NUMPAD4
+	KeyNumpad5           Key = win.VK_NUMPAD5
+	KeyNumpad6           Key = win.VK_NUMPAD6
+	KeyNumpad7           Key = win.VK_NUMPAD7
+	KeyNumpad8           Key = win.VK_NUMPAD8
+	KeyNumpad9           Key = win.VK_NUMPAD9
+	KeyMultiply          Key = win.VK_MULTIPLY
+	KeyAdd               Key = win.VK_ADD
+	KeySeparator         Key = win.VK_SEPARATOR
+	KeySubtract          Key = win.VK_SUBTRACT
+	KeyDecimal           Key = win.VK_DECIMAL
+	KeyDivide            Key = win.VK_DIVIDE
+	KeyF1                Key = win.VK_F1
+	KeyF2                Key = win.VK_F2
+	KeyF3                Key = win.VK_F3
+	KeyF4                Key = win.VK_F4
+	KeyF5                Key = win.VK_F5
+	KeyF6                Key = win.VK_F6
+	KeyF7                Key = win.VK_F7
+	KeyF8                Key = win.VK_F8
+	KeyF9                Key = win.VK_F9
+	KeyF10               Key = win.VK_F10
+	KeyF11               Key = win.VK_F11
+	KeyF12               Key = win.VK_F12
+	KeyF13               Key = win.VK_F13
+	KeyF14               Key = win.VK_F14
+	KeyF15               Key = win.VK_F15
+	KeyF16               Key = win.VK_F16
+	KeyF17               Key = win.VK_F17
+	KeyF18               Key = win.VK_F18
+	KeyF19               Key = win.VK_F19
+	KeyF20               Key = win.VK_F20
+	KeyF21               Key = win.VK_F21
+	KeyF22               Key = win.VK_F22
+	KeyF23               Key = win.VK_F23
+	KeyF24               Key = win.VK_F24
+	KeyNumlock           Key = win.VK_NUMLOCK
+	KeyScroll            Key = win.VK_SCROLL
+	KeyLShift            Key = win.VK_LSHIFT
+	KeyRShift            Key = win.VK_RSHIFT
+	KeyLControl          Key = win.VK_LCONTROL
+	KeyRControl          Key = win.VK_RCONTROL
+	KeyLAlt              Key = win.VK_LMENU
+	KeyLMenu             Key = win.VK_LMENU
+	KeyRAlt              Key = win.VK_RMENU
+	KeyRMenu             Key = win.VK_RMENU
+	KeyBrowserBack       Key = win.VK_BROWSER_BACK
+	KeyBrowserForward    Key = win.VK_BROWSER_FORWARD
+	KeyBrowserRefresh    Key = win.VK_BROWSER_REFRESH
+	KeyBrowserStop       Key = win.VK_BROWSER_STOP
+	KeyBrowserSearch     Key = win.VK_BROWSER_SEARCH
+	KeyBrowserFavorites  Key = win.VK_BROWSER_FAVORITES
+	KeyBrowserHome       Key = win.VK_BROWSER_HOME
+	KeyVolumeMute        Key = win.VK_VOLUME_MUTE
+	KeyVolumeDown        Key = win.VK_VOLUME_DOWN
+	KeyVolumeUp          Key = win.VK_VOLUME_UP
+	KeyMediaNextTrack    Key = win.VK_MEDIA_NEXT_TRACK
+	KeyMediaPrevTrack    Key = win.VK_MEDIA_PREV_TRACK
+	KeyMediaStop         Key = win.VK_MEDIA_STOP
+	KeyMediaPlayPause    Key = win.VK_MEDIA_PLAY_PAUSE
+	KeyLaunchMail        Key = win.VK_LAUNCH_MAIL
+	KeyLaunchMediaSelect Key = win.VK_LAUNCH_MEDIA_SELECT
+	KeyLaunchApp1        Key = win.VK_LAUNCH_APP1
+	KeyLaunchApp2        Key = win.VK_LAUNCH_APP2
+	KeyOEM1              Key = win.VK_OEM_1
+	KeyOEMPlus           Key = win.VK_OEM_PLUS
+	KeyOEMComma          Key = win.VK_OEM_COMMA
+	KeyOEMMinus          Key = win.VK_OEM_MINUS
+	KeyOEMPeriod         Key = win.VK_OEM_PERIOD
+	KeyOEM2              Key = win.VK_OEM_2
+	KeyOEM3              Key = win.VK_OEM_3
+	KeyOEM4              Key = win.VK_OEM_4
+	KeyOEM5              Key = win.VK_OEM_5
+	KeyOEM6              Key = win.VK_OEM_6
+	KeyOEM7              Key = win.VK_OEM_7
+	KeyOEM8              Key = win.VK_OEM_8
+	KeyOEM102            Key = win.VK_OEM_102
+	KeyProcessKey        Key = win.VK_PROCESSKEY
+	KeyPacket            Key = win.VK_PACKET
+	KeyAttn              Key = win.VK_ATTN
+	KeyCRSel             Key = win.VK_CRSEL
+	KeyEXSel             Key = win.VK_EXSEL
+	KeyErEOF             Key = win.VK_EREOF
+	KeyPlay              Key = win.VK_PLAY
+	KeyZoom              Key = win.VK_ZOOM
+	KeyNoName            Key = win.VK_NONAME
+	KeyPA1               Key = win.VK_PA1
+	KeyOEMClear          Key = win.VK_OEM_CLEAR
+)
+
+type Modifiers byte
+func (m Modifiers) String() string {
+	return modifiers2string[m]
+}
+var modifiers2string = map[Modifiers]string{
+	ModShift:                       "Shift",
+	ModControl:                     "Ctrl",
+	ModControl | ModShift:          "Ctrl+Shift",
+	ModAlt:                         "Alt",
+	ModAlt | ModShift:              "Alt+Shift",
+	ModAlt | ModControl | ModShift: "Alt+Ctrl+Shift",
+}
+const (
+	ModShift Modifiers = 1 << iota
+	ModControl
+	ModAlt
+)
+func ModifiersDown() Modifiers {
+	var m Modifiers
+	if ShiftDown() {
+		m |= ModShift
+	}
+	if ControlDown() {
+		m |= ModControl
+	}
+	if AltDown() {
+		m |= ModAlt
+	}
+	return m
+}
+type Shortcut struct {
+	Modifiers Modifiers
+	Key       Key
+}
+func (s Shortcut) String() string {
+	m := s.Modifiers.String()
+	if m == "" {
+		return s.Key.String()
+	}
+	b := new(bytes.Buffer)
+	b.WriteString(m)
+	b.WriteRune('+')
+	b.WriteString(s.Key.String())
+	return b.String()
+}
+func AltDown() bool {
+	return win.GetKeyState(int32(KeyAlt))>>15 != 0
+}
+func ControlDown() bool {
+	return win.GetKeyState(int32(KeyControl))>>15 != 0
+}
+func ShiftDown() bool {
+	return win.GetKeyState(int32(KeyShift))>>15 != 0
+}
+
+</pre>
