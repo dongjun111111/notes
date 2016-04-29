@@ -312,7 +312,7 @@ querySelectorAll('div') // ie9+
 可能还有其他，不过我现在能想到就这些吧，是否符合你自己预期，自己多实践，有了心得之后再来回顾这些好处更有价值
 
 
-+++json跨域+++++
++++前端数据跨域+++++
 使用jQuery的jsonp可以实现json跨域，不过要注意jsonp与json的格式有所区别，使用时要留意。
 使用jQuery的ajax解决跨域问题的简单版：
 $(document).ready(function(){
@@ -333,7 +333,6 @@ $(document).ready(function(){
      }});
    });
 比较一下json与jsonp格式的区别：
-
 json格式：
 {
     "message":"获取成功",
@@ -346,5 +345,5 @@ callback({
     "state":"1",
     "result":{"name":"工作组1","id":1,"description":"11"}
 })
-看出来区别了吧，在url中callback传到后台的参数是神马callback就是神马，jsonp比json外面有多了一层，callback()。这样就知道怎么处理它了。
+在url中callback传到后台的参数是神马callback就是神马，jsonp比json外面有多了一层：callback()。
 参考地址：http://www.cnblogs.com/sunxucool/p/3433992.html
