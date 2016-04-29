@@ -303,10 +303,48 @@ querySelectorAll('div') // ie9+
 
 
 
-第三，她倡导使用flux模式来进行组件间数据传输，这种做法叫unidirectional data flow(单向数据流)，单向数据流的好处是与之前angularJS提出的two-way data binding相比较而言，因为单向，所以各种变化都是可预计、可控制的。不像two-way data binding那样，变化一但复杂起来，大家都互相触发变化，到最后一个地方变了，你根本猜不出来她还会导致其他什么地方跟着一起变。这个需要大量实践才能有所感受，如果你初学，那听听就算了，不必死磕。
+第三，她倡导使用flux模式来进行组件间数据传输，这种做法叫unidirectional data flow(单向数据流)，单向数据流的好处是与之前angularJS提出的two-way data binding相比较而言，因为单向，所以各种变化都是可预计、可控制的。不像two-way data binding那样，变化一但复杂起来，大家都互相触发变化，到最后一个地方变了，你根本猜不出来她还会导致其他什么地方跟着一起变。这个需要大量实践才能有所感受，如果你初学，那听听就算不必死磕。
 
 第四，她倡导使用immutable object(不可变数据)，不可变的好处是大大节约了脏检查的消耗，有兴趣可以看我翻译的[译]JavaScript中的不可变性(Immutability)
 
 
 
 可能还有其他，不过我现在能想到就这些吧，是否符合你自己预期，自己多实践，有了心得之后再来回顾这些好处更有价值
+
+
++++json跨域+++++
+使用jQuery的jsonp可以实现json跨域，不过要注意jsonp与json的格式有所区别，使用时要留意。
+使用jQuery的ajax解决跨域问题的简单版：
+$(document).ready(function(){
+   var url='http://localhost:8080/WorkGroupManagment/open/getGroupById"
+       +"?id=1&callback=?';
+   $.ajax({
+     url:url,
+     dataType:'jsonp',
+     processData: false, 
+     type:'get',
+     success:function(data){
+       alert(data.name);
+     },
+     error:function(XMLHttpRequest, textStatus, errorThrown) {
+       alert(XMLHttpRequest.status);
+       alert(XMLHttpRequest.readyState);
+       alert(textStatus);
+     }});
+   });
+比较一下json与jsonp格式的区别：
+
+json格式：
+{
+    "message":"获取成功",
+    "state":"1",
+    "result":{"name":"工作组1","id":1,"description":"11"}
+}
+jsonp格式：
+callback({
+    "message":"获取成功",
+    "state":"1",
+    "result":{"name":"工作组1","id":1,"description":"11"}
+})
+看出来区别了吧，在url中callback传到后台的参数是神马callback就是神马，jsonp比json外面有多了一层，callback()。这样就知道怎么处理它了。
+参考地址：http://www.cnblogs.com/sunxucool/p/3433992.html
