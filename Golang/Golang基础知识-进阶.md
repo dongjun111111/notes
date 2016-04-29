@@ -14320,7 +14320,7 @@ func main() {
     callDll()
 }
 </pre>
-这样我们就可以利用windows的API了，同样可以做GUI的编程了。那样我们就可以在windows下用GO语言实现曾经的键盘记录等好玩的软件了.
+这样我们就可以利用windows的API了，同样可以做GUI的编程了。
 
 源码：
 <pre>
