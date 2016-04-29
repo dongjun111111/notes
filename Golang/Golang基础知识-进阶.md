@@ -14325,11 +14325,10 @@ func main() {
 源码：
 <pre>
 package walk
-import (
-	"bytes"
-)
+
 import (
 	"github.com/lxn/win"
+	"bytes"
 )
 
 type Key uint16
