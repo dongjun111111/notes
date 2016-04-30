@@ -6,7 +6,7 @@ go安装目录在C:\go文件夹下面；go的工作目录在D:\gopath文件夹�
 - GOPATH:D：\gopath
 - GOROOT:C:\go
 
-Path加上
+Path加上：
 
 - PATH:c:\go\bin;d:\gopath\bin(如果在最后分号不要加上)
 
