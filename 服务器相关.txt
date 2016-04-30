@@ -1,4 +1,4 @@
-++++Centos下搭建FTP上传下载服务器++++
++++Centos下搭建FTP上传下载服务器++++
 1、首先判断你服务器上是否安装了vsftpd
 rpm -q vsftpd
 2、安装完成之后就要重启vsftpd服务
