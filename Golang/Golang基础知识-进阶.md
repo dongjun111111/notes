@@ -13,7 +13,6 @@ Path加上
 F7 --> 呼出sublime的golang调试控制台
 ##安装Go-sublime
 http://blog.csdn.net/kenkao/article/details/49488833
-
 ###net/http
 在net/http包中，动态文件的路由和静态文件的路由是分开的，动态文件使用http.HandleFunc进行设置，静态文件就需要使用到http.FileServer
 ####如何设置Cookie
