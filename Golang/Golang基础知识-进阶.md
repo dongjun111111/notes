@@ -21,7 +21,7 @@ http://blog.csdn.net/kenkao/article/details/49488833
 cookie := http.Cookie{Name: "admin_name", Value: rows[0].Str(res.Map("admin_name")), Path: "/"}
 http.SetCookie(w,&cookie)
 </pre>
-####http.FileServer()
+####http.FileServer
 文件系统：将本地文件输出到网页。
 <pre>
 package main
