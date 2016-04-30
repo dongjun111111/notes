@@ -13,6 +13,14 @@ Path加上
 F7 --> 呼出sublime的golang调试控制台
 ##安装Go-sublime
 http://blog.csdn.net/kenkao/article/details/49488833
+##Go常用命令行命令
+- go get 获取远程包（必须提前安装git（包来自github）或者hg(包来自Google)）
+- go run 直接运行程序
+- go build 测试编译，检查是否有编译错误
+- go fmt 格式化代码（部分IDE在保存时自调用）
+- go install 编译包文件变编译整个程序
+- go test 运行测试文件
+- go doc 查看文档
 ###net/http
 在net/http包中，动态文件的路由和静态文件的路由是分开的，动态文件使用http.HandleFunc进行设置，静态文件就需要使用到http.FileServer
 ####如何设置Cookie
