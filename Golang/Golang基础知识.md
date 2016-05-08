@@ -13,7 +13,6 @@ Path加上
 F7 -- 呼出sublime的golang调试控制台
 ##安装Go-sublime
 http://blog.csdn.net/kenkao/article/details/49488833
-
 ##Linux下Go安装方法（以Linux64为例）
 ###确定环境
 <pre>
