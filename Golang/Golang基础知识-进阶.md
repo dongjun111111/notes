@@ -29,7 +29,7 @@ cookie := http.Cookie{Name: "admin_name", Value: rows[0].Str(res.Map("admin_name
 http.SetCookie(w,&cookie)
 </pre>
 ####Golang-http.FileServer
-文件系统：将本地文件输出到网页。
+文件系统：将本地文件输出到网页
 <pre>
 package main
 import (
