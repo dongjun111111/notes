@@ -37,6 +37,7 @@ $ tar zxf go1.1rc1.linux-amd64.tar.gz
 我先按版本来改名
 $ mv go go1.1
 $ cd ~
+
 做一个软连接，来搭配上一节的“GOROOT=$HOME/go”
 $ ln -s golang/go1.4 go
 
