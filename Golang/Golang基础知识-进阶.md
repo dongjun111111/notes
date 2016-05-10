@@ -14579,6 +14579,20 @@ func ShiftDown() bool {
 	return win.GetKeyState(int32(KeyShift))>>15 != 0
 }
 </pre>
+###Golang显示毫秒
+<pre>
+package main
 
+import (
+	"fmt"
+	"time"
+)
 
+func main() {
+	now := time.Now().Format("2006-01-02 15:04:05.99999")
+	fmt.Println(now)
+}
+output==>
+2016-05-10 23:28:37.49564
+</pre>
 
