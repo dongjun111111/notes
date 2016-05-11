@@ -14611,3 +14611,42 @@ func main() {
 访问：http://localhost:6060/debug/_gom
 {"goroutine":5,"thread":5,"block":0,"timestamp":1462942794}
 </pre>
+###Golang获取字符串长度
+<pre>
+package main
+
+import "fmt"
+import "bytes"
+import "strings"
+import "unicode/utf8"
+
+func f1(s string) int {
+	return bytes.Count([]byte(s), nil) - 1
+}
+
+func f2(s string) int {
+	return strings.Count(s, "") - 1
+}
+
+func f3(s string) int {
+	return len([]rune(s))
+}
+
+func f4(s string) int {
+	return utf8.RuneCountInString(s)
+}
+
+func main() {
+	s := "hello,世界"
+	fmt.Println(f1(s))
+	fmt.Println(f2(s))
+	fmt.Println(f3(s))
+	fmt.Println(f4(s))
+
+}
+output==>
+8
+8
+8
+8
+</pre>
