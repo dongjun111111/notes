@@ -14595,7 +14595,7 @@ func main() {
 output==>
 2016-05-10 23:28:37.49564
 </pre>
-###Golang显示实时goroutine thread 时间戳
+###Golang显示实时goroutine thread block 时间戳
 <pre>
 package main
 
