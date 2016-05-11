@@ -14595,4 +14595,19 @@ func main() {
 output==>
 2016-05-10 23:28:37.49564
 </pre>
+###Golang显示实时goroutine thread 时间戳
+<pre>
+package main
 
+import gomhttp "github.com/rakyll/gom/http"
+import "log"
+import "net/http"
+
+func main() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/debug/_gom", gomhttp.Handler())
+	log.Println(http.ListenAndServe("localhost:6060", nil))
+}
+访问：http://localhost:6060/debug/_gom
+{"goroutine":5,"thread":5,"block":0,"timestamp":1462942794}
+</pre>
