@@ -506,6 +506,10 @@ query_cache_limit = 2M
 查看无法删除的文件，被占资源 
 lsof |grep deleted  
 
+env:查看系统环境变量，最近用Python，hadoop和spark比较多，经常需要查看环境变量，这个命令能帮很多忙。
+
+find：查找文件：find -path '*.py'，其实这个命令早就知道了，一直没怎么用，蛮强大的。
+
 
 +++Linux必备的内核知识+++++
 
