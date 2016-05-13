@@ -16761,3 +16761,117 @@ func main() {
 }
 //在终端run,不错
 </pre>
+###Golang共享内存读写实验
+先大概说下什么是共享内存。我们知道不同进程见的内存是互相独立的，没办法直接互相操作对方内的数据，而共享内存则是靠操作系统提供的内存映射机制，让不同进程的一块地址空间映射到同一个虚拟内存区域上，使不同的进程可以操作到一块共用的内存块。共享内存是效率最高的进程间通讯机制，因为数据不需要在内核和程序之间复制。
+
+共享内存用到的是系统提供的mmap函数，它可以将一个文件映射到虚拟内存的一个区域中，程序使用指针引用这个区域，对这个内存区域的操作会被回写到文件上，Go内置的syscall包中有mmap函数，但是它是经过封装的，返回的是[]byte，没办法做我需求的指针运算，所以我还是用cgo来调用原生的mmap。
+
+实验分为读和写两个程序，这样我们可以观察到读进程可以读到写进程写入共享内存的信息。
+
+shm_writer.go的代码：
+<pre>
+package main
+
+/*
+#cgo linux LDFLAGS: -lrt
+
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
+#define FILE_MODE (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+
+int my_shm_new(char *name) {
+    shm_unlink(name);
+    return shm_open(name, O_RDWR|O_CREAT|O_EXCL, FILE_MODE);
+}
+*/
+import "C"
+import (
+    "fmt"
+    "unsafe"
+)
+
+const SHM_NAME = "my_shm"
+const SHM_SIZE = 4 * 1000 * 1000 * 1000
+
+type MyData struct {
+    Col1 int
+    Col2 int
+    Col3 int
+}
+
+func main() {
+    fd, err := C.my_shm_new(C.CString(SHM_NAME))
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+
+    C.ftruncate(fd, SHM_SIZE)
+
+    ptr, err := C.mmap(nil, SHM_SIZE, C.PROT_READ|C.PROT_WRITE, C.MAP_SHARED, fd, 0)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    C.close(fd)
+
+    data := (*MyData)(unsafe.Pointer(ptr))
+
+    data.Col1 = 100
+    data.Col2 = 876
+    data.Col3 = 8021
+}
+</pre>
+shm_reader.go的代码：
+<pre>
+package main
+
+/*
+#cgo linux LDFLAGS: -lrt
+
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
+#define FILE_MODE (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
+
+int my_shm_open(char *name) {
+    return shm_open(name, O_RDWR);
+}
+*/
+import "C"
+import (
+    "fmt"
+    "unsafe"
+)
+
+const SHM_NAME = "my_shm"
+const SHM_SIZE = 4 * 1000 * 1000 * 1000
+
+type MyData struct {
+    Col1 int
+    Col2 int
+    Col3 int
+}
+
+func main() {
+    fd, err := C.my_shm_open(C.CString(SHM_NAME))
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+
+    ptr, err := C.mmap(nil, SHM_SIZE, C.PROT_READ|C.PROT_WRITE, C.MAP_SHARED, fd, 0)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    C.close(fd)
+
+    data := (*MyData)(unsafe.Pointer(ptr))
+
+    fmt.Println(data)
+}
+</pre>
