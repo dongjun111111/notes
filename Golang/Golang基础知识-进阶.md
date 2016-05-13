@@ -15107,3 +15107,30 @@ func main(){
     logger.Fatal("test");
 }
 </pre>
+###Golang电话号码校验
+<pre>
+package main
+
+import (
+    "regexp"
+)
+
+const (
+    regular = "^(13[0-9]|14[57]|15[0-35-9]|18[07-9])\\d{8}$"
+)
+
+func validate(mobileNum string) bool {
+    reg := regexp.MustCompile(regular)
+    return reg.MatchString(mobileNum)
+}
+
+func main() {
+    if validate("18855477036") {
+        println("ture")
+        return
+    }
+    println("false")
+}
+output==>
+true
+</pre>
