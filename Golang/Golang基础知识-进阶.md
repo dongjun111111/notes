@@ -14931,3 +14931,27 @@ func main() {
 output==>
 贰拾元零玖分
 </pre>
+###Golang删除文件
+<pre>
+package main
+
+import (
+    "os"
+    "fmt"
+)
+
+func main() {
+    file := "test.txt"                   //源文件路径
+    err := os.Remove(file)               //删除文件test.txt
+    if err != nil {
+        //如果删除失败则输出 file remove Error!
+        fmt.Println("file remove Error!")
+        //输出错误详细信息
+        fmt.Printf("%s", err)
+    } else {
+        //如果删除成功则输出 file remove OK!
+        fmt.Print("file remove OK!")
+    }
+
+}
+</pre>
