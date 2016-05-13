@@ -16354,3 +16354,42 @@ func main() {
     <- c
 }
 </pre>
+###Golang写的nodejs守护
+nodejs并发确实很猛，php、.net或者java，比并发都比不过nodejs.不过它缺点还是有的，就是太容易挂了，所有需要一个程序来克服或者减少这种危害。
+<pre>
+package main
+
+import (
+    "log"
+    "os"
+    "os/exec"
+    "time"
+)
+
+func main() {
+    lf, err := os.OpenFile("angel.txt", os.O_CREATE|os.O_RDWR|os.O_APPEND, 0600)
+    if err != nil {
+        os.Exit(1)
+    }
+    defer lf.Close()
+
+    // 日志
+    l := log.New(lf, "", os.O_APPEND)
+
+    for {
+        cmd := exec.Command("D:/Program Files/nodejs/node.exe", "D:/node/test.js")
+        err := cmd.Start()
+        if err != nil {
+            l.Printf("%s 启动命令失败", time.Now().Format("2006-01-02 15:04:05"), err)
+
+            time.Sleep(time.Second * 5)
+            continue
+        }
+        l.Printf("%s 进程启动", time.Now().Format("2006-01-02 15:04:05"), err)
+        err = cmd.Wait()
+        l.Printf("%s 进程退出", time.Now().Format("2006-01-02 15:04:05"), err)
+
+        time.Sleep(time.Second * 1)
+    }
+}
+</pre>
