@@ -14770,3 +14770,56 @@ two VS seven
 three VS six
 four VS five
 </pre>
+###Golang 哈希加密（加入了个人key）
+<pre>
+package main
+
+import (
+    "bytes"
+    "crypto/rand"
+    "crypto/sha1"
+    "encoding/base64"
+    "fmt"
+    "io"
+)
+
+const SaltSize = 16
+
+func hashWithSalted(plain string) string {
+    buf := make([]byte, SaltSize, SaltSize+sha1.Size)
+    _, err := io.ReadFull(rand.Reader, buf)
+    if err != nil {
+        fmt.Println("random read failed ->", err)
+    }
+
+    h := sha1.New()
+    h.Write(buf)
+    h.Write([]byte(plain))
+
+    return base64.URLEncoding.EncodeToString(h.Sum(buf))
+}
+
+func match(secret, plain string) bool {
+    data, _ := base64.URLEncoding.DecodeString(secret)
+    if len(data) != SaltSize+sha1.Size {
+        fmt.Println("wrong length of data")
+        return false
+    }
+    h := sha1.New()
+    h.Write(data[:SaltSize])
+    h.Write([]byte(plain))
+    return bytes.Equal(h.Sum(nil), data[SaltSize:])
+}
+
+func main() {
+    h := hashWithSalted("道可道,非常道.")
+    fmt.Printf("h:长度-> %d , 加密后内容 -> %v\n", len(h), h)
+	//匹配 ,true相同，false不同
+    fmt.Printf("%v\n", match(h, "凡所有相，皆是虚妄"))
+    fmt.Printf("%v\n", match(h, "道可道,非常道."))
+}
+output==>
+h:长度-> 48 , 加密后内容 -> A36aO_PP6ib0O5z8usBVz4e3oGcg-zGDsnF4Qial8WGTWBxp
+false
+true
+</pre>
