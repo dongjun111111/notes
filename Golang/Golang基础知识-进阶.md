@@ -16893,7 +16893,6 @@ type state struct {
 func (s state) String() string {
     return fmt.Sprintf("{%v,%v}", s.s1, s.s2)
 }
-
 func generator(A_Cap,B_Cap int)[]state{
         if A_Cap<B_Cap{
                 A_Cap,B_Cap=B_Cap,A_Cap
