@@ -14837,3 +14837,25 @@ func main() {
 output==>
 7068
 </pre>
+###Golang获取随机数
+<pre>
+package main
+import (
+	"crypto/rand" 
+	"math/big"
+	"fmt"
+)
+func main(){
+	fmt.Println(RandInt64(100,3000))
+}
+func RandInt64(min,max int64) int64{
+	maxBigInt:=big.NewInt(max)
+	i,_:=rand.Int(rand.Reader,maxBigInt)
+	if i.Int64()<min{ 
+		RandInt64(min,max) 
+}
+	return i.Int64()
+}
+output==>
+1063
+</pre>
