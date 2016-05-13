@@ -15029,3 +15029,25 @@ func main() {
     }
 }
 </pre>
+###Golang检查文件或者目录是否存在
+<pre>
+package main
+
+import (
+	"os"
+	"fmt"
+)
+//Golang检测文件/目录是否存在
+func main(){
+	finfo, err := os.Stat("filename.txt")
+	if err != nil {
+	    fmt.Println("no such file or dir")// no such file or dir
+	    return
+	}
+	if finfo.IsDir() {
+	    fmt.Println("it's a file")
+	} else {
+	    fmt.Println("it's a directory")// it's a directory
+	}
+}
+</pre>
