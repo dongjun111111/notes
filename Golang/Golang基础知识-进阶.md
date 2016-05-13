@@ -16436,3 +16436,40 @@ output==>
 1234567812345678 false
 1234567812345670 true
 </pre>
+###Golang下载图片
+<pre>
+package main
+
+import (
+    "bytes"
+    "fmt"
+    "io"
+    "io/ioutil"
+    "net/http"
+    "os"
+    "strings"
+)
+
+func getImg(url string) (n int64, err error) {
+    path := strings.Split(url, "/")
+    var name string
+    if len(path) > 1 {
+        name = path[len(path)-1]
+    }
+    fmt.Println(name)
+    out, err := os.Create(name)
+    defer out.Close()
+    resp, err := http.Get(url)
+    defer resp.Body.Close()
+    pix, err := ioutil.ReadAll(resp.Body)
+    n, err = io.Copy(out, bytes.NewReader(pix))
+    return
+
+}
+func main() {
+    getImg("http://img2.bdstatic.com/img/image/166314e251f95cad1c8f496ad547d3e6709c93d5197.jpg")
+}
+output==>
+166314e251f95cad1c8f496ad547d3e6709c93d5197.jpg
+//该图片已下载到本地
+</pre>
