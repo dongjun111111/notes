@@ -14823,3 +14823,17 @@ h:长度-> 48 , 加密后内容 -> A36aO_PP6ib0O5z8usBVz4e3oGcg-zGDsnF4Qial8WGTW
 false
 true
 </pre>
+###Golang获取当前进程pid
+<pre>
+package main
+
+import (
+    "fmt"
+    "os"
+)
+func main() {
+    fmt.Println(os.Getpid())
+}
+output==>
+7068
+</pre>
