@@ -16473,3 +16473,87 @@ output==>
 166314e251f95cad1c8f496ad547d3e6709c93d5197.jpg
 //该图片已下载到本地
 </pre>
+###Golang获取文件的MD5.SHA1.SHA256值
+<pre>
+package main
+
+import (
+	"crypto/sha1"
+	"crypto/md5"
+	"crypto/sha256"
+    "fmt"
+    "io"
+    "os"
+
+)
+
+func Md5File(path string) (string, error) {
+    file, err := os.Open(path)
+    defer file.Close() 
+    if err != nil {
+        return "",err 
+    }
+
+    h := md5.New()
+    _, err = io.Copy(h,file)
+    if err != nil {
+        return "",err 
+    }
+
+    return fmt.Sprintf("%x",h.Sum(nil)), nil 
+}
+
+//SHA1     
+func SHA1File(path string) (string, error) {
+    file, err := os.Open(path)
+    defer file.Close() 
+    if err != nil {
+        return "",err 
+    }
+
+    h := sha1.New() 
+    _, err = io.Copy(h,file)
+    if err != nil {
+        return "",err 
+    }
+    return fmt.Sprintf("%x",h.Sum(nil)), nil 
+}
+
+//SHA256
+func SHA256File(path string) (string, error) {
+    file, err := os.Open(path)
+    defer file.Close() 
+    if err != nil {
+        return "",err 
+    }
+
+    h := sha256.New() 
+    _, err = io.Copy(h,file)
+    if err != nil {
+        return "",err 
+    }
+    return fmt.Sprintf("%x",h.Sum(nil)), nil 
+}
+func main() {
+    filename := "angel.txt"
+	rs,err:=Md5File(filename)
+	if err != nil{
+		fmt.Println("error!")
+	}
+	rssha1,err1:=SHA1File(filename)
+	if err1 != nil{
+		fmt.Println("error!")
+	}
+	rssha256,err256:=SHA256File(filename)
+	if err256 != nil{
+		fmt.Println("error!")
+	}
+	fmt.Println("file md5:",rs)
+	fmt.Println("file sha1:",rssha1)
+	fmt.Println("file sha256:",rssha256)
+}
+output==>
+file md5: 5ea7c8eba17b5d3fdd1a28f4f60c374f
+file sha1: 89ed3313517fe17d500296a1fa80c310d266d0dc
+file sha256: 10684c2c2fb3d11b5bbb4935278345c498399536812338c8c1c3dd346502ad97
+</pre>
