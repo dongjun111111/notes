@@ -16280,3 +16280,51 @@ func main() {
     bp.UseBp(input)
 }
 </pre>
+###Golang产生不同的ID
+<pre>
+package main
+
+import (
+    "crypto/md5"
+    "crypto/rand"
+    "encoding/base64"
+    "encoding/hex"
+    "fmt"
+    "io"
+)
+
+//生成32位md5字串
+func GetMd5String(s string) string {
+    h := md5.New()
+    h.Write([]byte(s))
+    return hex.EncodeToString(h.Sum(nil))
+}
+
+//生成Guid字串
+func GetGuid() string {
+    b := make([]byte, 48)
+
+    if _, err := io.ReadFull(rand.Reader, b); err != nil {
+        return ""
+    }
+    return GetMd5String(base64.URLEncoding.EncodeToString(b))
+}
+
+func main() {
+        //产生10个不重复的id字串
+    for i := 0; i < 10; i++ {
+        fmt.Println(GetGuid())
+    }
+}
+output==>
+1e4c9a7733d162e079b770a722970264
+cde0874f1ea2803bdc7bd96de1dcec70
+1bdb52374eee7c31f0b4311b84b9ec37
+c665a650040111c2b92cd1185e523d2b
+58dac7f3a8245c8ddf8b393082ab5749
+a22713d55d4e483cf18f5a8d00d6d4ae
+55d7ecb7c5212a500f42fd397c27c568
+5fbb85e4efed9ac8f0211493945752a6
+efaab1aa438a7dff8fa2785ecb7596ab
+2088ccb348e3fb89da32ced38ac69315
+</pre>
