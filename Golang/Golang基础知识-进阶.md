@@ -14859,3 +14859,76 @@ func RandInt64(min,max int64) int64{
 output==>
 1063
 </pre>
+###Golang 阿拉伯数字转换成繁体字
+<pre>
+package main
+
+import (
+    "fmt"
+    "math"
+    "regexp"
+    "strconv"
+    _ "strings"
+)
+
+func AmountConvert(p_money float64, p_Round bool) string {
+    var NumberUpper = []string{"壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖", "零"}
+    var Unit = []string{"分", "角", "圆", "拾", "佰", "仟", "万", "拾", "佰", "仟", "亿", "拾", "佰", "仟"}
+    var regex = [][]string{
+        {"零拾", "零"}, {"零佰", "零"}, {"零仟", "零"}, {"零零零", "零"}, {"零零", "零"},
+        {"零角零分", "整"}, {"零分", "整"}, {"零角", "零"}, {"零亿零万零元", "亿元"},
+        {"亿零万零元", "亿元"}, {"零亿零万", "亿"}, {"零万零元", "万元"}, {"万零元", "万元"},
+        {"零亿", "亿"}, {"零万", "万"}, {"拾零圆", "拾元"}, {"零圆", "元"}, {"零零", "零"}}
+    Str, DigitUpper, UnitLen, Round := "", "", 0, 0
+
+    if p_money == 0 {
+        return "零"
+    }
+    if p_money < 0 {
+        Str = "负"
+        p_money = math.Abs(p_money)
+    }
+    if p_Round {
+        Round = 1
+    } else {
+        Round = 2
+    }
+
+    Digit_byte := []byte(strconv.FormatFloat(p_money, 'f', Round+1, 64)) //注意币种四舍五入
+    UnitLen = len(Digit_byte) - Round
+
+    for _, v := range Digit_byte {
+        if UnitLen >= 1 && v != 46 {
+            s, _ := strconv.ParseInt(string(v), 10, 0)
+            if s != 0 {
+                DigitUpper = NumberUpper[s-1]
+
+            } else {
+                DigitUpper = "零"
+            }
+            Str = Str + DigitUpper + Unit[UnitLen-1]
+            UnitLen = UnitLen - 1
+        }
+    }
+
+    for i, _ := range regex {
+        reg := regexp.MustCompile(regex[i][0])
+        Str = reg.ReplaceAllString(Str, regex[i][1])
+    }
+
+    if string(Str[0:3]) == "元" {
+        Str = string(Str[3:len(Str)])
+    }
+
+    if string(Str[0:3]) == "零" {
+        Str = string(Str[3:len(Str)])
+    }
+    return Str
+}
+
+func main() {
+    fmt.Println(AmountConvert(20.098, false))
+}
+output==>
+贰拾元零玖分
+</pre>
