@@ -14925,7 +14925,6 @@ func AmountConvert(p_money float64, p_Round bool) string {
     }
     return Str
 }
-
 func main() {
     fmt.Println(AmountConvert(20.098, false))
 }
