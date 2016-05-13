@@ -32,9 +32,11 @@ http.SetCookie(w,&cookie)
 文件系统：将本地文件输出到网页
 <pre>
 package main
+
 import(
     "net/http"
 )
+
 func main() {
     http.Handle("/", http.FileServer(http.Dir("./")))
     http.ListenAndServe(":8123", nil)
