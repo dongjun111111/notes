@@ -14686,3 +14686,87 @@ func get_size(file_bytes uint64) string {
 output==>
 4M
 </pre>
+###Golang蛇形算法（单循环赛程表）
+<pre>
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    //单循环对阵表，蛇形算法
+    p := fmt.Println
+    //参赛队
+    Team := []string{"one", "two", "three", "four", "five", "six", "seven"}
+    //判断参赛队的奇偶，若为奇数则人为加临时队
+    H := len(Team)
+    if H%2 != 0 {
+        Temp := []string{"0"}
+        Team = append(Team, Temp...)
+        H = H + 1
+    }
+    a := make([]string, H/2)
+    b := make([]string, H/2)
+    for i := 1; i < H; i++ {
+        p("第", i, "轮")
+        Team = append(Team[:1], append(Team[H-1:], Team[1:]...)...)
+        Team = Team[:H]
+        copy(a, Team[:H/2])
+        copy(b, Team[H/2:H])
+        b = Reverse(b)
+        for j := 0; j < H/2; j++ {
+            if a[j] == "0" {
+                p(b[j], "轮空")
+            } else if b[j] == "0" {
+                p(a[j], "轮空")
+            } else {
+                p(a[j], "VS", b[j])
+            }
+        }
+    }
+}
+func Reverse(r []string) []string {
+    //数组反转函数
+    for i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {
+        r[i], r[j] = r[j], r[i]
+    }
+    return r
+}
+output==>
+第 1 轮
+one VS seven
+six 轮空
+two VS five
+three VS four
+第 2 轮
+one VS six
+seven VS five
+four 轮空
+two VS three
+第 3 轮
+one VS five
+six VS four
+seven VS three
+two 轮空
+第 4 轮
+one VS four
+five VS three
+six VS two
+seven 轮空
+第 5 轮
+one VS three
+four VS two
+five 轮空
+six VS seven
+第 6 轮
+one VS two
+three 轮空
+four VS seven
+five VS six
+第 7 轮
+one 轮空
+two VS seven
+three VS six
+four VS five
+</pre>
