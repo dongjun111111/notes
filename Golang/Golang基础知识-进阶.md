@@ -14955,3 +14955,59 @@ func main() {
 
 }
 </pre>
+###Golang发送邮件
+亲测可用。
+<pre>
+package main
+import (
+	"time"
+    "net/smtp"
+    "fmt"
+    "strings"
+)
+
+func SendMail(user, password, host, to, subject, body, mailtype string) error{
+    hp := strings.Split(host, ":")
+    auth := smtp.PlainAuth("", user, password, hp[0])
+    var content_type string
+    if mailtype == "html" {
+        content_type = "Content-Type: text/"+ mailtype + "; charset=UTF-8;"
+    }else{
+        content_type = "Content-Type: text/plain" + "; charset=UTF-8;"
+    }
+
+    msg := []byte("To: " + to + "\r\nFrom: " + user + "<"+ user +">\r\nSubject: " + subject + "\r\n" + content_type + "\r\n" + body)
+    send_to := strings.Split(to, ";")
+    err := smtp.SendMail(host, auth, user, send_to, msg)
+    return err
+}
+
+func main() {
+	currenttime := time.Now().Format("2006-01-02 15:04:05") //当前时间
+	
+    user := "user@163.com"
+    password := "password"
+    host := "smtp.163.com:25"
+    to := "903456967@qq.com"	
+    subject := "Jason"	
+    body := `
+    <html>
+    <body>
+    <h3>
+    Jason is sending mail by golang now!
+    </h3>
+	<p><a href="http://dongjun111111.github.io/purebaidu/">百度纯净搜索</a></p>
+	<p>`+currenttime+`</p>
+    </body>
+    </html>
+    `
+    fmt.Println("sending email......")
+    err := SendMail(user, password, host, to, subject, body, "html")
+    if err != nil {
+        fmt.Println("sended mail error!")
+        fmt.Println(err)
+    }else{
+        fmt.Println("sended mail success!")
+    }
+}
+</pre>
