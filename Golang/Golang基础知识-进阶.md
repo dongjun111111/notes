@@ -16328,3 +16328,29 @@ a22713d55d4e483cf18f5a8d00d6d4ae
 efaab1aa438a7dff8fa2785ecb7596ab
 2088ccb348e3fb89da32ced38ac69315
 </pre>
+###Golang跑满所有CPU，吃尽CPU性能
+<pre>
+package main
+
+import "runtime"
+
+func loop(){
+    for i := 0; i < 999999999; i++ {
+    }
+
+}
+func loop2() {
+    for i := 0; i < 999999999; i++ {
+         loop()
+    }
+}
+func main() {
+    ncpu := runtime.NumCPU()
+    runtime.GOMAXPROCS(ncpu)
+    c := make(chan int , 1)
+    for i := 0; i < ncpu; i++ {
+        go loop2()
+    }
+    <- c
+}
+</pre>
