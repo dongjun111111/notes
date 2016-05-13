@@ -14859,6 +14859,24 @@ func RandInt64(min,max int64) int64{
 output==>
 1063
 </pre>
+还有一种，使用时间作为随机数种子
+<pre>
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+func main() {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	fmt.Println(r.Intn(100))
+
+}
+output==>
+56
+</pre>
 ###Golang 阿拉伯数字转换成繁体字
 <pre>
 package main
