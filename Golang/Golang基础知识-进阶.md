@@ -48,7 +48,6 @@ http.Handle("/doc",http.StripPrefix("/doc",http.FileServer(http.Dir("./")))) //�
 </pre>
 ####template包
 template包（html/template）实现了数据驱动的模板，用于生成可对抗代码注入的安全HTML输出。本包提供了和text/template包相同的接口，无论何时当输出是HTML的时候都应使用本包。
-
 ####字段操作
 Go语言的模板通过{{}}来包含需要在渲染时被替换的字段，{{.}}表示当前的对象，这和Java或者C++中的this类似。
 
@@ -69,11 +68,13 @@ func OutputJson(w http.ResponseWriter, ret int, reason string, i interface{}) {
 ####Golang发送Email(邮件)
 <pre>
 package main
+
 import (
     "net/smtp"
     "fmt"
     "strings"
 )
+
 /*
  *  user : example@example.com login smtp server user
  *  password: xxxxx login smtp server password
@@ -83,6 +84,7 @@ import (
  *  body: The content of mail
  *  mailtyoe: mail type html or text
  */
+
 func SendMail(user, password, host, to, subject, body, mailtype string) error{
     hp := strings.Split(host, ":")
     auth := smtp.PlainAuth("", user, password, hp[0])
@@ -98,6 +100,7 @@ func SendMail(user, password, host, to, subject, body, mailtype string) error{
     err := smtp.SendMail(host, auth, user, send_to, msg)
     return err
 }
+
 func main() {
     user := "xxxx@163.com"
     password := "xxxx"
