@@ -14651,3 +14651,38 @@ output==>
 8
 </pre>
 以上都能够打印出正确的字符串数目。
+###Golang计算文件大小
+<pre>
+package main
+
+import (
+    "fmt"
+)
+//代码测试
+func main() {
+    var file_bytes uint64
+    file_bytes = 1 << 22
+    fmt.Println(get_size(file_bytes))
+}
+/* 函数 get_site */
+func get_size(file_bytes uint64) string {
+    var (
+        units []string
+        size  string
+        i     int
+    )
+    units = []string{"B", "K", "M", "G", "T", "P"}
+    i = 0
+    for {
+        i++
+        file_bytes = file_bytes / 1024
+        if file_bytes < 1024 {
+            size = fmt.Sprintf("%d", file_bytes) + units[i]
+            break
+        }
+    }
+    return size
+}
+output==>
+4M
+</pre>
