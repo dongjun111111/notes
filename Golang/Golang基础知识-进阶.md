@@ -249,10 +249,12 @@ output==>
 <pre>
 package main
 //程序中RUnlock()个数不得多于Rlock()的个数
+
 import (
 	"fmt"
 	"sync"
 )
+
 func main(){
 	var g *sync.RWMutex
 	g = new(sync.RWMutex)
