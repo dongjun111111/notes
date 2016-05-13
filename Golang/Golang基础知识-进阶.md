@@ -15084,3 +15084,26 @@ func main() {
 output==>
 map[test:1 gocode:2 src:4 gotest:2 map:1]
 </pre>
+###Golang日志记录库简单使用方法
+<pre>
+package main
+
+import (
+    "fmt"
+    "log"
+    "os"
+)
+
+func main(){
+    logfile,err := os.OpenFile("outofmemory.cn.log",os.O_RDWR|os.O_CREATE,0);
+    if err!=nil {
+        fmt.Printf("%s\r\n",err.Error());
+        os.Exit(-1);
+    }
+    defer logfile.Close();
+    logger := log.New(logfile,"\r\n",log.Ldate|log.Ltime|log.Llongfile);
+    logger.Println("hello");
+    logger.Println("oh....");
+    logger.Fatal("test");
+}
+</pre>
