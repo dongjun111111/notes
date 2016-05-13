@@ -175,6 +175,7 @@ import (
 	"fmt"
 	"sync"
 )
+
 func main(){
 	var mutex sync.Mutex
 	fmt.Println("Lock the lock")
@@ -210,15 +211,18 @@ import (
 	"runtime"
 	"sync"
 )
+
 type counter struct{
 	mutex sync.Mutex
 	x int64
 }
+
 func (c *counter) Inc(){
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 	c.x++
 }
+
 func main(){
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	c := counter{}
@@ -238,7 +242,6 @@ func main(){
 output==>
 800000
 </pre>
-
 - RWMutex
 定义：<b>它允许任意读操作同时进行 同一时刻，只允许有一个写操作进行.并且一个写操作被进行过程中，读操作的进行也是不被允许的,读写锁控制下的多个写操作之间都是互斥的,写操作与读操作之间也都是互斥的,多个读操作之间却不存在互斥关系</b>.RWMutex是一个读写锁，该锁可以加多个读锁或者一个写锁。写锁，如果在添加写锁之前已经有其他的读锁和写锁，则lock就会阻塞直到该锁可用，为确保该锁最终可用，已阻塞的 Lock 调用会从获得的锁中排除新的读取器，即写锁权限高于读锁，有写锁时优先进行写锁定。写锁解锁，如果没有进行写锁定，则就会引起一个运行时错误．注意：写解锁在进行的时候会试图唤醒所有因欲进行读锁定而被阻塞的Goroutine，也就是在所有写锁上锁之前存在的并且被迫停止的读锁将重新开始工作，读解锁在进行的时候只会在已无任何读锁定的情况下试图唤醒一个因欲进行写锁定而被阻塞的Goroutine。<br>
 适用场景：经常用于读次数远远多于写次数的场景．<br>
