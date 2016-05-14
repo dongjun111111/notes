@@ -16973,3 +16973,4 @@ solution:
 3:	{5,2}
 Input Target >> 
 </pre>
+###Golang
