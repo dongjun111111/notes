@@ -42,7 +42,7 @@ func main() {
     http.ListenAndServe(":8123", nil)
 }
 </pre>
-当然用golang写一个文件服务很简单，比如上面的，但是如果想通过localhost:8123/doc（即自定义文件服务器入口）来进入文件目录，则需要
+当然用golang写一个文件服务很简单，比如上面的，但是如果想通过localhost:8123/doc（即自定义文件服务器入口）来进入文件目录，则需要:
 <pre>
 http.Handle("/doc",http.StripPrefix("/doc",http.FileServer(http.Dir("./")))) //在浏览器地址栏输入localhost:8123/doc ,显示同上面一样的结果
 </pre>
@@ -17050,4 +17050,5 @@ func main() {
     client.Run()
 }
 </pre>
-###
+###Golang有序map与无序map
+有序map是树结构的，无序map是hash表的，而我们常常误以为map就是哈希表可以O(1)时间，然而有序map是特例。所以，猜测，可能go为了不混淆（一个关键字底层就应该用一种数据结构。假如一个关键字的底层是各种数据结构都有，这样不就跟继承那样繁杂了么？），于是摒弃有序map，这样一提到map就可以放心地知道是hash结构的，线性的时间复杂度。。如果要用树结构的有序map。
