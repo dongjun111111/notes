@@ -63,8 +63,6 @@ go安装好了，测试一下
 $ go version
 如果显示"go version go1.3.3"表示安装并切换成功
 </pre>
-####Ok
-完
 #go安装的位置
 export GOROOT=$HOME/go
 #类似工作空间
