@@ -11,7 +11,7 @@ date     result
 2005-05-10 lose
 
 如果要生成下列结果, 该如何写sql语句?
-   　    win lose
+win lose
 
 2005-05-09 2   2
 2005-05-10 1   2
