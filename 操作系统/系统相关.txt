@@ -5,7 +5,7 @@
 文件处理命令：file、 mkdir、 grep、dd、 find、 mv 、ls 、diff、 cat、 ln
 系统管理相关命令： df、 top、 free、 quota 、at、 lp、 adduser、 groupadd kill、 crontab、 tar、 unzip、 gunzip 、last
 网络操作命令：ifconfig、 ip 、ping 、 netstat 、telnet、 ftp、 route、 rlogin rcp 、finger 、mail 、nslookup
-系统安全相关命令： passwd 、su、 umask 、chgrp、 chmod、chown、chattr、sudo、 pswho
+系统安全相关命令： passwd 、su、 umask 、chgrp、 chmod、chown、chattr、sudo与pswho
 2.熟悉Gnome/KDE等X-windows桌面环境操作。
 3.掌握.tgz、.rpm等软件包的常用安装方法。
 4.学习添加外设，安装设备驱动程序(比如网卡）。
