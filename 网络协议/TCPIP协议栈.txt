@@ -3,7 +3,6 @@ http://www.cnblogs.com/fengzanfeng/articles/1339347.html
 
 
 TCP/IP通常被认为是一个四层协议系统：
-
 应用层：Telnet（远程登录）、FTP（文件传输协议）和e_mail等
 运输层：TCP（传输控制协议）和UDP（用户数据协议）
 网络层：IP（网际协议）、ICMP（Internet互联网控制报文协议）和IGMP（Internet组管理协议）
