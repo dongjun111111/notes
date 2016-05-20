@@ -34,7 +34,7 @@ RSS 文档使用一种简单的自我描述的语法。下面是一个简单的R
 
 每个 <channel> 元素可拥有一个或多个 <item> 元素。
 
-每个 <item> 元素可定义 RSS feed 中的一篇文章或 "story"。
+每个<item>元素可定义RSS feed 中的一篇文章或 "story"。
 
 item 元素拥有三个必需的子元素：
 
@@ -44,7 +44,7 @@ item 元素拥有三个必需的子元素：
 
 最后，后面的两行关闭 <channel> 和 <rss> 元素。
 
-在 RSS 中书写注释的语法与 HTML 的语法类似：
+在RSS中书写注释的语法与HTML的语法类似：
 <pre>
 <!-- This is an RSS comment -->
 </pre>
