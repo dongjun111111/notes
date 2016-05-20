@@ -70,7 +70,7 @@ docker restart Name/ID
 9. 附加到一个运行的容器上面; --no-stdin=false Do not attach stdin; --sig-proxy=true Proxify all received signal to the process  
 docker attach ID 
 
-###保存和加载镜像（save、load）
+###保存和加载镜像 （save、load）
 当需要把一台机器上的镜像迁移到另一台机器的时候，需要保存镜像与加载镜像。
 
 1. 保存镜像到一个tar包; -o, --output="" Write to an file  
