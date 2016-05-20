@@ -24,9 +24,9 @@ RSS 文档使用一种简单的自我描述的语法。下面是一个简单的R
 
 下一行是标识此文档是一个 RSS 文档的 RSS 声明（此例是 RSS version 2.0）。
 
-下一行含有 <channel> 元素。此元素用于描述RSS feed。
+下一行含有 <channel>元素。此元素用于描述RSS feed。
 
-<channel> 元素有三个必需的子元素：
+<channel>元素有三个必需的子元素：
 
 -  title- 定义频道的标题。（比如 w3school 首页）
 -  link - 定义到达频道的超链接。（比如 www.w3school.com.cn）
