@@ -55,7 +55,7 @@ var s1 = struct {
 }{ptr, length, length}
 s := *(*[]byte)(unsafe.Pointer(&s1))
 </pre>
-把slice的底层结构写出来，将addr，len，cap等字段写进去，将这个结构体赋给s。相比上一种写法，这种更好的地方在于cap更加自然，虽然上面写法中实际上1<<10就是cap。
+把slice的底层结构写出来，将addr、len、cap等字段写进去，将这个结构体赋给s。相比上一种写法，这种更好的地方在于cap更加自然，虽然上面写法中实际上1<<10就是cap。
 
 3. 又或者使用reflect.SliceHeader的方式来构造slice，比较推荐这种做法：
 <pre>
