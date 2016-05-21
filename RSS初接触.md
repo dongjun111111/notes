@@ -1,7 +1,7 @@
 ###通过实例总结RSS基本语法知识
 RSS 文档使用一种简单的自我描述的语法。下面是一个简单的RSS文档：
 <pre>
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <rss version="2.0">
 <channel>
   <title>W3School Home Page</title>
