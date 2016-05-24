@@ -1,7 +1,7 @@
 ﻿++++++++Linux操作系统初学者的学习线路图++++++++
 如果你正在学习Linux操作系统，不知从哪里入手，可以参考下面给出的9点建议.
 1.掌握至少50个以上的常用命令。
-比如：安装和登录命令：login、 shutdown、 halt、 reboot 、mount、umount 、chsh
+比如：安装和登录命令：login、shutdown、halt、reboot、mount、umount 、chsh
 文件处理命令：file、 mkdir、 grep、dd、 find、 mv 、ls 、diff、 cat、 ln
 系统管理相关命令： df、 top、 free、 quota 、at、 lp、 adduser、 groupadd kill、 crontab、 tar、 unzip、 gunzip 、last
 网络操作命令：ifconfig、 ip 、ping 、 netstat 、telnet、 ftp、 route、 rlogin rcp 、finger 、mail 、nslookup
