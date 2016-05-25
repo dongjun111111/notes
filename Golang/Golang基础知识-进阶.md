@@ -15,6 +15,8 @@ F7 --> 呼出sublime的golang调试控制台
 http://blog.csdn.net/kenkao/article/details/49488833
 
 golang安装更新。环境变量只要是下面这样就行了:系统变量-> GOPATH=D:\gopath\ |   GOROOT=D:\go\ |  Path= D:\gopath\bin;D:\go\bin;
+
+<img src="install.png" />
 ##Go常用命令行命令
 - go get 获取远程包（必须提前安装git（包来自github）或者hg(包来自Google)）
 - go run 直接运行程序
