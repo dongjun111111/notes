@@ -17245,3 +17245,29 @@ exit status 2
 
 exit status 1
 </pre>
+###盗用一哥们撩妹工具[doge]
+<pre>
+package main
+
+import "fmt"
+
+type ipeople interface {
+	love(people)
+}
+type people struct {
+	name string
+}
+
+func (o *people) love(w people) {
+	fmt.Println(o.name, ":", w.name, ",I love you!")
+}
+func main() {
+	p1 := people{"Jason"}
+	p2 := people{"someone"}
+	var one ipeople
+	one = &p1
+	one.love(p2)
+}
+output==>
+Jason : someone ,I love you!
+</pre>
