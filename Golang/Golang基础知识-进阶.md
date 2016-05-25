@@ -17204,3 +17204,44 @@ output==>
 7	4	2	1	3	6	5	13	11	9	8	10	12	15	14	16	
 1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16
 </pre>
+###os.Args
+默认情况下 os.Args[0]应该返回可执行文件的路径
+<pre>
+package main
+
+import "os"
+import "fmt"
+
+func main() {
+	fmt.Println("test the os package")
+	fmt.Println("Args len", len(os.Args))
+	for i, arg := range os.Args {
+		fmt.Println("arg", i)
+		fmt.Println("arg", arg)
+	}
+	fileInfo, err := os.Stat("D:\\gopath\\newsite\\newsite.exe")
+	if err != nil {
+		fmt.Println(err)
+	}
+	Date := fileInfo.ModTime().String()
+	fmt.Println("Date:", Date)
+}
+output==>
+test the os package
+Args len 1
+arg 0
+arg C:\Users\ADMINI~1\AppData\Local\Temp\go-build033480262\command-line-arguments\_obj\exe\main.exe
+GetFileAttributesEx D:\gopath\newsite\newsite.exe: The system cannot find the path specified.
+
+panic: runtime error: invalid memory address or nil pointer dereference
+[signal 0xc0000005 code=0x0 addr=0x28 pc=0x401746]
+
+goroutine 1 [running]:
+panic(0x4f0e00, 0xc08200a0a0)
+	D:/go/src/runtime/panic.go:481 +0x3f4
+main.main()
+	D:/gopath/src/test/main.go:17 +0x706
+exit status 2
+
+exit status 1
+</pre>
