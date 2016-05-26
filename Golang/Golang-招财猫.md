@@ -155,3 +155,52 @@ e3: [4 5 7 8 54] len: 5 cap: 5
 [4 5 8 54]
 after insert: [4 5 100 8 54]
 </pre>
+###字典/映射 Map
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+	/*map是引用类型，使用内置函数 make进行初始化，
+	未初始化的map零值为 nil长度为0，并且不能赋值元素
+	var m map[int]int
+	fmt.Println(len(m))   -->false can`t enter value to a nil map
+	*/
+	//使用内置函数make初始化map
+	var m map[int]int = make(map[int]int)
+	m[0] = 4
+	m[3] = 2
+	m[4] = 1
+	m[7] = 2
+	fmt.Println(m)
+	fmt.Println("is nil:", nil == m) //false
+	//直接赋值初始化map
+	n1 := map[string]int{
+		"jason": 3,
+		"miao":  2, //最后的逗号一定要加上
+	}
+	type S struct {
+		age  int
+		name int
+	}
+	n2 := map[string]S{
+		"a": S{3, 5},
+		"b": {23, 7}, //最后的逗号一定要加上;类型名称可忽略
+	}
+	fmt.Println(n1, n2)
+	//map的使用:修改、删除元素
+	fmt.Println(n2["b"]) //{23 7}
+	n2["b"] = S{77, 77}  //修改
+	fmt.Println(n2["b"])
+	delete(n2, "b")      //删除
+	fmt.Println(n2["b"]) //空的map是{0,0}   {0 0}
+}
+output==>
+map[4:1 7:2 0:4 3:2]
+is nil: false
+map[jason:3 miao:2] map[b:{23 7} a:{3 5}]
+{23 7}
+{77 77}
+{0 0}
+</pre>
