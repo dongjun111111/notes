@@ -425,13 +425,13 @@ func f() {
  func main() {
      go f()
  
-     c <- 'c'
+     c <- 'c'  //要是没有这个，则"在main中"没有打印
      <-c
      <-c
  
-     fmt.Println("外部调用")
+     fmt.Println("在main中")  
  }
 output==>
 在goroutine内
-外部调用
+在main中
 </pre>
