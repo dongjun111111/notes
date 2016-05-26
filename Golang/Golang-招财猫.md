@@ -253,3 +253,26 @@ jason`s name : jason
 {} {0}
 3
 </pre>
+###指针pointer
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+	var i int = 1
+	pi := &i
+	fmt.Println(pi) //0xc082006288
+	a := []int{4, 5, 6}
+	pa := &a
+	fmt.Println(pa) //&[4 5 6]
+	//使用*读取/修改指针指向的值
+	i1 := new(int)
+	*i1 = 3
+	fmt.Println(i1, *i1) //0xc082048098 3
+}
+output==>
+0xc082048038
+&[4 5 6]
+0xc082048098 3
+</pre>
