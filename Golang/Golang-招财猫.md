@@ -435,3 +435,54 @@ output==>
 在goroutine内
 在main中
 </pre>
+###方法
+<pre>
+package main
+
+import "fmt"
+
+type A struct {
+	x, y int
+}
+
+/*// 定义结构体的方法，'_'表示方法内忽略使用结构体、字段及其他方法
+func (_ A) echo_A() {
+	fmt.Println("(_ A)")
+} */
+// 同上
+func (A) echoA(s string) {
+	fmt.Println("(_A)", s)
+}
+
+/*
+func (_ *A) echo_PA() {
+	fmt.Println("(_ *A)")
+}
+*/
+// 同上
+func (*A) echo_PA(s string) {
+	fmt.Println("(*A)", s)
+}
+
+//定义结构体的方法，方法内可以引用结构，字段及其他方法
+func (a A) setX(x int) {
+	a.x = x
+}
+
+// 定义结构体指针的方法，方法内可以引用结构体、结构体指针、字段及其他方法
+func (a *A) setY(y int) {
+	a.y = y
+}
+func main() {
+	var a A
+	a.setX(3)
+	a.setY(9)
+	fmt.Println(a.x, a.y)
+	a.echoA("a")       //(_A) a
+	a.echo_PA("jason") //(*A) jason
+}
+output==>
+0 9
+(_A) a
+(*A) jason
+</pre>
