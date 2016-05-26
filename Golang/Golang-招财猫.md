@@ -1,6 +1,7 @@
 #喵
 ##基础知识
-const iota ;const可以放到func外面，其他变量的声明不可以放到外面。
+###常量 const iota 
+const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
 package main
 
@@ -53,4 +54,36 @@ output==>
 4 这是string c iota: 2 a4 iota: 3
 x2 iota: 2
 z1 value : 6 z2 value: 9 z3 value: 12
+</pre>
+###数组 Array
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+	var a [3]int = [3]int{3, 4, 5}
+	var b [2]int = [2]int{} //[0 0]
+	//使用...自动计算数组的长度
+	var c = [...]int{5, 6, 7, 8, 9} //[5 6 7 8 9]
+	d := [6]int{}                   //[0 0 0 0 0 0]
+	//多维数组.多维数组只能自动计算最外围数组长度
+	e := [...][3]int{{1, 2, 5}, {4, 6, 4}} //[[1 2 5] [4 6 4]]
+	//初始化指定索引的数组元素，未指定初始化的元素保持默认零值
+	var f = [...]string{2: "first", 4: "second"}
+	fmt.Println(a[2])
+	fmt.Println(b)
+	fmt.Println(c)
+	fmt.Println(d)
+	//通过下标访问多维数组元素
+	fmt.Println(e, "++++++++", e[1][2]) //[[1 2 5] [4 6 4]] ++++++++ 4
+	fmt.Println("f数组所有：", f, "f数组元素：", f[2])
+}
+output==>
+5
+[0 0]
+[5 6 7 8 9]
+[0 0 0 0 0 0]
+[[1 2 5] [4 6 4]] ++++++++ 4
+f数组所有： [  first  second] f数组元素： first
 </pre>
