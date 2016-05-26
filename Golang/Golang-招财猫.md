@@ -486,3 +486,109 @@ output==>
 (_A) a
 (*A) jason
 </pre>
+###并发 Concurrency
+使用关键字go调用一个函数/方法，启动一个新的协程goroutine
+<pre>
+package main
+
+import "time"
+
+//主协程goroutine输出0，其他由go启动的几个子协程分别输出1～5
+func say(i int) {
+	println("goroutine:", i)
+}
+func main() {
+	for i := 1; i <= 5; i++ {
+		go say(i)
+	}
+	say(0)
+	time.Sleep(5 * time.Second)
+}
+output==>
+goroutine: 0
+goroutine: 1
+goroutine: 2
+goroutine: 3
+goroutine: 4
+goroutine: 5
+</pre>
+goroutine 在相同的地址空间中运行，因此访问共享内存必须进行同步
+<pre>
+package main
+
+import "time"
+import "sync"
+
+var mu sync.Mutex
+var i int
+
+func add() {
+	/*
+		使用互斥锁防止多个协程goroutine同时修改共享变量
+		只能限制同时访问此方法修改变量，在方法外修改则限制是无效的
+	*/
+	mu.Lock()
+	defer mu.Unlock()
+	i++
+}
+func main() {
+	for range [100]byte{} {
+		go add()
+	}
+	time.Sleep(1 * time.Second)
+	println(i)
+}
+output==>
+100
+</pre>
+使用通道channel进行同步
+<pre>
+package main
+
+import "time"
+
+var i int
+var ch = make(chan byte, 1)
+
+//将channel用作同步开关
+func main() {
+	for range [100]byte{} {
+		go add()
+	}
+	time.Sleep(1 * time.Second)
+	println(i)
+}
+func add() {
+	ch <- 0
+	i++
+	<-ch
+}
+output==>
+100
+</pre>
+使用channel在不同的goroutine之间通信
+<pre>
+package main
+
+import "time"
+
+var i int
+var ch = make(chan int, 1)
+
+func add() {
+	x := <-ch
+	x++
+	ch <- x
+}
+func main() {
+	for range [100]byte{} {
+		go add()
+	}
+	ch <- i
+	time.Sleep(1 * time.Second)
+	i = <-ch
+	println(i)
+}
+output==>
+100
+</pre>
