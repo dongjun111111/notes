@@ -604,6 +604,7 @@ Go中自带轻量级的测试框架testing和自带的go test命令来实现单�
 - 函数中通过调用*testing.T的Error，Errorf，FailNow，Fatal，FatalIf方法标注测试不通过，调用Log方法用来记录测试的信息。
 
 测试分两个文件，分别是:
+
 - test.go
 <pre>
 //test.go
@@ -653,4 +654,59 @@ go test -v
 	test_test.go:12: Sum 1 to 10: 55
 PASS
 ok  	test	0.237s
+</pre>
+####基准测试 Benchmark
+基准测试 Benchmark用来检测函数/方法的性能。
+
+- 基准测试用例函数必须以Benchmark开头
+- go test默认不会执行基准测试的函数，需要加上参数-test.bench，语法:-test.bench="test_name_regex"，例如go test -test.bench=".*"表示测试全部的基准测试函数
+- 在基准测试用例中，在循环体内使用testing.B.N，使测试可以正常的运行
+
+测试分两个文件，分别是:
+
+- test.go
+<pre>
+//test.go
+package testgo
+
+import "math"
+
+func Sum(min, max int) (sum int) {
+	if min < 0 || max < 0 || max > math.MaxInt32 || min > max {
+		return 0
+	}
+
+	for ; min <= max; min++ {
+		sum += min
+	}
+	return
+}
+</pre>
+- test_test.go
+<pre>
+package testgo
+
+import "testing"
+
+func BenchmarkSum(b *testing.B) {
+    b.Logf("Sum 1 to %d: %d\n", b.N, Sum(1, b.N))
+}
+</pre>
+在当前位置执行测试： (注意bench后面还有一个 . )
+<pre>
+go test -v -bench .   
+
+输出：
+PASS
+BenchmarkSum-2	2000000000	         0.69 ns/op
+--- BENCH: BenchmarkSum-2
+	test_test.go:6: Sum 1 to 1: 1
+	test_test.go:6: Sum 1 to 100: 5050
+	test_test.go:6: Sum 1 to 10000: 50005000
+	test_test.go:6: Sum 1 to 1000000: 500000500000
+	test_test.go:6: Sum 1 to 100000000: 5000000050000000
+	test_test.go:6: Sum 1 to 2000000000: 2000000001000000000
+ok  	test	1.697s
+
+testing: warning: no tests to run
 </pre>
