@@ -8,18 +8,21 @@ import "fmt"
 import "os"
 
 const z string = "这是string"
+
+//常量组合声明时，iota每次引用会逐步自增，初始值为0，步进值为1
 const (
 	a uint8  = iota
 	b uint8  = iota
 	c uint16 = iota
 )
-
+//即使iota不是在常量组内第一个开始引用，也会按组内常量数量递增
 const (
 	a1        = 4
 	a2 string = "d"
 	a3 bool   = true
 	a4 int    = iota
 )
+//枚举的常量都为同一类型时，可以使用简单序列格式(组内复用表达式).
 const (
 	x = iota
 	x1
