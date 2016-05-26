@@ -276,3 +276,50 @@ output==>
 &[4 5 6]
 0xc082048098 3
 </pre>
+###通道 Channel
+channel用于两个goroutine之间传递指定类型的值来同步运行和通讯。操作符<-用于指定channel的方向，发送或接收。如果未指定方向，则为双向channel。
+
+channel是引用类型，使用make函数来初始化。未初始化的channel零值是nil，且不能用于发送和接收值。
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+	/*
+		关闭channel，只能用于双向或只发送类型的channel
+		只能由 发送方调用close函数来关闭channel
+		接收方取出已关闭的channel中发送的值后，后续再从channel中取值时会以非阻塞的方式立即返回channel传递类型的零值。
+	*/
+	ch := make(chan string, 1)
+	ch <- "hello"
+	close(ch)
+	s, ok := <-ch
+	if ok {
+		fmt.Println("receive value from sender:", s)
+	} else {
+		fmt.Println("get zero value from closed channel")
+	}
+	/*//向已关闭的通道发送值会产生运行时恐慌panic
+	ch <- "hi"
+	fmt.Println(<-ch)
+	// 再次关闭已经关闭的通道也会产生运行时恐慌panic
+	close(ch)
+	*/
+
+	//使用for range语句依次读取发送到channel的值，直到channel关闭。
+	var chh = make(chan int)
+	go func() {
+		for i := 0; i < 5; i++ {
+			chh <- i
+		}
+		close(chh)
+	}()
+	for x := range chh {
+		fmt.Printf("%d-", x)
+	}
+}
+output==>
+receive value from sender: hello
+0-1-2-3-4-
+</pre>
