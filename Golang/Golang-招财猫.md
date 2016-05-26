@@ -592,3 +592,65 @@ func main() {
 output==>
 100
 </pre>
+###测试 Testing
+Go中自带轻量级的测试框架testing和自带的go test命令来实现单元测试和基准测试
+####单元测试 Unit
+- 测试源文件名必须是_test.go结尾的，go test的时候才会执行到相应的代码
+- 必须import testing包
+- 所有的测试用例函数必须以Test开头
+- 测试用例按照源码中编写的顺序依次执行
+- 测试函数TestXxx()的参数是*testing.T，可以使用该类型来记录错误或者是测试状态
+- 测试格式：func TestXxx (t *testing.T)，Xxx部分可以为任意的字母数字的组合，首字母不能是小写字母[a-z]，例如Testsum是错误的函数名。
+- 函数中通过调用*testing.T的Error，Errorf，FailNow，Fatal，FatalIf方法标注测试不通过，调用Log方法用来记录测试的信息。
+
+测试分两个文件，分别是:
+- test.go
+<pre>
+//test.go
+package testgo
+
+import "math"
+
+func Sum(min, max int) (sum int) {
+	if min < 0 || max < 0 || max > math.MaxInt32 || min > max {
+		return 0
+	}
+
+	for ; min <= max; min++ {
+		sum += min
+	}
+	return
+}
+</pre>
+- test_test.go
+<pre>
+//test_test.go
+package testgo
+
+import "testing"
+
+func TestSum(t *testing.T) {
+	s := Sum(1, 0)
+	t.Log("Sum 1 to 0:", s)
+	if 0 != s {
+		t.Error("not equal.")
+	}
+	s = Sum(1, 10)
+	t.Log("Sum 1 to 10:", s)
+	if 55 != s {
+		t.Error("not equal.")
+	}
+}
+</pre>
+在当前位置执行测试：
+<pre>
+go test -v
+
+输出：
+=== RUN   TestSum
+--- PASS: TestSum (0.00s)
+	test_test.go:7: Sum 1 to 0: 0
+	test_test.go:12: Sum 1 to 10: 55
+PASS
+ok  	test	0.237s
+</pre>
