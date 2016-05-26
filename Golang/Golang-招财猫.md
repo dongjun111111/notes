@@ -87,3 +87,71 @@ output==>
 [[1 2 5] [4 6 4]] ++++++++ 4
 f数组所有： [  first  second] f数组元素： first
 </pre>
+###Slice
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+	//slice
+	var a []int
+	fmt.Println(a, "len:", len(a), "cap:", cap(a)) //	[] len: 0 cap: 0
+	var b []int = []int{5, 78, 5, 56, 45, 3}
+	fmt.Println(b)         //[5 78 5 56 45 3]
+	for _, pp := range b { //5,78,5,56,45,3,
+		fmt.Printf("%d,", pp)
+		if len(b) == 6 {
+			fmt.Println()
+		}
+	}
+	//使用内置函数make初始化slice，第一参数是slice类型，第二参数是长度，第三参数是容量(省略时与长度相同)
+	var c = make([]int, 3, 10)
+	fmt.Println(c, "len:", len(c), "cap:", cap(c))
+	var d = new([]int)                               //var d= new([]int ,2,3)写法错误
+	fmt.Println(d, "len:", len(*d), "cap:", cap(*d)) //这里用地址的形式访问
+	e := []int{4, 5, 7, 8, 54}
+	fmt.Println("e:", e, "len:", len(e), "cap:", cap(e))
+	e1 := e[0:2] //值是e[0] e[1]，不包括e[2].  [4 5]
+	fmt.Println("e1:", e1, "len:", len(e1), "cap:", cap(e1))
+	e2 := e[:3] //值是e[0] e[1] e[2] ,不包括e[3]
+	fmt.Println(e2)
+	e3 := e[:] //相当于复制了一个e切片
+	fmt.Println("e3:", e3, "len:", len(e3), "cap:", cap(e3))
+	//向slice中增加/修改元素
+	f := []string{} //空的slice
+	f = append(f, "Jason")
+	f = append(f, "Miao")
+	fmt.Println(f, "len:", len(f), "cap:", cap(f))
+	/*删除slice中指定的元素,因为slice引用指向底层数组，数组的长度不变元素是不能删除的，
+	所以删除的原理就是排除待删除元素后用其他元素重新构造一个数组*/
+	index := 2 //删除第三个元素
+	var ee []int
+	ee = append(e[:index], e[index+1:]...)
+	fmt.Println(ee) //[4 5 8 54]
+	//向slice中间插入元素 注意：保存后部剩余元素，必须新建一个临时切片
+	rear := append([]int{}, ee[index:]...)
+	ee = append(ee[0:index], 100)
+	ee = append(ee, rear...)
+	fmt.Println("after insert:", ee)
+
+}
+output==>
+[] len: 0 cap: 0
+[5 78 5 56 45 3]
+5,
+78,
+5,
+56,
+45,
+3,
+[0 0 0] len: 3 cap: 10
+&[] len: 0 cap: 0
+e: [4 5 7 8 54] len: 5 cap: 5
+e1: [4 5] len: 2 cap: 5
+[4 5 7]
+e3: [4 5 7 8 54] len: 5 cap: 5
+[Jason Miao] len: 2 cap: 2
+[4 5 8 54]
+after insert: [4 5 100 8 54]
+</pre>
