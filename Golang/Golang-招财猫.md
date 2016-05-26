@@ -204,3 +204,52 @@ map[jason:3 miao:2] map[b:{23 7} a:{3 5}]
 {77 77}
 {0 0}
 </pre>
+###结构体Struct
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+	type S struct {
+		a int
+		b string
+	}
+	//结构体初始化通过结构体字段的值作为列表来新分配一个结构体
+	var s S = S{4, "jason"}
+	fmt.Println(s)   //{4 jason}
+	fmt.Println(s.a) //4
+	//结构体是值类型，传递时会复制值，其默认零值不是nil
+	var a S
+	var b = S{}
+	fmt.Println(a)      //{0 }
+	fmt.Println(b)      //{0 }
+	fmt.Println(a == b) //true
+	type People struct {
+		name  string
+		age   int
+		phone int
+	}
+	var jason People = People{"jason", 12, 123434545}
+	fmt.Println("jason`s phone :", jason.phone)
+	fmt.Println("jason`s name :", jason.name)
+	//匿名结构体
+	//匿名结构体声明时省略了type关键字，并且没有名称
+	var x struct{}
+	var y struct{ x int }
+	fmt.Println(x, y) //{} {0}
+	y.x = 3
+	fmt.Println(y.x) //3
+	
+}
+output==>
+{4 jason}
+4
+{0 }
+{0 }
+true
+jason`s phone : 123434545
+jason`s name : jason
+{} {0}
+3
+</pre>
