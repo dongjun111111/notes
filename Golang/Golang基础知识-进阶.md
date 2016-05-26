@@ -17271,3 +17271,134 @@ func main() {
 output==>
 Jason : someone ,I love you!
 </pre>
+###Golang中实现优雅的停止程序
+过早地部署这种行为非常粗鲁，尤其是在部署时还要中断用户请求的情况下更是如此，因此，我们在Betable构建的Go服务要在不中断任何用户请求的情况下优雅地中止服务。其基本思想就是停止侦听（llistening），假定会有一个新的进程来接管这些侦听，让所有已经建立起来的连接在最终停止服务前继续处理进行中的请求。顺便说一句，我们采用了goagain，从而可以甚至在不停止侦听的情况下重启服务，但这个话题超出了本文的讨论范围。
+
+main.main做了四件事情：侦听、生成一个Service并将其发送到后台（background）执行、阻塞直到收到相应的信号（signal）、 然后优雅的停止服务。侦听以及信号处理完全出自于标准库的一般套路，只有一点令我十分恼火，就是，不仅需要使用anet.Listener或者net.Connto调用SetDeadline，竟然还需要*net.TCPListener或者*net.TCPConnand。
+
+service.Serve(listener)用来接受连接请求并在它自己的goroutine之内处理它所接受的每个连接请求。由于它设置了一个截至时间，所以listener.AcceptTCP()不会永久性地处于阻塞状态，而且它还会在下一轮循环时检查它是否应该停止侦听。
+
+service.serve(conn)进行读写操作，而且同样的，它也具有一个截至时间。由于它设置了截至时间，所以conn.Read(buf)不会永久性地处于阻塞状态，
+而且在写入响应数据和读取下一个请求之间或者超过了conn.Read(buf)截至时间后，检查它是否应该关闭该连接。
+
+因为不会有别的东西发送到service的channel中，只有在service.Stop()关闭该channel后才会向该channel中发送一个值，所以，只要从service的channel中接收到一个值，各个goroutine就会决定关闭相关的连接和侦听器（listener）。
+
+难题的最后一个部分是通过调用标准库sync.WaitGroup实现等待所有的goroutine结束执行。
+<pre>
+package main
+ 
+import (
+    "log"
+    "net"
+    "os"
+    "os/signal"
+    "sync"
+    "syscall"
+    "time"
+)
+ 
+// An uninteresting service.
+type Service struct {
+    ch        chan bool
+    waitGroup *sync.WaitGroup
+}
+ 
+// Make a new Service.
+func NewService() *Service {
+    return &Service{
+        ch:        make(chan bool),
+        waitGroup: &sync.WaitGroup{},
+    }
+}
+ 
+// Accept connections and spawn a goroutine to serve each one.  Stop listening
+// if anything is received on the service's channel.
+func (s *Service) Serve(listener *net.TCPListener) {
+    s.waitGroup.Add(1)
+    defer s.waitGroup.Done()
+    for {
+        select {
+        case <-s.ch:
+            log.Println("stopping listening on", listener.Addr())
+            listener.Close()
+            return
+        default:
+        }
+        listener.SetDeadline(time.Now().Add(1e9))
+        conn, err := listener.AcceptTCP()
+        if nil != err {
+            if opErr, ok := err.(*net.OpError); ok && opErr.Timeout() {
+                continue
+            }
+            log.Println(err)
+        }
+        log.Println(conn.RemoteAddr(), "connected")
+        go s.serve(conn)
+    }
+}
+ 
+// Stop the service by closing the service's channel.  Block until the service
+// is really stopped.
+func (s *Service) Stop() {
+    close(s.ch)
+    s.waitGroup.Wait()
+}
+ 
+// Serve a connection by reading and writing what was read.  That's right, this
+// is an echo service.  Stop reading and writing if anything is received on the
+// service's channel but only after writing what was read.
+func (s *Service) serve(conn *net.TCPConn) {
+    defer conn.Close()
+    s.waitGroup.Add(1)
+    defer s.waitGroup.Done()
+    for {
+        select {
+        case <-s.ch:
+            log.Println("disconnecting", conn.RemoteAddr())
+            return
+        default:
+        }
+        conn.SetDeadline(time.Now().Add(1e9))
+        buf := make([]byte, 4096)
+        if _, err := conn.Read(buf); nil != err {
+            if opErr, ok := err.(*net.OpError); ok && opErr.Timeout() {
+                continue
+            }
+            log.Println(err)
+            return
+        }
+        if _, err := conn.Write(buf); nil != err {
+            log.Println(err)
+            return
+        }
+    }
+}
+ 
+func main() {
+ 
+    // Listen on 127.0.0.1:48879.  That's my favorite port number because in
+    // hex 48879 is 0xBEEF.
+    laddr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:48879")
+    if nil != err {
+        log.Fatalln(err)
+    }
+    listener, err := net.ListenTCP("tcp", laddr)
+    if nil != err {
+        log.Fatalln(err)
+    }
+    log.Println("listening on", listener.Addr())
+ 
+    // Make a new service and send it into the background.
+    service := NewService()
+    go service.Serve(listener)
+ 
+    // Handle SIGINT and SIGTERM.
+    ch := make(chan os.Signal)
+    signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+    log.Println(<-ch)
+ 
+    // Stop the service gracefully.
+    service.Stop()
+ 
+}
+</pre>
