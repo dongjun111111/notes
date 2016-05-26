@@ -323,3 +323,115 @@ output==>
 receive value from sender: hello
 0-1-2-3-4-
 </pre>
+###switch case goto break continue
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+	x := 2
+	//分支选择 switch
+	switch x {
+	case 0:
+		fmt.Println("x=0")
+	case 1:
+		fmt.Println("x=1")
+	case 2:
+		fmt.Println("x=2")
+	default:
+		fmt.Println("default value")
+	}
+	switch {
+	case x == 1:
+		fmt.Println("1")
+	case x == 2:
+		fmt.Println("bingo 2")
+	default:
+		fmt.Println("default value")
+	}
+	//循环
+	sl := []int{2, 4, 5, 6, 7}
+	for i := 0; i < len(sl); i++ {
+		fmt.Printf("%d ", sl[i])
+	}
+	fmt.Println()
+	for k, v := range sl {
+		fmt.Println("key:", k, "value:", v) //下标,值
+	}
+	//循环的继续、中断、跳转
+	for k, v := range sl {
+		if v == 2 {
+			fmt.Println(k)
+			continue
+		} else if v == 5 {
+			break
+		} else {
+			goto JASON
+		}
+	JASON:
+		fmt.Println("goto action done")
+	}
+
+}
+output==>
+x=2
+bingo 2
+2 4 5 6 7 
+key: 0 value: 2
+key: 1 value: 4
+key: 2 value: 5
+key: 3 value: 6
+key: 4 value: 7
+0
+goto action done
+</pre>
+###有缓冲 无缓冲channel
+无缓冲
+<pre>
+package main
+
+import "fmt"
+
+func writeRoutine(test_chan chan int, value int) {
+	test_chan <- value
+}
+func readRoutine(test_chan chan int) {
+	<-test_chan
+	return
+}
+func main() {
+	c := make(chan int)
+	x := 100
+	go writeRoutine(c, x)
+	readRoutine(c)
+	fmt.Println(x)
+}
+outout==>
+100
+</pre>
+有缓冲
+<pre>
+package main 
+import "fmt"
+var c = make(chan int, 1)
+
+func f() {
+     c <- 'c'
+ 
+     fmt.Println("在goroutine内")
+ }
+ 
+ func main() {
+     go f()
+ 
+     c <- 'c'
+     <-c
+     <-c
+ 
+     fmt.Println("外部调用")
+ }
+output==>
+在goroutine内
+外部调用
+</pre>
