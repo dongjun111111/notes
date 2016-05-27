@@ -817,3 +817,31 @@ hello Jason!
 
 	my friend name is Jason
 </pre>
+#####条件处理
+在Go模板里面如果需要进行条件判断，那么我们可以使用和Go语言的if-else语法类似的方式来处理，如果pipeline为空，那么if就认为是false，下面的例子展示了如何使用if-else语法：
+<pre>
+package main
+
+import (
+	"os"
+	"text/template"
+)
+
+func main() {
+	tEmpty := template.New("template test")
+	tEmpty = template.Must(tEmpty.Parse("空的pipeline if demo:{{if ``}}不会输出.{{end}}\n"))
+	tEmpty.Execute(os.Stdout, nil)
+
+	tWithValue := template.New("template test")
+	tWithValue = template.Must(tWithValue.Parse("不为空的pipeline if demo:{{if `anything`}} 我有内容，我会输出.{{end}}\n"))
+	tWithValue.Execute(os.Stdout, nil)
+
+	tIfElse := template.New("template test")
+	tIfElse = template.Must(tIfElse.Parse("if-else demo: {{if `anything`}} if部分 {{else}} else部分.{{end}}\n"))
+	tIfElse.Execute(os.Stdout, nil)
+}
+output==>
+空的pipeline if demo:
+不为空的pipeline if demo: 我有内容，我会输出.
+if-else demo:  if部分
+</pre>
