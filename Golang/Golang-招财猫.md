@@ -687,19 +687,19 @@ func BenchmarkSum(b *testing.B) {
 <pre>
 go test -v -bench .   
 
-输出：
-PASS
-BenchmarkSum-2	2000000000	         0.69 ns/op
---- BENCH: BenchmarkSum-2
-	test_test.go:6: Sum 1 to 1: 1
-	test_test.go:6: Sum 1 to 100: 5050
-	test_test.go:6: Sum 1 to 10000: 50005000
-	test_test.go:6: Sum 1 to 1000000: 500000500000
-	test_test.go:6: Sum 1 to 100000000: 5000000050000000
-	test_test.go:6: Sum 1 to 2000000000: 2000000001000000000
-ok  	test	1.697s
-
-testing: warning: no tests to run
+	输出：
+	PASS
+	BenchmarkSum-2	2000000000	         0.69 ns/op
+	--- BENCH: BenchmarkSum-2
+		test_test.go:6: Sum 1 to 1: 1
+		test_test.go:6: Sum 1 to 100: 5050
+		test_test.go:6: Sum 1 to 10000: 50005000
+		test_test.go:6: Sum 1 to 1000000: 500000500000
+		test_test.go:6: Sum 1 to 100000000: 5000000050000000
+		test_test.go:6: Sum 1 to 2000000000: 2000000001000000000
+	ok  	test	1.697s
+	
+	testing: warning: no tests to run
 </pre>
 ###简单web服务器
 <pre>
