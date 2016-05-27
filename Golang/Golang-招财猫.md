@@ -733,7 +733,33 @@ func temp(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, user)                      //执行模板的merge操作
 }
 /*
-Parse与ParseFiles：Parse可以直接测试一个字符串，而不需要额外的文件；ParseFiles只能解析文件
-os.Stdout与http.ResponseWriter:os.Stdout实现了io.Writer接口，而http.ResponseWriter没有
+Parse与ParseFiles：Parse可以直接测试一个字符串，而不需要额外的文件；ParseFiles只能解析文件;
+os.Stdout与http.ResponseWriter:os.Stdout实现了io.Writer接口，而http.ResponseWriter没有.
+实现了io.Writer接口就可以用于t.Execute(),比如 temp.Execute(os.Stdout,element) [temp:待渲染的模板或则字符串,element:写入模板的参数] 。没有实现io.Writer接口的则会报如下的错误：
+.\test.go:15: cannot use http.ResponseWriter (type func(...interface {}) (int, error)) as type io.Writer in argument to t.Execute:
+
 */
+</pre>
+####模板中如何插入数据？
+上面我们演示了如何解析并渲染模板，接下来让我们来更加详细的了解如何把数据渲染出来。一个模板都是应用在一个Go的对象之上，Go对象的字段如何插入到模板中呢？
+#####字段操作
+Go语言的模板通过{{}}来包含需要在渲染时被替换的字段，{{.}}表示当前的对象，这和Java或者C++中的this类似，如果要访问当前对象的字段通过{{.FieldName}},但是需要注意一点：这个字段必须是导出的(字段首字母必须是大写的),否则在渲染的时候就会报错，请看下面的这个例子：
+<pre>
+package main
+
+import "html/template"
+import "os"
+
+type Person struct {
+	Username string // 字段首字母必须大写，否则失败
+}
+
+func main() {
+	t := template.New("fieldname example")
+	t, _ = t.Parse("hello {{.Username }}")
+	p := Person{Username: "Jason"}
+	t.Execute(os.Stdout, p)
+}
+output==>
+hello Jason
 </pre>
