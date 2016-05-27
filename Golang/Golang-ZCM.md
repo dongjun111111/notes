@@ -2047,4 +2047,47 @@ uage
 [[[97 109 32 108 101 97 114 110 105 110 103 32 71 111 32 108 97 110 103 117 97 103 101] [32 108 101 97 114 110 105 110 103 32 71 111 32] [117 97 103 101]]]
 [[2 25 4 17 21 25]]
 </pre>
+###sync.WaitGroup
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+/*
+sync.WaitGroup
+sync包中的WaitGroup实现了一个类似任务队列的结构，
+你可以向队列中加入任务，任务完成后就把任务从队列中移除，
+如果队列中的任务没有全部完成，队列就会触发阻塞以阻止程序继续运行，
+具体用法参考如下代码：
+*/
+var waitgroup sync.WaitGroup
+
+func Afunction(shownum int) {
+	fmt.Println(shownum)
+	waitgroup.Done() //任务完成，将任务队列中的任务数量-1，其实.Done就是.Add(-1)
+}
+
+func main() {
+	for i := 0; i < 10; i++ {
+		waitgroup.Add(1) //每创建一个goroutine，就把任务队列中任务的数量+1
+		go Afunction(i)
+	}
+	waitgroup.Wait() //.Wait()这里会发生阻塞，直到队列中所有的任务结束就会解除阻塞
+}
+output==>
+9
+0
+1
+2
+3
+4
+5
+6
+7
+8
+</pre>
 ###Socket编程
+https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/08.1.md
