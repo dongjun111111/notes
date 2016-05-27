@@ -1700,3 +1700,138 @@ func (manager *Manager) sessionId() string {
 	return base64.URLEncoding.EncodeToString(b)
 }
 </pre>
+###xml文件处理
+servers.xml
+<pre>
+<?xml version="1.0" encoding="utf-8"?>
+<servers version="1">
+    <server>
+        <serverName>Shanghai_VPN</serverName>
+        <serverIP>127.0.0.1</serverIP>
+    </server>
+    <server>
+        <serverName>Beijing_VPN</serverName>
+        <serverIP>127.0.0.2</serverIP>
+    </server>
+</servers>
+</pre>
+处理代码是：
+<pre>
+package main
+
+import (
+	"encoding/xml"
+	"fmt"
+	"io/ioutil"
+	"os"
+)
+
+type Recurlyservers struct {
+	XMLName     xml.Name `xml:"servers"`
+	Version     string   `xml:"version,attr"`
+	Svs         []server `xml:"server"`
+	Description string   `xml:",innerxml"`
+}
+
+type server struct {
+	XMLName    xml.Name `xml:"server"`
+	ServerName string   `xml:"serverName"`
+	ServerIP   string   `xml:"serverIP"`
+}
+
+func main() {
+	file, err := os.Open("servers.xml") // For read access.
+	if err != nil {
+		fmt.Printf("error: %v", err)
+		return
+	}
+	defer file.Close()
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		fmt.Printf("error: %v", err)
+		return
+	}
+	v := Recurlyservers{}
+	err = xml.Unmarshal(data, &v)
+	if err != nil {
+		fmt.Printf("error: %v", err)
+		return
+	}
+
+	fmt.Println(v)
+}
+</pre>
+###JSON处理
+
+- 解析到结构体
+<pre>
+package main
+
+import "encoding/json"
+import "fmt"
+
+type Server struct {
+	Servername string
+	Serverip   string
+}
+
+type Serverslice struct {
+	Servers []Server
+}
+
+func main() {
+	var s Serverslice
+	str := `{"Servers":[{"Servername":"shanghai","ServerIP":"127.0.0.1"},{"Servername":"beijing","Serverip":"127.0.0.3"}]}`
+	json.Unmarshal([]byte(str), &s)
+	fmt.Println(s)
+}
+output==>
+{[{shanghai 127.0.0.1} {beijing 127.0.0.3}]}
+</pre>
+
+- 解析到interface
+
+我们知道interface{}可以用来存储任意数据类型的对象，这种数据结构正好用于存储解析的未知结构的json数据的结果。JSON包中采用map[string]interface{}和[]interface{}结构来存储任意的JSON对象和数组。Go类型和JSON类型的对应关系如下：
+
+- bool 代表 JSON booleans
+- float64 代表 JSON numbers
+- string 代表 JSON strings
+- nil 代表 JSON null
+
+对于未知结构的json，建议使用https://github.com/bitly/go-simplejson。
+
+- 生成Json
+
+我们开发很多应用的时候，最后都是要输出JSON数据串，那么如何来处理呢？JSON包里面通过Marshal函数来处理，函数定义如下：
+<pre>
+func Marshal(v interface{}) ([]byte, error)
+</pre>
+例子 ：
+<pre>
+package main
+
+import "encoding/json"
+import "fmt"
+
+type Server struct {
+	Servername string
+	Serverip   string
+}
+
+type Serverslice struct {
+	Servers []Server
+}
+
+func main() {
+	var s Serverslice
+	s.Servers = append(s.Servers, Server{Servername: "shanghai", Serverip: "1234.56.45.56"})
+	s.Servers = append(s.Servers, Server{Servername: "beijing", Serverip: "55.87.67.8"})
+	b, err := json.Marshal(s)
+	if err != nil {
+		fmt.Println("json err :", err)
+	}
+	fmt.Println(string(b))
+}
+output==>
+{"Servers":[{"Servername":"shanghai","Serverip":"1234.56.45.56"},{"Servername":"beijing","Serverip":"55.87.67.8"}]}
+</pre>
