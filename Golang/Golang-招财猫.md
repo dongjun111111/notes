@@ -763,3 +763,57 @@ func main() {
 output==>
 hello Jason
 </pre>
+#####输出嵌套字段内容
+上面我们例子展示了如何针对一个对象的字段输出，那么如果字段里面还有对象，如何来循环的输出这些内容呢？我们可以使用{{with …}}…{{end}}和{{range …}}{{end}}来进行数据的输出。
+
+- {{range}} 这个和Go语法里面的range类似，循环操作数据
+- {{with}}操作是指当前对象的值，类似上下文的概念
+<pre>
+package main
+
+import "html/template"
+import "os"
+
+type Friend struct {
+	Fname string
+}
+type Person struct {
+	Username string
+	Emails   []string
+	Friends  []*Friend
+}
+
+func main() {
+	f1 := Friend{Fname: "Jack"}
+	f2 := Friend{Fname: "Jason"}
+	t := template.New("fieldname template")
+	/*{{with}}操作是指当前对象的值，类似上下文的概念*/
+	t, _ = t.Parse(`
+		hello {{.Username}}!
+		{{range .Emails}}
+			an email {{.}}
+		{{end}}
+		{{with .Friends}}  
+		{{range .}}
+			my friend name is {{.Fname}}
+		{{end}}
+		{{end}}
+	`)
+	p := Person{Username: "Jason",
+		Emails:  []string{"jason@qq.com", "jason@163.com"},
+		Friends: []*Friend{&f1, &f2}}
+	t.Execute(os.Stdout, p)
+}
+output==>
+hello Jason!
+			
+	an email jason@qq.com
+
+	an email jason@163.com
+
+  
+
+	my friend name is Jack
+
+	my friend name is Jason
+</pre>
