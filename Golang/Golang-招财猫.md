@@ -607,7 +607,6 @@ Go中自带轻量级的测试框架testing和自带的go test命令来实现单�
 
 - test.go
 <pre>
-//test.go
 package testgo
 import "math"
 func Sum(min, max int) (sum int) {
@@ -620,13 +619,12 @@ func Sum(min, max int) (sum int) {
 	return
 }
 </pre>
+
 - test_test.go
+
 <pre>
-//test_test.go
 package testgo
-
 import "testing"
-
 func TestSum(t *testing.T) {
 	s := Sum(1, 0)
 	t.Log("Sum 1 to 0:", s)
