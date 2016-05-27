@@ -724,3 +724,16 @@ func main() {
 	}
 }
 </pre>
+###模板 template
+<pre>
+func temp(w http.ResponseWriter, r *http.Request) {
+	t := template.New("some template")      //创建一个模板
+	t, _ = t.ParseFiles("welcome.tpl", nil) //解析模板文件
+	user := Getuser()                       //获取用户信息
+	t.Execute(w, user)                      //执行模板的merge操作
+}
+/*
+Parse与ParseFiles：Parse可以直接测试一个字符串，而不需要额外的文件；ParseFiles只能解析文件
+os.Stdout与http.ResponseWriter:os.Stdout实现了io.Writer接口，而http.ResponseWriter没有
+*/
+</pre>
