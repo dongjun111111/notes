@@ -829,12 +829,11 @@ hello Jason
 
 - {{range}} 这个和Go语法里面的range类似，循环操作数据
 - {{with}}操作是指当前对象的值，类似上下文的概念
+
 <pre>
 package main
-
 import "html/template"
 import "os"
-
 type Friend struct {
 	Fname string
 }
@@ -843,7 +842,6 @@ type Person struct {
 	Emails   []string
 	Friends  []*Friend
 }
-
 func main() {
 	f1 := Friend{Fname: "Jack"}
 	f2 := Friend{Fname: "Jason"}
@@ -872,12 +870,11 @@ hello Jason!
 
 	an email jason@163.com
 
-  
-
 	my friend name is Jack
 
 	my friend name is Jason
 </pre>
+
 #####条件处理
 在Go模板里面如果需要进行条件判断，那么我们可以使用和Go语言的if-else语法类似的方式来处理，如果pipeline为空，那么if就认为是false，下面的例子展示了如何使用if-else语法：
 <pre>
