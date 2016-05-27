@@ -845,3 +845,131 @@ output==>
 不为空的pipeline if demo: 我有内容，我会输出.
 if-else demo:  if部分
 </pre>
+#####pipelines
+Unix用户已经很熟悉什么是pipe了，ls | grep "beego"类似这样的语法你是不是经常使用，过滤当前目录下面的文件，显示含有"beego"的数据，表达的意思就是前面的输出可以当做后面的输入，最后显示我们想要的数据，而Go语言模板最强大的一点就是支持pipe数据，<font color=red>在Go语言里面任何{{}}里面的都是pipelines数据</font>，例如我们上面输出的email里面如果还有一些可能引起XSS注入的，那么我们如何来进行转化呢？
+<pre>
+{{. | html}}
+</pre>
+在email输出的地方我们可以采用如上方式可以把输出全部转化html的实体，上面的这种方式和我们平常写Unix的方式是不是一模一样，操作起来相当的简便，调用其他的函数也是类似的方式。
+#####模板变量
+有时候，我们在模板使用过程中需要定义一些局部变量，我们可以在一些操作中申明局部变量，例如withrangeif过程中申明局部变量，这个变量的作用域是{{end}}之前，Go语言通过申明的局部变量格式如下所示：
+<pre>
+$variable := pipeline
+</pre>
+详细的例子看下面的：
+<pre>
+{{with $x := "output" | printf "%q"}}{{$x}}{{end}}
+{{with $x := "output"}}{{printf "%q" $x}}{{end}}
+</pre>
+#####模板函数
+模板在输出对象的字段值时，采用了fmt包把对象转化成了字符串。但是有时候我们的需求可能不是这样的，例如有时候我们为了防止垃圾邮件发送者通过采集网页的方式来发送给我们的邮箱信息，我们希望把@替换成at例如：astaxie at beego.me，如果要实现这样的功能，我们就需要自定义函数来做这个功能。
+
+每一个模板函数都有一个唯一值的名字，然后与一个Go函数关联，通过如下的方式来关联
+<pre>
+type FuncMap map[string]interface{}
+</pre>
+例如，如果我们想要的email函数的模板函数名是emailDeal，它关联的Go函数名称是EmailDealWith,那么我们可以通过下面的方式来注册这个函数
+<pre>
+t = t.Funcs(template.FuncMap{"emailDeal": EmailDealWith})
+</pre>
+EmailDealWith这个函数的参数和返回值定义如下：
+<pre>
+func EmailDealWith(args …interface{}) string
+</pre>
+例子如下：
+<pre>
+package main
+
+import (
+	"fmt"
+	"html/template"
+	"os"
+	"strings"
+)
+
+type Friend struct {
+	Fname string
+}
+
+type Person struct {
+	Username string
+	Emails   []string
+}
+
+func EmailDealWith(args ...interface{}) string {
+	ok := false
+	var s string
+	if len(args) == 1 {
+		s, ok = args[0].(string)
+	}
+	if !ok {
+		s = fmt.Sprint(args...)
+	}
+	substrs := strings.Split(s, "@")
+	if len(substrs) != 2 {
+		return s
+	}
+	return (substrs[0] + " AT " + substrs[1])
+}
+func main() {
+	t := template.New("filedname test")
+	t = t.Funcs(template.FuncMap{"emailDeal": EmailDealWith})
+	t, _ = t.Parse(`
+		hello {{.Username}}!
+	        {{range .Emails}}
+	            an emails {{.|emailDeal}}
+	        {{end}}
+	`)
+	p := Person{Username: "Jason", Emails: []string{"jason@qq.com", "jason@163.com", "jack@sina.com"}}
+	t.Execute(os.Stdout, p)
+}
+output==>
+hello Jason!
+		        
+    an emails jason AT qq.com
+
+    an emails jason AT 163.com
+
+    an emails jack AT sina.com
+</pre>
+类似的还有一个是重写gt eq lt等常见筛选条件：
+<pre>
+package main
+
+import (
+	"os"
+	"text/template"
+)
+
+type Person struct {
+	Name string
+	Age  int
+}
+
+func main() {
+
+	t := template.Must(
+		template.New("test").Funcs(
+			template.FuncMap{
+				"lt": func(a, b int) bool { return a < b },
+				"eq": func(a, b int) bool { return a == b },
+				"gt": func(a, b int) bool { return a > b },
+			},
+		).Parse(
+			"{{.Name}}:{{ if .Age | lt 5 }} 5 < age.{{else}} 5 > age.{{end}}\n",
+		),
+	)
+
+	t.Execute(os.Stdout, &Person{
+		Name: "lulu",
+		Age:  4,
+	})
+	t.Execute(os.Stdout, &Person{
+		Name: "lili",
+		Age:  6,
+	})
+}
+output==>
+lulu: 5 > age.
+lili: 5 < age.
+</pre>
