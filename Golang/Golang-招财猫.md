@@ -1092,3 +1092,32 @@ func main() {
 }
 </pre>
 通过上面的例子我们可以看到通过template.ParseFiles把所有的嵌套模板全部解析到模板里面，其实每一个定义的{{define}}都是一个独立的模板，他们相互独立，是并行存在的关系，内部其实存储的是类似map的一种关系(key是模板的名称，value是模板的内容)，然后我们通过ExecuteTemplate来执行相应的子模板内容，我们可以看到header、footer都是相对独立的，都能输出内容，content 中因为嵌套了header和footer的内容，就会同时输出三个的内容。但是当我们执行s1.Execute，没有任何的输出，因为在默认的情况下没有默认的子模板，所以不会输出任何的东西。
+#####将struct传入模板
+<pre>
+package main
+
+import (
+	"os"
+	"text/template"
+)
+
+type Inventory struct {
+	Material string
+	Count    uint
+}
+
+func main() {
+	sweaters := Inventory{"wool", 34}
+	muban := "{{.Count}} items are made of {{.Material}}"
+	tmpl, err := template.New("test").Parse(muban)
+	if err != nil {
+		panic(err)
+	}
+	err = tmpl.Execute(os.Stdout, sweaters) //将struct与模板合成，合成结果放到os.Stdout里
+	if err != nil {
+		panic(err)
+	}
+}
+outout==>
+34 items are made of wool
+</pre>
