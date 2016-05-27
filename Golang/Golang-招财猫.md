@@ -1121,3 +1121,172 @@ func main() {
 outout==>
 34 items are made of wool
 </pre>
+
+##深入理解 net/http 
+###第一版
+<pre>
+package main
+
+import (
+	"io"
+	"net/http"
+)
+
+/*
+Hander是啥呢，它是一个接口。这个接口很简单，只要某个struct
+有ServeHTTP(http.ResponseWriter, *http.Request)这个方法，
+那这个struct就自动实现了Hander接口
+*/
+
+func sayhi(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "hello jason")
+}
+
+func main() {
+	http.HandleFunc("/", sayhi)       //注册一个sayhello函数给“/”，当浏览器浏览“/”的时候，会调用sayhello函数
+	http.ListenAndServe(":8089", nil) //开始监听和服务
+}
+</pre>
+###第二版
+认识http.ResponseWriter
+
+当http.ListenAndServe(":8080", &a{})后，开始等待有访问请求
+一旦有访问请求过来，http包帮我们处理了一系列动作后，最后他会去调用a的ServeHTTP这个方法，并把自己已经处理好的http.ResponseWriter, *http.Request传进去
+而a的ServeHTTP这个方法，拿到*http.ResponseWriter后，并往里面写东西，客户端的网页就显示出来了
+<pre>
+package main
+
+//重写ServeHTTP方法
+import (
+	"io"
+	"net/http"
+)
+
+type a struct{}
+
+func (*a) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "version 1")
+}
+func main() {
+	http.ListenAndServe(":8089", &a{})
+}
+</pre>
+认识*http.Request
+<pre>
+package main
+
+import (
+	"io"
+	"net/http"
+)
+
+type a struct{}
+
+func (*a) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.String() //获取访问的路径
+	io.WriteString(w, path)
+}
+
+func main() {
+	http.ListenAndServe(":8089", &a{})
+}
+output==>
+地址栏输入：http://localhost:8089/ffffffffffffffffffffff
+/ffffffffffffffffffffff
+</pre>
+一个非常简单的网站
+<pre>
+package main
+
+import (
+	"io"
+	"net/http"
+)
+
+type a struct{}
+
+func (*a) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.String()
+	switch path {
+	case "/":
+		io.WriteString(w, "<h1>ROOT</h1><a href=\"abc\">abc</a> | <a href=\"hello\">hello</a>")
+	case "/abc":
+		io.WriteString(w, "<h1>ABC</h1><a href=\"/\">root</a>")
+	case "/hello":
+		io.WriteString(w, "<h1>HELLO</h1><a href=\"/\">root</a>")
+	}
+}
+
+func main() {
+	http.ListenAndServe(":8089", &a{})
+}
+/*
+运行后，可以看出，一个case就是一个页面
+如果一个网站有上百个页面，那是否要上百个case？
+很不幸，是的
+那管理起来岂不是要累死？
+要累死，不过，还好有ServeMux
+*/
+</pre>
+###第三版-用ServeMux拯救上面的问题
+ServeMux大致作用是，他有一张map表，map里的key记录的是r.URL.String()，而value记录的是一个方法，这个方法ServeHTTP是一样的，这个方法有一个别名，叫HandlerFunc.ServeMux还有一个方法名字是Handle，他是用来注册HandlerFunc 的.
+ServeMux还有另一个方法名字是ServeHTTP，这样ServeMux是实现Handler接口的，否者无法当http.ListenAndServe的第二个参数传输.
+<pre>
+package main
+
+import (
+	"io"
+	"net/http"
+)
+
+type b struct{}
+
+func (*b) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "version 2")
+}
+
+func main() {
+	mux := http.NewServeMux()
+	mux.Handle("/hi", &b{})
+	http.ListenAndServe(":8089", mux)
+}
+/*
+mux := http.NewServeMux():新建一个ServeMux。
+mux.Handle("/", &b{}):注册路由，把"/"注册给b这个实现Handler接口的struct，注册到map表中。
+http.ListenAndServe(":8080", mux)第二个参数是mux。
+运行时，因为第二个参数是mux，所以http会调用mux的ServeHTTP方法。
+ServeHTTP方法执行时，会检查map表（表里有一条数据，key是“/h”，value是&b{}的ServeHTTP方法）
+如果用户访问/h的话，mux因为匹配上了，mux的ServeHTTP方法会去调用&b{}的 ServeHTTP方法，从而打印hello
+如果用户访问/abc的话，mux因为没有匹配上，从而打印404 page not found
+
+ServeMux就是个二传手！
+*/
+</pre>
+ServeMux的HandleFunc方法
+<pre>
+package main
+
+/*
+发现了没有，b这个struct仅仅是为了装一个ServeHTTP而存在，所以能否跳过b呢，
+ServeMux说：可以 mux.HandleFunc是用来注册func到map表中的
+*/
+import (
+	"io"
+	"net/http"
+)
+
+func main() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/hi", func(w http.ResponseWriter, r *http.Request) {
+		io.WriteString(w, "hi")
+	})
+	mux.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+		io.WriteString(w, "hello")
+	})
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		io.WriteString(w, "ROOT")
+	})
+
+	http.ListenAndServe(":8089", mux)
+}
+</pre>
