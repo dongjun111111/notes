@@ -356,6 +356,34 @@ func main() {
 }
 
 </pre>
+使用channel精确控制goroutine的数量
+<pre>
+package main
+
+import "fmt"
+
+var ch chan int = make(chan int)
+
+func afunction(ch chan int, t int) {
+	fmt.Println(t+1, ":finished")
+	<-ch
+}
+
+func main() {
+	for i := 0; i < 7; i++ {
+		go afunction(ch, i)
+		ch <- 1
+	}
+}
+output==>
+1 :finished
+2 :finished
+3 :finished
+4 :finished
+5 :finished
+6 :finished
+7 :finished
+</pre>
 ###switch case goto break continue
 <pre>
 package main
