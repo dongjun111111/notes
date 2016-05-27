@@ -1398,3 +1398,77 @@ t1:=time.Now()              //现在是12点整（假设）,那t1记录的就是
 t2:=t1.Add(time.Hour)          //那t1的时间点 **加上(Add)** 1个小时，是几点呢？
 fmt.Println(t2)       //13点（呵呵）
 </pre>
+###Golang处理表单输入
+<pre>
+package main
+
+import (
+	"fmt"
+	"html/template"
+	"log"
+	"net/http"
+	_ "strings"
+)
+
+func sayhelloName(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm() //解析url传递的参数,对于POST则解析响应包的主体(request body)
+	//注意:如果没有调用ParseForm方法,下面无法获取表单的数据
+	/*fmt.Println(r.Form) //这些信息是输出到服务器端的打印信息
+	fmt.Println("path", r.URL.Path)
+	fmt.Println("scheme", r.URL.Scheme)
+	fmt.Println(r.Form["url_long"])
+	for k, v := range r.Form {
+		fmt.Println("key:", k)
+		fmt.Println("val:", strings.Join(v, ""))
+	} */
+	fmt.Fprintf(w, "Hello Jason!") //这个写入到w的是输出到客户端的
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("method:", r.Method) //获取请求的方法
+	if r.Method == "GET" {
+		t, _ := template.ParseFiles("login.gtpl")
+		t.Execute(w, nil)
+	} else {
+		//请求的是登陆数据，那么执行登陆的逻辑判断
+		/*
+			默认情况下，Handler里面是不会自动解析form的，必须显式的调用r.ParseForm()后，
+			你才能对这个表单数据进行操作。我们修改一下代码，
+			在fmt.Println("username:", r.Form["username"])之前加一行r.ParseForm(),重新编译
+		*/
+		r.ParseForm()
+		fmt.Println("username:", r.Form["username"])
+		fmt.Println("password:", r.Form["password"])
+	}
+}
+
+func main() {
+	http.HandleFunc("/", sayhelloName)       //设置访问的路由
+	http.HandleFunc("/login", login)         //设置访问的路由
+	err := http.ListenAndServe(":9090", nil) //设置监听的端口
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
+//其中一种情况
+method: GET
+method: POST
+username: [rrtrt]
+password: [rtt]
+</pre>
+###验证表单的输入
+验证项目包括
+
+- 必填字段
+- 是否数字
+- 是否中文
+- 英文
+- 电子邮件地址
+- 手机号码
+- 下拉菜单
+- 单选按钮
+- 复选框
+- 日期和时间
+- 身份证号码
+
+见 https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/04.2.md
