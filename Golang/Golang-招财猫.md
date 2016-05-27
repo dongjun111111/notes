@@ -609,14 +609,11 @@ Go中自带轻量级的测试框架testing和自带的go test命令来实现单�
 <pre>
 //test.go
 package testgo
-
 import "math"
-
 func Sum(min, max int) (sum int) {
 	if min < 0 || max < 0 || max > math.MaxInt32 || min > max {
 		return 0
 	}
-
 	for ; min <= max; min++ {
 		sum += min
 	}
@@ -668,9 +665,7 @@ ok  	test	0.237s
 <pre>
 //test.go
 package testgo
-
 import "math"
-
 func Sum(min, max int) (sum int) {
 	if min < 0 || max < 0 || max > math.MaxInt32 || min > max {
 		return 0
@@ -685,9 +680,7 @@ func Sum(min, max int) (sum int) {
 - test_test.go
 <pre>
 package testgo
-
 import "testing"
-
 func BenchmarkSum(b *testing.B) {
     b.Logf("Sum 1 to %d: %d\n", b.N, Sum(1, b.N))
 }
