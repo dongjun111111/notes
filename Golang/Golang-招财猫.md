@@ -701,14 +701,14 @@ go test -v -bench .
 	
 	testing: warning: no tests to run
 </pre>
+
 ###简单web服务器
+
 <pre>
 package main
-
 import "fmt"
 import "net/http"
 import "log"
-
 func sayhi(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello Jason")
 }
