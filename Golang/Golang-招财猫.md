@@ -1290,3 +1290,111 @@ func main() {
 	http.ListenAndServe(":8089", mux)
 }
 </pre>
+###time 
+time.Sleep
+<pre>
+fmt.Println("start sleeping...")
+time.Sleep(time.Second)
+fmt.Println("end sleep.")
+//【结果】打印start sleeping后，等了正好1秒后，打印了end sleep
+//会阻塞，Sleep时，什么事情都不会做
+</pre>
+time.After
+<pre>
+package main
+
+import "fmt"
+import "time"
+
+func main() {
+	fmt.Println("the 1")
+	//返回一个time.C这个管道，1秒(time.Second)后会在此管道中放入一个时间点
+	tc := time.After(time.Second)
+	fmt.Println("the 2")
+	fmt.Println("the 3")
+	<-tc
+	fmt.Println("the 4")
+}
+//【结果】立即打印123，等了1秒不到一点点的时间，打印了4，结束
+//打印the 1后，获得了一个空管道，这个管道1秒后会有数据进来
+//打印the 2，（这里可以做更多事情）
+//打印the 3
+//等待，直到可以取出管道的数据（取出数据的时间与获得tc管道的时间正好差1秒钟）
+//打印the 4
+</pre>
+time.AfterFunc
+
+time.AfterFunc(time.Duration,func());
+和After差不多，意思是多少时间之后在goroutine line执行函数.
+<pre>
+package main
+
+import "time"
+import "fmt"
+
+func main() {
+	f := func() {
+		fmt.Println("time out")
+	}
+	time.AfterFunc(time.Second, f)
+	time.Sleep(2 * time.Second)
+}
+
+//【结果】运行了1秒后，打印出timeout，又过了1秒，程序退出
+//将一个间隔和一个函数给AfterFunc后
+//间隔时间过后，执行传入的函数
+</pre>
+time.Tick
+
+每隔多少时间后
+<pre>
+package main
+
+import "time"
+import "fmt"
+
+func main() {
+	fmt.Println("the 1")
+	tc := time.Tick(time.Second)
+
+	for i := 1; i <= 5; i++ {
+		<-tc
+		fmt.Println("hello")
+	}
+}
+/*
+首先打印一个 the 1
+然后每隔1秒，打印一个hello
+*/
+</pre>
+Before & After方法、
+
+判断一个时间点是否在另一个时间点的前面（后面），返回true或false
+<pre>
+t1:=time.Now()
+time.Sleep(time.Second)
+t2:=time.Now()
+a:=t2.After(t1)     //t2的记录时间是否在t1记录时间的**后面**呢，是的话，a就是true
+fmt.Println(a)       //true
+b:=t2.Before(t1)     //t2的记录时间是否在t1记录时间的**前面**呢，是的话，b就是true
+fmt.Println(b)       //false
+</pre>
+Sub方法
+
+两个时间点相减，获得时间差（Duration）
+<pre>
+t1:=time.Now()
+time.Sleep(time.Second)
+t2:=time.Now()
+d:=t2.Sub(t1)     //时间2减去时间1
+fmt.Println(d)       //打印结果差不多为1.000123几秒，因为Sleep无法做到精确的睡1秒
+后发生的时间  减去   先发生时间，是正数
+</pre>
+Add方法
+
+拿一个时间点，add一个时长，获得另一个时间点
+<pre>
+t1:=time.Now()              //现在是12点整（假设）,那t1记录的就是12点整
+t2:=t1.Add(time.Hour)          //那t1的时间点 **加上(Add)** 1个小时，是几点呢？
+fmt.Println(t2)       //13点（呵呵）
+</pre>
