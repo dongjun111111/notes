@@ -323,6 +323,39 @@ output==>
 receive value from sender: hello
 0-1-2-3-4-
 </pre>
+在实际的项目中，我们的程序一般都是很多个goroutine同时工作，知道所有goroutine是否都完成不是一件容易的事情。以前的经验是通过轮询的方式，但是在golang中这种方式比较浪费性能。
+<pre>
+package main
+
+import (
+	"fmt"
+)
+
+var (
+	flag bool
+	str  string
+)
+
+var ch chan string = make(chan string)
+/*
+不要用无限轮询的方式来检查goroutine是否完成,而是要通过使用channel，
+让foo()和main()实现通信，让foo()执行完毕后通过channel发送一个消息给main()，
+告诉它自己的事儿完成了，然后main()收到消息后继续执行其他操作
+*/
+func foo() {
+	flag = true
+	str = "setup complete"
+	ch <- "I am complete"
+}
+func main() {
+	go foo()
+	<-ch
+	for !flag {
+	}
+	fmt.Println(str)
+}
+
+</pre>
 ###switch case goto break continue
 <pre>
 package main
@@ -1835,3 +1868,162 @@ func main() {
 output==>
 {"Servers":[{"Servername":"shanghai","Serverip":"1234.56.45.56"},{"Servername":"beijing","Serverip":"55.87.67.8"}]}
 </pre>
+###regexp 正则
+使用正则来过滤或截取抓取到的百度搜索首页内容
+<pre>
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"regexp"
+	"strings"
+)
+
+func main() {
+	resp, err := http.Get("http://www.baidu.com")
+	if err != nil {
+		fmt.Println("http get error.")
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("http read error")
+		return
+	}
+
+	src := string(body)
+
+	//将HTML标签全转换成小写
+	re, _ := regexp.Compile("\\<[\\S\\s]+?\\>")
+	src = re.ReplaceAllStringFunc(src, strings.ToLower)
+
+	//去除STYLE
+	re, _ = regexp.Compile("\\<style[\\S\\s]+?\\</style\\>")
+	src = re.ReplaceAllString(src, "")
+
+	//去除SCRIPT
+	re, _ = regexp.Compile("\\<script[\\S\\s]+?\\</script\\>")
+	src = re.ReplaceAllString(src, "")
+
+	//去除所有尖括号内的HTML代码，并换成换行符
+	re, _ = regexp.Compile("\\<[\\S\\s]+?\\>")
+	src = re.ReplaceAllString(src, "\n")
+
+	//去除连续的换行符
+	re, _ = regexp.Compile("\\s{2,}")
+	src = re.ReplaceAllString(src, "\n")
+
+	fmt.Println(strings.TrimSpace(src))
+}
+output==>
+百度一下，你就知道
+输入法
+手写
+拼音
+关闭
+百度首页
+设置
+登录
+糯米
+新闻
+hao123
+地图
+视频
+贴吧
+登录
+设置
+更多产品
+网页
+新闻
+贴吧
+知道
+音乐
+图片
+视频
+地图
+文库
+更多»
+手机百度
+快人一步
+百度糯米
+一元大餐
+把百度设为主页
+把百度设为主页
+关于百度
+About&nbsp;&nbsp;Baidu
+&copy;2016&nbsp;Baidu&nbsp;
+使用百度前必读
+&nbsp;
+意见反馈
+&nbsp;京ICP证030173号&nbsp;
+京公网安备11000002000001号
+</pre>
+<pre>
+package main
+
+import (
+    "fmt"
+    "regexp"
+)
+
+func main() {
+    a := "I am learning Go language"
+
+    re, _ := regexp.Compile("[a-z]{2,4}")
+
+    //查找符合正则的第一个
+    one := re.Find([]byte(a))
+    fmt.Println("Find:", string(one))
+
+    //查找符合正则的所有slice,n小于0表示返回全部符合的字符串，不然就是返回指定的长度
+    all := re.FindAll([]byte(a), -1)
+    fmt.Println("FindAll", all)
+
+    //查找符合条件的index位置,开始位置和结束位置
+    index := re.FindIndex([]byte(a))
+    fmt.Println("FindIndex", index)
+
+    //查找符合条件的所有的index位置，n同上
+    allindex := re.FindAllIndex([]byte(a), -1)
+    fmt.Println("FindAllIndex", allindex)
+
+    re2, _ := regexp.Compile("am(.*)lang(.*)")
+
+    //查找Submatch,返回数组，第一个元素是匹配的全部元素，第二个元素是第一个()里面的，第三个是第二个()里面的
+    //下面的输出第一个元素是"am learning Go language"
+    //第二个元素是" learning Go "，注意包含空格的输出
+    //第三个元素是"uage"
+    submatch := re2.FindSubmatch([]byte(a))
+    fmt.Println("FindSubmatch", submatch)
+    for _, v := range submatch {
+        fmt.Println(string(v))
+    }
+
+    //定义和上面的FindIndex一样
+    submatchindex := re2.FindSubmatchIndex([]byte(a))
+    fmt.Println(submatchindex)
+
+    //FindAllSubmatch,查找所有符合条件的子匹配
+    submatchall := re2.FindAllSubmatch([]byte(a), -1)
+    fmt.Println(submatchall)
+
+    //FindAllSubmatchIndex,查找所有字匹配的index
+    submatchallindex := re2.FindAllSubmatchIndex([]byte(a), -1)
+    fmt.Println(submatchallindex)
+}
+output==>
+Find: am
+FindAll [[97 109] [108 101 97 114] [110 105 110 103] [108 97 110 103] [117 97 103 101]]
+FindIndex [2 4]
+FindAllIndex [[2 4] [5 9] [9 13] [17 21] [21 25]]
+FindSubmatch [[97 109 32 108 101 97 114 110 105 110 103 32 71 111 32 108 97 110 103 117 97 103 101] [32 108 101 97 114 110 105 110 103 32 71 111 32] [117 97 103 101]]
+am learning Go language
+ learning Go 
+uage
+[2 25 4 17 21 25]
+[[[97 109 32 108 101 97 114 110 105 110 103 32 71 111 32 108 97 110 103 117 97 103 101] [32 108 101 97 114 110 105 110 103 32 71 111 32] [117 97 103 101]]]
+[[2 25 4 17 21 25]]
+</pre>
+###Socket编程
