@@ -1028,3 +1028,67 @@ exit status 2
 
 exit status 1
 </pre>
+#####嵌套模板
+我们平常开发Web应用的时候，经常会遇到一些模板有些部分是固定不变的，然后可以抽取出来作为一个独立的部分，例如一个博客的头部和尾部是不变的，而唯一改变的是中间的内容部分。所以我们可以定义成header、content、footer三个部分。Go语言中通过如下的语法来申明
+<pre>
+{{define "子模板名称"}}内容{{end}}
+</pre>
+通过如下方式来调用：
+<pre>
+{{template "子模板名称"}}
+</pre>
+接下来我们演示如何使用嵌套模板，我们定义三个文件，header.tmpl、content.tmpl、footer.tmpl文件，里面的内容如下
+
+header.tmpl
+<pre>
+{{define "header"}}
+<html>
+<head>
+    <title>演示信息</title>
+</head>
+<body>
+{{end}}
+</pre>
+content.tmpl
+<pre>
+//content.tmpl
+{{define "content"}}
+{{template "header"}}
+<h1>演示嵌套</h1>
+<ul>
+    <li>嵌套使用define定义子模板</li>
+    <li>调用使用template</li>
+</ul>
+{{template "footer"}}
+{{end}}
+</pre>
+footer.tmpl
+<pre>
+//footer.tmpl
+{{define "footer"}}
+</body>
+</html>
+{{end}}
+</pre>
+演示如下：
+<pre>
+package main
+
+import (
+    "fmt"
+    "os"
+    "text/template"
+)
+
+func main() {
+    s1, _ := template.ParseFiles("header.tmpl", "content.tmpl", "footer.tmpl")
+    s1.ExecuteTemplate(os.Stdout, "header", nil)
+    fmt.Println()
+    s1.ExecuteTemplate(os.Stdout, "content", nil)
+    fmt.Println()
+    s1.ExecuteTemplate(os.Stdout, "footer", nil)
+    fmt.Println()
+    s1.Execute(os.Stdout, nil)
+}
+</pre>
+通过上面的例子我们可以看到通过template.ParseFiles把所有的嵌套模板全部解析到模板里面，其实每一个定义的{{define}}都是一个独立的模板，他们相互独立，是并行存在的关系，内部其实存储的是类似map的一种关系(key是模板的名称，value是模板的内容)，然后我们通过ExecuteTemplate来执行相应的子模板内容，我们可以看到header、footer都是相对独立的，都能输出内容，content 中因为嵌套了header和footer的内容，就会同时输出三个的内容。但是当我们执行s1.Execute，没有任何的输出，因为在默认的情况下没有默认的子模板，所以不会输出任何的东西。
