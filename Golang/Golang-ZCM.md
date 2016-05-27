@@ -1819,24 +1819,20 @@ func main() {
 	fmt.Println(v)
 }
 </pre>
-###JSON处理
+###Json处理
 
 - 解析到结构体
 <pre>
 package main
-
 import "encoding/json"
 import "fmt"
-
 type Server struct {
 	Servername string
 	Serverip   string
 }
-
 type Serverslice struct {
 	Servers []Server
 }
-
 func main() {
 	var s Serverslice
 	str := `{"Servers":[{"Servername":"shanghai","ServerIP":"127.0.0.1"},{"Servername":"beijing","Serverip":"127.0.0.3"}]}`
