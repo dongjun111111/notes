@@ -1472,3 +1472,231 @@ password: [rtt]
 - 身份证号码
 
 见 https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/04.2.md
+###客户端上传文件
+<pre>
+package main
+
+import (
+    "bytes"
+    "fmt"
+    "io"
+    "io/ioutil"
+    "mime/multipart"
+    "net/http"
+    "os"
+)
+
+func postFile(filename string, targetUrl string) error {
+    bodyBuf := &bytes.Buffer{}
+    bodyWriter := multipart.NewWriter(bodyBuf)
+
+    //关键的一步操作
+    fileWriter, err := bodyWriter.CreateFormFile("uploadfile", filename)
+    if err != nil {
+        fmt.Println("error writing to buffer")
+        return err
+    }
+
+    //打开文件句柄操作
+    fh, err := os.Open(filename)
+    if err != nil {
+        fmt.Println("error opening file")
+        return err
+    }
+    defer fh.Close()
+
+    //iocopy
+    _, err = io.Copy(fileWriter, fh)
+    if err != nil {
+        return err
+    }
+
+    contentType := bodyWriter.FormDataContentType()
+    bodyWriter.Close()
+
+    resp, err := http.Post(targetUrl, contentType, bodyBuf)
+    if err != nil {
+        return err
+    }
+    defer resp.Body.Close()
+    resp_body, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        return err
+    }
+    fmt.Println(resp.Status)
+    fmt.Println(string(resp_body))
+    return nil
+}
+//sample usage
+func main() {
+    target_url := "http://localhost:9090/upload"
+    filename := "./astaxie.pdf"
+    postFile(filename, target_url)
+}
+</pre>
+###数据库接口
+在我们使用database/sql接口和第三方库的时候经常看到如下:
+<pre>
+  import (
+      "database/sql"
+      _ "github.com/mattn/go-sqlite3"
+  )
+</pre>
+新手都会被这个 _ 所迷惑，其实这个就是Go设计的巧妙之处，我们在变量赋值的时候经常看到这个符号，它是用来忽略变量赋值的占位符，那么包引入用到这个符号也是相似的作用，这儿使用_的意思是引入后面的包名而不直接使用这个包中定义的函数，变量等资源。
+###Golang Session Cookie 
+- Cookie
+
+Golang中通过net/http包中的SetCookie来设置：
+<pre>
+http.SetCookie(w ResponseWriter, cookie *Cookie)
+</pre>
+w表示需要写入的response，cookie是一个struct，让我们来看一下cookie对象是怎么样的
+<pre>
+type Cookie struct {
+    Name       string
+    Value      string
+    Path       string
+    Domain     string
+    Expires    time.Time
+    RawExpires string
+
+// MaxAge=0 means no 'Max-Age' attribute specified.
+// MaxAge<0 means delete cookie now, equivalently 'Max-Age: 0'
+// MaxAge>0 means Max-Age attribute present and given in seconds
+    MaxAge   int
+    Secure   bool
+    HttpOnly bool
+    Raw      string
+    Unparsed []string // Raw text of unparsed attribute-value pairs
+}
+</pre>
+我们来看一个例子，如何设置cookie
+<pre>
+expiration := time.Now()
+expiration = expiration.AddDate(1, 0, 0)
+cookie := http.Cookie{Name: "username", Value: "jason", Expires: expiration}
+http.SetCookie(w, &cookie)
+</pre>
+Golang读取cookie
+上面的例子演示了如何设置cookie数据，我们这里来演示一下如何读取cookie
+<pre>
+cookie, _ := r.Cookie("username")
+fmt.Fprint(w, cookie)
+</pre>
+还有另外一种读取方式
+<pre>
+for _, cookie := range r.Cookies() {
+    fmt.Fprint(w, cookie.Name)
+}
+</pre>
+可以看到通过request获取cookie非常方便。
+
+- Session 
+
+session是在服务器端实现的一种用户和服务器之间认证的解决方案，目前Go标准包没有为session提供任何支持，这小节我们将会自己动手来实现go版本的session管理和创建。
+<pre>
+//created by astaxie
+package session
+
+import (
+	"crypto/rand"
+	"encoding/base64"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"sync"
+	"time"
+)
+
+type Session interface {
+	Set(key, value interface{}) error //set session value
+	Get(key interface{}) interface{}  //get session value
+	Delete(key interface{}) error     //delete session value
+	SessionID() string                //back current sessionID
+}
+
+type Provider interface {
+	SessionInit(sid string) (Session, error)
+	SessionRead(sid string) (Session, error)
+	SessionDestroy(sid string) error
+	SessionGC(maxlifetime int64)
+}
+
+var provides = make(map[string]Provider)
+
+// Register makes a session provide available by the provided name.
+// If Register is called twice with the same name or if driver is nil,
+// it panics.
+func Register(name string, provide Provider) {
+	if provide == nil {
+		panic("session: Register provide is nil")
+	}
+	if _, dup := provides[name]; dup {
+		panic("session: Register called twice for provide " + name)
+	}
+	provides[name] = provide
+}
+
+type Manager struct {
+	cookieName  string     //private cookiename
+	lock        sync.Mutex // protects session
+	provider    Provider
+	maxlifetime int64
+}
+
+func NewManager(provideName, cookieName string, maxlifetime int64) (*Manager, error) {
+	provider, ok := provides[provideName]
+	if !ok {
+		return nil, fmt.Errorf("session: unknown provide %q (forgotten import?)", provideName)
+	}
+	return &Manager{provider: provider, cookieName: cookieName, maxlifetime: maxlifetime}, nil
+}
+
+//get Session
+func (manager *Manager) SessionStart(w http.ResponseWriter, r *http.Request) (session Session) {
+	manager.lock.Lock()
+	defer manager.lock.Unlock()
+	cookie, err := r.Cookie(manager.cookieName)
+	if err != nil || cookie.Value == "" {
+		sid := manager.sessionId()
+		session, _ = manager.provider.SessionInit(sid)
+		cookie := http.Cookie{Name: manager.cookieName, Value: url.QueryEscape(sid), Path: "/", HttpOnly: true, MaxAge: int(manager.maxlifetime)}
+		http.SetCookie(w, &cookie)
+	} else {
+		sid, _ := url.QueryUnescape(cookie.Value)
+		session, _ = manager.provider.SessionRead(sid)
+	}
+	return
+}
+
+//Destroy sessionid
+func (manager *Manager) SessionDestroy(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie(manager.cookieName)
+	if err != nil || cookie.Value == "" {
+		return
+	} else {
+		manager.lock.Lock()
+		defer manager.lock.Unlock()
+		manager.provider.SessionDestroy(cookie.Value)
+		expiration := time.Now()
+		cookie := http.Cookie{Name: manager.cookieName, Path: "/", HttpOnly: true, Expires: expiration, MaxAge: -1}
+		http.SetCookie(w, &cookie)
+	}
+}
+
+func (manager *Manager) GC() {
+	manager.lock.Lock()
+	defer manager.lock.Unlock()
+	manager.provider.SessionGC(manager.maxlifetime)
+	time.AfterFunc(time.Duration(manager.maxlifetime)*time.Second, func() { manager.GC() })
+}
+
+func (manager *Manager) sessionId() string {
+	b := make([]byte, 32)
+	if _, err := io.ReadFull(rand.Reader, b); err != nil {
+		return ""
+	}
+	return base64.URLEncoding.EncodeToString(b)
+}
+</pre>
