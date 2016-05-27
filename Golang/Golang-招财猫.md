@@ -973,3 +973,58 @@ output==>
 lulu: 5 > age.
 lili: 5 < age.
 </pre>
+上面演示了如何自定义函数，其实，在模板包内部已经有内置的实现函数，下面代码截取自模板包里面
+<pre>
+var builtins = FuncMap{
+    "and":      and,
+    "call":     call,
+    "html":     HTMLEscaper,
+    "index":    index,
+    "js":       JSEscaper,
+    "len":      length,
+    "not":      not,
+    "or":       or,
+    "print":    fmt.Sprint,
+    "printf":   fmt.Sprintf,
+    "println":  fmt.Sprintln,
+    "urlquery": URLQueryEscaper,
+}
+</pre>
+#####Must操作
+模板包里面有一个函数Must，它的作用是检测模板是否正确，例如大括号是否匹配，注释是否正确的关闭，变量是否正确的书写。接下来我们演示一个例子，用Must来判断模板是否正确：
+<pre>
+package main
+
+import "fmt"
+import "text/template"
+
+func main() {
+	tok := template.New("first")
+	template.Must(tok.Parse("some static text /*and a comment*/"))
+	fmt.Println("The first one parsed ok")
+
+	template.Must(template.New("second").Parse("some static text {{ .Name }}"))
+	fmt.Println("the second one parsed ok")
+
+	fmt.Println("the next one ought to fail")
+	tErr := template.New("check parse error with Must")
+	template.Must(tErr.Parse("some static text {{ .Name }"))
+}
+output==>
+The first one parsed ok
+the second one parsed ok
+the next one ought to fail
+
+panic: template: check parse error with Must:1: unexpected "}" in operand
+
+goroutine 1 [running]:
+panic(0x556d40, 0xc08202a3e0)
+	D:/go/src/runtime/panic.go:481 +0x3f4
+text/template.Must(0x0, 0x760000, 0xc08202a3e0, 0x0)
+	D:/go/src/text/template/helper.go:23 +0x52
+main.main()
+	D:/gopath/src/test/test.go:16 +0x928
+exit status 2
+
+exit status 1
+</pre>
