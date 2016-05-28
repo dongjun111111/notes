@@ -1,6 +1,10 @@
 #喵
 ##基础知识
 字符串
+
+因为Golan中的字符串是不可变的，所以不能像其他语言那样很容易就修改字符串的内容。但是还是有至少下面两种方式来实现字符串内容的修改。
+
+第一种：转成 []byte类型
 <pre>
 package main
 
@@ -13,6 +17,20 @@ func main() {
 	s = string(c)  //再转回 string 类型
 	println(s)
 }
+第二种：切片操作
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+	s := "hello"
+	s = "c" + s[1:] //切片操作
+	fmt.Println(s)
+}
+output==>
+cello
+</pre>
 output==>
 cello	
 </pre>
