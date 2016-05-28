@@ -76,6 +76,22 @@ output==>
 abcde
 [101 102 103]
 </pre>
+map 
+<pre>
+package main
+
+import "fmt"
+
+//数组
+func main() {
+	var numbers map[string]int = make(map[string]int)
+	numbers["w"] = 3
+	numbers["s"] = 2
+	fmt.Println(numbers["w"])
+}
+ouput==>
+3
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
