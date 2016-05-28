@@ -8,9 +8,9 @@ func main() {
 /*Go中字符串是不可变的,所以var s string = "hello" s[0] = 'c' println(s) 报错
 */
 	var s string = "hello"
-	c := []byte(s)
+	c := []byte(s)  //将字符串 s 转换成 []byte 类型
 	c[0] = 'c'
-	s = string(c)
+	s = string(c)  //再转回 string 类型
 	println(s)
 }
 output==>
