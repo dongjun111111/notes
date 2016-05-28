@@ -25,7 +25,7 @@ import "fmt"
 
 func main() {
 	s := "hello"
-	s = "c" + s[1:] //切片操作
+	s = "c" + s[1:] //切片操作 加  字符串连接
 	fmt.Println(s)
 }
 output==>
@@ -33,6 +33,27 @@ cello
 </pre>
 output==>
 cello	
+</pre>
+数组
+<pre>
+package main
+
+import "fmt"
+
+//数组
+func main() {
+	var a [10]int
+	a = [10]int{2, 3, 4, 5}
+	b := [5]string{"f", "d", "e"}
+	c := [...]int{45, 56, 67, 78, 8, 89, 8900, 8} //不定长度
+	fmt.Println(c)
+	fmt.Println(b)
+	fmt.Println(a)
+}
+output==>
+[45 56 67 78 8 89 8900 8]
+[f d e  ]
+[2 3 4 5 0 0 0 0 0 0]
 </pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
