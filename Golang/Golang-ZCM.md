@@ -1,5 +1,21 @@
 #喵
 ##基础知识
+字符串
+<pre>
+package main
+
+func main() {
+/*Go中字符串是不可变的,所以var s string = "hello" s[0] = 'c' println(s) 报错
+*/
+	var s string = "hello"
+	c := []byte(s)
+	c[0] = 'c'
+	s = string(c)
+	println(s)
+}
+output==>
+cello	
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
