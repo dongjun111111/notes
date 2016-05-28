@@ -34,7 +34,7 @@ cello
 output==>
 cello	
 </pre>
-数组
+数组  -- 值类型
 <pre>
 package main
 
@@ -54,6 +54,27 @@ output==>
 [45 56 67 78 8 89 8900 8]
 [f d e  ]
 [2 3 4 5 0 0 0 0 0 0]
+</pre>
+切片 -- 引用类型
+
+在很多应用场景中，数组并不能满足我们的需求。在初始定义数组时，我们并不知道需要多大的数组，因此我们就需要“动态数组”。在Go里面这种数据结构叫slice
+<pre>
+package main
+
+import "fmt"
+
+//数组
+func main() {
+	var ar = []byte{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'}
+	var a, b []byte
+	a = ar[:5]
+	b = ar[4:7]
+	fmt.Println(string(a))
+	fmt.Println(b)
+}
+output==>
+abcde
+[101 102 103]
 </pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
