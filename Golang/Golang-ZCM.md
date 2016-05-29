@@ -495,6 +495,45 @@ func main() {
 output==>
 24
 </pre>
+method继承
+
+如果匿名字段实现了一个method，那么包含这个匿名字段的struct也能调用该method。让我们来看下面这个例子.
+<pre>
+package main
+
+import "fmt"
+
+type Human struct {
+	name  string
+	age   int
+	phone string
+}
+
+type Student struct {
+	Human
+	school string
+}
+
+type Employee struct {
+	Human
+	company string
+}
+
+//在human上面定义了一个method
+func (h *Human) sayhi() {
+	fmt.Println(h.name, h.phone)
+}
+
+func main() {
+	mark := Student{Human{"mark", 34, "4543445454"}, "MIT"}
+	jason := Employee{Human{"Jason", 23, "543434223"}, "ZCMLC"}
+	mark.sayhi()
+	jason.sayhi()
+}
+output==>
+mark 4543445454
+Jason 543434223
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
