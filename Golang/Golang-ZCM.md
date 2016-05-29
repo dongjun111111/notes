@@ -151,6 +151,68 @@ m["hello"] salut
 m1["hello"] salut
 </pre>
 需要注意的是：map和其他基本型别不同，它不是thread-safe，在多个go-routine存取时，必须使用mutex lock机制。
+
+传值与传指针
+
+先看一下下面两个例子，传值：
+<pre>
+package main
+
+import "fmt"
+
+func add1(a int) int {
+	a = a + 1
+	return a
+}
+func main() {
+	x := 4
+	fmt.Println("x =", x)
+
+	x1 := add1(x)
+
+	fmt.Println("x+1 =", x1)
+	fmt.Println("x =", x)
+}
+output==>
+x = 4
+x+1 = 5
+x = 4			
+</pre>
+看到了吗？虽然我们调用了add1函数，并且在add1中执行a = a+1操作，但是上面例子中x变量的值没有发生变化
+
+理由很简单：因为当我们调用add1的时候，add1接收的参数其实是x的copy，而不是x本身。
+
+那你也许会问了，如果真的需要传这个x本身,该怎么办呢？
+
+传指针:
+<pre>
+package main
+
+import "fmt"
+
+func add1(a *int) int {
+	*a = *a + 1
+	return *a
+}
+func main() {
+	x := 4
+	fmt.Println("x =", x)
+
+	x1 := add1(&x)
+
+	fmt.Println("x+1 =", x1)
+	fmt.Println("x =", x)
+}
+output==>
+x = 4
+x+1 = 5
+x = 5
+</pre>
+这样，我们就达到了修改x的目的。那么到底传指针有什么好处呢？
+
+- 传指针使得多个函数能操作同一个对象。
+- 传指针比较轻量级 (8bytes),只是传内存地址，我们可以用指针传递体积大的结构体。如果用参数值传递的话, 在每次copy上面就会花费相对较多的系统开销（内存和时间）。所以当你要传递大的结构体的时候，用指针是一个明智的选择。
+- Go语言中channel，slice，map这三种类型的实现机制类似指针，所以可以直接传递，而不用取地址后传递指针。（注：若函数需改变slice的长度，则仍需要取地址传递指针）
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
