@@ -421,6 +421,36 @@ Jason
 77
 you guess
 </pre>
+这里有一个问题：如果human里面有一个字段叫做phone，而student也有一个字段叫做phone，那么该怎么办呢？
+
+Go里面很简单的解决了这个问题，最外层的优先访问，也就是当你通过student.phone访问的时候，是访问student里面的字段，而不是human里面的字段。
+
+这样就允许我们去重载通过匿名字段继承的一些字段，当然如果我们想访问重载后对应匿名类型里面的字段，可以通过匿名字段名来访问。请看下面的例子
+<pre>
+package main
+
+import "fmt"
+
+type Human struct {
+	name string
+	age  int
+}
+
+type Employee struct {
+	Human
+	age int
+}
+
+func main() {
+	bob := Employee{Human{"bob", 23}, 12}
+
+	fmt.Println("bob`s age is :", bob.age)
+	fmt.Println("bob`s human age is :", bob.Human.age)
+}
+output==>
+bob`s age is : 12
+bob`s human age is : 23
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
