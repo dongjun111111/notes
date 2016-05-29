@@ -392,6 +392,35 @@ CMU
 [there is a long long words ,so how it is going on next]
 77
 </pre>
+<pre>
+package main
+
+import "fmt"
+
+type Human struct {
+	name string
+	age  int
+}
+
+type Skills []string
+type Student struct {
+	Human
+	Skills
+	int
+	num string
+}
+
+func main() {
+	jason := Student{Human: Human{"Jason", 24}, Skills: []string{"Less is more"}, int: 77, num: "you guess"}
+	fmt.Println(jason.name)
+	fmt.Println(jason.int)
+	fmt.Println(jason.num)
+}
+output==>
+Jason
+77
+you guess
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
