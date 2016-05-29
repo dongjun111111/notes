@@ -296,6 +296,102 @@ func main() {
 output==>
 Golang
 </pre>
+struct
+<pre>
+package main
+
+import "fmt"
+
+type person struct {
+	name string
+	age  int
+}
+
+func Older(p1, p2 person) (person, int) {
+	if p1.age > p2.age {
+		return p1, p1.age - p2.age
+	}
+	return p2, p2.age - p1.age
+}
+func main() {
+	var tom person
+	tom.name, tom.age = "Tom", 18
+	bob := person{"bob", 45}
+	paul := person{"paul", 25}
+	tb_older, tb_diff := Older(tom, bob)
+	tp_older, tp_diff := Older(tom, paul)
+	fmt.Println(tom.name, bob.name, tb_older.name, tb_diff)
+	fmt.Println(tom.name, paul.name, tp_older.name, tp_diff)
+}
+output==>
+Tom bob bob 27
+Tom paul paul 7
+</pre>
+匿名结构
+<pre>
+package main
+
+import "fmt"
+
+type Human struct {
+	name   string
+	age    int
+	weight int
+}
+
+type Student struct {
+	Human  //匿名字段，默认Student就包含了Human的所有字段
+	school string
+}
+
+func main() {
+	mark := Student{Human{"mark", 34, 60}, "THU"}
+	fmt.Println("His name is ", mark.name)
+	fmt.Println("His age is ", mark.age)
+	fmt.Println("His school is ", mark.school)
+}
+output==>
+His name is  mark
+His age is  34
+His school is  THU
+</pre>
+匿名的其他类型 []string int等
+<pre>
+package main
+
+import "fmt"
+
+type Skills []string
+type Human struct {
+	name   string
+	age    int
+	weight int
+}
+type Student struct {
+	Human  //匿名字段,自定义的struct
+	Skills //匿名字段，自定义的类型string slice
+	int    // 内置类型作为匿名字段
+	school string
+}
+
+func main() {
+	jack := Student{Human: Human{"jack", 34, 80}, school: "CMU"}
+	fmt.Println(jack.name)
+	fmt.Println(jack.age)
+	fmt.Println(jack.school)
+	jack.Skills = []string{"there is a long long words"}
+	jack.Skills = append(jack.Skills, ",so how it is going on next")
+	fmt.Println(jack.Skills)
+	jack.int = 77
+	fmt.Println(jack.int)
+}
+output==>
+jack
+34
+CMU
+[there is a long long words ,so how it is going on next]
+77
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
