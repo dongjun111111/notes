@@ -213,6 +213,72 @@ x = 5
 - 传指针使得多个函数能操作同一个对象。
 - 传指针比较轻量级 (8bytes),只是传内存地址，我们可以用指针传递体积大的结构体。如果用参数值传递的话, 在每次copy上面就会花费相对较多的系统开销（内存和时间）。所以当你要传递大的结构体的时候，用指针是一个明智的选择。
 - Go语言中channel，slice，map这三种类型的实现机制类似指针，所以可以直接传递，而不用取地址后传递指针。（注：若函数需改变slice的长度，则仍需要取地址传递指针）
+
+defer 
+
+1.在defer后指定的函数会在函数退出前调用
+<pre>
+package main
+//2.后进先出
+import "fmt"
+
+func main() {
+
+	for i := 0; i < 5; i++ {
+		defer fmt.Println(i)
+	}
+}
+output==>
+4
+3
+2
+1
+0
+</pre>
+函数作为值、类型
+<pre>
+package main
+
+import "fmt"
+
+type testInt func(int) bool
+
+func isOdd(integer int) bool {
+	if integer%2 == 0 {
+		return false
+	}
+	return true
+}
+
+func isEven(integer int) bool {
+	if integer%2 == 0 {
+		return true
+	}
+	return false
+}
+func filter(slice []int, f testInt) []int {
+	var result []int
+	for _, value := range slice {
+		if f(value) {
+			result = append(result, value)
+		}
+	}
+	return result
+}
+
+func main() {
+	slice := []int{1, 2, 3, 4, 5, 6, 7}
+	fmt.Println("slice = ", slice)
+	odd := filter(slice, isOdd)
+	fmt.Println("Odd elements of slice are :", odd)
+	even := filter(slice, isEven)
+	fmt.Println("Even elements of slice are :", even)
+}
+output==>
+slice =  [1 2 3 4 5 6 7]
+Odd elements of slice are : [1 3 5 7]
+Even elements of slice are : [2 4 6]
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
