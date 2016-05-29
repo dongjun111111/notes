@@ -451,6 +451,50 @@ output==>
 bob`s age is : 12
 bob`s human age is : 23
 </pre>
+面向对象
+
+函数的另一种形态，带有接收者的函数，我们称为method.
+<pre>
+package main
+
+import "fmt"
+
+type rectangle struct {
+	width, height float64
+}
+
+func area(r rectangle) float64 {
+	return r.width * r.height
+}
+
+func main() {
+	rec := rectangle{34, 6}
+	fmt.Println(area(rec))
+}
+output==>
+204		
+</pre>
+将上面的改写成下面的形式(将area作为struct rectangle的一种属性或者说是方法):
+<pre>
+package main
+
+import "fmt"
+
+type rectangle struct {
+	width, height float64
+}
+
+func (r rectangle) area() float64 {
+	return r.height * r.width
+}
+
+func main() {
+	ar := rectangle{4, 6}
+	fmt.Println(ar.area())
+}
+output==>
+24
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
