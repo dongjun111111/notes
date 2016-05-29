@@ -113,6 +113,43 @@ func main(){
 [ `go run main.go` | done: 2.2391281s ]
 	map[4:3 2:1 5:4]        /*说明map是无序的*/
 </pre>
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+	rating := map[string]float32{"c": 3, "d": 4, "f": 7, "h": 8}
+	//map有两个返回值，分别是value与key，不存在key则是false
+	resu, ok := rating["c"]
+	if ok {
+		fmt.Println(resu) //输出 value 值
+	} else {
+		fmt.Println("something error")
+	}
+
+}
+output==>
+3
+</pre>
+<pre>
+package main
+
+import "fmt"
+
+//证明map是引用类型
+func main() {
+	m := make(map[string]string)
+	m["hello"] = "Bonjour"
+	m1 := m
+	m1["hello"] = "salut"
+	fmt.Println("m[\"hello\"]", m["hello"])
+	fmt.Println("m1[\"hello\"]", m1["hello"])
+}
+output==>
+m["hello"] salut
+m1["hello"] salut
+</pre>
 需要注意的是：map和其他基本型别不同，它不是thread-safe，在多个go-routine存取时，必须使用mutex lock机制。
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
