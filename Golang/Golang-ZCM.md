@@ -534,6 +534,48 @@ output==>
 mark 4543445454
 Jason 543434223
 </pre>
+method重写
+
+上面的例子中，如果Employee想要实现自己的SayHi,怎么办？简单，和匿名字段冲突一样的道理，我们可以在Employee上面定义一个method，重写了匿名字段的方法。请看下面的例子.
+<pre>
+package main
+
+import "fmt"
+
+type Human struct {
+	name  string
+	age   int
+	phone string
+}
+
+type Student struct {
+	Human
+	school string
+}
+
+type Employee struct {
+	Human
+	company string
+}
+
+func (h *Human) sayhi() {         //Human定义的sayhi方法
+	fmt.Println(h.name, h.phone)
+}
+
+func (e *Employee) sayhi() {      //Employee定义的sayhi方法
+	fmt.Println(e.name, e.company, e.phone)
+}
+
+func main() {
+	mark := Student{Human{"mark", 23, "34545"}, "CMU"}
+	jason := Employee{Human{"jason", 24, "55753"}, "Golang Inc"}
+	mark.sayhi()
+	jason.sayhi()
+}
+output==>
+mark 34545
+jason Golang Inc 55753
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
