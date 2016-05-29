@@ -279,6 +279,23 @@ slice =  [1 2 3 4 5 6 7]
 Odd elements of slice are : [1 3 5 7]
 Even elements of slice are : [2 4 6]
 </pre>
+init函数
+<pre>
+package main
+
+import "fmt"
+
+//init函数是golang程序自动调用的
+func init() {
+	fmt.Println("Golang")
+}
+
+func main() {
+
+}
+output==>
+Golang
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
@@ -776,6 +793,7 @@ output==>
 在main中
 </pre>
 ###方法
+_操作其实是引入该包，而不直接使用包里面的函数，而是调用了该包里面的init函数。
 <pre>
 package main
 
