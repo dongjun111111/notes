@@ -92,6 +92,25 @@ func main() {
 ouput==>
 3
 </pre>
+map 无序的，可能每次打印的map不是相同顺序的；通过 delete 删除 map 元素：
+<pre>
+package main 
+
+import "fmt"
+
+func main(){
+	var a map[int]int = make(map[int]int)
+	a[4] = 3
+	a[2] = 1
+	a[5] = 4
+	fmt.Println(a)
+}
+两次output==>
+[ `go run main.go` | done: 2.5041432s ]
+	map[5:4 4:3 2:1]
+[ `go run main.go` | done: 2.2391281s ]
+	map[4:3 2:1 5:4]        /*说明map是无序的*/
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
