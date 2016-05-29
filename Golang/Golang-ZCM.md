@@ -103,6 +103,8 @@ func main(){
 	a[4] = 3
 	a[2] = 1
 	a[5] = 4
+	a[6] = 5
+	delete(a,6)   //删除map元素
 	fmt.Println(a)
 }
 两次output==>
@@ -111,6 +113,7 @@ func main(){
 [ `go run main.go` | done: 2.2391281s ]
 	map[4:3 2:1 5:4]        /*说明map是无序的*/
 </pre>
+需要注意的是：map和其他基本型别不同，它不是thread-safe，在多个go-routine存取时，必须使用mutex lock机制。
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
