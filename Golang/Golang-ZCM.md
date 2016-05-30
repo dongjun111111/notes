@@ -451,6 +451,47 @@ output==>
 bob`s age is : 12
 bob`s human age is : 23
 </pre>
+还有一个例子也是说重载的：
+<pre>
+package main
+
+import "fmt"
+
+type Human struct {
+	name string
+	age  int
+}
+
+type Student struct {
+	Human
+	school string
+}
+
+func (h *Human) say() {
+	fmt.Println(h.name, h.age)
+}
+
+func (h *Human) run() {
+	fmt.Println(h.name + "is running")
+}
+
+func (s *Student) say() {
+	fmt.Println("a student whois name is " + s.name + " ,saying something")
+}
+
+func (s *Student) study() {
+	fmt.Println("stupid study")
+}
+
+func main() {
+	jason := Student{Human{"jason", 12}, "MIT"}
+	jason.say()       //a student whois name is jason ,saying something
+	jason.Human.say() //jason 12
+}
+output==>
+a student whois name is jason ,saying something
+jason 12
+</pre>
 面向对象
 
 函数的另一种形态，带有接收者的函数，我们称为method.
@@ -654,6 +695,52 @@ Lalala... I love U
 This is jason,an employee:
 jason Google Inc 1247890
 Lalala... Born to be wild
+</pre>
+interface 与指针
+<pre>
+package main
+
+import "fmt"
+
+type Human struct {
+	name string
+	age  int
+}
+
+type Student struct {
+	Human
+	school string
+}
+
+func (h *Human) say() {
+	fmt.Println(h.name, h.age)
+}
+
+func (h *Human) run() {
+	fmt.Println(h.name + " is running")
+}
+
+func (s *Student) say() {
+	fmt.Println("a student whois name is " + s.name + " ,saying something")
+}
+
+func (s *Student) Study() {
+	fmt.Println("stupid study")
+}
+
+type M interface {
+	say()
+	run()
+}
+
+func main() {
+	jason := Student{Human{"jason", 6}, "MIT"}
+	var m M
+	m = &jason      //注意这里的 &
+	m.run()
+}
+output==>
+jason is running
 </pre>
 interface函数参数
 
