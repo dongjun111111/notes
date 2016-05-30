@@ -3174,3 +3174,220 @@ func main() {
     http.ListenAndServe(":8088", nil)
 }
 </pre>
+###加密与解密
+base64
+<pre>
+package main
+
+//base64加密与解密
+import "encoding/base64"
+import "fmt"
+
+func base64Encode(src []byte) []byte {
+	return []byte(base64.StdEncoding.EncodeToString(src))
+}
+
+func base64Decode(src []byte) ([]byte, error) {
+	return base64.StdEncoding.DecodeString(string(src))
+}
+
+func main() {
+	hello := "hello world"
+	debyte := base64Encode([]byte(hello))
+	fmt.Println(debyte)
+	fmt.Println(string(debyte))
+
+	enbyte, err := base64Decode(debyte)
+	if err == nil {
+		fmt.Println(string(enbyte))
+	}
+}
+output==>
+[97 71 86 115 98 71 56 103 100 50 57 121 98 71 81 61]
+aGVsbG8gd29ybGQ=
+hello world
+</pre>
+高级加解密 aes/AES des/DES
+<pre>
+//des与aes用法类似，这里讲的是aes
+package main
+
+import (
+	"crypto/aes"
+	"crypto/cipher"
+	"fmt"
+	"os"
+)
+
+var commonIV = []byte{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f}
+
+func main() {
+	//需要去加密的字符串
+	plaintext := []byte("I am jason")
+	//如果传入加密串的话，plaint就是传入的字符串
+	if len(os.Args) > 1 {
+		plaintext = []byte(os.Args[1])
+	}
+
+	//aes的加密字符串
+	key_text := "jason78gv798akljzmknm.ahkjkljl;k" //长度固定
+	if len(os.Args) > 2 {
+		key_text = os.Args[2]
+	}
+
+	fmt.Println(len(key_text))
+
+	// 创建加密算法aes
+	c, err := aes.NewCipher([]byte(key_text))
+	if err != nil {
+		fmt.Printf("Error: NewCipher(%d bytes) = %s", len(key_text), err)
+		os.Exit(-1)
+	}
+
+	//加密字符串
+	cfb := cipher.NewCFBEncrypter(c, commonIV)
+	ciphertext := make([]byte, len(plaintext))
+	cfb.XORKeyStream(ciphertext, plaintext)
+	fmt.Printf("%s=>%x\n", plaintext, ciphertext)
+
+	// 解密字符串
+	cfbdec := cipher.NewCFBDecrypter(c, commonIV)
+	plaintextCopy := make([]byte, len(plaintext))
+	cfbdec.XORKeyStream(plaintextCopy, ciphertext)
+	fmt.Printf("%x=>%s\n", ciphertext, plaintextCopy)
+}
+output==>
+32
+I am jason=>4cb0daaa99eb2483e0bb
+4cb0daaa99eb2483e0bb=>I am jason
+</pre>
+本地化资源
+<pre>
+package main
+
+import "fmt"
+
+var locales map[string]map[string]string
+
+func main() {
+	locales = make(map[string]map[string]string, 2)
+	en := make(map[string]string, 10)
+	en["pea"] = "pea"
+	en["bean"] = "bean"
+	locales["en"] = en
+	cn := make(map[string]string, 10)
+	cn["pea"] = "豌豆"
+	cn["bean"] = "毛豆"
+	locales["zh-CN"] = cn
+	lang := "zh-CN"
+	fmt.Println(msg(lang, "pea"))
+	fmt.Println(msg(lang, "bean"))
+}
+
+func msg(locale, key string) string {
+	if v, ok := locales[locale]; ok {
+		if v2, ok := v[key]; ok {
+			return v2
+		}
+	}
+	return ""
+}
+output==>
+豌豆
+毛豆
+</pre>
+上面示例演示了不同locale的文本翻译，实现了中文和英文对于同一个key显示不同语言的实现，上面实现了中文的文本消息，如果想切换到英文版本，只需要把lang设置为en即可。
+###自定义用户认证（登录或注册）
+自定义的认证一般都是和session结合验证的。
+<pre>
+//登陆处理
+func (this *LoginController) Post() {
+    this.TplNames = "login.tpl"
+    this.Ctx.Request.ParseForm()
+    username := this.Ctx.Request.Form.Get("username")
+    password := this.Ctx.Request.Form.Get("password")
+    md5Password := md5.New()
+    io.WriteString(md5Password, password)
+    buffer := bytes.NewBuffer(nil)
+    fmt.Fprintf(buffer, "%x", md5Password.Sum(nil))
+    newPass := buffer.String()
+
+    now := time.Now().Format("2006-01-02 15:04:05")
+
+    userInfo := models.GetUserInfo(username)
+    if userInfo.Password == newPass {
+        var users models.User
+        users.Last_logintime = now
+        models.UpdateUserInfo(users)
+
+        //登录成功设置session
+        sess := globalSessions.SessionStart(this.Ctx.ResponseWriter, this.Ctx.Request)
+        sess.Set("uid", userInfo.Id)
+        sess.Set("uname", userInfo.Username)
+
+        this.Ctx.Redirect(302, "/")
+    }   
+}
+
+//注册处理
+func (this *RegController) Post() {
+    this.TplNames = "reg.tpl"
+    this.Ctx.Request.ParseForm()
+    username := this.Ctx.Request.Form.Get("username")
+    password := this.Ctx.Request.Form.Get("password")
+    usererr := checkUsername(username)
+    fmt.Println(usererr)
+    if usererr == false {
+        this.Data["UsernameErr"] = "Username error, Please to again"
+        return
+    }
+
+    passerr := checkPassword(password)
+    if passerr == false {
+        this.Data["PasswordErr"] = "Password error, Please to again"
+        return
+    }
+
+    md5Password := md5.New()
+    io.WriteString(md5Password, password)
+    buffer := bytes.NewBuffer(nil)
+    fmt.Fprintf(buffer, "%x", md5Password.Sum(nil))
+    newPass := buffer.String()
+
+    now := time.Now().Format("2006-01-02 15:04:05")
+
+    userInfo := models.GetUserInfo(username)
+
+    if userInfo.Username == "" {
+        var users models.User
+        users.Username = username
+        users.Password = newPass
+        users.Created = now
+        users.Last_logintime = now
+        models.AddUser(users)
+
+        //登录成功设置session
+        sess := globalSessions.SessionStart(this.Ctx.ResponseWriter, this.Ctx.Request)
+        sess.Set("uid", userInfo.Id)
+        sess.Set("uname", userInfo.Username)
+        this.Ctx.Redirect(302, "/")
+    } else {
+        this.Data["UsernameErr"] = "User already exists"
+    }
+
+}
+
+func checkPassword(password string) (b bool) {
+    if ok, _ := regexp.MatchString("^[a-zA-Z0-9]{4,16}$", password); !ok {
+        return false
+    }
+    return true
+}
+
+func checkUsername(username string) (b bool) {
+    if ok, _ := regexp.MatchString("^[a-zA-Z0-9]{4,16}$", username); !ok {
+        return false
+    }
+    return true
+}
+</pre>
