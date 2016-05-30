@@ -1020,6 +1020,29 @@ jason`s name : jason
 {} {0}
 3
 </pre>
+结构体的tag属性，类似注释内容。 下面利用reflect包将tag内容输出出来。
+<pre>
+package main
+
+import "fmt"
+import "reflect"
+
+type User struct {
+	Name     string "This is an user name"       //这后面的是tag
+	Password string "This is an user password"	 //这后面的是tag
+}
+
+func main() {
+	user := &User{"Jason", "password"}
+	s := reflect.TypeOf(user).Elem() //通过反射获取type定义
+	for i := 0; i < s.NumField(); i++ {
+		fmt.Println(s.Field(i).Tag)  //将tag输出出来
+	}
+}
+output==>
+This is an user name
+This is an user password
+</pre>
 ###指针pointer
 <pre>
 package main
