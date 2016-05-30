@@ -39,7 +39,6 @@ cello
 package main
 
 import "fmt"
-
 //数组
 func main() {
 	var a [10]int
