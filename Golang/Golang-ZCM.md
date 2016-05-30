@@ -3385,3 +3385,214 @@ func checkUsername(username string) (b bool) {
     return true
 }
 </pre>
+###sync.Mutex加锁
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+var mutex *sync.Mutex
+
+func lock(i int) {
+	fmt.Println(i, " lock start")
+	mutex.Lock()
+	fmt.Println(i, "lock")
+	time.Sleep(5 * time.Second)
+	mutex.Unlock()
+	fmt.Println(i, "unlock")
+}
+
+func main() {
+	mutex = new(sync.Mutex)
+	go lock(1)
+	time.Sleep(time.Second)
+	lock(2)
+	fmt.Println("exit")
+}
+output==>
+1  lock start
+1 lock
+2  lock start
+1 unlock
+2 lock
+2 unlock
+exit
+</pre>
+sync.WaitGroup
+
+例子1
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func(i int) {
+			fmt.Println("Jason", i)
+			wg.Done()
+		}(i)
+	}
+	wg.Wait()
+}
+output==>
+Jason 9
+Jason 0
+Jason 1
+Jason 2
+Jason 3
+Jason 4
+Jason 5
+Jason 6
+Jason 7
+Jason 8
+</pre>
+例子2
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	var urls = []string{
+		"http://baidu.com", "http://sina.com", "http://163.com",
+	}
+	for _, url := range urls {
+		wg.Add(1)
+		go func(url string) {
+			defer wg.Done()
+			fmt.Println(url)
+		}(url)		
+	}
+	wg.Wait()
+	fmt.Println("over!")
+}
+output==>
+http://163.com
+http://baidu.com
+http://sina.com
+over!
+</pre>
+http.Get()
+<pre>
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+)
+
+func main() {
+	client := new(http.Client)
+	reg, err := http.NewRequest("GET", "http://sina.com", nil)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	reg.Header.Set("HTTP", "2.0")
+	reg.Header.Set("Accept", "*/*")
+	reg.Header.Set("Accept-Language", "zh-cn")
+	reg.Header.Set(`User-Agent`, `AppStore/2.0 iOS/7.1.2 model/iPod5,1 build/11D257 (4; dt:81)`)
+	reg.Header.Set(`Host`, `sina.com`)
+	reg.Header.Set(`Connection`, `keep-alive`)
+	reg.Header.Set(`X-Apple-Store-Front`, `143465-19,21 t:native`)
+	reg.Header.Set(`X-Dsid`, `932530590`)
+
+	resp, err := client.Do(reg)
+	defer resp.Body.Close()
+	if err != nil {
+		fmt.Println("Err:", err)
+		return
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+	fmt.Println(string(body))
+}
+output==>
+......(so many contents)
+</pre>
+sync.Once()
+<pre>
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"sync"
+)
+
+func GetDemo(addr string) {
+	res, err := http.Get(addr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	robots, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(robots))
+}
+
+func ExampleWaitGroup() {
+	var wg sync.WaitGroup
+	var urls = []string{
+		"http://sina.com",
+		"http://sohu.com",
+		"http://baidu.com",
+	}
+	for _, url := range urls {
+		wg.Add(1)
+		go func(url string) {
+			defer wg.Done()
+			GetDemo(url)
+		}(url)
+	}
+	wg.Wait()
+	fmt.Println("-----------Group wait over---------------")
+}
+
+func ExampleOnce() {
+	var once sync.Once
+	onceBody := func() {
+		fmt.Println("Only once")
+	}
+	done := make(chan bool)
+	for i := 0; i < 10; i++ {
+		go func() {
+			once.Do(onceBody)
+			done <- true
+		}()
+	}
+	for i := 0; i < 10; i++ {
+		<-done
+	}
+	fmt.Println("-----------------Once over --------------")
+}
+
+func main() {
+	ExampleOnce()
+	ExampleWaitGroup()
+}
+output==>
+...(so many contents...)
+</pre>
