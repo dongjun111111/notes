@@ -655,7 +655,70 @@ This is jason,an employee:
 jason Google Inc 1247890
 Lalala... Born to be wild
 </pre>
+interface函数参数
 
+interface的变量可以持有任意实现该interface类型的对象，这给我们编写函数(包括method)提供了一些额外的思考，我们是不是可以通过定义interface参数，让函数接受各种类型的参数。
+
+举个例子：fmt.Println是我们常用的一个函数，但是你是否注意到它可以接受任意类型的数据。打开fmt的源码文件，你会看到这样一个定义:
+<pre>
+type Stringer interface {
+	String() string
+}
+</pre>
+也就是说，任何实现了String方法的类型都能作为参数被fmt.Println()调用，比如：
+<pre>
+package main
+
+import "fmt"
+import "strconv"
+
+type Human struct {
+	name  string
+	age   int
+	phone string
+}
+
+//通过这个方法Human 实现了 fmt.Stringer
+func (h Human) String() string {
+	return ".." + h.name + strconv.Itoa(h.age) + " years " + h.phone
+}
+
+func main() {
+	bob := Human{"bob", 34, "57357878"}
+	fmt.Println(bob.String())
+}
+output==>
+..bob34 years 57357878
+</pre>
+并发
+<pre>
+package main
+
+import "fmt"
+import "runtime"
+
+//runtime.Gosched()表示让CPU把时间片让给别人,下次某个时候继续恢复执行该goroutine
+func say(s string) {
+	for i := 0; i < 5; i++ {
+		runtime.Gosched()
+		fmt.Println(s)
+	}
+}
+func main() {
+	go say("world")  //开启一个新的Goroutines执行
+	say("hello")  //当前的Goroutines执行
+}
+output==>
+hello
+world
+hello
+world
+hello
+world
+hello
+world
+hello
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
