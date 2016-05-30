@@ -2967,6 +2967,129 @@ output==>
 7
 8
 </pre>
+###Beego相关
+<pre>
+									|model--->db.go-->|
+地址栏访问->路由router->controller-->|          		  |----->Render html
+									|---------------->|
+
+
+1. router  形式
+
+beego.Router("/base/addbincard", &controllers.BankInfoController{}, "get:BindCardGet;post:BindCardPost") //如果以get方式访问该方法调用BindCardGet方法，要是以post方式访问则调用BinCardPost方法
+
+2. controller    形式
+
+//Jason test page
+func (this *AboutController) Jason() {
+	this.Ctx.WriteString("Jason")
+}
+
+//Jason test page two
+func (this *AboutController) Jason2() {
+	//加载公用controller，比如对是否登录的判断等等基本的操作
+	this.BaseController.Get()
+	this.Data["header"] = 4
+	this.TplName = "about/jason.html"
+}
+
+3. model 形式
+
+func (this *JoinController) Join() {
+	this.BaseController.Get()
+	this.Data["header"] = 4
+	links, _ := models.GetLinks()
+	this.Data["links"] = links
+
+	//招聘人员信息
+	joinlist, err := models.GetJoinList() //models中db.go中的GetJoinList()方法，它返回数据集与错误信息
+	if err == nil {
+		this.Data["list"] = joinlist // joinlist是来自数据库的信息；list是传递到模板的东西
+	}
+	this.TplName = "about/join.html"
+}
+
+
+4. db
+
+func GetJoinList() (v []ZcmNews, err error) {
+	o := orm.NewOrm()
+	sql := " SELECT *  from zcm_news a where a.cid = 58 and a.status = 1  ORDER BY create_time desc "
+	_, err = o.Raw(sql).QueryRows(&v)
+	if err != nil {
+		return nil, err
+	}
+	return v, nil
+
+}
+
+5. 前端页面
+
+<!DOCTYPE html>
+<html class="screen_bg">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>加入我们_招财猫理财一家有诚意的互联网金融投资理财平台</title>
+<meta name="keywords" content="招财猫招聘,招财猫理财招聘,招财猫招聘信息,招财猫求职"/>
+<meta name="description" content="欢迎有志于投入互联网金融创业的有激情梦想的小伙伴加入我们，一起推动中国的金融服务创新，诚挚欢迎领域精英与我们一起，挥洒满腔热情、成就宏伟事业，我在招财猫理财等你！"/>
+
+<link href="/static/css/base.css?y=20160418" rel="stylesheet"/>
+<link href="/static/css/aboutus.css" rel="stylesheet" />
+</head>
+
+<body>
+<!--header start-->
+{{template "layout/header.tpl" .}}
+<!--header end-->
+<!--nav start -->
+<div class="sub_nav">
+    <ul class="w1000">
+        <li><a href="/cooperate">共襄问鼎</a></li>
+        <li><a href="/finance">融创未来</a></li>
+        <li><a href="/about">公司简介</a></li>
+        <li><a href="/branch">分支机构</a></li>
+        <!-- <li><a href="">团队介绍</a></li> -->
+        <li><a href="/partner">合作伙伴</a></li>
+        <li><a href="/media">企业动态</a></li>
+        <li><a href="/news">行业资讯</a></li>
+        <li><a href="/contact">联系我们</a></li>
+        <li><a href="/join" class="curr">加入我们</a></li>
+    </ul>
+</div>
+<!--nav end -->
+<!--main start-->
+<div class="join_banner"></div>
+<div class="w1000 join_us">
+
+   {{range .list}}
+    <dl>
+        <dt><h1>{{.Title}}</h1><a>查看详情<i></i></a></dt>
+        <dd class="join_cnt_hide">
+            <span class="join_arrowtop"></span>
+            <ul>
+                <li>{{.Content}}</li>
+                <li>
+                    <a class="join_hide_box">收起</a>
+                    <input type="button" onclick="location='mailto:hr@zcmlc.com'" value="投个简历" />
+                </li>
+            </ul>
+        </dd>
+    </dl>
+   {{end}}
+</div>
+<!--main end-->
+<!--footer start-->
+{{template "layout/footer.tpl" .}}
+<!--footer end-->
+<script type="text/javascript" src="/static/js/about.js?y=20160316"></script>
+</body>
+</html>
+
+
+</pre>
+
+
 ### Socket编程
 https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/08.1.md
+
 
