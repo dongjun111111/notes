@@ -3092,4 +3092,85 @@ func GetJoinList() (v []ZcmNews, err error) {
 ### Socket编程
 https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/08.1.md
 
+多并发执行,当有新的客户端请求到达并同意接受Accept该请求的时候他会反馈当前的时间信息。值得注意的是，在代码中for循环里，当有错误发生时，直接continue而不是退出，是因为在服务器端跑代码的时候，当有错误发生的情况下最好是由服务端记录错误，然后当前连接的客户端直接报错而退出，从而不会影响到当前服务端运行的整个服务。
+<pre>
+package main
 
+import (
+	"fmt"
+	"net"
+	"os"
+	"time"
+)
+
+func main() {
+	service := ":1200"
+	tcpAddr, err := net.ResolveTCPAddr("tcp4", service)
+	checkError(err)
+	listener, err := net.ListenTCP("tcp", tcpAddr)
+	checkError(err)
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			continue
+		}
+		go handleClient(conn)
+	}
+}
+
+func handleClient(conn net.Conn) {
+	defer conn.Close()
+	daytime := time.Now().String()
+	conn.Write([]byte(daytime)) // don't care about return value
+	// we're finished with this client
+}
+func checkError(err error) {
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
+		os.Exit(1)
+	}
+}
+</pre>
+###RESTful
+<pre>
+package main
+
+import (
+    "fmt"
+    "github.com/drone/routes"
+    "net/http"
+)
+
+func getuser(w http.ResponseWriter, r *http.Request) {
+    params := r.URL.Query()
+    uid := params.Get(":uid")
+    fmt.Fprintf(w, "you are get user %s", uid)
+}
+
+func modifyuser(w http.ResponseWriter, r *http.Request) {
+    params := r.URL.Query()
+    uid := params.Get(":uid")
+    fmt.Fprintf(w, "you are modify user %s", uid)
+}
+
+func deleteuser(w http.ResponseWriter, r *http.Request) {
+    params := r.URL.Query()
+    uid := params.Get(":uid")
+    fmt.Fprintf(w, "you are delete user %s", uid)
+}
+
+func adduser(w http.ResponseWriter, r *http.Request) {
+    uid := r.FormValue("uid")
+    fmt.Fprint(w, "you are add user %s", uid)
+}
+
+func main() {
+    mux := routes.New()
+    mux.Get("/user/:uid", getuser)
+    mux.Post("/user/", adduser)
+    mux.Del("/user/:uid", deleteuser)
+    mux.Put("/user/:uid", modifyuser)
+    http.Handle("/", mux)
+    http.ListenAndServe(":8088", nil)
+}
+</pre>
