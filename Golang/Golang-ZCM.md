@@ -3596,3 +3596,128 @@ func main() {
 output==>
 ...(so many contents...)
 </pre>
+###atomic原子操作
+原子操作即是进行过程中不能被中断的操作。针对某个值的原子操作在被进行的过程中，CPU绝不会再去进行其他的针对该值的操作。为了实现这样的严谨性，原子操作仅会由一个独立的CPU指令代表和完成。
+
+Golang提供的原子操作都是非入侵式的，由标准库sync/atomic中的众多函数代表类型包括int32,int64,uint32,uint64,uintptr,unsafe.Pointer，共六个。这些函数提供的原子操作共有五种：增或减，比较并交换，载入，存储和交换。
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync/atomic"
+)
+
+func main() {
+	var i32 int32
+	fmt.Println("old i32 value===")
+	fmt.Println(i32)
+	newi32 := atomic.AddInt32(&i32, 3)
+	fmt.Println("new i32 value===")
+	fmt.Println(i32)
+	fmt.Println(newi32)
+}
+output==>
+old i32 value===
+0
+new i32 value===
+3
+3
+</pre>
+高并发下atomic
+<pre>
+package main
+
+import (
+        "fmt"
+        "sync/atomic"
+        "time"
+)
+
+func main() {
+
+        var cnt uint32 = 0
+
+        // 启动10个goroutine
+        for i := 0; i < 10; i++ {
+                go func() {
+                        // 每个goroutine都做20次自增运算
+                        for i := 0; i < 20; i++ {
+                                time.Sleep(time.Millisecond)
+                                atomic.AddUint32(&cnt, 1)
+                        }
+                }()
+        }
+
+        // 等待2s, 等goroutine完成
+        time.Sleep(time.Second * 2)
+        // 取最终结果
+        cntFinal := atomic.LoadUint32(&cnt)
+
+        fmt.Println("cnt:", cntFinal)
+}
+output==>
+cnt=200
+</pre>
+卖票的故事 ~
+<pre>
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"runtime"
+	"sync"
+	"time"
+)
+
+var total_tickets int32 = 10
+var mutex = &sync.Mutex{}
+
+func sell_tickets(i int) {
+
+	for total_tickets > 0 {
+
+		mutex.Lock()
+		// 如果有票就卖
+		if total_tickets > 0 {
+			time.Sleep(time.Duration(rand.Intn(5)) * time.Millisecond)
+			// 卖一张票
+			total_tickets--
+			fmt.Println("id:", i, " ticket:", total_tickets)
+		}
+		mutex.Unlock()
+	}
+}
+
+func main() {
+
+	// 设置真正意义上的并发
+	runtime.GOMAXPROCS(4)
+
+	// 生成随机种子
+	rand.Seed(time.Now().Unix())
+
+	// 并发5个goroutine来卖票
+	for i := 0; i < 5; i++ {
+		go sell_tickets(i)
+	}
+
+	// 等待线程执行完
+	var input string
+	fmt.Scanln(&input)
+	// 退出时打印还有多少票
+	fmt.Println(total_tickets, "done")
+}
+output==>
+id: 1  ticket: 9
+id: 1  ticket: 8
+id: 1  ticket: 7
+id: 1  ticket: 6
+id: 1  ticket: 5
+id: 1  ticket: 4
+id: 1  ticket: 3
+id: 1  ticket: 2
+id: 1  ticket: 1
+id: 1  ticket: 0
+</pre>
