@@ -719,6 +719,33 @@ hello
 world
 hello
 </pre>
+超时
+<pre>
+package main
+
+import "fmt"
+import "time"
+
+func main() {
+	c := make(chan int)
+	o := make(chan bool)
+	go func() {
+		for {
+			select {
+			case v := <-c:
+				fmt.Println(v)
+			case <-time.After(2 * time.Second):
+				fmt.Println("timeout")
+				o <- true
+				break
+			}
+		}
+	}()
+	<-o
+}
+output==>
+timeout
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
