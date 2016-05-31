@@ -3992,3 +3992,67 @@ loop
 loop
 loop
 </pre>
+os.Expand()
+<pre>
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+//将字符串中的特定变量替换
+func main() {
+	mapping := func(s string) string {
+		m := map[string]string{"X": "XXXXXXXX", "Y": "YYYYYY"}
+		return m[s]
+	}
+	data := "hello $X and $Y"
+	fmt.Printf("%s", os.Expand(data, mapping)) //输出hello widuu blog address www.widuu.com
+}
+output==>
+hello XXXXXXXX and YYYYYY
+</pre>
+###litte tools
+<pre>
+package main
+
+import (
+	"crypto/md5"
+	"crypto/sha1"
+	"encoding/hex"
+	"fmt"
+	"io"
+)
+
+//对字符串进行SHA1哈希
+func Sha1(data string) string {
+	t := sha1.New()
+	io.WriteString(t, data)
+	return fmt.Sprintf("%x", t.Sum(nil))
+}
+
+//对字符串进行MD5编码处理
+func Md5(data string) string {
+	h := md5.New()
+	h.Write([]byte(data))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+//隐藏手机号中间4位
+func HidePhoneNumber(number string) string {
+	return number[:3] + "****" + number[7:]
+}
+
+func main() {
+	s := "hello"
+	fmt.Println(Sha1(s))
+	fmt.Println(Md5(s))
+	phone := "15567874567"
+	fmt.Println(HidePhoneNumber(phone))
+}
+output==>
+aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
+5d41402abc4b2a76b9719d911017c592
+155****4567
+</pre>
