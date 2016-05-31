@@ -4108,6 +4108,84 @@ func main() {
 output==>
 [{jason} {jack} {jakiry}]
 </pre>
+###Golang异步编程
+<pre>
+package main
+
+import (
+	"log"
+	"math/rand"
+	"time"
+)
+
+func UploadNetvalueFile(done chan bool) {
+	//利用随机函数模拟不同文件的处理时间
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	x := r.Intn(20)
+	log.Println("UploadNetvalueFile: ", x)
+	time.Sleep(time.Second * time.Duration(x))
+	log.Println("UploadNetvalueFile OK")
+	done <- true
+
+}
+
+func UplaodSaleFareFile(done chan bool) {
+	//利用随机函数模拟不同文件的处理时间
+	r := rand.New(rand.NewSource(time.Now().UnixNano() + 10))
+	x := r.Intn(5)
+	log.Println("UplaodSaleFareFile: ", x)
+	time.Sleep(time.Second * time.Duration(x))
+	log.Println("UplaodSaleFareFile OK ")
+	done <- true
+
+}
+
+func main() {
+	t1 := time.Now()
+	tasknum := 2
+
+	done := make(chan bool, tasknum)
+
+	// 模拟生成文件的时间
+	time.Sleep(time.Second * 1)
+
+	log.Println("create netvalue file !")
+
+	// 并发执行
+
+	go UploadNetvalueFile(done)
+
+	// 模拟生成文件的时间
+	time.Sleep(time.Second * 1)
+
+	log.Println("create salefare file !")
+
+	// 并发执行
+
+	go UplaodSaleFareFile(done)
+
+	//等待所有并发完成
+	func() {
+		for i := 0; i < tasknum; i++ {
+			log.Println(<-done)
+		}
+
+	}()
+
+	t2 := time.Now()
+	log.Printf("耗时:%d\n", t2.Sub(t1))
+}
+output==>
+2016/05/31 20:10:38 create netvalue file !
+2016/05/31 20:10:38 UploadNetvalueFile:  6
+2016/05/31 20:10:39 create salefare file !
+2016/05/31 20:10:39 UplaodSaleFareFile:  2
+2016/05/31 20:10:41 UplaodSaleFareFile OK
+2016/05/31 20:10:41 true
+2016/05/31 20:10:44 UploadNetvalueFile OK
+2016/05/31 20:10:44 true
+2016/05/31 20:10:44 耗时:7029402100
+</pre>
 ###litte tools
 <pre>
 package main
