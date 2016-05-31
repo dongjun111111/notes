@@ -1781,7 +1781,7 @@ output==>
 if-else demo:  if部分
 </pre>
 #####pipelines
-Unix用户已经很熟悉什么是pipe了，ls | grep "beego"类似这样的语法你是不是经常使用，过滤当前目录下面的文件，显示含有"beego"的数据，表达的意思就是前面的输出可以当做后面的输入，最后显示我们想要的数据，而Go语言模板最强大的一点就是支持pipe数据，<font color=red>在Go语言里面任何{{}}里面的都是pipelines数据</font>，例如我们上面输出的email里面如果还有一些可能引起XSS注入的，那么我们如何来进行转化呢？
+Unix用户已经很熟悉什么是pipe了，ls | grep "example"类似这样的语法你是不是经常使用，过滤当前目录下面的文件，显示含有"example"的数据，表达的意思就是前面的输出可以当做后面的输入，最后显示我们想要的数据，而Go语言模板最强大的一点就是支持pipe数据，<font color=red>在Go语言里面任何{{}}里面的都是pipelines数据</font>，例如我们上面输出的email里面如果还有一些可能引起XSS注入的，那么我们如何来进行转化呢？
 <pre>
 {{. | html}}
 </pre>
@@ -1797,7 +1797,7 @@ $variable := pipeline
 {{with $x := "output"}}{{printf "%q" $x}}{{end}}
 </pre>
 #####模板函数
-模板在输出对象的字段值时，采用了fmt包把对象转化成了字符串。但是有时候我们的需求可能不是这样的，例如有时候我们为了防止垃圾邮件发送者通过采集网页的方式来发送给我们的邮箱信息，我们希望把@替换成at例如：astaxie at beego.me，如果要实现这样的功能，我们就需要自定义函数来做这个功能。
+模板在输出对象的字段值时，采用了fmt包把对象转化成了字符串。但是有时候我们的需求可能不是这样的，例如有时候我们为了防止垃圾邮件发送者通过采集网页的方式来发送给我们的邮箱信息，我们希望把@替换成at例如：jason at jason.info，如果要实现这样的功能，我们就需要自定义函数来做这个功能。
 
 每一个模板函数都有一个唯一值的名字，然后与一个Go函数关联，通过如下的方式来关联
 <pre>
@@ -3084,6 +3084,38 @@ func GetJoinList() (v []ZcmNews, err error) {
 </body>
 </html>
 </pre>
+beego 中路由参数与表单参数
+
+beego的路由映射支持灵活的结构，比如对于这种/blog/:catName可以表示的是某一个分类下的blog列表，那么这里的:catName就是路由参数；如果说我们要对这个分类下面的blog进行分页，想查看第10页的blog，那么我们的url可能变成了/blog/:catName?page=10这种格式，那么这里的page就是表单参数。表单参数既可以是GET类型的参数也可以是POST类型的参数，总之都叫做表单参数。
+
+1. 获取路由参数的方法（可以使用下面的方法来获取路由参数）
+<pre>
+方法 	原型
+GetInt 	func (c *Controller) GetInt(key string) (int64, error)
+GetBool 	func (c *Controller) GetBool(key string) (bool, error)
+GetFloat 	func (c *Controller) GetFloat(key string) (float64, error)
+GetString 	func (c *Controller) GetString(key string) string
+</pre>
+2. 获取表单参数的方法
+
+上面我们看过了获取路由参数的方法，这里我们再看一下获取表单参数的方法。在上面的获取路由参数的讲解最后，我们发现可以使用和上面相同的方法来获取表单参数。
+<pre>
+方法 	原型
+GetInt 	func (c *Controller) GetInt(key string) (int64, error)
+GetBool 	func (c *Controller) GetBool(key string) (bool, error)
+GetFloat 	func (c *Controller) GetFloat(key string) (float64, error)
+GetString 	func (c *Controller) GetString(key string) string
+</pre>
+验证很简单，使用这样的url：http://localhost:8080/blog/30/beego/true/98.45?page=10 和代码：
+<pre>
+page, _ := this.GetInt("page")
+beego.Debug("Page", page)
+</pre>
+输出:
+<pre>
+2014/09/02 14:41:07 [D] Page 10
+</pre>
+
 ### Socket编程
 多并发执行,当有新的客户端请求到达并同意接受Accept该请求的时候他会反馈当前的时间信息。值得注意的是，在代码中for循环里，当有错误发生时，直接continue而不是退出，是因为在服务器端跑代码的时候，当有错误发生的情况下最好是由服务端记录错误，然后当前连接的客户端直接报错而退出，从而不会影响到当前服务端运行的整个服务。
 <pre>
