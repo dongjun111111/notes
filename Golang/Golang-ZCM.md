@@ -4037,6 +4037,51 @@ func main() {
 output==>
 hello XXXXXXXX and YYYYYY
 </pre>
+###Golang自定义类型
+<pre>
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+type Server struct {
+	Name string
+}
+
+type Servers []Server
+
+func ListenServers() Servers {
+	return []Server{
+		{Name: "jason"},
+		{Name: "jack"},
+		{Name: "kitty"},
+	}
+}
+
+func (s Servers) Filter(name string) Servers {
+	filtered := make(Servers, 0)
+	for _, server := range s {
+		if strings.Contains(server.Name, name) {
+			filtered = append(filtered, server)
+			fmt.Printf("%v\n", &filtered)
+		}
+	}
+	return filtered
+}
+
+func main() {
+	servers := ListenServers()
+	servers = servers.Filter("")
+	fmt.Printf("servers %+v\n", servers)
+}
+output==>
+&[{jason}]
+&[{jason} {jack}]
+&[{jason} {jack} {kitty}]
+servers [{Name:jason} {Name:jack} {Name:kitty}]
+</pre>
 ###litte tools
 <pre>
 package main
