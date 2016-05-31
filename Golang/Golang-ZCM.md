@@ -3955,6 +3955,30 @@ itoa`s type is: string
 "Jason"
 "hello,\u4e16\u754c"
 </pre>
+###将其他类型的变量转换成字符串类型
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"reflect"
+)
+
+func ToString(v interface{}) string {
+	data, _ := json.Marshal(v)
+	return string(data)
+}
+
+func main() {
+	var s int = 55555
+	fmt.Println(ToString(s))
+	fmt.Println("s`s type is:", reflect.TypeOf(ToString(s)))
+}
+output==>
+55555
+s`s type is: string
+</pre>
 ###for循环
 <pre>
 package main
