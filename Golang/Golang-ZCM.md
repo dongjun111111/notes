@@ -3115,7 +3115,43 @@ beego.Debug("Page", page)
 <pre>
 2014/09/02 14:41:07 [D] Page 10
 </pre>
+###reflect
+<pre>
+package main
 
+import (
+	"fmt"
+	"reflect"
+)
+
+type Info struct {
+	name string `abc:"type,attr,omitempty" nnn:"xxx"`
+	//pass struct{} `test`
+}
+
+func main() {
+	info := Info{"hello"}
+	ref := reflect.ValueOf(info)
+	fmt.Println(ref.Kind())
+	fmt.Println(reflect.Interface)
+	fmt.Println(ref.Type())
+	typ := reflect.TypeOf(info)
+	n := typ.NumField()
+	for i := 0; i < n; i++ {
+		f := typ.Field(i)
+		fmt.Println(f.Tag)
+		fmt.Println(f.Tag.Get("nnn"))
+		fmt.Println(f.Name)
+	}
+}
+output==>
+struct
+interface
+main.Info
+abc:"type,attr,omitempty" nnn:"xxx"
+xxx
+name
+</pre>
 ### Socket编程
 多并发执行,当有新的客户端请求到达并同意接受Accept该请求的时候他会反馈当前的时间信息。值得注意的是，在代码中for循环里，当有错误发生时，直接continue而不是退出，是因为在服务器端跑代码的时候，当有错误发生的情况下最好是由服务端记录错误，然后当前连接的客户端直接报错而退出，从而不会影响到当前服务端运行的整个服务。
 <pre>
