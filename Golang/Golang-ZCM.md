@@ -3872,3 +3872,86 @@ id: 1  ticket: 2
 id: 1  ticket: 1
 id: 1  ticket: 0
 </pre>
+###strconv中的类型转换
+<pre>
+package main
+
+import (
+	"fmt"
+	"reflect"
+	"strconv"
+)
+
+func main() {
+	//ParseBool 将字符串转换为布尔值
+	fmt.Println(strconv.ParseBool("1"))     //true
+	fmt.Println(strconv.ParseBool("t"))     //true
+	fmt.Println(strconv.ParseBool("true"))  //true
+	fmt.Println(strconv.ParseBool("0"))     //false
+	fmt.Println(strconv.ParseBool("f"))     //false
+	fmt.Println(strconv.ParseBool("false")) //false
+
+	// FormatBool 将布尔值转换为字符串 "true" 或 "false"
+	fmt.Println(strconv.FormatBool(0 < 1)) //true
+	fmt.Println(strconv.FormatBool(0 > 1)) // false
+
+	// ParseFloat 将字符串转换为浮点数
+	s := "0.65645434345"
+	fmt.Println("f`s type was:", reflect.TypeOf(s))
+	f, _ := strconv.ParseFloat(s, 64)
+	fmt.Println("f`s type is:", reflect.TypeOf(f))
+
+	// ParseInt 将字符串转换为 int 类型
+	fmt.Println(strconv.ParseInt("123", 10, 8))
+	dd, _ := strconv.ParseInt("123", 10, 8)
+	fmt.Println("dd`s type is:", reflect.TypeOf(dd)) //int64
+
+	// Atoi 相当于 ParseInt(s, 10, 0)
+	fmt.Println(strconv.Atoi("234546764"))
+	at, _ := strconv.Atoi("234546764")
+	fmt.Println("at`s type is:", reflect.TypeOf(at)) //int
+
+	// FormatFloat 将浮点数 f 转换为字符串值
+	fot := 100.12345678901234567890123456789
+	fmt.Println(strconv.FormatFloat(fot, 'b', 5, 32))
+	fotconv := strconv.FormatFloat(fot, 'b', 5, 32)
+	fmt.Println("fotconv`s type is:", reflect.TypeOf(fotconv)) //string
+
+	//FormatInt将 int 型整数 i 转换为字符串形式
+	// Itoa 相当于 FormatInt(i, 10)
+	fmt.Println(strconv.Itoa(2048))
+	itoaa := strconv.Itoa(2048)
+	fmt.Println("itoa`s type is:", reflect.TypeOf(itoaa)) //string
+
+	//Quote将字符串转换成 "双引号" 包裹起来的字符串
+	fmt.Println(strconv.Quote(`Jason`)) //"Jason"
+
+	// AppendQuoteToASCII 将字符串 s 转换为“双引号”引起来的 ASCII 字符串
+	stas := "hello,世界"
+	stab := make([]byte, 0)
+	stab = strconv.AppendQuoteToASCII(stab, stas)
+	fmt.Printf("%s", stab) //"hello,\u4e16\u754c"
+
+}
+output==>
+true <nil>
+true <nil>
+true <nil>
+false <nil>
+false <nil>
+false <nil>
+true
+false
+f`s type was: string
+f`s type is: float64
+123 <nil>
+dd`s type is: int64
+234546764 <nil>
+at`s type is: int
+13123382p-17
+fotconv`s type is: string
+2048
+itoa`s type is: string
+"Jason"
+"hello,\u4e16\u754c"
+</pre>
