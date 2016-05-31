@@ -4082,6 +4082,32 @@ output==>
 &[{jason} {jack} {kitty}]
 servers [{Name:jason} {Name:jack} {Name:kitty}]
 </pre>
+简化上面的可以写成：
+<pre>
+package main
+
+import "fmt"
+
+type Server struct {
+	name string
+}
+
+type Servers []Server
+
+func returnServers() Servers {
+	return []Server{
+		{name: "jason"},
+		{name: "jack"},
+		{name: "jakiry"},
+	}
+}
+
+func main() {
+	fmt.Println(returnServers())
+}
+output==>
+[{jason} {jack} {jakiry}]
+</pre>
 ###litte tools
 <pre>
 package main
