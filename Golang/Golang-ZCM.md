@@ -3955,3 +3955,40 @@ itoa`s type is: string
 "Jason"
 "hello,\u4e16\u754c"
 </pre>
+###for循环
+<pre>
+package main
+
+import "fmt"
+
+//for 循环
+func main() {
+	//第一种,单一条件循环
+	i := 1
+	for i <= 3 {
+		fmt.Println(i)
+		i = i + 1
+	}
+	//第二种，经典的循环条件初始化/条件判断/循环后条件变化
+	for j := 7; j <= 9; j++ {
+		fmt.Println(j)
+	}
+	//第三种，无条件for循环是死循环，除非用break跳出或则return从函数返回
+	for {
+		fmt.Println("loop")
+		fmt.Println("loop")
+		fmt.Println("loop")
+		return //break也可以
+	}
+}
+output==>
+1
+2
+3
+7
+8
+9
+loop
+loop
+loop
+</pre>
