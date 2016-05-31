@@ -3116,6 +3116,90 @@ beego.Debug("Page", page)
 2014/09/02 14:41:07 [D] Page 10
 </pre>
 ###reflect
+reflect包有两个数据类型我们必须知道，一个是Type，一个是Value。
+
+Type就是定义的类型的一个数据类型，Value是值的类。
+<pre>
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+type Mystruct struct {
+	name string
+}
+
+func (this *Mystruct) Getname() string {
+	return this.name
+}
+func (this *Mystruct) Gettwo() string {
+	return this.name + "hello"
+}
+
+func main() {
+	s := "this is a string"
+	fmt.Println("s`s type  is:", reflect.TypeOf(s))
+	fmt.Println("s`s value is:", reflect.ValueOf(s))
+
+	var x int = 3
+	fmt.Println("x`s type is:", reflect.TypeOf(x))
+	fmt.Println("x`s value is:", reflect.ValueOf(x))
+
+	a := new(Mystruct)
+	a.name = "Jason"
+	typ := reflect.TypeOf(a)
+	fmt.Println("typ`s type is:", reflect.TypeOf(typ))
+	fmt.Println("typ`s value is:", reflect.ValueOf(typ))
+	fmt.Println("typ`s NumMethod is:", typ.NumMethod())//属于typ的方法的总个数（这个太6了),分别是Getname与Gettwo
+}
+output==>
+s`s type  is: string
+s`s value is: this is a string
+x`s type is: int
+x`s value is: 3
+typ`s type is: *reflect.rtype
+typ`s value is: &{8 8 1536160849 0 8 8 54 0x5a0930 0x543f50 0x51af60 0x4f1708 <nil>}
+typ`s NumMethod is: 2 
+</pre>
+reflect.ValueOf().FieldByName ,获取结构体内某一个属性的值
+<pre>
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+type Mystruct struct {
+	name string
+	age  int
+}
+
+func (this *Mystruct) Getname() string {
+	return this.name
+}
+
+func main() {
+	var a Mystruct
+	b := new(Mystruct)
+	fmt.Println("a value:", reflect.ValueOf(a))
+	fmt.Println("b value:", reflect.ValueOf(b))
+
+	a.name = "jack"
+	a.age = 4
+	b.name = "jason"
+
+	val := reflect.ValueOf(a).FieldByName("age")
+	fmt.Println("a FieldByName:", val)
+}
+output==>
+a value: { 0}
+b value: &{ 0}
+a FieldByName: 4
+</pre>
+
 <pre>
 package main
 
