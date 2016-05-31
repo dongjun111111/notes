@@ -3658,7 +3658,7 @@ func main() {
 output==>
 cnt=200
 </pre>
-卖票的故事 ~
+卖票的故事 ~ ~ ~
 <pre>
 package main
 
