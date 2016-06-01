@@ -4186,7 +4186,92 @@ output==>
 2016/05/31 20:10:44 true
 2016/05/31 20:10:44 耗时:7029402100
 </pre>
-###litte tools
+###Golang一个方法实现对数字或者字符串进行排序
+<pre>
+package main
+
+import "fmt"
+
+type Xi []int
+type Xs []string
+
+func (xi Xi) Len() int {
+	return len(xi)
+}
+
+func (xi Xi) Less(i, j int) bool {
+	return xi[j] < xi[i]
+}
+func (xi Xi) Swap(i, j int) {
+	xi[i], xi[j] = xi[j], xi[i]
+}
+
+func (xs Xs) Len() int {
+	return len(xs)
+}
+
+func (xs Xs) Less(i, j int) bool {
+	return xs[j] < xs[i]
+}
+
+func (xs Xs) Swap(i, j int) {
+	xs[i], xs[j] = xs[j], xs[i]
+}
+
+type Sorter interface {
+	Len() int
+	Less(i, j int) bool
+	Swap(i, j int)
+}
+
+func Sort(x Sorter) {
+	for i := 0; i < x.Len()-1; i++ {
+		for j := i + 1; j < x.Len(); j++ {
+			if x.Less(i, j) {
+				x.Swap(i, j)
+			}
+		}
+	}
+}
+
+func main() {
+	ints := Xi{67, 8, 9, 56, 8, 8, 990, 54, 5667, 788, 99, 674, 5, 7, 845}
+	strings := Xs{"jack", "hrrgy", "abi", "frog"}
+	Sort(ints)
+	fmt.Println(ints)
+	Sort(strings)
+	fmt.Println(strings)
+}
+output==>
+[5 7 8 8 8 9 54 56 67 99 674 788 845 990 5667]
+[abi frog hrrgy jack]
+</pre>
+###Golang不定二维数组
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+	s := [...][2]string{{"ss", "dd"}, {"gg", "hh"}, {"kk", "jj"}, {"55", "88"}}
+	b := s
+	for _, v := range b {
+		for _, t := range v {
+			fmt.Println(t)
+		}
+	}
+}
+output==>
+ss
+dd
+gg
+hh
+kk
+jj
+55
+88
+</pre>
+###Litte Tools 小工具
 <pre>
 package main
 
