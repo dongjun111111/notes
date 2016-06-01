@@ -3277,7 +3277,74 @@ func (this *...) ...(){
 	}
 } 
 </pre>
-
+#####beego中使用beego/orm更新数据
+models.go
+<pre>
+import "..."
+type JasonTest struct {
+	Id    int    `orm:"column(id);pk"`
+	Name  string `orm:"column(name);size(20)"`
+	Phone string `orm:"column(phone);size(100)"`
+}
+//这个方法会默认更新一条数据的所有字段
+func UpdateAllData(jt *JasonTest)(int64,error){
+	o:= orm.NewOrm()	
+	num ,err := o.Update(jt)
+	return num ,err
+}
+//这个方法只会更新指定字段(这里只会更新name字段的值)
+func UpdateOneData(jt *JasonTest)(int64,error){
+	o:= orm.NewOrm()	
+	num ,err := o.Update(jt,"name")
+	return num ,err
+}
+</pre>
+controllers.go
+<pre>
+import "..."
+var jasontest models.JasonTest
+jasontest.Id = 5
+jasontest.Name = "all"
+jasontest.Phone = "11111"
+_, err := models.UpdateAllData(&jasontest)
+if err == nil {
+	words += "所有字段更新成功"
+} else {
+	words += "所有字段更新失败"
+}
+_, err2 := models.UpdateOneData(&jasontest)
+if err2 == nil {
+	words += "name更新成功"
+} else {
+	words += "name更新失败"
+}
+</pre>
+#####beego中使用beego/orm插入数据
+models.go
+<pre>
+import "..."
+type JasonTest struct {
+	Id    int    `orm:"column(id);pk"`
+	Name  string `orm:"column(name);size(20)"`
+	Phone string `orm:"column(phone);size(100)"`
+}
+func InsertIntoJason(a int, b, c string) (err error) {
+	o := orm.NewOrm()
+	sql := "insert into jason_test(id,name,phone) values(?,?,?)"
+	_, err = o.Raw(sql, a, b, c).Exec()
+	fmt.Println(sql, err)
+	return err
+}
+</pre>
+controllers.go
+<pre>
+err := models.InsertIntoJason(9, "ll", "2433445")
+if err == nil {
+	words +="添加成功"
+} else {
+	words +="添加失败"
+}
+</pre>
 ### Socket编程
 多并发执行,当有新的客户端请求到达并同意接受Accept该请求的时候他会反馈当前的时间信息。值得注意的是，在代码中for循环里，当有错误发生时，直接continue而不是退出，是因为在服务器端跑代码的时候，当有错误发生的情况下最好是由服务端记录错误，然后当前连接的客户端直接报错而退出，从而不会影响到当前服务端运行的整个服务。
 <pre>
