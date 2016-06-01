@@ -1,5 +1,8 @@
 #喵
 ##基础知识
+
+<font color=red>在Golang中不能用string(int) ==>string，只能用strconv.Itoa(int) ==>string ,同理，将string转成int只能用strconv.Atoi；string强制转换只能用于将切片转成string。</font>
+
 字符串
 
 因为Golan中的字符串是不可变的，所以不能像其他语言那样很容易就修改字符串的内容。但是还是有至少下面两种方式来实现字符串内容的修改。
