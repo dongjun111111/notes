@@ -3236,6 +3236,48 @@ abc:"type,attr,omitempty" nnn:"xxx"
 xxx
 name
 </pre>
+#####beego中使用beego/orm获取一个数据集的例子(多个数据)
+models.go
+<pre>
+package models
+
+import (
+	"fmt"
+	"github.com/astaxie/beego/orm"
+)
+type JasonTest struct {
+	Id    int    `orm:"column(id);pk"`
+	Name  string `orm:"column(name);size(20)"`
+	Phone string `orm:"column(phone);size(100)"`
+}
+
+/*视情况而定
+func init() {
+	orm.RegisterModel(new(JasonTest))
+}*/
+
+//获取数据集
+func GetNamesBySort(condition string) (names []JasonTest, err error) {
+	o := orm.NewOrm()
+	sql := "select name from jason_test where id>?"
+	_, err = o.Raw(sql, condition).QueryRows(&names)
+	fmt.Println(sql, err)
+	return names, err
+}
+</pre>
+controllers.go
+<pre>
+import "`/models"
+func (this *...) ...(){
+	results ,_:= models.GetNamesBySort("1")
+	fmt.Println("所查询到的数据集的个数为：",len(results))
+	var stringword string
+	for k, _ := range results {               //将结构体形式的数据集转成字符串类型
+		stringword += results[k].Name + "|"
+	}
+} 
+</pre>
+
 ### Socket编程
 多并发执行,当有新的客户端请求到达并同意接受Accept该请求的时候他会反馈当前的时间信息。值得注意的是，在代码中for循环里，当有错误发生时，直接continue而不是退出，是因为在服务器端跑代码的时候，当有错误发生的情况下最好是由服务端记录错误，然后当前连接的客户端直接报错而退出，从而不会影响到当前服务端运行的整个服务。
 <pre>
