@@ -3292,7 +3292,7 @@ type JasonTest struct {
 //这个方法会默认更新一条数据的所有字段
 func UpdateAllData(jt *JasonTest)(int64,error){
 	o:= orm.NewOrm()	
-	num ,err := o.Update(jt)
+	num ,err := o.Update(jt)   //这里不能是&jt(指针的指针)
 	return num ,err
 }
 //这个方法只会更新指定字段(这里只会更新name字段的值)
@@ -3306,7 +3306,7 @@ controllers.go
 <pre>
 import "..."
 var jasontest models.JasonTest
-jasontest.Id = 5
+jasontest.Id = 5             //这里的Id（表的主键绝对不能为空）
 jasontest.Name = "all"
 jasontest.Phone = "11111"
 _, err := models.UpdateAllData(&jasontest)
