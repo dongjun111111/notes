@@ -4688,6 +4688,28 @@ func main() {
 output==>
 hello_jason_I_am_world
 </pre>
+下面是求和
+<pre>
+package main
+
+import "fmt"
+
+type f []int
+
+func Add(f ...interface{}) int {
+	var ff int
+	for _, v := range f {
+		ff = ff + v.(int)
+	}
+	return ff
+}
+
+func main() {
+	fmt.Println(Add(5, 6, 7, 78, 4, 8, 0))
+}
+output==>
+108
+</pre>
 类型断言。其实Golang中的所有类型包括string.int.struct等都是默认继承了interface{}，所以interface{}也就是万能类型的来历。现在有一个问题：如何将一个interface{}形式的变量转换成string。那么这里就必须用到类型断言。见下：
 <pre>
 package main
