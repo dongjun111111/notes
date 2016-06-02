@@ -3290,7 +3290,7 @@ type JasonTest struct {
 	Phone string `orm:"column(phone);size(100)"`
 }
 func init() {
-	orm.RegisterModel(new(Jack))   //1.注册模型是必须的(使用结构体对应表结构则需要注册模型)
+	orm.RegisterModel(new(Jack))   //1.注册模型是必须的(注册模型：如果使用 orm.QuerySeter 进行高级查询的话，这个是必须的。反之，如果只使用Raw查询和 map struct，是无需这一步的。)
 }
 //这个方法会默认更新一条数据的所有字段
 func UpdateAllData(jt *JasonTest)(int64,error){
@@ -3351,6 +3351,20 @@ if err == nil {
 	words +="添加失败"
 }
 </pre>
+###Beego中使用事务
+<pre>
+o := NewOrm()
+err := o.Begin()
+// 事务处理过程
+...
+...
+// 此过程中的所有使用 o Ormer 对象的查询都在事务处理范围内
+if SomeError {
+    err = o.Rollback()
+} else {
+    err = o.Commit()
+}
+</pre>
 ### Socket编程
 多并发执行,当有新的客户端请求到达并同意接受Accept该请求的时候他会反馈当前的时间信息。值得注意的是，在代码中for循环里，当有错误发生时，直接continue而不是退出，是因为在服务器端跑代码的时候，当有错误发生的情况下最好是由服务端记录错误，然后当前连接的客户端直接报错而退出，从而不会影响到当前服务端运行的整个服务。
 <pre>
@@ -3390,6 +3404,58 @@ func checkError(err error) {
 		os.Exit(1)
 	}
 }
+</pre>
+###gob/Gob/GOB
+<pre>
+package main
+
+/*
+1 P和Q是两个结构体，应该说是“相似”的两个结构体
+2 Encode是将结构体传递过来，但是Decode的函数参数却是一个pointer！
+
+gob包是Go提供的"私有"的编解码方式，文档中也说了它的效率会比json，
+xml等更高（虽然我也没有验证）。因此在两个Go服务之间的相互通信建议
+不要再使用json传递了，完全可以直接使用gob来进行数据传递。
+*/
+import (
+	"bytes"
+	"encoding/gob"
+	"fmt"
+	"log"
+)
+
+type P struct {
+	X, Y, Z int
+	Name    string
+}
+
+type Q struct {
+	X, Y *int32
+	Name string
+}
+
+func main() {
+	var network bytes.Buffer
+	enc := gob.NewEncoder(&network)
+	dec := gob.NewDecoder(&network)
+	// Encode (send) the value.
+	err := enc.Encode(P{3, 4, 5, "Jason"})
+	if err != nil {
+		log.Fatal("encode error:", err)
+	}
+	// Decode (receive) the value.
+	var q Q
+	err = dec.Decode(&q)
+	if err != nil {
+		log.Fatal("decode error:", err)
+	}
+	fmt.Println(q)
+	fmt.Printf("%q: {%d,%d}\n", q.Name, *q.X, *q.Y)
+
+}
+output==>
+{0xc08202ab18 0xc08202ab1c Jason}
+"Jason": {3,4}
 </pre>
 ###RESTful
 <pre>
