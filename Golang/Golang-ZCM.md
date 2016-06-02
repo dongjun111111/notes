@@ -3104,14 +3104,15 @@ GetString 	func (c *Controller) GetString(key string) string
 上面我们看过了获取路由参数的方法，这里我们再看一下获取表单参数的方法。在上面的获取路由参数的讲解最后，我们发现可以使用和上面相同的方法来获取表单参数。
 <pre>
 方法 	原型
-GetInt 	func (c *Controller) GetInt(key string) (int64, error)
-GetBool 	func (c *Controller) GetBool(key string) (bool, error)
-GetFloat 	func (c *Controller) GetFloat(key string) (float64, error)
-GetString 	func (c *Controller) GetString(key string) string
+GetInt 	func (c *Controller) GetInt(key string) (int64, error)         // value = GetInt(name)
+GetBool 	func (c *Controller) GetBool(key string) (bool, error)     // value = GetBool(name)
+GetFloat 	func (c *Controller) GetFloat(key string) (float64, error) // value = GetFloat(name)
+GetString 	func (c *Controller) GetString(key string) string          // value = GetString(name)
+GetStrings(key string) []string										   // value = GetStrings(name)
 </pre>
 验证很简单，使用这样的url：http://localhost:8080/blog/30/beego/true/98.45?page=10 和代码：
 <pre>
-page, _ := this.GetInt("page")
+page, _ := this.GetInt("page")       //page是name,得到的结果是value   (name=>value)
 beego.Debug("Page", page)
 </pre>
 输出:
@@ -3460,7 +3461,7 @@ output==>
 ###Beego中正则路由的使用（实现一个路由下多个数据的逐一展示）
 router.go
 <pre>
-	beego.Router("/jack2/:id([0-9]+)", &controllers.JackController{}, "get:Jack2")
+	beego.Router("/jack2/:id([0-9]+)", &controllers.JackController{}, "get:Jack2")   //这里将get:Jack2改为*:Jack2，则无论何种访问方式都可以，不然只能通过get方式访问
 </pre>
 controller.go
 <pre>
