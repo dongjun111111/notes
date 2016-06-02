@@ -4598,3 +4598,28 @@ aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
 5d41402abc4b2a76b9719d911017c592
 155****4567
 </pre>
+###万能类型 interface{} 与 .(string)的使用
+<pre>
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+//万能类型(interface{})很神奇
+func getname(pa ...interface{}) {
+	var pasl []string
+	for _, p := range pa {
+		pasl = append(pasl, p.(string))
+	}
+	aa := strings.Join(pasl, "_")
+	fmt.Println(aa)
+}
+
+func main() {
+	getname("hello", "jason", "I", "am", "world")
+}
+output==>
+hello_jason_I_am_world
+</pre>
