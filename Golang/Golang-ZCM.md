@@ -4598,7 +4598,7 @@ aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
 5d41402abc4b2a76b9719d911017c592
 155****4567
 </pre>
-###万能类型 interface{} 与 .(string)的使用
+###万能类型 interface{} 与 .(string)的使用 |类型断言
 <pre>
 package main
 
@@ -4622,4 +4622,15 @@ func main() {
 }
 output==>
 hello_jason_I_am_world
+</pre>
+类型断言。其实Golang中的所有类型包括string.int.struct等都是默认继承了interface{}，所以interface{}也就是万能类型的来历。现在有一个问题：如何将一个interface{}形式的变量转换成string。那么这里就必须用到类型断言。见下：
+<pre>
+package main
+
+func main() {
+	var val interface{} = "hello"
+	println(val.(string))    //这样子用滴···，那么输出的是string形式，如果val.(int)那么就是int类型
+}
+output==>
+hello
 </pre>
