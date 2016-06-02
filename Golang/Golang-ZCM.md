@@ -4688,7 +4688,7 @@ func main() {
 output==>
 hello_jason_I_am_world
 </pre>
-下面是求和
+下面是利用类型断言来求和的例子：
 <pre>
 package main
 
@@ -4699,7 +4699,7 @@ type f []int
 func Add(f ...interface{}) int {
 	var ff int
 	for _, v := range f {
-		ff = ff + v.(int)
+		ff += v.(int)
 	}
 	return ff
 }
