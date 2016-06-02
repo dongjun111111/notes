@@ -3149,6 +3149,39 @@ func (this *MainController) Post() {
     }
 }
 </pre>
+Beego中cookie操作 redirect跳转操作 WriteString Abort操作需要引入github.com/astaxie/beego/context包
+
+context 对象是对 Input 和 Output 的封装，里面封装了几个方法：
+
+- Redirect
+- Abort
+- WriteString
+- GetCookie
+- SetCookie
+
+
+Input 对象 （很多方法，下面列出常用）
+
+- Domain 请求的域名，例如 beego.me
+- UserAgent 返回请求的 UserAgent，例如 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36
+- Param 在路由设置的时候可以设置参数，这个是用来获取那些参数的，例如 Param(":id"),返回12
+- Query 该函数返回 Get 请求和 Post 请求中的所有数据，和 PHP 中 $_REQUEST 类似
+- Cookie 返回请求中的 cookie 数据，例如 Cookie("username")，就可以获取请求头中携带的 cookie 信息中 username 对应的值
+- Session session 是用户可以初始化的信息，默认采用了 beego 的 session 模块中的 Session 对象，用来获取存储在服务
+器端中的数据。
+- 。。。
+
+Output 对象 （很多方法，下面列出常用）
+
+- Cookie 设置输出的 cookie 信息，例如 Cookie("sessionID","beegoSessionID")
+- Json 把 Data 格式化为 Json，然后调用 Body 输出数据
+- Jsonp 把 Data 格式化为 Jsonp，然后调用 Body 输出数据
+- Session 设置在服务器端保存的值，例如 Session("username","astaxie")，这样用户就可以在下次使用的时候读取
+- 。。。
+
+
+Session操作最好引入github.com/astaxie/beego/session包，使用方法见http://beego.me/docs/module/session.md
+
 ###reflect
 reflect包有两个数据类型我们必须知道，一个是Type，一个是Value。
 
