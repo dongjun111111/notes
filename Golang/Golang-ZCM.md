@@ -4694,8 +4694,6 @@ package main
 
 import "fmt"
 
-type f []int
-
 func Add(f ...interface{}) int {
 	var ff int
 	for _, v := range f {
