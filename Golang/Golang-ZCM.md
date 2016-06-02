@@ -3119,6 +3119,36 @@ beego.Debug("Page", page)
 <pre>
 2014/09/02 14:41:07 [D] Page 10
 </pre>
+将表单内容赋值到一个struct里
+
+如果要把表单里的内容赋值到一个 struct 里，除了用上面的方法一个一个获取再赋值外，beego 提供了通过另外一个更便捷的方式，就是通过 struct 的字段名或 tag 与表单字段对应直接解析到 struct。
+
+模板html里面：
+<pre>
+<form id="user" method="post">
+    名字：<input name="username" type="text" />
+    年龄：<input name="age" type="text" />
+    邮箱：<input name="Email" type="text" />
+    <input type="submit" value="提交" />
+</form>
+</pre>
+constroller里面定义struct:
+<pre>
+type user struct {
+    Id    int         `form:"-"`           // - 表示忽略（不使用的意思）
+    Name  interface{} `form:"username"`
+    Age   int         `form:"age"`
+    Email string
+}
+
+//controller里面解析：
+func (this *MainController) Post() {     
+    u := user{}
+    if err := this.ParseForm(&u); err != nil {
+        //handle error
+    }
+}
+</pre>
 ###reflect
 reflect包有两个数据类型我们必须知道，一个是Type，一个是Value。
 
