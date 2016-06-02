@@ -3180,8 +3180,17 @@ Output 对象 （很多方法，下面列出常用）
 - 。。。
 
 
-Session操作最好引入github.com/astaxie/beego/session包，使用方法见http://beego.me/docs/module/session.md
+Session操作可以引入github.com/astaxie/beego/session包，使用方法见http://beego.me/docs/module/session.md
 
+在beego框架中直接在controller中使用GetSession SetSession DelSession 就能完成基本的操作。同样的，cookie操作也是类似，见下例子:
+<pre>
+//设置cookie
+	this.Ctx.SetCookie("guess", "guesscookie")
+	//清除cookie
+	this.Ctx.SetCookie("guess", "0", -1)
+	//读取cookie
+	guess := this.Ctx.GetCookie("guess")
+</pre>
 ###reflect
 reflect包有两个数据类型我们必须知道，一个是Type，一个是Value。
 
