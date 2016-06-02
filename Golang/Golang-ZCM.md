@@ -3457,6 +3457,45 @@ output==>
 {0xc08202ab18 0xc08202ab1c Jason}
 "Jason": {3,4}
 </pre>
+###Beego中正则路由的使用（实现一个路由下多个数据的逐一展示）
+router.go
+<pre>
+	beego.Router("/jack2/:id([0-9]+)", &controllers.JackController{}, "get:Jack2")
+</pre>
+controller.go
+<pre>
+func (this *JackController) Jack2() {
+	id := this.Ctx.Input.Param(":id") //这里的 :id  要与router里面的 :id([0-9]+) 对应
+	idd, _ := strconv.Atoi(id)
+	reult, err := models.ShowEveryData(idd)
+	fmt.Println(idd)
+	if err == nil && reult != nil {
+		fmt.Println(reult.Name)
+		Age := strconv.Itoa(reult.Age)
+		this.Ctx.WriteString(reult.Name + "-" + Age)
+	} else {
+		this.Ctx.WriteString("出错了")
+	}
+}
+</pre>
+model.go
+<pre>
+type Jack struct {
+	Id   int    `orm:"column(id)"`
+	Name string `orm:"column(name)"`
+	Age  int    `orm:"column(age)"`
+}
+//实现根据id访问每条数据
+func ShowEveryData(id int) (data *Jack, err error) {
+	o := orm.NewOrm()
+	sql := "select * from jack where id = ?"
+	err = o.Raw(sql, id).QueryRow(&data)
+	if err != nil {
+		fmt.Println("results:", sql, err)
+	}
+	return data, err
+}
+</pre>
 ###RESTful
 <pre>
 package main
