@@ -4901,5 +4901,6 @@ func main() {
 	result, _ := SendGet("http://www.sina.com")
 	fmt.Println(string(result)) 
 }
-s
+output==>  //得到base64处理过的切片
+Y3SRj2WKAL7SaTG2BAo13voGdi2FAq7osAbkAWWGCAZFDWZFVv1pWu2oWu2oVq1pXjGqVvGpX37sa32lYFG8AUHlBQ6cYTGxDAZ13u1Fa318BAL....
 </pre>
