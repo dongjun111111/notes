@@ -856,6 +856,62 @@ runtime包中有几个处理goroutine的函数：
 - GOMAXPROCS
 
 用来设置可以并行计算的CPU核数的最大值，并返回之前的值。
+###自增长 ID 生成器
+<pre>
+package main
+
+import "fmt"
+
+//自增长 ID 生成器
+type AutoInc struct {
+	start, step int
+	queue       chan int
+	running     bool
+}
+
+func New(start, step int) (ai *AutoInc) {
+	ai = &AutoInc{
+		start:   start,
+		step:    step,
+		running: true,
+		queue:   make(chan int, 4),
+	}
+	go ai.process()
+	return
+}
+
+func (ai *AutoInc) process() {
+	defer func() { recover() }()
+	for i := ai.start; ai.running; i = i + ai.step {
+		ai.queue <- i
+	}
+}
+
+func (ai *AutoInc) Id() int {
+	return <-ai.queue
+}
+
+func (ai *AutoInc) Close() {
+	ai.running = false
+	close(ai.queue)
+}
+
+func main() {
+	ai := New(1, 7)
+	defer ai.Close()
+	for i := 0; i < 10; i = i + 2 {
+		if id := ai.Id(); id != i {
+			fmt.Println(id)
+		}
+	}
+}
+output==>
+1
+8
+15
+22
+29
+</pre>
 ###常量 const iota 
 const可以放到func外面，其他变量的声明不可以放到外面。
 <pre>
@@ -4698,4 +4754,64 @@ func main() {
 }
 output==>
 hello
+</pre>
+###Golang截断float string类型数据
+<pre>
+package main
+
+import "fmt"
+import "strings"
+import "strconv"
+
+var whoareyou = make(map[string]string)
+
+func WhoAreYou(account string) string {
+	key := string(account[:3])
+	return key
+}
+
+//对字符串进行截取
+func Substr(str string, start, length int) string {
+	rs := []rune(str)
+	rl := len(rs)
+	end := 0
+	if start < 0 {
+		start = rl - 1 + start
+	}
+	end = start + length
+	if start > end {
+		start, end = end, start
+	}
+	if start < 0 {
+		start = 0
+	}
+	if start > rl {
+		start = rl
+	}
+	if end < 0 {
+		end = 0
+	}
+	if end > rl {
+		end = rl
+	}
+	return string(rs[start:end])
+}
+
+//格式化float类型，截断，不四舍五入
+func FormatFloat64(f float64, l int) float64 {
+	str1 := fmt.Sprintf("%f", f)
+	strl := strings.Split(str1, ".")
+	strl[1] = Substr(strl[1], 0, l)
+	strre := strl[0] + "." + strl[1]
+	fre, _ := strconv.ParseFloat(strre, 64)
+	return fre
+}
+
+func main() {
+	fmt.Println(WhoAreYou("13588484126"))
+	fmt.Println(FormatFloat64(45.04676, 2))
+}
+output==>
+135
+45.04
 </pre>
