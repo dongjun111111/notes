@@ -4836,3 +4836,50 @@ output==>
 1.1234678 -> 1.12347
 1.1 -> 1.10000
 </pre>
+###发送Get请求
+<pre>
+package main
+
+import "fmt"
+import "net/http"
+import "io/ioutil"
+import "errors"
+import "encoding/base64"
+
+const (
+	base64Table = "173QRSTUabcdVWXYZHijKLAWDCABDstEFGuvwxyzGHIJklmnopqr234560178912"
+)
+
+var coder = base64.NewEncoding(base64Table)
+
+func base64Encode(src []byte) []byte {
+	return []byte(coder.EncodeToString(src))
+}
+
+func base64Decode(src []byte) ([]byte, error) {
+	return coder.DecodeString(string(src))
+}
+
+//发送get请求
+func SendGet(url string) ([]byte, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.Status == "404 Not Found" {
+		return nil, errors.New("服务器异常!")
+	}
+	if bodyByte, err := ioutil.ReadAll(resp.Body); err == nil {
+		return base64Encode(bodyByte), err //得到经过base64编码处理过的返回的数据
+	} else {
+		return nil, err
+	}
+}
+
+func main() {
+	result, _ := SendGet("http://www.sina.com")
+	fmt.Println(string(result)) 
+}
+s
+</pre>
