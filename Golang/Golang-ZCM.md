@@ -4815,3 +4815,24 @@ output==>
 135
 45.04
 </pre>
+进行四舍五入的：
+<pre>
+package main
+ 
+import (
+    "fmt"
+)
+ 
+func main() {
+    var fs []float64 = []float64{1.1234456, 1.1234567, 1.1234678, 1.1}
+    for _, f := range fs {
+        s := fmt.Sprintf("%.5f", f)
+        fmt.Println(f, "->", s)
+    }
+}
+output==>
+1.1234456 -> 1.12345
+1.1234567 -> 1.12346
+1.1234678 -> 1.12347
+1.1 -> 1.10000
+</pre>
