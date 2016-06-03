@@ -5006,3 +5006,24 @@ func main() {
 output==>
 results: 28 24
 </pre>
+特定元素过滤
+<pre>
+package main
+
+import "fmt"
+import "strings"
+
+//特定元素过滤,有则返回true
+func filter(num string) bool {
+	if strings.Contains(num, "123") || strings.Contains(num, "456") {
+		return true
+	}
+	return false
+}
+func main() {
+	s := "thddhhs23gffgbf"
+	fmt.Println(filter(s))
+}
+output==>
+false
+</pre>
