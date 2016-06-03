@@ -4948,3 +4948,61 @@ output==>
 --------------
 [60 104 116 109 108 62 10 60 109 101 116 97 32 104 116 116 112 45 101 113 117 105 118 61 34 114 101 102 114 101 115 104 34 32 99 111 110 116 101 110 116 61 34 48 59 117 114 108 61 104 116 116 112 58 47 47 119 119 119 46 98 97 105 100 117 46 99 111 109 47 34 62 10 60 47 104 116 109 108 62 10]
 </pre>
+发送put请求
+<pre>
+package main
+
+import "fmt"
+import "net/http"
+import "io/ioutil"
+import "bytes"
+
+//发送put请求
+func SendPut(url string, body []byte) ([]byte, error) {
+	client := &http.Client{}
+	requestBody := body
+	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(requestBody))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := client.Do(req)
+	defer resp.Body.Close()
+	if bodyByte, err := ioutil.ReadAll(resp.Body); err == nil {
+		responseBody := bodyByte
+		return responseBody, err
+	} else {
+		return nil, err
+	}
+}
+
+func main() {
+	//待测试
+}
+</pre>
+并行计算
+<pre>
+package main
+
+import "fmt"
+
+func sum(values []int, resultChan chan int) {
+	sum := 0
+	for _, value := range values {
+		sum += value
+	}
+	resultChan <- sum //将计算结果发送到channel
+}
+
+//并行计算，两个goroutine进行并行的累加计算，都完成后打印
+func main() {
+	values := []int{12, 3, 4, 5, 6, 7, 7, 8}
+	resultChan := make(chan int, 2) //定义2个goroutine
+	go sum(values[:len(values)/2], resultChan)
+	go sum(values[len(values)/2:], resultChan)
+	sum1, sum2 := <-resultChan, <-resultChan //接收结果
+	fmt.Println("results:", sum1, sum2)
+}
+output==>
+results: 28 24
+</pre>
