@@ -5027,3 +5027,34 @@ func main() {
 output==>
 false
 </pre>
+时间相关
+<pre>
+package main
+
+import "fmt"
+import "time"
+
+func GetToday() string {
+	today := time.Now().Format("2006-01-02")
+	return today
+}
+
+//获取今天剩余时间的秒数
+func GetTodayLastSecond() time.Duration {
+	today := GetToday() + " 23:59:59"
+	end, _ := time.ParseInLocation("2006-01-02 15:04:05", today, time.Local)
+	return end.Sub(time.Now())
+}
+
+//获取活动结束 ，剩余时间的秒数
+func GetAtivityLastSecondByEndtime(timestr string) time.Duration {
+	end, _ := time.ParseInLocation("2006-01-02 15:04:05", timestr, time.Local)
+	return end.Sub(time.Now())
+}
+
+func main() {
+	fmt.Println(GetToday(), GetTodayLastSecond(), GetAtivityLastSecondByEndtime("2016-06-09"))
+}
+output==>
+2016-06-03 3h28m25.0986392s -2562047h47m16.854775808s
+</pre>
