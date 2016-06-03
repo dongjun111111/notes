@@ -4904,3 +4904,47 @@ func main() {
 output==>  //得到base64处理过的切片
 Y3SRj2WKAL7SaTG2BAo13voGdi2FAq7osAbkAWWGCAZFDWZFVv1pWu2oWu2oVq1pXjGqVvGpX37sa32lYFG8AUHlBQ6cYTGxDAZ13u1Fa318BAL....
 </pre>
+//发送post请求
+<pre>
+package main
+
+import "fmt"
+import "net/http"
+import "io/ioutil"
+import "errors"
+import "bytes"
+
+//发送post请求
+func SendPost(url string, body []byte) ([]byte, error) {
+	requestBody := body //此处没有加密
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	fmt.Println(resp.Status)
+	if resp.Status == "404 Not Found" {
+		return nil, errors.New("服务器异常!")
+	}
+	if bodyByte, err := ioutil.ReadAll(resp.Body); err == nil {
+		fmt.Println(string(bodyByte), "--------------")
+		responseBody := bodyByte
+		return responseBody, err //此处没有加密
+	} else {
+		return nil, err
+	}
+}
+
+func main() {
+	res, _ := SendPost("http://baidu.com", []byte{'3', '4'})
+	fmt.Println(res)
+
+}
+output==>
+200 OK
+<html>
+<meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
+</html>
+--------------
+[60 104 116 109 108 62 10 60 109 101 116 97 32 104 116 116 112 45 101 113 117 105 118 61 34 114 101 102 114 101 115 104 34 32 99 111 110 116 101 110 116 61 34 48 59 117 114 108 61 104 116 116 112 58 47 47 119 119 119 46 98 97 105 100 117 46 99 111 109 47 34 62 10 60 47 104 116 109 108 62 10]
+</pre>
