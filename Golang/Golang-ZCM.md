@@ -5027,7 +5027,7 @@ func main() {
 output==>
 false
 </pre>
-时间相关
+简单时间处理：
 <pre>
 package main
 
