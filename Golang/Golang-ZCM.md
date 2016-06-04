@@ -5164,3 +5164,85 @@ http://localhost:9090
 ==========json 到 []string==========
 [hello apple python golang base peach pear]
 </pre>
+###Golang生成RSAF公私钥
+<pre>
+package main
+
+import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
+	"flag"
+	"fmt"
+	"os"
+)
+
+var outFilePath = flag.String("outpath", "./", "Generate rsa file save path")
+
+func main() {
+	flag.Parse()
+	if err := genRsaKey(1, *outFilePath); err != nil {
+		fmt.Println("密钥文件生成失败！")
+	} else {
+		fmt.Println("密钥文件生成成功！")
+	}
+}
+
+func genRsaKey(bits int, filePath string) error {
+	//检测生成证书
+	if bits > 1024 {
+		bits = 2048
+	} else {
+		bits = 1024
+	}
+
+	//查看目录是否存在
+	_, err := os.Stat(filePath)
+	if err != nil {
+		os.Mkdir(filePath, 0777)
+	}
+
+	// 生成私钥文件
+	privateKey, err := rsa.GenerateKey(rand.Reader, bits)
+	if err != nil {
+		return err
+	}
+	derStream := x509.MarshalPKCS1PrivateKey(privateKey)
+	block := &pem.Block{
+		Type:  "RSA PRIVATE KEY",
+		Bytes: derStream,
+	}
+	file, err := os.Create(fmt.Sprintf("%s/private.pem", filePath))
+	if err != nil {
+		return err
+	}
+
+	err = pem.Encode(file, block)
+	if err != nil {
+		return err
+	}
+	// 生成公钥文件
+	publicKey := &privateKey.PublicKey
+	derPkix, err := x509.MarshalPKIXPublicKey(publicKey)
+	if err != nil {
+		return err
+	}
+	block = &pem.Block{
+		Type:  "PUBLIC KEY",
+		Bytes: derPkix,
+	}
+	file, err = os.Create(fmt.Sprintf("%s/public.pem", filePath))
+	if err != nil {
+		return err
+	}
+	//fmt.Println("私钥：", base64.StdEncoding.EncodeToString(block.Bytes))
+	err = pem.Encode(file, block)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+output==> //本地目录生成两个文件，分别是public.pem与private.pem
+密钥文件生成成功！
+</pre>
