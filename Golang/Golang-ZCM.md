@@ -5347,3 +5347,115 @@ output==>
 加密编码内容=> yeOHQY5nXXl3wiNyjWBQO3s0zsT0mZezhgh+ycmve5+uV0/odAsw0bBe/4Innbf6DYxZzPsf8nHUow5MAZKLATjCyfWUGpGndbjfRzNWZ35LvMpZZKy/+B9SD3zisZwGb3JpLYKQt7R8oBHdeyKVGEc97UYNHew/0kmaMzUa4JE=
 解码解密内容=> Jason RSA
 </pre>
+###Golang写日志保存到本地
+<pre>
+package main
+
+import (
+	"flag"
+	"fmt"
+	"log"
+	"os"
+	"runtime"
+)
+
+var (
+	logFileName = flag.String("log", "ServerLog.log", "Log file name")
+)
+
+func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	flag.Parse()
+
+	//set logfile Stdout
+	logFile, logErr := os.OpenFile(*logFileName, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
+	if logErr != nil {
+		fmt.Println("Fail to find", *logFile, "cServer start Failed")
+		os.Exit(1)
+	} else {
+		fmt.Println("Log  was wrote!")
+	}
+	log.SetOutput(logFile)
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+
+	//write log
+	log.Printf("Server abort! Cause:%v \n", "test log file\r\n")
+
+}
+output==>
+Log  was wrote!
+</pre>
+###Golang struct结构体转buffer缓冲区
+<pre>
+package main
+
+import (
+	"bytes"
+	"encoding/binary"
+	"errors"
+	"fmt"
+	"io"
+	"reflect"
+)
+
+func writeBuf(w io.Writer, v reflect.Value) (n int, err error) {
+	newBuf := bytes.NewBuffer(nil)
+	for i := 0; i < v.NumField(); i++ {
+		switch v.Field(i).Type().Kind() {
+		case reflect.Struct:
+			n, err := writeBuf(newBuf, v.Field(i))
+			if err != nil {
+				return n, err
+			}
+		case reflect.Bool:
+			boolByte := []byte{0}
+			if v.Field(i).Bool() {
+				boolByte = []byte{1}
+			}
+			newBuf.Write(boolByte)
+		case reflect.String:
+			newBuf.WriteString(v.Field(i).String())
+		case reflect.Slice:
+			newBuf.Write(v.Field(i).Bytes())
+		case reflect.Int:
+			binary.Write(newBuf, binary.LittleEndian, int32(v.Field(i).Int()))
+		case reflect.Uint:
+			binary.Write(newBuf, binary.LittleEndian, uint32(v.Field(i).Uint()))
+		case reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+			reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+			reflect.Float32, reflect.Float64, reflect.Complex64, reflect.Complex128:
+			binary.Write(newBuf, binary.LittleEndian, v.Field(i).Interface())
+		}
+	}
+	return w.Write(newBuf.Bytes())
+}
+
+func WriteStructToBuffer(w io.Writer, data interface{}) error {
+	v := reflect.Indirect(reflect.ValueOf(data))
+	if v.Kind() == reflect.Struct {
+		fmt.Println("test")
+		_, err := writeBuf(w, v)
+		return err
+	}
+	return errors.New("invalid type Not a struct")
+}
+
+func StringFixedLength(s string, length int) []byte {
+	sLength := len(s)
+	if sLength >= length {
+		return []byte(s[:length])
+	} else {
+		b := make([]byte, length-sLength)
+		return append([]byte(s), b...)
+	}
+	return nil
+}
+
+func main() {
+	s := "1gtrhgrt2345456"
+	fmt.Println(string(StringFixedLength(s, 4)))
+
+}
+output==>
+1gtr
+</pre>
