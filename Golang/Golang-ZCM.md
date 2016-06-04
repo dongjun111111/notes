@@ -5537,7 +5537,6 @@ func readabc(conn net.Conn) string {
 }
 output==>
 2016/06/04 15:27:03 Starting...
-fgg
 ClientToServer>
 ClientToServer>gg
 ClientToServer>/quit
