@@ -5459,3 +5459,92 @@ func main() {
 output==>
 1gtr
 </pre>
+###Golang的Echo服务器
+<pre>
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"net"
+	"os"
+	"time"
+)
+
+var running bool
+var (
+	host  = "127.0.0.1"
+	port  = "8989"
+	laddr = host + ":" + port
+)
+
+func main() {
+	//flag.Parse();
+	running = true
+
+	log.Printf("Starting... ")
+	conn, err := net.Dial("tcp", laddr)
+	if err != nil {
+		log.Printf("与服务器%s握手失败;\n 错误：%s", host, err)
+		os.Exit(1)
+	}
+	defer conn.Close()
+	reader := bufio.NewReader(os.Stdin)
+	name, _ := reader.ReadBytes('\n')
+	conn.Write(name[0 : len(name)-1])
+	go client_receiver(conn)
+	go client_sender(conn)
+	for running {
+		time.Sleep(1 * 1e9)
+	}
+}
+
+//客户端发送器
+func client_sender(conn net.Conn) {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Print("ClientToServer>")
+		input, _ := reader.ReadBytes('\n')
+		if string(input) == "/quit\n" {
+			conn.Write([]byte("/quit\n"))
+			running = false
+			break
+		}
+		conn.Write(input[0 : len(input)-1])
+	}
+
+}
+
+//客户端接收器
+func client_receiver(conn net.Conn) {
+	//无限循环
+	for running {
+		fmt.Println("===%s", readabc(conn))
+		fmt.Print("You>")
+	}
+}
+
+//读书连接
+func readabc(conn net.Conn) string {
+	buf := make([]byte, 1024)
+	_, err := conn.Read(buf)
+	if err != nil {
+		log.Printf("警告!连接已断开: %s \n", err)
+		os.Exit(1)
+	}
+	return string(buf)
+}
+output==>
+2016/06/04 15:27:03 Starting...
+fgg
+ClientToServer>
+ClientToServer>gg
+ClientToServer>/quit
+===%s HTTP/1.1 400 Bad Request
+Content-Type: text/plain
+Connection: close
+
+400 Bad Request
+You>
+</pre>
