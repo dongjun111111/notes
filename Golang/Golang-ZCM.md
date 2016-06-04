@@ -5246,3 +5246,104 @@ func genRsaKey(bits int, filePath string) error {
 output==> //本地目录生成两个文件，分别是public.pem与private.pem
 密钥文件生成成功！
 </pre>
+针对上面的RSA密钥的生成，下面是它的一个应用(RSA加解密)：
+<pre>
+package main
+
+import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/base64"
+	"encoding/pem"
+	"errors"
+	"fmt"
+)
+
+var privateKey = []byte(`
+-----BEGIN RSA PRIVATE KEY-----
+MIICXAIBAAKBgQDXQrrwRLUhFsgWw4snjemCYryE9+RigE9v7q2/smQI7/4H9TZn
+rce/jm80VMxqB6c4t60HbmvuO8WspAp2oN/tZ7jx9qSfCWJoRqI7WbgLovOvwW+h
+Yo6orIFsc9lFG8bVRxUUCozijTmJiorKzPis/DUv/yPObav+d1bwKzsJ9QIDAQAB
+AoGAP2sdgCP96R25HVvG54Rbw1oriFEwLAT5YlTDQ7Le3fM2uEl6GdmM+9aO1LAW
++TYAAim7BHF3wtxBRLefjYuf7NsLuLmujvXQoxdWm+lXuNQxxiiaTxtuj/3NhymR
+NROww9JsAATHSFi6CtLbni3Y+sKYA+NQextcpgSrN4Urv5ECQQDdC8qHZ1q2Rj9F
+F+/2g+50L8f0/HDnkMwkRZgj4YnfOn219qXv1tO58W7+da7eQJ+SQVuISi6mFGOZ
+4FVQ28y/AkEA+Uy9SvkOK8Nrq926fxrXLXU5LQVAa7+bIpk2EWGpCJo+YtJYdKr1
+a+J+nMGQsjeX8m2DK6Q9IvmK1L/Ka5dySwJATmNlEjmT0Ln+q/j+LxTAVlGvfnCb
+dXNDAcXwWyEbbJ9of0QVuoUbloBJFVIUjlqqfApTdHSiMGFgpOwKNV+NLwJBAJVQ
+FP/Wc1pazR4+yvhdxwr+7qO8RX1DYVMzmGKIr4jrePoPKdOWoS9glJymgld7XJJi
+bPGyiLtt4mzSAha2ukkCQGV1X9i+aYN1YP45jGxiizVuRphIrfdAnbiKbYMEXm51
+NCtHHhLdIDnVu6tuP981eg87nEm8QQTvwjevSbWUmYY=
+-----END RSA PRIVATE KEY-----
+`)
+
+var publicKey = []byte(`
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXQrrwRLUhFsgWw4snjemCYryE
+9+RigE9v7q2/smQI7/4H9TZnrce/jm80VMxqB6c4t60HbmvuO8WspAp2oN/tZ7jx
+9qSfCWJoRqI7WbgLovOvwW+hYo6orIFsc9lFG8bVRxUUCozijTmJiorKzPis/DUv
+/yPObav+d1bwKzsJ9QIDAQAB
+-----END PUBLIC KEY-----
+`)
+
+func main() {
+	var base64Str string
+
+	// rsa加密
+	// rsa加密成功后base64编码
+	data, err := RsaEncrypt([]byte("Jason RSA"))
+	if err == nil {
+		base64Str = base64.StdEncoding.EncodeToString(data)
+		fmt.Println("加密编码内容=>", base64Str)
+	} else {
+		fmt.Println("rsa加密结果", err)
+	}
+
+	// base64解码
+	// 确码成功后rsa解密
+	dataStr, bErr := base64.StdEncoding.DecodeString(base64Str)
+	if bErr == nil {
+		origData, rErr := RsaDecrypt(dataStr)
+		if rErr == nil {
+			fmt.Println("解码解密内容=>", string(origData))
+		} else {
+			fmt.Println("rsa解密结果：", rErr)
+		}
+
+	} else {
+		fmt.Println("base64解码结果：", bErr)
+	}
+
+}
+
+// 加密
+func RsaEncrypt(origData []byte) ([]byte, error) {
+	block, _ := pem.Decode(publicKey)
+	if block == nil {
+		return nil, errors.New("public key error")
+	}
+	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	pub := pubInterface.(*rsa.PublicKey)
+	return rsa.EncryptPKCS1v15(rand.Reader, pub, origData)
+}
+
+// 解密
+func RsaDecrypt(ciphertext []byte) ([]byte, error) {
+	block, _ := pem.Decode(privateKey)
+	if block == nil {
+		return nil, errors.New("private key error!")
+	}
+	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
+}
+output==>
+加密编码内容=> yeOHQY5nXXl3wiNyjWBQO3s0zsT0mZezhgh+ycmve5+uV0/odAsw0bBe/4Innbf6DYxZzPsf8nHUow5MAZKLATjCyfWUGpGndbjfRzNWZ35LvMpZZKy/+B9SD3zisZwGb3JpLYKQt7R8oBHdeyKVGEc97UYNHew/0kmaMzUa4JE=
+解码解密内容=> Jason RSA
+</pre>
