@@ -5547,3 +5547,31 @@ Connection: close
 400 Bad Request
 You>
 </pre>
+###beego中post、put与delete请求处理要点（下面以最常见的post表单提交为例）
+需要注意xsrf(cross-site request forgery)的安全设置
+
+在发送post请求的cotroller里
+<pre>
+this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
+</pre>
+同时在模板中设置
+<pre>
+<form action="example" method="post">
+	{{ .xsrfdata }}
+	<input type="text" name="name" /> 
+	<input type="text" name="..." />
+</form>
+</pre>
+
+xsrf支持controller 级别的屏蔽
+
+XSRF 之前是全局设置的一个参数,如果设置了那么所有的API请求都会进行验证,但是有些时候API 逻辑是不需要进行验证的,因此现在支持在controller 级别设置屏蔽:
+<pre>
+type AdminController struct{
+    beego.Controller
+}
+
+func (a *AdminController) Prepare() {
+    a.EnableXSRF = false
+}
+</pre>
