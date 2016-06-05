@@ -3,7 +3,7 @@ go安装目录在C:\go文件夹下面；go的工作目录在D:\gopath文件夹�
 
 对应的环境变量是：
 
-- GOPATH:D：\gopath   （工作目录，项目在这里建立）
+- GOPATH:D:\gopath   （工作目录，项目在这里建立）
 - GOROOT:C:\go   （安装目录）
 
 Path加上：
