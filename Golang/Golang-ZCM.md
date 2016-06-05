@@ -5562,7 +5562,6 @@ this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
 	<input type="text" name="..." />
 </form>
 </pre>
-
 xsrf支持controller 级别的屏蔽
 
 XSRF 之前是全局设置的一个参数,如果设置了那么所有的API请求都会进行验证,但是有些时候API 逻辑是不需要进行验证的,因此现在支持在controller 级别设置屏蔽:
