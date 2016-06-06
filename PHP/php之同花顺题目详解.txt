@@ -25,7 +25,7 @@ $str="Hello world";
 $arr=explode(' ',$str);
 foreach($arr as $key=>$value)
 {
- echo strtolower(strrev($value))." ";
+  echo strtolower(strrev($value))." ";
 }
 
 4.从'我30你40她50'提取出数字然后求和-->
