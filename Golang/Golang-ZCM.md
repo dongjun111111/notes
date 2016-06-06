@@ -5574,3 +5574,26 @@ func (a *AdminController) Prepare() {
     a.EnableXSRF = false
 }
 </pre>
+###先说结论：Golang中所以类型都是值类型，slice/map/channel也都是传值的
+<pre>
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	a := []int{1, 3, 4}
+	fmt.Println(a)
+	mo(a)
+	fmt.Println(a)
+}
+
+func mo(data []int) {
+	data = nil
+}
+output==>
+[1 3 4]
+[1 3 4]           //函数mo修改了a,但是结果却是a没有改变，说明slice不是引用类型
+</pre>
