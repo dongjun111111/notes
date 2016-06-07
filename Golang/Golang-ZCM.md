@@ -6053,3 +6053,104 @@ output==>
 f7a9e24777ec23212c54d7a350bc5bea5477fdbb
 049988f47afd5ba680e84472db1dd31a6e6051cb
 </pre>
+Golang实现的数据存储管理器
+<pre>
+package main
+
+//golang实现数据存储管理器
+import (
+	"container/list"
+	"log"
+	"sync"
+	"time"
+)
+
+type DataManager struct {
+	Lock    sync.Mutex
+	DL      *list.List
+	Expires int
+}
+type Data struct {
+	Key     string
+	Expires int
+	Value   interface{}
+}
+
+var DM *DataManager
+
+func (DM *DataManager) NewData(key string, value interface{}) *Data {
+	return &Data{
+		Key:     key,
+		Expires: DM.Expires,
+		Value:   value,
+	}
+}
+func (DM *DataManager) Listen() {
+	time.AfterFunc(time.Second, func() { DM.Listen() })
+	DM.Lock.Lock()
+	defer DM.Lock.Unlock()
+	for e := DM.DL.Front(); e != nil; e = e.Next() {
+		if e.Value.(*Data).Expires == 0 {
+			DM.DL.Remove(e)
+		} else {
+			e.Value.(*Data).Expires--
+		}
+	}
+}
+func (DM *DataManager) Get(key string) interface{} {
+	DM.Lock.Lock()
+	defer DM.Lock.Unlock()
+	for e := DM.DL.Front(); e != nil; e = e.Next() {
+		if key == e.Value.(*Data).Key {
+			e.Value.(*Data).Expires = DM.Expires
+			DM.DL.MoveToBack(e)
+			return e.Value.(*Data).Value
+		}
+	}
+	return nil
+}
+func (DM *DataManager) Set(key string, value interface{}) {
+	DM.Lock.Lock()
+	defer DM.Lock.Unlock()
+	for e := DM.DL.Front(); e != nil; e = e.Next() {
+		if key == e.Value.(*Data).Key {
+			DM.DL.Remove(e)
+			return
+		}
+	}
+	DM.DL.PushBack(DM.NewData(key, value))
+}
+func (DM *DataManager) Del(key string) {
+	DM.Lock.Lock()
+	defer DM.Lock.Unlock()
+	for e := DM.DL.Front(); e != nil; e = e.Next() {
+		if key == e.Value.(*Data).Key {
+			DM.DL.Remove(e)
+			return
+		}
+	}
+	return
+}
+func init() {
+	DM = &DataManager{
+		DL:      list.New(),
+		Expires: 5,
+	}
+	DM.Listen()
+}
+
+func main() {
+	DM.Set("name", "jason")
+	DM.Set("id", "33")
+	log.Println(DM.Get("name").(string))
+	log.Println(DM.DL.Len())
+	log.Println(DM.DL.Len())
+	log.Println(DM.Get("id").(string))
+	time.Sleep(time.Second)
+}
+output==>
+2016/06/07 19:26:14 jason
+2016/06/07 19:26:14 2
+2016/06/07 19:26:14 2
+2016/06/07 19:26:14 33
+</pre>
