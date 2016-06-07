@@ -5910,3 +5910,119 @@ func main() {
 
 - 在有if的地方如果有变量声明的时候，不要使用 := ，而是应该尽量在if判断的外面用 var 先声明一下；
 - 模板函数语法：  {{if and (eq a 3) (gt b 4)}} ，对，golang的语法就是这么浪。
+
+###一套高效的超时通知机制(ticker + channel)
+<pre>
+package main
+
+//一套高效的超时通知机制
+import (
+	"sync"
+	"time"
+)
+
+type TimingWheel struct {
+	sync.Mutex
+
+	interval time.Duration
+
+	ticker *time.Ticker
+	quit   chan struct{}
+
+	maxTimeout time.Duration
+
+	cs []chan struct{}
+
+	pos int
+}
+
+func NewTimingWheel(interval time.Duration, buckets int) *TimingWheel {
+	w := new(TimingWheel)
+
+	w.interval = interval
+
+	w.quit = make(chan struct{})
+	w.pos = 0
+
+	w.maxTimeout = time.Duration(interval * (time.Duration(buckets)))
+
+	w.cs = make([]chan struct{}, buckets)
+
+	for i := range w.cs {
+		w.cs[i] = make(chan struct{})
+	}
+
+	w.ticker = time.NewTicker(interval)
+	go w.run()
+
+	return w
+}
+
+func (w *TimingWheel) Stop() {
+	close(w.quit)
+}
+
+func (w *TimingWheel) After(timeout time.Duration) <-chan struct{} {
+	if timeout >= w.maxTimeout {
+		panic("timeout too much, over maxtimeout")
+	}
+
+	w.Lock()
+
+	index := (w.pos + int(timeout/w.interval)) % len(w.cs)
+
+	b := w.cs[index]
+
+	w.Unlock()
+
+	return b
+}
+
+func (w *TimingWheel) run() {
+	for {
+		select {
+		case <-w.ticker.C:
+			w.onTicker()
+			println("10")
+		case <-w.quit:
+			w.ticker.Stop()
+			return
+		}
+	}
+}
+
+func (w *TimingWheel) onTicker() {
+	w.Lock()
+
+	lastC := w.cs[w.pos]
+	w.cs[w.pos] = make(chan struct{})
+
+	w.pos = (w.pos + 1) % len(w.cs)
+
+	w.Unlock()
+
+	close(lastC)
+}
+
+func main() {
+	//这里我们创建了一个timingwheel，精度是0.1s，最大的超时等待时间为10s
+	w := NewTimingWheel(100*time.Millisecond, 10)
+	for {
+		select {
+		//等待0.8s
+		case <-w.After(800 * time.Millisecond):
+			return
+		}
+	}
+}
+output==>
+10
+10
+10
+10
+10
+10
+10
+10
+10
+</pre>
