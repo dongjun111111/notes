@@ -6154,3 +6154,29 @@ output==>
 2016/06/07 19:26:14 2
 2016/06/07 19:26:14 33
 </pre>
+###slice不定参数
+<pre>
+package main
+
+import "fmt"
+
+/*
+如果我们传入的是slice...这种形式的参数，
+go不会创建新的slice,性能不会受到影响
+*/
+func t(args ...int) {
+	fmt.Println(args)
+}
+
+func main() {
+	a := []int{3, 7, 8, 2, 3, 7, 8, 2}
+	b := a[1:]
+	t(a...)
+	t(b...)
+	fmt.Println("b:", b)
+}
+output==>
+[3 7 8 2 3 7 8 2]
+[7 8 2 3 7 8 2]
+b: [7 8 2 3 7 8 2]
+</pre>
