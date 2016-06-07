@@ -5597,3 +5597,93 @@ output==>
 [1 3 4]
 [1 3 4]           //函数mo修改了a,但是结果却是a没有改变，说明slice不是引用类型
 </pre>
+###Golang发送手机短信
+<pre>
+package main
+
+//使用【容联 - 云通讯】发送手机短信
+import (
+	"bytes"
+	"crypto/md5"
+	"encoding/base64"
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"strings"
+	"time"
+)
+
+// 云通讯短信请求
+type ReqBody struct {
+	To         string   `json:"to"`
+	AppId      string   `json:"appId"`
+	TemplateId string   `json:"templateId"`
+	Datas      []string `json:"datas,omitempty"`
+}
+
+// 构建云通讯短信请求
+func newSmsRequest(mobile, verifyCode string) *http.Request {
+	now := time.Now().Format("20060102150405")
+	sigParameter := calcSigParameter(now)
+	url := fmt.Sprintf("%s/2013-12-26/Accounts/%s/SMS/TemplateSMS?sig=%s", baseUrl, accountSid, sigParameter)
+	b, _ := json.Marshal(ReqBody{
+		To:         mobile,
+		AppId:      appId,
+		TemplateId: "1",
+		Datas:      []string{verifyCode, "10"},
+	})
+	request, _ := http.NewRequest("POST", url, bytes.NewReader(b))
+	request.Header.Set("Accept", "application/json")
+	request.Header.Set("Content-Type", "application/json; charset=utf-8")
+	request.Header.Set("Content-Length", fmt.Sprintf("%d", len(b)))
+	request.Header.Set("Authorization", calcAuthorization(now))
+	return request
+}
+func calcSigParameter(now string) string {
+	h := md5.New()
+	io.WriteString(h, accountSid+authToken+now)
+	sign := fmt.Sprintf("%x", h.Sum(nil))
+	return strings.ToUpper(sign)
+}
+func calcAuthorization(now string) string {
+	return base64.StdEncoding.EncodeToString([]byte(accountSid + ":" + now))
+}
+
+// 云通讯响应
+type RespBody struct {
+	StatusMsg   string      `json:"statusMsg"`
+	StatusCode  string      `json:"statusCode"`
+	TemplateSMS interface{} `json:"TemplateSMS"`
+}
+
+// 解析云通讯响应
+func parseSmsResp(resp *http.Response) (RespBody, error) {
+	var data RespBody
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return data, err
+	}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		return data, err
+	}
+	return data, nil
+}
+
+func main() {
+	// 发送短信
+	request := newSmsRequest("13488888888", "123456")
+	client := &http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		// 处理错误
+	}
+	defer resp.Body.Close()
+	data, err := parseSmsResp(resp)
+	if err != nil || data.StatusCode != "000000" {
+		// 处理错误
+	}
+}
+</pre>
