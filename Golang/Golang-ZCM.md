@@ -6026,3 +6026,30 @@ output==>
 10
 10
 </pre>
+###Golang shal加密
+<pre>
+package main
+
+import (
+	"crypto/hmac"
+	"crypto/sha1"
+	"fmt"
+	"io"
+)
+
+func main() {
+	//sha1
+	h := sha1.New()
+	io.WriteString(h, "aaaaaa")
+	fmt.Printf("%x\n", h.Sum(nil))
+
+	//hmac ,use sha1
+	key := []byte("123456")
+	mac := hmac.New(sha1.New, key)
+	mac.Write([]byte("aaaaaa"))
+	fmt.Printf("%x\n", mac.Sum(nil))
+}
+output==>
+f7a9e24777ec23212c54d7a350bc5bea5477fdbb
+049988f47afd5ba680e84472db1dd31a6e6051cb
+</pre>
