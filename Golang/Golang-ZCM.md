@@ -7816,3 +7816,49 @@ $ go run test.go -r fmt
 
 
 </pre>
+###Golanngs实现类似Proxy的小程序{可以用来访问goolge} 
+<pre>
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+)
+
+func main() {
+	http.HandleFunc("/", route)
+	e := http.ListenAndServe(":80", nil)
+	if e != nil {
+		fmt.Println(e)
+	}
+}
+
+func route(w http.ResponseWriter, r *http.Request) {
+	req, _ := http.NewRequest(r.Method, "", r.Body)
+	req.URL = r.URL
+	req.URL.Host = "www.qq.com" //"www.google.com"
+	req.URL.Scheme = "http"
+	for _, v := range r.Cookies() {
+		req.AddCookie(v)
+	}
+	//req.Header = r.Header 这里的Header就不要使用了,使用的话他会自动跳转到https,代理就出问题了.
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Println("Here:", err)
+		return
+	}
+	for k, v := range resp.Header {
+		for _, value := range v {
+			w.Header().Add(k, value)
+		}
+	}
+	for _, cookie := range resp.Cookies() {
+		w.Header().Add("Set-Cookie", cookie.Raw)
+	}
+	w.WriteHeader(resp.StatusCode)
+	io.Copy(w, resp.Body)
+	resp.Body.Close()
+	r.Body.Close()
+}
+</pre>
