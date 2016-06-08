@@ -6267,3 +6267,111 @@ output==>
 2016/06/08 09:28:23 Monitor event ".\\tr.txt": WRITE
 2016/06/08 09:28:25 exec: "": executable file not found in %PATH%
 </pre>
+###Golang监控goroutine是否异常退出
+<pre>
+package main
+
+import (
+	"fmt"
+	"log"
+	"math/rand"
+	"runtime"
+	"strconv"
+	"time"
+)
+
+type message struct {
+	normal bool
+	state  map[string]interface{}
+}
+
+func worker(mess chan message) {
+	defer func() {
+		exit_message := message{state: make(map[string]interface{})}
+		i := recover()
+		if i != nil {
+			exit_message.normal = false
+		} else {
+			exit_message.normal = true
+		}
+		mess <- exit_message
+	}()
+	now := time.Now()
+	seed := now.UnixNano()
+	rand.Seed(seed)
+	num := rand.Int63()
+	if num%2 != 0 {
+		panic("not evening")
+	} else {
+		runtime.Goexit()
+	}
+}
+
+func supervisor(mess chan message) {
+	for i := 0; i < 40; i++ {
+		m := <-mess
+		switch m.normal {
+		case true:
+			log.Println("Goroutine exit normal, nothing serious :)")
+		case false:
+			log.Println("Goroutine exit abnormal, something went wrong!!出错啦")
+		}
+
+	}
+}
+
+func main() {
+	fmt.Println("当前时间戳:", strconv.Itoa(int(time.Now().UnixNano())), "当前时间:", time.Now().Format("2006-01-02 15:04:05 -0700"))
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	mess := make(chan message, 10)
+	for i := 0; i < 100; i++ {
+		go worker(mess)
+	}
+	supervisor(mess)
+	//当前的时间戳字符串
+	fmt.Println("当前时间戳:", strconv.Itoa(int(time.Now().UnixNano())), "当前时间:", time.Now().Format("2006-01-02 15:04:05 -0700"))
+}
+output==>
+当前时间戳: 1465350189186121600 当前时间: 2016-06-08 09:43:09 +0800
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit normal, nothing serious :)
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+2016/06/08 09:43:09 Goroutine exit abnormal, something went wrong!!出错啦
+当前时间戳: 1465350189212123100 当前时间: 2016-06-08 09:43:09 +0800
+</pre>
