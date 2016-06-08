@@ -7006,3 +7006,190 @@ func (self Router) Handler(pattern string) func(w http.ResponseWriter, r *http.R
 	return self[pattern]
 }
 </pre>
+###Golang为错误分级
+<pre>
+package main
+
+import (
+	"io"
+	"log"
+	"os"
+	"runtime"
+	"time"
+)
+
+type l struct {
+	logs  *log.Logger
+	level int
+	io.Closer
+}
+
+func NewLog(HttpLogPath string, level int) *l {
+	file, err := os.OpenFile(HttpLogPath, os.O_CREATE|os.O_RDWR, 0644)
+	if err != nil {
+		log.Println("Error", err)
+		log.Println("Error", "日志输出到标准输出.")
+		return nil
+	}
+	var Log *log.Logger = log.New(os.Stdout, now(), 0)
+	if file != nil {
+		Log = log.New(file, now(), 0)
+		go flushLogFile(file)
+	}
+	file.Seek(0, 2)
+	return &l{Log, level, file}
+}
+
+func now() string {
+	return time.Now().Format("2006-01-02 15:04:05 ")
+}
+
+func flushLogFile(File *os.File) {
+	for _ = range time.NewTicker(50 * time.Second).C {
+		if File == nil {
+			return
+		}
+		File.Sync()
+	}
+}
+
+func (self *l) SetLogLevel(level int) {
+	if level > 4 {
+		return
+	}
+	self.level = level
+}
+
+func (self *l) Print(v ...interface{}) {
+	self.logs.Print(v)
+}
+
+func (self *l) Printf(formate string, v ...interface{}) {
+	self.logs.Printf(formate, v)
+}
+
+func (self *l) Println(v ...interface{}) {
+	self.logs.Println(v)
+}
+
+func (self *l) PrintfI(formate string, v ...interface{}) {
+	if self.level > 1 {
+		return
+	}
+	self.logs.Printf("Info->"+formate, v...)
+}
+
+func (self *l) PrintfW(formate string, v ...interface{}) {
+	if self.level > 2 {
+		return
+	}
+	self.logs.Printf("Warn->"+formate, v...)
+}
+
+func (self *l) PrintfE(formate string, v ...interface{}) {
+	if self.level > 3 {
+		return
+	}
+	self.logs.Printf("Error->"+formate, v...)
+}
+
+func (self *l) PrintfF(formate string, v ...interface{}) {
+	if self.level > 4 {
+		return
+	}
+	self.logs.Fatalf("Fatal->"+formate, v...)
+}
+
+func (self *l) InfoPrintf(callers int, formate string, v ...interface{}) {
+	_, file, line, ok := runtime.Caller(callers + 1)
+	if !ok {
+		return
+	}
+	self.logs.Printf("File->%s Line->%d\n", file, line)
+	self.logs.Printf(formate, v...)
+}
+
+func main() {
+
+	ltest := NewLog("http.log", 0)
+
+	ltest.InfoPrintf(0, "\r\n%s\r\n", "错误在这里↑")
+
+	ltest.PrintfI("%s\r\n", "Info")
+
+	ltest.PrintfW("%s\r\n", "Warn")
+
+	ltest.PrintfE("%s\r\n", "Error")
+
+	ltest.PrintfF("%s\r\n", "Fatal")
+
+}
+</pre>
+###Golang将ip地址作为Int形式存储
+<pre>
+package main
+
+import (
+	"errors"
+	"fmt"
+	"strconv"
+	"strings"
+)
+
+type IntIP struct {
+	IP    string
+	Intip int
+}
+
+func main() {
+	var x *IntIP = &IntIP{IP: "192.168.1.1"}
+	fmt.Println(x)
+	x.ToIntIp()
+	fmt.Println(*x)
+}
+
+func (self *IntIP) String() string {
+	return self.IP
+}
+
+func (self *IntIP) ToIntIp() (int, error) {
+	Intip, err := ConvertToIntIP(self.IP)
+	if err != nil {
+		return 0, err
+	}
+	self.Intip = Intip
+	return Intip, nil
+}
+
+func (self *IntIP) ToString() (string, error) {
+	i4 := self.Intip & 255
+	i3 := self.Intip >> 8 & 255
+	i2 := self.Intip >> 16 & 255
+	i1 := self.Intip >> 24 & 255
+	if i1 > 255 || i2 > 255 || i3 > 255 || i4 > 255 {
+		return "", errors.New("Isn't a IntIP Type.")
+	}
+	ipstring := fmt.Sprintf("%d.%d.%d.%d", i4, i3, i2, i1)
+	self.IP = ipstring
+	return ipstring, nil
+}
+func ConvertToIntIP(ip string) (int, error) {
+	ips := strings.Split(ip, ".")
+	E := errors.New("Not A IP.")
+	if len(ips) != 4 {
+		return 0, E
+	}
+	var intIP int
+	for k, v := range ips {
+		i, err := strconv.Atoi(v)
+		if err != nil || i > 255 {
+			return 0, E
+		}
+		intIP = intIP | i<<uint(8*(3-k))
+	}
+	return intIP, nil
+}
+output==>
+192.168.1.1
+{192.168.1.1 3232235777}
+</pre>
