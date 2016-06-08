@@ -7753,6 +7753,47 @@ func ce(h http.Handler) http.Handler {
 
 }
 </pre>
+###Golang使用正则路由实现http服务器
+<pre>
+package main
+
+import (
+	"net/http"
+	"regexp"
+)
+
+func main() {
+	http.HandleFunc("/", route)
+	http.ListenAndServe(":8080", nil)
+}
+
+var num = regexp.MustCompile(`\d`)
+var str = regexp.MustCompile(`\w`)
+
+func route(w http.ResponseWriter, r *http.Request) {
+	switch {
+	case num.MatchString(r.URL.Path):
+		digits(w, r)
+	case str.MatchString(r.URL.Path):
+		sstr(w, r)
+	default:
+		w.Write([]byte("位置匹配项"))
+	}
+}
+
+func digits(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("receive digits"))
+}
+
+func sstr(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("receive string"))
+}
+output==>
+//打开浏览器，分别访问
+localhost:8080/
+localhost:8080/8
+localhost:8080/ff
+</pre>
 ###Golang实现命令行输入关键字在文件夹/文件中搜索
 <pre>
 package main
