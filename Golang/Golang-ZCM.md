@@ -7924,3 +7924,152 @@ nohup ./httpserver &
 nohup这个命令可以把程序放后台运行，顺便通过1>和2>把标准输出和标准错误重定向到文件，这样程序崩溃时才会有记录可查，这两者和程序的日志最好是分开，混在一起没办法判断轻重缓急:
 
 nohup ./server 1> server.out 2> server.err
+###Golang文件共享
+<pre>
+package main  
+  
+import (  
+    "flag"  
+    "fmt"  
+    "io/ioutil"  
+    "net/http"  
+    "path/filepath"  
+    "sort"  
+    "sync"  
+    "text/template"  
+    "time"  
+)  
+  
+const L = `<html>  
+<title>文件列表</title>  
+<body>  
+    {{$ip := .IP}}  
+    {{$dir := .Dir}}  
+    <table>  
+    {{range $k,$v := .List}}<tr><td><a href="http://{{$ip}}/{{$dir}}/{{$v.Name}}">文件名：{{$v.Name}}</a></td><td>  修改时间：{{$v.Time}}</td></tr>  
+{{end}}  
+    </table>  
+</body>  
+</html>`  
+  
+type info struct {  
+    Name string  
+    Time time.Time  
+}  
+  
+type newlist []*info  
+  
+type Dirinfo struct {  
+    lock sync.Mutex  
+    IP   string  
+    Dir  string  
+    List newlist  
+}  
+  
+var x Dirinfo  
+var name, dir string  
+var path *string = flag.String("p", "/tmp", "共享的路径")  
+var port *string = flag.String("l", ":1789", "监听的IP:端口")  
+  
+func main() {  
+    flag.Parse()  
+    name = filepath.Base(*path)  
+    dir = filepath.Dir(*path)  
+    fmt.Println("共享的目录：", *path)  
+    http.Handle(fmt.Sprintf("/%s/", name), http.FileServer(http.Dir(dir)))  
+    http.HandleFunc("/", router)  
+    http.ListenAndServe(*port, nil)  
+}  
+  
+func router(w http.ResponseWriter, r *http.Request) {  
+    l, _ := getFilelist(*path)  
+    x.lock.Lock()  
+    x.Dir = name  
+    x.List = l  
+    x.IP = r.Host  
+    x.lock.Unlock()  
+    t := template.New("")  
+    t.Parse(L)  
+    t.Execute(w, x)  
+}  
+  
+func getFilelist(path string) (newlist, error) {  
+    l, err := ioutil.ReadDir(path)  
+    if err != nil {  
+        return []*info{}, err  
+    }  
+    var list []*info  
+    for _, v := range l {  
+        list = append(list, &info{v.Name(), v.ModTime()})  
+    }  
+    sort.Sort(newlist(list))  
+    return list, nil  
+}  
+  
+func (I newlist) Len() int {  
+    return len(I)  
+}  
+func (I newlist) Less(i, j int) bool {  
+    return I[i].Time.Unix() < I[j].Time.Unix()  
+}  
+func (I newlist) Swap(i, j int) {  
+    I[i], I[j] = I[j], I[i]  
+} 
+</pre>
+###Golang自定义结构体标签的重要应用
+在Golang中首字母大小写,决定着这此变量是否能被外部调用。比如下面：
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type T struct {
+	name string
+	Age  int
+}
+
+func main() {
+
+	var info T = T{"fyxichen", 24}
+	fmt.Println("编码前：", info)
+	b, _ := json.Marshal(info)
+	fmt.Println("编码后：", string(b))
+
+}
+output==>
+编码前： {fyxichen 24}           //看这里
+编码后： {"Age":24}              //看这里
+</pre>
+在这里name的值并未被编码,原因接收首字母是小写,用json编码后不能被外部使用。这时候，自定义标签的用处凸显出来了，请看下面。
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type T1 struct {
+	Name string
+	Age  int
+}
+type T2 struct {
+	Name string `json:"name"`
+	Age  int    `json:"age"`
+}
+
+func main() {
+	var info1 T1 = T1{"fyxichen", 24}
+	var info2 T2 = T2{"fyxichen", 24}
+	b, _ := json.Marshal(info1)
+	fmt.Println("Struct1:", string(b))
+	b, _ = json.Marshal(info2)
+	fmt.Println("Struct2:", string(b))
+}
+output==>
+Struct1: {"Name":"fyxichen","Age":24}	  //看这里
+Struct2: {"name":"fyxichen","age":24}     //看这里
+</pre>
