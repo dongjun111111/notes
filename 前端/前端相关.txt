@@ -9025,3 +9025,25 @@ ws.onopen = function () {
 以提高访问速度。比如图片，强制刷新也就是Ctrl+F5告诉浏览器不要获取缓存，重新从服务器请求网页上的所有资源，
 适用于开发测试或者是某些资源更新比较实时的网站。
 
+++++大小写锁定++++++
+//大小写锁定
+function  CapsLock(event){
+    var e = event||window.event;
+    var password_err = $("#login_password");
+	var passwordCursor = $(document);
+    var keyCode  =  e.keyCode||e.which; // 按键的keyCode 
+    var isShift  =  e.shiftKey ||(keyCode  ==   16 ) || false ; // shift键是否按住
+	 if (
+	 ((keyCode >=   65   &&  keyCode  <=   90 )  &&   !isShift) // Caps Lock 打开，且没有按住shift键 
+	 || ((keyCode >=   97   &&  keyCode  <=   122 )  &&  isShift)// Caps Lock 打开，且按住shift键
+	 ){
+		 password_err.text("大写锁定已打开，请注意大小写！");
+		}
+	 else{
+		 password_err.text("");
+		}
+	passwordCursor.on("blur",".js-login-pwd",function(){
+			 password_err.text("");
+	});
+}
+
