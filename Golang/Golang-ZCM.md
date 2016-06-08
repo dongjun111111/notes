@@ -8073,3 +8073,93 @@ output==>
 Struct1: {"Name":"fyxichen","Age":24}	  //看这里
 Struct2: {"name":"fyxichen","age":24}     //看这里
 </pre>
+###Golang用堆排序的方法将一千万个int随机数排序 与 用快速排序法排序性能/正确性比较
+是如果用快速排序法对重复率很高的slice排序的时候,时间复杂度会激增,速度相当慢，而且并没有达到排序的目的。  
+所以尝试了一下堆排序，效果不错。
+
+二叉树的特性:  
+
+最后一个非叶子节点 ： root = length/2(当length为奇数的时候root向下取整) 在GO语言中的索引位置：root - 1,  左右孩子节点:child_l = 2*root,索引位置:child_l-1,右孩子的节点: 2*root+1 索引位置。 
+<pre>
+package main
+
+import (
+	"fmt"
+	"math/rand"
+)
+
+func main() {
+	Num := 10000000
+	var list []int
+	for i := Num; i > 0; i-- {
+		list = append(list, rand.Intn(10000))
+	} //生成一千万个0---10000的随机数.
+	length := len(list)
+	for root := length/2 - 1; root >= 0; root-- {
+		sort(list, root, length)
+	} //第一次建立大顶堆
+	for i := length - 1; i >= 1; i-- {
+		list[0], list[i] = list[i], list[0]
+		sort(list, 0, i)
+	} //调整位置并建并从第一个root开始建堆.如果不明白为什么,大家多把图画几遍就应该明朗了
+	fmt.Println(list)
+}
+func sort(list []int, root, length int) {
+	for {
+		child := 2*root + 1
+		if child >= length {
+			break
+		}
+		if child+1 < length && list[child] < list[child+1] {
+			child++ //这里重点讲一下,就是调整堆的时候,以左右孩子为节点的堆可能也需要调整
+		}
+		if list[root] > list[child] {
+			return
+		}
+		list[root], list[child] = list[child], list[root]
+		root = child
+	}
+}
+output=>
+//占用内存313984k
+...
+</pre>
+而用快速排序法非但没有实现排序目的，还占用了更多的内存，如下:
+<pre>
+package main
+
+import (
+	"fmt"
+	"math/rand"
+)
+
+func main() {
+	var z []int
+	for i := 0; i < 10000000; i++ {
+		z = append(z, rand.Intn(10000))
+	}
+	sort(z)
+	fmt.Println(z)
+}
+func sort(list []int) {
+	if len(list) <= 1 {
+		return //退出条件
+	}
+	i, j := 0, len(list)-1
+	index := 1     //表示第一次比较的索引位置.
+	key := list[0] //第一次比较的参考值.这里选择第一个数
+	if list[index] > key {
+		list[i], list[j] = list[j], list[i]
+		j-- //表示取大值跟末尾的数替换位置,使大于参考值的数在后面
+	} else {
+		list[i], list[index] = list[index], list[i]
+		i++ //表示取小的值跟前面的替换位置,使小于参考值的数在前面
+		index++
+	}
+	sort(list[:i])   //处理参考值前面的数组
+	sort(list[i+1:]) //处理参考值后面的数组
+}
+output==>
+//占用内存1022936k
+...
+</pre>
