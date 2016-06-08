@@ -7723,3 +7723,33 @@ func main() {
 
 }
 </pre>
+###Golang实现简单文件服务器
+<pre>
+package main
+
+import (
+	"fmt"
+
+	"net/http"
+)
+
+func main() {
+
+	h := http.FileServer(http.Dir("./"))
+
+	http.ListenAndServe(":1789", ce(h))
+
+}
+
+func ce(h http.Handler) http.Handler {
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		fmt.Println(r.URL.Path)
+
+		h.ServeHTTP(w, r)
+
+	})
+
+}
+</pre>
