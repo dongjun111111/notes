@@ -6968,3 +6968,41 @@ func readDir(path string) ([]os.FileInfo, error) {
     return []os.FileInfo{info}, nil  
 } 
 </pre>
+###一种web路由的实现
+Router
+<pre>
+package main
+
+import (
+	"net/http"
+	"sync"
+)
+
+type Router map[string]func(w http.ResponseWriter, r *http.Request)
+
+var routerMap Router = make(Router)
+var lock *sync.RWMutex = new(sync.RWMutex)
+
+func main() {
+	routerMap.Regist("/", ce)
+	hand := routerMap.Handler("/")
+	http.HandleFunc("/", hand)
+	http.ListenAndServe(":1789", nil)
+}
+
+func ce(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(r.URL.Path))
+}
+
+func (self Router) Regist(pattern string, f func(w http.ResponseWriter, r *http.Request)) {
+	lock.Lock()
+	defer lock.Unlock()
+	self[pattern] = f
+}
+
+func (self Router) Handler(pattern string) func(w http.ResponseWriter, r *http.Request) {
+	lock.RLock()
+	defer lock.RUnlock()
+	return self[pattern]
+}
+</pre>
