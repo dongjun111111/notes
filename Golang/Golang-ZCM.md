@@ -6533,3 +6533,35 @@ func main() {
 	fmt.Println(html)
 }
 </pre>
+###Golang获取本机MAC唯一标识
+<pre>
+package main
+
+import (
+	"fmt"
+	"net"
+	"strings"
+)
+
+func main() {
+	var macAddr string
+	var hws, err = net.Interfaces()
+	if err != nil {
+		fmt.Println("[InitLockerInfo]", "获取服务器MAC地址失败", err.Error())
+		return
+	}
+	for _, h := range hws {
+		var addr = h.HardwareAddr.String()
+		if addr != "" && !strings.HasPrefix(addr, "00:00:00:00:00:00") {
+			macAddr = h.HardwareAddr.String()
+			break
+		}
+	}
+	if macAddr != "" {
+		fmt.Println("本机MAC硬件地址:", macAddr)
+	} else {
+		fmt.Println("[InitLockerInfo]", "未找到MAC硬件地址")
+	}
+}
+output==>
+</pre>
