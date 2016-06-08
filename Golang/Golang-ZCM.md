@@ -6268,6 +6268,9 @@ output==>
 2016/06/08 09:28:25 exec: "": executable file not found in %PATH%
 </pre>
 ###Golang监控goroutine是否异常退出
+在Golang中，我们可以很轻易产生数以万计的goroutine，不过这也带来了麻烦：在运行中某一个goroutine异常退出，怎么办？
+
+在erlang中，有link原语，2个进程可以链接在一起，一个在异常退出的时候，向另一个进程呼喊崩溃的原因，然后由另一个进程处理这些信号，包括是否重启这个进程。在这方面，erlang的确做得很好，估计以后这个特性会在golang中得到实现。据此，有了下面的实现：
 <pre>
 package main
 
@@ -6378,4 +6381,155 @@ output==>
 2016/06/08 09:49:35 Goroutine exit normal, nothing serious :)
 2016/06/08 09:49:35 Goroutine exit normal, nothing serious :)
 当前时间戳: 1465350576468272900 当前时间: 2016-06-08 09:49:36 +0800
+</pre>
+###Golang模拟双色球彩票号码
+<pre>
+package main
+
+import (
+	"fmt"
+)
+
+func Combinaion(arr []string, m int) []string {
+	if m == 1 {
+		return arr
+	}
+	result := make([]string, 0)
+	if len(arr) == m {
+		var str string
+		for i := 0; i < len(arr); i++ {
+			str = str + arr[i]
+			if i != len(arr)-1 {
+				str = str + ","
+			}
+		}
+		result = append(result, str)
+		return result
+	}
+
+	firstItem := arr[0]
+	tempArr1 := Combinaion(append(arr[1:]), m-1)
+	for i := 0; i < len(tempArr1); i++ {
+		result = append(result, firstItem+","+tempArr1[i])
+	}
+	tempArr2 := Combinaion(append(arr[1:]), m)
+	result = append(result, tempArr2...)
+	return result
+}
+
+func main() {
+	reds := []string{"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "22", "23", "24", "25", "26", "28", "29", "30", "31", "32", "33"}
+	result := Combinaion(reds, 6)
+	fmt.Println("length:\r", len(result))
+	for i := 0; i < len(result); i++ {
+		fmt.Println(result[i] + "\r")
+	}
+}
+output==>
+//跑一下有惊喜
+</pre>
+###交叉编译工具gox
+交叉编译也就是你可以在linux上编译出可以在windows上运行的程序，在32位系统编译出64位系统运行的程序。进入到程序目录中，直接运行gox。程序会一口气生成17个文件。横跨windows,linux,mac,freebsd,netbsd五大操作系统。以及3种了下的处理器(386、amd64、arm),nice.
+
+https://github.com/mitchellh/gox
+###Golang三个常用方法-字符串Md5/获取Guid/字符串截取
+<pre>
+package main
+
+import (
+	"crypto/md5"
+	"crypto/rand"
+	"encoding/base64"
+	"encoding/hex"
+	"io"
+)
+
+//md5方法
+func GetMd5String(s string) string {
+	h := md5.New()
+	h.Write([]byte(s))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+//Guid方法
+func GetGuid() string {
+	b := make([]byte, 48)
+	if _, err := io.ReadFull(rand.Reader, b); err != nil {
+		return ""
+	}
+	return GetMd5String(base64.URLEncoding.EncodeToString(b))
+}
+
+//字串截取
+func SubString(s string, startpos, length int) string {
+	runes := []rune(s)
+	l := startpos + length
+	if l > len(runes) {
+		l = len(runes)
+	}
+	return string(runes[startpos:l])
+}
+func main() {
+	println(GetGuid())
+	str := "hellojason"
+	println(SubString(str, 2, 5))
+}
+output==>
+c074eb9467c702c1a93d2b5ac0bce59f
+lloja
+</pre>
+###Golang实现代理访问
+<pre>
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"net/url"
+)
+
+//指定代理ip
+func getTransportFieldURL(proxy_addr *string) (transport *http.Transport) {
+	url_i := url.URL{}
+	url_proxy, _ := url_i.Parse(*proxy_addr)
+	transport = &http.Transport{Proxy: http.ProxyURL(url_proxy)}
+	return
+}
+
+//从环境变量$http_proxy或$HTTP_PROXY中获取HTTP代理地址
+func getTransportFromEnvironment() (transport *http.Transport) {
+	transport = &http.Transport{Proxy: http.ProxyFromEnvironment}
+	return
+}
+func fetch(url, proxy_addr *string) (html string) {
+	transport := getTransportFieldURL(proxy_addr)
+	client := &http.Client{Transport: transport}
+	req, err := http.NewRequest("GET", *url, nil)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	if resp.StatusCode == 200 {
+		robots, err := ioutil.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		html = string(robots)
+	} else {
+		html = ""
+	}
+	return
+}
+func main() {
+	proxy_addr := "http://221.10.251.196:80/"
+	url := "http://zituo.net"
+	html := fetch(&url, &proxy_addr)
+	fmt.Println(html)
+}
 </pre>
