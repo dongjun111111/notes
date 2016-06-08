@@ -7753,3 +7753,66 @@ func ce(h http.Handler) http.Handler {
 
 }
 </pre>
+###Golang实现命令行输入关键字在文件夹/文件中搜索
+<pre>
+package main
+
+import (
+	"bufio"
+	"flag"
+	"fmt"
+	"os"
+	"path/filepath"
+	"regexp"
+)
+
+var path *string = flag.String("p", "./", "搜索的路径")
+var re_string *string = flag.String("r", "", "关键字")
+
+func main() {
+	flag.Parse()
+	if *re_string == "" {
+		fmt.Println("搜索的关键字不能为空")
+		return
+	}
+	fmt.Println("搜索的路径：", *path, "搜索的关键字：", *re_string)
+	re, _ := regexp.Compile(*re_string)
+	filepath.Walk(*path, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
+		fmt.Println("文件名称/路径：", path)
+		File, _ := os.Open(path)
+		r := bufio.NewReader(File)
+		for {
+			b, _, e := r.ReadLine()
+			if e != nil {
+				break
+			}
+			if b, _ := regexp.Match(string([]byte{0}), b); b {
+				break
+			}
+			if re.Match(b) {
+				fmt.Println(string(b))
+			}
+		}
+		File.Close()
+		return nil
+	})
+}
+output==>
+$ go run test.go -r fmt
+搜索的路径： ./ 搜索的关键字： fmt
+文件名称/路径： test.exe
+文件名称/路径： test.go
+        "fmt"
+                fmt.Println("搜索的关键字不能为空")
+        fmt.Println("搜索的路径：", *path, "搜索的关键字：", *re_string)
+                fmt.Println("文件名称/路径：", path)
+                                fmt.Println(string(b))
+
+
+</pre>
