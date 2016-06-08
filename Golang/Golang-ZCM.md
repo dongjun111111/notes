@@ -3302,6 +3302,46 @@ func main() {
 output==>
 	[{Name:Platypus Order:Monotremata} {Name:Quoll Order:Dasyuromorphia}]
 </pre>
+####beego内置模板函数
+目前beego内置的模板函数有如下：
+
+- markdown
+
+实现了把markdown文本转化为html信息，使用方法{{markdown .Content}}
+
+- dateformat
+
+实现了时间的格式化，返回字符串，使用方法{{dateformat .Time "2006-01-02T15:04:05Z07:00"}}
+
+- date
+
+实现了类似PHP的date函数，可以很方便的根据字符串返回时间，使用方法{{date .T "Y-m-d H:i:s"}}
+
+- compare
+
+实现了比较两个对象的比较，如果相同返回true，否者false，使用方法{{compare .A .B}}
+
+- substr
+
+实现了字符串的截取，支持中文截取的完美截取，使用方法{{substr .Str 0 30}}
+
+- html2str
+
+实现了把html转化为字符串，剔除一些script、css之类的元素，返回纯文本信息，使用方法{{html2str .Htmlinfo}}
+
+- str2html
+
+实现了把相应的字符串当作HTML来输出，不转义，使用方法{{str2html .Strhtml}}
+
+- htmlquote
+
+实现了基本的html字符转义，使用方法{{htmlquote .quote}}
+
+- htmlunquote
+
+实现了基本的反转移字符，使用方法{{htmlunquote .unquote}}
+
+
 ###reflect
 reflect包有两个数据类型我们必须知道，一个是Type，一个是Value。
 
@@ -6564,4 +6604,26 @@ func main() {
 	}
 }
 output==>
+</pre>
+###Golang显示本机IP
+<pre>
+package main
+
+import (
+	"net"
+	"strings"
+)
+
+func GetLocalIP() string {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		return "127.0.0.1"
+	}
+	defer conn.Close()
+	return strings.Split(conn.LocalAddr().String(), ":")[0]
+}
+
+func main() {
+	println(GetLocalIP())
+}
 </pre>
