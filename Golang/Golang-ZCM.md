@@ -8239,7 +8239,7 @@ func Rm_duplicate(list *[]int) []int {
 output==>
 [2 1 5 6 3 4 9]
 </pre>
-###Golang抓取磁力链接
+###Golang抓取网站磁力链接
 <pre>
 package main
 
