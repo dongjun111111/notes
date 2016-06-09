@@ -8281,12 +8281,12 @@ func main() {
 
 func Resolve(Find string, FileResult io.Writer) {
 	Re0, _ := regexp.Compile("<h5.*h5>")
-	Re1, _ := regexp.Compile(`^<h5 class="h" name="rsrc"`)
+	Re1, _ := regexp.Compile("<h5 class='h' name='rsrc'")
 	Re2, _ := regexp.Compile("<span class='highlight'>")
 	Re3, _ := regexp.Compile("</span")
 	Re4, _ := regexp.Compile("</h5>")
 	Re5, _ := regexp.Compile(">")
-	Re6, _ := regexp.Compile(`data-hash="`)
+	Re6, _ := regexp.Compile("data-hash=")
 	Resp, err := http.Get(Find)
 	if err != nil {
 		fmt.Println(err)
