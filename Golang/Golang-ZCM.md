@@ -8563,3 +8563,44 @@ output==>
 ###C开发后端的技术要求
 - 熟悉linux下c开发，熟悉网络、进程/线程间通信编程；
 - 全面的软件知识结构（操作系统、软件工程、设计模式、数据结构、数据库系统、网络安全)。
+###Beego下的api开发
+基本结构如下：
+<pre>
+routers：
+-------router.go
+router.go -->
+
+package routers
+import (
+	"github.com/astaxie/beego"
+)
+func init() {
+	beego.GlobalControllerRouter["？？？/controllers:ActivityController"] = append(beego.GlobalControllerRouter["zcm/controllers:ActivityController"],
+		beego.ControllerComments{
+			"GetHomepage",       //结构体的方法名
+			`/home/`,            //路径，或者说是路由
+			[]string{"get"},     //访问形式及返回数据类型
+			nil})
+......
+}
+
+-------commentsRouter_controllers.go
+
+package routers
+import (
+	"github.com/astaxie/beego"
+	"zcm/controllers"
+)
+
+func init() {
+	ns := beego.NewNamespace("/x1",
+
+		beego.NSNamespace("/activity",   
+			beego.NSInclude(
+				&controllers.ActivityController{},    //继承自beegoController的结构体
+			),
+		),
+......
+	beego.AddNamespace(ns)
+}
+</pre>
