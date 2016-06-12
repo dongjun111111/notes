@@ -3302,6 +3302,57 @@ func main() {
 output==>
 	[{Name:Platypus Order:Monotremata} {Name:Quoll Order:Dasyuromorphia}]
 </pre>
+###beego中设置404页面
+在入口页面main.go中编辑：
+<pre>
+var FilterPermission = func(ctx *context.Context) {
+	id := ctx.Input.Session("loginid")
+	if id == nil && ctx.Request.RequestURI != "/" {
+		ctx.Redirect(302, "/")
+	}
+}
+
+var FilterWap = func(ctx *context.Context) {
+	//检查cookie
+	var value = ctx.GetCookie("FromWap")
+	if value != "true" {
+		agent := strings.ToLower(ctx.Request.Header.Get("User-Agent"))
+		var agents = []string{"android", "iphone", "ipad", "windows phone", "ipod", "blackberry", "mobile"}
+		var mobile = false
+		for _, a := range agents {
+			if strings.Contains(agent, a) {
+				mobile = true
+				break
+			}
+		}
+		if mobile {
+			//移动端处理
+			var wap = ctx.Request.FormValue("fromwap")
+			if wap != "1" {
+				//跳转到wap
+				ctx.Redirect(302, "http://???.com")
+			} else {
+				//如果是wap端并且是跳转过来的则设置Cookie
+				ctx.SetCookie("FromWap", "true")
+			}
+		}
+	}
+}
+func main() {
+	beego.SetStaticPath("/static/*", "/static")
+	beego.InsertFilter("/user/recharge/*", beego.BeforeRouter, FilterPermission) //过滤
+	beego.InsertFilter("/", beego.BeforeRouter, FilterWap)                       //wap访问过滤
+	beego.ErrorHandler("404", page_not_found)                                    //404跳转
+	beego.ErrorController(&controllers.ErrorController{})                        //自定义错误处理
+	beego.Run()
+}
+//404处理
+func page_not_found(rw http.ResponseWriter, r *http.Request) {
+	t, _ := template.New("404.html").ParseFiles(beego.BConfig.WebConfig.ViewsPath + "/404.html")
+	data := make(map[string]interface{})
+	t.Execute(rw, data)
+}
+</pre>
 ####beego内置模板函数
 目前beego内置的模板函数有如下：
 
