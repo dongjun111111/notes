@@ -8426,3 +8426,21 @@ func main() {
 output==>
 9412ddc1f9772447951ec7281ce49ec8
 </pre>
+###Golang时间
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	currenttime := time.Now()     //当前时间
+	begintime, _ := time.ParseInLocation("2006-01-02 15:04:05", "2015-12-01 00:00:00", time.Local)  //格式化特定时间
+	endtime, _ := time.ParseInLocation("2006-01-02 15:04:05", "2016-12-31 23:59:59", time.Local)   //格式化特定时间
+	fmt.Println(currenttime, begintime, endtime)
+}
+output==>
+2016-06-12 14:07:03.2768511 +0800 CST 2015-12-01 00:00:00 +0800 CST 2016-12-31 23:59:59 +0800 CST
+</pre>
