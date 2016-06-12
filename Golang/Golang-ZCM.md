@@ -4994,7 +4994,7 @@ func main() {
 output==>  //得到base64处理过的切片
 Y3SRj2WKAL7SaTG2BAo13voGdi2FAq7osAbkAWWGCAZFDWZFVv1pWu2oWu2oVq1pXjGqVvGpX37sa32lYFG8AUHlBQ6cYTGxDAZ13u1Fa318BAL....
 </pre>
-//发送post请求
+//发送post请求(1)/发送的数据是[]byte形式
 <pre>
 package main
 
@@ -5004,7 +5004,6 @@ import "io/ioutil"
 import "errors"
 import "bytes"
 
-//发送post请求
 func SendPost(url string, body []byte) ([]byte, error) {
 	requestBody := body //此处没有加密
 	resp, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
@@ -5069,6 +5068,34 @@ func SendPut(url string, body []byte) ([]byte, error) {
 func main() {
 	//待测试
 }
+</pre>
+发送post请求(2)/发送的数据是map形式，也就是常见的表单提交形式，Content-Type：application/x-www-form-urlencoded
+<pre>
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	//这里添加post的body内容
+	var data map[string][]string
+	data = make(map[string][]string)
+	data["json"] = []string{"jsonStr"}
+
+	//把post表单发送给目标服务器
+	res, err := http.PostForm("https://api.huageya.com:8443/server/sign", data)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	fmt.Println("post send success")
+	fmt.Println(res)
+}
+output==>
+post send success
+&{200 OK 200 HTTP/1.1 1 1 map[Server:[Apache-Coyote/1.1] Set-Cookie:[JSESSIONID=F64A6408B481272B95172638CA8184A5; Path=/server/; Secure; HttpOnly] Content-Type:[text/html;charset=utf-8] Content-Length:[51] Date:[Sun, 12 Jun 2016 08:00:21 GMT]] 0xc0820af080 51 [] false map[] 0xc08209e000 0xc0820c24d0}
 </pre>
 并行计算
 <pre>
