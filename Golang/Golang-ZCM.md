@@ -8356,3 +8356,44 @@ func Resolve(Find string, FileResult io.Writer) {
 	}
 }
 </pre>
+###根据手机号判断手机运营商
+<pre>
+package main
+
+import (
+	"fmt"
+)
+
+var whoareyou = make(map[string]string)
+
+func init() {
+
+	var yidong []string = []string{"134", "135", "136", "137", "138", "139", "147", "150", "151", "152", "157", "158", "159", "178", "182", "183", "184", "187", "188"}
+	var liantong []string = []string{"130", "131", "132", "145", "155", "156", "176", "185", "186"}
+	var dianxin []string = []string{"133", "153", "177", "180", "181", "189"}
+	var qita []string = []string{"170"} //1700,1705,1709
+	for i := 0; i < len(yidong); i++ {
+		whoareyou[yidong[i]] = "y-移动" //移动
+	}
+	for i := 0; i < len(liantong); i++ {
+		whoareyou[liantong[i]] = "l-联通" //联通
+	}
+	for i := 0; i < len(dianxin); i++ {
+		whoareyou[dianxin[i]] = "d-电信" //电信
+	}
+	for i := 0; i < len(qita); i++ {
+		whoareyou[qita[i]] = "q-其他" //其他
+	}
+}
+
+func WhoAreYou(account string) string {
+	key := string(account[:3])
+	return whoareyou[key]
+}
+
+func main() {
+	fmt.Println(WhoAreYou("18856464532"))
+}
+output==>
+y-移动
+</pre>
