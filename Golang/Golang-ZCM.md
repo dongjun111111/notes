@@ -8444,3 +8444,53 @@ func main() {
 output==>
 2016-06-12 14:07:03.2768511 +0800 CST 2015-12-01 00:00:00 +0800 CST 2016-12-31 23:59:59 +0800 CST
 </pre>
+###Golang对金额进行判断
+<pre>
+package main
+
+import (
+	"strconv"
+)
+
+//对字符串进行截取
+func Substr(str string, start, length int) string {
+	rs := []rune(str)
+	rl := len(rs)
+	end := 0
+	if start < 0 {
+		start = rl - 1 + start
+	}
+	end = start + length
+	if start > end {
+		start, end = end, start
+	}
+	if start < 0 {
+		start = 0
+	}
+	if start > rl {
+		start = rl
+	}
+	if end < 0 {
+		end = 0
+	}
+	if end > rl {
+		end = rl
+	}
+	return string(rs[start:end])
+}
+
+func OperationMoney(money int) string {
+	if money >= 10000 {
+		bb := strconv.Itoa(money)
+		aa := Substr(strconv.Itoa(money), 0, len([]byte(bb))-4)
+		return aa + "万"
+	} else {
+		return strconv.Itoa(money) + "元"
+	}
+}
+func main() {
+	println(OperationMoney(135634))
+}
+output==>
+13万
+</pre>
