@@ -8402,3 +8402,27 @@ defer的用法及意义
 
 - defer 在声明时不会立即执行，而是在函数 return 后，再按照 FILO （先进后出）的原则依次执行每一个 defer，一般用于异常处理、释放资源、清理数据、记录日志等。这有点像面向对象语言的析构函数，优雅又简洁，是 Golang 的亮点之一。
 - defer 还有一个重要的特性，就是即便函数抛出了异常，也会被执行的。 这样就不会因程序出现了错误，而导致资源不会释放了。
+###生成Hmac
+<pre>
+package main
+
+import (
+	"crypto/hmac"
+	"crypto/md5"
+	"fmt"
+)
+
+//生成Hmac
+func GenerateHmac(str string) string {
+	var hash = hmac.New(md5.New, []byte("tesstring"))
+	hash.Write([]byte(str))
+	return fmt.Sprintf("%x", hash.Sum(nil))
+
+}
+
+func main() {
+	fmt.Println(GenerateHmac("EEE"))
+}
+output==>
+9412ddc1f9772447951ec7281ce49ec8
+</pre>
