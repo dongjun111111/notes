@@ -5097,6 +5097,45 @@ output==>
 post send success
 &{200 OK 200 HTTP/1.1 1 1 map[Server:[Apache-Coyote/1.1] Set-Cookie:[JSESSIONID=F64A6408B481272B95172638CA8184A5; Path=/server/; Secure; HttpOnly] Content-Type:[text/html;charset=utf-8] Content-Length:[51] Date:[Sun, 12 Jun 2016 08:00:21 GMT]] 0xc0820af080 51 [] false map[] 0xc08209e000 0xc0820c24d0}
 </pre>
+发送post请求(3)//使用tcp形式发送
+<pre>
+package main
+
+import (
+	"fmt"
+	"net"
+)
+
+func main() {
+	//因为post方法属于HTTP协议，HTTP协议以TCP为基础，所以先建立一个
+	//TCP连接，通过这个TCP连接来发送我们的post请求
+	conn, err := net.Dial("tcp", "api.huageya.com:8443")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	defer conn.Close()
+	//构造post请求
+	var post string
+	post += "POST /postpage HTTP/1.1\r\n"
+	post += "Content-Type: application/x-www-form-urlencoded\r\n"
+	post += "Content-Length: 37\r\n"
+	post += "Connection: keep-alive\r\n"
+	post += "Accept-Language: zh-CN,zh;q=0.8,en;q=0.6\r\n"
+	post += "\r\n"
+	post += "key=json&value=jsonStr\r\n"
+	res, err := conn.Write([]byte(post))
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	fmt.Println("post send success")
+	fmt.Println(res)
+}
+output==>
+post send success
+186
+</pre>
 并行计算
 <pre>
 package main
