@@ -8804,3 +8804,41 @@ func main() {
 output==>
 done!
 </pre>
+###Golang生成自定义长度的密码
+<pre>
+package main
+
+import (
+	"fmt"
+	ran "math/rand"
+	"strconv"
+	"time"
+)
+
+//生成自定义长度的密码
+func GetRandom(length int) string {
+	r := ran.New(ran.NewSource(time.Now().UnixNano()))
+	var result string
+	for i := 0; i < length; i++ {
+
+		if int(r.Intn(2))%2 == 0 {
+			var choice int
+			if int(r.Intn(2))%2 == 0 {
+				choice = 65
+			} else {
+				choice = 97
+			}
+			result = result + string(choice+r.Intn(26))
+		} else {
+			result = result + strconv.Itoa(r.Intn(10))
+		}
+	}
+	return result
+}
+
+func main() {
+	fmt.Println(GetRandom(45))
+}
+output==>
+csB9065oLYlS9Kk0GE0cJhbDwIS8247Nouo1n0541Pwwa
+</pre>
