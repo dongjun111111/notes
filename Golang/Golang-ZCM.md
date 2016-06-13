@@ -8712,7 +8712,7 @@ func main() {
 output==>
 echo--------------------()
 </pre>
-###遍历某个目录下的文件，并读取文件名到一个csv文件 
+###Golang遍历某个目录下的文件，并读取文件名到一个csv文件 
 <pre>
 package main
 
