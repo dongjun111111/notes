@@ -8914,3 +8914,22 @@ func main() {
 output==>
 肆拾伍万肆仟伍佰陆拾伍圆整
 </pre>
+###Golang获取字符串长度
+<pre>
+package main
+
+import (
+	"fmt"
+)
+
+func Strlen(s string) int {
+	rs := []rune(s)
+	rl := len(rs)
+	return rl
+}
+func main() {
+	fmt.Println(Strlen("hello冬季"))
+}
+output==>
+7
+</pre>
