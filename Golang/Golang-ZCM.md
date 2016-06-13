@@ -8672,3 +8672,135 @@ output==>
 	if(window.location.toString().index
 ...
 </pre>
+###利用Golang的反射包，实现根据函数名自动调用函数
+<pre>
+package main
+
+import "fmt"
+import "reflect"
+import "encoding/xml"
+
+type st struct {
+}
+
+func (this *st) Echo() {
+	fmt.Println("echo()")
+}
+
+func (this *st) Echo2() {
+	fmt.Println("echo--------------------()")
+}
+
+var xmlstr string = `<root>  
+    <func>Echo</func>  
+    <func>Echo2</func>  
+    </root>`
+
+type st2 struct {
+	E []string `xml:"func"`
+}
+
+func main() {
+	s2 := st2{}
+	xml.Unmarshal([]byte(xmlstr), &s2)
+
+	s := &st{}
+	v := reflect.ValueOf(s)
+
+	v.MethodByName(s2.E[1]).Call(nil)
+}
+output==>
+echo--------------------()
+</pre>
+###遍历某个目录下的文件，并读取文件名到一个csv文件 
+<pre>
+package main
+
+import (
+	"container/list"
+	"encoding/csv"
+	"fmt"
+	"os"
+	"path/filepath"
+)
+
+var outputFileName string = "filesName.csv"
+
+func CheckErr(err error) {
+	if nil != err {
+		panic(err)
+	}
+}
+
+func GetFullPath(path string) string {
+	absolutePath, _ := filepath.Abs(path)
+	return absolutePath
+}
+
+func PrintFilesName(path string) {
+	fullPath := GetFullPath(path)
+
+	listStr := list.New()
+
+	filepath.Walk(fullPath, func(path string, fi os.FileInfo, err error) error {
+		if nil == fi {
+			return err
+		}
+		if fi.IsDir() {
+			return nil
+		}
+
+		name := fi.Name()
+		if outputFileName != name {
+			listStr.PushBack(name)
+		}
+
+		return nil
+	})
+
+	OutputFilesName(listStr)
+}
+
+func ConvertToSlice(listStr *list.List) []string {
+	sli := []string{}
+	for el := listStr.Front(); nil != el; el = el.Next() {
+		sli = append(sli, el.Value.(string))
+	}
+
+	return sli
+}
+
+func OutputFilesName(listStr *list.List) {
+	files := ConvertToSlice(listStr)
+	//sort.StringSlice(files).Sort()// sort
+
+	f, err := os.Create(outputFileName)
+	//f, err := os.OpenFile(outputFileName, os.O_APPEND | os.O_CREATE, os.ModeAppend)
+	CheckErr(err)
+	defer f.Close()
+
+	f.WriteString("\xEF\xBB\xBF")
+	writer := csv.NewWriter(f)
+
+	length := len(files)
+	for i := 0; i < length; i++ {
+		writer.Write([]string{files[i]})
+	}
+
+	writer.Flush()
+}
+
+func main() {
+	var path string
+	if len(os.Args) > 1 {
+		path = os.Args[1]
+	} else {
+		path, _ = os.Getwd()
+	}
+	PrintFilesName(path)
+
+	fmt.Println("done!")
+}
+output==>
+done!
+</pre>
