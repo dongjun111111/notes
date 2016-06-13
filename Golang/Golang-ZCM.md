@@ -8933,3 +8933,86 @@ func main() {
 output==>
 7
 </pre>
+###
+<pre>
+type SmsResult struct {
+	XMLname       xml.Name `xml:"returnsms"`
+	Status        string   `xml:"returnstatus"`
+	Message       string   `xml:"message"`
+	Remainpoint   string   `xml:"remainpoint"`
+	TaskID        string   `xml:"taskID"`
+	SuccessCounts string   `xml:"successCounts"`
+}
+
+//向梦网语音平台发送验证码，获取语音验证码
+func GetForSmMengWang(account string, uid int) (vc string, b bool) {
+	vcode := utils.GetRand2Digit() + utils.GetRand2Digit()
+	v := url.Values{}
+	v.Set("userId", "??????")
+	v.Set("password", "??????")
+	v.Set("pszMobis", account)
+	v.Set("pszMsg", vcode) //4位验证码
+	v.Set("iMobiCount", "1")
+	v.Set("pszSubPort", "4009917005") //回拨显示的号码，目前不支持使用，请勿输入，（可用不传），如果输入会下单不成功返回错误码 MW:1094（显示号码不合法）
+	dtOrder := time.Now().Local().Format("20060102150405") + vcode
+	v.Set("MsgId", dtOrder)
+	v.Set("PtTmplId", "100102")
+	v.Set("msgType", "1")
+
+	cache.RecordMessages(account, "语音验证码:==>"+vcode+"")     //向zcmlc_log数据库中message加入短信日志记录
+	body := ioutil.NopCloser(strings.NewReader(v.Encode())) //把form数据编下码
+	client := &http.Client{}
+	req_url := "http://61.145.229.28:5001/voiceprepose"
+	req, err := http.NewRequest("POST", req_url+"/MongateSendSubmit", body)
+	if err != nil {
+		cache.RecordNewLogs(uid, account, "语音验证码:==>"+vcode+"发送失败："+err.Error(), "", "SMS", "", "")
+		return vcode, false
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value") //这个一定要加，不加form的值post不过去，被坑了两小时
+	resp, err := client.Do(req)                                                      //发送
+	if err != nil {
+		cache.RecordNewLogs(uid, account, "语音验证码:==>"+vcode+"发送失败："+err.Error(), "", "SMS", "", "")
+		return vcode, false
+	}
+	defer resp.Body.Close() //一定要关闭resp.Body
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		cache.RecordNewLogs(uid, account, "语音验证码:==>"+vcode+"解析失败："+err.Error(), "", "SMS", "", "")
+		return vcode, false
+	}
+	cache.RecordNewLogs(uid, account, "语音验证码:==>"+vcode+",申请发送语音验证码,返回的结果:==>"+string(data), "", "SMS", "", "")
+	return vcode, true
+}
+
+//向梦网平台获取验证码结果
+func GetStateForMengWang(account string, uid int) bool {
+	v := url.Values{}
+	v.Set("userId", "??????")
+	v.Set("password", "??????")
+	v.Set("iReqType", "2")
+	body := ioutil.NopCloser(strings.NewReader(v.Encode())) //把form数据编下码
+	client := &http.Client{}
+	req_url := "http://61.145.229.28:5001/voiceprepose"
+	req, err := http.NewRequest("POST", req_url+"/MongateGetDeliver", body)
+	if err != nil {
+		cache.RecordNewLogs(uid, account, "语音验证码状态查询:==>"+err.Error(), "", "SMS", "", "")
+		return false
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value") //这个一定要加，不加form的值post不过去，被坑了两小时
+	resp, err := client.Do(req)                                                      //发送
+	if err != nil {
+		cache.RecordNewLogs(uid, account, "语音验证码状态查询:==>"+err.Error(), "", "SMS", "", "")
+		return false
+	}
+	defer resp.Body.Close() //一定要关闭resp.Body
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		cache.RecordNewLogs(uid, account, "语音验证码状态查询解析失败:==>"+err.Error(), "", "SMS", "", "")
+		return false
+	}
+	cache.RecordNewLogs(uid, account, "语音验证码是否接听状态:==>"+string(data), "", "SMS", "", "")
+	//	beego.Emergency(string(data), err)
+	return true
+}
+
+</pre>
