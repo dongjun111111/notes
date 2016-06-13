@@ -8604,3 +8604,71 @@ func init() {
 	beego.AddNamespace(ns)
 }
 </pre>
+###Golang实现并发get请求
+goroutine实现并发
+<pre>
+package main
+
+import (
+	"fmt"
+	"github.com/astaxie/beego/httplib"
+	"time"
+)
+
+type RemoteResult struct {
+	Url    string
+	Result string
+}
+
+func RemoteGet(requestUrl string, resultChan chan RemoteResult) {
+	request := httplib.NewBeegoRequest(requestUrl, "GET")
+	request.SetTimeout(2*time.Second, 5*time.Second)
+	//request.String()
+	content, err := request.String()
+	if err != nil {
+		content = "" + err.Error()
+	}
+	resultChan <- RemoteResult{Url: requestUrl, Result: content}
+}
+func MultiGet(urls []string) []RemoteResult {
+	fmt.Println(time.Now())
+	resultChan := make(chan RemoteResult, len(urls))
+	defer close(resultChan)
+	var result []RemoteResult
+	for _, url := range urls {
+		go RemoteGet(url, resultChan)
+	}
+	for i := 0; i < len(urls); i++ {
+		res := <-resultChan
+		result = append(result, res)
+	}
+	fmt.Println(time.Now())
+	return result
+}
+
+func main() {
+	urls := []string{
+		"http://baidu.com",
+		"http://soso.com",
+		"http://bing.com",
+		"http://qq.com",
+		"http://yahoo.com"}
+	content := MultiGet(urls)
+	fmt.Println(content)
+}
+output==>
+	2016-06-13 09:31:44.9976743 +0800 CST
+	2016-06-13 09:31:46.5737645 +0800 CST
+	[{http://baidu.com <html>
+	<meta http-equiv="refresh" content="0;url=http://www.baidu.com/">
+	</html>
+	} {http://qq.com <!DOCTYPE html>
+	<html lang="zh-CN">
+	<head>
+	<meta content="text/html; charset=gb2312" http-equiv="Content-Type">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>��Ѷ��ҳ</title>
+	<script type="text/javascript">
+	if(window.location.toString().index
+...
+</pre>
