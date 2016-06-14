@@ -8933,7 +8933,7 @@ func main() {
 output==>
 7
 </pre>
-###
+###梦网语音
 <pre>
 type SmsResult struct {
 	XMLname       xml.Name `xml:"returnsms"`
@@ -9013,5 +9013,18 @@ func GetStateForMengWang(account string, uid int) bool {
 	cache.RecordNewLogs(uid, account, "语音验证码是否接听状态:==>"+string(data), "", "SMS", "", "")
 	//	beego.Emergency(string(data), err)
 	return true
+}
+</pre>
+###姓名与身份证号的正则匹配
+<pre>
+r, _ := regexp.Compile("^([\u4E00-\u9FA5]{2,5}(?:·[\u4E00-\u9FA5]{2,5})*)$")//应该是匹配两个或以上的汉字，\u4e00-\u9fa5是所有汉字的unicode编码范围
+if !r.MatchString(cardName) { 
+	errmsg = "你输入的姓名有误或暂不支持,请核对后再试~"
+	return
+}
+r2, _ := regexp.Compile("^(\\d{15}$|^\\d{18}$|^\\d{17}(\\d|X|x))$")//身份证号匹配
+if !r2.MatchString(idCard) {
+	errmsg = "你输入的身份证号有误或暂不支持,请核对后再试~"
+	return
 }
 </pre>
