@@ -9082,3 +9082,20 @@ ProcessID : 0
 ProcessName : System
 ...
 </pre>
+###Golang获取当前毫秒时间戳
+<pre>
+package main
+
+import (
+	"fmt"
+	"strconv"
+	"time"
+)
+
+func main() {
+	timestamp := strconv.FormatInt(time.Now().UnixNano()/1000, 10)
+	fmt.Println(timestamp)
+}
+output==>
+1465894621538550
+</pre>
