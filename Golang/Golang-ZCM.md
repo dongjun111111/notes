@@ -9099,3 +9099,32 @@ func main() {
 output==>
 1465894621538550
 </pre>
+###Shell脚本
+<pre>
+比较字符写法：
+-eq 等于
+-ne 不等于
+-gt 大于
+-lt 小于
+-le 小于等于
+-ge 大于等于
+-z 空串
+* = 两个字符相等
+* != 两个字符不等
+* -n 非空串
+举例：
+if [ $# -ge 2 ];then
+echo "你提供的参数过多！"
+exit 1
+else
+ if [ $# -ne 0 ];then
+  if [ $1 = s ];then
+  echo "one"
+  else
+  echo "two"
+  fi
+ else
+ echo "3"
+ fi
+fi
+</pre>
