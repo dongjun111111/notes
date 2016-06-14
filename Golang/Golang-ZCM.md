@@ -9014,5 +9014,4 @@ func GetStateForMengWang(account string, uid int) bool {
 	//	beego.Emergency(string(data), err)
 	return true
 }
-
 </pre>
