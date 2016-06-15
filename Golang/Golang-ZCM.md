@@ -3302,6 +3302,11 @@ func main() {
 output==>
 	[{Name:Platypus Order:Monotremata} {Name:Quoll Order:Dasyuromorphia}]
 </pre>
+beego中存储日志信息
+<pre>
+//将项目中所有beego.Emergency/beego.Warning等信息保存在logs/log.log文件中
+beego.BeeLogger.SetLogger("file", `{"filename": "logs/log.log"}`)
+</pre>
 ###beego中设置404页面
 在入口页面main.go中编辑：
 <pre>
