@@ -9601,3 +9601,148 @@ func SendEmaliToUsers(user, password, content, title string) {
 	}
 }
 </pre>
+###Golang中的ecb/ECB加密
+<pre>
+package main
+
+import (
+	"bytes"
+	"crypto/des"
+	"errors"
+	"log"
+)
+
+func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Println("程序开始....")
+	key := []byte{0xD5, 0x92, 0x86, 0x02, 0x2A, 0x0B, 0x3E, 0x64}
+	data := []byte("hello world")
+
+	out, _ := MyEncrypt(data, key)
+	log.Println("加密后:", out)
+	out, _ = MyDecrypt(out, key)
+	log.Println("解密后:", string(out))
+}
+func MyEncrypt(data, key []byte) ([]byte, error) {
+	block, err := des.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	bs := block.BlockSize()
+	data = PKCS5Padding(data, bs)
+	if len(data)%bs != 0 {
+		return nil, errors.New("Need a multiple of the blocksize")
+	}
+	out := make([]byte, len(data))
+	dst := out
+	for len(data) > 0 {
+		block.Encrypt(dst, data[:bs])
+		data = data[bs:]
+		dst = dst[bs:]
+	}
+	return out, nil
+}
+func MyDecrypt(data []byte, key []byte) ([]byte, error) {
+	block, err := des.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	bs := block.BlockSize()
+	if len(data)%bs != 0 {
+		return nil, errors.New("crypto/cipher: input not full blocks")
+	}
+	out := make([]byte, len(data))
+	dst := out
+	for len(data) > 0 {
+		block.Decrypt(dst, data[:bs])
+		data = data[bs:]
+		dst = dst[bs:]
+	}
+	out = PKCS5UnPadding(out)
+	return out, nil
+}
+
+func PKCS5Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func PKCS5UnPadding(origData []byte) []byte {
+	length := len(origData)
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
+}
+output==>
+2016/06/15 17:01:21 test.go:31: 程序开始....
+2016/06/15 17:01:21 test.go:36: 加密后: [169 102 193 176 238 138 72 19 199 11 51 238 250 56 193 150]
+2016/06/15 17:01:21 test.go:38: 解密后: hello world
+</pre>
+下面是一个ecb封装的工具方法
+<pre>
+package utils
+
+import (
+	"crypto/cipher"
+)
+
+type ecb struct {
+	b         cipher.Block
+	blockSize int
+}
+
+func newECB(b cipher.Block) *ecb {
+	return &ecb{
+		b:         b,
+		blockSize: b.BlockSize(),
+	}
+}
+
+type ecbEncrypter ecb
+
+// NewECBEncrypter returns a BlockMode which encrypts in electronic code book
+// mode, using the given Block.
+func NewECBEncrypter(b cipher.Block) cipher.BlockMode {
+	return (*ecbEncrypter)(newECB(b))
+}
+
+func (x *ecbEncrypter) BlockSize() int { return x.blockSize }
+
+func (x *ecbEncrypter) CryptBlocks(dst, src []byte) {
+	if len(src)%x.blockSize != 0 {
+		panic("crypto/cipher: input not full blocks")
+	}
+	if len(dst) < len(src) {
+		panic("crypto/cipher: output smaller than input")
+	}
+	for len(src) > 0 {
+		x.b.Encrypt(dst, src[:x.blockSize])
+		src = src[x.blockSize:]
+		dst = dst[x.blockSize:]
+	}
+}
+
+type ecbDecrypter ecb
+
+// NewECBDecrypter returns a BlockMode which decrypts in electronic code book
+// mode, using the given Block.
+func NewECBDecrypter(b cipher.Block) cipher.BlockMode {
+	return (*ecbDecrypter)(newECB(b))
+}
+
+func (x *ecbDecrypter) BlockSize() int { return x.blockSize }
+
+func (x *ecbDecrypter) CryptBlocks(dst, src []byte) {
+	if len(src)%x.blockSize != 0 {
+		panic("crypto/cipher: input not full blocks")
+	}
+	if len(dst) < len(src) {
+		panic("crypto/cipher: output smaller than input")
+	}
+	for len(src) > 0 {
+		x.b.Decrypt(dst, src[:x.blockSize])
+		src = src[x.blockSize:]
+		dst = dst[x.blockSize:]
+	}
+}
+</pre>
