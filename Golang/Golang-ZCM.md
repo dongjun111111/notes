@@ -9518,14 +9518,65 @@ output==>
 Resp code: 200
 </pre>
 ###Golang channel
-<pre>
 Golang Channel的基本操作语法如下：
 
-c := make(chan bool) //创建一个无缓冲的bool型Channel 
-c <- x        //向一个Channel发送一个值
-<- c          //从一个Channel中接收一个值
-x = <- c      //从Channel c接收一个值并将其存储到x中
-x, ok = <- c  //从Channel接收一个值，如果channel关闭了或没有数据，那么ok将被置为false
+- c := make(chan bool) //创建一个无缓冲的bool型Channel 
+- c <- x        //向一个Channel发送一个值
+- <- c          //从一个Channel中接收一个值
+- x = <- c      //从Channel c接收一个值并将其存储到x中
+- x, ok = <- c  //从Channel接收一个值，如果channel关闭了或没有数据，那么ok将被置为false
 
 不带缓冲的Channel兼具通信和同步两种特性，颇受青睐。
+<pre>
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Println("Begin doing something")
+	c := make(chan bool)
+	go func() {
+		fmt.Println("Doing something ...")
+		c <- true //事情做完后向channel中写入值来作为通知
+	}()
+	<-c //等待读取channel中的值，读不到一直阻塞进程
+	fmt.Println("Done!")
+}
+output==>
+Begin doing something
+Doing something ...
+Done!
+</pre>
+多个goroutine
+<pre>
+package main
+
+import (
+	"fmt"
+)
+
+func worker(start chan bool, index int) {
+	<-start
+	fmt.Println("This  is  worker:", index)
+}
+func main() {
+	start := make(chan bool)
+	for i := 1; i <= 10; i++ {
+		go worker(start, i)
+		start <- true
+	}
+}
+output==>
+This  is  worker: 1
+This  is  worker: 2
+This  is  worker: 3
+This  is  worker: 4
+This  is  worker: 5
+This  is  worker: 6
+This  is  worker: 7
+This  is  worker: 8
+This  is  worker: 9
+This  is  worker: 10
 </pre>
