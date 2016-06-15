@@ -9312,6 +9312,189 @@ FuncName : main.main
 file : D:/gopath/src/test/test.go
 line : 9
 </pre>
+###Golang统计某一目录下所有文件代码行数并且统计总数
+<pre>
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+	"sync"
+)
+
+var (
+	linesum int
+	mutex   *sync.Mutex = new(sync.Mutex)
+)
+
+var (
+	// the dir where souce file stored
+	rootPath string = "/go/src"
+	// exclude these sub dirs
+	nodirs [5]string = [...]string{"/bitbucket.org", "/github.com", "/goplayer", "/uniqush", "/code.google.com"}
+	// the suffix name you care
+	suffixname string = ".go"
+)
+
+func main() {
+	argsLen := len(os.Args)
+	if argsLen == 2 {
+		rootPath = os.Args[1]
+	} else if argsLen == 3 {
+		rootPath = os.Args[1]
+		suffixname = os.Args[2]
+	}
+	// sync chan using for waiting
+	done := make(chan bool)
+	go codeLineSum(rootPath, done)
+	<-done
+
+	fmt.Println("total line:", linesum)
+}
+
+// compute souce file line number
+func codeLineSum(root string, done chan bool) {
+	var goes int              // children goroutines number
+	godone := make(chan bool) // sync chan using for waiting all his children goroutines finished
+	isDstDir := checkDir(root)
+	defer func() {
+		if pan := recover(); pan != nil {
+			fmt.Printf("root: %s, panic:%#v\n", root, pan)
+		}
+
+		// waiting for his children done
+		for i := 0; i < goes; i++ {
+			<-godone
+		}
+
+		// this goroutine done, notify his parent
+		done <- true
+	}()
+	if !isDstDir {
+		return
+	}
+
+	rootfi, err := os.Lstat(root)
+	checkerr(err)
+
+	rootdir, err := os.Open(root)
+	checkerr(err)
+	defer rootdir.Close()
+
+	if rootfi.IsDir() {
+		fis, err := rootdir.Readdir(0)
+		checkerr(err)
+		for _, fi := range fis {
+			if strings.HasPrefix(fi.Name(), ".") {
+				continue
+			}
+			goes++
+			if fi.IsDir() {
+				go codeLineSum(root+"/"+fi.Name(), godone)
+			} else {
+				go readfile(root+"/"+fi.Name(), godone)
+			}
+		}
+	} else {
+		goes = 1 // if rootfi is a file, current goroutine has only one child
+		go readfile(root, godone)
+	}
+}
+
+func readfile(filename string, done chan bool) {
+	var line int
+	isDstFile := strings.HasSuffix(filename, suffixname)
+	defer func() {
+		if pan := recover(); pan != nil {
+			fmt.Printf("filename: %s, panic:%#v\n", filename, pan)
+		}
+		if isDstFile {
+			addLineNum(line)
+			fmt.Printf("file %s complete, line = %d\n", filename, line)
+		}
+		// this goroutine done, notify his parent
+		done <- true
+	}()
+	if !isDstFile {
+		return
+	}
+
+	file, err := os.Open(filename)
+	checkerr(err)
+	defer file.Close()
+
+	reader := bufio.NewReader(file)
+	for {
+		_, isPrefix, err := reader.ReadLine()
+		if err != nil {
+			break
+		}
+		if !isPrefix {
+			line++
+		}
+	}
+}
+
+// check whether this dir is the dest dir
+func checkDir(dirpath string) bool {
+	// 判断该文件夹是否在被排除的范围之内
+	for _, dir := range nodirs {
+		if rootPath+dir == dirpath {
+			return false
+		}
+	}
+	return true
+}
+
+func addLineNum(num int) {
+	// 获取锁
+	mutex.Lock()
+	// defer语句在函数返回时调用, 确保锁被释放
+	defer mutex.Unlock()
+	linesum += num
+}
+
+// if error happened, throw a panic, and the panic will be recover in defer function
+func checkerr(err error) {
+	if err != nil {
+		// 在发生错误时调用panic, 程序将立即停止正常执行, 开始沿调用栈往上抛, 直到遇到recover
+		// 对于java程序员, 可以将panic类比为exception, 而recover则是try...catch
+		panic(err.Error())
+	}
+}
+output==>
+file /go/src/math/unsafe.go complete, line = 21
+file /go/src/bufio/scan_test.go complete, line = 544
+file /go/src/mime/type_windows.go complete, line = 41
+file /go/src/net/url/url_test.go complete, line = 1439
+file /go/src/math/nextafter.go complete, line = 49
+file /go/src/math/pow.go complete, line = 137
+file /go/src/math/pow10.go complete, line = 40
+file /go/src/builtin/builtin.go complete, line = 256
+file /go/src/math/rand/zipf.go complete, line = 77
+file /go/src/math/remainder.go complete, line = 85
+file /go/src/math/signbit.go complete, line = 10
+file /go/src/math/sin.go complete, line = 224
+file /go/src/math/sincos.go complete, line = 69
+file /go/src/math/sinh.go complete, line = 77
+file /go/src/math/sqrt.go complete, line = 148
+file /go/src/math/tan.go complete, line = 130
+file /go/src/math/tanh.go complete, line = 97
+file /go/src/mime/encodedword.go complete, line = 434
+file /go/src/mime/encodedword_test.go complete, line = 208
+file /go/src/mime/example_test.go complete, line = 98
+file /go/src/mime/grammar.go complete, line = 32
+file /go/src/mime/mediatype.go complete, line = 361
+file /go/src/mime/mediatype_test.go complete, line = 311
+file /go/src/mime/multipart/writer_test.go complete, line = 128
+file /go/src/mime/quotedprintable/writer_test.go complete, line = 158
+file /go/src/mime/type.go complete, line = 187
+file /go/src/mime/type_dragonfly.go complete, line = 9
+......
+total line: 820210
+</pre>
 ###Golang中http读取大文件必须读完 
 <pre>
 package main
