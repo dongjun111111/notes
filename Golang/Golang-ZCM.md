@@ -9585,3 +9585,19 @@ This  is  worker: 8
 This  is  worker: 9
 This  is  worker: 10
 </pre>
+###Golang发送邮件给多人
+<pre>
+func SendEmaliToUsers(user, password, content, title string) {
+	host := "smtp.exmail.qq.com:25"
+	to := strings.Split(user, ";") //收件人用;号隔开
+	content_type := "Content-Type: text/plain" + "; charset=UTF-8"
+	str := content // 邮件内容
+	msg := []byte("To: cuinan\r\nFrom: " + user + ">\r\nSubject:" + title + "\r\n" + content_type + "\r\n" + str)
+	err := smtp.SendMail(host, smtp.PlainAuth("", "???@???.com", password, "smtp.exmail.qq.com"), "???@???.com", to, []byte(msg))
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("success")
+	}
+}
+</pre>
