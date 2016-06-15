@@ -9312,3 +9312,25 @@ FuncName : main.main
 file : D:/gopath/src/test/test.go
 line : 9
 </pre>
+###Golang中http读取大文件必须读完 
+<pre>
+package main
+
+import (
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	req, _ := http.NewRequest("GET", "http://mirrors.ustc.edu.cn/opensuse/distribution/12.3/iso/openSUSE-12.3-GNOME-Live-i686.iso", nil)
+	req.Header.Set("Connection", "close")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Resp code:", resp.StatusCode)
+	resp.Body.Close()
+}
+output==>
+Resp code: 200
+</pre>
