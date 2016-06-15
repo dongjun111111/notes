@@ -9956,3 +9956,63 @@ root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8   11
 root@tcp(172.16.0.4:3306)/shiqu_tools?charset=utf8   6
 root@tcp(172.16.0.2:3306)/shiqu_tools?charset=utf8   3
 </pre>
+###发送带附件的邮件
+<pre>
+package main
+/*
+http://blog.csdn.net/xcl168/article/details/51340272
+*/
+import (
+	"bytes"
+	"fmt"
+	"net"
+	"net/smtp"
+	"strings"
+)
+
+const (
+	emlUser = "？？？？？@163.com"
+	emlPwd  = "？？？？？？？"
+	emlSMTP = "smtp.163.com:25"
+)
+
+func main() {
+
+	err := eml()
+	if err != nil {
+		fmt.Println("错误:", err)
+	} else {
+		fmt.Println("发送成功")
+	}
+
+}
+
+// 发普通文本邮件
+func eml() error {
+
+	to := "？？？@？？？.com"
+	sendTo := strings.Split(to, ";")
+	subject := "带附件的邮件"
+	mime := bytes.NewBuffer(nil)
+
+	//设置邮件
+	mime.WriteString(fmt.Sprintf("From: %s<%s>\r\nTo: %s\r\nSubject: %s\r\nMIME-Version: 1.0\r\n", emlUser, emlUser, to, subject))
+	mime.WriteString("Content-Description: 这是一封带附件的邮件\r\n")
+
+	//附件
+	mime.WriteString("Content-Type: text/plain\r\n")
+	mime.WriteString("Content-Description: 附一个Text文件\r\n")
+	mime.WriteString("Content-Disposition: attachment; filename=\"test.txt\"\r\n\r\n")
+	mime.WriteString("这是写入test.txt文件的内容")
+	//发送
+	smtpHost, _, err := net.SplitHostPort(emlSMTP)
+	if err != nil {
+		return err
+	}
+	auth := smtp.PlainAuth("", emlUser, emlPwd, smtpHost)
+	return smtp.SendMail(emlSMTP, auth, emlUser, sendTo, mime.Bytes())
+
+}
+output==>
+发送成功
+</pre>
