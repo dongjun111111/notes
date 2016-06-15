@@ -9291,3 +9291,24 @@ func PKCS5UnPadding(origData []byte) []byte {
 	return origData[:(length - unpadding)]
 }
 </pre>
+###Golang打印当前行数，文件名与函数名
+<pre>
+package main
+
+import (
+	"fmt"
+	"runtime"
+)
+
+func main() {
+	funcName, file, line, ok := runtime.Caller(0)
+	if ok {
+		fmt.Println("FuncName : " + runtime.FuncForPC(funcName).Name())
+		fmt.Printf("file : %s\nline : %d", file, line)
+	}
+}
+output==>
+FuncName : main.main
+file : D:/gopath/src/test/test.go
+line : 9
+</pre>
