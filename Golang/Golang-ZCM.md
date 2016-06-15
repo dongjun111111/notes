@@ -9746,3 +9746,213 @@ func (x *ecbDecrypter) CryptBlocks(dst, src []byte) {
 	}
 }
 </pre>
+###Golang解析sina登录页
+<pre>
+package main
+
+import (
+	"compress/gzip"
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"regexp"
+	"strings"
+)
+
+func loginPre1() map[string]interface{} {
+
+	client := &http.Client{}
+
+	reqest, err := http.NewRequest("GET", "http://login.sina.com.cn/sso/prelogin.php?entry=weibo&callback=sinaSSOController.preloginCallBack&su=Z3V5dWV0ZnRiJTQwMTYzLmNvbQ%3D%3D&rsakt=mod&checkpin=1&client=ssologin.js(v1.4.5)&_=", nil)
+
+	if err != nil {
+		fmt.Println("Fatal error ", err.Error())
+		os.Exit(0)
+	}
+
+	reqest.Header.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+	reqest.Header.Add("Accept-Encoding", "gzip, deflate")
+	reqest.Header.Add("Accept-Language", "zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3")
+	reqest.Header.Add("Connection", "keep-alive")
+	reqest.Header.Add("Host", "login.sina.com.cn")
+	reqest.Header.Add("Referer", "http://weibo.com/")
+	reqest.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0")
+	response, err := client.Do(reqest)
+	defer response.Body.Close()
+
+	if err != nil {
+		fmt.Println("Fatal error ", err.Error())
+		os.Exit(0)
+	}
+
+	if response.StatusCode == 200 {
+
+		var body string
+
+		switch response.Header.Get("Content-Encoding") {
+		case "gzip":
+			reader, _ := gzip.NewReader(response.Body)
+			for {
+				buf := make([]byte, 1024)
+				n, err := reader.Read(buf)
+
+				if err != nil && err != io.EOF {
+					panic(err)
+				}
+
+				if n == 0 {
+					break
+				}
+				body += string(buf)
+			}
+		default:
+			bodyByte, _ := ioutil.ReadAll(response.Body)
+			body = string(bodyByte)
+		}
+
+		r := regexp.MustCompile(`sinaSSOController.preloginCallBack\((.*?)\)`)
+		rs := r.FindStringSubmatch(body)
+
+		//json decode
+		header := make(map[string]interface{})
+		err = json.Unmarshal([]byte(rs[1]), &header)
+		if err != nil {
+			fmt.Println("Fatal error ", err.Error())
+			os.Exit(0)
+		}
+
+		t := fmt.Sprintf("%f", header["servertime"])
+
+		header["servertime"] = strings.Trim(t, ".000000")
+
+		return header
+	}
+
+	return nil
+}
+
+func main() {
+	res := loginPre1()
+	for k, v := range res {
+		fmt.Println(k, "==>", v)
+	}
+}
+output==>
+servertime ==> 1465991817
+pcid ==> gz-28505aff1e897f38d4ba0cad5eca27acc317
+is_openlock ==> 0
+showpin ==> 1
+retcode ==> 0
+nonce ==> 6FIJCZ
+pubkey ==> EB2A38568661887FA180BDDB5CABD5F21C7BFD59C090CB2D245A87AC253062882729293E5506350508E7F9AA3BB77F4333231490F915F6D63C55FE2F08A49B353F444AD3993CACC02DB784ABBB8E42A9B1BBFFFB38BE18D78E87A0E41B9B8F73A928EE0CCEE1F6739884B9777E4FE9E88A1BBE495927AC4A799B3181D6442443
+rsakv ==> 1330428213
+exectime ==> 357
+</pre>
+###Golang实现权重轮询调度算法/WRRS
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+var slaveDns = map[int]map[string]interface{}{
+	0: {"connectstring": "root@tcp(172.16.0.2:3306)/shiqu_tools?charset=utf8", "weight": 2},
+	1: {"connectstring": "root@tcp(172.16.0.4:3306)/shiqu_tools?charset=utf8", "weight": 4},
+	2: {"connectstring": "root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8", "weight": 8},
+}
+
+var i int = -1  //表示上一次选择的服务器
+var cw int = 0  //表示当前调度的权值
+var gcd int = 2 //当前所有权重的最大公约数 比如 2，4，8 的最大公约数为：2
+
+func getDns() string {
+	for {
+		i = (i + 1) % len(slaveDns)
+		if i == 0 {
+			cw = cw - gcd
+			if cw <= 0 {
+				cw = getMaxWeight()
+				if cw == 0 {
+					return ""
+				}
+			}
+		}
+
+		if weight, _ := slaveDns[i]["weight"].(int); weight >= cw {
+			return slaveDns[i]["connectstring"].(string)
+		}
+	}
+}
+
+func getMaxWeight() int {
+	max := 0
+	for _, v := range slaveDns {
+		if weight, _ := v["weight"].(int); weight >= max {
+			max = weight
+		}
+	}
+
+	return max
+}
+
+func main() {
+
+	note := map[string]int{}
+
+	s_time := time.Now().Unix()
+
+	for i := 0; i < 20; i++ {
+		s := getDns()
+		fmt.Println(s)
+		if note[s] != 0 {
+			note[s]++
+		} else {
+			note[s] = 1
+		}
+	}
+
+	e_time := time.Now().Unix()
+	fmt.Println("s_time", s_time)
+	fmt.Println("e_time", e_time)
+	fmt.Println("total time: ", e_time-s_time)
+
+	fmt.Println("--------------------------------------------------")
+
+	for k, v := range note {
+		fmt.Println(k, " ", v)
+	}
+}
+output==>
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.4:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.2:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.4:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.4:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.2:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.4:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.4:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.2:3306)/shiqu_tools?charset=utf8
+root@tcp(172.16.0.4:3306)/shiqu_tools?charset=utf8
+s_time 1465992539
+e_time 1465992539
+total time:  0
+--------------------------------------------------
+root@tcp(172.16.0.8:3306)/shiqu_tools?charset=utf8   11
+root@tcp(172.16.0.4:3306)/shiqu_tools?charset=utf8   6
+root@tcp(172.16.0.2:3306)/shiqu_tools?charset=utf8   3
+</pre>
