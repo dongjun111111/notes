@@ -9164,3 +9164,130 @@ func (this *LoginController) PictureCode() {
 	img.WriteTo(this.Ctx.ResponseWriter)
 }
 </pre>
+###Golang常用加密工具包/3DES/BASE64/MD5
+<pre>
+//加密工具类，用了3des和base64,md5
+package utils
+
+import (
+	"bytes"
+	"crypto/cipher"
+	"crypto/des"
+	"crypto/md5"
+	"encoding/base64"
+	"fmt"
+)
+
+const key = `dg.d!ehtg_78nmb?#r5ew1q!`
+
+//若解码出错，返回空字符串 手机号解密
+func DesCode(acc string) (account string) {
+	defer func() {
+		err := recover()
+		if err != nil {
+			account = ""
+		}
+	}()
+	accbyt := []byte(acc)
+	accbyt, _ = DesBase64Decrypt(accbyt)
+	account = string(accbyt)
+	return
+}
+
+//若解码出错，返回空字符串 手机号加密
+func EncCode(acc string) (account string) {
+	defer func() {
+		err := recover()
+		if err != nil {
+			account = ""
+		}
+	}()
+	accbyt := []byte(acc)
+	accbyt, _ = DesBase64Encrypt(accbyt)
+	account = string(accbyt)
+	return
+}
+
+//md5加密
+func MD5(data string) string {
+	return fmt.Sprintf("%x", md5.Sum([]byte(data)))
+}
+
+//des3 + base64 encrypt
+func DesBase64Encrypt(origData []byte) ([]byte, error) {
+	result, err := TripleDesEncrypt(origData, []byte(key))
+	if err != nil {
+		return nil, err
+	}
+	return []byte(base64.StdEncoding.EncodeToString(result)), nil
+}
+
+func DesBase64Decrypt(crypted []byte) ([]byte, error) {
+	result, _ := base64.StdEncoding.DecodeString(string(crypted))
+	origData, err := TripleDesDecrypt(result, []byte(key))
+	if err != nil {
+		return nil, err
+	}
+	return origData, nil
+}
+
+// 3DES加密
+func TripleDesEncrypt(origData, key []byte) ([]byte, error) {
+	block, err := des.NewTripleDESCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	origData = PKCS5Padding(origData, block.BlockSize())
+	// origData = ZeroPadding(origData, block.BlockSize())
+	blockMode := cipher.NewCBCEncrypter(block, key[:8])
+	crypted := make([]byte, len(origData))
+	blockMode.CryptBlocks(crypted, origData)
+	return crypted, nil
+}
+
+// 3DES解密
+func TripleDesDecrypt(crypted, key []byte) ([]byte, error) {
+	block, err := des.NewTripleDESCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockMode := cipher.NewCBCDecrypter(block, key[:8])
+	origData := make([]byte, len(crypted))
+	// origData := crypted
+	blockMode.CryptBlocks(origData, crypted)
+	origData = PKCS5UnPadding(origData)
+	// origData = ZeroUnPadding(origData)
+	return origData, nil
+}
+
+func ZeroPadding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{0}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func ZeroUnPadding(origData []byte) []byte {
+	length := len(origData)
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
+}
+
+func PKCS5Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func PKCS5UnPadding(origData []byte) []byte {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("WTF-------------", err)
+			panic("参数异常")
+		}
+	}()
+	length := len(origData)
+	// 去掉最后一个字节 unpadding 次
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
+}
+</pre>
