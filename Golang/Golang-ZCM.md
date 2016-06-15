@@ -9517,3 +9517,15 @@ func main() {
 output==>
 Resp code: 200
 </pre>
+###Golang channel
+<pre>
+Golang Channel的基本操作语法如下：
+
+c := make(chan bool) //创建一个无缓冲的bool型Channel 
+c <- x        //向一个Channel发送一个值
+<- c          //从一个Channel中接收一个值
+x = <- c      //从Channel c接收一个值并将其存储到x中
+x, ok = <- c  //从Channel接收一个值，如果channel关闭了或没有数据，那么ok将被置为false
+
+不带缓冲的Channel兼具通信和同步两种特性，颇受青睐。
+</pre>
