@@ -9128,3 +9128,39 @@ else
  fi
 fi
 </pre>
+###Golang生成图片验证码
+//图片验证码工具
+<per>
+package utils
+
+import (
+	"math/rand"
+	"strconv"
+	"time"
+	"github.com/dchest/captcha"
+)
+
+// 生成4位的数字图片验证码
+// return:验证码字符串,验证码图片
+func GeneratePicCode() (string, *captcha.Image) {
+	rand.Seed(time.Now().UnixNano())
+	var code = rand.Intn(8999) + 1000
+	var codestr = strconv.Itoa(code)
+	var codeArray = make([]byte, 4)
+	for i := 0; i < 4; i++ {
+		codeArray[3-i] = byte(code % 10)
+		code /= 10
+	}
+	return codestr, captcha.NewImage("code", codeArray, 188, 72)
+}
+</pre>
+使用它
+<pre>
+//获取登录图形验证码
+func (this *LoginController) PictureCode() {
+	var code, img = utils.GeneratePicCode()
+	this.SetSession("loginCode", code)
+	this.SetSession("loginCodeDeadline", time.Now().Add(time.Minute*3).Unix())
+	img.WriteTo(this.Ctx.ResponseWriter)
+}
+</pre>
