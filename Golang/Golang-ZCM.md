@@ -10011,7 +10011,6 @@ func eml() error {
 	}
 	auth := smtp.PlainAuth("", emlUser, emlPwd, smtpHost)
 	return smtp.SendMail(emlSMTP, auth, emlUser, sendTo, mime.Bytes())
-
 }
 output==>
 发送成功
