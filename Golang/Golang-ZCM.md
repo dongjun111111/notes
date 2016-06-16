@@ -9166,7 +9166,7 @@ func (this *LoginController) PictureCode() {
 	var code, img = utils.GeneratePicCode()
 	this.SetSession("loginCode", code)
 	this.SetSession("loginCodeDeadline", time.Now().Add(time.Minute*3).Unix())
-	img.WriteTo(this.Ctx.ResponseWriter)
+	img.WriteTo(this.Ctx.ResponseWriter) //输出到屏幕
 }
 </pre>
 ###Golang常用加密工具包/3DES/BASE64/MD5
