@@ -10118,3 +10118,63 @@ output==>
  38、帐号(字母开头，允许5-16字节，允许字母数字下划线)：^[a-zA-Z][a-zA-Z0-9_]{4,15}$
  
  39、中文、英文、数字及下划线：^[\u4e00-\u9fa5_a-zA-Z0-9]+$
+
+###LINUX服务器项目管理
+<pre>
+cd /home/go/src/项目名称
+bee run 
+ps -ef |grep 项目名称
+kill -9 进程ID
+bee run 
+nohup ./项目名称 &
+</pre>
+/*不挂断地启动zcm进程,注意：运行完nohup命令后用exit退出终端，而不是直接点关闭，
+因为这样会删除该命令所对应的session，导致nohup对应的进程被通知需要一起shutdown*/
+
+tail -f 文件名
+
+linux tail命令用途是依照要求将指定的文件的最后部分输出到标准设备，通常是终端，
+通俗讲来，就是把某个档案文件的最后几行显示到终端上，假设该档案有更新，
+tail会自己主动刷新，确保你看到最新的档案内容。
+
+ps 将某个进程显示出来
+
+-A 显示所有进程
+
+-e 效果同上，显示所有进程
+
+-f 显示UID/PPID/C/STIME 栏位
+
+
+grep 查找
+
+| 管道命令，是指ps与grep同时执行
+
+UID 程序被该 UID 所拥有
+
+PID 就是这个程序的 ID
+
+PPID 则是其上级父程序的ID
+
+C CPU 使用的资源百分比
+
+STIME 系统启动时间
+
+
+kill
+
+下面是常用的信号：
+
+HUP     1    终端断线
+
+INT     2    中断（同 Ctrl + C）
+
+QUIT    3    退出（同 Ctrl + \）
+
+KILL    9    强制终止  (最常用)
+
+TERM    15    终止
+
+CONT    18    继续（与STOP相反， fg/bg命令）
+
+STOP    19    暂停（同 Ctrl + Z）
