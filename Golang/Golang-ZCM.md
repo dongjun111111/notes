@@ -10178,3 +10178,30 @@ TERM    15    终止
 CONT    18    继续（与STOP相反， fg/bg命令）
 
 STOP    19    暂停（同 Ctrl + Z）
+###Golang判断电脑系统
+<pre>
+package main
+
+import (
+	"fmt"
+	"runtime"
+)
+
+func main() {
+	fmt.Println("GO run on")
+
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("OS X.")
+	case "linux":
+		fmt.Println("Linux")
+	case "windows":
+		fmt.Println("Windows")
+	default:
+		fmt.Println(os)
+	}
+}
+output==>
+GO run on
+Windows
+</pre>
