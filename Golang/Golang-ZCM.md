@@ -10208,7 +10208,7 @@ GO run on
 Goroot:D:/go
 Windows
 </pre>
-###Golang查找全球ip地址的方法|离线版
+###Golang实现查找全球ip地址|离线版|没网可查哟
 <pre>
 package main
 
