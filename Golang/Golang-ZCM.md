@@ -10734,3 +10734,38 @@ func main() {
 	}
 }
 </pre>
+###Golang template自定义函数
+<pre>
+package main
+
+import (
+	"os"
+	"text/template"
+	"time"
+)
+
+type User struct {
+	Username, Password string
+	RegTime            time.Time
+}
+
+func ShowTime(t time.Time, format string) string {
+	return t.Format(format)
+}
+
+func main() {
+	u := User{"dotcoo", "dotcoopwd", time.Now()}    
+	//自定义函数
+	t, err := template.New("text").Funcs(template.FuncMap{"showtime": ShowTime}).
+		Parse(`<p>{{.Username}}|{{.Password}}|{{.RegTime.Format "2006-01-02 15:04:05"}}</p>
+<p>{{.Username}}|{{.Password}}|{{showtime .RegTime "2006-01-02 15:04:05"}}</p>
+`)
+	if err != nil {
+		panic(err)
+	}
+	t.Execute(os.Stdout, u)
+}
+output==>
+<p>dotcoo|dotcoopwd|2016-06-18 16:01:30</p>
+<p>dotcoo|dotcoopwd|2016-06-18 16:01:30</p>
+</pre>
