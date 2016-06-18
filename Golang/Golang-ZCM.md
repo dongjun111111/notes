@@ -10334,3 +10334,26 @@ CN
   500000	      2848 ns/op
 10w次查询: 284.8 毫秒
 </pre>
+###Golang的template包
+<pre>
+package main
+
+import (
+	"os"
+	"text/template"
+)
+
+func main() {
+	name := "jason"
+	tmpl, err := template.New("AnythingIsOk").Parse("hello,{{.}}")
+	if err != nil {
+		panic(err)
+	}
+	err = tmpl.Execute(os.Stdout, name)
+	if err != nil {
+		panic(err)
+	}
+}
+output==>
+hello,jason
+</pre>
