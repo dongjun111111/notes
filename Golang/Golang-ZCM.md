@@ -10179,6 +10179,7 @@ CONT    18    继续（与STOP相反， fg/bg命令）
 
 STOP    19    暂停（同 Ctrl + Z）
 ###Golang判断电脑系统
+runtime.GOOS
 <pre>
 package main
 
