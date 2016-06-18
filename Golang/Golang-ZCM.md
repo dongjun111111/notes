@@ -10805,3 +10805,79 @@ func EarthDistance(lat1, lng1, lat2, lng2 float64) float64 {
 output==>
 16670.904273268756
 </pre>
+###Golang版ip2long|long2ip
+<pre>
+package main
+
+import (
+	"encoding/binary"
+	"errors"
+	"fmt"
+	"net"
+	"regexp"
+	"strconv"
+)
+
+func Ip2long(ipstr string) (ip uint32) {
+	r := `^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})`
+	reg, err := regexp.Compile(r)
+	if err != nil {
+		return
+	}
+	ips := reg.FindStringSubmatch(ipstr)
+	if ips == nil {
+		return
+	}
+
+	ip1, _ := strconv.Atoi(ips[1])
+	ip2, _ := strconv.Atoi(ips[2])
+	ip3, _ := strconv.Atoi(ips[3])
+	ip4, _ := strconv.Atoi(ips[4])
+
+	if ip1 > 255 || ip2 > 255 || ip3 > 255 || ip4 > 255 {
+		return
+	}
+
+	ip += uint32(ip1 * 0x1000000)
+	ip += uint32(ip2 * 0x10000)
+	ip += uint32(ip3 * 0x100)
+	ip += uint32(ip4)
+
+	return
+}
+
+func Long2ip(ip uint32) string {
+	return fmt.Sprintf("%d.%d.%d.%d", ip>>24, ip<<8>>24, ip<<16>>24, ip<<24>>24)
+}
+
+//AddrToUint32
+func AddrToUint32(addr net.Addr) (uint32, error) {
+	var ip net.IP
+
+	switch ipaddr := addr.(type) {
+	case *net.IPAddr:
+		ip = ipaddr.IP
+	case *net.IPNet:
+		ip = ipaddr.IP
+	case *net.TCPAddr:
+		ip = ipaddr.IP
+	case *net.UDPAddr:
+		ip = ipaddr.IP
+	case *net.UnixAddr:
+		return 0, errors.New("UnixAddr type not support")
+	default:
+		return 0, errors.New("addr type not support")
+	}
+
+	return binary.BigEndian.Uint32(ip.To4()), nil
+}
+func main() {
+	ip := "12.67.85.145"
+	longstr := uint32(205739409)
+	fmt.Println("ip2long:",Ip2long(ip))
+	fmt.Println("long2ip:",Long2ip(longstr))
+}
+output==>
+ip2long:205739409
+long2ip:12.67.85.145
+</pre>
