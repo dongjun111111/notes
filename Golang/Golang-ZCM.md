@@ -10180,6 +10180,7 @@ CONT    18    继续（与STOP相反， fg/bg命令）
 STOP    19    暂停（同 Ctrl + Z）
 ###Golang判断电脑系统
 runtime.GOOS
+runtime.GOROOT()
 <pre>
 package main
 
@@ -10190,7 +10191,7 @@ import (
 
 func main() {
 	fmt.Println("GO run on")
-
+	fmt.Println("Goroot:",runtime.GOROOT())
 	switch os := runtime.GOOS; os {
 	case "darwin":
 		fmt.Println("OS X.")
@@ -10204,5 +10205,6 @@ func main() {
 }
 output==>
 GO run on
+Goroot:D:/go
 Windows
 </pre>
