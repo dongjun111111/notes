@@ -10388,3 +10388,185 @@ func u2s(form string) (to string, err error) {
 output==>
 家族 <nil>
 </pre>
+###Golang实现长轮询，实现消息的发送与接收
+main.go
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"strconv"
+	"time"
+)
+
+var mc *MessageCenter
+
+type Message struct {
+	Uid     int
+	Message string
+}
+
+type MessageCenter struct {
+	// 测试 没有加读写锁
+	messageList []*Message
+	userList    map[int]chan string
+}
+
+func NewMessageCenter() *MessageCenter {
+	mc := new(MessageCenter)
+	mc.messageList = make([]*Message, 0, 100)
+	mc.userList = make(map[int]chan string)
+	return mc
+}
+
+func (mc *MessageCenter) GetMessage(uid int) []string {
+	messages := make([]string, 0, 10)
+	for i, msg := range mc.messageList {
+		if msg == nil {
+			continue
+		}
+		if msg.Uid == uid {
+			messages = append(messages, msg.Message)
+			// 临时方案 只是测试用 应更换为list
+			mc.messageList[i] = nil
+		}
+	}
+	return messages
+}
+
+func (mc *MessageCenter) GetMessageChan(uid int) <-chan string {
+	messageChan := make(chan string)
+	mc.userList[uid] = messageChan
+	return messageChan
+}
+
+func (mc *MessageCenter) SendMessage(uid int, message string) {
+	messageChan, exist := mc.userList[uid]
+	if exist {
+		messageChan <- message
+		return
+	}
+	// 未考虑同一账号多登陆情况
+	mc.messageList = append(mc.messageList, &Message{uid, message})
+}
+
+func (mc *MessageCenter) RemoveUser(uid int) {
+	_, exist := mc.userList[uid]
+	if exist {
+		delete(mc.userList, uid)
+	}
+}
+
+func IndexServer(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "longpoll.html")
+}
+
+func SendMessageServer(w http.ResponseWriter, req *http.Request) {
+	uid, _ := strconv.Atoi(req.FormValue("uid"))
+	message := req.FormValue("message")
+
+	mc.SendMessage(uid, message)
+
+	io.WriteString(w, `{}`)
+}
+
+func PollMessageServer(w http.ResponseWriter, req *http.Request) {
+	uid, _ := strconv.Atoi(req.FormValue("uid"))
+
+	messages := mc.GetMessage(uid)
+
+	if len(messages) > 0 {
+		jsonData, _ := json.Marshal(map[string]interface{}{"status": 0, "messages": messages})
+		w.Write(jsonData)
+		return
+	}
+
+	messageChan := mc.GetMessageChan(uid)
+
+	select {
+	case message := <-messageChan:
+		jsonData, _ := json.Marshal(map[string]interface{}{"status": 0, "messages": []string{message}})
+		w.Write(jsonData)
+	case <-time.After(10 * time.Second):
+		mc.RemoveUser(uid)
+		jsonData, _ := json.Marshal(map[string]interface{}{"status": 1, "messages": nil})
+		n, err := w.Write(jsonData)
+		fmt.Println(n, err)
+	}
+}
+
+func main() {
+	fmt.Println("http://127.0.0.1:89/")
+
+	mc = NewMessageCenter()
+
+	http.HandleFunc("/", IndexServer)
+	http.HandleFunc("/sendmessage", SendMessageServer)
+	http.HandleFunc("/pollmessage", PollMessageServer)
+	err := http.ListenAndServe(":89", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
+</pre>
+longpoll.html
+<pre>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>long-polling</title>
+    <style type="text/css">
+        .msg {padding: 10px;margin-bottom: 10px;border: 1px solid #ccc;border-radius: 8px;}
+    </style>
+    <script type="text/javascript" src="http://www.v2ex.com/static/js/jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#uid').val(Date.now() % 10000);
+            var setTimeoutId = 0;
+            var ajax = null;
+            var getmessage = function() {
+                var data = {uid:$('#uid').val()};
+                ajax = $.getJSON('/pollmessage', data, function(resp) {
+                    if (resp.status == 0) {
+                        for (var i = 0; i < resp.messages.length; i++) {
+                            $('#messagelist').append('<div class="msg">'+resp.messages[i]+'</div>');
+                        };
+                    }
+                    if (setTimeoutId > 0) {
+                        setTimeoutId = setTimeout(getmessage, 3000);
+                    }
+                });
+                console.dir(ajax);
+            };
+            $('#getmessagebtn').click(function(){
+                this.disabled = true;
+                setTimeoutId = setTimeout(getmessage, 10);
+            });
+            $('#sendmessagebtn').click(function(){
+                var data = {uid:$('#senduid').val(), 'message':$('#message').val()};
+                $.post('/sendmessage', data, function(resp){}, 'json');
+            });
+            $('#stopgetmessagebtn').click(function(){
+                clearTimeout(setTimeoutId);
+                setTimeoutId = 0
+                if (ajax != null) {
+                    ajax.abort();
+                }
+                $('#getmessagebtn').prop('disabled', false);
+            });
+        });
+    </script>
+</head>
+<body>
+Send User ID: <input type="number" id="senduid" /> Message: <input type="text" id="message" /> <button id="sendmessagebtn">发送消息</button>
+<hr/>
+RecvUser ID: <input type="number" id="uid" /> <button id="getmessagebtn">接收消息</button> <button id="stopgetmessagebtn">停止接收消息</button>
+<div id="messagelist"></div>
+</body>
+</html>
+</pre>
