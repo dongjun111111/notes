@@ -10570,3 +10570,167 @@ RecvUser ID: <input type="number" id="uid" /> <button id="getmessagebtn">接收�
 </body>
 </html>
 </pre>
+###判断channel是否关闭
+<pre>
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	c := make(chan int, 10)
+	c <- 1
+	c <- 2
+	c <- 3
+	close(c)
+
+	for {
+		i, isClose := <-c
+		if !isClose {
+			fmt.Println("channel Closed")
+			break
+		} else {
+			fmt.Println(i)
+		}
+	}
+}
+output==>
+1
+2
+3
+channel Closed
+</pre>
+###Golang认证http
+<pre>
+package main
+
+import (
+	"encoding/base64"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"strings"
+)
+
+// hello world, the web server
+func HelloServer(w http.ResponseWriter, req *http.Request) {
+	auth := req.Header.Get("Authorization")
+	if auth == "" {
+		w.Header().Set("WWW-Authenticate", `Basic realm="Dotcoo User Login"`)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	fmt.Println(auth)
+
+	auths := strings.SplitN(auth, " ", 2)
+	if len(auths) != 2 {
+		fmt.Println("error")
+		return
+	}
+
+	authMethod := auths[0]
+	authB64 := auths[1]
+
+	switch authMethod {
+	case "Basic":
+		authstr, err := base64.StdEncoding.DecodeString(authB64)
+		if err != nil {
+			fmt.Println(err)
+			io.WriteString(w, "Unauthorized!\n")
+			return
+		}
+		fmt.Println(string(authstr))
+
+		userPwd := strings.SplitN(string(authstr), ":", 2)
+		if len(userPwd) != 2 {
+			fmt.Println("error")
+			return
+		}
+
+		username := userPwd[0]
+		password := userPwd[1]
+
+		fmt.Println("Username:", username)
+		fmt.Println("Password:", password)
+		fmt.Println()
+
+	default:
+		fmt.Println("error")
+		return
+	}
+
+	io.WriteString(w, "hello, world!\n")
+}
+
+func main() {
+	http.HandleFunc("/hello", HelloServer)
+	err := http.ListenAndServe(":12345", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
+</pre>
+###Golang获取上传文件大小
+<pre>
+package main
+
+import (
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"os"
+)
+
+// 获取文件大小的接口
+type Size interface {
+	Size() int64
+}
+
+// 获取文件信息的接口
+type Stat interface {
+	Stat() (os.FileInfo, error)
+}
+
+// hello world, the web server
+func HelloServer(w http.ResponseWriter, r *http.Request) {
+	if "POST" == r.Method {
+		file, _, err := r.FormFile("userfile")
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+			return
+		}
+
+		if statInterface, ok := file.(Stat); ok {
+			fileInfo, _ := statInterface.Stat()
+			fmt.Fprintf(w, "上传文件的大小为: %d", fileInfo.Size())
+		}
+		if sizeInterface, ok := file.(Size); ok {
+			fmt.Fprintf(w, "上传文件的大小为: %d", sizeInterface.Size())
+		}
+
+		return
+	}
+
+	// 上传页面
+	w.Header().Add("Content-Type", "text/html")
+	w.WriteHeader(200)
+	html := `
+<form enctype="multipart/form-data" action="/hello" method="POST">
+    Send this file: <input name="userfile" type="file" />
+    <input type="submit" value="Send File" />
+</form>
+`
+	io.WriteString(w, html)
+}
+
+func main() {
+	http.HandleFunc("/hello", HelloServer)
+	err := http.ListenAndServe(":12345", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
+</pre>
