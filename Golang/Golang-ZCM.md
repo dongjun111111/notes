@@ -9166,7 +9166,7 @@ func (this *LoginController) PictureCode() {
 	var code, img = utils.GeneratePicCode()
 	this.SetSession("loginCode", code)
 	this.SetSession("loginCodeDeadline", time.Now().Add(time.Minute*3).Unix())
-	img.WriteTo(this.Ctx.ResponseWriter)
+	img.WriteTo(this.Ctx.ResponseWriter) //输出到屏幕
 }
 </pre>
 ###Golang常用加密工具包/3DES/BASE64/MD5
@@ -10011,8 +10011,873 @@ func eml() error {
 	}
 	auth := smtp.PlainAuth("", emlUser, emlPwd, smtpHost)
 	return smtp.SendMail(emlSMTP, auth, emlUser, sendTo, mime.Bytes())
-
 }
 output==>
 发送成功
+</pre>
+###rot系列加密
+
+- ROT5：只对数字进行编码，用当前数字往前数的第5个数字替换当前数字，例如当前为0，编码后变成5，当前为1，编码后变成6，以此类推顺序循环。
+- ROT13：只对字母进行编码，用当前字母往前数的第13个字母替换当前字母，例如当前为A，编码后变成N，当前为B，编码后变成O，以此类推顺序循环。
+- ROT18：这是一个异类，本来没有，它是将ROT5和ROT13组合在一起，为了好称呼，将其命名为ROT18。
+- ROT47：对数字、字母、常用符号进行编码，按照它们的ASCII值进行位置替换，用当前字符ASCII值往前数的第47位对应字符替换当前字符，例如当前为小写字母z，编码后变成大写字母K，当前为数字0，编码后变成符号_。
+###Goalng常用正则式 
+匹配中文字符的正则表达式： [\u4e00-\u9fa5]
+ 
+匹配双字节字符(包括汉字在内)：[^\x00-\xff]
+ 
+匹配空行的正则表达式：\n[\s| ]*\r
+ 
+匹配HTML标记的正则表达式：/<(.*)>.*<\/\1>|<(.*) \/>/
+ 
+匹配首尾空格的正则表达式：(^\s*)|(\s*$)
+ 
+匹配IP地址的正则表达式：/(\d+)\.(\d+)\.(\d+)\.(\d+)/g //
+ 
+匹配Email地址的正则表达式：\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*
+ 
+匹配网址URL的正则表达式：<a href="http://%28/" target="_blank">http://(/</a>[\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?
+ 
+ sql语句：^(select|drop|delete|create|update|insert).*$
+ 
+ 1、非负整数：^\d+$
+ 
+ 2、正整数：^[0-9]*[1-9][0-9]*$
+ 
+ 3、非正整数：^((-\d+)|(0+))$
+ 
+ 4、负整数：^-[0-9]*[1-9][0-9]*$
+ 
+ 5、整数：^-?\d+$
+ 
+ 6、非负浮点数：^\d+(\.\d+)?$
+ 
+ 7、正浮点数：^((0-9)+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$
+ 
+ 8、非正浮点数：^((-\d+\.\d+)?)|(0+(\.0+)?))$
+ 
+ 9、负浮点数：^(-((正浮点数正则式)))$
+ 
+10、英文字符串：^[A-Za-z]+$
+ 
+ 11、英文大写串：^[A-Z]+$
+ 
+ 12、英文小写串：^[a-z]+$
+ 
+ 13、英文字符数字串：^[A-Za-z0-9]+$
+ 
+ 14、英数字加下划线串：^\w+$
+ 
+ 15、E-mail地址：^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$
+ 
+16、URL：^[a-zA-Z]+://(\w+(-\w+)*)(\.(\w+(-\w+)*))*(\?\s*)?$
+或：^http:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$
+ 
+17、邮政编码：^[1-9]\d{5}$
+ 
+ 18、中文：^[\u0391-\uFFE5]+$
+ 
+ 19、电话号码：^((\(\d{2,3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-)?[1-9]\d{6,7}(\-\d{1,4})?$
+ 
+ 20、手机号码：^((\(\d{2,3}\))|(\d{3}\-))?13\d{9}$
+ 
+ 21、双字节字符(包括汉字在内)：^\x00-\xff
+ 
+ 22、匹配首尾空格：(^\s*)|(\s*$)（像vbscript那样的trim函数）
+ 
+23、匹配HTML标记：<(.*)>.*<\/\1>|<(.*) \/>
+ 
+ 24、匹配空行：\n[\s| ]*\r
+ 
+ 25、提取信息中的网络链接：(h|H)(r|R)(e|E)(f|F) *= *('|")?(\w|\\|\/|\.)+('|"| *|>)?
+ 
+ 26、提取信息中的邮件地址：\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*
+ 
+ 27、提取信息中的图片链接：(s|S)(r|R)(c|C) *= *('|")?(\w|\\|\/|\.)+('|"| *|>)?
+ 
+ 28、提取信息中的IP地址：(\d+)\.(\d+)\.(\d+)\.(\d+)
+ 
+ 29、提取信息中的中国手机号码：(86)*0*13\d{9}
+ 
+ 30、提取信息中的中国固定电话号码：(\(\d{3,4}\)|\d{3,4}-|\s)?\d{8}
+ 
+ 31、提取信息中的中国电话号码（包括移动和固定电话）：(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}
+ 
+ 32、提取信息中的中国邮政编码：[1-9]{1}(\d+){5}
+ 
+ 33、提取信息中的浮点数（即小数）：(-?\d*)\.?\d+
+ 
+ 34、提取信息中的任何数字 ：(-?\d*)(\.\d+)?
+ 
+ 35、IP：(\d+)\.(\d+)\.(\d+)\.(\d+)
+ 
+ 36、电话区号：/^0\d{2,3}$/
+ 
+ 37、腾讯QQ号：^[1-9]*[1-9][0-9]*$
+ 
+ 38、帐号(字母开头，允许5-16字节，允许字母数字下划线)：^[a-zA-Z][a-zA-Z0-9_]{4,15}$
+ 
+ 39、中文、英文、数字及下划线：^[\u4e00-\u9fa5_a-zA-Z0-9]+$
+
+###LINUX服务器项目管理
+<pre>
+cd /home/go/src/项目名称
+bee run 
+ps -ef |grep 项目名称
+kill -9 进程ID
+bee run 
+nohup ./项目名称 &
+</pre>
+/*不挂断地启动zcm进程,注意：运行完nohup命令后用exit退出终端，而不是直接点关闭，
+因为这样会删除该命令所对应的session，导致nohup对应的进程被通知需要一起shutdown*/
+
+tail -f 文件名
+
+linux tail命令用途是依照要求将指定的文件的最后部分输出到标准设备，通常是终端，
+通俗讲来，就是把某个档案文件的最后几行显示到终端上，假设该档案有更新，
+tail会自己主动刷新，确保你看到最新的档案内容。
+
+ps 将某个进程显示出来
+
+-A 显示所有进程
+
+-e 效果同上，显示所有进程
+
+-f 显示UID/PPID/C/STIME 栏位
+
+
+grep 查找
+
+| 管道命令，是指ps与grep同时执行
+
+UID 程序被该 UID 所拥有
+
+PID 就是这个程序的 ID
+
+PPID 则是其上级父程序的ID
+
+C CPU 使用的资源百分比
+
+STIME 系统启动时间
+
+
+kill
+
+下面是常用的信号：
+
+HUP     1    终端断线
+
+INT     2    中断（同 Ctrl + C）
+
+QUIT    3    退出（同 Ctrl + \）
+
+KILL    9    强制终止  (最常用)
+
+TERM    15    终止
+
+CONT    18    继续（与STOP相反， fg/bg命令）
+
+STOP    19    暂停（同 Ctrl + Z）
+###Golang判断电脑系统
+runtime.GOOS
+runtime.GOROOT()
+<pre>
+package main
+
+import (
+	"fmt"
+	"runtime"
+)
+
+func main() {
+	fmt.Println("GO run on")
+	fmt.Println("Goroot:",runtime.GOROOT())
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("OS X.")
+	case "linux":
+		fmt.Println("Linux")
+	case "windows":
+		fmt.Println("Windows")
+	default:
+		fmt.Println(os)
+	}
+}
+output==>
+GO run on
+Goroot:D:/go
+Windows
+</pre>
+###Golang实现查找全球ip地址|离线版|没网可查哟
+<pre>
+package main
+
+import (
+	"fmt"
+	"github.com/slene/iploc"
+	"os"
+	"path/filepath"
+	. "testing"
+)
+
+func init() {
+	// replace iplocFilePath to your iploc.dat path
+	iplocFilePath, _ := filepath.Abs("../github.com/slene/iploc/iploc.dat")
+	// simple set a true param can preload all ipinfo
+	// need allocate more memory > 30M
+	// and speed can grow up about 40 percent than not preload
+	iploc.IpLocInit(iplocFilePath, true)
+}
+
+func testIp(ipAddr string) {
+	ipinfo, err := iploc.GetIpInfo(ipAddr)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(ipAddr)
+
+	switch ipinfo.Flag {
+	case iploc.FLAG_INUSE:
+		if ipinfo.Code == "CN" {
+			fmt.Println(ipinfo.Code)
+			fmt.Println(ipinfo.Country)
+			fmt.Println(ipinfo.Region)
+			fmt.Println(ipinfo.City)
+			fmt.Println(ipinfo.Isp)
+		} else {
+			fmt.Println(ipinfo.Code)
+			fmt.Println(ipinfo.Country)
+		}
+	case iploc.FLAG_RESERVED:
+		fmt.Println(ipinfo.Note)
+	case iploc.FLAG_NOTUSE:
+		fmt.Println(ipinfo.Note)
+	}
+
+	for i := 0; i < 30; i++ {
+		fmt.Print("-")
+	}
+	fmt.Print("\n")
+}
+
+func testSpeed() {
+	r := Benchmark(func(b *B) {
+		ips := []string{
+			"0.0.0.0",
+			"127.0.0.1",
+			"169.254.0.1",
+			"192.168.1.1",
+			"10.0.0.0",
+			"255.255.255.255",
+			"112.226.155.1",
+			"121.18.72.0",
+			"6.18.72.0",
+			"200.18.72.0",
+		}
+		for i := 0; i < b.N; i++ {
+			for _, ipAddr := range ips {
+				iploc.GetIpInfo(ipAddr)
+			}
+		}
+	})
+	fmt.Println(r)
+	fmt.Printf("10w次查询: %.1f 毫秒\n", float64(r.NsPerOp())/100000000*1000*100000/10)
+}
+
+func main() {
+	testIp("0.0.0.0")
+	testIp("127.0.0.1")
+	testIp("169.254.0.1")
+	testIp("192.168.1.1")
+	testIp("10.0.0.0")
+	testIp("255.255.255.255")
+	testIp("112.226.155.1")
+	testIp("121.18.72.0")
+
+	testSpeed()
+}
+output==>
+0.0.0.0
+IANA保留作为特殊地址
+------------------------------
+127.0.0.1
+IANA保留用于本机回环地址
+------------------------------
+169.254.0.1
+IANA保留作为链路本地地址
+------------------------------
+192.168.1.1
+IANA保留用于局域网地址
+------------------------------
+10.0.0.0
+IANA保留用于内部网络地址
+------------------------------
+255.255.255.255
+IANA保留地址
+------------------------------
+112.226.155.1
+CN
+中国
+山东省
+青岛市
+联通
+------------------------------
+121.18.72.0
+CN
+中国
+河北省
+保定市
+联通
+------------------------------
+  500000	      2848 ns/op
+10w次查询: 284.8 毫秒
+</pre>
+###Golang的template包
+<pre>
+package main
+
+import (
+	"os"
+	"text/template"
+)
+
+func main() {
+	name := "jason"
+	tmpl, err := template.New("AnythingIsOk").Parse("hello,{{.}}")
+	if err != nil {
+		panic(err)
+	}
+	err = tmpl.Execute(os.Stdout, name)
+	if err != nil {
+		panic(err)
+	}
+}
+output==>
+hello,jason
+</pre>
+###Golang将Unicode转换成字符串string
+<pre>
+package main
+
+import (
+	"bytes"
+	"encoding/binary"
+	"encoding/hex"
+	"fmt"
+	"strings"
+)
+
+func main() {
+	str := `\u5bb6\u65cf`
+	fmt.Println(u2s(str))
+}
+
+func u2s(form string) (to string, err error) {
+	bs, err := hex.DecodeString(strings.Replace(form, `\u`, ``, -1))
+	if err != nil {
+		return
+	}
+	for i, bl, br, r := 0, len(bs), bytes.NewReader(bs), uint16(0); i < bl; i += 2 {
+		binary.Read(br, binary.BigEndian, &r)
+		to += string(r)
+	}
+	return
+}
+output==>
+家族 <nil>
+</pre>
+###Golang实现长轮询，实现消息的发送与接收
+main.go
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"strconv"
+	"time"
+)
+
+var mc *MessageCenter
+
+type Message struct {
+	Uid     int
+	Message string
+}
+
+type MessageCenter struct {
+	// 测试 没有加读写锁
+	messageList []*Message
+	userList    map[int]chan string
+}
+
+func NewMessageCenter() *MessageCenter {
+	mc := new(MessageCenter)
+	mc.messageList = make([]*Message, 0, 100)
+	mc.userList = make(map[int]chan string)
+	return mc
+}
+
+func (mc *MessageCenter) GetMessage(uid int) []string {
+	messages := make([]string, 0, 10)
+	for i, msg := range mc.messageList {
+		if msg == nil {
+			continue
+		}
+		if msg.Uid == uid {
+			messages = append(messages, msg.Message)
+			// 临时方案 只是测试用 应更换为list
+			mc.messageList[i] = nil
+		}
+	}
+	return messages
+}
+
+func (mc *MessageCenter) GetMessageChan(uid int) <-chan string {
+	messageChan := make(chan string)
+	mc.userList[uid] = messageChan
+	return messageChan
+}
+
+func (mc *MessageCenter) SendMessage(uid int, message string) {
+	messageChan, exist := mc.userList[uid]
+	if exist {
+		messageChan <- message
+		return
+	}
+	// 未考虑同一账号多登陆情况
+	mc.messageList = append(mc.messageList, &Message{uid, message})
+}
+
+func (mc *MessageCenter) RemoveUser(uid int) {
+	_, exist := mc.userList[uid]
+	if exist {
+		delete(mc.userList, uid)
+	}
+}
+
+func IndexServer(w http.ResponseWriter, req *http.Request) {
+	http.ServeFile(w, req, "longpoll.html")
+}
+
+func SendMessageServer(w http.ResponseWriter, req *http.Request) {
+	uid, _ := strconv.Atoi(req.FormValue("uid"))
+	message := req.FormValue("message")
+
+	mc.SendMessage(uid, message)
+
+	io.WriteString(w, `{}`)
+}
+
+func PollMessageServer(w http.ResponseWriter, req *http.Request) {
+	uid, _ := strconv.Atoi(req.FormValue("uid"))
+
+	messages := mc.GetMessage(uid)
+
+	if len(messages) > 0 {
+		jsonData, _ := json.Marshal(map[string]interface{}{"status": 0, "messages": messages})
+		w.Write(jsonData)
+		return
+	}
+
+	messageChan := mc.GetMessageChan(uid)
+
+	select {
+	case message := <-messageChan:
+		jsonData, _ := json.Marshal(map[string]interface{}{"status": 0, "messages": []string{message}})
+		w.Write(jsonData)
+	case <-time.After(10 * time.Second):
+		mc.RemoveUser(uid)
+		jsonData, _ := json.Marshal(map[string]interface{}{"status": 1, "messages": nil})
+		n, err := w.Write(jsonData)
+		fmt.Println(n, err)
+	}
+}
+
+func main() {
+	fmt.Println("http://127.0.0.1:89/")
+
+	mc = NewMessageCenter()
+
+	http.HandleFunc("/", IndexServer)
+	http.HandleFunc("/sendmessage", SendMessageServer)
+	http.HandleFunc("/pollmessage", PollMessageServer)
+	err := http.ListenAndServe(":89", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
+</pre>
+longpoll.html
+<pre>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>long-polling</title>
+    <style type="text/css">
+        .msg {padding: 10px;margin-bottom: 10px;border: 1px solid #ccc;border-radius: 8px;}
+    </style>
+    <script type="text/javascript" src="http://www.v2ex.com/static/js/jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#uid').val(Date.now() % 10000);
+            var setTimeoutId = 0;
+            var ajax = null;
+            var getmessage = function() {
+                var data = {uid:$('#uid').val()};
+                ajax = $.getJSON('/pollmessage', data, function(resp) {
+                    if (resp.status == 0) {
+                        for (var i = 0; i < resp.messages.length; i++) {
+                            $('#messagelist').append('<div class="msg">'+resp.messages[i]+'</div>');
+                        };
+                    }
+                    if (setTimeoutId > 0) {
+                        setTimeoutId = setTimeout(getmessage, 3000);
+                    }
+                });
+                console.dir(ajax);
+            };
+            $('#getmessagebtn').click(function(){
+                this.disabled = true;
+                setTimeoutId = setTimeout(getmessage, 10);
+            });
+            $('#sendmessagebtn').click(function(){
+                var data = {uid:$('#senduid').val(), 'message':$('#message').val()};
+                $.post('/sendmessage', data, function(resp){}, 'json');
+            });
+            $('#stopgetmessagebtn').click(function(){
+                clearTimeout(setTimeoutId);
+                setTimeoutId = 0
+                if (ajax != null) {
+                    ajax.abort();
+                }
+                $('#getmessagebtn').prop('disabled', false);
+            });
+        });
+    </script>
+</head>
+<body>
+Send User ID: <input type="number" id="senduid" /> Message: <input type="text" id="message" /> <button id="sendmessagebtn">发送消息</button>
+<hr/>
+RecvUser ID: <input type="number" id="uid" /> <button id="getmessagebtn">接收消息</button> <button id="stopgetmessagebtn">停止接收消息</button>
+<div id="messagelist"></div>
+</body>
+</html>
+</pre>
+###判断channel是否关闭
+<pre>
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	c := make(chan int, 10)
+	c <- 1
+	c <- 2
+	c <- 3
+	close(c)
+
+	for {
+		i, isClose := <-c
+		if !isClose {
+			fmt.Println("channel Closed")
+			break
+		} else {
+			fmt.Println(i)
+		}
+	}
+}
+output==>
+1
+2
+3
+channel Closed
+</pre>
+###Golang认证http
+<pre>
+package main
+
+import (
+	"encoding/base64"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"strings"
+)
+
+// hello world, the web server
+func HelloServer(w http.ResponseWriter, req *http.Request) {
+	auth := req.Header.Get("Authorization")
+	if auth == "" {
+		w.Header().Set("WWW-Authenticate", `Basic realm="Dotcoo User Login"`)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	fmt.Println(auth)
+
+	auths := strings.SplitN(auth, " ", 2)
+	if len(auths) != 2 {
+		fmt.Println("error")
+		return
+	}
+
+	authMethod := auths[0]
+	authB64 := auths[1]
+
+	switch authMethod {
+	case "Basic":
+		authstr, err := base64.StdEncoding.DecodeString(authB64)
+		if err != nil {
+			fmt.Println(err)
+			io.WriteString(w, "Unauthorized!\n")
+			return
+		}
+		fmt.Println(string(authstr))
+
+		userPwd := strings.SplitN(string(authstr), ":", 2)
+		if len(userPwd) != 2 {
+			fmt.Println("error")
+			return
+		}
+
+		username := userPwd[0]
+		password := userPwd[1]
+
+		fmt.Println("Username:", username)
+		fmt.Println("Password:", password)
+		fmt.Println()
+
+	default:
+		fmt.Println("error")
+		return
+	}
+
+	io.WriteString(w, "hello, world!\n")
+}
+
+func main() {
+	http.HandleFunc("/hello", HelloServer)
+	err := http.ListenAndServe(":12345", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
+</pre>
+###Golang获取上传文件大小
+<pre>
+package main
+
+import (
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"os"
+)
+
+// 获取文件大小的接口
+type Size interface {
+	Size() int64
+}
+
+// 获取文件信息的接口
+type Stat interface {
+	Stat() (os.FileInfo, error)
+}
+
+// hello world, the web server
+func HelloServer(w http.ResponseWriter, r *http.Request) {
+	if "POST" == r.Method {
+		file, _, err := r.FormFile("userfile")
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+			return
+		}
+
+		if statInterface, ok := file.(Stat); ok {
+			fileInfo, _ := statInterface.Stat()
+			fmt.Fprintf(w, "上传文件的大小为: %d", fileInfo.Size())
+		}
+		if sizeInterface, ok := file.(Size); ok {
+			fmt.Fprintf(w, "上传文件的大小为: %d", sizeInterface.Size())
+		}
+
+		return
+	}
+
+	// 上传页面
+	w.Header().Add("Content-Type", "text/html")
+	w.WriteHeader(200)
+	html := `
+<form enctype="multipart/form-data" action="/hello" method="POST">
+    Send this file: <input name="userfile" type="file" />
+    <input type="submit" value="Send File" />
+</form>
+`
+	io.WriteString(w, html)
+}
+
+func main() {
+	http.HandleFunc("/hello", HelloServer)
+	err := http.ListenAndServe(":12345", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
+}
+</pre>
+###Golang template自定义函数
+<pre>
+package main
+
+import (
+	"os"
+	"text/template"
+	"time"
+)
+
+type User struct {
+	Username, Password string
+	RegTime            time.Time
+}
+
+func ShowTime(t time.Time, format string) string {
+	return t.Format(format)
+}
+
+func main() {
+	u := User{"dotcoo", "dotcoopwd", time.Now()}    
+	//自定义函数
+	t, err := template.New("text").Funcs(template.FuncMap{"showtime": ShowTime}).
+		Parse(`<p>{{.Username}}|{{.Password}}|{{.RegTime.Format "2006-01-02 15:04:05"}}</p>
+<p>{{.Username}}|{{.Password}}|{{showtime .RegTime "2006-01-02 15:04:05"}}</p>
+`)
+	if err != nil {
+		panic(err)
+	}
+	t.Execute(os.Stdout, u)
+}
+output==>
+<p>dotcoo|dotcoopwd|2016-06-18 16:01:30</p>
+<p>dotcoo|dotcoopwd|2016-06-18 16:01:30</p>
+</pre>
+###Golang计算经纬度之间的距离
+<pre>
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+func main() {
+	lat1 := 29.490295
+	lng1 := 106.486654
+
+	lat2 := 29.615467
+	lng2 := 106.581515
+	fmt.Println(EarthDistance(lat1, lng1, lat2, lng2))
+}
+
+// 返回值的单位为米
+func EarthDistance(lat1, lng1, lat2, lng2 float64) float64 {
+	radius := float64(6371000) // 6378137
+	rad := math.Pi / 180.0
+
+	lat1 = lat1 * rad
+	lng1 = lng1 * rad
+	lat2 = lat2 * rad
+	lng2 = lng2 * rad
+
+	theta := lng2 - lng1
+	dist := math.Acos(math.Sin(lat1)*math.Sin(lat2) + math.Cos(lat1)*math.Cos(lat2)*math.Cos(theta))
+
+	return dist * radius
+}
+output==>
+16670.904273268756
+</pre>
+###Golang版ip2long|long2ip
+<pre>
+package main
+
+import (
+	"encoding/binary"
+	"errors"
+	"fmt"
+	"net"
+	"regexp"
+	"strconv"
+)
+
+func Ip2long(ipstr string) (ip uint32) {
+	r := `^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})`
+	reg, err := regexp.Compile(r)
+	if err != nil {
+		return
+	}
+	ips := reg.FindStringSubmatch(ipstr)
+	if ips == nil {
+		return
+	}
+
+	ip1, _ := strconv.Atoi(ips[1])
+	ip2, _ := strconv.Atoi(ips[2])
+	ip3, _ := strconv.Atoi(ips[3])
+	ip4, _ := strconv.Atoi(ips[4])
+
+	if ip1 > 255 || ip2 > 255 || ip3 > 255 || ip4 > 255 {
+		return
+	}
+
+	ip += uint32(ip1 * 0x1000000)
+	ip += uint32(ip2 * 0x10000)
+	ip += uint32(ip3 * 0x100)
+	ip += uint32(ip4)
+
+	return
+}
+
+func Long2ip(ip uint32) string {
+	return fmt.Sprintf("%d.%d.%d.%d", ip>>24, ip<<8>>24, ip<<16>>24, ip<<24>>24)
+}
+
+//AddrToUint32
+func AddrToUint32(addr net.Addr) (uint32, error) {
+	var ip net.IP
+
+	switch ipaddr := addr.(type) {
+	case *net.IPAddr:
+		ip = ipaddr.IP
+	case *net.IPNet:
+		ip = ipaddr.IP
+	case *net.TCPAddr:
+		ip = ipaddr.IP
+	case *net.UDPAddr:
+		ip = ipaddr.IP
+	case *net.UnixAddr:
+		return 0, errors.New("UnixAddr type not support")
+	default:
+		return 0, errors.New("addr type not support")
+	}
+
+	return binary.BigEndian.Uint32(ip.To4()), nil
+}
+func main() {
+	ip := "12.67.85.145"
+	longstr := uint32(205739409)
+	fmt.Println("ip2long:",Ip2long(ip))
+	fmt.Println("long2ip:",Long2ip(longstr))
+}
+output==>
+ip2long:205739409
+long2ip:12.67.85.145
 </pre>

@@ -2175,3 +2175,42 @@ window.onload = function(){
 <body>
 </body>
 </html>
+
+++++js文件中包含js文件++++++
+//直接包含js文件。
+function loadJsFile(jsPath) {     
+      var sobj = document.createElement('script');
+      sobj.type = "text/javascript";
+      sobj.src = jsPath;
+      var headobj = document.getElementsByTagName('head')[0];
+      headobj.appendChild(sobj);
+}
+
+
+//根据已经包含的第一个js文件路径，包含新的js文件
+
+function loadJsFile(jsFile) {
+
+    var scripts = document.getElementsByTagName("script");
+        if(!scripts) {
+            return;
+        }
+        var jsPath = scripts[0].src;
+        jsPath = jsPath.substring(0,jsPath.lastIndexOf('/')+1);
+        var sobj = document.createElement('script');
+        sobj.type = "text/javascript";
+        sobj.src = jsPath+jsFile;
+        var headobj = document.getElementsByTagName('head')[0];
+        alert(headobj);
+        headobj.appendChild(sobj);
+
+}
+
+
+ 
+
+示例
+
+第一种方法：loadJsFile('/js/main.js');
+
+第二种方法：loadJsFile('main.js'); html中引入的js必须和main.js同一目录
