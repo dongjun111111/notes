@@ -1,5 +1,5 @@
 ##go标准库
-bufio 实现缓冲的I/O <br>
+bufio 实现缓冲的I/O<br>
 bytes 提供了对字节切片操作的函数 <br>
 crypto 收集了常见的加密常数 <br>
 errors 实现了操作错误的函数 <br>
