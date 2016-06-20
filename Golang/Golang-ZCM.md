@@ -28,7 +28,7 @@ import "fmt"
 
 func main() {
 	s := "hello"
-	s = "c" + s[1:] //切片操作 加  字符串连接
+	s = "c" + s[1:] //切片操作
 	fmt.Println(s)
 }
 output==>
