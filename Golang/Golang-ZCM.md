@@ -10869,7 +10869,6 @@ func AddrToUint32(addr net.Addr) (uint32, error) {
 	default:
 		return 0, errors.New("addr type not support")
 	}
-
 	return binary.BigEndian.Uint32(ip.To4()), nil
 }
 func main() {
