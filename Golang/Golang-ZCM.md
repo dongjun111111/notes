@@ -10881,3 +10881,20 @@ output==>
 ip2long:205739409
 long2ip:12.67.85.145
 </pre>
+###Golang中的net/url包
+url.QueryEscape(s)将s进行转码使之可以安全的在URL查询中使用
+<pre>
+package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	d := url.QueryEscape("ghty7789<f>>!攻关计划988*gy")
+	fmt.Println(d)
+}
+output==>
+ghty7789%3Cf%3E%3E%21%E6%94%BB%E5%85%B3%E8%AE%A1%E5%88%92988%2Agy
+</pre>
