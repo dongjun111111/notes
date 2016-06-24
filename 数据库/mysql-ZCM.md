@@ -20,3 +20,6 @@ SELECT * FROM 表 WHERE username is not null
 <pre>
 select ifnull(username,'jason'),* from 表
 </pre>
+##mysql数据库设置为只读
+1. 设置用户权限；
+2. set GLOBAL read_only = true.
