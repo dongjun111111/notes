@@ -20,7 +20,7 @@ RSS 文档使用一种简单的自我描述的语法。下面是一个简单的R
 </channel>
 </rss>
 </pre>
-文档中的第一行：XML声明 - 定义了文档中使用的 XML 版本和字符编码。此例子遵守 1.0 规范，并使用 ISO-8859-1 (Latin-1/West European) 字符集。
+文档中的第一行：XML声明 - 定义了文档中使用的XML版本和字符编码。此例子遵守 1.0 规范，并使用 ISO-8859-1 (Latin-1/West European) 字符集。
 
 下一行是标识此文档是一个 RSS 文档的 RSS 声明（此例是 RSS version 2.0）。
 
