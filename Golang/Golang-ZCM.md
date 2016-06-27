@@ -10988,3 +10988,10 @@ func main() {
 	http.ListenAndServe(":8080", nil)
 }
 </pre>
+###Linux下go程序守护进程|保证始终在后台运行
+以beego为例：
+<pre>
+bee run
+^C
+nohup ./项目名称 &    //将该程序放到后台运行，不是可执行文件
+</pre>
