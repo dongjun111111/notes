@@ -11012,4 +11012,10 @@ cd /usr/
 chmod +X ./test.sh   //使该脚本具有执行权限
 . test.sh
 </pre>
-注意：在shell脚本中，声明变量在等号两边不能有空格，比如 myname = "j" 是错误的，必须是 myname="j"，这样才对。
+注意：在shell脚本中，声明变量在等号两边不能有空格，比如 myname = "j" 是错误的，必须是 myname="j"，这样才对。在shell脚本中自定义函数的调用方法是不用后面的(),如下:
+<pre>
+4fun(){
+	echo "rrrrrr"
+}
+4fun        //调用函数不能是4fun()
+</pre>
