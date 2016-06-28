@@ -11018,4 +11018,8 @@ chmod +X ./test.sh   //使该脚本具有执行权限
 	echo "rrrrrr"
 }
 4fun        //调用函数不能是4fun()
+
+. test.sh
+输出：
+rrrrrr
 </pre>
