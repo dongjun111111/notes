@@ -10995,3 +10995,7 @@ bee run
 ^C
 nohup ./项目名称 &    //将该程序放到后台运行，不是可执行文件
 </pre>
+打开redis
+<pre>
+redis-cli
+</pre>
