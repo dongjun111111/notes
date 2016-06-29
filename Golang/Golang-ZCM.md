@@ -11022,7 +11022,13 @@ chmod +X ./test.sh   //使该脚本具有执行权限
 . test.sh
 输出：
 rrrrrr
+
+nl 文件名    //计算行数
+
+source命令通常用于重新执行刚修改的初始化文件，使之立即生效，而不必注销并重新登录
+source /etc/profile
 </pre>
+
 ###Golang实现DDNS客户端
 对于动态ip的管理比较不方便，于是乎想到了使用DDNS来解决这个问题。 
 
