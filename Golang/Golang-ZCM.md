@@ -11028,7 +11028,66 @@ nl 文件名    //计算行数
 source命令通常用于重新执行刚修改的初始化文件，使之立即生效，而不必注销并重新登录
 source /etc/profile
 </pre>
+linux常用统计命令
+<pre>
+1）统计80端口连接数
 
+netstat -nat|grep -i “80”|wc -l
+
+2）统计httpd协议连接数
+
+ps -ef|grep httpd|wc -l
+
+3）、统计已连接上的，状态为“established
+
+netstat -na|grep ESTABLISHED|wc -l
+
+4）、查出哪个IP地址连接最多，将其封了。
+
+netstat -na|grep ESTABLISHED|awk {print $5}|awk -F： {print $1}|sort|uniq -c|sort -r +0n
+
+netstat -na|grep SYN|awk {print $5}|awk -F： {print $1}|sort|uniq -c|sort -r +0n
+
+1、查看apache当前并发访问数：
+
+netstat -an | grep ESTABLISHED | wc -l
+
+对比httpd.conf中MaxClients的数字差距多少。
+
+2、查看有多少个进程数：
+
+ps aux|grep httpd|wc -l
+
+3、可以使用如下参数查看数据
+
+server-status？auto
+
+#ps -ef|grep httpd|wc -l
+
+1388
+
+统计httpd进程数，连个请求会启动一个进程，使用于Apache服务器。
+
+表示Apache能够处理1388个并发请求，这个值Apache可根据负载情况自动调整。
+
+#netstat -nat|grep -i “80”|wc -l
+
+4341
+
+netstat -an会打印系统当前网络链接状态，而grep -i “80”是用来提取与80端口有关的连接的，wc -l进行连接数统计。
+
+最终返回的数字就是当前所有80端口的请求总数。
+
+#netstat -na|grep ESTABLISHED|wc -l
+
+376
+
+netstat -an会打印系统当前网络链接状态，而grep ESTABLISHED 提取出已建立连接的信息。 然后wc -l统计。
+
+最终返回的数字就是当前所有80端口的已建立连接的总数。
+
+netstat -nat||grep ESTABLISHED|wc - 可查看所有建立连接的详细记录 
+</pre>
 ###Golang实现DDNS客户端
 对于动态ip的管理比较不方便，于是乎想到了使用DDNS来解决这个问题。 
 
