@@ -11357,3 +11357,11 @@ id      account
 126		18768176361
 -------------------
 </pre>
+###sql总数
+<pre>
+select sum(col) from (
+select count(*) col  from table1 union all
+ select count(*) col  from table2 union all
+ select count(*) col  from table3 union  all
+ select count(*) col  from table4)d
+</pre>
