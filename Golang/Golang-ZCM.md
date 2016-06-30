@@ -11397,5 +11397,8 @@ find / -group cat //查找在系统中属于groupcat的文件
 find / -mmin -5   //查找在系统中最后5分钟里修改过的文件
 find / -mtime -1  //查找在系统中最后24小时里修改过的文件
 find / -nouser    //查找在系统中属于作废用户的文件
-find / -user fred //查找在系统中属于FRED这个用户的文件 
+find / -user fred //查找在系统中属于FRED这个用户的文件
+
+//在某一文件中查找某一特定字符串
+find . -name redis.conf | xargs grep "requirepass" //在当前目录中查找redis.conf文件并且在该文件中查找字符串"requirepass"的位置
 </pre>
