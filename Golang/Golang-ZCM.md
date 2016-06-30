@@ -11377,3 +11377,25 @@ select count(*) col  from table1 union all
 kill `cat /usr/local/webserver/redis/run/redis.pid`
 chmod a+x /usr/local/webserver/redis/start.sh /usr/local/webserver/redis/stop.sh
 </pre>
+验证redis服务是否成功:
+<pre>
+netstat -nlpt | grep 6379  //6379是redis默认端口号，同理可通过3306端口看mysql是否启动
+</pre>
+查找redis配置文件|某一文件
+<pre>
+//第一种:
+locate redis.conf
+//第二种：假设你忘记了redis.conf这个文件在系统的哪个目录下，甚至在系统的某个地方也不知道，则这是可以使用如下命令 
+find / -name redis.conf   //在整个系统中查找redis.conf在中间的位置
+//第三种：例如我们知道某个文件包含有redis这个字符串，那么要找到系统中所有包含有这特定字符串的文件是可以实现的，输入：
+find / -name '*redis*'    //在整个系统中查找redis字符串在中间的位置
+
+find / -amin -10  //查找在系统中最后10分钟访问的文件
+find / -atime -2  //查找在系统中最后48小时访问的文件
+find / -empty     //查找在系统中为空的文件或者文件夹
+find / -group cat //查找在系统中属于groupcat的文件
+find / -mmin -5   //查找在系统中最后5分钟里修改过的文件
+find / -mtime -1  //查找在系统中最后24小时里修改过的文件
+find / -nouser    //查找在系统中属于作废用户的文件
+find / -user fred //查找在系统中属于FRED这个用户的文件 
+</pre>
