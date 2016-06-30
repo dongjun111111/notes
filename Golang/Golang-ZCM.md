@@ -11365,3 +11365,15 @@ select count(*) col  from table1 union all
  select count(*) col  from table3 union  all
  select count(*) col  from table4)d
 </pre>
+###redis启动与停止脚本|start redis |stop redis
+<pre>
+//创建启动和停止服务脚本
+------- start.sh ---------
+#!/bin/bash
+/usr/local/webserver/redis/redis-server /usr/local/webserver/redis/conf/redis.conf
+------- stop.sh ---------
+
+#!/bin/bash
+kill `cat /usr/local/webserver/redis/run/redis.pid`
+chmod a+x /usr/local/webserver/redis/start.sh /usr/local/webserver/redis/stop.sh
+</pre>
