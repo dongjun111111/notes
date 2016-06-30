@@ -11332,7 +11332,7 @@ htm文件放view里面，要下载的文件放upload里面。
 <pre>
 select id ,account,count(account) from trade_y where account > 18000000000 group by account;
 ==>
-id      account     count(account)  
+id      account      count(account)  
 -----------------------------------
 171		18202764528		 2
 236		18268846032 	 19
