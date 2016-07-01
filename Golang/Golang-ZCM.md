@@ -11402,3 +11402,20 @@ find / -user fred //查找在系统中属于FRED这个用户的文件
 //在某一文件中查找某一特定字符串
 find . -name redis.conf | xargs grep "requirepass" //在当前目录中查找redis.conf文件并且在该文件中查找字符串"requirepass"的位置
 </pre>
+简单sql语句，用sql语句修改表结构
+<pre>
+原表修改：
+//增加字段
+alter table `tablename` add `tid` int(11) NOT NULL COMMENT '借款类型ID' ; 
+//删除已有字段
+alter table `tablename` drop `tid`;
+//修改某一存在字段的内容：（下面以修改变长文本型字段的大小为例）
+alter table `tablename` alter `tid` int(1000)
+//新建表：
+CREATE TABLE `tablename` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(100) NOT NULL COMMENT '备注内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+</pre>
