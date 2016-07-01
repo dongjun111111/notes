@@ -11379,7 +11379,7 @@ chmod a+x /usr/local/webserver/redis/start.sh /usr/local/webserver/redis/stop.sh
 </pre>
 验证redis服务是否成功:
 <pre>
-netstat -nlpt | grep 6379  //6379是redis默认端口号，同理可通过3306端口看mysql是否启动
+netstat -nlpt | grep 6379  //6379是redis默认端口号，同理可通过3306端口看mysql服务是否启动
 </pre>
 查找redis配置文件|某一文件
 <pre>
