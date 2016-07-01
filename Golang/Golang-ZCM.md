@@ -11401,6 +11401,53 @@ find / -user fred //查找在系统中属于FRED这个用户的文件
 
 //在某一文件中查找某一特定字符串
 find . -name redis.conf | xargs grep "requirepass" //在当前目录中查找redis.conf文件并且在该文件中查找字符串"requirepass"的位置
+
+linux 实用命令运维
+//电脑系统CPU核心
+cat /proc/cpuinfo |grep -c processor
+//TCP连接状态
+netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+//系统运行内存大小
+free -m |grep "Mem" | awk '{print $2}'
+//按cpu利用率从大到小排列所有进程id等信息
+ps -e -o "%C : %p : %z : %a"|sort -nr
+//按内存从大到小排列所有进程id等信息
+ps -e -o "%C : %p : %z : %a"|sort -k5 -nr
+//查看连接某服务端口(比如这里的80端口)最多的的IP地址
+netstat -an -t | grep ":80" | grep ESTABLISHED | awk '{printf "%s %s\n",$5,$6}' | sort
+//统计服务器下面某种类型的所有文件（比如这里的jpg格式图片）的大小总和
+find / -name *.jpg -exec wc -c {} \;|awk '{print $1}'|awk '{a+=$1}END{print a}'
+//cpu负载
+cat /proc/loadavg
+//观察si和so值是否较大
+vmstat 1 5
+//磁盘空间大小
+ df -h
+--->比如:
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/centos-root   48G  6.3G   42G  14% /
+devtmpfs                 1.9G     0  1.9G   0% /dev
+tmpfs                    1.9G     0  1.9G   0% /dev/shm
+tmpfs                    1.9G  153M  1.8G   9% /run
+tmpfs                    1.9G     0  1.9G   0% /sys/fs/cgroup
+/dev/sda1                497M   96M  401M  20% /boot
+//找出占用空间最多的文件或目录
+du -cks * | sort -rn | head -n 10
+//磁盘I/O负载
+iostat -x 1 2
+//网络负载
+sar -n DEV
+//检查是否有网络错误
+netstat -i
+//统计进程总数
+ps aux | wc -l
+//动态观察是否有异常进程出现
+top -id 1
+//统计系统在线用户人数
+who | wc -l
+//统计所有打开的文件数目
+ lsof | wc -l
+日志   # logwatch –print   配置/etc/log.d/logwatch.conf，将 Mailto 设置为自己的email 地址，启动mail服务(sendmail或者postfix)，这样就可以每天收到日志报告了。
 </pre>
 简单sql语句，用sql语句修改表结构
 <pre>
