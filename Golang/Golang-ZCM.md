@@ -11453,7 +11453,7 @@ who | wc -l
 <pre>
 原表修改：
 //增加字段
-alter table `tablename` add `tid` int(11) NOT NULL COMMENT '借款类型ID' ; 
+alter table `tablename` add `tid` int(11) NOT NULL COMMENT '借款类型ID'; 
 //删除已有字段
 alter table `tablename` drop `tid`;
 //修改某一存在字段的内容：（下面以修改变长文本型字段的大小为例）
