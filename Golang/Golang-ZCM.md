@@ -11447,7 +11447,7 @@ top -id 1
 who | wc -l
 //统计所有打开的文件数目
  lsof | wc -l
-日志   # logwatch –print   配置/etc/log.d/logwatch.conf，将 Mailto 设置为自己的email 地址，启动mail服务(sendmail或者postfix)，这样就可以每天收到日志报告了。
+收集日志   # logwatch –print   配置/etc/log.d/logwatch.conf，将 Mailto 设置为自己的email 地址，启动mail服务(sendmail或者postfix)，这样就可以每天收到日志报告了。
 </pre>
 简单sql语句，用sql语句修改表结构
 <pre>
