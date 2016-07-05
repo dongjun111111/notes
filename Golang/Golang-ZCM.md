@@ -11529,3 +11529,72 @@ func oe(e error) error {
 	return ret
 }
 </pre>
+###Golang之Float32ToByte、ByteToFloat32、Float64ToByte、ByteToFloat64
+<pre>
+import (  
+    "encoding/binary"  
+    "math"  
+)  
+  
+func Float32ToByte(float float32) []byte {  
+    bits := math.Float32bits(float)  
+    bytes := make([]byte, 4)  
+    binary.LittleEndian.PutUint32(bytes, bits)  
+  
+    return bytes  
+}  
+  
+func ByteToFloat32(bytes []byte) float32 {  
+    bits := binary.LittleEndian.Uint32(bytes)  
+  
+    return math.Float32frombits(bits)  
+}  
+  
+func Float64ToByte(float float64) []byte {  
+    bits := math.Float64bits(float)  
+    bytes := make([]byte, 8)  
+    binary.LittleEndian.PutUint64(bytes, bits)  
+  
+    return bytes  
+}  
+  
+func ByteToFloat64(bytes []byte) float64 {  
+    bits := binary.LittleEndian.Uint64(bytes)  
+  
+    return math.Float64frombits(bits)  
+}  
+</pre>
+##工作中遇到的问题|记录
+<pre>
+package main
+
+import (
+	"fmt"
+)
+
+func main(){
+	d := 4.786667
+	dd := d * 100
+	fmt.Println(dd)
+}
+output==>
+//你猜等于多少?嘿嘿，不是478.6667，而是
+478.66669999999993
+</pre>
+这是golang float64失真问题。
+解决方法：使用下面的方法：
+<pre>
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+func coutfloat(f float64, l int) float64 {
+	str1 := fmt.Sprintf("%."+strconv.Itoa(l)+"f", f)
+
+	fre, _ := strconv.ParseFloat(str1, 64)
+	return fre
+}
+</pre>
