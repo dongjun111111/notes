@@ -111,4 +111,12 @@ void write_extern(void)
 <pre>
 gcc main.c support.c   //成功则生成a.out
 ./a.out                //运行 count is 5
+//如果出现deny提示，则chmod ug+x 文件名  //为文件所有者和组添加执行权限
+</pre>
+由此引申：
+<pre>
+chmod u+x 文件名或者目录 //为此文件所有者添加执行权限
+chmod g-x 文件名或者目录 //为组用户减去执行权限
+chmod 777 文件名或者目录 //为所有用户添加可读可写可执行权限  （最高权限）
+chmod 755 文件名或者目录 //为所有者添加读写与执行权限，组用户与其他用户添加读与执行权限
 </pre>
