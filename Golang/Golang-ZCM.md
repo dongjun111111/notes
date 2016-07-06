@@ -11449,7 +11449,7 @@ who | wc -l
 //统计所有打开的文件数目
  lsof | wc -l
 收集日志   # logwatch –print   配置/etc/log.d/logwatch.conf，将 Mailto 设置为自己的email 地址，启动mail服务(sendmail或者postfix)，这样就可以每天收到日志报告了。
-//linux alias 命令 ，为某一操作设置别名(暂时性有效，长期有效则必须写到 /etc/bashrc里面)
+//linux alias 命令 ，为某一操作设置别名(暂时性有效，长期有效则必须写到 /etc/bashrc 文件里)
 alias cdd="cd /home/go/src"     //这边的等号两边不要有空格
 </pre>
 简单sql语句，用sql语句修改表结构
