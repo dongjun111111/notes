@@ -11775,3 +11775,8 @@ func SecurePost(url string, xmlContent []byte) (*http.Response, error) {
                 bytes.NewBuffer(xmlContent))
 }
 </pre>
+###Beego发送json数据
+<pre>
+this.Data["json"] = map[string]interface{}{"state": 1, "message": "发送成功"}
+this.ServeJSON()
+</pre>
