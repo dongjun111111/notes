@@ -11032,13 +11032,13 @@ linux常用统计命令
 <pre>
 1）统计80端口连接数
 
-netstat -nat|grep -i “80”|wc -l
+netstat -nat|grep -i "80"|wc -l
 
 2）统计httpd协议连接数
 
 ps -ef|grep httpd|wc -l
 
-3）、统计已连接上的，状态为“established
+3）、统计已连接上的，状态为 established
 
 netstat -na|grep ESTABLISHED|wc -l
 
@@ -11062,7 +11062,7 @@ ps aux|grep httpd|wc -l
 
 server-status？auto
 
-#ps -ef|grep httpd|wc -l
+ps -ef|grep httpd|wc -l
 
 1388
 
@@ -11070,15 +11070,15 @@ server-status？auto
 
 表示Apache能够处理1388个并发请求，这个值Apache可根据负载情况自动调整。
 
-#netstat -nat|grep -i “80”|wc -l
+netstat -nat|grep -i "80"|wc -l
 
 4341
 
-netstat -an会打印系统当前网络链接状态，而grep -i “80”是用来提取与80端口有关的连接的，wc -l进行连接数统计。
+netstat -an会打印系统当前网络链接状态，而grep -i "80"是用来提取与80端口有关的连接的，wc -l进行连接数统计。
 
 最终返回的数字就是当前所有80端口的请求总数。
 
-#netstat -na|grep ESTABLISHED|wc -l
+netstat -na|grep ESTABLISHED|wc -l
 
 376
 
@@ -11406,7 +11406,8 @@ linux 实用命令运维
 //电脑系统CPU核心
 cat /proc/cpuinfo |grep -c processor
 //TCP连接状态
-netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}' 
+/*注解：awk（AWK）工作流程是这样的：先执行BEGING，然后读取文件，读入有/n换行符分割的一条记录，然后将记录按指定的域分隔符划分域，填充域，$0则表示所有域,$1表示第一个域,$n表示第n个域,随后开始执行模式所对应的动作action。接着开始读入第二条记录······直到所有的记录都读完，最后执行END操作。*/
 //系统运行内存大小
 free -m |grep "Mem" | awk '{print $2}'
 //按cpu利用率从大到小排列所有进程id等信息
