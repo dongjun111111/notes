@@ -11818,7 +11818,7 @@ func main() {
 	case 12:
 		month = "十二月"
 	default:
-		month = ""
+		month = "default"
 	}
 	fmt.Println(month)
 }
