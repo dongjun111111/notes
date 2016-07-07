@@ -426,3 +426,77 @@ int main(){
     printf("\n");  
 }  
 </pre>
+###C string.h
+字符串常用函数
+<pre>
+#include <stdio.h>
+#include <string.h>
+
+int main(){
+	char str1[12] = "HELLO";
+	char str2[12] = "jason";
+	char str3[23];
+	int len;
+	
+	/* 复制 str1 到 str3 */
+	strcpy(str3,str1);
+	printf("strcpy(str3,str1):%s\n",str3);
+	
+	/* 连接 str1 和 str2 */
+	strcat(str1,str2);
+	printf("strcat(str1,str2)str1:%s\n",str1);
+	printf("strcat(str1,str2)str2:%s\n",str2);
+	
+	len = strlen(str1);
+	printf("strlen(str1):%d\n",len);
+	return 0;
+}
+output==>
+strcpy(str3,str1):HEELO
+strcat(str1,str2)str1:HEELLOjason
+strcat(str1,str2)str2:jason
+strlen(str1):10
+</pre>
+结构体
+<pre>
+#include <stdio.h>
+#include <string.h>
+
+struct stuinfo{
+	char name[80];
+	int score;
+}student1;          //注意这里
+
+int main(){
+	scanf("%s",&student1.name);
+	scanf("%d",&student1.score);
+	printf("姓名：%s 成绩：%d\n",student1.name,student1.score); 
+	return 0;
+}
+</pre>
+位域
+
+所谓"位域"是把一个字节中的二进位划分为几个不同的区域，并说明每个区域的位数。每个域有一个域名，允许在程序中按域名进行操作。这样就可以把几个不同的对象用一个字节的二进制位域来表示。
+典型的实例：
+
+- 用 1 位二进位存放一个开关量时，只有 0 和 1 两种状态。
+- 读取外部文件格式——可以读取非标准的文件格式。例如：9 位的整数。
+<pre>
+#include <stdio.h>
+main(){
+    struct bs{
+        unsigned a:1;
+        unsigned b:3;
+        unsigned c:4;
+    } bit,*pbit;
+    bit.a=1;	/* 给位域赋值（应注意赋值不能超过该位域的允许范围） */
+    bit.b=7;	/* 给位域赋值（应注意赋值不能超过该位域的允许范围） */
+    bit.c=15;	/* 给位域赋值（应注意赋值不能超过该位域的允许范围） */
+    printf("%d,%d,%d\n",bit.a,bit.b,bit.c);	/* 以整型量格式输出三个域的内容 */
+    pbit=&bit;	/* 把位域变量 bit 的地址送给指针变量 pbit */
+    pbit->a=0;	/* 用指针方式给位域 a 重新赋值，赋为 0 */
+    pbit->b&=3;	/* 使用了复合的位运算符 "&="，相当于：pbit->b=pbit->b&3，位域 b 中原有值为 7，与 3 作按位与运算的结果为 3（111&011=011，十进制值为 3） */
+    pbit->c|=1;	/* 使用了复合位运算符"|="，相当于：pbit->c=pbit->c|1，其结果为 15 */
+    printf("%d,%d,%d\n",pbit->a,pbit->b,pbit->c);	/* 用指针方式输出了这三个域的值 */
+}
+</pre>
