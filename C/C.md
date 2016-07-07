@@ -170,3 +170,126 @@ return 0;
 output==>
 aaaaaaabcdeAABD
 </pre>
+###C实现栈的线性表的链表数据结构
+<pre>
+//#include <stdio.h>
+//#include <malloc.h>
+//
+//struct student
+//{
+// char score;
+// struct student *next;
+//};
+//
+//int main()
+//{
+// struct student *head,*p,*q;
+// head =(struct student*)malloc(sizeof(struct student));
+// if(!head)
+// { 
+//    printf("wrong！");
+//    return 0;
+//  }
+// head->score=getchar();
+// head->next=NULL;
+// p=head;
+//
+// while(1)
+// {
+//   char c=getchar();
+//   if(c=='\n')
+//   break;
+//   q = (struct student*)malloc(sizeof(struct student));
+//   if(!q) return 0;
+//   q->score=c;
+//   p->next=q;
+//   p=q;
+//   p->next=NULL;
+// }
+//
+// while(head!=NULL)
+// { 
+//   printf("%c",head->score);
+//   head=head->next;
+// }
+// printf("\n");
+// return 0;
+//}   
+//
+
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <time.h>   
+#define ERROR 0  
+#define OK 1  
+#define MAXSIZE 20  
+#define  random(x) (rand()%x)  
+  
+typedef int SElemType, Status;                                
+  
+typedef struct {    //定义一个结构体栈并且用字符串SqStack来代表该结构体类型   
+    SElemType data[MAXSIZE] ;  
+    int top;  
+} SqStack;  
+  
+//在栈中插入元素 e   
+Status push(SqStack *s, SElemType e) {  
+    if(s->top == MAXSIZE - 1) {  
+        printf("栈已满");  
+        return ERROR;   
+    }  
+    s->top++;  
+    s->data[s->top] = e;  
+    return OK;  
+}   
+  
+//若栈不空，则删除S的栈顶元素，用e返回其值，并返回OK，否则返回ERROR   
+Status pop(SqStack *s, SElemType *e) {  
+    if(s->top == -1) {  
+        printf("栈为空");  
+        return ERROR;  
+    }  
+    *e = s->data[s->top];  
+    s->top--;  
+}  
+  
+//栈元素展示   
+void display(SqStack s) {  
+    int i =0;  
+    for(i; i <= s.top; i++) {  
+        printf("%d ", s.data[i]);  
+    }  
+    printf("\n");  
+}  
+  
+int main() {  
+    srand((int)time(NULL)); //用当前的时间作为随机数种子，这样就能保证每次运行时都能取到不同的随机数序列  
+  
+    SqStack s;  
+    s.top = -1;  
+    int i = 0;  
+      
+    for(i; i < random(MAXSIZE); i++) {   //创建一个原始栈并为其赋值   
+        s.data[i] = random(MAXSIZE);  
+        s.top++;      
+    }  
+    printf("原始栈为  ：");  
+    display(s);  
+      
+    printf("插入后栈为：");  
+    push(&s, random(MAXSIZE));  
+    display(s);  
+      
+    printf("弹出后栈为：");   
+    int e;  
+    pop(&s,&e);   
+    display(s);  
+    printf("弹出元素为：%d\n", e);   
+}  
+output==>
+原始栈为  ：5  
+插入后栈为：5 0  
+弹出后栈为：5  
+弹出元素为：0  
+请按任意键继续. . .  
+</pre>
