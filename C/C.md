@@ -120,3 +120,53 @@ chmod g-x 文件名或者目录 //为组用户减去执行权限
 chmod 777 文件名或者目录 //为所有用户添加可读可写可执行权限  （最高权限）
 chmod 755 文件名或者目录 //为所有者添加读写与执行权限，组用户与其他用户添加读与执行权限
 </pre>
+###把一个字符串的大写字母放到字符串的后面，各个字符的相对位置不变，不能申请额外的空间
+<pre>
+#include <stdio.h>  
+#include <string.h>  
+//题目以及要求：把一个字符串的大写字母放到字符串的后面，  
+//各个字符的相对位置不变，不能申请额外的空间。   
+//判断是不是大写字母   
+int isUpperAlpha(char c){  
+if(c >= 'A' && c <= 'Z'){  
+return 1;  
+}  
+return 0;   
+}  
+//交换两个字母   
+void swap(char *a, char *b){  
+char temp = *a;  
+*a = *b;  
+*b = temp;  
+}   
+char * mySort(char *arr, int len){  
+if(arr == NULL || len <= 0){  
+return NULL;  
+}  
+int i = 0, j = 0, k = 0;  
+for(i = 0; i < len; i++){  
+for(j = len - 1 - i; j >= 0; j--){  
+if(isUpperAlpha(arr[j])){  
+for(k = j; k < len - i - 1; k++){  
+swap(&arr[k], &arr[k + 1]);  
+}  
+break;  
+}  
+//遍历完了字符数组，但是没发现大写字母，所以没必要再遍历下去  
+if(j == 0 && !isUpperAlpha(arr[j])){  
+//结束;  
+                           return arr;  
+}  
+}  
+}  
+//over:   
+return arr;  
+}  
+int main(){  
+char arr[] = "aaaaaaaAbcAdeBbDc";  
+printf("%s\n", mySort(arr, strlen(arr)));  
+return 0;  
+} 
+output==>
+aaaaaaabcdeAABD
+</pre>
