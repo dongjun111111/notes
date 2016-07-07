@@ -11780,3 +11780,46 @@ func SecurePost(url string, xmlContent []byte) (*http.Response, error) {
 this.Data["json"] = map[string]interface{}{"state": 1, "message": "发送成功"}
 this.ServeJSON()
 </pre>
+###Golang月份|month
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	//Add方法和Sub方法是相反的，获取t0和t1的时间距离d是使用Sub，将t0加d获取t1就是使用Add方法
+	var month string
+	switch time.Now().Month() {
+	case 1:
+		month = "一月"
+	case 2:
+		month = "二月"
+	case 3:
+		month = "三月"
+	case 4:
+		month = "四月"
+	case 5:
+		month = "五月"
+	case 6:
+		month = "六月"
+	case 7:
+		month = "七月"
+	case 8:
+		month = "八月"
+	case 9:
+		month = "九月"
+	case 10:
+		month = "十月"
+	case 11:
+		month = "十一月"
+	case 12:
+		month = "十二月"
+	default:
+		month = ""
+	}
+	fmt.Println(month)
+}
+</pre>
