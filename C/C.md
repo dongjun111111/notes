@@ -500,3 +500,84 @@ main(){
     printf("%d,%d,%d\n",pbit->a,pbit->b,pbit->c);	/* 用指针方式输出了这三个域的值 */
 }
 </pre>
+共用体
+
+共用体是一种特殊的数据类型，允许您在相同的内存位置存储不同的数据类型。您可以定义一个带有多成员的共用体，但是任何时候只能有一个成员带有值。共用体提供了一种使用相同的内存位置的有效方式。
+<pre>
+#include <stdio.h>
+#include <string.h>
+ 
+union Data
+{
+   int i;
+   float f;
+   char  str[20];
+};
+ 
+int main( )
+{
+   union Data data;        
+
+   data.i = 10;
+   data.f = 220.5;
+   strcpy( data.str, "C Programming");
+
+   printf( "data.i : %d\n", data.i);
+   printf( "data.f : %f\n", data.f);
+   printf( "data.str : %s\n", data.str);
+
+   return 0;
+}
+</pre>
+typedef
+
+C 语言提供了 typedef 关键字，您可以使用它来为类型取一个新的名字。您也可以使用 typedef 来为用户自定义的数据类型取一个新的名字。例如，您可以对结构体使用 typedef 来定义一个新的数据类型，然后使用这个新的数据类型来直接定义结构变量，如
+<pre>
+#include <stdio.h>
+#include <string.h>
+ 
+typedef struct Books
+{
+   char  title[50];
+   char  author[50];
+   char  subject[100];
+   int   book_id;
+} Book;
+ 
+int main( )
+{
+   Book book;
+ 
+   strcpy( book.title, "C Programming");
+   strcpy( book.author, "Nuha Ali"); 
+   strcpy( book.subject, "C Programming Tutorial");
+   book.book_id = 6495407;
+ 
+   printf( "Book title : %s\n", book.title);
+   printf( "Book author : %s\n", book.author);
+   printf( "Book subject : %s\n", book.subject);
+   printf( "Book book_id : %d\n", book.book_id);
+
+   return 0;
+}
+</pre>
+ #define
+
+ #define 是 C 指令，用于为各种数据类型定义别名，与 typedef 类似，但是它们有以下几点不同：
+
+- typedef 仅限于为类型定义符号名称，#define 不仅可以为类型定义别名，也能为数值定义别名，比如您可以定义 1 为 ONE;
+- typedef 是由编译器执行解释的，#define 语句是由预编译器进行处理的。
+<pre>
+#include <stdio.h>
+ 
+#define TRUE  1
+#define FALSE 0
+ 
+int main( )
+{
+   printf( "Value of TRUE : %d\n", TRUE);
+   printf( "Value of FALSE : %d\n", FALSE);
+
+   return 0;
+}
+</pre>
