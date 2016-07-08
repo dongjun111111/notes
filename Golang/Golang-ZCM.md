@@ -11843,3 +11843,31 @@ func main() {
 	fmt.Println(month)
 }
 </pre>
+###Golang获取今天开始与结束时间戳
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func GetTimeStrSecond(timestr string) int64 {
+	end, _ := time.ParseInLocation("2006-01-02 15:04:05", timestr, time.Local)
+	return end.Unix()
+}
+
+func main() {
+	// 今天凌晨的时间
+	starttoday := time.Now().Format("2006-01-02") + " 00:00:00"
+	//今天结束的时间
+	endtoday := time.Now().Format("2006-01-02") + " 23:59:59"
+	st := GetTimeStrSecond(starttoday)
+	et := GetTimeStrSecond(endtoday)
+	fmt.Println(starttoday+"的时间戳为：", st)
+	fmt.Println(endtoday+"的时间戳为：", et)
+}
+output==>
+2016-07-08 00:00:00的时间戳为： 1467907200
+2016-07-08 23:59:59的时间戳为： 1467993599
+</pre>
