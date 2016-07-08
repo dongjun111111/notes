@@ -11452,7 +11452,27 @@ who | wc -l
 //linux alias 命令 ，为某一操作设置别名(暂时性有效，长期有效则必须写到 /etc/bashrc 文件里)
 alias cdd="cd /home/go/src"     //这边的等号两边不要有空格
 </pre>
-简单sql语句，用sql语句修改表结构
+free命令可以显示Linux系统中空闲的、已用的物理内存及swap内存,及被内核使用的buffer。
+<pre>
+free -t 		//以总和的形式显示内存的使用信息
+free -s 2  //每两秒显示一次
+</pre>
+在linux系统中，buffers和cached都是缓存，两者有什么区别呢？
+
+为了提高磁盘存取效率, Linux做了一些精心的设计, 除了对dentry进行缓存(用于VFS,加速文件路径名到inode的转换), 还采取了两种主要Cache方式：Buffer Cache和Page Cache。前者针对磁盘块的读写，后者针对文件inode的读写。这些Cache有效缩短了 I/O系统调用(比如read,write,getdents)的时间。
+
+磁盘的操作有逻辑级（文件系统）和物理级（磁盘块），这两种Cache就是分别缓存逻辑和物理级数据的。
+
+Page cache实际上是针对文件系统的，是文件的缓存，在文件层面上的数据会缓存到page cache。文件的逻辑层需要映射到实际的物理磁盘，这种映射关系由文件系统来完成。当page cache的数据需要刷新时，page cache中的数据交给buffer cache，因为Buffer Cache就是缓存磁盘块的。但是这种处理在2.6版本的内核之后就变的很简单了，没有真正意义上的cache操作。
+
+Buffer cache是针对磁盘块的缓存，也就是在没有文件系统的情况下，直接对磁盘进行操作的数据会缓存到buffer cache中，例如，文件系统的元数据都会缓存到buffer cache中。
+
+简单说来，page cache用来缓存文件数据，buffer cache用来缓存磁盘数据。在有文件系统的情况下，对文件操作，那么数据会缓存到page cache，如果直接采用dd等工具对磁盘进行读写，那么数据会缓存到buffer cache。
+
+所以我们看linux,只要不用swap的交换空间,就不用担心自己的内存太少.如果常常swap用很多,可能你就要考虑加物理内存了.这也是linux看内存是否够用的标准.
+
+如果是应用服务器的话，一般只看第二行，+buffers/cache,即对应用程序来说free的内存太少了，也是该考虑优化程序或加内存了。
+###简单sql语句，用sql语句修改表结构
 <pre>
 原表修改：
 //增加字段
