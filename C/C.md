@@ -577,7 +577,6 @@ int main( )
 {
    printf( "Value of TRUE : %d\n", TRUE);
    printf( "Value of FALSE : %d\n", FALSE);
-
    return 0;
 }
 </pre>
