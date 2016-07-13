@@ -410,3 +410,29 @@ main (int argc, char *argv[])
 
 - 在一个终端运行此程序：epoll.out PORT
 - 另一个终端：telnet  127.0.0.1 PORT
+
+###Linux vi 基本用法
+替换字符串
+
+- :s/str1/str2/ 用字符串 str2 替换行中首次出现的字符串 str1
+- :s/str1/str2/g 用字符串 str2 替换行中所有出现的字符串 str1
+
+删除 
+
+- dd：删除光标所在行   //在esc后
+
+撤销|回复上一次操作
+
+- u：如果您误执行一个命令，可以马上按下「u」，回到上一个操作；按多次"u"可以执行多次回复 
+
+搜索及替换命令 
+
+- /pattern：从光标开始处向文件尾搜索pattern
+- ?pattern：从光标开始处向文件首搜索pattern
+ 
+最后行方式命令
+
+- ：x：保存当前文件并退出
+- ：q：退出vi
+- ：q!：不保存文件并退出vi
+- ：!command：执行shell命令command
