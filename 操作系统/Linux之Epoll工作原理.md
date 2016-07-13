@@ -436,3 +436,9 @@ main (int argc, char *argv[])
 - ：q：退出vi
 - ：q!：不保存文件并退出vi
 - ：!command：执行shell命令command
+
+diff -- 比较文件内容
+
+- diff dir1 dir2比较目录1与目录2的文件列表是否相同，但不比较文件的实际内容，不同则列出
+- diff file1 file2比较文件1与文件2的内容是否相同，如果是文本格式的文件，则将不相同的内容显示，如果是二进制代码则只表示两个文件是不同的
+- comm file1 file2比较文件，显示两个文件不相同的内容
