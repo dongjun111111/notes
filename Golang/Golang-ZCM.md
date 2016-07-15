@@ -11871,3 +11871,25 @@ output==>
 2016-07-08 00:00:00的时间戳为： 1467907200
 2016-07-08 23:59:59的时间戳为： 1467993599
 </pre>
+###Golang 获取距离某一时间的剩余秒数
+<pre>
+package main
+
+import (
+	"time"
+	"fmt"
+)
+
+///////////////获取活动剩余时间的秒数(新的，可以修改时间)//////////////
+func GetAtivityTodayLastSecondByEndtime(timestr string) time.Duration {
+	end, _ := time.ParseInLocation("2006-01-02 15:04:05", timestr, time.Local)
+	return time.Duration(end.Unix()-time.Now().Local().Unix()) * time.Second
+}
+
+func main() {
+	resttime := GetAtivityTodayLastSecondByEndtime("2016-07-20 23:59:59") //剩余的秒数
+	fmt.Println(resttime)
+}
+output==>
+128h43m53s
+</pre>
