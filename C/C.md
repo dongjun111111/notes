@@ -615,3 +615,7 @@ chkconfig --level 345 nfs off
 ####/etc/profile与/etc/profile.d/
 1. /etc/profile是永久性的环境变量,是全局变量，/etc/profile.d/设置所有用户生效；
 2. /etc/profile.d/比/etc/profile好维护，不想要什么变量直接删除/etc/profile.d/下对应的shell脚本即可，不用像/etc/profile需要改动此文件。
+###各种变量类型的最大值
+以下均为C语言。以int类型为例，int的取值范围在 -32768~32767,无符号类型unsigned int取值范围在0~65535。int类型在不同编译器类型下又有着不同的取值长度，不过基本的计算式为：2^(n-1) n是位数。
+
+因此，在16位编译器中，int占16位（2字节），int最大值为2^(16-1) = 32767；对于32位或64位编译器，int占32位（4字节），int最大值为 2^(32-1) = 2147483647。
