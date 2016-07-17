@@ -669,3 +669,107 @@ main(){
 	fclose(file);
 }
 </pre>
+递归求阶乘
+<pre>
+#include <stdio.h> 
+
+//阶乘 
+double factorial(int i){
+	if(i<= 1){
+		return 1;
+	}
+	return i*factorial(i-1);
+}
+
+int main(){
+	int i = 15;
+	printf("%d 的阶乘为%f\n",i,factorial(i));
+}
+</pre>
+不定参数
+<pre>
+#include <stdio.h>
+#include <stdarg.h> 
+
+double average(int num,...){
+	va_list valist;
+	double sum = 0.0;
+	int i;
+	va_start(valist,num);
+	
+	for(i=0;i<num;i++){
+		sum += va_arg(valist,int);
+	}
+	va_end(valist); 
+	return sum/num;
+}
+
+int main(){
+	printf("average of 3,4,5 = %f\n",average(3,3,4,5));
+}
+</pre>
+##内存操作
+主要用到的是 stdlib.h 下的calloc .free . malloc .realloc函数。
+
+- 1.void *calloc(int num, int size);
+该函数分配一个带有 function allocates an array of num 个元素的数组，每个元素的大小为 size 字节。
+- 2.void free(void *address); 
+该函数释放 address 所指向的h内存块。
+- 3.void *malloc(int num); 
+该函数分配一个 num 字节的数组，并把它们进行初始化。
+- 4.void *realloc(void *address, int newsize); 
+该函数重新分配内存，把内存扩展到 newsize。
+####malloc动态分配内存
+<pre>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(){
+	char name[100];
+	char *description; //动态分配
+	
+	strcpy(name,"Jason"); 
+	
+	description = malloc(100 * sizeof(char));//动态分配
+	if(description == NULL){
+		fprintf(stderr,"Error-unable to allocate requried memory\n");
+	}else{
+		strcpy(description,"Jason is my nickname,welcome to contactting with me");
+	}
+	printf("Name = %s\n",name);
+	printf("Description:%s\n",description);
+}
+</pre>
+####重新调整内存的大小和释放内存
+当程序退出时，操作系统会自动释放所有分配给程序的内存，但是，建议您在不需要内存时，都应该调用函数 free() 来释放内存。或者，您可以通过调用函数 realloc() 来增加或减少已分配的内存块的大小。让我们使用 realloc() 和 free() 函数。
+<pre>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main(){
+	char name[100];
+	char *description;
+	
+	strcpy(name,"Jason");
+	
+	description = malloc(30*sizeof(char));
+	if(description == NULL){
+		fprintf(stderr,"Error-unable to allocate requried memory\n") ;
+	}else{
+		strcpy(description,"Jason I am");
+	}
+	
+	description =realloc(description,100*sizeof(char));
+	if(description == NULL){
+		fprintf(stderr,"Error-unable to allocate required memory\n");
+	}else{
+		strcat(description,"She is in class 10th\n");
+	}
+	printf("Name = %s\n",name);
+	printf("Description:%s\n",description);
+	
+	free(description);
+}
+</pre>
