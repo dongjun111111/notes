@@ -611,3 +611,7 @@ chkconfig [--level levels] name <on|off|reset>：设置某一服务在指定的�
 <pre>
 chkconfig --level 345 nfs off
 </pre>
+
+####/etc/profile与/etc/profile.d/
+1. /etc/profile是永久性的环境变量,是全局变量，/etc/profile.d/设置所有用户生效；
+2. /etc/profile.d/比/etc/profile好维护，不想要什么变量直接删除/etc/profile.d/下对应的shell脚本即可，不用像/etc/profile需要改动此文件。
