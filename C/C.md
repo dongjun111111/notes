@@ -619,3 +619,51 @@ chkconfig --level 345 nfs off
 以下均为C语言。以int类型为例，int的取值范围在 -32768~32767,无符号类型unsigned int取值范围在0~65535。int类型在不同编译器类型下又有着不同的取值长度，不过基本的计算式为：2^(n-1) n是位数。
 
 因此，在16位编译器中，int占16位（2字节），int最大值为2^(16-1) = 32767；对于32位或64位编译器，int占32位（4字节），int最大值为 2^(32-1) = 2147483647。
+
+###C 文件操作函数
+基本函数模型是：
+<pre>
+FILE *fopen(const char * filename,const char * mode);
+</pre>
+其中访问模式mode的分下面几种：
+<pre>
+r   打开已经存在的文件，只读，不能写；不能创建；
+r+  打开已经存在的文件，可读可写；不能创建；
+w   打开已经存在的文件，从头部写入，不能读；无则创建；
+w+  打开已经存在的文件，可读可清空之后写（以前的内容会销毁）；无则创建；
+a   打开已经存在的文件，追加写，不能读;无则创建；
+a+  打开已经存在的文件，追加写，可读；无则创建。
+</pre>
+如果处理的是二进制文件，则需使用下面的访问模式来取代上面的访问模式：
+<pre>
+//b 是 binary
+"rb", "wb", "ab", "rb+", "r+b", "wb+", "w+b", "ab+", "a+b"
+</pre>
+写示例：
+<pre>
+#include <stdio.h>
+
+main()
+{
+   FILE *fp;
+
+   fp = fopen("/tmp/test.txt", "w+");
+   fprintf(fp, "This is testing for fprintf...\n");    //注意这里语法
+   fputs("This is testing for fputs...\n", fp);        //注意这里语法
+   fclose(fp);
+}
+</pre>
+读示例：
+<pre>
+#include <stdio.h>
+
+main(){
+	FILE *file;
+	char buff[2555];
+	
+	file =fopen("jason.txt","r");
+	fgets(buff,2550,(FILE*)file);                        //注意这里语法    
+	printf("content:%s\n",buff);
+	fclose(file);
+}
+</pre>
