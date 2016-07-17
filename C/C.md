@@ -588,3 +588,26 @@ w !sudo tee %
 查看cpu使用情况：
 
 sar -u 5 720 > cpu.out &
+
+chkconfig
+
+说明：chkconfig命令主要用来更新（启动或停止）和查询系统服务的运行级信息。谨记chkconfig不是立即自动禁止或激活一个服务，它只是简单的改变了符号连接。
+
+语法：chkconfig [--add][--del][--list][系统服务] 或 chkconfig [--level <等级代号>][系统服务][on/off/reset]
+
+linux os 将操作环境分为以下7个等级:
+
+- 0:开机(请不要切换到此等级)
+- 1:单人使用者模式的文字界面
+- 2:多人使用者模式的文字界面,不具有网络档案系统(NFS)功能
+- 3:多人使用者模式的文字界面,具有网络档案系统(NFS)功能
+- 4:某些发行版的linux使用此等级进入x windows system
+- 5:某些发行版的linux使用此等级进入x windows system
+- 6:重新启动
+
+例如：
+
+chkconfig [--level levels] name <on|off|reset>：设置某一服务在指定的运行级是被启动，停止还是重置。例如，要在3，4，5运行级停止nfs服务，则命令如下：
+<pre>
+chkconfig --level 345 nfs off
+</pre>
