@@ -662,8 +662,10 @@ main(){
 	char buff[2555];
 	
 	file =fopen("jason.txt","r");
-	fgets(buff,2550,(FILE*)file);                        //注意这里语法    
-	printf("content:%s\n",buff);
+	fscanf(file, "%s", buff); //读到第一个\n或空格结束       
+   	printf("1 content: %s\n", buff);
+	fgets(buff,2550,(FILE*)file);                       //注意这里语法
+	printf("2 content:%s\n",buff);//最多读取2550个字符 
 	fclose(file);
 }
 </pre>
