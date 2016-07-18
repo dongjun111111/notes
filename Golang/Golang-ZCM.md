@@ -12236,3 +12236,11 @@ func main() {
     ClearList(&list)
 }
 </pre>
+###将数据格式化为[]byte类型
+<pre>
+data := `{
+	"Verifyrealname":"` + ver + `",
+	"IdCard":"` + idcard + `"
+}`
+sodata := []byte(data)
+</pre>
