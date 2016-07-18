@@ -11893,3 +11893,346 @@ func main() {
 output==>
 128h43m53s
 </pre>
+###Golang 简单数据结构实现
+单链表
+<pre>
+package main
+
+//链表实现
+import (
+	"fmt"
+)
+
+//定义错误常量
+const (
+	ERROR = -1000000001
+)
+
+//定义元素类型
+type Element int64
+
+//定义节点
+type LinkNode struct {
+	Data Element   //数据域
+	Nest *LinkNode //指针域，指向下一个节点
+}
+
+//函数接口
+type LinkNoder interface {
+	Add(head *LinkNode, new *LinkNode)              //后面添加
+	Delete(head *LinkNode, index int)               //删除指定index位置元素
+	Insert(head *LinkNode, index int, data Element) //在指定index位置插入元素
+	GetLength(head *LinkNode) int                   //获取长度
+	Search(head *LinkNode, data Element)            //查询元素的位置
+	GetData(head *LinkNode, index int) Element      //获取指定index位置的元素
+}
+
+//添加 头结点，数据
+func Add(head *LinkNode, data Element) {
+	point := head //临时指针
+	for point.Nest != nil {
+		point = point.Nest //移位
+	}
+	var node LinkNode  //新节点
+	point.Nest = &node //赋值
+	node.Data = data
+	head.Data = Element(GetLength(head)) //打印全部的数据
+	if GetLength(head) > 1 {
+		Traverse(head)
+	}
+
+}
+
+//删除 头结点 index 位置
+func Delete(head *LinkNode, index int) Element {
+	//判断index合法性
+	if index < 0 || index > GetLength(head) {
+		fmt.Println("please check index")
+		return ERROR
+	} else {
+		point := head
+		for i := 0; i < index-1; i++ {
+			point = point.Nest //移位
+		}
+		point.Nest = point.Nest.Nest //赋值
+		data := point.Nest.Data
+		return data
+	}
+}
+
+//插入 头结点 index位置 data元素
+func Insert(head *LinkNode, index int, data Element) {
+	//检验index合法性
+	if index < 0 || index > GetLength(head) {
+		fmt.Println("please check index")
+	} else {
+		point := head
+		for i := 0; i < index-1; i++ {
+			point = point.Nest //移位
+		}
+		var node LinkNode //新节点，赋值
+		node.Data = data
+		node.Nest = point.Nest
+		point.Nest = &node
+	}
+}
+
+//获取长度 头结点
+func GetLength(head *LinkNode) int {
+	point := head
+	var length int
+	for point.Nest != nil {
+		length++
+		point = point.Nest
+	}
+	return length
+}
+
+//搜索 头结点 data元素
+func Search(head *LinkNode, data Element) {
+	point := head
+	index := 0
+	for point.Nest != nil {
+		if point.Data == data {
+			fmt.Println(data, "exist at", index, "th")
+			break
+		} else {
+			index++
+			point = point.Nest
+			if index > GetLength(head)-1 {
+				fmt.Println(data, "not exist at")
+				break
+			}
+			continue
+		}
+	}
+}
+
+//获取data 头结点 index位置
+func GetData(head *LinkNode, index int) Element {
+	point := head
+	if index < 0 || index > GetLength(head) {
+		fmt.Println("please check index")
+		return ERROR
+	} else {
+		for i := 0; i < index; i++ {
+			point = point.Nest
+		}
+		return point.Data
+	}
+}
+
+//遍历 头结点
+func Traverse(head *LinkNode) {
+	point := head.Nest
+	for point.Nest != nil {
+		fmt.Println(point.Data)
+		point = point.Nest
+	}
+	fmt.Println("Traverse OK!")
+}
+
+//主函数测试
+func main() {
+	var head LinkNode = LinkNode{Data: 0, Nest: nil}
+	head.Data = 0
+	var nodeArray []Element
+	for i := 0; i < 10; i++ {
+		nodeArray = append(nodeArray, Element(i+1+i*100))
+		Add(&head, nodeArray[i])
+	}
+	Delete(&head, 3)
+	Search(&head, 2032)
+	Insert(&head, 23, 10010)
+	Traverse(&head)
+	fmt.Println("data is", GetData(&head, 6))
+	fmt.Println("length:", GetLength(&head))
+}
+</pre>
+线性表
+<pre>
+package main
+ 
+//线性表的相关算法实现
+import (
+    "fmt"
+)
+ 
+//定义List数据结构
+type Element int64
+ 
+const (
+    MAX_SIZE = 10 //最大Size
+    ERROR    = -1 //出错值
+    NULL     = 0  //空值
+)
+ 
+type Sqlist struct {
+    data   []Element //数据数组
+    length int       //当前长度
+    size   int       //最大size
+}
+ 
+//定义List的Interface,这里写出所有用到的方法
+type Lister interface {
+    //初始化构造一个线性表
+    InitList(sl *Sqlist) bool
+    //清空一个线性表
+    ClearList(sl *Sqlist) bool
+    //判断线性表是否为空
+    IsListEmpty(sl *Sqlist) bool
+    //判断线性表是否为满
+    IsListFull(sl *Sqlist) bool
+    //获取线性表长度
+    Listlength(sl Sqlist) int
+    //根据index获取数据
+    GetData(sl Sqlist, index int) Element
+    //根据数据返回index
+    GetIndex(sl Sqlist, data Element) int
+    //在index位置插入元素
+    InsertList(sl *Sqlist, index int, data Element) bool
+    //删除index的元素
+    DeleteList(sl *Sqlist, index int) Element
+    //遍历List
+    TraverseList(sl *Sqlist) bool
+}
+ 
+//新建一个线性表
+func InitList() Sqlist {
+    var sl Sqlist
+    sl.data = make([]Element, MAX_SIZE)
+    sl.length = 0
+    sl.size = MAX_SIZE
+    return sl
+}
+ 
+//清空一个线性表
+func ClearList(sl *Sqlist) bool {
+    for i := 0; i < sl.size; i++ {
+        sl.data[i] = NULL //全部都置空
+    }
+    return true
+}
+ 
+//判断线性表是否为空
+func IsListEmpty(sl *Sqlist) bool {
+    return sl.length == 0
+}
+ 
+//判断线性表是否为满
+func IsListFull(sl *Sqlist) bool {
+    return sl.length == MAX_SIZE
+}
+ 
+//获取线性表长度
+func Listlength(sl Sqlist) int {
+    return sl.length
+}
+ 
+//根据index获取数据
+func GetData(sl *Sqlist, index int) Element {
+    if index < 0 && index > MAX_SIZE {
+        fmt.Println("please check index")
+        return ERROR
+    } else {
+        return sl.data[index]
+    }
+ 
+}
+ 
+//根据数据返回index
+func GetIndex(sl *Sqlist, data Element) int {
+    var index int = 0
+    for i := 0; i < sl.length; i++ {
+        if data == sl.data[i] {
+            index = i
+            break
+        }
+    }
+    return index
+ 
+}
+ 
+//在index位置插入元素
+/**
+第一要判断index是否合法，然后判断index的位置，注意移动过程，最后要把length加1
+**/
+func InsertList(sl *Sqlist, index int, data Element) bool {
+    if index < 0 && index > sl.length {
+        fmt.Println("please check index")
+        return false
+    }
+    if !IsListFull(sl) {
+        if index == 0 && sl.length != 0 {
+            for i := sl.length; i < 1; i-- {
+                sl.data[i] = sl.data[i-1] //千万注意
+            }
+        } else if index > 0 && index < sl.length {
+            for i := sl.length; i < index; i-- {
+                sl.data[i] = sl.data[i-1] //注意这一块儿
+            }
+        } else if index > sl.length {
+            fmt.Println("beyoug length")
+            return false
+        }
+        sl.data[index] = data
+        sl.length++
+        return true
+    } else {
+        fmt.Println("list is full")
+        return false
+    }
+}
+ 
+//删除index的元素
+/**
+第一要判断index是否合法，然后判断index的位置，注意移位的时候要想清楚怎么移动，最后要把length减一
+**/
+func DeleteList(sl *Sqlist, index int) Element {
+    if index < 0 && index > sl.length {
+        fmt.Println("please check index")
+        return ERROR
+    }
+    if !IsListEmpty(sl) {
+        var data Element = sl.data[index]
+        if index == 0 {
+            for i := 0; i < sl.length; i++ {
+                sl.data[i] = sl.data[i+1] //注意这个
+            }
+        }
+        if index > 0 && index < sl.length {
+            for i := index; i < sl.length-1; i++ {
+                sl.data[i] = sl.data[i+1] //要注意
+            }
+        }
+        sl.data[sl.length-1] = NULL
+        sl.length--
+        return data
+ 
+    } else {
+        fmt.Println("list is empty!")
+        return ERROR
+    }
+}
+ 
+//遍历List
+func TraverseList(sl *Sqlist) bool {
+    for i := 0; i < sl.length; i++ {
+        fmt.Println(sl.data[i])
+    }
+    return true
+}
+func main() {
+    list := InitList()
+    fmt.Println(list.length)
+    for i := 0; i < MAX_SIZE; i++ {
+        InsertList(&list, i, Element(i*100))
+    }
+    TraverseList(&list)
+    DeleteList(&list, 4)
+    fmt.Println(list.data)
+    fmt.Println(GetData(&list, 0))
+    fmt.Println(GetIndex(&list, 600))
+    ClearList(&list)
+}
+</pre>
