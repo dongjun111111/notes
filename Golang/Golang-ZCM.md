@@ -12244,3 +12244,28 @@ data := `{
 }`
 sodata := []byte(data)
 </pre>
+###将不同要求的内容放入不同的slice
+<pre>
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	var sli2 []int
+	sli1 := []int{1, 2, 3, 4, 5}
+	for i := len(sli1) - 1; i >= 0; i-- {
+		if i >= 2 {
+			sli2 = append(sli2, sli1[i])           // 不符合条件
+			sli1 = append(sli1[:i], sli1[i+1:]...) // 符合条件
+		}
+	}
+	fmt.Println("sli1:", sli1)
+	fmt.Println("sli2:", sli2)
+
+}
+output==>
+sli1: [1 2]
+sli2: [5 4 3]
+</pre>
