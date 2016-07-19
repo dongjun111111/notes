@@ -12186,7 +12186,7 @@ func InsertList(sl *Sqlist, index int, data Element) bool {
  
 //删除index的元素
 /**
-第一要判断index是否合法，然后判断index的位置，注意移位的时候要想清楚怎么移动，最后要把length减一
+第一要判断index是否合法，然后判断index的位置，注意移位的时候要想清楚怎么移动，最后要把length减1
 **/
 func DeleteList(sl *Sqlist, index int) Element {
     if index < 0 && index > sl.length {
