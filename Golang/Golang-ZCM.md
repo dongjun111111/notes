@@ -12270,4 +12270,12 @@ sli1: [1 2]
 sli2: [5 4 3]
 </pre>
 ###SQL小技巧
-为避免发生where后没有查询条件而出现错误的时候，一般将where改写成 where  1=1  。
+为避免发生where后没有查询条件而出现错误的时候，一般将"where"改写成"where 1=1"。
+
+为了提高查询效率，一般方法是利用数据库的缓存功能，因此如果 需要使用到类似CURDATE()、NOW()、RAND()或TO_DAYS()等函数的时候必须把它们用变量代替，因为那些函数的返回是会不定的易变的。比如下例：
+<pre>
+ sql := `select * from table1 where starttime >= CURDATE()  limit 10`    //性能差，没有利用到数据库的查询缓存
+
+ now := time.Now().Format("2016-01-02 15:04:05")
+ sql := `select * from table1 where starttime >= '`+now+`' limit 10`     //使用变量来提高性能
+</pre>
