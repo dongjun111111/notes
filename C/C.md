@@ -805,7 +805,7 @@ main(){
 #include <stdio.h>
 #include <malloc.h> 
 
-typedef struct Jason{
+typedef struct{
 	int a;
 }Djason;
 
