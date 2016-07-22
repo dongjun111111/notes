@@ -810,6 +810,7 @@ typedef struct Jason{
 }Djason;
 
 main(){
+	//手动给结构体分配内存
 	Djason *jason = (Djason *)malloc(sizeof(Djason)+20*sizeof(char));
 	jason->a = 34;
 	printf("jason->a`s value is %d",jason->a);
