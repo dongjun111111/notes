@@ -800,3 +800,20 @@ main(){
         printf("size of pchangeable2 : %d\n",sizeof(pchangeable2));  
 }  
 </pre>
+自己写一个
+<pre>
+#include <stdio.h>
+#include <malloc.h> 
+
+typedef struct Jason{
+	int a;
+}Djason;
+
+main(){
+	Djason *jason = (Djason *)malloc(sizeof(Djason)+20*sizeof(char));
+	jason->a = 34;
+	printf("jason->a`s value is %d",jason->a);
+}
+output==>
+jason->a`s value is 34
+</pre>
