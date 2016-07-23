@@ -12328,5 +12328,58 @@ res, err := o.Raw(`insert into activity(is_use) values(?)`, is_useid).Exec()
 
 // delete Exec
 res, err := o.Raw(`delete from activity where is_use = ?`, is_useid).Exec()
+</pre>
+###通过身份证号判断年龄
+<pre>
+package main
+
+import (
+	"fmt"
+	"strconv"
+	"time"
+)
+
+//对字符串进行截取
+func Substr(str string, start, length int) string {
+	rs := []rune(str)
+	rl := len(rs)
+	end := 0
+	if start < 0 {
+		start = rl - 1 + start
+	}
+	end = start + length
+	if start > end {
+		start, end = end, start
+	}
+	if start < 0 {
+		start = 0
+	}
+	if start > rl {
+		start = rl
+	}
+	if end < 0 {
+		end = 0
+	}
+	if end > rl {
+		end = rl
+	}
+	return string(rs[start:end])
+}
+
+func main(){
+	cardNo := "3406761999070656453674"
+	idstr := Substr(cardNo, 6, 8)
+	id, _ := strconv.Atoi(idstr)
+	now, _ := strconv.Atoi(time.Now().Format("20060102"))
+	bottom := now - 700000
+	top := now - 200000
+	if id < bottom || id > top {
+		result := "本公司不向20周岁以下，70周岁以上的用户提供服务。敬请理解！"
+		fmt.Println(result)
+		return
+	}else{
+		fmt.Println("OK")
+	}
+}
 
 </pre>
