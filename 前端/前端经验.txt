@@ -440,3 +440,30 @@ html.onclick = function(){
     "async" : false
   });
 }
+
+
+++++使用jquey.cookie.js++++++
+<script type="text/javascript" src="../../static/js/jquery.cookie.js"></script>
+$(function(){
+	var phone = $.cookie('phone')||"";
+	$("#phone").val(phone);
+	var isMobile=/^(13[0-9]|17[0-9]|14[57]|15([0-3]|[5-9])|18[0-9])\d{8}$/;//手机号正则
+	$("#submitBtn").click(function(){
+		phone = $("#phone").val();
+		$.cookie('phone',phone, {expires:30,path:'/'});//手机号存入cookie
+		if(!isMobile.test(phone)){
+			dialog({
+				desc:"请正确填写手机号码！"
+			}); 
+			return false;       
+		}else{
+			$("#form").submit();
+			return false;
+		}
+	});
+	$("#phone").focus(function(){
+		$(this).attr("placeholder"," 手机号是您登录的账户");
+	}).blur(function(){
+		$(this).attr("placeholder"," 请输入手机号码");
+	});
+});
