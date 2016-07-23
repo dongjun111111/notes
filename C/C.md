@@ -810,7 +810,7 @@ typedef struct{
 }Djason;
 
 main(){
-	//手动给结构体分配内存
+	//手动给结构体分配内存,这个是用指针的形式，涉及到底层
 	Djason *jason = (Djason *)malloc(sizeof(Djason)+20*sizeof(char));
 	jason->a = 34;
 	printf("jason->a`s value is %d",jason->a);
