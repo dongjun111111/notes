@@ -12308,3 +12308,25 @@ while (1) {
 更通俗一点讲，内存中存储数据的方式是：一个存储数据的“实际地址”=段首地址+偏移量， 
 
 你也可以这样理解：就像我们现实中的“家庭地址”=“小区地址”+“门牌号” ，上面的“偏移量”就好比“门牌号”。
+###Golang mysq日常操作CURD
+<pre>
+import (
+	"github.com/astaxie/beego/orm"
+)
+o := orm.NewOrm()
+//select QueryRaw
+err := o.Raw(`select * from activity where is_use = ?`, is_useid).QueryRaw(&ff)
+
+//select QueryRaws
+res, err := o.Raw(`select * from activity where is_use = ?`, is_useid).QueryRaws(&ffs)
+
+//update  Exec
+res, err := o.Raw(`update activity set is_use = ? where uid=?`, is_uesid, uid).Exec()
+
+//insert Exec
+res, err := o.Raw(`insert into activity(is_use) values(?)`, is_useid).Exec()
+
+// delete Exec
+res, err := o.Raw(`delete from activity where is_use = ?`, is_useid).Exec()
+
+</pre>
