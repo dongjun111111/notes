@@ -36,7 +36,7 @@ int jason(){
 		printf("\a");
 	}
 } 
-//这个函数流弊 
+//这个函数很流弊 
 void sleep(long wait){
 	long goal=clock()+wait;
 	while(goal>clock());
