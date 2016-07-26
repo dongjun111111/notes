@@ -903,7 +903,7 @@ API的使用）。这些繁琐的例行工作已经转移到JDO产品提供商�
 
 一个内部类对象可以访问创建它的外部类对象的内容
 
-122、WEBSERVICE名词解释。JSWDL开发包的介绍。JAXP、JAXM的解释。SOAP、UDDI,WSDL解释。
+122、WEBSERVICE名词解释；JSWDL开发包的介绍；JAXP、JAXM的解释；SOAP、UDDI与WSDL解释。
 
 Web ServiceWeb
 Service是基于网络的、分布式的模块化组件，它执行特定的任务，遵守具体的技术规范，这些规范使得Web
