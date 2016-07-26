@@ -8570,6 +8570,17 @@ output==>
 - 熟悉linux下c开发，熟悉网络、进程/线程间通信编程；
 - 全面的软件知识结构（操作系统、软件工程、设计模式、数据结构、数据库系统、网络安全)。
 ###Beego下的api开发
+注意：在使用beego的自动注解路由的时候，每个方法的上面的自动注解内容格式必须是：
+<pre>
+// @Title 显示标题  
+// @Description get TradeRecord
+// @Param	app		path 	string	true		"The app for"
+// @Success 200
+// @Failure 403
+// @router /lastedtraderecord [get]                                                                 //这里的router 必须是小写的，写成Router的就是错误的
+</pre>
+然后beego就会自动在router/CommentsRouter_*.go文件中自动生成对应的restful接口代码。
+
 基本结构如下：
 <pre>
 routers：
