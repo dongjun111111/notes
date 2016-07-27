@@ -12429,3 +12429,32 @@ select count(*) as qi from users_q                         //别名要与最外�
 ==>
 99
 </pre>
+IPC ==> Inter-Process Communication,进程间通信
+###Golang json 
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type Other struct {
+	Host   string
+	Port   int
+	Fruits []string
+}
+
+func main() {
+
+	jsonstr := `{"host":"localhost","port":4566,"fruits":["apple","fff","ere"]}`
+
+	var config Other
+	json.Unmarshal([]byte(jsonstr), &config)
+
+	fmt.Println(config)
+}
+
+output==>
+{localhost 4566 [apple fff ere]}
+</pre>
