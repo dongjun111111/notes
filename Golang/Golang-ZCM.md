@@ -12392,5 +12392,10 @@ func main(){
 		fmt.Println("OK")
 	}
 }
+</pre>
 
+###git使用tips
+本地分支误删了一个文件，想从remote获取下来(恢复本地)的命令是：
+<pre>
+git checkout 文件名
 </pre>
