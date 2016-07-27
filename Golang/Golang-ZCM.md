@@ -12403,7 +12403,7 @@ git checkout 文件名
 <pre>
 SELECT concat('点击量是',click,";",left(author,3)) as newclick FROM `default_news` where click >400;
 
-:
+==>
 点击量是433;匿名者
 点击量是411;匿名者
 点击量是572;匿名者
@@ -12413,6 +12413,17 @@ SELECT concat('点击量是',click,";",left(author,3)) as newclick FROM `default
 
 select  SUBSTRING(summary,1,2)as new from default_news where id = 33;
 
-： 
+==> 
 何为
+
+
+select sum(qi)  from (
+select count(*) as qi from users_y   union                 //别名要与最外层的保持一致
+select count(*) as qi from users_l   union				   //别名要与最外层的保持一致
+select count(*) as qi from users_d   union                 //别名要与最外层的保持一致
+select count(*) as qi from users_q                         //别名要与最外层的保持一致
+) as onetable；
+
+==>
+99
 </pre>
