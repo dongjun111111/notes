@@ -12399,3 +12399,16 @@ func main(){
 <pre>
 git checkout 文件名
 </pre>
+###mysql的cancat与left|right的使用案例
+<pre>
+SELECT concat('点击量是',click,";",left(author,3)) as newclick FROM `default_news` where click >400;
+
+:
+点击量是433;匿名者
+点击量是411;匿名者
+点击量是572;匿名者
+点击量是413;匿名者
+点击量是568;匿名者
+点击量是803;匿名者
+
+</pre>
