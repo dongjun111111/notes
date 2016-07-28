@@ -12458,10 +12458,19 @@ func main() {
 output==>
 {localhost 4566 [apple fff ere]}
 </pre>
+func main(){
+	today := time.Now().Format("2006-01-02") + " 00:00:00"
+	fmt.Println("获取今天凌晨时间戳：", GetTimeStrSecond(today))
+
+	strtime := time.Now()
+	fmt.Println("此刻时间戳：", strtime.Local().Unix())
+}
+<pre>
 ###Linux 命令行奇用
 <pre>
 2>&1 &                                            //解释：(1)bash中0，1，2三个数字分别代表STDIN_FILENO、STDOUT_FILENO、STDERR_FILENO，即标准输入（一般是键盘），标准输出（一般是显示屏，准确的说是用户终端控制台），标准错误（出错信息输出）; (2)输入输出可以重定向,有时候会看到如 ls >> 1.txt这类的写法，> 和 >> 的区别在于：> 用于新建而>>用于追加;（3）2>&1就是用来将标准错误2重定向到标准输出1中的。此处1前面的&就是为了让bash将1解释成标准输出而不是文件1。至于最后一个&，则是让bash在后台执行。
 
 find / -name *.java > find.txt 2>&1 &             //解释：将find的命令得到的结果写入 find.txt 文件中并且此操作是在后台进行的，不会受到其他操作的干扰。  
 
+ps xj                                             //解释：守护进程是系统长期运行的后台进程。列出进程的信息，TPGID一栏为-1就是守护进程。
 </pre>
