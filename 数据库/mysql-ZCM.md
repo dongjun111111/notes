@@ -143,3 +143,20 @@ mysqldump --all-databases > all-databases.sql（将所有数据库备份到all-d
 3、导入数据
 mysql < all-databases.sql（导入数据库）
 mysql>source news.sql;（在mysql命令下执行，可导入表）
+###linux 使用ssh
+ssh 用户名@地址 //如：ssh root@192.168.1.1
+
+
+解决无操作自动退出问题：
+<pre>
+修改/etc/profile配置文件
+# vi /etc/profile
+增加：TMOUT=1800
+这样30分钟没操作就自动LOGOUT
+</pre>
+退出已经登录成功的客户端： exit
+
+
+
+//这个xargs厉害了
+find / -name *.java| xargs grep "device"
