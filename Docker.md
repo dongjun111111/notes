@@ -2,8 +2,11 @@
 ##常用命令
 ###查看docker信息
 1. 查看docker版本
+
 docker version 
+
 2. docker系统信息
+
 docker info
 ###对image的操作
 1. 检索image
