@@ -13,8 +13,8 @@ int main(){
 	time(&nowtime);
 	timeinfo = localtime(&nowtime);
 	int year,month,day,hour,minute,second;
-	year = timeinfo->tm_year +1900;
-	month = timeinfo->tm_mon +1;
+	year = timeinfo->tm_year + 1900;
+	month = timeinfo->tm_mon + 1;
 	day = timeinfo->tm_mday;
 	hour = timeinfo->tm_hour;
 	minute = timeinfo->tm_min;
