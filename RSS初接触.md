@@ -38,8 +38,8 @@ RSS 文档使用一种简单的自我描述的语法。下面是一个简单的R
 
 item 元素拥有三个必需的子元素：
 
-- title - 定义项目的标题。（比如 RSS 教程）
-- link - 定义到达项目的超链接。（比如 http://www.w3school.com.cn/rss）
+- title- 定义项目的标题。（比如 RSS 教程）
+- link- 定义到达项目的超链接。（比如 http://www.w3school.com.cn/rss）
 - description - 描述此项目（比如 w3school 的 RSS 教程）
 
 最后，后面的两行关闭 <channel> 和 <rss> 元素。
