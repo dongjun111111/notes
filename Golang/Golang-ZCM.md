@@ -12482,6 +12482,16 @@ ps xj                                             //解释：守护进程是系�
 内存访问速度属于纳秒级别；SSD性能显著优于传统硬盘（HDD）的其中一个原因是其超快的数据访问速度(发出请求和完成读写运行之间的延迟)。SSD的随机数据访问时间为0.1ms或更短，而主流2.5 HDD所用的时间约为10~12ms，甚至更长。就像您在下面对照表中所看到的，SSD的数据访问速度要比HDD快100倍，包括数据搜索时间和延迟。
 ###Linux远程传输命令scp
 <pre>
-//将本地 /usr/a/index.html文件复制到 root@192.168.1.2:/usr/a/文件夹下
-scp /usr/a/index.html root@192.168.1.2:/usr/a/
+//将本地 /usr/a/index.html 文件复制到 root@192.168.1.2:/usr/a/文件夹下 (上传)
+scp /usr/a/index.html  root@192.168.1.2:/usr/a/
+
+//若 SSH端口不是默认的22，比如，是端口1234 则加-P参数：
+scp -P 1234  /usr/a/index.html  root@192.168.1.2:/usr/a/
+
+
+//将远程 2服务器上的my.cnf文件下载到本地mysql文件夹下 （下载）
+scp root@192.168.1.2:/etc/mysql/my.cnf  /etc/mysql
+
+// -r 递归复制整个目录(一般用在需要复制[上传/下载]整个文件夹时使用)
+scp -r root@192.168.1.2:/opt/soft/mongodb /opt/soft/
 </pre>
