@@ -20,6 +20,7 @@ Go中字符串是不可变的,所以var s string = "hello" s[0] = 'c' println(s)
 	s = string(c)  //再转回 string 类型
 	println(s)
 }
+</pre>
 第二种：切片操作
 <pre>
 package main
@@ -33,9 +34,6 @@ func main() {
 }
 output==>
 cello
-</pre>
-output==>
-cello	
 </pre>
 数组  --值类型
 <pre>
@@ -12458,6 +12456,7 @@ func main() {
 output==>
 {localhost 4566 [apple fff ere]}
 </pre>
+<pre>
 func main(){
 	today := time.Now().Format("2006-01-02") + " 00:00:00"
 	fmt.Println("获取今天凌晨时间戳：", GetTimeStrSecond(today))
@@ -12465,7 +12464,7 @@ func main(){
 	strtime := time.Now()
 	fmt.Println("此刻时间戳：", strtime.Local().Unix())
 }
-<pre>
+</pre>
 ###Linux 命令行奇用
 <pre>
 2>&1 &                                            //解释：(1)bash中0，1，2三个数字分别代表STDIN_FILENO、STDOUT_FILENO、STDERR_FILENO，即标准输入（一般是键盘），标准输出（一般是显示屏，准确的说是用户终端控制台），标准错误（出错信息输出）; (2)输入输出可以重定向,有时候会看到如 ls >> 1.txt这类的写法，> 和 >> 的区别在于：> 用于新建而>>用于追加;（3）2>&1就是用来将标准错误2重定向到标准输出1中的。此处1前面的&就是为了让bash将1解释成标准输出而不是文件1。至于最后一个&，则是让bash在后台执行。
@@ -12495,3 +12494,51 @@ scp root@192.168.1.2:/etc/mysql/my.cnf  /etc/mysql
 // -r 递归复制整个目录(一般用在需要复制[上传/下载]整个文件夹时使用)
 scp -r root@192.168.1.2:/opt/soft/mongodb /opt/soft/
 </pre>
+###SVN版本控制之回滚
+取消对代码的修改分为两种情况：
+####第一种情况：改动没有被提交（commit）
+这种情况下，使用svn revert就能取消之前的修改。
+svn revert用法如下：
+<pre>
+# svn revert [-R] something
+</pre>
+其中something可以是（目录或文件的）相对路径也可以是绝对路径。
+当something为单个文件时，直接svn revert something就行了；当something为目录时，需要加上参数-R(Recursive,递归)，否则只会将something这个目录的改动。
+在这种情况下也可以使用svn update命令来取消对之前的修改，但不建议使用。因为svn update会去连接仓库服务器，耗费时间。
+注意：svn revert本身有固有的危险，因为它的目的是放弃未提交的修改。一旦你选择了恢复，Subversion没有方法找回未提交的修改。
+####第二种情况：改动已经被提交（commit）
+这种情况下，用svn merge命令来进行回滚。 
+
+回滚的操作过程如下： 
+
+1. 保证我们拿到的是最新代码： 
+<pre>
+     svn update 
+     假设最新版本号是28。
+</pre> 
+2. 然后找出要回滚的确切版本号：
+<pre> 
+     svn log [something]
+     假设根据svn log日志查出要回滚的版本号是25，此处的something可以是文件、目录或整个项目
+     如果想要更详细的了解情况，可以使用svn diff -r 28:25 [something]
+</pre>
+3. 回滚到版本号25：
+<pre>
+     svn merge -r 28:25 something
+</pre>
+
+为了保险起见，再次确认回滚的结果：
+<pre>
+     svn diff [something]
+     发现正确无误，提交。
+</pre>
+4. 提交回滚：
+<pre>
+     svn commit -m ”Revert revision from r28 to r25,because of …” 
+     提交后版本变成了29。
+</pre>
+将以上操作总结为三条如下：
+
+1. svn update，svn log，找到最新版本（latest revision）
+2. 找到自己想要回滚的版本号（rollbak revision）
+3. 用svn merge来回滚： svn merge -r : something
