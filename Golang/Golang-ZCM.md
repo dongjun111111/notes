@@ -12542,3 +12542,25 @@ svn revert用法如下：
 1. svn update，svn log，找到最新版本（latest revision）
 2. 找到自己想要回滚的版本号（rollbak revision）
 3. 用svn merge来回滚： svn merge -r : something
+
+###golang将类型转换为string
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+func ToString(v interface{}) string {
+	data, _ := json.Marshal(v)
+	return string(data)
+}
+
+func main() {
+	var s int
+	s = 4545
+	fmt.Println(ToString(s))
+}
+
+</pre>
