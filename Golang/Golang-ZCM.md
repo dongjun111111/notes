@@ -12513,29 +12513,29 @@ svn revert用法如下：
 
 1. 保证我们拿到的是最新代码： 
 <pre>
-     svn update 
-     假设最新版本号是28。
+ svn update 
+ 假设最新版本号是28。
 </pre> 
 2. 然后找出要回滚的确切版本号：
 <pre> 
-     svn log [something]
-     假设根据svn log日志查出要回滚的版本号是25，此处的something可以是文件、目录或整个项目
-     如果想要更详细的了解情况，可以使用svn diff -r 28:25 [something]
+ svn log [something]
+ 假设根据svn log日志查出要回滚的版本号是25，此处的something可以是文件、目录或整个项目
+ 如果想要更详细的了解情况，可以使用svn diff -r 28:25 [something]
 </pre>
 3. 回滚到版本号25：
 <pre>
-     svn merge -r 28:25 something
+ svn merge -r 28:25 something
 </pre>
 
 为了保险起见，再次确认回滚的结果：
 <pre>
-     svn diff [something]
-     发现正确无误，提交。
+ svn diff [something]
+ 发现正确无误，提交。
 </pre>
 4. 提交回滚：
 <pre>
-     svn commit -m ”Revert revision from r28 to r25,because of …” 
-     提交后版本变成了29。
+ svn commit -m ”Revert revision from r28 to r25,because of …” 
+ 提交后版本变成了29。
 </pre>
 将以上操作总结为三条如下：
 
