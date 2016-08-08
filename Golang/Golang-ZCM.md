@@ -12563,3 +12563,10 @@ func main() {
 	fmt.Println(ToString(s))
 }
 </pre>
+###Golang 将标准时间格式转换成时间戳格式
+<pre>
+func GetTimeStrSecond(timestr string) int64 {
+	end, _ := time.ParseInLocation("2006-01-02 15:04:05", timestr, time.Local)
+	return end.Unix()
+}
+</pre>
