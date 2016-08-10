@@ -11,9 +11,9 @@
 package main
 
 func main() {
-/*
-Go中字符串是不可变的,所以var s string = "hello" s[0] = 'c' println(s)报错
-*/
+	/*
+	Go中字符串是不可变的,所以var s string = "hello" s[0] = 'c' println(s)报错
+	*/
 	var s string = "hello"
 	c := []byte(s)  //将字符串 s 转换成 []byte 类型
 	c[0] = 'c'
@@ -6067,10 +6067,8 @@ func main() {
 }
 </pre>
 ###2016-6-7工作记录
-
 - 在有if的地方如果有变量声明的时候，不要使用 := ，而是应该尽量在if判断的外面用 var 先声明一下；
 - 模板函数语法：  {{if and (eq a 3) (gt b 4)}} ，对，golang的语法就是这么浪。
-
 ###一套高效的超时通知机制(ticker + channel)
 <pre>
 package main
@@ -12570,3 +12568,5 @@ func GetTimeStrSecond(timestr string) int64 {
 	return end.Unix()
 }
 </pre>
+###COUNT(*) 与 COUNT(1)
+最关键是在你统计个数的时候是否需要考虑到有空值的情况，count(主键)肯定没有空值，但是对于一个没有主键的表或者 count(任意字段)时，count(*)能取出含有空值的所有记录数，count(任意字段)不含空值。
