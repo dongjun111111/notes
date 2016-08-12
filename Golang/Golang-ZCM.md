@@ -223,7 +223,6 @@ package main
 import "fmt"
 
 func main() {
-
 	for i := 0; i < 5; i++ {
 		defer fmt.Println(i)
 	}
@@ -12575,5 +12574,17 @@ func GetTimeStrSecond(timestr string) int64 {
 //md5加密
 func mD5(data string) string {
 	return fmt.Sprintf("%x", md5.Sum([]byte(data)))
+}
+//数组去重 暂时支持string ,可以自己实现其他几种类型
+func RemoveAndEmpty(a []string) (ret []string) {
+	sort.Sort(sort.StringSlice(a))
+	a_len := len(a)
+	for i := 0; i < a_len; i++ {
+		if (i > 0 && a[i-1] == a[i]) || len(a[i]) == 0 {
+			continue
+		}
+		ret = append(ret, a[i])
+	}
+	return
 }
 </pre>
