@@ -12566,6 +12566,10 @@ func GetTimeStrSecond(timestr string) int64 {
 	end, _ := time.ParseInLocation("2006-01-02 15:04:05", timestr, time.Local)
 	return end.Unix()
 }
+
+//毫秒
+timestamp := strconv.FormatInt(time.Now().UnixNano()/1000, 10)
+fmt.Println(timestamp)
 </pre>
 ###COUNT(*) 与 COUNT(1)
 最关键是在你统计个数的时候是否需要考虑到有空值的情况，count(主键)肯定没有空值，但是对于一个没有主键的表或者 count(任意字段)时，count(*)能取出含有空值的所有记录数，count(任意字段)不含空值。
