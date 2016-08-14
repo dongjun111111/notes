@@ -12619,3 +12619,54 @@ func (tagetPath string, fileName string, data interface{}) dbToExcel() {
 	}
 }
 </pre>
+###在post或者get请求中添加自定义参数
+//发送post请求
+func SendPost(url string, body []byte) ([]byte, error) {
+
+	// 为了处理，所有post请求都加入 app,mobileversion,mobiletype
+	ss := strings.Replace(string(body), "}", "", -1)
+	aa := ss + `,"App":` + strconv.Itoa(utils.App) + `,"MobileVersion":"` + utils.MobileVersion + `","MobileType":"` + utils.MobileType + `}`
+	body = []byte(aa)
+	//==========================
+	requestBody, _ := utils.DesBase64Encrypt(body)
+	resp, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	fmt.Println(resp.Status)
+	if resp.Status == "404 Not Found" {
+		return nil, errors.New("服务器异常!")
+	}
+	if bodyByte, err := ioutil.ReadAll(resp.Body); err == nil {
+		responseBody, err := utils.DesBase64Decrypt(bodyByte)
+		return responseBody, err
+	} else {
+		return nil, err
+	}
+}
+
+//发送get请求
+func SendGet(url string) ([]byte, error) {
+	// 为了处理，所有post请求都加入 app,mobileversion,mobiletype
+	if strings.Contains(url, "?") {
+		url = url + "&app=" + strconv.Itoa(utils.App) + "&mobileversion=" + utils.MobileVersion + "&mobiletype=" + utils.MobileType
+	} else {
+		url = url + "?app=" + strconv.Itoa(utils.App) + "&mobileversion=" + utils.MobileVersion + "&mobiletype=" + utils.MobileType
+	}
+	// =======================================
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	if resp.Status == "404 Not Found" {
+		return nil, errors.New("服务器异常!")
+	}
+	if bodyByte, err := ioutil.ReadAll(resp.Body); err == nil {
+		responseBody, err := utils.DesBase64Decrypt(bodyByte)
+		return responseBody, err
+	} else {
+		return nil, err
+	}
+}
