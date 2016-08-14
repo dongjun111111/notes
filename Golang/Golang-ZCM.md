@@ -12639,7 +12639,7 @@ func SendPost(url string, body []byte) ([]byte, error) {
 		return nil, errors.New("服务器异常!")
 	}
 	if bodyByte, err := ioutil.ReadAll(resp.Body); err == nil {
-		responseBody, err := utils.DesBase64Decrypt(bodyByte)
+		responseBody, err := utils.解密(bodyByte)
 		return responseBody, err
 	} else {
 		return nil, err
@@ -12664,7 +12664,7 @@ func SendGet(url string) ([]byte, error) {
 		return nil, errors.New("服务器异常!")
 	}
 	if bodyByte, err := ioutil.ReadAll(resp.Body); err == nil {
-		responseBody, err := utils.DesBase64Decrypt(bodyByte)
+		responseBody, err := utils.解密(bodyByte)
 		return responseBody, err
 	} else {
 		return nil, err
