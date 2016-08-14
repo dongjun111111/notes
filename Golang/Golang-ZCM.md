@@ -12623,9 +12623,9 @@ func (tagetPath string, fileName string, data interface{}) dbToExcel() {
 //发送post请求
 func SendPost(url string, body []byte) ([]byte, error) {
 
-	// 为了处理，所有post请求都加入 app,mobileversion,mobiletype
+	// 为了处理，所有post请求都加入 3个参数
 	ss := strings.Replace(string(body), "}", "", -1)
-	aa := ss + `,"App":` + strconv.Itoa(utils.App) + `,"MobileVersion":"` + utils.MobileVersion + `","MobileType":"` + utils.MobileType + `}`
+	aa := ss + `,"参数1":` + strconv.Itoa(utils.参数1) + `,"参数2":"` + utils.参数2 + `","参数3":"` + utils.参数3 + `}`
 	body = []byte(aa)
 	//==========================
 	requestBody, _ := utils.DesBase64Encrypt(body)
@@ -12648,11 +12648,11 @@ func SendPost(url string, body []byte) ([]byte, error) {
 
 //发送get请求
 func SendGet(url string) ([]byte, error) {
-	// 为了处理，所有post请求都加入 app,mobileversion,mobiletype
+	// 为了处理，所有post请求都加入  3个参数
 	if strings.Contains(url, "?") {
-		url = url + "&app=" + strconv.Itoa(utils.App) + "&mobileversion=" + utils.MobileVersion + "&mobiletype=" + utils.MobileType
+		url = url + "&参数1=" + strconv.Itoa(utils.参数1) + "&参数2=" + utils.参数2 + "&参数3=" + utils.参数3
 	} else {
-		url = url + "?app=" + strconv.Itoa(utils.App) + "&mobileversion=" + utils.MobileVersion + "&mobiletype=" + utils.MobileType
+		url = url + "?参数1=" + strconv.Itoa(utils.参数1) + "&参数2=" + utils.参数2 + "&参数3=" + utils.参数3
 	}
 	// =======================================
 	resp, err := http.Get(url)
