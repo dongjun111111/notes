@@ -12620,6 +12620,7 @@ func (tagetPath string, fileName string, data interface{}) dbToExcel() {
 }
 </pre>
 ###在post或者get请求中添加自定义参数
+<pre>
 //发送post请求
 func SendPost(url string, body []byte) ([]byte, error) {
 
@@ -12670,3 +12671,4 @@ func SendGet(url string) ([]byte, error) {
 		return nil, err
 	}
 }
+</pre>
