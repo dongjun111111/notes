@@ -12626,7 +12626,7 @@ func SendPost(url string, body []byte) ([]byte, error) {
 
 	// 为了处理，所有post请求都加入 3个参数
 	ss := strings.Replace(string(body), "}", "", -1)
-	aa := ss + `,"参数1":` + strconv.Itoa(utils.参数1) + `,"参数2":"` + utils.参数2 + `","参数3":"` + utils.参数3 + `}`
+	aa := ss + `,"参数1":` + strconv.Itoa(utils.参数1) + `,"参数2":"` + utils.参数2 + `","参数3":"` + utils.参数3 + `'}`
 	body = []byte(aa)
 	//==========================
 	requestBody, _ := utils.DesBase64Encrypt(body)
