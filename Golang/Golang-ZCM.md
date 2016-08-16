@@ -354,7 +354,7 @@ His name is  mark
 His age is  34
 His school is  THU
 </pre>
-匿名的其他类型 []string int等
+匿名的其他类型[]string int等
 <pre>
 package main
 
