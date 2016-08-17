@@ -12672,3 +12672,30 @@ func SendGet(url string) ([]byte, error) {
 	}
 }
 </pre>
+###Golang将struct转换成map字典
+<pre>
+// mapStructToMap 将一个结构体所有字段(包括通过组合得来的字段)映射到一个map中
+// data:存储字段数据的map
+// value:结构体的反射值
+func mapStructToMap(data map[interface{}]interface{}, value reflect.Value) {
+	if value.Kind() == reflect.Struct {
+		for i := 0; i < value.NumField(); i++ {
+			var fieldValue = value.Field(i)
+			if fieldValue.CanInterface() {
+				var fieldType = value.Type().Field(i)
+				if fieldType.Anonymous {
+					//匿名组合字段,进行递归解析
+					mapStructToMap(data, fieldValue)
+				} else {
+					//非匿名字段
+					var fieldName = fieldType.Tag.Get("to")
+					if fieldName == "" {
+						fieldName = fieldType.Name
+					}
+					data[fieldName] = fieldValue.Interface()
+				}
+			}
+		}
+	}
+}
+</pre>
