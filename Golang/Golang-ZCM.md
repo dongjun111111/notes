@@ -12699,3 +12699,16 @@ func mapStructToMap(data map[interface{}]interface{}, value reflect.Value) {
 	}
 }
 </pre>
+###Golang官网被墙解决方案
+1. 修改hosts文件
+
+找到hosts文件，Mac OS X/*nix在/etc/hosts，Windows在C:\WINDOWS\system32\drivers\etc\hosts
+
+增加一行
+
+173.194.75.141 golang.org
+2. 本地启动godoc服务
+<pre>
+godoc -http=:6060
+</pre>
+通过浏览器访问http://localhost:6060即可。
