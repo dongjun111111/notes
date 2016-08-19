@@ -12705,8 +12705,9 @@ func mapStructToMap(data map[interface{}]interface{}, value reflect.Value) {
 找到hosts文件，Mac OS X/*nix在/etc/hosts，Windows在C:\WINDOWS\system32\drivers\etc\hosts
 
 增加一行
-
+<pre>
 173.194.75.141 golang.org
+</pre>
 2. 本地启动godoc服务
 <pre>
 godoc -http=:6060
