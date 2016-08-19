@@ -12713,3 +12713,7 @@ func mapStructToMap(data map[interface{}]interface{}, value reflect.Value) {
 godoc -http=:6060
 </pre>
 通过浏览器访问http://localhost:6060即可。
+###Linux 根据Pid获取对应的文件
+<pre>
+lsof -p "PID" 
+</pre>
