@@ -12717,3 +12717,27 @@ godoc -http=:6060
 <pre>
 lsof -p "PID" 
 </pre>
+###[]rune类型拼接
+<pre>
+package main 
+
+import (
+	"fmt"
+)
+func merge(a, b []rune) []rune {
+	c := make([]rune, len(a)+len(b))
+	copy(c, a)
+	copy(c[len(a):], b)
+	return c
+}
+
+func main(){
+	a := []rune("adobe")
+	b := []rune("pdf")
+	fmt.Println("merge结果是：", merge(a, b))
+}
+
+output==>
+merge结果是： [97 100 111 98 101 112 100 102]
+string(merge)结果是： adobepdf
+</pre>
