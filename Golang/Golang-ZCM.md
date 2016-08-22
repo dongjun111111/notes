@@ -12741,3 +12741,8 @@ output==>
 merge结果是： [97 100 111 98 101 112 100 102]
 string(merge)结果是： adobepdf
 </pre>
+###nginx报错解决方法之一
+手动添加错误日志文件
+<pre>
+mkdir -p /disk2/logs/error.log
+</pre>
