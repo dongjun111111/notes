@@ -12770,3 +12770,12 @@ fmt.Println(len([]rune(s)))
 
 - rune 能操作任何字符
 - byte 不支持中文的操作
+###time.Now().After()用法
+<pre>
+begin, _ := time.ParseInLocation("2006-01-02 15:04:05", "2015-10-13 00:00:00", time.Local)
+if time.Now().After(begin) {
+	fmt.Println("yes after")
+} else {
+	fmt.Println("no")
+}
+</pre>
