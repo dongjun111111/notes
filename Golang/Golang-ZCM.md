@@ -12780,3 +12780,17 @@ if time.Now().After(begin) {
 }
 类似的还有是：time.Now().Before(end) 
 </pre>
+###Linux下Go与Java环境变量
+<pre>
+GOBIN=/usr/local/go/bin //安装目录,下面文件有 bee  go  godoc  gofmt
+JRE_HOME=/home/jdk1.7.0//jre
+PATH=/home/jdk1.7//bin:/home/jdk1.7.0//jre/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin:/root/bin:/usr/local/go/bin
+PWD=/home/go/bin
+GOARCH=amd64
+JAVA_HOME=/home/jdk1.7/
+GOROOT=/usr/local/go
+GOOS=linux
+CLASSPATH=.:/home/jdk1.7//lib:/home/jdk1.7.0//jre/lib:
+GOPATH=/home/go
+OLDPWD=/home/go
+</pre>
