@@ -12778,6 +12778,5 @@ if time.Now().After(begin) {
 } else {
 	fmt.Println("no")
 }
-
 类似的还有是：time.Now().Before(end) 
 </pre>

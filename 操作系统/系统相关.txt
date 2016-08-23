@@ -1820,4 +1820,7 @@ slabtop
 sysctl
 /proc
 
++++linux查看系统版本+++++
+cat /etc/issue
+
 
