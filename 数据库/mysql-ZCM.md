@@ -156,6 +156,18 @@ ssh 用户名@地址 //如：ssh root@192.168.1.1
 </pre>
 退出已经登录成功的客户端： exit
 
+###mysql limit使用
+limit是mysql的语法
+<pre>
+select * from table limit m,n 【m是起始位置，n是长度】
+</pre>
+其中m是指记录开始的index，从0开始，表示第一条记录;n是指从第m+1条开始，取n条。
+<pre>
+select * from tablename limit 2,4
+</pre>
+即取出第3条至第6条，4条记录。
+
+
 
 
 //这个xargs厉害了
