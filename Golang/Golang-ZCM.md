@@ -12746,3 +12746,8 @@ string(merge)结果是： adobepdf
 <pre>
 mkdir -p /disk2/logs/error.log
 </pre>
+###Golang float64数字很大会变成科学计数法的解决方法
+在网络传输过程中，过大的float64位的数似乎会变成科学计数法的显示形式，如3.0336e 06,这时候用下面的方法会解决这个问题。
+<pre>
+res := fmt.Sprintf("%.2f", (originValue))
+</pre>
