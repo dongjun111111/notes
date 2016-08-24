@@ -12794,3 +12794,14 @@ CLASSPATH=.:/home/jdk1.7//lib:/home/jdk1.7.0//jre/lib:
 GOPATH=/home/go
 OLDPWD=/home/go
 </pre>
+###Linux常用命令
+<pre>
+rpm -qa 						 //查看所有安装包名称
+netstat -lntp 				 //查看所有正在监听的端口 
+uptime  					 //查看系统运行的时间，在线用户数
+netstat -antp  				 //查看所有已经建立的连接
+w  							 //查看活跃用户，可以看出现在在线的所有用户ip地址以及最后使用的命令
+grep MemTotal /proc/meminfo  //查看内存总量
+grep MemFree /proc/meminfo   //查看空闲（可使用的）内存量 
+uname -a                     //查看内核、操作系统、CPU信息
+</pre>
