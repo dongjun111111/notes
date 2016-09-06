@@ -1,0 +1,25 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Hook - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPBB.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:no /pdb:"Release/Hook.pdb" /machine:I386 /def:".\Hook.def" /out:"Release/Hook.dll" /implib:"Release/Hook.lib" 
+".\Release\Hook.obj"
+]
+Creating command line "link.exe @C:\DOCUME~1\ADMINI~1\LOCALS~1\Temp\RSPBB.tmp"
+<h3>Output Window</h3>
+Linking...
+   Creating library Release/Hook.lib and object Release/Hook.exp
+
+
+
+<h3>Results</h3>
+Hook.dll - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

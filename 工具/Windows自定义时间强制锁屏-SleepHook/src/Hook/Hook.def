@@ -1,0 +1,4 @@
+LIBRARY Hook
+EXPORTS
+SetHook  @2
+UnHook  @3

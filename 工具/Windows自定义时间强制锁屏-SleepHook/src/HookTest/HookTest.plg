@@ -1,0 +1,20 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: HookTest - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "link.exe Release/Hook.lib /nologo /subsystem:windows /incremental:no /pdb:"Release/HookTest.pdb" /machine:I386 /out:"Release/HookTest.exe"  ".\Release\HookTest.obj" ".\Release\HookTestDlg.obj" ".\Release\StdAfx.obj" ".\Release\HookTest.res" "
+<h3>Output Window</h3>
+Linking...
+LINK : warning LNK4089: all references to "SHELL32.dll" discarded by /OPT:REF
+
+
+
+<h3>Results</h3>
+HookTest.exe - 0 error(s), 1 warning(s)
+</pre>
+</body>
+</html>
