@@ -12805,3 +12805,5 @@ grep MemTotal /proc/meminfo  //查看内存总量
 grep MemFree /proc/meminfo   //查看空闲（可使用的）内存量 
 uname -a                     //查看内核、操作系统、CPU信息
 </pre>
+###时间格式显示小坑
+在IOS前端无法识别"2016-09-09 12:12:12",改成"2016/09/09 12:12:12"即可。
