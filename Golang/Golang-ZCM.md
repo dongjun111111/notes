@@ -2454,7 +2454,8 @@ password: [rtt]
 - 是否数字
 - 是否中文
 - 英文
-- 电子邮件地址
+- 电子
+- 件地址
 - 手机号码
 - 下拉菜单
 - 单选按钮
@@ -9598,7 +9599,7 @@ This  is  worker: 10
 <pre>
 func SendEmaliToUsers(user, password, content, title string) {
 	host := "smtp.exmail.qq.com:25"
-	to := strings.Split(user, ";") //收件人用;号隔开
+	to := strings.Split(user, ";") //多个收件人用;号隔开
 	content_type := "Content-Type: text/plain" + "; charset=UTF-8"
 	str := content // 邮件内容
 	msg := []byte("To: cuinan\r\nFrom: " + user + ">\r\nSubject:" + title + "\r\n" + content_type + "\r\n" + str)
