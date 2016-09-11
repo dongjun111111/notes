@@ -12824,3 +12824,5 @@ if productS.After(productNow) {
 	fmt.Println("")
 }
 </pre>
+####查看linux系统TCP/UDP的端口号:
+netstat -tupln
