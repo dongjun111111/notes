@@ -12808,3 +12808,19 @@ uname -a                     //查看内核、操作系统、CPU信息
 </pre>
 ###时间格式显示小坑
 在IOS前端无法识别"2016-09-09 12:12:12",改成"2016/09/09 12:12:12"即可。
+###Golang时间比较大小 After Before
+<pre>
+var productStartTime time.Time
+if product.StartTime != "" {
+	durat := 20
+	productStartTime, _ = time.Parse("2006-01-02 15:04:05", product.StartTime)
+	product.StartTime = productStartTime.Add(time.Duration(durat) * time.Second).Format("2006-01-02 15:04:05")
+}
+productS, _ := time.Parse("2006-01-02 15:04:05", product.StartTime)
+productNow, _ := time.Parse("2006-01-02 15:04:05", time.Now().Format("2006-01-02 15:04:05"))
+if productS.After(productNow) {
+	fmt.Println("")
+} else {
+	fmt.Println("")
+}
+</pre>
