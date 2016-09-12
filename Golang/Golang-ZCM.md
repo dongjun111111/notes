@@ -12830,6 +12830,7 @@ netstat -tupln
 XShell上传与下载文件命令sz,rz
 <pre>
 sz  test.log   //下载当前目录下文件名为test.log到本地
+sz ./* //将当前文件夹下的所有文件发送到本地
 rz  上传文件到远程服务器
 rz -y 覆盖已存在文件
 </pre>
