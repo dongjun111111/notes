@@ -1,4 +1,4 @@
-wget http://mirrors.linuxeye.com/scripts/vpn_centos.sh     //或者：wget https://github.com/dongjun111111/notes/blob/master/%E5%B7%A5%E5%85%B7/Centos%E4%B8%8B%E6%90%AD%E5%BB%BAVPN(%E4%BB%A5%E5%8F%8A%E5%B8%B8%E7%94%A8Shell%E5%B7%A5%E5%85%B7)/importshells/vpn_centos.sh
+wget http://mirrors.linuxeye.com/scripts/vpn_centos.sh     //或者：wget https://github.com/dongjun111111/notes/blob/master/%E5%B7%A5%E5%85%B7/Centos%E4%B8%8B%E6%90%AD%E5%BB%BAVPN%E4%BB%A5%E5%8F%8A%E5%B8%B8%E7%94%A8Shell%E5%B7%A5%E5%85%B7/importshells/vpn_centos.sh
 
 chmod +x ./vpn_centos.sh
 
