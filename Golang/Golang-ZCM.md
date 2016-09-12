@@ -12826,3 +12826,15 @@ if productS.After(productNow) {
 </pre>
 ####查看linux系统TCP/UDP的端口号:
 netstat -tupln
+###Xshell下上传与下载的命令
+XShell上传与下载文件命令sz,rz
+<pre>
+sz  test.log   //下载当前目录下文件名为test.log到本地
+rz  上传文件到远程服务器
+rz -y 覆盖已存在文件
+</pre>
+Linux复制cp
+<pre>
+cp 文件名 目标地址
+cp test.log /tmp  //将当前目录下的test,log文件复制到 /tmp 目录下
+</pre>
