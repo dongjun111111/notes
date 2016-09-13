@@ -12853,3 +12853,8 @@ go get github.com/beego/bee
 go version 
 bee version 
 </pre>
+###适用于linux/window下的端口查看命令
+<pre>
+netstat -ano   //列出所有端口情况
+netstat -ano|grep 8080  //看8080端口
+</pre>
