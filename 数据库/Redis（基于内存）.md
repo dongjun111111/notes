@@ -156,3 +156,19 @@ redis如何清理数据库中过期的键？它分为两种：
 - 定时删除：redis中有个时间事件，它会清理数据库中已经过期的键（redis会限定该操作占用的时间，避免阻塞客户端的请求）
 
 一般情况下我们要手动操作（调用）会生成缓存的方法来实现过期的key会被及时清除。这也是使用Redis中的惰性删除的属性。
+
+##Redis 查看所有key与清理缓存
+<pre>
+->redis-cli
+->keys *
+//列出所有key
+->flushdb        //清理keys
+OK
+->set authen_off 1    //关闭认证
+OK
+->quit
+</pre>
+在windows中通过CMD连接另一台主机上上的redis数据库：
+<pre>
+redis-cli.exe -h 127.0.0.1 -p 6379  
+</pre>

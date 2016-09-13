@@ -12839,3 +12839,17 @@ Linux复制cp
 cp 文件名 目标地址
 cp test.log /tmp  //将当前目录下的test,log文件复制到 /tmp 目录下
 </pre>
+###Linux下更新golang bee beego环境
+1. 备份以前的go环境
+<pre>
+cd /usr/local
+bee version 
+go get -u github.com/astaxie/beego
+go get -u github.com/beego/bee
+bee version 
+go get -u github.com/astaxie/beego
+go get -u github.com/beego/bee
+go get github.com/beego/bee
+go version 
+bee version 
+</pre>
