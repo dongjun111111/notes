@@ -12855,6 +12855,20 @@ bee version
 <pre>
 netstat -ano   //列出所有端口情况
 netstat -ano|grep 8080  //看8080端口
+
+系统管理命令:
+
+stat         显示指定文件的详细信息，比ls更详细
+who          显示在线登陆用户
+whoami       显示当前操作用户
+hostname     显示主机名
+uname        显示系统简要信息
+     -a          显示系统完整信息
+top          动态显示当前耗费资源最多进程信息
+ps           显示瞬间进程状态 ps aux
+     -ef         显示系统常驻进程
+du           查看目录大小 du -h /home带有单位显示目录信息
+df           查看磁盘大小 df -h 带有单位显示磁盘信息
 </pre>
 ###Bytes包
 写
