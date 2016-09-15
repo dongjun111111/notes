@@ -12856,3 +12856,53 @@ bee version
 netstat -ano   //列出所有端口情况
 netstat -ano|grep 8080  //看8080端口
 </pre>
+###Bytes包
+写
+<pre>
+func main() {
+    // 操作目标
+    data := make([]byte, 6)
+    buff := bytes.NewWriter(data)
+    //往目标中写入1,2,3,目标变为[1,2,3,0,0,0]
+    buff.Write([]byte{1, 2, 3})
+    fmt.Println(buff.Bytes())//输出buff中写入的内容,应该为[1,2,3]
+    //往目标中继续写入数据,变成[1,2,3,4,5,6]
+    buff.Write([]byte{4, 5, 6})
+    n, err := buff.Write([]byte{7})
+    fmt.Println(n, err)//由于目标已经满了,继续写就会造成io.EOF错误啦,n为0
+    //写游标重置
+    buff.Reset()
+    //又能愉快的往目标区写内容啦
+    buff.Write([]byte{7, 8, 9})
+    fmt.Println(buff.Bytes())//注意,重置的除了游标,buff内原来的内容也清空
+    fmt.Println(data)//但是操作区并不会应为Reset而清空,应该输出[7,8,9,4,5,6]
+}
+</pre>
+读
+<pre>
+func main() {
+    // 操作目标,这个一般可能会超级大
+    data := []byte{1, 2, 3, 4, 5, 6, 7, 8}
+    buff := bytes.NewReader(data)
+    //这个一般是用来做复用的缓冲区,一般小于data的长度,为了试验效果,假设为4
+    x := [4]byte{}
+    for {
+        n, err := buff.Read(x[:])
+        if err != nil&&err == io.EOF {
+            break
+        }
+        fmt.Println("temp", x[:n])
+    }
+    fmt.Println("remian:", buff.Bytes())//都被读光了,现在应该是空的了
+    buff.SeekToBegin()//重新载入一下
+    fmt.Println("remian:", buff.Bytes())//可以看到又满了
+    fmt.Println(buff.Seek(3,1))
+    fmt.Println("remian:", buff.Bytes())//从当前位置,游标跳3,剩余[4,5,6,7,8]
+    fmt.Println(buff.Seek(2,0))
+    fmt.Println("remian:", buff.Bytes())//从起始位置,游标跳2个,剩余[3,4,5,6,7,8],可以看到,隐含一个重置过程
+    fmt.Println(buff.Seek(2,1))
+    fmt.Println("remian:", buff.Bytes())//从当前位置,游标跳2,剩余[5,6,7,8]
+    fmt.Println(buff.Seek(-3,2))
+    fmt.Println("remian:", buff.Bytes())//从末尾开始往前数,游标跳3,剩余[6,7,8]
+}
+</pre>
