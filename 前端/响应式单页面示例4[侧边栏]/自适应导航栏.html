@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)http://jpanelmenu.com/examples/jrespond/index.html# -->
+<html class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths wf-museosans-n9-active wf-museosans-n3-active wf-museosans-n7-active wf-inconsolata-n5-inactive wf-active"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<title>jPanelMenu | Using jPanelMenu with jRespond</title>
+	<meta name="viewport" content="initial-scale=1">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-touch-fullscreen" content="yes">
+
+	<link rel="apple-touch-icon" href="http://jpanelmenu.com/apple-touch-icon.png">
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://jpanelmenu.com/apple-touch-icon-144x144-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://jpanelmenu.com/apple-touch-icon-114x114-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://jpanelmenu.com/apple-touch-icon-72x72-precomposed.png">
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="http://jpanelmenu.com/apple-touch-icon-57x57-precomposed.png">
+
+	<link rel="stylesheet" href="http://jpanelmenu.com/css/style.css"><style type="text/css">.tk-inconsolata{font-family:"inconsolata",sans-serif;}.tk-museo-sans{font-family:"museo-sans",sans-serif;}</style><style type="text/css">@font-face{font-family:inconsolata;src:url(https://fonts.typekit.net/af/6eb605/000000000000000000012ace/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}@font-face{font-family:museo-sans;src:url(https://fonts.typekit.net/af/736167/00000000000000000000e7fe/27/l?subset_id=2&fvd=n3) format("woff2");font-weight:300;font-style:normal;}@font-face{font-family:museo-sans;src:url(https://fonts.typekit.net/af/585dc6/00000000000000000000e805/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:700;font-style:normal;}@font-face{font-family:museo-sans;src:url(https://fonts.typekit.net/af/95a565/00000000000000000000e807/27/l?subset_id=2&fvd=n9) format("woff2");font-weight:900;font-style:normal;}</style>
+</head>
+<body style="zoom: 1;" data-menu-position="closed">
+	<header class="main">
+		<h1 class="logo"><a href="http://jpanelmenu.com/index.html" class="ss-list">jPanelMenu</a></h1>
+		<a href="http://jpanelmenu.com/examples/jrespond/index.html#menu" class="menu-trigger ss-icon"></a>
+		<nav>
+			<ul>
+				<li><a href="http://jpanelmenu.com/index.html">Documentation</a></li>
+				<li><a href="./自适应导航栏_files/自适应导航栏.html">Overview</a></li>
+				<li><a href="http://jpanelmenu.com/examples/jrespond/index.html#setup">Setting It Up</a></li>
+				<li><a href="http://jpanelmenu.com/examples/jrespond/index.html#functionality">Adding Functionality</a></li>
+				<li><a href="http://jpanelmenu.com/examples/jrespond/index.html#about">About</a></li>
+			</ul>
+		</nav>
+	</header><div class="content">
+		<section class="intro">
+			<h2 id="overview"><a href="./自适应导航栏_files/自适应导航栏.html">Using jRespond with jPanelMenu</a></h2>
+
+			<p>jRespond is “a simple way to globally manage JavaScript on responsive websites.” It’s really straightforward to use, and it makes a world of difference in your JavaScript on responsive sites.</p>
+
+			<p>jPanelMenu and jRespond are the perfect couple. Many people want the functionality that jPanelMenu provides, but only at smaller sizes (this page, for example). jRespond is there to help accomplish that task, and it couldn’t be easier to do.</p>
+		</section>
+
+		<section>
+			<h2 id="setup"><a href="http://jpanelmenu.com/examples/jrespond/index.html#setup">Setting It Up</a></h2>
+
+			<p>First, get <a href="http://jpanelmenu.com/" title="jPanelMenu | A jQuery Plugin">jPanelMenu</a> and <a href="https://github.com/ten1seven/jRespond" title="Github | jRespond">jRespond</a>!</p>
+
+			<p>For <a href="https://github.com/ten1seven/jRespond#jrespond" title="jRespond Documentation">detailed documentation</a> on jRespond, please visit the <a href="https://github.com/ten1seven/jRespond#jrespond" title="jRespond Documentation">jRespond Github page</a>. I won’t go very in-depth on the ins and outs of jRespond here, but I will at least cover enough to get started using it in conjunction with jPanelMenu.</p>
+
+			<p class="caption"><strong>Note:</strong> The following example is pulled directly from this page. Resize your browser window and you’ll see the example outlined below in action.</p>
+
+			<p>Start off by setting up jPanelMenu, referring to the <a href="http://jpanelmenu.com/index.html" title="jPanelMenu | Documentation">documentation</a> for specifics on <a href="http://jpanelmenu.com/index.html#options" title="jPanelMenu | Options">options</a> and <a href="http://jpanelmenu.com/index.html#api" title="jPanelMenu | API">API</a> functions.</p>
+
+			<pre class="javascript"><span class="keyword">var</span> jPM = $.<span class="jQuery-constructor">jPanelMenu</span>({
+    menu: <span class="string">'#menu-selector'</span>
+});</pre>
+			
+			<p>Once jPanelMenu is ready to go, set up jRespond. Refer to the <a href="https://github.com/ten1seven/jRespond#jrespond" title="jRespond Documentation">jRespond documentation</a> for detailed instructions on this step. All it takes is an <code>array</code> of <code>objects</code> — each <code>object</code> specifies breakpoint names and sizes (enter and exit widths, in pixels).</p>
+
+			<pre class="javascript"><span class="keyword">var</span> jRes = jRespond([
+    {
+        label: <span class="string">'small'</span>,
+        enter: <span class="number">0</span>,
+        exit: <span class="number">800</span>
+    },{
+        label: <span class="string">'large'</span>,
+        enter: <span class="number">800</span>,
+        exit: <span class="number">10000</span>
+    }
+]);</pre>
+			
+			<p class="caption"><strong>Note:</strong> This is a very simple setup with only two breakpoints, small and large.</p>
+
+		</section>
+
+		<section>
+			<h2 id="functionality"><a href="http://jpanelmenu.com/examples/jrespond/index.html#functionality">Adding Functionality</a></h2>
+
+			<p>After your breakpoints have been registered with jRespond, you need to add some functionality hooks to those breakpoints.</p>
+
+			<p>This is done by calling <code>addFunc()</code> (on the saved jRespond instance), and passing in an <code>object</code> containing the following: the breakpoint (by name) that these actions apply to, a <code>function</code> to call upon entering that breakpoint, and a <code>function</code> to call when exiting that breakpoint.</p>
+
+			<p>In this example (this page), we want to turn jPanelMenu on, by calling <code>jPM.on()</code>, when entering the <code>‘small’</code> breakpoint (&lt; 800 pixels), and turn it off, by calling <code>jPM.off()</code>, when exiting the <code>‘small’</code> breakpoint (&gt; 800 pixels).</p>
+
+			<pre class="javascript">jRes.addFunc({
+    breakpoint: <span class="string">'small'</span>,
+    enter: <span class="keyword">function</span>() {
+        jPM.on();
+    },
+    exit: <span class="keyword">function</span>() {
+        jPM.off();
+    }
+});</pre>
+			
+			<p>That’s it! Enjoy your awesomely responsive navigation!</p>
+		</section>
+
+		<section>
+			<h2 id="about"><a href="http://jpanelmenu.com/examples/jrespond/index.html#about">Who Made This Wonderful Little Plugin?</a></h2>
+
+			<p>jPanelMenu was created, and is maintained, by <a href="http://acolangelo.com/" title="Anthony Colangelo | Web Design &amp; Development">Anthony Colangelo</a>.</p>
+
+			<p>You can find him (<a href="https://twitter.com/acolangelo" title="Twitter | Anthony Colangelo (@acolangelo)">@acolangelo</a>) on <a href="https://twitter.com/acolangelo" title="Twitter | Anthony Colangelo (@acolangelo)">Twitter</a> and <a href="https://github.com/acolangelo" title="Github | Anthony Colangelo (@acolangelo)">Github</a>.</p>
+		</section>
+	</div><footer class="main">
+		<small>© 2012 <a href="http://acolangelo.com/" title="Anthony Colangelo | Web Design &amp; Development">Anthony Colangelo</a></small>
+	</footer>
+
+	
+
+	
+	
+	<script src="./自适应导航栏_files/koc4rlq.js"></script>
+	<script>try{Typekit.load();}catch(e){}</script>
+	<script src="./自适应导航栏_files/example-jRespond.min.js"></script>
+
+
+<style id="jPanelMenu-style-master">body{width:100%}.jPanelMenu,body{overflow-x:hidden}#jPanelMenu-menu{display:block;position:fixed;top:0;left:0;height:100%;z-index:-1;overflow-x:hidden;overflow-y:scroll;-webkit-overflow-scrolling:touch}.jPanelMenu-panel{position:static;left:0;top:0;z-index:2;width:100%;min-height:100%;background-color:rgb(244, 240, 235);background-image:none;background-position:0% 0%;background-repeat:repeat;background-attachment:scroll;background-size:auto;background-clip:border-box;}</style></body></html>

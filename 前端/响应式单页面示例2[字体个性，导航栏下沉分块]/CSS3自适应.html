@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)http://www.onextrapixel.com/examples/css3-responsive-menu/# -->
+<html lang="en"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>CSS3 Responsive Menu - Onextrapixel</title>
+        <link rel="shortcut icon" href="" type="image/x-icon">
+        <link href="./CSS3自适应_files/reset.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="./CSS3自适应_files/oxp.css" type="text/css" media="screen">
+        <link href="./CSS3自适应_files/example.css" rel="stylesheet" type="text/css">
+        <meta name="viewport" content="initial-scale=1.0, width=device-width">
+        <!--[if lte IE 8]>
+        <script src="style/script/html5.js"></script>
+        <![endif]-->
+        <script src="./CSS3自适应_files/jquery.js"></script>
+        <script>
+            jQuery(function($) {
+                var open = false;
+
+                function resizeMenu() {
+                    if ($(this).width() < 768) {
+                        if (!open) {
+                            $("#menu-drink").hide();
+                        }
+                        $("#menu-button").show();
+                        $("#logo").attr("src", "image/logo.png");
+                    }
+                    else if ($(this).width() >= 768) {
+                        if (!open) {
+                            $("#menu-drink").show();
+                        }
+                        $("#menu-button").hide();
+                        $("#logo").attr("src", "image/logo-large.png");
+                    }
+                }
+                function setupMenuButton() {
+                    $("#menu-button").click(function(e) {
+                        e.preventDefault();
+
+                        if (open) {
+                            $("#menu-drink").fadeOut();
+                            $("#menu-button").toggleClass("selected");
+                        }
+                        else {
+                            $("#menu-drink").fadeIn();
+                            $("#menu-button").toggleClass("selected");
+                        }
+                        open = !open;
+                    });
+                }
+                $(window).resize(resizeMenu);
+                resizeMenu();
+                setupMenuButton();
+            });
+        </script>
+    </head>
+    <body>
+    	<div id="wrap">
+        <div id="banner-wrapper">
+            <header id="banner" role="banner">    	
+                <div id="banner-inner-wrapper">
+                    <div id="banner-inner">
+                        <hgroup id="title">
+                            <!-- <img id="logo" src="./CSS3自适应_files/logo-large.png" title="Responsive Bar"> -->
+                            DJason
+                        </hgroup>
+                        <nav id="menu-nav">
+                            <div id="menu-button" class="" style="display: none;">
+                                <div id="menu-button-inner">More</div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+                <nav id="menu-drink" style="display: block;">
+                    <ul>
+                        <li>
+                            <a class="beer" href="#">Beer</a>
+                        </li>
+                        <li>
+                            <a class="wine" href="#">Wines</a>
+                        </li>
+                        <li>
+                            <a class="soft-drink" href="#">Soft Drinks</a>
+                        </li>
+                        <li>
+                            <a class="coffee-tea" href="#">Coffee &amp; Tea</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+        </div>
+        <div id="content" role="main">
+            <p>
+                Drie komt was dus toch ipoh oven men. Ook kuil mee die sago zit vrij. Wegwerpen 
+                bepaalden vierkante vertoonen oogenblik dit het dat wij liverpool. Elk kan far 
+                uit liet maal gaan daar kant. De gezuiverd kettingen vertraagd in ontrukten. 
+                Maar liet voet was nog duur werd oude.
+            </p>
+            <p>
+                Kinderen middelen dezelfde zin dal. Meehelpen nu onderling ze krachtige misschien. 
+                Laag vast tot land maar het hand. Als aldus telok tot beste het vraag lot. Der 
+                perzische besluiten sap ingenieur rug met. Op tabak te al er prijs komst.
+            </p>
+            <p>
+                Jacht bijna ander goa prijs zoo zulke wezen zij. Grooter percent nu ze groeien en 
+                in geplant. Nam upasboom vlijtige der ter dezelfde zandlaag. Voorloopig ontsnappen 
+                in ze voorschijn middellijn mijnschool ontwouding. Far afstanden nam visschers dit 
+                belasting overschot engelsche per. Al kisten en al sterke zonder toppen in. Wie sap 
+                bergachtig voorloopig opgegraven toe. Kreeg geluk te ik reden eigen. Wij kapitalen 
+                behoorden ontginnen japansche hen sap.
+            </p>
+            <p>
+                Verwijderd zuidoosten denzelfden dik locomobiel middellijn een hun wie. Goud rug 
+                sago door hen deze. Of liet eens de kilo dier zijn goud. Ad na te wonderbare 
+                tinhoudend europeesch weelderige ze plotseling. Gas stoompomp verzameld mag aanvoeren. 
+                Stroeve wat planten leiding was gekomen. Behoeven voorzorg op vluchten schaffen er 
+                gestookt.
+            </p>
+            <p>
+                Om is bersawa luister gevolgd in gezocht energie vreezen na. Zakken houten en bouwde 
+                op af. Waren zes loopt het thans lange. Na ze te ze nadering dichtbij deeltjes. 
+                Gewonnen fransche na behoefte en. Roestige nu wildrijk prestige op britsche.
+            </p>
+        </div>
+        <footer id="contentinfo" role="contentinfo">
+            <small>Responsive Bar</small>
+        </footer>
+       	</div>
+    	<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		</script>
+		<script type="text/javascript">
+		try {
+		var pageTracker = _gat._getTracker("UA-8453623-1");
+		pageTracker._trackPageview();
+		} catch(err) {}
+	</script>    
+
+</body></html>

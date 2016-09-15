@@ -1,0 +1,5 @@
+* {border:none; margin:0; padding:0;}
+body {background:#fff url(demobg.jpg) repeat-x;}
+#head {height:190px;}
+#head h1 {margin:17px 0 22px 0; height:51px;}
+#head .demoads {padding-top:20px; width:728px; height:90px;}
