@@ -12920,3 +12920,102 @@ func main() {
     fmt.Println("remian:", buff.Bytes())//从末尾开始往前数,游标跳3,剩余[6,7,8]
 }
 </pre>
+###Golang 端口监听/在线聊天
+服务端
+<pre>
+package main
+
+import (
+	"fmt"
+	"log"
+	"net"
+)
+
+func startServer() {
+	listener, err := net.Listen("tcp", "localhost:7777")
+	checkError(err)
+	fmt.Println("建立成功")
+	for {
+		conn, err := listener.Accept()
+		checkError(err)
+		go doServerStuff(conn)
+	}
+}
+
+func doServerStuff(conn net.Conn) {
+	nameInfo := make([]byte, 512)
+	_, err := conn.Read(nameInfo)
+	checkError(err)
+	for {
+		buf := make([]byte, 512)
+		_, err := conn.Read(buf)
+		flag := checkError(err)
+		if flag == 0 {
+			break
+		}
+		fmt.Println(string(buf)) //打印出来
+	}
+}
+
+//检查错误
+func checkError(err error) int {
+	if err != nil {
+		if err.Error() == "EOF" {
+			fmt.Println("用户退出了")
+			return 0
+		}
+		log.Fatal("an error!", err.Error())
+		return -1
+	}
+	return 1
+}
+func main() {
+	//开启服务
+	startServer()
+}
+</pre>
+客户端
+<pre>
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"net"
+	"os"
+	"strings"
+)
+
+func connectServer() {
+	conn, err := net.Dial("tcp", "localhost:7777")
+	checkError(err)
+	fmt.Println("连接成功！\n")
+	inputReader := bufio.NewReader(os.Stdin)
+	fmt.Println("你是谁？")
+	name, _ := inputReader.ReadString('\n')
+	trimName := strings.Trim(name, "\r\n")
+	conn.Write([]byte(trimName + "接入了\n"))
+	for {
+		fmt.Println("我们来聊天吧！按quit退出")
+		input, _ := inputReader.ReadString('\n')
+		trimInput := strings.Trim(input, "\r\n")
+		if trimInput == "quit" {
+			fmt.Println("再见")
+			conn.Write([]byte(trimName + "退出了"))
+			return
+		}
+		_, err = conn.Write([]byte(trimName + " says " + trimInput))
+	}
+}
+
+func checkError(err error) {
+	if err != nil {
+		log.Fatal("an error!", err.Error())
+	}
+}
+
+func main() {
+	connectServer()
+}
+</pre>
