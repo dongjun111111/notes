@@ -471,3 +471,44 @@ $(function(){
 
 ++相对路径+++
 ../ 	上一层目录，可重复使用，如../../，表示上上层目录
+
+
+++++html播放视频video++++++
+<div id="player">
+	  <!--[if IE]><object id="qt_event_source" classid="clsid:CB927D12-4FF7-4a9e-A169-56E4B8A75598" style="display:none;"></object><![endif]-->
+
+	  <object classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" width="640" height="480"codebase="http://www.apple.com/qtactivex/qtplugin.cab#version=7,6,9,0" standby="控件加载中..." name="QT_OBJ" id="QT_OBJ"style="behavior:url(#qt_event_source);overflow:hidden;">
+
+	    <param name="src" value="ress/preview.mov"/>
+
+	    <!-- <param name="qtsrc" value="rtsp://"/> -->
+
+	    <param name="enablejavascript" value="true"/>
+
+	    <param name="postdomevents" value="true"/>
+
+	    <param name="controller" value="false"/>
+
+	    <param name="scale" value="tofit"/>
+
+	    <param name="kioskmode" value="true"/>
+
+	    <param name="bgcolor" value="#000000"/>
+
+	    <param name="qtsrcdontusebrowser" value="true"/>
+
+	    <param name="cache" value="false"/>
+
+	    <!-- qtsrc=""  -->
+
+	    <embed src="ress/preview.mov" width="640" height="480" pluginspage="http://www.apple.com/quicktime/download/"name="QT_EMB" id="QT_EMB" enablejavascript="true" postdomevents="true" controller="false" scale="tofit" kioskmode="true"bgcolor="#000000" qtsrcdontusebrowser="true" cache="false" style="overflow:hidden;"></embed>
+
+	  </object>
+
+</div>
+
+代码说明： 
+1. object 用于IE浏览器，而 embed 用于非IE浏览器； 
+2. qt_event_source 对象是为了给IE浏览器注册事件，通过style（ style="behavior:url(#qt_event_source);overflow:hidden;"）绑定行为； 
+3. src="ress/preview.mov" 用于在页面加载后初始化控件，因为在上述代码中没有初始化 qtsrc 直播路径（便于动态切换播放路径）； 
+4. kioskmode="true" 隐藏播放器右键菜单。
