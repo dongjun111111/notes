@@ -13628,3 +13628,45 @@ func (tcpConn *TCPConn) msgDispatcher(msgID uint16, pdata []byte) {
 	msghandler(tcpConn, pdata)
 }
 </pre>
+##Golang锁/线程间通讯实践指南
+线程间通讯：互斥
+
+锁的问题在哪？
+
+- 最大问题：不易控制
+
+锁
+
+- lock 但忘记unlock 的结果是灾难性的，因为服务器相当于挂了（所有和该锁有关的代码都不能被
+执行）！
+
+次要问题：性能杀手
+
+- 锁会导致代码串行化执行
+- 但别误会：锁并不特别慢，比线程间通讯其他原语（同步、收发消息）要快很多！比锁快的东西：无锁、原子操作（比锁并不快太多）网上有人用golang 的channel 来实现锁，这很不正确
+
+
+善用defer 和滥用defer
+
+- 善用defer可以大大降低用锁的心智负担
+- 滥用defer可能会导致锁粒度过大
+
+控制锁粒度
+
+- 不要在锁里面执行费时操作，会阻塞服务器，导致其他请求不能及时被响应
+
+读写锁：sync.RWMutex
+
+- 如果一个共享资源(不一定是一个变量，可能是一组变量)，绝大部分情况下是读操作，偶然有写操作
+，则非常适合用读写锁。
+
+锁数组：[]sync.Mutex
+
+- 如果一个共享资源，有很强的分区特征，则非常适合用锁数组
+- 比如一个网盘服务，网盘不同用户之间的资源彼此完全不相干
+<pre>
+var mutexs [N]sync.Mutex
+mutex := &mutexs[uid % N] // 根据用户id选择锁
+mutex.Lock()
+defer mutex.Unlock()
+</pre>
