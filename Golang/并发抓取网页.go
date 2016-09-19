@@ -5,13 +5,14 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"runtime"
 	"time"
 )
 
 var websites []string
 
 func main() {
-	//runtime.GOMAXPROCS(4)
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	// 各大电商网站首页数据量大小检测
 	websites = []string{
 		"http://www.51buy.com/", "http://www.360buy.com/", "http://www.tmall.com/", "http://www.taobao.com/",
