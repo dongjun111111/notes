@@ -550,3 +550,333 @@ preClickTime = currentClickTime;
 <a href="javascript:countClickedTimes();">统计点击次数</a>  
 </body>  
 </html>
+
+
+++++简单JS扩展类+++++++	
+  /** 
+         * 扩展基础类 
+         * 得到字符串的长度，包括中文和英文 
+         **/  
+        String.prototype.charlen = function() {  
+            var arr = this.match(/[^\x00-\xff]/ig);  
+            return this.length + (arr == null ? 0 : arr.length);  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 格式化字符串${0} -> 参考printf %s 
+         **/  
+        String.prototype.format = function() {  
+            var args = arguments;  
+            return this.replace(/\$\{(\d+)\}/g,                
+                function(m, i){  
+                    return args[i];  
+                });  
+        }   
+  
+        /** 
+         * 扩展基础类 
+         * 字符串首尾去空格 
+         **/  
+        String.prototype.trim = function() {  
+            return this.replace(/(^\s*)|(\s*$)/g, "");  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 字符串包含字符串判断 
+         **/  
+        String.prototype.contains = function(sub) {  
+            return this.indexOf(sub) != -1;  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 字符串比较大小 
+         **/  
+        String.prototype.compare = function(b) {  
+            if(!b)  
+                return -1;  
+  
+            if(this.length != b.length)  
+                return this.length - b.length;  
+  
+            var i = 0;  
+            for (; i < this.length; i++){  
+                var val = this.charCodeAt(i) - b.charCodeAt(i);  
+                if(val != 0)  
+                    return val;  
+            }  
+  
+            return 0;  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 替换字符 
+         **/  
+        String.prototype.replaceLen = function(start, len, replaced) {  
+            if(!len)  
+                return this;  
+  
+            if(start >= this.length)  
+                return this;  
+  
+            var returnSeg = '';  
+            var returnSeg2 = '';  
+            var i = 0;  
+            for (; i < this.length; i++){  
+                var c = this.charAt(i);  
+                if(i < start)  
+                    returnSeg += c;  
+  
+                if(i >= start + len)  
+                    returnSeg2 += c;  
+            }  
+  
+            return returnSeg + replaced + returnSeg2;  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 替换字符，这个在替换填入比较有用，比如***天***小时 替换为 <input />天<input />小时 
+         **/  
+        String.prototype.replaceChar = function(target, replaced, start) {  
+            if(!target)  
+                return this;  
+  
+            if(!start)  
+                start = 0;  
+  
+            var returnVal = this.substring(0, start);  
+            var index = 0;  
+            for (var i = start; i < this.length; i++) {  
+                var c = this.charAt(i);  
+                target = typeof target == 'function' ? target.call(this, index) : target;  
+                if (c == target) {  
+                    returnVal += typeof replaced == 'function' ? replaced.call(this, index) : replaced;  
+                    while (i < this.length - 1 && this.charAt(i + 1) == c) {  
+                        i++;  
+                    }  
+                    index++;  
+                }else{  
+                    returnVal += c;  
+                }  
+            }  
+  
+            return returnVal;  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 克隆复制（简单copy而已） 
+         **/  
+        Array.prototype.clone = function(){  
+            var arr = [];  
+            var i = 0;  
+            for(; i < this.length; i++){  
+                switch(typeof this[i]){  
+                    case 'object':  
+                        var obj = {};  
+                        for(key in this[i])  
+                            obj[key] = this[i][key];  
+                        arr.push(obj);  
+                        break;  
+                    default:  
+                        arr.push(this[i]);  
+                        break;  
+                }  
+            }  
+            return arr;  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 清空 
+         **/  
+        Array.prototype.clear = function() {  
+            this.splice(0, this.length);  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 数组包含元素 
+         **/  
+        Array.prototype.contains = function(el) {  
+            var i;  
+            for(i = 0; i < this.length; i++) {    
+                if(this[i] == el)    
+                    return true;    
+            }    
+            return false;    
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 数组添加数组 
+         **/  
+        Array.prototype.merge = function(arr) {  
+            if(arr){  
+                var i;  
+                for(i = 0; i < arr.length; i++) {    
+                    this.push(arr[i]);  
+                }    
+            }  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 根据值和属性获取到数组的对象下标 
+         **/  
+        Array.prototype.indexOf = function(val, field){  
+            var i = 0;  
+            for(; i < this.length; i++){  
+                if(this[i] && (field ? this[i][field] == val : this[i] == val)){  
+                    return i;  
+                }  
+            }  
+            return -1;  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 最后一个下标 
+         **/  
+        Array.prototype.lastIndexOf = function(val, field){  
+            var i = 0;  
+            var max = -1;  
+            for(; i < this.length; i++){  
+                if(this[i] && (field ? this[i][field] == val : this[i] == val)){  
+                    max = i;  
+                }  
+            }  
+            return max;  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 数组唯一 
+         **/  
+        Array.prototype.unique = function(field){  
+            var arr = [];  
+  
+            var i = 0;  
+            for(; i < this.length; i++){  
+                var val = field ? this[i][field] : this[i];  
+                var index = this.lastIndexOf(val, field);  
+                if(index == i)  
+                    arr.push(this[i]);  
+            }  
+  
+            return arr;  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 数组最大值 
+         **/  
+        Array.prototype.max = function(field){  
+            var result = -1;  
+  
+            var i = 0;  
+            for(; i < this.length; i++){  
+                var val = field ? this[i][field] : this[i];  
+                if(val > result)  
+                    result = val;  
+            }  
+  
+            return result;  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 数组最小值 
+         **/  
+        Array.prototype.min = function(field){  
+            var result = -1;  
+  
+            var i = 0;  
+            for(; i < this.length; i++){  
+                var val = field ? this[i][field] : this[i];  
+                if(val < result)  
+                    result = val;  
+            }  
+  
+            return result;  
+        }  
+  
+        /** 
+         * 扩展基础类 
+         * 日期格式化 
+         **/  
+        Date.prototype.format = function(pat){  
+            var year = this.getFullYear();  
+            var month = this.getMonth() + 1;  
+            var day = this.getDate();  
+            var hour = this.getHours();  
+            var minute = this.getMinutes();  
+            var second = this.getSeconds();  
+            // 两位补齐  
+            month = month > 9 ? month : "0" + month;  
+            day = day > 9 ? day : "0" + day;  
+            hour = hour > 9 ? hour : "0" + hour;  
+            minute = minute > 9 ? minute : "0" + minute;  
+            second = second > 9 ? second : "0" + second;  
+            if(!pat){  
+                pat = "yyyy-MM-dd";  
+            }  
+            pat = pat.replace(/yyyy/g, year);  
+            pat = pat.replace(/MM/g, month);  
+            pat = pat.replace(/dd/g, day);  
+            pat = pat.replace(/HH/gi, hour);  
+            pat = pat.replace(/mm/g, minute);  
+            pat = pat.replace(/ss/g, second);  
+            return pat;  
+        }  
+  
+        // 减去时差的毫秒数（取决于使用的浏览器的locale设置）  
+        Date.prototype.getTime2 = function(){  
+//          return this.getTime();  
+            return this.getTime() - this.getTimezoneOffset() / 60 * 3600 * 1000;  
+        }  
+  
+        // 日期相差天数  
+        Date.prototype.diff = function(date){  
+            return Math.ceil((this - date) / (1000 * 60 * 60 * 24));  
+        }  
+  
+        // 日期加减计算  
+        Date.prototype.add = function(days){  
+            return new Date(this.getTime() + days * (1000 * 60 * 60 * 24));  
+        }  
+  
+        // 日期加减计算  
+        Date.prototype.addMonth = function(months){  
+            var day = this.getDate();  
+            var month = this.getMonth() + 1;  
+            var year = this.getFullYear();  
+            month += months;    
+            if(month > 12){  
+                year += Math.floor(month / 12);  
+                month = month % 12;  
+            }  
+            return Date.parse(month + '/' + day + '/' + year);  
+        }  
+  
+        // 解析字符串，以默认 pat = "yyyy-MM-dd"的格式，而不是MM/dd/yyyy  
+        Date.parse2 = function(str, pat){  
+            if(str == null || str == '')  
+                return new Date();  
+            var rstr = str.replace(/(\d{4})([-\./])(\d{1,2})\2(\d{1,2})/, "$3/$4/$1");  
+            return new Date(Date.parse(rstr));  
+        }  
+  
+        // 解析字符串，json date obj  
+        // 减去时差的毫秒数（取决于使用的浏览器的locale设置）  
+        Date.parse3 = function(obj){  
+//          return new Date(obj.time);  
+            return new Date(obj.time - new Date().getTimezoneOffset() / 60 * 3600 * 1000);  
+//          var str = obj.year + '-' + (obj.month + 1) + '-' + obj.date + ' ' +   
+//              obj.hours + ':' + obj.minutes + ':' + obj.seconds;  
+//          return Date.parse2(str);  
+        }  
