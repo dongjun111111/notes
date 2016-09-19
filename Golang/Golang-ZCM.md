@@ -13957,3 +13957,116 @@ func counter(w http.ResponseWriter, r *http.Request) {
 	mu.Unlock()
 }
 </pre>
+###Linux du命令
+<pre>
+du -h //方便阅读的格式显示文件/文件夹使用空间
+du -h --max-depth=1 //输出当前目录下各个子目录所使用的空间
+</pre>
+###Golang sync.Once只会执行一次
+<pre>
+package main
+
+//整个程序，只会执行onces()方法一次,onced()方法是不会被执行的
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+var once sync.Once
+
+func main() {
+	for i, v := range make([]string, 10) {
+		once.Do(onces)
+		fmt.Println("count:", v, "---", i)
+	}
+	for i := 0; i < 10; i++ {
+		go func() {
+			once.Do(onced)
+			fmt.Println("213")
+		}()
+	}
+	time.Sleep(4000)
+}
+func onces() {
+	fmt.Println("onces")
+}
+
+func onced() {
+	fmt.Println("onced")
+}
+</pre>
+sync.WaitGroup 与 sync.Once
+<pre>
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"sync"
+)
+
+func GetDemo(addr string) {
+	res, err := http.Get(addr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	robots, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s", robots)
+}
+
+// This example fetches several URLs concurrently,
+// using a WaitGroup to block until all the fetches are complete.
+func ExampleWaitGroup() {
+	var wg sync.WaitGroup
+	var urls = []string{
+		"http://www.golang.org/",
+		"http://www.google.com/",
+		"http://www.baidu.com/",
+	}
+	for _, url := range urls {
+		// Increment the WaitGroup counter.
+		wg.Add(1)
+		// Launch a goroutine to fetch the URL.
+		go func(url string) {
+			// Decrement the counter when the goroutine completes.
+			defer wg.Done()
+			// Fetch the URL.
+			GetDemo(url)
+		}(url)
+	}
+	// Wait for all HTTP fetches to complete.
+	wg.Wait()
+	fmt.Println("--------------------group wait over ---------------------------")
+}
+
+func ExampleOnce() {
+	var once sync.Once
+	onceBody := func() {
+		fmt.Println("Only once")
+	}
+	done := make(chan bool)
+	for i := 0; i < 10; i++ {
+		go func() {
+			once.Do(onceBody)
+			done <- true
+		}()
+	}
+	for i := 0; i < 10; i++ {
+		<-done
+	}
+	fmt.Println("once over -------------------------------")
+}
+
+func main() {
+
+	ExampleOnce()
+	ExampleWaitGroup()
+}
+</pre>

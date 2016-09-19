@@ -512,3 +512,41 @@ $(function(){
 2. qt_event_source 对象是为了给IE浏览器注册事件，通过style（ style="behavior:url(#qt_event_source);overflow:hidden;"）绑定行为； 
 3. src="ress/preview.mov" 用于在页面加载后初始化控件，因为在上述代码中没有初始化 qtsrc 直播路径（便于动态切换播放路径）； 
 4. kioskmode="true" 隐藏播放器右键菜单。
+
+
+++++JS防止短时频繁提交+++++
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head runat="server"> 
+<title>Js定时事件</title> 
+<meta charset="utf-8">
+</head> 
+<script language="javascript" type="application/javascript">  
+var times = 0;//点击次数  
+var preClickTime ;//上一次点击的时间（毫秒）  
+var currentClickTime;//当前点击时间  
+function countClickedTimes(){  
+  
+if(times === 0){  
+preClickTime = new Date().getTime();//首次点击的时间  
+times ++;  
+//alert("当前点击次数:"+times);  
+return;  
+}  
+currentClickTime = new Date().getTime();  
+//alert(currentClickTime - preClickTime);  
+if((currentClickTime - preClickTime) < 1000) {//如果是1秒内重复点击  
+alert("亲，您的点击速度过快...");  
+preClickTime = currentClickTime;  
+return;  
+}   
+  
+times ++ ;  
+preClickTime = currentClickTime;  
+//alert("当前点击次数:"+times);  
+  
+}  
+</script>  
+<body>  
+<a href="javascript:countClickedTimes();">统计点击次数</a>  
+</body>  
+</html>
