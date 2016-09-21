@@ -14070,3 +14070,63 @@ func main() {
 	ExampleWaitGroup()
 }
 </pre>
+###Golang flag包的简单使用
+<pre>
+package main
+
+import (
+	"bytes"
+	"encoding/base64"
+	"encoding/binary"
+	"flag"
+	"fmt"
+)
+
+//base64加密解密 乱入内容，2333
+func Decode(raw []byte) []byte {
+	var buf bytes.Buffer
+	decoded := make([]byte, 215)
+	buf.Write(raw)
+	decoder := base64.NewDecoder(base64.StdEncoding, &buf)
+	decoder.Read(decoded)
+	return decoded
+}
+
+func Encode(raw []byte) []byte {
+	var encoded bytes.Buffer
+	encoder := base64.NewEncoder(base64.StdEncoding, &encoded)
+	encoder.Write(raw)
+	encoder.Close()
+	return encoded.Bytes()
+}
+
+func main() {
+	var pi float64
+	bpi := []byte{0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0x09, 0x40}
+	buf := bytes.NewReader(bpi)
+	err := binary.Read(buf, binary.LittleEndian, &pi)
+	if err != nil {
+		fmt.Println("binary.Read failed:", err)
+	}
+	fmt.Println(pi)
+
+	res := string(Encode([]byte("Jason")))
+	fmt.Println(res)
+	fmt.Println(string(Decode([]byte(res))))
+
+	//返回一个相应类型的指针
+	namePtr := flag.String("name", "Jason", "User's name")
+	agePtr := flag.Int("age", 22, "User's age")
+	vipPtr := flag.Bool("vip", true, "Is a vip user")
+	var svar string
+	flag.StringVar(&svar, "you", "总是心太软", "a string var")
+	fmt.Println("name:", *namePtr)
+	fmt.Println("age:", *agePtr)
+	fmt.Println("vip:", *vipPtr)
+	fmt.Println("you:", svar)
+
+	//获取从编译时期带进来的参数 如：go run main.go param1 param2 param3
+	flag.Parse()
+	fmt.Println("all params : ", flag.Args())
+}
+</pre>
