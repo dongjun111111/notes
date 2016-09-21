@@ -14130,3 +14130,48 @@ func main() {
 	fmt.Println("all params : ", flag.Args())
 }
 </pre>
+###Golang bufio包
+<pre>
+package main
+
+import (
+	"bufio"
+	"bytes"
+	"fmt"
+	"strings"
+)
+
+func main() {
+	// ReadString 功能同 ReadBytes，只不过返回的是一个字符串
+	s := strings.NewReader("Jason Test bufio read from byte to string")
+	str := bufio.NewReader(s)
+	br, _ := str.ReadString('\n')
+	fmt.Println("1--------->", br)
+
+	// Peek 返回缓存的一个切片，该切片引用缓存中前n字节数据
+	s2 := strings.NewReader("ABCDEFG")
+	br2 := bufio.NewReader(s2)
+	b2, _ := br2.Peek(5)
+	fmt.Println(string(b2))
+	// ReadByte 从 b 中读出一个字节并返回,没有数据则报错
+	// ReadRune 从 b 中读出一个 UTF8 编码的字符并返回
+
+	// WriteTo 实现了 io.WriterTo 接口
+	s3 := strings.NewReader("S3_CONTENT")
+	br3 := bufio.NewReader(s3)
+	b3 := bytes.NewBuffer(make([]byte, 0))
+	br3.WriteTo(b3)
+	fmt.Println(b3) //输出：S3_CONTENT
+
+	//bufio.NewWriter WriteByte Flush
+	b4 := bytes.NewBuffer(make([]byte, 0))
+	bw4 := bufio.NewWriter(b4)
+	bw4.WriteByte('H')
+	bw4.WriteByte('e')
+	bw4.WriteByte('l')
+	bw4.WriteByte('l')
+	bw4.WriteByte('o')
+	bw4.Flush()
+	fmt.Println(b4) //输出：Hello
+}
+</pre>
