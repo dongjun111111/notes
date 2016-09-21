@@ -14232,3 +14232,102 @@ func main() {
 	}
 }
 </pre>
+###Golang database/sql包
+<pre>
+package main
+
+import (
+	"database/sql"
+	"fmt"
+	_ "github.com/go-sql-driver/mysql"
+)
+
+func main() {
+	db, err := sql.Open("mysql", "root:123456@tcp(192.168.1.220:3306)/zcm")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		fmt.Println("SUCCESS")
+	}
+
+	var (
+		id         int
+		config_key string
+	)
+	rows, err := db.Query("select id,config_key from config where id =?", 1)
+	if err != nil {
+		fmt.Println("select failed")
+	}
+	defer rows.Close()
+	defer db.Close()
+
+	for rows.Next() {
+		err := rows.Scan(&id, &config_key)
+		if err != nil {
+			fmt.Println("err")
+		}
+		fmt.Println(id, config_key)
+	}
+}
+</pre>
+###Golang errors包
+<pre>
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+//使用errors包创建自定义错误
+type MyError struct{}
+
+func (this *MyError) Error() string {
+	return ""
+}
+
+func main() {
+	var err1 error = errors.New("This is an error")
+	fmt.Println(err1.Error())
+
+	err2 := fmt.Errorf("%s", "the error test for fmt.Errorf")
+	fmt.Println(err2.Error())
+}
+</pre>
+###Golang text/template包
+<pre>
+package main
+
+import (
+	"os"
+	"text/template"
+)
+
+func main() {
+	type Inventory struct {
+		Material string
+		Count    int
+	}
+
+	NewInventory := Inventory{"Jason", 77}
+	muban := `{{.Count}} items are made of {{.Material}}`
+	tmpl, err := template.New("test").Parse(muban) //建立一个模板
+	//如果将muban文件中内容放入muban.txt文件中，那么等价于tmpl,err := template.ParseFiles("muban.txt")
+	if err != nil {
+		panic(err)
+	}
+	err = tmpl.Execute(os.Stdout, NewInventory) //将struct与模板合成，合成结果放到os.Stdout里
+	if err != nil {
+		panic(err)
+	}
+
+	/*
+	   ParseFiles接受一个字符串，字符串的内容是一个模板文件的路径（绝对路径or相对路径）
+	   ParseGlob也差不多，是用正则的方式匹配多个文件
+	   假设一个目录里有a.txt b.txt c.txt的话
+	   用ParseFiles需要写3行对应3个文件，如果有一万个文件呢？
+	   而用ParseGlob只要写成template.ParseGlob("*.txt") 即可
+	*/
+
+}
+</pre>
