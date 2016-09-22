@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head runat="server"> 
+<title>Js定时事件</title> 
+<meta charset="utf-8">
+</head> 
+<script language="javascript" type="application/javascript">  
+var times = 0;//点击次数  
+var preClickTime ;//上一次点击的时间（毫秒）  
+var currentClickTime;//当前点击时间  
+function countClickedTimes(){  
+  
+if(times === 0){  
+preClickTime = new Date().getTime();//首次点击的时间  
+times ++;  
+//alert("当前点击次数:"+times);  
+return;  
+}  
+currentClickTime = new Date().getTime();  
+//alert(currentClickTime - preClickTime);  
+if((currentClickTime - preClickTime) < 1000) {//如果是1秒内重复点击  
+alert("亲，您的点击速度过快...");  
+preClickTime = currentClickTime;  
+return;  
+}   
+  
+times ++ ;  
+preClickTime = currentClickTime;  
+//alert("当前点击次数:"+times);  
+  
+}  
+</script>  
+<body>  
+<a href="javascript:countClickedTimes();">统计点击次数</a>  
+</body>  
+</html>
