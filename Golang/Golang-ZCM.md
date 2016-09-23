@@ -14420,3 +14420,30 @@ func getKey(s string) (key string) {
     return
 }
 </pre>
+###Golang去掉文件名的后缀
+<pre>
+package main
+
+import (
+    "fmt"
+    "runtime"
+    "path"
+    "strings"
+)
+
+func main() {
+    _, fulleFilename, line, _ := runtime.Caller(0)
+    fmt.Println(fulleFilename)
+    fmt.Println(line)
+    var filenameWithSuffix string
+    filenameWithSuffix = path.Base(fulleFilename)
+    fmt.Println("filenameWithSuffix=", filenameWithSuffix)
+    var fileSuffix string
+    fileSuffix = path.Ext(filenameWithSuffix)
+    fmt.Println("fileSuffix=", fileSuffix)
+    
+    var filenameOnly string
+    filenameOnly = strings.TrimSuffix(filenameWithSuffix, fileSuffix)
+    fmt.Println("filenameOnly=", filenameOnly)
+}
+</pre>
