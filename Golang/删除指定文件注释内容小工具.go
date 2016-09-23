@@ -1,16 +1,17 @@
 package main
 
-//删除代码中注释内容 ；注意不要删除注解的东西！！！！！
+//删除代码中注释内容 (适配常见注释类型)
 import (
 	"bufio"
 	"fmt"
+	_ "io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-//获取指定目录下的所有文件，不进入下一级目录搜索，可以匹配后缀过滤。
+//获取指定目录下的所有文件，不进入下一级目录搜索，可以匹配后缀过滤
 func ListDir(dirPth string, suffix string) (files []string, err error) {
 	files = make([]string, 0, 10)
 	dir, err := ioutil.ReadDir(dirPth)
@@ -30,7 +31,7 @@ func ListDir(dirPth string, suffix string) (files []string, err error) {
 	return files, nil
 }
 
-//获取指定目录及所有子目录下的所有文件，可以匹配后缀过滤。
+//获取指定目录及所有子目录下的所有文件，可以匹配后缀过滤
 func WalkDir(dirPth, suffix string) (files []string, err error) {
 	files = make([]string, 0, 30)
 	suffix = strings.ToUpper(suffix)                                                     //忽略后缀匹配的大小写
@@ -49,6 +50,7 @@ func WalkDir(dirPth, suffix string) (files []string, err error) {
 	return files, err
 }
 
+//读取文件内容
 func ReadFile(path string) string {
 	fi, err := os.Open(path)
 	if err != nil {
@@ -59,24 +61,55 @@ func ReadFile(path string) string {
 	return string(fd)
 }
 
-func main() {
-	files, _ := WalkDir("D:\\go", ".go")
-	// for _, v := range files {
-	// 	fmt.Println(ReadFile(v))
-	// }
-	contents, _ := os.OpenFile(files[34], os.O_RDONLY, 0777)
+//删除文件中注释内容
+func RewriteFileContent(filename string) {
+	contents, _ := os.OpenFile(filename, os.O_RDONLY, 0777)
+	defer contents.Close()
 	buff := bufio.NewReader(contents)
+	var basestr string
 	for {
 		str, err := buff.ReadString('\n')
+		if err != nil && err.Error() == "EOF" {
+			break
+		}
 		if err != nil {
 			fmt.Println(err)
 		}
 		if strings.Contains(str, "//") {
-			fmt.Println(str)
+			str = strings.TrimSpace(str)
 		}
-		if err != nil && err.Error() == "EOF" {
-			fmt.Println("扫描结束")
-			break
+		//适用于go
+		if !strings.HasPrefix(str, "//") || strings.HasPrefix(str, "// @") {
+			basestr += str
 		}
+		//适用于html
+		if !strings.HasPrefix(str, "<!--") || !strings.HasSuffix(str, "-->") {
+			basestr += str
+		}
+		//适用于shell
+		if !strings.HasPrefix(str, "#") {
+			basestr += str
+		}
+		//适用于java
+		if !strings.HasPrefix(str, "/**") && !strings.HasSuffix(str, "*/") {
+			basestr += str
+		}
+		//适用于c、c++
+		if !strings.HasPrefix(str, "/*") && !strings.HasSuffix(str, "*/") {
+			basestr += str
+		}
+	}
+	var filecontent = []byte(basestr)
+	err2 := ioutil.WriteFile(filename, filecontent, 0666)
+	if err2 != nil {
+		fmt.Println(err2)
+	}
+	fmt.Println(filename + " - 删除注释内容成功!")
+}
+
+func main() {
+	files, _ := WalkDir("D:\\gopath\\src\\test", ".go")
+	for _, v := range files {
+		RewriteFileContent(v)
 	}
 }
