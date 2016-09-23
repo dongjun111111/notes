@@ -14331,3 +14331,92 @@ func main() {
 
 }
 </pre>
+###Golang并发分割文件
+<pre>
+package main
+ 
+import (
+    "bufio"
+    "fmt"
+    "io"
+    "os"
+    "runtime"
+    "strings"
+    "sync"
+    "time"
+)
+ 
+func init() {
+    runtime.GOMAXPROCS(runtime.NumCPU())
+}
+ 
+func main() {
+    t0 := time.Now()
+    file, err := os.Open("test.log")
+    if err != nil {
+        fmt.Printf("%v\n", err)
+        os.Exit(1)
+    }
+    defer file.Close() //文件关闭
+ 
+    ch := make(chan string, 10240)
+    var wg = new(sync.WaitGroup)
+    wg.Add(1)
+ 
+    go writeFile(wg, ch)
+ 
+    //将文件作为一个io.Reader对象进行buffered I/O操作
+    //每次读取一行,处理一行
+    br := bufio.NewReaderSize(file, 1024*1024*64)
+    for {
+        line, isPrefix, err := br.ReadLine()
+        if err == io.EOF {
+            break
+        }
+        for isPrefix && err == nil {
+            println("isPrefix==true")
+            var rest []byte
+            rest, isPrefix, err = br.ReadLine()
+            line = append(line, rest...)
+        }
+        strLine := string(line)
+        ch <- strLine
+ 
+    }
+    close(ch)
+    wg.Wait()
+ 
+    t := time.Now()
+    fmt.Println(t.Sub(t0).Seconds())
+}
+ 
+func writeFile(wg *sync.WaitGroup, ch chan string) {
+    defer wg.Done()
+    var m = make(map[string]*bufio.Writer, 10)
+    for line := range ch {
+        key := getKey(line)
+        if _, ok := m[key]; ok == false {
+            file, err := os.Create(key + ".log")
+            if err != nil {
+                panic(err)
+            }
+            bw := bufio.NewWriterSize(file, 1024*1024)
+            m[key] = bw
+            defer func() {
+                bw.Flush()
+                file.Close()
+            }()
+        }
+        bw := m[key]
+        bw.WriteString(line)
+    }
+}
+ 
+func getKey(s string) (key string) {
+    str := strings.Split(s, "//")
+    stringKey := strings.Split(str[1], "/")
+    //  fmt.Println(stringKey[0])
+    key = stringKey[0]
+    return
+}
+</pre>
