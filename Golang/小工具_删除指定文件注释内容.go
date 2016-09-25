@@ -4,12 +4,14 @@ package main
 import (
 	"bufio"
 	"fmt"
-	_ "io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
+
+var sem = make(chan int)
 
 //获取指定目录下的所有文件，不进入下一级目录搜索，可以匹配后缀过滤
 func ListDir(dirPth string, suffix string) (files []string, err error) {
@@ -63,6 +65,7 @@ func ReadFile(path string) string {
 
 //删除文件中注释内容
 func RewriteFileContent(filename string) {
+	sem <- 1
 	contents, _ := os.OpenFile(filename, os.O_RDONLY, 0777)
 	defer contents.Close()
 	buff := bufio.NewReader(contents)
@@ -78,25 +81,37 @@ func RewriteFileContent(filename string) {
 		if strings.Contains(str, "//") {
 			str = strings.TrimSpace(str)
 		}
-		//适用于go
-		if !strings.HasPrefix(str, "//") || strings.HasPrefix(str, "// @") {
-			basestr += str
+		filenameres := strings.Split(filename, ".")
+		if len(filenameres) <= 1 || len(filenameres) > 2 {
+			panic("文件类型错误，请检查源文件是否符合条件")
+			return
 		}
-		//适用于html
-		if !strings.HasPrefix(str, "<!--") || !strings.HasSuffix(str, "-->") {
-			basestr += str
-		}
-		//适用于shell
-		if !strings.HasPrefix(str, "#") {
-			basestr += str
-		}
-		//适用于java
-		if !strings.HasPrefix(str, "/**") && !strings.HasSuffix(str, "*/") {
-			basestr += str
-		}
-		//适用于c、c++
-		if !strings.HasPrefix(str, "/*") && !strings.HasSuffix(str, "*/") {
-			basestr += str
+		switch filenameres[1] {
+		case "go":
+			//适用于go
+			if !strings.HasPrefix(str, "//") || strings.HasPrefix(str, "// @") {
+				basestr += str
+			}
+		case "html", "htm":
+			//适用于html
+			if !strings.HasPrefix(str, "<!--") || !strings.HasSuffix(str, "-->") {
+				basestr += str
+			}
+		case "sh":
+			//适用于shell
+			if !strings.HasPrefix(str, "#") {
+				basestr += str
+			}
+		case "java":
+			//适用于java
+			if !strings.HasPrefix(str, "/**") && !strings.HasSuffix(str, "*/") {
+				basestr += str
+			}
+		case "cpp", "c":
+			//适用于c、c++
+			if !strings.HasPrefix(str, "/*") && !strings.HasSuffix(str, "*/") {
+				basestr += str
+			}
 		}
 	}
 	var filecontent = []byte(basestr)
@@ -108,8 +123,10 @@ func RewriteFileContent(filename string) {
 }
 
 func main() {
-	files, _ := WalkDir("D:\\gopath\\src\\test", ".go")
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	files, _ := WalkDir("D:\\gopath\\src\\test\\ngrok", ".go")
 	for _, v := range files {
-		RewriteFileContent(v)
+		go RewriteFileContent(v)
+		<-sem
 	}
 }
