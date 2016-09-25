@@ -124,7 +124,7 @@ func RewriteFileContent(filename string) {
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
-	files, _ := WalkDir("D:\\gopath\\src\\test\\ngrok", ".go")
+	files, _ := WalkDir("D:\\gopath\\src\\test", ".go")
 	for _, v := range files {
 		go RewriteFileContent(v)
 		<-sem
