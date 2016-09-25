@@ -82,11 +82,11 @@ func RewriteFileContent(filename string) {
 			str = strings.TrimSpace(str)
 		}
 		filenameres := strings.Split(filename, ".")
-		if len(filenameres) <= 1 || len(filenameres) > 2 {
+		if len(filenameres) <= 1 {
 			panic("文件类型错误，请检查源文件是否符合条件")
 			return
 		}
-		switch filenameres[1] {
+		switch filenameres[len(filenameres)-1] {
 		case "go":
 			//适用于go
 			if !strings.HasPrefix(str, "//") || strings.HasPrefix(str, "// @") {
