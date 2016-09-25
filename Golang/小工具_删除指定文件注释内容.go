@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 )
 
 var sem = make(chan int)
@@ -127,6 +128,10 @@ func main() {
 	files, _ := WalkDir("D:\\gopath\\src\\test", ".go")
 	for _, v := range files {
 		go RewriteFileContent(v)
-		<-sem
+		select {
+		case <-sem:
+		case <-time.After(time.Second):
+			fmt.Println("超时处理中,请稍后...")
+		}
 	}
 }
