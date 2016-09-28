@@ -14447,3 +14447,7 @@ func main() {
     fmt.Println("filenameOnly=", filenameOnly)
 }
 </pre>
+###Linux中的ls
+<pre>
+ls -lh //详细列出所有文件的权限信息、用户归属以及大小所占内存[单位不是Kb]等信息
+</pre>
