@@ -42,7 +42,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprintln(w, "该key已经被占用,请重新选择")
 				return
 			}
-			if addUrl(r.Form["key"][0], r.Form["url"][0]) { //将新的Url插入到map中
+			if addUrl(r.Form["key"][0], r.Form["url"][0]) { //将新的 Url 插入到 Map 中
 				fmt.Fprintln(w, "添加成功")
 				fmt.Fprintln(w, "原Url："+r.Form["url"][0])
 				fmt.Fprintln(w, "新Url：http://"+r.Host+"/"+r.Form["key"][0])
