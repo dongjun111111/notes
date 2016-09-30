@@ -14447,9 +14447,10 @@ func main() {
     fmt.Println("filenameOnly=", filenameOnly)
 }
 </pre>
-###Linux中的ls
+###Linux中的小技巧
 <pre>
 ls -lh //详细列出所有文件的权限信息、用户归属以及大小所占内存[单位不是Kb]等信息
 ls -Slh //按照所占内存空间大小倒序排列 
 ls -Slhr //按照所占内存空间大小整序排列
+date -s 时间/日期  //修改系统时间
 </pre>
