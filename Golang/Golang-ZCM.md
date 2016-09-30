@@ -27,7 +27,7 @@ import "fmt"
 
 func main() {
 	s := "hello"
-	s = "c" + s[1:] //切片操作
+	s = "c" + s[1:]   //切片操作
 	fmt.Println(s)
 }
 output==>
