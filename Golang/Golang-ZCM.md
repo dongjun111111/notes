@@ -14495,3 +14495,26 @@ func main() {
     fmt.Printf("time escaped=%s, error=%s\n", time.Now().Sub(started), err)
 }
 </pre>
+###Golang Strings使用
+<pre>
+package main
+
+//Stringer 是一个可以用字符串描述自己的类型
+import (
+	"fmt"
+)
+
+type Test struct {
+	Name string
+	QQ   string
+}
+
+func (t Test) String() string {
+	return fmt.Sprintf("name=%v|qq=%v", t.Name, t.QQ)
+}
+
+func main() {
+	a := Test{"Jason", "903456967"}
+	fmt.Println(a)
+}
+</pre>
