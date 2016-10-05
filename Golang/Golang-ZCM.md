@@ -14457,3 +14457,41 @@ ls -Slh  //按照所占内存空间大小倒序排列
 ls -Slhr //按照所占内存空间大小整序排列
 date -s 时间/日期  //修改系统时间
 </pre>
+###Golang设置Keep_alive（keep_alive）时间
+需要设置的是：浏览器与服务器空闲关闭时间，例如30s没有发送请求、返回数据，则服务器关闭与浏览器之间connection。设置了ReadTimeout以后，如果指定时间没有接收到数据，服务器就会关闭客户端连接。
+<pre>
+package main
+import (
+    "fmt"
+    "net"
+    "net/http"
+    "io"
+    "time"
+)
+func ListenAndServe(addr string, handler http.Handler, timeout time.Duration) error {
+    server := &http.Server{
+        Addr:        addr,
+        Handler:     handler,
+        ReadTimeout: timeout,
+    }
+    return server.ListenAndServe()
+}
+func main() {
+    addr := "127.0.0.1:6061"
+    http.HandleFunc("/", func(http.ResponseWriter, *http.Request) {})
+    go ListenAndServe(addr, nil, time.Second*10)
+    time.Sleep(time.Second)
+    started := time.Now()
+    remoteAddr, _ := net.ResolveTCPAddr("tcp4", addr)
+    conn, err := net.DialTCP("tcp4", nil, remoteAddr)
+    if err != nil {
+        panic("failed to connect")
+    }
+    defer conn.Close()
+    _, err = conn.Read(make([]byte, 128))
+    if err != io.EOF {
+        panic("should return EOF")
+    }
+    fmt.Printf("time escaped=%s, error=%s\n", time.Now().Sub(started), err)
+}
+</pre>
