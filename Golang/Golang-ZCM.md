@@ -1968,7 +1968,7 @@ var builtins = FuncMap{
     "and":      and,
     "call":     call,
     "html":     HTMLEscaper,
-    "index":    index,
+    "index":    index,  //用于输出数组元素
     "js":       JSEscaper,
     "len":      length,
     "not":      not,
@@ -1978,6 +1978,13 @@ var builtins = FuncMap{
     "println":  fmt.Sprintln,
     "urlquery": URLQueryEscaper,
 }
+</pre>
+index函数用于输出数组元素：
+<pre>
+{{index x 1 2 3}}
+返回index后面的第一个参数的某个索引对应的元素值，其余的参数为索引值
+表示：x[1][2][3]
+x必须是一个map、slice或数组
 </pre>
 #####Must操作
 模板包里面有一个函数Must，它的作用是检测模板是否正确，例如大括号是否匹配，注释是否正确的关闭，变量是否正确的书写。接下来我们演示一个例子，用Must来判断模板是否正确：
