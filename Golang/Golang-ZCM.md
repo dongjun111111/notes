@@ -14525,7 +14525,7 @@ func main() {
 	fmt.Println(a)
 }
 </pre>
-###Beego里面的404页
+###Beego里面的404情况处理
 <pre>
 func main() {
 	beego.ErrorHandler("404", page_not_found)
