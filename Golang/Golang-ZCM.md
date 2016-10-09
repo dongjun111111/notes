@@ -14623,3 +14623,35 @@ output==>
 {"Name":"jemy","Age":26}
 {"Engine":"Power","Count":4}
 </pre>
+###Golang并发不安全示例
+<pre>
+package main
+
+import "fmt"
+
+func main() {
+    c := make(map[string]int)
+
+    for i := 0; i < 100; i++ {
+        go func() {
+            for j := 0; j < 1000000; j++ {
+                c[fmt.Sprintf("%d", j)] = j
+            }
+        }()
+    }
+}
+output==>
+fatal error: concurrent map writes
+
+goroutine 19 [running]:
+runtime.throw(0x5290a0, 0x15)
+        C:/Go/src/runtime/panic.go:547 +0x97 fp=0xc082063e50 sp=0xc082063e38
+runtime.mapassign1(0x4cb980, 0xc082037d70, 0xc082063f68, 0xc082063f38)
+        C:/Go/src/runtime/hashmap.go:445 +0xb8 fp=0xc082063ef8 sp=0xc082063e50
+main.main.func1(0xc082037d70)
+        D:/gopath/src/test/t3.go:47 +0x15b fp=0xc082063f98 sp=0xc082063ef8
+runtime.goexit()
+        C:/Go/src/runtime/asm_amd64.s:1998 +0x1 fp=0xc082063fa0 sp=0xc082063f98
+created by main.main
+        D:/gopath/src/test/t3.go:49 +0x82
+</pre>
