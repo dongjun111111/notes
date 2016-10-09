@@ -14538,3 +14538,88 @@ func page_not_found(rw http.ResponseWriter, r *http.Request) {
 	t.Execute(rw, data)
 }
 </pre>
+###Golang中json流式编解码
+<pre>
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+)
+
+type Dog struct {
+    Name string
+    Age  int
+}
+
+type Car struct {
+    Engine string
+    Count  int
+}
+
+func main() {
+    var data = []byte(`
+ {"Name":"jemy","Age":26}{"Engine":"Power","Count":4}
+`)
+
+    var d Dog
+    var c Car
+
+    decoder := json.NewDecoder(bytes.NewReader(data))
+    decoder.Decode(&d)
+    decoder.Decode(&c)
+
+    fmt.Println(d)
+    fmt.Println(c)
+}
+output==>
+{jemy 26}
+{Power 4}
+</pre>
+<pre>
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+)
+
+type Dog struct {
+    Name string
+    Age  int
+}
+
+type Car struct {
+    Engine string
+    Count  int
+}
+
+func main() {
+    var dog = Dog{
+        Name: "jemy",
+        Age:  26,
+    }
+    var car = Car{
+        Engine: "Power",
+        Count:  4,
+    }
+
+    buffer := bytes.NewBuffer(nil)
+    encoder := json.NewEncoder(buffer)
+    if err := encoder.Encode(&dog); err != nil {
+        fmt.Println(err)
+        return
+    }
+
+    if err := encoder.Encode(&car); err != nil {
+        fmt.Println(err)
+    }
+
+    fmt.Print(buffer.String())
+}
+output==>
+{"Name":"jemy","Age":26}
+{"Engine":"Power","Count":4}
+</pre>
