@@ -14655,3 +14655,27 @@ runtime.goexit()
 created by main.main
         D:/gopath/src/test/t3.go:49 +0x82
 </pre>
+###Golang将(字节切片)[]byte转换成string
+<pre>
+package main
+
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
+
+func convert(b []byte) string {
+	s := make([]string, len(b))
+	for i := range b {
+		s[i] = strconv.Itoa(int(b[i]))
+	}
+	return strings.Join(s, ",")
+}
+
+func main() {
+	bytes := [4]byte{1, 2, 3, 4}
+	str := convert(bytes[:])
+	fmt.Println(str)
+}
+</pre>
