@@ -14655,7 +14655,7 @@ runtime.goexit()
 created by main.main
         D:/gopath/src/test/t3.go:49 +0x82
 </pre>
-###Golang将(字节切片)[]byte转换成string
+###Golang将(字节切片)[]byte转换成string类型
 <pre>
 package main
 
