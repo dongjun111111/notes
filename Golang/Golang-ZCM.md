@@ -4959,6 +4959,28 @@ output==>
 1.1234678 -> 1.12347
 1.1 -> 1.10000
 </pre>
+###Golang将float64转换成string
+<pre>
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+var s = 12
+
+func init() {
+	if true {
+		s = 34
+	}
+}
+
+func main() {
+	fmt.Println(s)
+	fmt.Println(strconv.FormatFloat(56.78888, 'f', 3, 64))
+}
+</pre>
 ###发送Get请求
 <pre>
 package main
