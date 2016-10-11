@@ -14679,3 +14679,175 @@ func main() {
 	fmt.Println(str)
 }
 </pre>
+###Golang UDP、TCP[socket编程]
+UDP服务端
+<pre>
+package main
+
+//UDP服务端
+import (
+	"fmt"
+	"net"
+	"os"
+	"time"
+)
+
+/*
+先通过net.ResolveUDPAddr创建监听地址
+net.ListenUDP创建监听链接
+然后通过conn.ReadFromUDP和conn.WriteToUDP收发UDP报文
+*/
+func checkError(err error) {
+	if err != nil {
+		fmt.Println("Error: %s", err.Error())
+		os.Exit(1)
+	}
+}
+
+func recvUDPMsg(conn *net.UDPConn) {
+	var buf [20]byte
+	n, raddr, err := conn.ReadFromUDP(buf[0:])
+	if err != nil {
+		return
+	}
+	fmt.Println("msg is ", string(buf[0:n]))
+	time.Sleep(10 * time.Second)
+	_, err = conn.WriteToUDP([]byte("nice to see u"), raddr)
+	checkError(err)
+}
+
+func main() {
+	udp_addr, err := net.ResolveUDPAddr("udp", ":11110")
+	checkError(err)
+
+	conn, err := net.ListenUDP("udp", udp_addr)
+	defer conn.Close()
+	checkError(err)
+	recvUDPMsg(conn)
+}
+</pre>
+UDP客户端
+<pre>
+package main
+
+//UDP客户端
+import (
+	"fmt"
+	"net"
+	"os"
+)
+
+/*
+先通过net.Dial(“udp”, “127.0.0.1:11110”)，建立发送报文至本机11110端口的socket，
+然后使用conn.Write和conn.Read收发包，当然conn.ReadFromUDP和conn.WriteToUDP也是可以的
+*/
+func udp_client() {
+	conn, err := net.Dial("udp", "127.0.0.1:11110")
+	defer conn.Close()
+	if err != nil {
+		os.Exit(1)
+	}
+	conn.Write([]byte("Hello Jason!"))
+	fmt.Println("send msg")
+	var msg [20]byte
+	conn.Read(msg[0:])
+	fmt.Println("msg is", string(msg[0:10]))
+}
+
+func main() {
+	udp_client()
+}
+</pre>
+TCP服务端
+<pre>
+package main
+
+//TCP Socket服务端
+import (
+	"fmt"
+	"io"
+	"net"
+)
+
+const RECV_BUF_LEN = 1024
+
+func main() {
+	listener, err := net.Listen("tcp", "0.0.0.0:6666") //侦听在 6666 端口
+	if err != nil {
+		panic("error listening:" + err.Error())
+	}
+	fmt.Println("Starting the server")
+
+	for {
+		conn, err := listener.Accept() //接受连接
+		if err != nil {
+			panic("Error accept:" + err.Error())
+		}
+		go EchoServer(conn)
+	}
+}
+
+func EchoServer(conn net.Conn) {
+	buf := make([]byte, RECV_BUF_LEN)
+	defer conn.Close()
+
+	for {
+		fmt.Println("Accepted the Connection :", conn.RemoteAddr())
+		n, err := conn.Read(buf)
+		switch err {
+		case nil:
+			conn.Write(buf[0:n])
+		case io.EOF:
+			fmt.Printf("Warning: End of data: %s \n", err)
+			return
+		default:
+			fmt.Printf("Error: Reading data : %s \n", err)
+			return
+		}
+	}
+}
+</pre>
+TCP客户端
+<pre>
+package main
+
+//TCP Socket客户端
+import (
+	"fmt"
+	"net"
+	"time"
+)
+
+const RECV_BUF_LEN = 1024
+
+func main() {
+	conn, err := net.Dial("tcp", "127.0.0.1:6666")
+	if err != nil {
+		panic(err.Error())
+	}
+	defer conn.Close()
+
+	buf := make([]byte, RECV_BUF_LEN)
+
+	for i := 0; i < 5; i++ {
+		//准备要发送的字符串
+		msg := fmt.Sprintf("Hello World, %03d", i)
+		n, err := conn.Write([]byte(msg))
+		if err != nil {
+			println("Write Buffer Error:", err.Error())
+			break
+		}
+		fmt.Println("发出的信息:", msg)
+
+		//从服务器端收字符串
+		n, err = conn.Read(buf)
+		if err != nil {
+			println("Read Buffer Error:", err.Error())
+			break
+		}
+		fmt.Println("接收的信息:", string(buf[0:n]))
+		//等一秒钟
+		time.Sleep(time.Second)
+	}
+}
+</pre>
