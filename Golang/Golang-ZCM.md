@@ -14851,3 +14851,231 @@ func main() {
 	}
 }
 </pre>
+###Golang代理服务Proxy
+<pre>
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"net"
+	"os"
+)
+
+func main() {
+
+	addr, err := net.ResolveUDPAddr("udp", "localhost:1987")
+	if err != nil {
+		fmt.Println("net.ResolveUDPAddr fail.", err)
+		os.Exit(1)
+	}
+
+	socket, err := net.DialUDP("udp", nil, addr)
+	if err != nil {
+		fmt.Println("net.DialUDP fail.", err)
+		os.Exit(1)
+	}
+	defer socket.Close()
+	r := bufio.NewReader(os.Stdin)
+	for {
+		switch line, ok := r.ReadString('\n'); true {
+		case ok != nil:
+			fmt.Printf("bye bye!\n")
+			return
+		default:
+			socket.Write([]byte(line))
+			data := make([]byte, 1024)
+			_, remoteAddr, err := socket.ReadFromUDP(data)
+			if err != nil {
+				fmt.Println("error recv data")
+				return
+			}
+			fmt.Printf("from %s:%s\n", remoteAddr.String(), string(data))
+		}
+	}
+}
+
+package main
+
+import (
+	"encoding/json"
+	"log"
+	"net"
+	"strconv"
+	"time"
+)
+
+const (
+	ip   = "127.0.0.1"
+	port = 1987
+)
+
+const (
+	proxy_timeout = 2
+	proxy_server  = "localhost:8989"
+	msg_length    = 1024
+)
+
+type Request struct {
+	reqId      int
+	reqContent string
+	rspChan    chan<- string // writeonly chan
+}
+
+var requestMap map[int]*Request
+
+type Clienter struct {
+	client  net.Conn
+	isAlive bool
+	SendStr chan *Request
+	RecvStr chan string
+}
+
+func (c *Clienter) Connect() bool {
+	if c.isAlive {
+		return true
+	} else {
+		var err error
+		c.client, err = net.Dial("tcp", proxy_server)
+		if err != nil {
+			return false
+		}
+		c.isAlive = true
+		log.Println("connect to " + proxy_server)
+	}
+	return true
+}
+
+func ProxySendLoop(c *Clienter) {
+
+	//store reqId and reqContent
+	senddata := make(map[string]string)
+	for {
+		if !c.isAlive {
+			time.Sleep(1 * time.Second)
+			c.Connect()
+		}
+		if c.isAlive {
+			req := <-c.SendStr
+
+			//construct request json string
+			senddata["reqId"] = strconv.Itoa(req.reqId)
+			senddata["reqContent"] = req.reqContent
+			sendjson, err := json.Marshal(senddata)
+			if err != nil {
+				continue
+			}
+
+			_, err = c.client.Write([]byte(sendjson))
+			if err != nil {
+				c.RecvStr <- string("proxy server close...")
+				c.client.Close()
+				c.isAlive = false
+				log.Println("disconnect from " + proxy_server)
+				continue
+			}
+			//log.Println("Write to proxy server: " + string(sendjson))
+		}
+	}
+}
+
+func ProxyRecvLoop(c *Clienter) {
+	buf := make([]byte, msg_length)
+	recvdata := make(map[string]string, 2)
+	for {
+		if !c.isAlive {
+			time.Sleep(1 * time.Second)
+			c.Connect()
+		}
+		if c.isAlive {
+			n, err := c.client.Read(buf)
+			if err != nil {
+				c.client.Close()
+				c.isAlive = false
+				log.Println("disconnect from " + proxy_server)
+				continue
+			}
+			//log.Println("Read from proxy server: " + string(buf[0:n]))
+
+			if err := json.Unmarshal(buf[0:n], &recvdata); err == nil {
+				reqidstr := recvdata["reqId"]
+				if reqid, err := strconv.Atoi(reqidstr); err == nil {
+					req, ok := requestMap[reqid]
+					if !ok {
+						continue
+					}
+					req.rspChan <- recvdata["resContent"]
+				}
+				continue
+			}
+		}
+	}
+}
+
+func handle(conn *net.UDPConn, remote *net.UDPAddr, id int, tc *Clienter, data []byte) {
+
+	handleProxy := make(chan string)
+	request := &Request{reqId: id, rspChan: handleProxy}
+
+	request.reqContent = string(data)
+
+	requestMap[id] = request
+	//send to proxy
+	select {
+	case tc.SendStr <- request:
+	case <-time.After(proxy_timeout * time.Second):
+		conn.WriteToUDP([]byte("proxy server send timeout."), remote)
+	}
+
+	//read from proxy
+	select {
+	case rspContent := <-handleProxy:
+		conn.WriteToUDP([]byte(rspContent), remote)
+	case <-time.After(proxy_timeout * time.Second):
+		conn.WriteToUDP([]byte("proxy server recv timeout."), remote)
+	}
+}
+
+func UdpLotusMain(ip string, port int) {
+	//start tcp server
+	addr, err := net.ResolveUDPAddr("udp", ip+":"+strconv.Itoa(port))
+	if err != nil {
+		log.Fatalln("net.ResolveUDPAddr fail.", err)
+		return
+	}
+	conn, err := net.ListenUDP("udp", addr)
+	if err != nil {
+		log.Fatalln("net.ListenUDP fail.", err)
+		//os.Exit(1)
+		return
+	}
+	log.Println("start udp server " + ip + " " + strconv.Itoa(port))
+	defer conn.Close()
+
+	//start proxy connect and loop
+	var tc Clienter
+	tc.SendStr = make(chan *Request, 1000)
+	tc.RecvStr = make(chan string)
+	tc.Connect()
+	go ProxySendLoop(&tc)
+	go ProxyRecvLoop(&tc)
+
+	//listen new request
+	requestMap = make(map[int]*Request)
+
+	buf := make([]byte, msg_length)
+	var id int = 0
+	for {
+		rlen, remote, err := conn.ReadFromUDP(buf)
+		if err == nil {
+			id++
+			log.Println("connected from " + remote.String())
+			go handle(conn, remote, id, &tc, buf[:rlen]) //new thread
+		}
+	}
+}
+
+func main() {
+	UdpLotusMain(ip, port)
+}
+</pre>
