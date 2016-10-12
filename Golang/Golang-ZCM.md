@@ -14996,7 +14996,7 @@ func ProxySendLoop(c *Clienter) {
 				log.Println("disconnect from " + proxy_server)
 				continue
 			}
-			//log.Println("Write to proxy server: " + string(sendjson))
+			// log.Println("Write to proxy server: " + string(sendjson))
 		}
 	}
 }
