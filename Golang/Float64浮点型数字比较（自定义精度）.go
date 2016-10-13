@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	// 设置精确度为0.00001
+	// 设置  精确度为0.00001
 	var a Accuracy = func() float64 { return 0.000001 }
 	fmt.Println(a.Equal(0.11111222, 0.11111222233333)) //打印结果为：true
 }
