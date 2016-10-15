@@ -43,6 +43,6 @@ func MakeMd5(obj interface{}, length int) string {
 }
 
 func main() {
-	fmt.Println(MakeUnique("test"))
-	fmt.Println(MakeMd5("test", 17))
+	fmt.Println(MakeUnique("jason"))
+	fmt.Println(MakeMd5("jason", 17))
 }
