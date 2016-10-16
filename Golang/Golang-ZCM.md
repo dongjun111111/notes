@@ -33,7 +33,7 @@ func main() {
 output==>
 cello
 </pre>
-数组  --值类型
+数组  -> 值类型
 <pre>
 package main
 
