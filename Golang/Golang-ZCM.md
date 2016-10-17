@@ -14941,7 +14941,7 @@ const (
 type Request struct {
 	reqId      int
 	reqContent string
-	rspChan    chan<- string // writeonly chan
+	rspChan    chan<- string  // writeonly chan
 }
 
 var requestMap map[int]*Request
