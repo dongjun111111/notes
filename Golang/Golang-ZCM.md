@@ -15110,3 +15110,10 @@ github.com/funny/slab
  err := jpeg.Encode(buf, new_image, nil)
  send_s3 := buf.Bytes()
 </pre>
+###nohup的用法
+//0、1和2分别表示标准输入、标准输出和标准错误信息输出，可以用来指定需要重定向的标准输入或输出。
+<pre>
+nohup ./program_name &   //默认输出当前目录下nohup.out日志文件
+nohup ./program_name >/dev/null 2>log &   //在当前目录下产生只记录错误输出信息的log文件
+nohup ./program_name >/dev/null 2>&1 & //不产生任何日志文件
+</pre>
