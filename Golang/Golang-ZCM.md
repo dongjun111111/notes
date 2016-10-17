@@ -15103,3 +15103,10 @@ func main() {
 </pre>
 ###Golang内存分配包
 github.com/funny/slab
+###image变成[]byte
+<pre>
+ //将image图片转换成[]byte类型
+ buf := new(bytes.Buffer)
+ err := jpeg.Encode(buf, new_image, nil)
+ send_s3 := buf.Bytes()
+</pre>
