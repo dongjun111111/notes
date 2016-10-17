@@ -15101,3 +15101,5 @@ func main() {
 	UdpLotusMain(ip, port)
 }
 </pre>
+###Golang内存分配包
+github.com/funny/slab
