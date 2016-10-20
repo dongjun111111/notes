@@ -15117,3 +15117,42 @@ nohup ./program_name &   //默认输出当前目录下 nohup.out 日志文件
 nohup ./program_name >/dev/null 2>log &   //在当前目录下产生只记录错误输出信息的log文件
 nohup ./program_name >/dev/null 2>&1 & //不产生任何日志文件
 </pre>
+###双向链表
+<pre>
+package main
+
+import (
+	"container/list"
+	"fmt"
+)
+
+//list是一个双向链表。该结构具有链表的所有功能
+func main() {
+	l := list.New()
+	for i := 0; i < 5; i++ {
+		l.PushBack(i)
+	}
+	for e := l.Front(); e != nil; e = e.Next() {
+		fmt.Println(e.Value)
+	}
+	fmt.Println("---------------------")
+	fmt.Println("首部元素的值：", l.Front().Value) //首部元素
+	fmt.Println("尾部元素的值：", l.Back().Value)  //尾部元素
+	l.InsertAfter(6, l.Front())             //首部元素之后插入一个值为6的元素
+	for e := l.Front(); e != nil; e = e.Next() {
+		fmt.Println(e.Value)
+	}
+	fmt.Println("---------------------")
+	l.MoveBefore(l.Front().Next(), l.Front()) //首部两个元素位置互换
+	for e := l.Front(); e != nil; e = e.Next() {
+		fmt.Println(e.Value)
+	}
+	fmt.Println("---------------------")
+	l.MoveToFront(l.Back()) //将尾部元素移动到首部
+	for e := l.Front(); e != nil; e = e.Next() {
+		fmt.Println(e.Value)
+	}
+	fmt.Println("---------------------")
+	l.Init()
+}
+</pre>
