@@ -15117,7 +15117,8 @@ nohup ./program_name &   //默认输出当前目录下 nohup.out 日志文件
 nohup ./program_name >/dev/null 2>log &   //在当前目录下产生只记录错误输出信息的log文件
 nohup ./program_name >/dev/null 2>&1 & //不产生任何日志文件
 </pre>
-###双向链表
+###container包
+双向链表 list
 <pre>
 package main
 
@@ -15154,5 +15155,63 @@ func main() {
 	}
 	fmt.Println("---------------------")
 	l.Init()
+}
+</pre>
+ring heap
+<pre>
+package main
+
+import (
+	"container/heap"
+	"container/ring"
+	"fmt"
+)
+
+func josephus(n, m int) []int {
+	var res []int
+	ring := ring.New(n)
+	ring.Value = 1
+	for i, p := 2, ring.Next(); p != ring; i, p = i+1, p.Next() {
+		p.Value = i
+	}
+	h := ring.Prev()
+	for h != h.Next() {
+		for i := 1; i < m; i++ {
+			h = h.Next()
+		}
+		res = append(res, h.Unlink(1).Value.(int))
+	}
+	res = append(res, h.Value.(int))
+	return res
+}
+
+type intHeap []int
+
+func (h intHeap) Len() int           { return len(h) }
+func (h intHeap) Less(i, j int) bool { return h[i] < h[j] }
+func (h intHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *intHeap) Push(x interface{}) {
+	*h = append(*h, x.(int))
+}
+func (h *intHeap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
+func main() {
+	fmt.Println("----------循环双向链表-----------")
+	fmt.Println(josephus(10, 5))
+	fmt.Println("-------二叉堆(binary heap)-------")
+	h := &intHeap{11, 12, 13, 14, 15}
+	heap.Init(h)
+	heap.Push(h, 1) //头部插入一个新的元素
+	heap.Pop(h)     //头部弹出第一个元素
+	heap.Pop(h)     //头部弹出第一个元素
+	for h.Len() > 0 {
+		fmt.Println(heap.Pop(h))
+	}
 }
 </pre>
