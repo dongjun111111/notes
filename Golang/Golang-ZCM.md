@@ -15157,7 +15157,7 @@ func main() {
 	l.Init()
 }
 </pre>
-ring heap
+ring  优先级队列heap
 <pre>
 package main
 
@@ -15213,5 +15213,63 @@ func main() {
 	for h.Len() > 0 {
 		fmt.Println(heap.Pop(h))
 	}
+}
+</pre>
+stack
+<pre>
+package main
+
+import (
+	"container/list"
+	"fmt"
+)
+
+type Stack struct {
+	list *list.List
+}
+
+func NewStack() *Stack {
+	list := list.New()
+	return &Stack{list}
+}
+
+func (stack *Stack) Push(value interface{}) {
+	stack.list.PushBack(value)
+}
+
+func (stack *Stack) Pop() interface{} {
+	e := stack.list.Back()
+	if e != nil {
+		stack.list.Remove(e)
+		return e.Value
+	}
+	return nil
+}
+
+func (stack *Stack) Peak() interface{} {
+	e := stack.list.Back()
+	if e != nil {
+		return e.Value
+	}
+
+	return nil
+}
+
+func (stack *Stack) Len() int {
+	return stack.list.Len()
+}
+
+func (stack *Stack) Empty() bool {
+	return stack.list.Len() == 0
+}
+
+func main() {
+	stack := NewStack()
+	stack.Push(1)
+	stack.Push(2)
+	stack.Push(3)
+	fmt.Println("长度：", stack.Len())
+	fmt.Println(stack.Peak().(int))
+	fmt.Println(stack.Pop().(int))
 }
 </pre>
