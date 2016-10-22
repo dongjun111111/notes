@@ -15725,6 +15725,7 @@ import (
 /*
 withContext 封装函数
 自定义上下文，让代码更优雅
+P对象(processor) 代表cpu，M(work thread)代表工作线程，G对象（goroutine) 上下文切换
 */
 
 var Mutex sync.Mutex
