@@ -15713,3 +15713,43 @@ func main() {
 	fmt.Printf("servers %+v\n", servers)
 }
 </pre>
+###Golang context 上下文
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+/*
+withContext 封装函数
+自定义上下文，让代码更优雅
+*/
+
+var Mutex sync.Mutex
+
+func withMutexContext(fn func()) {
+	//可添加更多公用方法属性
+	Mutex.Lock()
+	defer Mutex.Unlock()
+	fn()
+	fmt.Println("--------已执行上下文--------")
+}
+
+func foo() {
+	withMutexContext(func() {
+		fmt.Println("--->foo()")
+	})
+}
+
+func bar() {
+	withMutexContext(func() {
+		fmt.Println("--->bar()")
+	})
+}
+func main() {
+	foo()
+	bar()
+}
+</pre>
