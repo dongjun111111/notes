@@ -15448,3 +15448,60 @@ queue4
 queue3
 queue1
 </pre>
+###Golang RPC远程调用实战
+服务端
+<pre>
+package main
+
+ import (
+ 	"log"
+ 	"net"
+ 	"net/http"
+ 	"net/rpc"
+ )
+
+ type Echo int
+
+ func (t *Echo) Hi(args string, reply *string) error {
+ 	*reply = "Jason's server return:" + args
+ 	return nil
+ }
+
+ func main() {
+ 	rpc.Register(new(Echo))
+ 	rpc.HandleHTTP()
+ 	l, e := net.Listen("tcp", ":1234")
+ 	if e != nil {
+ 		log.Fatal("listen error:", e)
+ 	}
+ 	http.Serve(l, nil)
+ }
+</pre>
+客户端
+<pre>
+package main
+
+import (
+	"fmt"
+	"log"
+	"net/rpc"
+)
+
+func main() {
+	client, err := rpc.DialHTTP("tcp", "127.0.0.1:1234")
+	if err != nil {
+		log.Fatal("dialing:", err)
+	}
+
+	var args = "-----------"
+	var reply string
+	//Echo.Hi将要调用的函数名，args传过去的参数[非必须]，&replay服务器返回结果
+	err = client.Call("Echo.Hi", args, &reply)
+	if err != nil {
+		log.Fatal("arith error:", err)
+	}
+	fmt.Println(reply)
+}
+output=>
+Jason's server return:-----------
+</pre>
