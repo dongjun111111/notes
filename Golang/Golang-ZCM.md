@@ -15618,3 +15618,98 @@ func main() {
 	}
 }
 </pre>
+###Golang 跳出for-select死循环方法优化
+<pre>
+package main
+
+import "fmt"
+import "time"
+
+/*
+func main() {
+
+L:
+    for {
+        select {
+        case <-time.After(time.Second):
+            fmt.Println("hello")
+        default:
+            break L
+        }
+    }
+
+    fmt.Println("ending")
+}
+如你所见，需要联合break使用标签。这有其用途，不过我不喜欢。这个例子中的 for 循环看起来很小，但是通常它们会更大，而判断break的条件也更为冗长。
+如果需要退出循环，我会将 for-select 封装到函数中:
+*/
+func foo() {
+	for {
+		select {
+		case <-time.After(time.Second):
+			fmt.Println("hello")
+		default:
+			fmt.Println("default")
+			return
+		}
+	}
+}
+
+func main() {
+	foo()
+	fmt.Println("ending")
+}
+</pre>
+###Golang 自定义类型
+<pre>
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+/*
+将 slice 或 map 定义成自定义类型可以让代码维护起来更加容易。假设有一个Server类型和一个返回服务器列表的函数,增加自定义筛选条件。
+*/
+
+type Server struct {
+	Name string
+}
+
+type Servers []Server
+
+// ListServers 返回服务器列表
+func ListServers() Servers {
+	return []Server{
+		{Name: "Server1"},
+		{Name: "Server2"},
+		{Name: "Foo1"},
+		{Name: "Foo2"},
+	}
+}
+
+func (s Servers) Filter(name string) Servers {
+	filtered := make(Servers, 0)
+
+	for _, server := range s {
+		if strings.Contains(server.Name, name) {
+			filtered = append(filtered, server)
+		}
+
+	}
+
+	return filtered
+}
+
+//弹性扩展
+// func (s Servers) Check()
+// func (s Servers) AddRecord()
+// func (s Servers) Len()
+
+func main() {
+	servers := ListServers()
+	servers = servers.Filter("Foo")
+	fmt.Printf("servers %+v\n", servers)
+}
+</pre>
