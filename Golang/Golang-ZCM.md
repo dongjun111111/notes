@@ -15505,3 +15505,77 @@ func main() {
 output=>
 Jason's server return:-----------
 </pre>
+###Golang 1.7 SSA编译器 反射 reflect
+<pre>
+package main
+
+/*
+由于Golang的SSA的编译器，变得非常聪明了，因此会把使用反射reflect.StringHeader，reflect.SliceHeader返回值中的uintptr指向的内存块，当成了没有被使用的内存块回收了。
+解决方法：
+一是尽量不要过分追求性能，使用反射reflect和unsafe包内的函数。这样能避免一些诡异的、很难分析的bug出现。
+如果非要使用反射reflect和unsafe包内的函数，请注意一定要使用runtime.KeepAlive告诉SSA编译器，在指定的代码段内，不要回收内存块。
+*/
+import (
+	"fmt"
+	"reflect"
+	"runtime"
+	"unsafe"
+)
+
+func SimpleCrc(ptr uintptr, size int) int {
+	ret := 0
+	maxPtr := ptr + uintptr(size)
+	for ptr < maxPtr {
+		b := *(*byte)(unsafe.Pointer(ptr))
+		ret += int(b)
+		ptr++
+	}
+	return ret
+}
+
+//模拟申请内存，触发Gc回收内存
+func Allocation(size int) {
+	var free []byte
+	free = make([]byte, size)
+	if len(free) == 0 {
+		panic("Allocation Error")
+	}
+}
+
+func SliceCrcTest(slice []byte, N int) (ret int) {
+	newSlice := []byte(string(slice))                       //获取独立内存
+	sh := (*reflect.SliceHeader)(unsafe.Pointer(&newSlice)) //反射切片结构
+	ptr, size := uintptr(sh.Data), sh.Len                   //获取地址尺寸
+	runtime.GC()                                            //强制内存回收
+	for i := 0; i < N; i++ {
+		ret = SimpleCrc(ptr, size) //计算crc校验码
+		Allocation(size)           //模拟申请内存，触发Gc回收内存
+	}
+
+	//runtime.KeepAlive(newSlice) //本行一旦注释后结果不再是1665，取消注释节正确
+	return
+}
+
+func StringCrcTest(str string, N int) (ret int) {
+	newStr := string([]byte(str))                          //获取独立内存
+	runtime.SetFinalizer(&newStr, func(x *string) {})      //设置回收事件
+	sh := (*reflect.StringHeader)(unsafe.Pointer(&newStr)) //反射字符串结构
+	ptr, size := uintptr(sh.Data), sh.Len                  //获取地址尺寸
+	runtime.GC()                                           //强制内存回收
+	for i := 0; i < N; i++ {
+		ret = SimpleCrc(ptr, size) //计算crc校验码
+		Allocation(size)           //模拟申请内存，触发Gc回收内存
+	}
+
+	//runtime.KeepAlive(newStr) //本行一旦注释后结果不再是1665，取消注释节正确
+	return
+}
+
+func main() {
+	var B = []byte("1234567890-1234567890-1234567890") //Crc的值为：1665
+	var S = string(B)                                  //生成字符串
+	N := 1000000                                       //循环执行1,000,000次
+	fmt.Printf("SimpleCrc(\"%s\") = %v\n", B, SliceCrcTest(B, N))
+	fmt.Printf("SimpleCrc(\"%s\") = %v\n", B, StringCrcTest(S, N))
+}
+</pre>
