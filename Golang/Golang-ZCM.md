@@ -15579,3 +15579,42 @@ func main() {
 	fmt.Printf("SimpleCrc(\"%s\") = %v\n", B, StringCrcTest(S, N))
 }
 </pre>
+###Golang 工作线程池
+<pre>
+package main
+
+import "fmt"
+import "time"
+
+// 使用goroutine  开启大小为3的线程池
+// 其中1个channel为执行做通信，1个对结果进行保存
+
+// 创建的worker
+func worker(id int, jobs <-chan int, results chan<- int) {
+	for j := range jobs {
+		fmt.Println("worker", id, "processing job", j)
+		time.Sleep(time.Second)
+		results <- j * 2
+	}
+}
+func main() {
+	// 创建channel
+	jobs := make(chan int, 100)
+	results := make(chan int, 100)
+	// 3个worker作为一个pool
+	for w := 1; w <= 3; w++ {
+		go worker(w, jobs, results)
+	}
+
+	// 发送9个jobs，然后关闭
+	for j := 1; j <= 9; j++ {
+		jobs <- j
+	}
+	close(jobs)
+
+	// 最后收集结果
+	for a := 1; a <= 9; a++ {
+		<-results
+	}
+}
+</pre>
