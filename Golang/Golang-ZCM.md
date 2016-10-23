@@ -15976,3 +15976,109 @@ func handleJson(resp http.ResponseWriter, req *http.Request) {
 	}
 }
 </pre>
+###哈希适用于高并发系统的重要原因之一
+但凡大数据处理，高并发系统，必言哈希，随机插入，时间复杂度O(1)，随便查询，时间复杂度O(1)，除了耗费点空间以外，几乎没什么缺点了，在现在这个内存廉价的时代，哈希表变成了一个高并发系统的标配。
+###Golang hash+list 哈希表+链表 LRU算法 缓存算法
+LRU : Least Recently Used
+核心思想是：如果数据最近被访问过，那么将来被访问的几率也更高.
+<pre>
+package main
+
+//LRU算法
+/*
+1.key记录在map
+2.对于set/get添加或命中的元素移到链表头
+3.如总个数大于Cache容量(cap),则将最末的元素移除.
+*/
+import (
+	"container/list"
+	"errors"
+	"fmt"
+)
+
+type CacheNode struct {
+	Key, Value interface{}
+}
+
+func (cnode *CacheNode) NewCacheNode(k, v interface{}) *CacheNode {
+	return &CacheNode{k, v}
+}
+
+type LRUCache struct {
+	Capacity int
+	dlist    *list.List
+	cacheMap map[interface{}]*list.Element
+}
+
+func NewLRUCache(cap int) *LRUCache {
+	return &LRUCache{
+		Capacity: cap,
+		dlist:    list.New(),
+		cacheMap: make(map[interface{}]*list.Element),
+	}
+}
+
+func (lru *LRUCache) Size() int {
+	return lru.dlist.Len()
+}
+
+func (lru *LRUCache) Set(k, v interface{}) error {
+	if lru.dlist == nil {
+		return errors.New("LRUCache结构体未初始化")
+	}
+	if pElement, ok := lru.cacheMap[k]; ok {
+		lru.dlist.MoveToFront(pElement)
+		pElement.Value.(*CacheNode).Value = v
+		return nil
+	}
+	newElement := lru.dlist.PushFront(&CacheNode{k, v})
+	lru.cacheMap[k] = newElement
+	if lru.dlist.Len() > lru.Capacity {
+		//移除最后一个
+		lastElement := lru.dlist.Back()
+		if lastElement == nil {
+			return nil
+		}
+		CacheNode := lastElement.Value.(*CacheNode)
+		delete(lru.cacheMap, CacheNode.Key)
+		lru.dlist.Remove(lastElement)
+	}
+	return nil
+}
+
+func (lru *LRUCache) Get(k interface{}) (v interface{}, ret bool, err error) {
+	if lru.cacheMap == nil {
+		return v, false, errors.New("LRUCache结构体未初始化")
+	}
+	if pElement, ok := lru.cacheMap[k]; ok {
+		lru.dlist.MoveToFront(pElement)
+		return pElement.Value.(*CacheNode).Value, true, nil
+	}
+	return v, false, nil
+}
+
+func (lru *LRUCache) Remove(k interface{}) bool {
+	if lru.cacheMap == nil {
+		return false
+	}
+	if pElement, ok := lru.cacheMap[k]; ok {
+		CacheNode := pElement.Value.(*CacheNode)
+		delete(lru.cacheMap, CacheNode.Key)
+		lru.dlist.Remove(pElement)
+		return true
+	}
+	return false
+}
+
+func main() {
+	LRU := NewLRUCache(3)
+	//jason1 将被移除 先进先出 list
+	LRU.Set("jason1", "T1")
+	LRU.Set("jason2", "T2")
+	LRU.Set("jason3", "T3")
+	LRU.Set("jason4", "T4")
+	fmt.Println("长度：", LRU.Size())
+	fmt.Println(LRU.Get("jason1"))
+	fmt.Println(LRU.Get("jason4"))
+}
+</pre>
