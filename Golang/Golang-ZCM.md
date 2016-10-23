@@ -16082,3 +16082,63 @@ func main() {
 	fmt.Println(LRU.Get("jason4"))
 }
 </pre>
+###Golang实现长连接
+<pre>
+package main
+
+/*
+Golang实现长连接思路：
+创建一个套接字对象, 指定其IP以及端口；
+开始监听套接字指定的端口；
+如有新的客户端连接请求, 则建立一个goroutine, 在goroutine中, 读取客户端消息, 并转发回去, 直到客户端断开连接；
+主进程继续监听端口。
+*/
+import (
+	"bufio"
+	"fmt"
+	"net"
+	"time"
+)
+
+func main() {
+	var tcpAddr *net.TCPAddr
+
+	tcpAddr, _ = net.ResolveTCPAddr("tcp", "127.0.0.1:9999")
+
+	tcpListener, _ := net.ListenTCP("tcp", tcpAddr)
+
+	defer tcpListener.Close()
+
+	for {
+		tcpConn, err := tcpListener.AcceptTCP()
+		if err != nil {
+			continue
+		}
+
+		fmt.Println("A client connected : " + tcpConn.RemoteAddr().String())
+		go tcpPipe(tcpConn)
+	}
+
+}
+
+func tcpPipe(conn *net.TCPConn) {
+	ipStr := conn.RemoteAddr().String()
+	defer func() {
+		fmt.Println("disconnected :" + ipStr)
+		conn.Close()
+	}()
+	reader := bufio.NewReader(conn)
+
+	for {
+		message, err := reader.ReadString('\n')
+		if err != nil {
+			return
+		}
+
+		fmt.Println(string(message))
+		msg := time.Now().String() + "\n"
+		b := []byte(msg)
+		conn.Write(b)
+	}
+}
+</pre>
