@@ -15866,3 +15866,113 @@ func main() {
 	}
 }
 </pre>
+###Golang 使用io.Pipe
+客户端
+
+主要是来解决当发送的数据量很大的时候出现严重影响性能的问题。
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"io"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"time"
+)
+
+func init() {
+	log.SetFlags(log.Lshortfile)
+}
+func main() {
+	cli := http.Client{}
+
+	msg := struct {
+		Name, Addr string
+		Price      float64
+	}{
+		Name:  "hello",
+		Addr:  "beijing",
+		Price: 123.56,
+	}
+	r, w := io.Pipe()
+	// 注意这边的逻辑！！
+	go func() {
+		defer func() {
+			time.Sleep(time.Second * 2)
+			log.Println("encode完成")
+			// 只有这里关闭了，Post方法才会返回
+			w.Close()
+		}()
+		log.Println("管道准备输出")
+		// 只有Post开始读取数据，这里才开始encode，并传输
+		err := json.NewEncoder(w).Encode(msg)
+		log.Println("管道输出数据完毕")
+		if err != nil {
+			log.Fatalln("encode json failed:", err)
+		}
+	}()
+	time.Sleep(time.Second * 1)
+	log.Println("开始从管道读取数据")
+	resp, err := cli.Post("http://localhost:9999/json", "application/json", r)
+
+	if err != nil {
+		log.Fatalln(err)
+	}
+	log.Println("POST传输完成")
+
+	body := resp.Body
+	defer body.Close()
+
+	if body_bytes, err := ioutil.ReadAll(body); err == nil {
+		log.Println("response:", string(body_bytes))
+	} else {
+		log.Fatalln(err)
+	}
+}
+</pre> 
+服务端[便于调试]
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"net/http"
+)
+
+func init() {
+	log.SetFlags(log.Lshortfile)
+	println("----->服务器启动成功！")
+}
+
+func main() {
+	http.HandleFunc("/json", handleJson)
+	http.ListenAndServe(":9999", nil)
+}
+
+func handleJson(resp http.ResponseWriter, req *http.Request) {
+	if req.Method == "POST" {
+		body := req.Body
+		defer body.Close()
+		body_bytes, err := ioutil.ReadAll(body)
+		if err != nil {
+			log.Println(err)
+			resp.Write([]byte(err.Error()))
+			return
+		}
+		j := map[string]interface{}{}
+		if err := json.Unmarshal(body_bytes, &j); err != nil {
+			log.Println(err)
+			resp.Write([]byte(err.Error()))
+			return
+		}
+		println("收到的信息：", string(body_bytes))
+		resp.Write(body_bytes)
+	} else {
+		resp.Write([]byte("请使用post方法!"))
+	}
+}
+</pre>
