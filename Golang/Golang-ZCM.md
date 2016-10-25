@@ -16263,3 +16263,28 @@ func BytesToString(b *[]byte) *string {
 	return &r
 }
 </pre>
+###Golang 简单回调函数
+<pre>
+package main 
+
+import (
+	"fmt"
+)
+
+type Callback func(str string)
+
+func jasonFunc(str string){
+	fmt.Println("callback started: "+str)
+}
+
+func TestCallBack(str string,callback Callback){
+	if str ==""{
+	callback(jasonFunc)
+	}
+	fmt.Println("not callback yet")
+}
+func main(){
+	TestCallBack("",jasonFunc)
+	TestCallBack("jason",jasonFunc)
+}
+</pre>
