@@ -16255,3 +16255,11 @@ func main() {
 ###Mesos与K8S适用场景
 - Mesos更适合做跨DC的资源管理，对于大数据领域或大量存在短任务，可以采用Mesos+上层调度器来解决大数据的资源池化调度问题；
 - K8S更适合当应用的集群管理，它解决大规模应用部署的问题，而它的集群的热升级，动态伸缩，负载均衡，服务发现等特性可以让你的应用的更可靠。
+###Golang  byte to string 
+<pre>
+func BytesToString(b *[]byte) *string {
+	s := bytes.NewBuffer(*b)
+	r := s.String()
+	return &r
+}
+</pre>
