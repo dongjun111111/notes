@@ -16395,7 +16395,7 @@ func main() {
 	fmt.Println(myslice)
 }
 </pre>
-###Golang 图片
+###Golang 网页生成图片
 <pre>
 package main
 
@@ -16482,7 +16482,7 @@ func writeImage(w http.ResponseWriter, img *image.Image) {
 	}
 }
 </pre>
-###简单KV缓存
+###简单的KV缓存
 <pre>
 package hicache
 
