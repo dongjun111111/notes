@@ -16541,3 +16541,64 @@ func (c *Cache) Incr(k string, n int) int {
 	return new_v
 }
 </pre>
+###Golang 实现定时任务
+<pre>
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+const INTERVAL_PERIOD time.Duration = 24 * time.Hour
+
+const HOUR_TO_TICK int = 20
+const MINUTE_TO_TICK int = 00
+const SECOND_TO_TICK int = 00
+
+func main() {
+	ticker := updateTicker()
+	for {
+		<-ticker.C
+		fmt.Println(time.Now(), "- just ticked")
+		ticker = updateTicker()
+	}
+}
+
+func updateTicker() *time.Ticker {
+	nextTick := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), HOUR_TO_TICK, MINUTE_TO_TICK, SECOND_TO_TICK, 0, time.Local)
+	if !nextTick.After(time.Now()) {
+		nextTick = nextTick.Add(INTERVAL_PERIOD)
+	}
+	fmt.Println(nextTick, "- next tick")
+	diff := nextTick.Sub(time.Now())
+	return time.NewTicker(diff)
+}
+</pre>
+###Golang 判断是否有汉字的方法 unicode包
+<pre>
+package main
+
+import (
+	"fmt"
+	"regexp"
+	"unicode"
+)
+
+//判断是否有汉字的两个方法
+func main() {
+	str := "中文文文文"
+	var hzRegexp = regexp.MustCompile("^[\u4e00-\u9fa5]{3,8}$")
+	fmt.Println(hzRegexp.MatchString(str))
+	fmt.Println(IsChineseChar(str))
+}
+
+func IsChineseChar(str string) bool {
+	for _, r := range str {
+		if unicode.Is(unicode.Scripts["Han"], r) {
+			return true
+		}
+	}
+	return false
+}
+</pre>
