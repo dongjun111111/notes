@@ -16575,7 +16575,7 @@ func updateTicker() *time.Ticker {
 	return time.NewTicker(diff)
 }
 </pre>
-###Golang 判断是否有汉字的方法 unicode包
+###Golang 判断是否有汉字的方法 - unicode包
 <pre>
 package main
 
