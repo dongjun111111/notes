@@ -16378,3 +16378,20 @@ func readFully(conn net.Conn) ([]byte, error) {
 	return result.Bytes(), nil
 }
 </pre>
+###Golang slice append&preappend
+<pre>
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func main() {
+	str := "a,b,c"
+	myslice := strings.Split(str, ",")
+	myslice = append(myslice, "1")
+	myslice = append([]string{"2"}, myslice...)
+	fmt.Println(myslice)
+}
+</pre>
