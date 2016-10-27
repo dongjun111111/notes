@@ -13127,7 +13127,7 @@ func main() {
     fmt.Printf("%s\n", data)
 }
 </pre>
-UDP-2:
+UDP-2: 在线聊天
 <pre>
 //服务端
 package main  
@@ -13480,19 +13480,15 @@ func main() {
 Golang TCP长连接
 <pre>
 /***********************************************************************
-* @ tcp连接
-* @ brief
-	1、Notice：
-		http的消息处理，是另开goroutine调用的，所以函数中可阻塞
-		tcp的消息处理，是在readRoutine中及时调用的，所以函数中不能有阻塞调用
-		否则“该条连接”的读会被挂起，c++中的话，整个系统的处理线程都会阻塞掉
-	2、server端目前是一条连接两个goroutine(readRoutine/writeRoutine)
-		假设5k玩家，就有1w个goroutine，太多了
-	3、msghandler可考虑设计成：不执行逻辑，仅将消息加入buf队列，由一个goroutine来处理
-		不过那5k个readRoutine貌似省不了哇，感觉单独一个goroutine处理消息也不会有性能提升
-		且增加了风险，若某条消息有阻塞调用，后面的就得等了
-* @ author zhoumf
-* @ date 2016-8-3
+1、Notice：
+	http的消息处理，是另开goroutine调用的，所以函数中可阻塞
+	tcp的消息处理，是在readRoutine中及时调用的，所以函数中不能有阻塞调用
+	否则“该条连接”的读会被挂起，c++中的话，整个系统的处理线程都会阻塞掉
+2、server端目前是一条连接两个goroutine(readRoutine/writeRoutine)
+	假设5k玩家，就有1w个goroutine，太多了
+3、msghandler可考虑设计成：不执行逻辑，仅将消息加入buf队列，由一个goroutine来处理
+	不过那5k个readRoutine貌似省不了哇，感觉单独一个goroutine处理消息也不会有性能提升
+	且增加了风险，若某条消息有阻塞调用，后面的就得等了
 ***********************************************************************/
 package tcp
 
@@ -14208,7 +14204,7 @@ func main() {
 	fmt.Println(b4) //输出：Hello
 }
 </pre>
-###GOlang container包
+###Golang container包
 <pre>
 package main
 
