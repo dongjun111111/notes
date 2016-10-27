@@ -12839,7 +12839,7 @@ uname -a                     //查看内核、操作系统、CPU信息
 </pre>
 ###时间格式显示小坑
 在IOS前端无法识别"2016-09-09 12:12:12",改成"2016/09/09 12:12:12"即可。
-###Golang时间比较大小 After Before
+###Golang时间比较大小 After Before 时间格式化(不同类型)
 <pre>
 var productStartTime time.Time
 if product.StartTime != "" {
