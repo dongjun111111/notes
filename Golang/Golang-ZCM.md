@@ -15,7 +15,7 @@ func main() {
 	var s string = "hello"
 	c := []byte(s)  //将字符串 s 转换成 []byte 类型
 	c[0] = 'c'
-	s = string(c)  //再转回 string 类型
+	s = string(c)  //再转换成 string 类型
 	println(s)
 }
 </pre>
