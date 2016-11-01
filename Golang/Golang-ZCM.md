@@ -16936,3 +16936,7 @@ func sleep() {
 	time.Sleep(30 * time.Second)
 }
 </pre>
+###Golang time 
+<pre>
+time.ParseInLocation("0000-00-00 00:00:00", "0000-00-00 00:00:00", time.Local)
+</pre>
