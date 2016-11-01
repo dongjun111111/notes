@@ -16943,3 +16943,27 @@ fmt.Println(res)
 output==>
 0000-01-01 00:00:00 +0800 CST
 </pre>
+###Golang 程序设计之用户登录状态监测
+将下面的方法作为全局调用的基本方法
+<pre>
+//检查用户的登录信息
+func (this *BaseController) CheckUsersLoginStatus() {
+	account := this.GetSession("account")
+	loginresult := make(map[string]interface{})
+	defer func() {
+		this.Data["json"] = loginresult
+		this.ServeJSON()
+	}()
+	if account == nil {
+		loginresult["islogin"] = false
+	} else {
+		loginresult["islogin"] = true
+		loginresult["account"] = account.(string)
+		//统计用户未读消息
+		uid := this.GetSession("loginid").(int)
+		uidstr := strconv.Itoa(uid)
+		//统计方法
+		loginresult["msg"] = 消息条数统计结果
+	}
+}
+</pre>
