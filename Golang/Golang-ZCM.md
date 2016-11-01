@@ -16938,5 +16938,8 @@ func sleep() {
 </pre>
 ###Golang time 
 <pre>
-time.ParseInLocation("0000-00-00 00:00:00", "0000-00-00 00:00:00", time.Local)
+res,_ := time.ParseInLocation("0000-00-00 00:00:00", "0000-00-00 00:00:00", time.Local)
+fmt.Println(res)
+output==>
+0000-01-01 00:00:00 +0800 CST
 </pre>
