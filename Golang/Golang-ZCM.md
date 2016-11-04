@@ -16967,3 +16967,24 @@ func (this *BaseController) CheckUsersLoginStatus() {
 	}
 }
 </pre>
+###Golang net/url
+<pre>
+package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	var urlparam = url.Values{}
+	urlparam.Add("jason", "1")
+	urlparam.Add("jason2", "2")
+	urlparam.Add("jason3", "3")
+	urlparam.Add("jason4", "4")
+	var params = urlparam.Encode()
+	fmt.Println("www.baidu.com?" + params)
+}
+output==>
+www.baidu.com?jason=1&jason2=2&jason3=3&jason4=4
+</pre>
