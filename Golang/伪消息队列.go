@@ -38,7 +38,7 @@ func read_channel(queue chan string) string {
 }
 
 func main() {
-	fmt.Printf("1111111\n")
+	fmt.Printf("11111\n")
 	for {
 
 		go func() {
