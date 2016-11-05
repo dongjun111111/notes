@@ -42,7 +42,7 @@ func main() {
 	for {
 
 		go func() {
-			write_channel(url_read_mysql_lis, "33333333333333")
+			write_channel(url_read_mysql_lis, "3333333333")
 		}()
 		ss := read_channel(url_read_mysql_lis)
 		fmt.Println(ss)
