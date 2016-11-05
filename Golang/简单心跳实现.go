@@ -27,9 +27,7 @@ func (t *PingTimer) SetDier(pi DierInterface) {
 //定时器唤醒处理函数
 func (t *PingTimer) Process() {
 	bDie := false
-
 	t.mu.Lock()
-
 	t.ptmr = nil
 
 	//如果连接未激活时间超过最大时长，则认为该连接过期，销毁处理
