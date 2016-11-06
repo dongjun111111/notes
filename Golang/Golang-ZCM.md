@@ -17105,7 +17105,6 @@ func cmd_watermark(file string, to string) {
 	jpeg.Encode(create_image, canvas, &jpeg.Options{95})
 	defer create_image.Close()
 }
-
 // 随机生成文件名
 func random_name() string {
 	rand.Seed(time.Now().UnixNano())
