@@ -17111,3 +17111,9 @@ func random_name() string {
 	return strconv.Itoa(rand.Int())
 }
 </pre>
+###redis缓存
+<pre>
+keys * //看所有缓存key
+flushdb //清除所有缓存
+set authen_off 1 //设置不用验证身份
+</pre>
