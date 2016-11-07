@@ -17117,3 +17117,13 @@ keys * //看所有缓存key
 flushdb //清除所有缓存
 set authen_off 1 //设置不用验证身份
 </pre>
+###defer位置之坑
+defer需要放到方法的最前面，不然调用不到！！！
+<pre>
+func test(){
+	defer func(){
+	...
+	}()
+	...
+}
+</pre>
