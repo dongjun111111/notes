@@ -17136,6 +17136,8 @@ ps -aux | sort -k4nr | head -5 //使用内存最多的5个进程
 ps -aux | sort -k3nr | head -5 //使用CPU最多的5个进程
 echo 1 > /proc/sys/vm/drop_caches   //清理内存命令|虚拟内存
 
+vi /etc/sysconfig/iptables //编辑防火墙配置文件
+service iptables restart   //最后重启防火墙使配置生效
 
 /*
  buffers是为块设备设计的缓冲。比如磁盘读写，把分散的写操作集中进行，减少磁盘I/O，从而提高系统性能。
@@ -17178,9 +17180,17 @@ echo 1 > /proc/sys/vm/drop_caches   //清理内存命令|虚拟内存
 　　# cut -d: -f1 /etc/passwd # 查看系统所有用户
 　　# cut -d: -f1 /etc/group # 查看系统所有组
 　　# crontab -l # 查看当前用户的计划任务
+    # chmod +wx filename   filename目录增加权限给当前用户
+	#chmod 777 filename 让所有用户对该目录【不涉及内部文件夹】有读写执行权限
+	#chmod -R 777 filename 让所有用户可对该目录内所有的文件和文件夹及子文件夹具备读写执行的权限
 　　服务
 　　# chkconfig --list # 列出所有系统服务
 　  # chkconfig --list | grep on # 列出所有启动的系统服务
 　　程序
 　  # rpm -qa # 查看所有安装的软件包
+</pre>
+###Mysql
+<pre>
+SHOW FULL PROCESSLIST; //展示所有链接到本数据库的所有进程
+show status;
 </pre>
