@@ -17208,7 +17208,14 @@ swapoff -a;swapon -a  //清理swap可以一定程度上减轻系统卡顿问题�
  第三步：free -m  查看内存失败结果；
  第四步：echo 0 > /proc/sys/vm/drop_caches 还原内核内存管理机制。
  ----------------------
-
+-buffers/cache=used-buffers-cached，这个是应用程序真实使用的内存大小
++buffers/cache=free+buffers+cached，这个是服务器真实还可利用的内存大小
+//-----清除ARP缓存
+ arp -n|awk '/^[1-9]/ {print "arp -d "$1}' | sh
+//----清除192.168.0.0网段的所有缓存
+for((ip=2;ip<255;ip++));do arp -d 192.168.0.$ip &>/dev/null;done
+注意：以上均需要root权限，尤其是最后一个，如果不再root下执行，则改为：
+arp -n|awk '/^[1-9]/ {print "arp -d "$1}' | sudo sh
 </pre>
 ###Mysql
 <pre>
