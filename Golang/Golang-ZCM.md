@@ -17183,6 +17183,14 @@ service iptables restart   //最后重启防火墙使配置生效
     # chmod +wx filename   filename目录增加权限给当前用户
 	#chmod 777 filename 让所有用户对该目录【不涉及内部文件夹】有读写执行权限
 	#chmod -R 777 filename 让所有用户可对该目录内所有的文件和文件夹及子文件夹具备读写执行的权限
+	#useradd 添加用户
+	#useradd -d /usr/sam -m sam 创建了一个用户sam,其中-d和-m选项用来为登录名sam产生一个主目录/usr/sam(/usr为默认的用户主目录所在的父目录)
+	#userdel 删除用户
+	#usermod 修改用户属性
+	#passwd 选项 用户名 | -l 锁定口令，即禁用账号；-u  口令解锁；-d 使账号无口令；-f  强迫用户下次登录时修改口令
+	#如果当前是超级用户，如果是超级用户，可以用下列形式指定任何用户的口令：passwd 任意用户的用户名
+	#为用户指定空口令：passwd -d sam ，下次可以免密登录
+	#groupadd  新建用户组
 　　服务
 　　# chkconfig --list # 列出所有系统服务
 　  # chkconfig --list | grep on # 列出所有启动的系统服务
