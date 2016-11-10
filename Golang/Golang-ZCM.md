@@ -17222,3 +17222,24 @@ arp -n|awk '/^[1-9]/ {print "arp -d "$1}' | sudo sh
 SHOW FULL PROCESSLIST; //展示所有链接到本数据库的所有进程
 show status;
 </pre>
+###Golang hmac
+<pre>
+package main
+
+import (
+	"crypto/hmac"
+	"crypto/md5"
+	"fmt"
+)
+
+//生成Hmac
+func MakeHmac(str string) string {
+	var hash = hmac.New(md5.New, []byte(YBPRIVATEKEYHMAC))
+	hash.Write([]byte(str))
+	return fmt.Sprintf("%x", hash.Sum(nil))
+}
+
+func main(){
+	fmt.Println(MakeHmac("str"))
+}
+</pre>
