@@ -17250,3 +17250,7 @@ nmcli dev wifi
 //连接
 nmcli dev wifi connect [SSID] password 
 </pre>
+MySQL中看一个字段a是否为空正确的判断方法是：
+<pre>
+a = "" or isnull(a)
+</pre>
