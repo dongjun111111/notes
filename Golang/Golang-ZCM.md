@@ -17243,3 +17243,10 @@ func main(){
 	fmt.Println(MakeHmac("str"))
 }
 </pre>
+###linux查看已连接的可用WIFI
+<pre>
+//列出可用的WiFi
+nmcli dev wifi
+//连接
+nmcli dev wifi connect [SSID] password 
+</pre>
