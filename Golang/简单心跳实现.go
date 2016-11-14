@@ -37,7 +37,7 @@ func (t *PingTimer) Process() {
 
 	t.mu.Unlock()
 
-	if bDie { //销毁，并且关闭定时器
+	if bDie { //销毁并且关闭定时器
 		t.dier.Die()
 		t.Clear()
 	} else {
