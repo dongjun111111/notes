@@ -17253,4 +17253,23 @@ nmcli dev wifi connect [SSID] password
 MySQL中看一个字段a是否为空正确的判断方法是：
 <pre>
 a = "" or isnull(a)
+
+----------端口访问权限设置----------
+//只打开22端口
+iptables -A INPUT -p tcp –dport 22 -j ACCEPT
+iptables -A OUTPUT -p tcp –sport 22 -j ACCEPT
+//保存设置
+service iptables save
+//重启服务
+service iptables restart
+
+
+或者是
+
+nc -lp 22 &
+----------------------
+一、查看哪些端口被打开  netstat -anp
+二、关闭端口号:iptables -A INPUT -p tcp --drop 端口号-j DROP
+　　iptables -A OUTPUT -p tcp --dport 端口号-j DROP
+三、打开端口号：iptables -A INPUT -ptcp --dport  端口号-j ACCEPT
 </pre>
