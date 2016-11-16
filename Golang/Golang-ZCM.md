@@ -17273,3 +17273,27 @@ nc -lp 22 &
 　　iptables -A OUTPUT -p tcp --dport 端口号-j DROP
 三、打开端口号：iptables -A INPUT -ptcp --dport  端口号-j ACCEPT
 </pre>
+###Golang 时间 日期操作 week
+<pre>
+package main 
+
+import (
+	"fmt"
+	"time"
+)
+
+func main(){
+	var w = map[int]string{1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thursday", 5: "Friday", 6: "Saturday", 7: "Sunday"}
+	time_now := time.Now()
+	week := time_now.Weekday().String()
+	date_now := time_now.Format("2006-01-02")
+	check11, _ := time.ParseInLocation("2006-01-02 15:04:05", date_now+" 00:00:00", time.Local)
+	check12, _ := time.ParseInLocation("2006-01-02 15:04:05", date_now+" 06:00:00", time.Local)
+	check21, _ := time.ParseInLocation("2006-01-02 15:04:05", date_now+" 18:00:00", time.Local)
+	check22, _ := time.ParseInLocation("2006-01-02 15:04:05", date_now+" 23:59:59", time.Local)
+	if week != w[6] {
+		fmt.Println(week)
+	}
+	fmt.Println(check11, "\n", check12, "\n", check21, "\n", check22)
+}
+</pre>
