@@ -17297,3 +17297,54 @@ func main(){
 	fmt.Println(check11, "\n", check12, "\n", check21, "\n", check22)
 }
 </pre>
+###Golang 定时器timer优化
+<pre>
+package main
+
+import (
+	"os"
+	"time"
+)
+
+func main() {
+	c := make(chan int, 100)
+	go func() {
+		for i := 0; i < 10; i++ {
+			c <- 1
+			time.Sleep(time.Second)
+		}
+		os.Exit(0)
+	}()
+
+	//方法一：只会产生一个定时器对象
+	/*维护一个全局单一的定时器，每次操作前调整一下定时器的超时时间，
+	从而避免每次循环都生成新的定时器对象*/
+	timer := time.NewTimer(time.Second)
+	for {
+		timer.Reset(time.Second)
+		select {
+		case n := <-c:
+			println(n)
+		case <-timer.C:
+		}
+	}
+
+	//方法二：会产生多个定时器对象，数量会根据i值而定，消耗性能，而且是常用做法
+	for {
+		select {
+		case n := <-c:
+			println(n)
+		case <-timeAfter(time.Second * 2):
+		}
+	}
+}
+
+func timeAfter(d time.Duration) chan int {
+	q := make(chan int, 1)
+	time.AfterFunc(d, func() {
+		q <- 1
+		println("run")
+	})
+	return q
+}
+</pre>
