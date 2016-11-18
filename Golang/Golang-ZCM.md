@@ -17272,6 +17272,23 @@ nc -lp 22 &
 二、关闭端口号:iptables -A INPUT -p tcp --drop 端口号-j DROP
 　　iptables -A OUTPUT -p tcp --dport 端口号-j DROP
 三、打开端口号：iptables -A INPUT -ptcp --dport  端口号-j ACCEPT
+
+//查看线程的栈跟踪
+pstack <PID>  //
+example: 
+pstack 3114  //bash
+#0  0x00007fb8661fe0ec in waitpid () from /lib64/libc.so.6
+#1  0x00000000004406d4 in waitchld.isra.10 ()
+#2  0x000000000044198c in wait_for ()
+#3  0x00000000004337ee in execute_command_internal ()
+#4  0x0000000000433a1e in execute_command ()
+#5  0x000000000041e205 in reader_loop ()
+#6  0x000000000041c88e in main ()
+
+//以树状图显示进程间的关系
+pstree    //有的需要下载
+
+pstree -p <PID>
 </pre>
 ###Golang 时间 日期操作 week
 <pre>
