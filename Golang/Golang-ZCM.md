@@ -17785,3 +17785,101 @@ func IsChineseNameStringEx(s string) (string, bool) {
 	return string(list), true
 }
 </pre>
+###Golang 获取本机ipv4列表
+<pre>
+package main
+
+import (
+	"net"
+)
+
+// IPv4List 获取本机的 ipv4 列表.
+func IPv4List() ([]net.IP, error) {
+	itfs, err := net.Interfaces()
+	if err != nil {
+		return nil, err
+	}
+
+	var (
+		itf      net.Interface
+		addrs    []net.Addr
+		addr     net.Addr
+		ipNet    *net.IPNet
+		ok       bool
+		ipv4     net.IP
+		ipv4List []net.IP
+	)
+	for _, itf = range itfs {
+		if itf.Flags&net.FlagUp == 0 {
+			continue
+		}
+		addrs, err = itf.Addrs()
+		if err != nil {
+			return nil, err
+		}
+		for _, addr = range addrs {
+			ipNet, ok = addr.(*net.IPNet)
+			if !ok || ipNet.IP.IsLoopback() {
+				continue
+			}
+			ipv4 = ipNet.IP.To4()
+			if ipv4 == nil {
+				continue
+			}
+			ipv4List = append(ipv4List, ipv4)
+		}
+	}
+	return ipv4List, nil
+}
+
+func main() {
+	res, _ := IPv4List()
+	for i := 0; i < len(res); i++ {
+		println(res[i].String())
+	}
+}
+</pre>
+###Golang crypto/subtle
+<pre>
+package main
+
+//安全比较string byte 的方法
+import (
+	"crypto/subtle"
+)
+
+func SecureCompareByte(given, actual []byte) bool {
+	if subtle.ConstantTimeEq(int32(len(given)), int32(len(actual))) == 1 {
+		if subtle.ConstantTimeCompare(given, actual) == 1 {
+			return true
+		}
+		return false
+	}
+	// Securely compare actual to itself to keep constant time, but always return false
+	if subtle.ConstantTimeCompare(actual, actual) == 1 {
+		return false
+	}
+	return false
+}
+
+func SecureCompareString(given, actual string) bool {
+	// The following code is incorrect:
+	// return SecureCompare([]byte(given), []byte(actual))
+
+	if subtle.ConstantTimeEq(int32(len(given)), int32(len(actual))) == 1 {
+		if subtle.ConstantTimeCompare([]byte(given), []byte(actual)) == 1 {
+			return true
+		}
+		return false
+	}
+	// Securely compare actual to itself to keep constant time, but always return false
+	if subtle.ConstantTimeCompare([]byte(actual), []byte(actual)) == 1 {
+		return false
+	}
+	return false
+}
+
+func main() {
+	println(SecureCompareString("4554", "4554"))
+}
+</pre>
