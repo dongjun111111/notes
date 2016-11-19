@@ -17289,6 +17289,16 @@ pstack 3114  //bash
 pstree    //有的需要下载
 
 pstree -p <PID>
+
+/*
+strace常用来跟踪进程执行时的系统调用和所接收的信号。 在Linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通 过系统调用访问硬件设备。strace可以跟踪到一个进程产生的系统调用,包括参数，返回值，执行消耗的时间。
+*/
+yum -y install strace 
+
+strace   
+
+example : strace cat /dev/null 
+
 </pre>
 ###Golang 时间 日期操作 week
 <pre>
@@ -17363,5 +17373,38 @@ func timeAfter(d time.Duration) chan int {
 		println("run")
 	})
 	return q
+}
+</pre>
+###Golnag 去除byte、string空格函数
+<pre>
+package main
+
+import (
+	"bytes"
+	"strings"
+)
+
+var newlineBytes = []byte{'\n'}
+
+func TrimSpaceByte(src []byte) []byte {
+	bytesArr := bytes.Split(src, newlineBytes)
+	for i := 0; i < len(bytesArr); i++ {
+		bytesArr[i] = bytes.TrimSpace(bytesArr[i])
+	}
+
+	return bytes.Join(bytesArr, nil)
+}
+
+func TrimSpaceString(src string) string {
+	strs := strings.Split(src, "\n")
+	for i := 0; i < len(strs); i++ {
+		strs[i] = strings.TrimSpace(strs[i])
+	}
+	return strings.Join(strs, "")
+}
+
+func main() {
+	str := "    -----Ki----"
+	println(TrimSpaceString(str))
 }
 </pre>
