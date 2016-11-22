@@ -17955,3 +17955,16 @@ func GetToday() string {
 	return today
 }
 </pre>
+###Golang简单的防止SQL注入
+<pre>
+func SqlDefend() error {
+regexpstr := `(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(\b(select|update|and|or|delete|insert|trancate|char|chr|into|substr|ascii|declare|exec|count|master|into|drop|execute)\b)`
+	re, err := regexp.Compile(regexpstr)
+	if err != nil {
+		fmt.Println(err.Error())
+		return err.Error()
+	}
+	examplestr := "存在 sel44ectdeclare"
+	return re.MatchString(examplestr) 
+}
+</pre>
