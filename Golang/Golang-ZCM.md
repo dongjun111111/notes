@@ -17906,3 +17906,20 @@ func GetRandom(length int) string {
 	return result
 }
 </pre>
+###Golang根据身份证获取生日
+<pre>
+// 处理出生日期函数
+func GetBrithDate(idcard string) string {
+	l := len(idcard)
+	var s string
+	if l == 15 {
+		s = "19" + utils.Substr(idcard, 6, 2) + "-" + utils.Substr(idcard, 8, 2) + "-" + utils.Substr(idcard, 10, 2)
+		return s
+	}
+	if l == 18 {
+		s = utils.Substr(idcard, 6, 4) + "-" + utils.Substr(idcard, 10, 2) + "-" + utils.Substr(idcard, 12, 2)
+		return s
+	}
+	return utils.GetToday()
+}
+</pre>
