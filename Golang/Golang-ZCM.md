@@ -17968,3 +17968,22 @@ regexpstr := `(?:')|(?:--)|(/\\*(?:.|[\\n\\r])*?\\*/)|(\b(select|update|and|or|d
 	return re.MatchString(examplestr) 
 }
 </pre>
+###Golang 常用tips
+<pre>
+//加密电子邮箱为星号 将邮箱地址的部分变成*号
+func EncryptEmail(email string) string {
+	length := len(email)
+	if 0 == length {
+		return ""
+	}
+	strs := strings.Split(email, "@")
+	return sToS(strs[0], '*', 1, len(strs[0])-2) + "@" + strs[1]
+}
+
+//加密姓名 将姓名的部分变成*号
+func EncryptName(name string) string {
+	r := []rune(name)
+	r[0] = '*'
+	return string(r)
+}
+</pre>
