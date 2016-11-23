@@ -17299,6 +17299,16 @@ strace
 
 example : strace cat /dev/null 
 
+//对连接的IP按连接数量进行排序
+netstat -ntu | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -n
+//查看TCP连接状态并对每种状态进行统计
+netstat -ant | awk '{print $NF}' | grep -v '[a-z]' | sort | uniq -c
+//查看80端口连接数最多的20个IP
+netstat -anlp|grep 80|grep tcp|awk '{print $5}'|awk -F: '{print $1}'|sort|uniq -c|sort -nr|head -n20
+//查找较多time_wait连接
+netstat -n|grep TIME_WAIT|awk '{print $5}'|sort|uniq -c|sort -rn|head -n20
+//找查较多的SYN连接
+netstat -an | grep SYN | awk '{print $5}' | awk -F: '{print $1}' | sort | uniq -c | sort -nr | more
 </pre>
 ###Golang 时间 日期操作 week
 <pre>
