@@ -11995,7 +11995,7 @@ func Delete(head *LinkNode, index int) Element {
 			point = point.Next //移位
 		}
 		point.Next = point.Next.Next //赋值
-		data := point.Nest.Data
+		data := point.Next.Data
 		return data
 	}
 }
