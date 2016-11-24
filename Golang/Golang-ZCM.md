@@ -11954,7 +11954,7 @@ type Element int64
 //定义节点
 type LinkNode struct {
 	Data Element   //数据域
-	Nest *LinkNode //指针域，指向下一个节点
+	Next *LinkNode //指针域，指向下一个节点
 }
 
 //函数接口
@@ -11970,11 +11970,11 @@ type LinkNoder interface {
 //添加 头结点，数据
 func Add(head *LinkNode, data Element) {
 	point := head //临时指针
-	for point.Nest != nil {
-		point = point.Nest //移位
+	for point.Next != nil {
+		point = point.Next //移位
 	}
 	var node LinkNode  //新节点
-	point.Nest = &node //赋值
+	point.Next = &node //赋值
 	node.Data = data
 	head.Data = Element(GetLength(head)) //打印全部的数据
 	if GetLength(head) > 1 {
@@ -11992,9 +11992,9 @@ func Delete(head *LinkNode, index int) Element {
 	} else {
 		point := head
 		for i := 0; i < index-1; i++ {
-			point = point.Nest //移位
+			point = point.Next //移位
 		}
-		point.Nest = point.Nest.Nest //赋值
+		point.Next = point.Next.Next //赋值
 		data := point.Nest.Data
 		return data
 	}
@@ -12008,12 +12008,12 @@ func Insert(head *LinkNode, index int, data Element) {
 	} else {
 		point := head
 		for i := 0; i < index-1; i++ {
-			point = point.Nest //移位
+			point = point.Next //移位
 		}
 		var node LinkNode //新节点，赋值
 		node.Data = data
-		node.Nest = point.Nest
-		point.Nest = &node
+		node.Next = point.Next
+		point.Next = &node
 	}
 }
 
@@ -12021,9 +12021,9 @@ func Insert(head *LinkNode, index int, data Element) {
 func GetLength(head *LinkNode) int {
 	point := head
 	var length int
-	for point.Nest != nil {
+	for point.Next != nil {
 		length++
-		point = point.Nest
+		point = point.Next
 	}
 	return length
 }
@@ -12032,13 +12032,13 @@ func GetLength(head *LinkNode) int {
 func Search(head *LinkNode, data Element) {
 	point := head
 	index := 0
-	for point.Nest != nil {
+	for point.Next != nil {
 		if point.Data == data {
 			fmt.Println(data, "exist at", index, "th")
 			break
 		} else {
 			index++
-			point = point.Nest
+			point = point.Next
 			if index > GetLength(head)-1 {
 				fmt.Println(data, "not exist at")
 				break
@@ -12056,7 +12056,7 @@ func GetData(head *LinkNode, index int) Element {
 		return ERROR
 	} else {
 		for i := 0; i < index; i++ {
-			point = point.Nest
+			point = point.Next
 		}
 		return point.Data
 	}
@@ -12064,17 +12064,17 @@ func GetData(head *LinkNode, index int) Element {
 
 //遍历 头结点
 func Traverse(head *LinkNode) {
-	point := head.Nest
-	for point.Nest != nil {
+	point := head.Next
+	for point.Next != nil {
 		fmt.Println(point.Data)
-		point = point.Nest
+		point = point.Next
 	}
 	fmt.Println("Traverse OK!")
 }
 
 //主函数测试
 func main() {
-	var head LinkNode = LinkNode{Data: 0, Nest: nil}
+	var head LinkNode = LinkNode{Data: 0, Next: nil}
 	head.Data = 0
 	var nodeArray []Element
 	for i := 0; i < 10; i++ {
