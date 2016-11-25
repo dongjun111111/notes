@@ -18025,3 +18025,30 @@ func main() {
 	time.Sleep(2e9)
 }
 </pre>
+###Golang http.PostForm
+<pre>
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+)
+
+func main() {
+	m := url.Values{}
+	m.Add("name1", "value1")
+	m.Add("name2", "value2")
+	resp, err := http.PostForm("https://www.baidu.com", m)
+	if err != nil {
+		fmt.Println("err")
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("err2")
+	}
+	fmt.Println(string(body))
+}
+</pre>
