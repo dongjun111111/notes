@@ -17997,3 +17997,31 @@ func EncryptName(name string) string {
 	return string(r)
 }
 </pre>
+###Golang sync.Once
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+func main() {
+	var one sync.Once //只会调用一次
+	first := func() {
+		fmt.Println("first times")
+	}
+	done := make(chan bool)
+	for i := 0; i < 10; i++ {
+		j := i
+		go func(int) { //int 是 j 的类型
+			one.Do(first)
+			fmt.Println(j)
+			done <- true
+		}(j)
+	}
+	<-done
+	time.Sleep(2e9)
+}
+</pre>
