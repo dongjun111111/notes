@@ -18095,5 +18095,19 @@ func main() {
 	res, _ := RsaEncrypt([]byte(`Hello`), []byte(`this is original data`))
 	println("RSA-数据-" + string(res))
 }
-
+</pre>
+###Golang通过身份证号码获取性别
+<pre>
+func WhichSexByIdcard(idcard string) string {
+	var sexs = [2]string{"F", "M"} //[2]string{"女","男"}
+	length := len(idcard)
+	if length == 18 {
+		sex, _ := strconv.Atoi(string(idcard[16]))
+		return sexs[sex%2]
+	} else if length == 15 {
+		sex, _ := strconv.Atoi(string(idcard[14]))
+		return sexs[sex%2]
+	}
+	return "M"
+}
 </pre>
