@@ -18052,3 +18052,48 @@ func main() {
 	fmt.Println(string(body))
 }
 </pre>
+###Golang rsa RSA加密与解密方法
+<pre>
+package main
+
+import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
+	"errors"
+)
+
+// 加密
+func RsaEncrypt(publicKey []byte, origData []byte) ([]byte, error) {
+	block, _ := pem.Decode(publicKey)
+	if block == nil {
+		return nil, errors.New("public key error")
+	}
+	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	pub := pubInterface.(*rsa.PublicKey)
+	return rsa.EncryptPKCS1v15(rand.Reader, pub, origData)
+}
+
+// 解密
+func RsaDecrypt(privateKey []byte, ciphertext []byte) ([]byte, error) {
+	block, _ := pem.Decode(privateKey)
+	if block == nil {
+		return nil, errors.New("private key error!")
+	}
+	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
+}
+
+func main() {
+	res, _ := RsaEncrypt([]byte(`Hello`), []byte(`this is original data`))
+	println("RSA-数据-" + string(res))
+}
+
+</pre>
