@@ -1,6 +1,6 @@
 package main
 
-//伪消息队列 channel
+// 伪消息队列 channel
 import (
 	"fmt"
 	"runtime"
