@@ -18099,7 +18099,7 @@ func main() {
 ###Golang通过身份证号码获取性别
 <pre>
 func WhichSexByIdcard(idcard string) string {
-	var sexs = [2]string{"F", "M"} //[2]string{"女","男"}
+	var sexs = [2]string{"F", "M"} //或者 [2]string{"女","男"}
 	length := len(idcard)
 	if length == 18 {
 		sex, _ := strconv.Atoi(string(idcard[16]))
