@@ -18111,3 +18111,27 @@ func WhichSexByIdcard(idcard string) string {
 	return "M"
 }
 </pre>
+###Golang slice通用插入方法
+<pre>
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+//slice的通用插入方法
+func Insert(slice interface{}, pos int, value interface{}) interface{} {
+	v := reflect.ValueOf(slice)
+	v = reflect.Append(v, reflect.ValueOf(value))
+	reflect.Copy(v.Slice(pos+1, v.Len()), v.Slice(pos, v.Len()))
+	v.Index(pos).Set(reflect.ValueOf(value))
+	return v.Interface()
+}
+
+func main() {
+	a := []int{1, 2, 3, 4, 5}
+	fmt.Println(a)
+	fmt.Println(Insert(a, 3, 3))
+}
+</pre>
