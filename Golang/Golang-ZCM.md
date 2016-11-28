@@ -18111,7 +18111,7 @@ func WhichSexByIdcard(idcard string) string {
 	return "M"
 }
 </pre>
-###Golang slice通用插入方法
+###Golang slice 通用插入方法
 <pre>
 package main
 
