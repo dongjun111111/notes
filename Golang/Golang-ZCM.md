@@ -18135,3 +18135,34 @@ func main() {
 	fmt.Println(Insert(a, 3, 3))
 }
 </pre>
+###Golang图片base64
+<pre>
+package main
+
+import (
+	"encoding/base64"
+	//"io/ioutil"
+	"os"
+)
+
+func main() {
+
+	//读原图片
+	ff, _ := os.Open("qr.png")
+	defer ff.Close()
+	sourcebuffer := make([]byte, 500000)
+	n, _ := ff.Read(sourcebuffer)
+	//base64压缩  sourcestring 图片base64数据
+	sourcestring := base64.StdEncoding.EncodeToString(sourcebuffer[:n])
+	// //写入临时文件
+	// ioutil.WriteFile("qr.png.txt", []byte(sourcestring), 0667)
+	// //读取临时文件
+	// cc, _ := ioutil.ReadFile("qr.png.txt")
+	//解压
+	dist, _ := base64.StdEncoding.DecodeString(sourcestring)
+	//写入新文件，生成新图片
+	f, _ := os.OpenFile("qb.png", os.O_RDWR|os.O_CREATE, os.ModePerm)
+	defer f.Close()
+	f.Write(dist)
+}
+</pre>
