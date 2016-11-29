@@ -18158,7 +18158,7 @@ func main() {
 	// ioutil.WriteFile("qr.png.txt", []byte(sourcestring), 0667)
 	// //读取临时文件
 	// cc, _ := ioutil.ReadFile("qr.png.txt")
-	//解压
+	//解码
 	dist, _ := base64.StdEncoding.DecodeString(sourcestring)
 	//写入新文件，生成新图片
 	f, _ := os.OpenFile("qb.png", os.O_RDWR|os.O_CREATE, os.ModePerm)
