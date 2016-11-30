@@ -18165,3 +18165,14 @@ func main() {
 	f.Write(dist)
 }
 </pre>
+###Golang md5加密
+<pre>
+func MD5keyforreal(pars map[string]interface{}) string {
+	md5key := "original_string"
+	parsJson, _ := json.Marshal(pars) //转json
+	sign_src := string(parsJson) + md5key
+	h := md5.New()
+	h.Write([]byte(sign_src))
+	return hex.EncodeToString(h.Sum(nil))
+}
+</pre>
