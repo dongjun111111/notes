@@ -18146,7 +18146,6 @@ import (
 )
 
 func main() {
-
 	//读原图片
 	ff, _ := os.Open("qr.png")
 	defer ff.Close()
