@@ -18176,7 +18176,7 @@ func MD5keyforreal(pars map[string]interface{}) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 </pre>
-###MYSQL  时间函数
+###MYSQL常用时间函数
 <pre>
 select date(NOW());
 select year(NOW());
@@ -18186,4 +18186,7 @@ select hour(NOW());
 
 2016-12-01
 2016
+12
+1
+12
 </pre>
