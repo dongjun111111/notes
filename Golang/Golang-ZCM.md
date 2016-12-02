@@ -18287,4 +18287,26 @@ func SelectQueryByRow() {
 	}
 }
 
+//mysql 事务
+tx, err := db.Begin()
+if err != nil {
+    log.Fatal(err)
+}
+defer tx.Rollback()
+stmt, err := tx.Prepare("INSERT INTO foo VALUES (?)")
+if err != nil {
+    log.Fatal(err)
+}
+defer stmt.Close() // danger!
+for i := 0; i < 10; i++ {
+    _, err = stmt.Exec(i)
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+err = tx.Commit()
+if err != nil {
+    log.Fatal(err)
+}
+
 </pre>
