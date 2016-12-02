@@ -18190,3 +18190,33 @@ select hour(NOW());
 1
 12
 </pre>
+###Golang database/sql 使用官方包
+<pre>
+//使用golang官方sql包查询表并且以字典形式输出结果
+func SelectQuery(dbdriver, dbconnecturl, selectsqlquery string) map[interface{}]interface{} {
+	db, err := sql.Open(dbdriver, dbconnecturl)
+	defer db.Close()
+	rows, err := db.Query(selectsqlquery)
+	defer rows.Close()
+	if err != nil {
+		panic(err)
+	}
+	columns, _ := rows.Columns()
+	scanArgs := make([]interface{}, len(columns))
+	values := make([]interface{}, len(columns))
+	for j := range values {
+		scanArgs[j] = &values[j]
+	}
+
+	record := make(map[interface{}]interface{})
+	for rows.Next() {
+		err = rows.Scan(scanArgs...)
+		for i, col := range values {
+			if col != nil {
+				record[columns[i]] = string(col.([]byte))
+			}
+		}
+	}
+	return record
+}
+</pre>
