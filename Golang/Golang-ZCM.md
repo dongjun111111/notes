@@ -18195,6 +18195,9 @@ select hour(NOW());
 //使用golang官方sql包查询表并且以字典形式输出结果
 func SelectQuery(dbdriver, dbconnecturl, selectsqlquery string) map[interface{}]interface{} {
 	db, err := sql.Open(dbdriver, dbconnecturl)
+	//db.SetMaxIdleConns(N)设置最大空闲连接数
+	//db.SetMaxOpenConns(N)设置最大打开连接数
+	//通常，mysql的最大连接数默认是100, 最大可以达到16384。要考虑操作系统支持的最大并发线程数等等因素
 	defer db.Close()
 	rows, err := db.Query(selectsqlquery)
 	defer rows.Close()
