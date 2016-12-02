@@ -18236,4 +18236,55 @@ func SelectQuery(dbdriver, dbconnecturl, selectsqlquery string) map[interface{}]
 	}
 	return record
 }
+
+//使用golang官方的database/sql包 逐行打印
+func SelectQueryByRow() {
+	db, err := sql.Open("mysql", "root:123456@tcp(192.168.1.221:3306)/zcm?charset=utf8&loc=Asia%2FShanghai")
+	defer db.Close()
+	// 执行sql语句
+	rows, err := db.Query("SELECT * FROM config limit 3")
+	if err != nil {
+		panic(err.Error())
+	}
+	// 获取一条数据中所有列的名称
+	columns, err := rows.Columns()
+	if err != nil {
+		panic(err.Error())
+	}
+	// 生成一个切片来接收值
+	values := make([]sql.RawBytes, len(columns))
+	// rows.Scan wants '[]interface{}' as an argument, so we must copy the
+	// references into such a slice
+	// See http://code.google.com/p/go-wiki/wiki/InterfaceSlice for details
+	scanArgs := make([]interface{}, len(values))
+	for i := range values {
+		scanArgs[i] = &values[i]
+	}
+	var datacount int
+	// 获取所有行
+	for rows.Next() {
+		datacount++
+		// get RawBytes from data
+		err = rows.Scan(scanArgs...)
+		if err != nil {
+			panic(err.Error())
+		}
+		// 打印出每列信息(string)
+		var value string
+		for i, col := range values {
+			if col == nil {
+				value = "NULL"
+			} else {
+				value = string(col)
+			}
+			fmt.Println(columns[i], ":", value) //每条数据的 字段名:值
+		}
+		fmt.Println("***************************************************")
+	}
+	fmt.Println(datacount) //数据总条数
+	if err = rows.Err(); err != nil {
+		panic(err.Error())
+	}
+}
+
 </pre>
