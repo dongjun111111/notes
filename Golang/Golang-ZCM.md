@@ -18192,11 +18192,25 @@ select hour(NOW());
 </pre>
 ###Golang database/sql 使用官方包
 <pre>
+//声明一个全局的db对象，并进行初始化。
+var db *sql.DB
+
+func init() {
+    db, _ = sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/example?charset=utf8")
+    db.SetMaxOpenConns(2000)
+    db.SetMaxIdleConns(1000)
+    db.SetConnMaxLifetime(300*time.Second)
+    db.Ping()
+}
+
 //使用golang官方sql包查询表并且以字典形式输出结果
 func SelectQuery(dbdriver, dbconnecturl, selectsqlquery string) map[interface{}]interface{} {
 	db, err := sql.Open(dbdriver, dbconnecturl)
 	//db.SetMaxIdleConns(N)设置最大空闲连接数
 	//db.SetMaxOpenConns(N)设置最大打开连接数
+	//db.SetConnMaxLifetime(d)超时时间
+ 	//example=>db.SetMaxOpenConns(2000)
+    //example=>db.SetMaxIdleConns(1000)
 	//通常，mysql的最大连接数默认是100, 最大可以达到16384。要考虑操作系统支持的最大并发线程数等等因素
 	defer db.Close()
 	rows, err := db.Query(selectsqlquery)
