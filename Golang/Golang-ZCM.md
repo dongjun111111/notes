@@ -18308,5 +18308,30 @@ err = tx.Commit()
 if err != nil {
     log.Fatal(err)
 }
+</pre>
+###Golang pool 临时对象池   GC
+<pre>
+package main
 
+import (
+	"log"
+	//"runtime"
+	"sync"
+)
+
+func main() {
+	//临时对象池 ，GC会销毁所有值
+	var pool = &sync.Pool{New: func() interface{} { return "This is pool auto reproduce an init value" }}
+	val1 := "Hello World--1"
+	val2 := "Hello World--2"
+	//放入2个
+	pool.Put(val1)
+	pool.Put(val2)
+	//runtime.GC()  //WARNING : GC一旦被调用，pool值全部消失...
+	//取出4个，后2个自动调用New方法产生
+	log.Println(pool.Get())
+	log.Println(pool.Get())
+	log.Println(pool.Get())
+	log.Println(pool.Get())
+}
 </pre>
