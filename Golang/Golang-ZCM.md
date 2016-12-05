@@ -18456,3 +18456,24 @@ func (c *Controller_name) URLMapping() {
 	c.Mapping("examplle", c.example)     
 }
 </pre>
+###Beego 获取config信息
+<pre>
+func init() {
+	DEBUG, _ = beego.AppConfig.Bool("debug")
+	var config map[string]string
+	var err error
+	if DEBUG {
+		config, err = beego.AppConfig.GetSection("debug")
+	} else {
+		config, err = beego.AppConfig.GetSection("release")
+	}
+	beego.Info("Release模式:", !DEBUG)
+	if err != nil {
+		panic(errors.New("配置文件读取错误 " + err.Error()))
+	}
+	REDIS_URI = config["redis_url"]
+	MYSQL_URI = config["mysql_url"]
+	BEEGO_CACHE = config["beego_cache"]
+	Rc, Re = cache.NewCache("redis", BEEGO_CACHE)
+}
+</pre>
