@@ -18335,3 +18335,103 @@ func main() {
 	log.Println(pool.Get())
 }
 </pre>
+###Golang 工作线程工具 workqueue
+<pre>
+package workqueue
+
+type Queue struct {
+	Jobs    chan string
+	done    chan bool
+	workers chan chan int
+}
+
+func (q *Queue) worker(id int, callback func(string, int)) (done chan int) {
+	done = make(chan int)
+
+	go func() {
+	work:
+		for {
+			select {
+			case <-q.done:
+				break work
+			case j := <-q.Jobs:
+				callback(j, id)
+			}
+		}
+		done <- id
+		close(done)
+	}()
+	return done
+}
+
+func (q *Queue) Init(size int, workers int, callback func(string, int)) {
+
+	q.Jobs = make(chan string, size)
+	q.done = make(chan bool)
+	q.workers = make(chan chan int, workers)
+	for w := 1; w <= workers; w++ {
+		q.workers <- q.worker(w, callback)
+	}
+	close(q.workers)
+}
+
+func (q *Queue) Run() {
+
+	// Wait for workers to be halted
+	for w := range q.workers {
+		<-w
+	}
+	// Nothing should still be mindlessly adding jobs
+	close(q.Jobs)
+}
+
+// Allow the queueue to be drained after it is closed
+func (q *Queue) Drain(callback func(string)) {
+	for j := range q.Jobs {
+		callback(j)
+	}
+}
+
+func (q *Queue) Close() {
+	close(q.done)
+}
+
+/*------------------------使用-----------------------------*/
+
+// A real worker would be parsing a web page or crunching numbers
+func workerFunc(job string, workerId int) {
+	fmt.Println("worker", workerId, "processing job", job)
+	//time.Sleep(1 * time.Second)
+	//fmt.Println("worker", workerId, "saving job", job)
+}
+
+func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	jobQueueSize := 100                 //队列容量
+	numberOfWorkers := runtime.NumCPU() //工作线程数
+
+	queue := goworkqueue.Queue{}
+	queue.Init(jobQueueSize, numberOfWorkers, workerFunc)
+
+	// Pretend we suddenly need to stop the workers.
+	// This might be a SIGTERM or perhaps the workerFunc() called queue.Close()
+	go func() {
+		time.Sleep(1 * time.Second)
+		queue.Close()
+		fmt.Println("ABORT!")
+	}()
+
+	// We can optionally prefill the work queue
+	for j := 0; j <= 9999; j++ {
+		queue.Jobs <- fmt.Sprintf("Job %d", j)
+	}
+
+	// Blocks until queue.Close()
+	queue.Run()
+
+	// Optional, callback for emptying the queue *if* anything remains
+	queue.Drain(func(job string) {
+		fmt.Printf("'%s' wasn't finished\n", job)
+	})
+}
+</pre>
