@@ -18438,7 +18438,18 @@ func main() {
 ###Beego MyAutoRouter UrlMapping 自动路由 性能会有所改善？
 <pre>
 router:
-beego.MyAutoRouter(&controller_path_dirname.Controller_name{})
+func init() {
+//=======================================解决自动路由bug====================================
+	exceptMethod := []string{"GetInt8", "GetInt16", "GetInt32", "GetInt64", "GetFiles",
+		"XSRFToken", "CheckXSRFCookie", "XSRFFormHTML", "HandlerFunc", "Mapping", "URLMapping", "renderTemplate", "URLFor"}
+	for _, fn := range exceptMethod {
+		beego.ExceptMethodAppend(fn)
+	}
+
+	beego.MyAutoRouter(&controller_path_dirname.Controller_name{})
+}
+
+
 
 Controller_name:
 func (c *Controller_name) URLMapping() {
