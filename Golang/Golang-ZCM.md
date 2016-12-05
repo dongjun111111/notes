@@ -18500,3 +18500,445 @@ func main(){
 	fmt.Println(AddDouhao("566768778"))
 }
 </pre>
+###Golang pdf 方法
+<pre>
+package pdf
+
+import (
+	"errors"
+	"github.com/signintech/gopdf"
+	"log"
+)
+
+type TASKPdfConfig struct {
+	PAGEWIDE      float64
+	PAGEHEIGHT    float64
+	SIDE          float64
+	TOP           float64
+	BOTTOM        float64
+	TABLELINESIZE float64
+	LINESIZE      float64
+}
+
+type TASKPdf struct {
+	gopdf.GoPdf
+	Config *TASKPdfConfig
+}
+
+const FONTNAME = "TASK"                   //字体文件名称
+const FONTPATH = "./pdf/ttf/SIMYOU.TTF"   //字体文件位置
+const STAMPPATH = "./pdf/ttf/example.jpg" //叠加图片位置
+const DEFAULTFONTSIZE = 10                //中文字，高和宽等于这个值，英文为一半
+// const PAGEWIDE = 595.28    //595.28, 841.89 = A4
+// const PAGEHEIGHT = 841.89
+// const SIDE = 50
+// const TOP = 90
+// const BOTTOM = 90
+
+var (
+	defaultBr          float64
+	defaultLineHight   float64
+	defaultLineFontNum int
+)
+
+func NewTASKPdf(config *TASKPdfConfig) *TASKPdf {
+	if config == nil {
+		config = &TASKPdfConfig{PAGEWIDE: 595.28, PAGEHEIGHT: 841.89, SIDE: 50, TOP: 90, BOTTOM: 90, LINESIZE: 1, TABLELINESIZE: 0.5}
+	}
+	defaultLineHight = float64(float64(DEFAULTFONTSIZE) + float64(DEFAULTFONTSIZE)/5)
+	defaultBr = float64(float64(DEFAULTFONTSIZE) + float64(DEFAULTFONTSIZE)/2)
+	num := (config.PAGEWIDE - config.SIDE*2) / DEFAULTFONTSIZE
+	defaultLineFontNum = int(num)
+	pdf := &TASKPdf{}
+	pdf.Start(gopdf.Config{Unit: "pt", PageSize: gopdf.Rect{W: config.PAGEWIDE, H: config.PAGEHEIGHT}})
+	pdf.SetTopMargin(config.TOP)
+	pdf.SetLeftMargin(config.SIDE)
+	pdf.SetLineWidth(config.SIDE)
+	pdf.Config = config
+	//设置默认字体
+	var err error
+	err = pdf.AddTTFFont(FONTNAME, FONTPATH)
+	HandleError("load font error", err)
+	err = pdf.SetFont(FONTNAME, "", DEFAULTFONTSIZE)
+	HandleError("set font error", err)
+	//设置线
+	pdf.SetLineWidth(1)
+
+	return pdf
+}
+
+func (pdf *TASKPdf) DoBR(height float64) *TASKPdf {
+	if pdf.GetY() > pdf.Config.PAGEHEIGHT-pdf.Config.BOTTOM-DEFAULTFONTSIZE {
+		pdf.AddPage()
+	}
+	pdf.Br(height)
+	return pdf
+}
+
+func (pdf *TASKPdf) DoDefaultBR() *TASKPdf {
+	if pdf.GetY() > pdf.Config.PAGEHEIGHT-pdf.Config.BOTTOM-DEFAULTFONTSIZE {
+		pdf.AddPage()
+	}
+	pdf.Br(defaultBr)
+	return pdf
+}
+
+func (pdf *TASKPdf) WriteDefaultLine() *TASKPdf {
+	x, y := pdf.GetX(), pdf.GetY()
+	// pdf.SetLineWidth(pdf.Config.TABLELINESIZE)
+	pdf.Line(x, y, pdf.Config.PAGEWIDE-pdf.Config.SIDE, y)
+	// pdf.SetY(y + 5)
+	// pdf.SetLineWidth(pdf.Config.LINESIZE)
+	return pdf
+}
+func (pdf *TASKPdf) WriteVerticalLine(height float64) *TASKPdf {
+	x, y := pdf.GetX(), pdf.GetY()
+	// pdf.SetLineWidth(pdf.Config.TABLELINESIZE)
+	pdf.Line(x, y, x, y+height)
+	// pdf.SetLineWidth(pdf.Config.LINESIZE)
+	return pdf
+}
+func (pdf *TASKPdf) WriteRightVerticalLine(height float64) *TASKPdf {
+	y := pdf.GetY()
+	// pdf.SetLineWidth(pdf.Config.TABLELINESIZE)
+	pdf.Line(pdf.Config.PAGEWIDE-pdf.Config.SIDE, y, pdf.Config.PAGEWIDE-pdf.Config.SIDE, y+height)
+	// pdf.SetLineWidth(pdf.Config.LINESIZE)
+	return pdf
+}
+func (pdf *TASKPdf) ResetX() *TASKPdf {
+	pdf.SetX(pdf.Config.SIDE)
+	return pdf
+}
+
+func (pdf *TASKPdf) AddY(size float64) *TASKPdf {
+	y := pdf.GetY()
+	pdf.SetY(y + size)
+	return pdf
+}
+func (pdf *TASKPdf) AddX(size float64) *TASKPdf {
+	x := pdf.GetX()
+	pdf.SetX(x + size)
+	return pdf
+}
+func (pdf *TASKPdf) WriteInCenter(text string, fontSize int) *TASKPdf {
+	//1.设置字体
+	pdf.SetFontSize(fontSize)
+	wide, _ := pdf.MeasureTextWidth(text)
+	//2.居中定位,写
+	// offset := (PAGEWIDE - pdf.GetX() - wide) / 2
+	offset := (pdf.Config.PAGEWIDE - wide) / 2
+	pdf.SetX(offset)
+	pdf.Cell(nil, text)
+	pdf.DoBR(GetBR(fontSize))
+	if fontSize != DEFAULTFONTSIZE {
+		//3.字体设置回默认的
+		pdf.SetDefaultFontSize()
+	}
+	return pdf
+}
+
+//右对齐
+func (pdf *TASKPdf) WriteInRight(text string) *TASKPdf {
+
+	wide, _ := pdf.MeasureTextWidth(text)
+	//2.居中定位,写
+	// offset := (PAGEWIDE - pdf.GetX() - wide) / 2
+	offset := pdf.Config.PAGEWIDE - pdf.Config.SIDE - wide
+	pdf.SetX(offset)
+	pdf.Cell(nil, text)
+	pdf.DoBR(GetBR(DEFAULTFONTSIZE))
+	return pdf
+}
+
+func (pdf *TASKPdf) WriteAnyPlace(percent float64, text string, fontSize int) *TASKPdf {
+	if fontSize == DEFAULTFONTSIZE {
+		pdf.SetX(pdf.Config.PAGEWIDE * percent)
+		pdf.Cell(nil, text)
+	} else {
+		pdf.SetFontSize(fontSize)
+
+		pdf.SetX(pdf.Config.PAGEWIDE * percent)
+		pdf.Cell(nil, text)
+
+		pdf.SetDefaultFontSize()
+	}
+	return pdf
+}
+
+func (pdf *TASKPdf) WriteWithLine(text string) *TASKPdf {
+	x, y := pdf.GetX(), pdf.GetY()
+	// log.Println("x,y:", x, y)
+	pdf.Cell(nil, text)
+	wide, _ := pdf.MeasureTextWidth(text)
+	pdf.Line(x, y+defaultLineHight, x+wide, y+defaultLineHight)
+	// log.Println("wide:", wide)
+	// log.Println(x, y+defaultLineHight, x+wide, y+defaultLineHight)
+	//划线后x轴值不是线的末尾，设置回去
+	pdf.SetX(x + wide)
+	return pdf
+}
+
+func (pdf *TASKPdf) WritePassage(text string) *TASKPdf {
+	length := Strlen(text)
+	wideFlag := pdf.Config.PAGEWIDE - pdf.Config.SIDE*2
+	var i int
+	var offset int
+	var flag bool
+	for i = 0; i <= length-defaultLineFontNum; i += defaultLineFontNum {
+		offset = 0
+		flag = true
+		for flag {
+			if i+defaultLineFontNum+offset > length {
+				flag = false
+			}
+			strline := Substr(text, i, defaultLineFontNum+offset)
+			wide, _ := pdf.MeasureTextWidth(strline)
+			if wide < wideFlag {
+				offset++
+			} else {
+				flag = false
+			}
+		}
+		pdf.Write(Substr(text, i, defaultLineFontNum+offset))
+		pdf.DoDefaultBR()
+		i += offset
+	}
+	if i < length {
+		pdf.Write(Substr(text, i, length-i))
+	}
+	return pdf
+}
+
+func (pdf *TASKPdf) Write(text string) *TASKPdf {
+	pdf.Cell(nil, text)
+	return pdf
+}
+
+func (pdf *TASKPdf) ZAddPage() *TASKPdf {
+	pdf.AddPage()
+	return pdf
+	// pdf.ZImage(BACKGROUNDPATH, 35, 0)
+	// log.Println(pdf)
+	// pdf.Image(BACKGROUNDPATH, 35, 0, nil)
+}
+func (pdf *TASKPdf) ZImage(image string, x float64, y float64) *TASKPdf {
+	pdf.Image(image, x, y, nil)
+	return pdf
+}
+func (pdf *TASKPdf) Out(filename string) *TASKPdf {
+	pdf.WritePdf(filename)
+	return pdf
+}
+
+func (pdf *TASKPdf) WriteWithColor(text string, r uint8, g uint8, b uint8) *TASKPdf {
+	pdf.SetTextColor(r, g, b)
+	pdf.Cell(nil, text)
+	//颜色设置回去
+	pdf.SetTextColor(0, 0, 0)
+	pdf.SetGrayFill(0)
+	return pdf
+}
+
+func (pdf *TASKPdf) SetFontSize(fontSize int) *TASKPdf {
+	err := pdf.SetFont(FONTNAME, "", fontSize)
+	HandleError("set font error", err)
+	return pdf
+}
+
+func (pdf *TASKPdf) SetDefaultFontSize() *TASKPdf {
+	err := pdf.SetFont(FONTNAME, "", DEFAULTFONTSIZE)
+	HandleError("set font error", err)
+	return pdf
+}
+
+func HandleError(prefix string, err error) bool {
+	if err != nil {
+		log.Fatalln(err.Error())
+		panic(errors.New(prefix))
+		return true
+	} else {
+		return false
+	}
+}
+
+func (pdf *TASKPdf) DrawCommonForm(x []float64, y []float64, value [][]string) *TASKPdf {
+	lenX := len(x)
+	lenY := len(y)
+	//画横线
+	for i := 0; i < lenY; i++ {
+		pdf.Line(x[0], y[i], x[lenX-1], y[i])
+	}
+	//画竖线
+	for i := 0; i < lenX; i++ {
+		pdf.Line(x[i], y[0], x[i], y[lenY-1])
+	}
+	//填值，暂不支持居中
+	for i := 0; i < lenY-1; i++ {
+		for j := 0; j < lenX-1; j++ {
+			pdf.SetX(x[j] + 5)
+			pdf.SetY(y[i] + 5)
+			pdf.Cell(nil, value[i][j])
+		}
+
+	}
+	return pdf
+}
+
+//==============test=================================
+//详见func (pdf *TASKPdf) WriteWithLine
+func (pdf *TASKPdf) WriteWithLineFont(text string, font int) *TASKPdf {
+	x, y := pdf.GetX(), pdf.GetY()
+
+	pdf.Cell(nil, text)
+	wide, _ := pdf.MeasureTextWidth(text)
+	lineHight := float64(float64(font) + float64(font)/5)
+	pdf.Line(x, y+lineHight, x+wide, y+lineHight)
+
+	pdf.SetX(x + wide)
+	return pdf
+}
+
+//在固定长度length里写text，起始位置为start
+func (pdf *TASKPdf) WriteInFixedlength(text string, length int, start int) *TASKPdf {
+	//去除逻辑错误
+	if length < 0 {
+		length = 10
+	}
+	if start > length || start < 0 {
+		start = 0
+	}
+	//获取视觉长度
+	lentext := LenOfSee(text)
+	if lentext+start > length {
+		text = GetBlank(start) + text[:length-start]
+	} else {
+		text = GetBlank(start) + text + GetBlank(length-(lentext+start))
+	}
+
+	return pdf.Write(text)
+}
+
+//固定长度中间写划线
+func (pdf *TASKPdf) WriteInCenterWithLineFixedlength(text string, length int, font int) *TASKPdf {
+	lentext := LenOfSee(text)
+	//去除逻辑错误
+	if length < 1 {
+		length = 1
+	}
+	if font < 0 {
+		font = 10
+	}
+	if lentext > length {
+		text = text[:length]
+	} else {
+		//前后缀空格
+		prefix := GetBlank((length - lentext) / 2)
+		suffix := GetBlank((length - lentext) - (length-lentext)/2)
+		text = prefix + text + suffix
+	}
+	return pdf.WriteWithLineFont(text, font)
+}
+
+//
+func (pdf *TASKPdf) WriteInCenterFixedlength(text string, length int) *TASKPdf {
+	lentext := LenOfSee(text)
+	//去除逻辑错误
+	if length < 1 {
+		length = 1
+	}
+	if lentext > length {
+		text = text[:length]
+		lentext = length
+	} else {
+		//前后缀空格
+		prefix := GetBlank((length - lentext) / 2)
+		suffix := GetBlank((length - lentext) - (length-lentext)/2)
+		text = prefix + text + suffix
+	}
+	return pdf.Write(text)
+}
+
+//自动分段(自定宽度，前缀长度，行间距，所有内容)
+func (pdf *TASKPdf) WritePassageAnyWidth(wideFlag int, preLength float64, lineSpace int, text string) *TASKPdf {
+	r := []rune(text)
+	length := len(r)
+	if length < wideFlag {
+		return pdf.AddX(preLength).Write(text).DoBR(GetBR(lineSpace))
+	}
+	var i int
+
+	for length > wideFlag {
+		length -= wideFlag
+		pdf.AddX(preLength).Write(string(r[i : i+wideFlag])).DoBR(GetBR(lineSpace))
+		i += wideFlag
+	}
+	return pdf.AddX(preLength).Write(string(r[i:])).DoBR(GetBR(lineSpace))
+}
+
+//------common方法---------
+func LenOfSee(str string) int {
+	rs := []rune(str)
+	return (len(rs) + len(str)) / 2
+}
+
+//获取i长度的空格串
+func GetBlank(i int) string {
+	blank := ""
+	if i == 0 {
+		return blank
+	}
+	shi := i / 10
+	ge := i % 10
+	if shi > 0 {
+		for num := 0; num < shi; num++ {
+			blank += "          "
+		}
+	}
+	if ge > 0 {
+		for num := 0; num < ge; num++ {
+			blank += " "
+		}
+	}
+
+	return blank
+}
+
+func GetBR(fontSize int) float64 {
+	return float64(float64(fontSize) + float64(fontSize)/2)
+}
+
+func Strlen(s string) int {
+	rs := []rune(s)
+	rl := len(rs)
+	return rl
+}
+func Substr(str string, start, length int) string {
+	rs := []rune(str)
+	rl := len(rs)
+	end := 0
+
+	if start < 0 {
+		start = rl - 1 + start
+	}
+	end = start + length
+
+	if start > end {
+		start, end = end, start
+	}
+
+	if start < 0 {
+		start = 0
+	}
+	if start > rl {
+		start = rl
+	}
+	if end < 0 {
+		end = 0
+	}
+	if end > rl {
+		end = rl
+	}
+
+	return string(rs[start:end])
+}
+</pre>
