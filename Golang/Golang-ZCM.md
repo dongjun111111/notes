@@ -18477,3 +18477,26 @@ func init() {
 	Rc, Re = cache.NewCache("redis", BEEGO_CACHE)
 }
 </pre>
+###Golang 给数值加上分隔逗号
+<pre>
+//给数值类型加上逗号,
+func AddDouhao(str string) string {
+	length := len(str)
+	if length < 4 {
+		return str
+	}
+	arr := strings.Split(str, ".")
+	length1 := len(arr[0])
+	if length1 < 4 {
+		return str
+	}
+	count := (length1 - 1) / 3
+	for i := 0; i < count; i++ {
+		arr[0] = arr[0][:length1-(i+1)*3] + "," + arr[0][length1-(i+1)*3:]
+	}
+	return strings.Join(arr, ".")
+}
+func main(){
+	fmt.Println(AddDouhao("566768778"))
+}
+</pre>
