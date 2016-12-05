@@ -18435,3 +18435,13 @@ func main() {
 	})
 }
 </pre>
+###Beego MyAutoRouter UrlMapping 自动路由 性能会有所改善？
+<pre>
+router:
+beego.MyAutoRouter(&controller_path_dirname.Controller_name{})
+
+Controller_name:
+func (c *Controller_name) URLMapping() {
+	c.Mapping("examplle", c.example)     
+}
+</pre>
