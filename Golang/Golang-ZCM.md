@@ -18942,3 +18942,32 @@ func Substr(str string, start, length int) string {
 	return string(rs[start:end])
 }
 </pre>
+###Golang 发送带有附件的邮件
+<pre>
+package main
+
+import (
+	"github.com/scorredoira/email"
+	"log"
+	"net/mail"
+	"net/smtp"
+)
+
+func main() {
+	m := email.NewMessage("This is Title", "this is content")
+	m.From = mail.Address{Name: "Jason", Address: "example@qq.com"}
+	m.To = []string{"example@163.com"}
+	err := m.Attach("qr.png")
+	if err != nil {
+		log.Println(err)
+	} else {
+		log.Println("附件添加成功！")
+	}
+	err = email.Send("smtp.qq.com:25", smtp.PlainAuth("", "example@qq.com", "pwd", "smtp.qq.com"), m)
+	if err == nil {
+		log.Println("邮件发送成功！")
+	} else {
+		log.Println(err.Error())
+	}
+}
+</pre>
