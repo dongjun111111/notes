@@ -19525,3 +19525,72 @@ func main() {
 	// 事情已经结束
 }
 </pre>
+###Golang 线程安全链表
+<pre>
+package main
+
+import (
+	"container/list"
+	"fmt"
+	"sync"
+	"time"
+)
+
+type Queue struct {
+	data *list.List
+}
+
+func NewQueue() *Queue {
+	q := new(Queue)
+	q.data = list.New()
+	return q
+}
+
+func (q *Queue) push(v interface{}) {
+	defer lock.Unlock()
+	lock.Lock()
+	q.data.PushFront(v)
+}
+
+func (q *Queue) pop() interface{} {
+	defer lock.Unlock()
+	lock.Lock()
+	iter := q.data.Back()
+	v := iter.Value
+	q.data.Remove(iter)
+	return v
+}
+
+func (q *Queue) dump() {
+	for iter := q.data.Back(); iter != nil; iter = iter.Prev() {
+		fmt.Println("item:", iter.Value)
+	}
+}
+
+var lock sync.Mutex
+
+func main() {
+	q := NewQueue()
+	go func() {
+		q.push("one")
+	}()
+	go func() {
+		q.push("four")
+	}()
+	q.push("two")
+	q.push("three")
+	v := q.pop()
+	fmt.Println("pop v:", v)
+	fmt.Println("......")
+	time.Sleep(1 * time.Second)
+	q.dump()
+}
+</pre>
+###Linux 常用命令
+<pre>
+//查看开机启动项
+ cat /etc/rc.d/rc.local
+
+//redis启动
+/usr/local/redis/src/redis-server /etc/redis.conf
+</pre>
