@@ -19445,3 +19445,83 @@ func main() {
 	}
 }
 </pre>
+###Golang sync.Cond   锁的条件变量
+<pre>
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+/*
+Cond有三个方法：Wait，Signal，Broadcast。
+Wait添加一个计数，也就是添加一个阻塞的goroutine;
+Signal解除一个goroutine的阻塞，计数减一;
+Broadcast接触所有wait goroutine的阻塞;
+
+那外部传入的Locker，是对wait，Signal，Broadcast进行保护。防止发送信号的时候，不会有新的goroutine进入wait。在wait逻辑完成前，不会有新的事件发生。
+
+注意：在调用Signal，Broadcast之前，应确保目标进入Wait阻塞状态。
+*/
+
+func main() {
+	wait := sync.WaitGroup{}
+	locker := new(sync.Mutex)
+	cond := sync.NewCond(locker)
+	for i := 0; i < 3; i++ {
+		go func(i int) {
+			defer wait.Done()
+			wait.Add(1)
+			cond.L.Lock()
+			fmt.Println("Waiting start...")
+			cond.Wait()
+			fmt.Println("Waiting end...")
+			cond.L.Unlock()
+			fmt.Println("Goroutine run. Number:", i)
+		}(i)
+	}
+	time.Sleep(time.Second)
+	cond.L.Lock()
+	cond.Signal()
+	cond.L.Unlock()
+
+	time.Sleep(time.Second)
+	cond.L.Lock()
+	cond.Signal()
+	cond.L.Unlock()
+
+	time.Sleep(time.Second)
+	cond.L.Lock()
+	cond.Signal()
+	cond.L.Unlock()
+
+	wait.Wait()
+}
+</pre>
+更加简单的可以是
+<pre>
+package main
+
+import "sync"
+
+func main() {
+	cv := sync.NewCond(new(sync.Mutex))
+	done := false
+	go func() {
+		cv.L.Lock()
+		//处理事情
+		done = true
+		cv.Signal()
+		cv.L.Unlock()
+	}()
+	//等待事情结束
+	cv.L.Lock()
+	for !done {
+		cv.Wait()
+	}
+	cv.L.Unlock()
+	// 事情已经结束
+}
+</pre>
