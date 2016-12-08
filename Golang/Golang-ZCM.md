@@ -19426,7 +19426,7 @@ type Node struct {
 }
 
 func (this *Node) Less(other interface{}) bool {
-	return this.priority < other.(*Node).riority
+	return this.priority < other.(*Node).priority
 }
 
 func main() {
