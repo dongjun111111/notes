@@ -19591,6 +19591,22 @@ func main() {
 //查看开机启动项
  cat /etc/rc.d/rc.local
 
+/防止rc.local重复运行        【放入rc.local文件中】
+touch /var/lock/subsys/local
+
 //redis启动
-/usr/local/redis/src/redis-server /etc/redis.conf
+1-->   /usr/local/redis/src/redis-server /etc/redis.conf
+2-->   /home/soft/redis-2.8.17/src/redis-server /home/soft/redis-2.8.17/redis.conf
+
+//启动svn服务 
+svnserve  -d -r /home/svn/svndata      | svnserve -d -r [仓库目录]
+
+//在当前目录下搜索文件内含有某字符串【大小写敏感】的文件 
+find . -type f |xargs grep 'rdb'   
+
+//在当前目录下搜索文件内含有某字符串【忽略大小写】的文件
+find . -type f -name '*.sh' | xargs grep -i 'your_string'
+
+//在当前目录下根据文件名模糊搜索文件
+find . -name 'rdb.*'
 </pre>
