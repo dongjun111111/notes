@@ -19628,4 +19628,8 @@ ELSE
 END )
 WHERE
 	id = 1;
+
+//mysql if else
+
+select *,if(actvity_name='活动1',"男","女") as ssva from activity where actvity_name != ""
 </pre>
