@@ -19609,4 +19609,23 @@ find . -type f -name '*.sh' | xargs grep -i 'your_string'
 
 //在当前目录下根据文件名模糊搜索文件
 find . -name 'rdb.*'
+
+//启动mysqld服务
+service mysqld start
+
+//mysql 更新语句
+
+UPDATE table   
+SET title =( CASE title
+WHEN instr(LOWER(title), '最大化') <= 0 THEN
+	title
+WHEN instr(LOWER(title), '最终') <= 0 THEN
+	title
+WHEN instr(LOWER(title), '最新') <= 0 THEN
+	title
+ELSE
+	REPLACE(title,'最','')
+END )
+WHERE
+	id = 1;
 </pre>
