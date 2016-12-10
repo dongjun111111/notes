@@ -19613,6 +19613,12 @@ find . -name 'rdb.*'
 //启动mysqld服务
 service mysqld start
 
+//启动nginx服务
+/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+
+//关闭nginx服务
+/usr/local/nginx/sbin/nginx -s stop
+
 //mysql 更新语句
 
 UPDATE table   
