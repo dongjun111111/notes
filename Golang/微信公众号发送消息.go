@@ -119,7 +119,7 @@ func Get_token(corpid, corpsecret string) (at access_token, err error) {
 	buf, _ := ioutil.ReadAll(resp.Body)
 	err = json.Unmarshal(buf, &at)
 	if at.Access_token == "" {
-		err = errors.New("corpid or corpsecret error.")
+		err = errors.New("corpid or corpsecret error .")
 	}
 	return
 }
