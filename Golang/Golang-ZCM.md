@@ -19639,41 +19639,43 @@ WHERE
 
 select *,if(actvity_name='活动1',"男","女") as ssva from activity where actvity_name != ""
 </pre>
-<<<<<<< HEAD
 ###Golang goroutine pool
-=======
-###Golang 显示正在执行的函数的名称与代码行数 runtime.Caller()
->>>>>>> 3967517faa4a93841a2e55b14c8f1082b07fce87
 <pre>
 package main
 
 import (
-	"fmt"
-<<<<<<< HEAD
-	//"runtime"
-	"time"
-	"github.com/ivpusic/grpool"
+  "fmt"
+  "runtime"
+  "time"
+
+  "github.com/ivpusic/grpool"
 )
 
 func main() {
-	// number of workers, and size of job queue
-	pool := grpool.NewPool(100, 50)
+  // number of workers, and size of job queue
+  pool := grpool.NewPool(100, 50)
 
-	// release resources used by pool
-	defer pool.Release()
+  // release resources used by pool
+  defer pool.Release()
 
-	// submit one or more jobs to pool
-	for i := 0; i < 10; i++ {
-		count := i
+  // submit one or more jobs to pool
+  for i := 0; i < 10; i++ {
+    count := i
 
-		pool.JobQueue <- func() {
-			fmt.Printf("I am worker! Number %d\n", count)
-		}
-	}
+    pool.JobQueue <- func() {
+      fmt.Printf("I am worker! Number %d\n", count)
+    }
+  }
 
-	// dummy wait until jobs are finished
-	time.Sleep(1 * time.Second)
-=======
+  // dummy wait until jobs are finished
+  time.Sleep(1 * time.Second)
+}
+<pre>
+###Golang 获取当前文件执行的行数
+<pre>
+package main 
+
+import (
 	"runtime"
 	"sync"
 )
@@ -19714,6 +19716,10 @@ func main() {
 	}
 	close(channels)
 	wg.Wait()
->>>>>>> 3967517faa4a93841a2e55b14c8f1082b07fce87
 }
+</pre>
+###Beego框架工作问题记录
+<pre>
+//如果是web应用，则在main.go文件中必须import _ "*/routers"
+	import _"*/routers"
 </pre>
