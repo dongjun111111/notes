@@ -19639,12 +19639,17 @@ WHERE
 
 select *,if(actvity_name='活动1',"男","女") as ssva from activity where actvity_name != ""
 </pre>
+<<<<<<< HEAD
 ###Golang goroutine pool
+=======
+###Golang 显示正在执行的函数的名称与代码行数 runtime.Caller()
+>>>>>>> 3967517faa4a93841a2e55b14c8f1082b07fce87
 <pre>
 package main
 
 import (
 	"fmt"
+<<<<<<< HEAD
 	//"runtime"
 	"time"
 	"github.com/ivpusic/grpool"
@@ -19668,5 +19673,47 @@ func main() {
 
 	// dummy wait until jobs are finished
 	time.Sleep(1 * time.Second)
+=======
+	"runtime"
+	"sync"
+)
+
+type worker struct {
+	Func func()
+}
+
+func main() {
+	var wg sync.WaitGroup
+
+	channels := make(chan worker, 10)
+
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for ch := range channels {
+				//reflect.ValueOf(ch.Func).Call(ch.Args)
+				//
+				ch.Func()
+			}
+		}()
+	}
+
+	for i := 0; i < 100; i++ {
+		j := i
+		wk := worker{
+			Func: func() {
+				fmt.Println(j + j)
+				_, file, line, ok := runtime.Caller(1)
+				if ok {
+					fmt.Println("filename:", file, " line:", line)
+				}
+			},
+		}
+		channels <- wk
+	}
+	close(channels)
+	wg.Wait()
+>>>>>>> 3967517faa4a93841a2e55b14c8f1082b07fce87
 }
 </pre>
