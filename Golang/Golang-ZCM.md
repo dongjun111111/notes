@@ -19900,6 +19900,6 @@ func (get *GoGet) Watch() {
 </pre>
 ###Linux nohup 
 <pre>
-//将项目运行日志的名称改成日期格式
-nohup ./项目名称 >  `date +%Y-%m-%d`.out 2>&1 &
+	//将项目运行的日志名称改成日期格式
+	nohup ./项目名称 >  `date +%Y-%m-%d`.out 2>&1 &
 </pre>
