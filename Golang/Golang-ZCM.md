@@ -19902,4 +19902,79 @@ func (get *GoGet) Watch() {
 <pre>
 	//将项目运行的日志名称改成日期格式
 	nohup ./项目名称 >  `date +%Y-%m-%d`.out 2>&1 &
+	//每秒执行一次
+	/bin/sleep 1    #每秒执行一次
+	
+
+/**********************************************************************/备份数据
+
+
+	//备份数据库
+	#!/bin/bash
+	Date=`date +%Y%m%d`
+	Begin=`date +"%Y年%m月%d日 %H:%M:%S"`
+	LogFile=10分钟.log
+	#mysqldump -h主机名称 -u用户名 -p密码 数据库名  表名  > 写入的文件名称
+	mysqldump -h00.00.00.00  -uUSERNAME -pPASSWORD  数据库名称   表一  表二  表三  表四 > /home/log/$Date.table
+	#备份mysql数据库
+	Last=`date +"%Y年%m月%d日 %H:%M:%S"`
+	echo 开始:$Begin 结束:$Last  success  >> /home/log/$LogFile
+	
+	
+	#ftp自动备份 
+	#lcd   ftp切换本地目录
+	#cd    ftp切换远程目录
+	#user  用户名  密码
+	ftp -ivn  00.00.00.00 <<EOF
+	user  USERNAME  PASSWORD
+	lcd /home/log 
+	cd /mysql-copy/table
+	put $Date.table
+	bye
+	EOF	
+	exit
+
+/**********************************************************************/备份数据
+
+	#!/bin/bash
+	Date=`date +%Y%m%d`
+	Begin=`date +"%Y年%m月%d日 %H:%M:%S"`
+	LogFile=15分钟exam_log
+	mysqldump -h00.00.00.00  -uUSERNAME -pPASSWORD  exam_log > /home/log/$Date-exam_log.sql
+	cd /home/log
+	tar -zcvf $Date-exam_log.sql.tar.gz $Date-exam_log.sql
+	#备份数据库
+	Last=`date +"%Y年%m月%d日 %H:%M:%S"`
+	echo 开始:$Begin 结束:$Last  success  >> /home/log/$LogFile
+
+
+	ftp -ivn  00.00.00.00 <<EOF
+	user  USERNAME  PASSWORD
+	bin
+	lcd /home/log
+	cd mysql-copy/log
+	put $Date-exam_log.sql.tar.gz
+	bye
+	EOF
+	exit
+	
+	find /home/log/ -amin +360  -exec rm -rvf {} \;
+
+/**********************************************************************/ 进程守护
+
+	#!/bin/sh
+	PRO_NAME="项目名称"
+	while true;
+	do
+	NUM=`ps aux | grep PRO_NAME | grep -v grep |wc -l`
+	if [ "${NUM}" -lt 1 ]
+	then
+	echo "${PRO_NAME} was killed"
+	cd /home/项目目录
+	./项目名称
+	else
+	echo "ok"
+	fi
+	sleep 3 
+	done
 </pre>
