@@ -19895,7 +19895,7 @@ func (get *GoGet) Download(i int) {
 }
 
 func (get *GoGet) Watch() {
-	fmt.Printf("[=================>]\n")
+	fmt.Printf("[===============>]\n")
 }
 </pre>
 ###Linux nohup 
