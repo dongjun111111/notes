@@ -8,7 +8,7 @@ import (
 )
 
 func ListHref(html string) {
-	//  (?m)开启多行文本模式，直到(?-m)。如果没出现就一直匹配到最后
+	//  (?m)开启多行文本模式，直到(?-m)，如果没出现就一直匹配到最后
 	//  .*? 尽可能少的（贪婪模式关闭）匹配任意字符
 
 	//var hrefRegexp = regexp.MustCompile("(?m)<a.*?[^<]>.*?</a>") //抓取所有链接地址
