@@ -20002,3 +20002,11 @@ func main() {
 	log.Println("exit")
 }
 </pre>
+###Mysql 获取此前30天的信息
+<pre>
+	SELECT * from (
+	SELECT * from exam_1 where state= 'YES' and create_date >= now()-interval 30 DAY  UNION ALL
+	SELECT * from exam_2 where state= 'YES' and create_date >= now()-interval 30 DAY  UNION ALL
+	SELECT * from exam_3 where state= 'YES' and create_date >= now()-interval 30 DAY )exams 
+	ORDER BY exams.create_date ASC
+</pre>
