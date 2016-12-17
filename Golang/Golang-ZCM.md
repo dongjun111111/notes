@@ -19978,3 +19978,27 @@ func (get *GoGet) Watch() {
 	sleep 3 
 	done
 </pre>
+###Golang sync.WaitGroup 
+<pre>
+package main
+
+import (
+	"log"
+	"sync"
+)
+
+// WaitGroup 同步的是 goroutine
+// wg 给拷贝传递到了 goroutine 中，导致只有 Add 操作，其实 Done 操作是在 wg 的副本执行的
+func main() {
+	wg := &sync.WaitGroup{}
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func(wg *sync.WaitGroup, i int) {
+			log.Printf("i:%d", i)
+			wg.Done()
+		}(wg, i)
+	}
+	wg.Wait()
+	log.Println("exit")
+}
+</pre>
