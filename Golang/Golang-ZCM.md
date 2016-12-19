@@ -20010,3 +20010,8 @@ func main() {
 	SELECT * from exam_3 where state= 'YES' and create_date >= now()-interval 30 DAY )exams 
 	ORDER BY exams.create_date ASC
 </pre>
+###Mysql  在整个数据库中搜索某一个字段
+<pre>
+-- 查找mysql数据库中所有包含特定名字的字段所在的表 
+select * from INFORMATION_SCHEMA.columns where COLUMN_NAME Like '%config%';
+</pre> 
