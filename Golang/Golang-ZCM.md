@@ -20019,6 +20019,7 @@ select * from INFORMATION_SCHEMA.columns where COLUMN_NAME Like '%config%';
 https://github.com/as/structslice
 <pre>
 //structslice.go
+//////////////////////////////////////
 package structslice
 
 import (
@@ -20141,9 +20142,15 @@ func (s structSlice) Index(i int) reflect.Value {
 	return s.Value.Index(i)
 }
 
+
+
 ///**************************************************///
 
+
+
 //interfaces.go
+/////////////////////////////////
+
 
 package structslice
 
