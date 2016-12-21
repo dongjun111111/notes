@@ -20222,3 +20222,12 @@ func SortStableByName(v interface{}, n ...string) error {
     ss.SortByName(internalDB, "ID")
   	fmt.Println(internalDB)
 </pre>
+###Golang 错误延迟调用
+<pre>
+defer func() {
+	if err := recover(); err != nil {
+		beego.Emergency("[ERROR]", err)
+		//RestartThisServe()
+	}
+}()
+</pre>
