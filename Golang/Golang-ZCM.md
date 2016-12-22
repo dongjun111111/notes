@@ -20242,4 +20242,36 @@ type ResultStruct struct {
 	Error_code string
 	Error_msg  string
 }
+
+
+//RSA 加解密
+//  RSA加密 PKCS8
+func RsaEncrypt2(origData, USERS_publicKey []byte) ([]byte, error) {
+	block, _ := pem.Decode(publicKey2)
+	if block == nil {
+		return nil, errors.New("public key error")
+	}
+	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	pub := pubInterface.(*rsa.PublicKey)
+	return rsa.EncryptPKCS1v15(rand.Reader, pub, origData)
+}
+
+// RSA解密 PKCS8
+func RsaDecrypt2(ciphertext []byte) ([]byte, error) {
+
+	block, _ := pem.Decode(USERS_privateKey)
+	if block == nil {
+		return nil, errors.New("private key error!")
+	}
+	privInterface, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	priv := privInterface.(*rsa.PrivateKey)
+	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
+}
+
 </pre>
