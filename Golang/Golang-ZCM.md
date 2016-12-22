@@ -20276,5 +20276,17 @@ func RsaDecrypt2(ciphertext []byte) ([]byte, error) {
 	priv := privInterface.(*rsa.PrivateKey)
 	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
 }
-
+</pre>
+###Golang struct to map 
+<pre>
+//struct转换成map
+func StructToMap(obj interface{}) map[string]interface{} {
+	t := reflect.TypeOf(obj)
+	v := reflect.ValueOf(obj)
+	var data = make(map[string]interface{})
+	for i := 0; i < t.NumField(); i++ {
+		data[t.Field(i).Name] = v.Field(i).Interface()
+	}
+	return data
+}
 </pre>
