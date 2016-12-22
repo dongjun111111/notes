@@ -20276,9 +20276,134 @@ func RsaDecrypt2(ciphertext []byte) ([]byte, error) {
 	priv := privInterface.(*rsa.PrivateKey)
 	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
 }
-</pre>
-###Golang struct to map 
-<pre>
+
+
+
+****************************************************
+
+package tool
+
+import (
+	"bytes"
+	"crypto"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/des"
+	"crypto/md5"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/sha1"
+	"crypto/x509"
+	"encoding/base64"
+	"encoding/pem"
+	"errors"
+	"fmt"
+	"io"
+	"io/ioutil"
+	ran "math/rand"
+	"os"
+	"reflect"
+	"sort"
+	"strconv"
+	"time"
+	"github.com/astaxie/beego"
+)
+
+const key = `fvck`
+
+//对字符串进行MD5哈希
+func Md5Encrypt(data string) string {
+	t := md5.New()
+	io.WriteString(t, data)
+	return fmt.Sprintf("%x", t.Sum(nil))
+}
+
+//对字符串进行SHA1哈希
+func ShaEncrypt(data string) string {
+	t := sha1.New()
+	io.WriteString(t, data)
+	return fmt.Sprintf("%x", t.Sum(nil))
+}
+
+//base64 加密
+func Base64Encrypt(data []byte) string {
+	return base64.StdEncoding.EncodeToString(data)
+}
+
+//base64 解密
+func Base64Decrypt(data string) []byte {
+	resdata, _ := base64.StdEncoding.DecodeString(data)
+	return resdata
+}
+
+//  RSA加密 PKCS8
+func RsaEncrypt2(origData, publicKey2 []byte) ([]byte, error) {
+	block, _ := pem.Decode(publicKey2)
+	if block == nil {
+		return nil, errors.New("public key error")
+	}
+	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	pub := pubInterface.(*rsa.PublicKey)
+	return rsa.EncryptPKCS1v15(rand.Reader, pub, origData)
+}
+
+// RSA解密 PKCS8
+func RsaDecrypt2(ciphertext []byte) ([]byte, error) {
+	block, _ := pem.Decode(privateKey)
+	if block == nil {
+		return nil, errors.New("private key error!")
+	}
+	privInterface, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	priv := privInterface.(*rsa.PrivateKey)
+	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
+}
+
+// 从文件中读取数据
+func ReadFileContent(path string) (string, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		beego.Emergency(file, err)
+	}
+	file1, err := os.OpenFile(path, os.O_RDWR|os.O_APPEND|os.O_CREATE, os.ModeType)
+	if err != nil {
+		beego.Emergency("从文件读取数据错误！第1步:" + err.Error())
+		return "", err
+	}
+	defer file1.Close()
+	// 往创建的文件中写入字符
+	//_, err = file1.WriteString("aaaaa\r\nbbbbb\r\ncccccc")
+	//if err != nil {
+	//    panic(err)
+	//}
+	// A. 使用 bufio按行读取文件
+	//br := bufio.NewReader(file1)
+	//for {
+	//    line, err := br.ReadString('\r')
+	//    if err == io.EOF {
+	//        fmt.Println("eof")
+	//        break
+	//    } else {
+	//        fmt.Printf("%v", line)
+	//    }
+	//}
+
+	// B. 使用ioutil读取文件所有内容
+	b, err := ioutil.ReadAll(file1)
+	if err != nil {
+		beego.Emergency("从文件读取数据错误！第2步:" + err.Error())
+		return "", err
+	}
+	//	fmt.Printf("%v", string(b))
+	//	time.Sleep(3 * time.Second)
+	return string(b), nil
+}
+
 //struct转换成map
 func StructToMap(obj interface{}) map[string]interface{} {
 	t := reflect.TypeOf(obj)
@@ -20288,5 +20413,216 @@ func StructToMap(obj interface{}) map[string]interface{} {
 		data[t.Field(i).Name] = v.Field(i).Interface()
 	}
 	return data
+}
+
+// aes 解密 ECB  PKCS5
+func AesDecrypt(crypted, key []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockMode := codec.NewECBDecrypter(block)
+	blockMode.CryptBlocks(crypted, crypted)
+	crypted = PKCS5UnPadding(crypted)
+	return crypted, nil
+
+}
+
+//生成密码aes密码 16位密码
+func GetRandom(length int) string {
+	r := ran.New(ran.NewSource(time.Now().UnixNano()))
+	var result string
+	for i := 0; i < length; i++ {
+		if int(r.Intn(2))%2 == 0 {
+			var choice int
+			if int(r.Intn(2))%2 == 0 {
+				choice = 65
+			} else {
+				choice = 97
+			}
+			result = result + string(choice+r.Intn(26))
+		} else {
+			result = result + strconv.Itoa(r.Intn(10))
+		}
+	}
+	return result
+}
+
+//aes加密 ECB  PKCS5
+func AesEncrypt(origData, key []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockSize := block.BlockSize()
+	origData = PKCS5Padding(origData, blockSize)
+	blockMode := codec.NewECBEncrypter(block)
+
+	crypted := origData
+	// 根据CryptBlocks方法的说明，如下方式初始化crypted也可以
+	//	crypted := origData
+	blockMode.CryptBlocks(crypted, origData)
+	return crypted, nil
+}
+
+func PKCS5Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+func PKCS5UnPadding(origData []byte) []byte {
+	length := len(origData)
+	// 去掉最后一个字节 unpadding 次
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
+}
+
+//rsa 生成待签名串
+func GenSignDataYbByRsa(m map[string]interface{}) string {
+	sorted_keys := make([]string, 0)
+	for k, _ := range m {
+		sorted_keys = append(sorted_keys, k)
+	}
+	// sort 'string' key in increasing order
+	sort.Strings(sorted_keys)
+	var valuestr string
+	for _, k := range sorted_keys {
+		//	fmt.Printf("k=%v, v=%v\n", k, m[k])
+		valuestr += fmt.Sprint(m[k])
+	}
+	//	beego.Info(valuestr)
+	return valuestr
+}
+
+// 产生签名：使用PKCS8 进行加密签名（私钥）
+func SignYb(data []byte) (sig []byte, err error) {
+	hashFunc := crypto.SHA1
+	h := hashFunc.New()
+	h.Write(data)
+	digest := h.Sum(nil)
+
+	block, _ := pem.Decode(privateKey)
+	if block == nil {
+		return nil, errors.New("privateKey key error")
+	}
+	//pubInterface, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	pubInterface, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	pub := pubInterface.(*rsa.PrivateKey)
+
+	bytes, err := rsa.SignPKCS1v15(nil, pub, hashFunc, digest)
+	if err != nil {
+		panic(err)
+	}
+	return bytes, err
+}
+
+// 3DES加密
+func TripleDesEncrypt(origData, key []byte) ([]byte, error) {
+	block, err := des.NewTripleDESCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	origData = PKCS5Padding(origData, block.BlockSize())
+	// origData = ZeroPadding(origData, block.BlockSize())
+	blockMode := cipher.NewCBCEncrypter(block, key[:8])
+	crypted := make([]byte, len(origData))
+	blockMode.CryptBlocks(crypted, origData)
+	return crypted, nil
+}
+
+// 3DES解密
+func TripleDesDecrypt(crypted, key []byte) ([]byte, error) {
+	block, err := des.NewTripleDESCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockMode := cipher.NewCBCDecrypter(block, key[:8])
+	origData := make([]byte, len(crypted))
+	// origData := crypted
+	blockMode.CryptBlocks(origData, crypted)
+	origData = PKCS5UnPadding(origData)
+	// origData = ZeroUnPadding(origData)
+	return origData, nil
+}
+
+//des3 + base64 encrypt
+func DesBase64Encrypt(origData []byte) ([]byte, error) {
+	result, err := TripleDesEncrypt(origData, []byte(key))
+	if err != nil {
+		return nil, err
+	}
+	return []byte(base64.StdEncoding.EncodeToString(result)), nil
+}
+
+func DesBase64Decrypt(crypted []byte) ([]byte, error) {
+	result, _ := base64.StdEncoding.DecodeString(string(crypted))
+	origData, err := TripleDesDecrypt(result, []byte(key))
+	if err != nil {
+		return nil, err
+	}
+	return origData, nil
+}
+
+type ecb struct {
+	b         cipher.Block
+	blockSize int
+}
+
+func newECB(b cipher.Block) *ecb {
+	return &ecb{
+		b:         b,
+		blockSize: b.BlockSize(),
+	}
+}
+
+type ecbEncrypter ecb
+
+// NewECBEncrypter returns a BlockMode which encrypts in electronic code book
+// mode, using the given Block.
+func NewECBEncrypter(b cipher.Block) cipher.BlockMode {
+	return (*ecbEncrypter)(newECB(b))
+}
+
+func (x *ecbEncrypter) BlockSize() int { return x.blockSize }
+
+func (x *ecbEncrypter) CryptBlocks(dst, src []byte) {
+	if len(src)%x.blockSize != 0 {
+		panic("crypto/cipher: input not full blocks")
+	}
+	if len(dst) < len(src) {
+		panic("crypto/cipher: output smaller than input")
+	}
+	for len(src) > 0 {
+		x.b.Encrypt(dst, src[:x.blockSize])
+		src = src[x.blockSize:]
+		dst = dst[x.blockSize:]
+	}
+}
+
+type ecbDecrypter ecb
+
+// NewECBDecrypter returns a BlockMode which decrypts in electronic code book
+// mode, using the given Block.
+func NewECBDecrypter(b cipher.Block) cipher.BlockMode {
+	return (*ecbDecrypter)(newECB(b))
+}
+
+func (x *ecbDecrypter) BlockSize() int { return x.blockSize }
+
+func (x *ecbDecrypter) CryptBlocks(dst, src []byte) {
+	if len(src)%x.blockSize != 0 {
+		panic("crypto/cipher: input not full blocks")
+	}
+	if len(dst) < len(src) {
+		panic("crypto/cipher: output smaller than input")
+	}
+	for len(src) > 0 {
+		x.b.Decrypt(dst, src[:x.blockSize])
+		src = src[x.blockSize:]
+		dst = dst[x.blockSize:]
+	}
 }
 </pre>
