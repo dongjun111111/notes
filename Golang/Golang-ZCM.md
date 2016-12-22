@@ -20231,3 +20231,15 @@ defer func() {
 	}
 }()
 </pre>
+###Golang 嵌套结构体
+<pre>
+type ResultStruct struct {
+	Identitytype    int
+	Cardlist      []struct {
+		Phone     string
+		Code      string
+	}
+	Error_code string
+	Error_msg  string
+}
+</pre>
