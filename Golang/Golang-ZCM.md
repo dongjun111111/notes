@@ -20014,6 +20014,9 @@ func main() {
 <pre>
 -- 查找mysql数据库中所有包含特定名字的字段所在的表 
 select * from INFORMATION_SCHEMA.columns where COLUMN_NAME Like '%config%';
+
+-- group by * having ~~~
+select * from table group by id having count(id)>1
 </pre> 
 ###Golang 对结构体进行排序 第三方库 赞
 https://github.com/as/structslice
