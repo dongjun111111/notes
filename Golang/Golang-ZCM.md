@@ -20913,3 +20913,24 @@ func EncodeXMLFromMap(w io.Writer, m map[string]string, rootname string) (err er
 	}
 }
 </pre>
+###Golang orm事务
+<pre>
+//删除账号 mysql事务
+func DeleteAccount(account string) error {
+	o := orm.NewOrm()
+	sql1 := "delete from table1 where account_id=(SELECT id FROM table2 where account=?)"
+	sql2 := "delete from table2 where account=?"
+	o.Begin()
+	_, err1 := o.Raw(sql1, account).Exec()
+	if err1 == nil {
+		_, err2 := o.Raw(sql2, account).Exec()
+		if err2 == nil {
+			o.Commit()
+		} else {
+			return err2
+		}
+	}
+	o.Rollback()
+	return err1
+}
+</pre>
