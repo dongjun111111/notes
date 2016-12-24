@@ -18456,7 +18456,7 @@ func (c *Controller_name) URLMapping() {
 	c.Mapping("examplle", c.example)     
 }
 </pre>
-###Beego 获取config信息
+###Beego 获取config信息 app.conf
 <pre>
 func init() {
 	DEBUG, _ = beego.AppConfig.Bool("debug")
@@ -21004,5 +21004,27 @@ import (
 
 func main() {
 	fmt.Println(strconv.FormatInt(time.Now().Unix(), 10))
+}
+</pre>
+###Golang 获取当月的第一天
+<pre>
+package main
+
+import (
+	"fmt"
+	"strconv"
+	"time"
+)
+
+var month = map[string]string{"January": "01", "February": "02", "March": "03", "April": "04", "May": "05", "June": "06", "July": "07", "August": "08", "September": "09", "October": "10", "November": "11", "December": "12"}
+
+//获取当月的第一天
+func GetCurrentMonth() string {
+	year := strconv.Itoa(time.Now().Year())
+	m := month[time.Now().Month().String()]
+	return year + "-" + m + "-" + "01"
+}
+func main() {
+	fmt.Println(GetCurrentMonth())
 }
 </pre>
