@@ -20992,3 +20992,17 @@ func main() {
 	fmt.Println(sha1string("jaSon"))
 }
 </pre>
+###Golang 时间戳格式化
+<pre>
+package main
+
+import (
+	"fmt"
+	"strconv"
+	"time"
+)
+
+func main() {
+	fmt.Println(strconv.FormatInt(time.Now().Unix(), 10))
+}
+</pre>
