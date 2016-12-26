@@ -21502,3 +21502,105 @@ func main() {
     }
 }
 </pre>
+###Golang GC优化 GC调优
+<pre>
+package main
+
+/*
+GC优化
+优化gc的方式仅仅只能是通过优化程序。但go有一个优势：
+有真正的array（而仅仅是an array of referece）。
+go的gc算法是mark and sweep，array对此是友好的：整个array一次性被处理。
+可以用一个array用open addressing的方式实现map，
+以此优化gc（也会减少内存的使用，后面可以看到）
+*/
+
+import (
+	"fmt"
+	//"math/rand"
+)
+
+type DealTiny struct {
+	Dealid    int32
+	Classid   int32
+	Mttypeid  int32
+	Bizacctid int32
+	Isonline  bool
+	Geocnt    int32
+}
+
+type DealMap struct {
+	table   []DealTiny
+	buckets int
+	size    int
+}
+
+const SIZE = 50000
+
+// round 到最近的2的倍数
+func minBuckets(v int) int {
+	v--
+	v |= v >> 1
+	v |= v >> 2
+	v |= v >> 4
+	v |= v >> 8
+	v |= v >> 16
+	v++
+	return v
+}
+
+func hashInt32(x int) int {
+	x = ((x >> 16) ^ x) * 0x45d9f3b
+	x = ((x >> 16) ^ x) * 0x45d9f3b
+	x = ((x >> 16) ^ x)
+	return x
+}
+
+func NewDealMap(maxsize int) *DealMap {
+	buckets := minBuckets(maxsize)
+	return &DealMap{size: 0, buckets: buckets, table: make([]DealTiny, buckets)}
+}
+
+// TODO rehash策略
+func (m *DealMap) Put(d DealTiny) {
+	num_probes, bucket_count_minus_one := 0, m.buckets-1
+	bucknum := hashInt32(int(d.Dealid)) & bucket_count_minus_one
+	for {
+		if m.table[bucknum].Dealid == 0 { // insert, 不支持放入ID为0的Deal
+			m.size += 1
+			m.table[bucknum] = d
+			return
+		}
+		if m.table[bucknum].Dealid == d.Dealid { // update
+			m.table[bucknum] = d
+			return
+		}
+		num_probes += 1 // Open addressing with Linear probing
+		bucknum = (bucknum + num_probes) & bucket_count_minus_one
+	}
+}
+
+func (m *DealMap) Get(id int32) (DealTiny, bool) {
+	num_probes, bucket_count_minus_one := 0, m.buckets-1
+	bucknum := hashInt32(int(id)) & bucket_count_minus_one
+	for {
+		if m.table[bucknum].Dealid == id {
+			return m.table[bucknum], true
+		}
+		if m.table[bucknum].Dealid == 0 {
+			return m.table[bucknum], false
+		}
+		num_probes += 1
+		bucknum = (bucknum + num_probes) & bucket_count_minus_one
+	}
+}
+
+func main() {
+	dm := NewDealMap(SIZE)
+	for i := 0; i < SIZE; i++ {
+		dm.Put(DealTiny{Dealid: int32(i), Classid: int32(200)})
+	}
+	dealres, boo := dm.Get(1)
+	fmt.Println(dealres, boo)
+}
+</pre>
