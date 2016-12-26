@@ -21164,7 +21164,7 @@ func main() {
 	LUTC()
 }
 </pre>
-###Golang最简单的http转发 翻墙程序 赞赞赞【Jason】
+###Golang最简单的http转发 翻墙程序 赞赞赞【http://www.flysnow.org/2016/12/24/golang-http-proxy.html】
 <pre>
 package main
 
