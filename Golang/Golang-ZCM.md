@@ -21604,8 +21604,8 @@ func main() {
 	fmt.Println(dealres, boo)
 }
 </pre>
-###Nginx 负载均衡设置
-配置实例如下
+###Nginx 小技巧
+负载均衡设置
 <pre>
 upstream wishome_backend {
     server mawenbao.com:9001;
@@ -21625,3 +21625,19 @@ server {
 通过上面的配置，访问test.mawenbao.com的请求将被平均分配到9001和9002两个端口。
 
 proxy_set_header设置的两个http头X-Real-Ip和X-Forwarded-For用于记录访问者的原始ip地址，其中X-Real-Ip只是一个ip，而X-Forwarded-For是一系列逗号分割的ip列表，第一个是访问者的ip，其后都是转发服务器的ip地址。
+
+访问txt文件时提示下载
+
+txt文件的MIME类型为text/plain，使用浏览器访问时默认行为是直接在浏览器中显示。如果需要将默认行为改为直接下载，可以在nginx配置文件中添加如下规则即可。
+<pre>
+location ~* \.(txt) {
+  add_header Content-Disposition "attachment";
+}
+<pre>
+对于某些特殊的文件，如果在访问时需要直接在浏览器上显示文件内容，则可使用如下规则，以gpg的asc加密文件为例。
+<pre>
+location ~* \.(asc) {
+  default_type text/plain;
+  add_header Content-Disposition "inline";
+}
+</pre>
