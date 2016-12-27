@@ -21604,3 +21604,24 @@ func main() {
 	fmt.Println(dealres, boo)
 }
 </pre>
+###Nginx 负载均衡设置
+配置实例如下
+<pre>
+upstream wishome_backend {
+    server mawenbao.com:9001;
+    server mawenbao.com:9002;
+}
+
+server {
+    server_name test.mawenbao.com;
+
+    location / {
+        proxy_set_header X-Real-Ip $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://wishome_backend;
+    }
+}
+</pre>
+通过上面的配置，访问test.mawenbao.com的请求将被平均分配到9001和9002两个端口。
+
+proxy_set_header设置的两个http头X-Real-Ip和X-Forwarded-For用于记录访问者的原始ip地址，其中X-Real-Ip只是一个ip，而X-Forwarded-For是一系列逗号分割的ip列表，第一个是访问者的ip，其后都是转发服务器的ip地址。
