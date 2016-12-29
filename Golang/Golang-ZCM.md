@@ -22514,7 +22514,7 @@ const tpl = `<html>
 </body>
 </html>`
 </pre>
-###Golang cgi CGI 
+###Golang cgi CGI 公共网关接口
 <pre>
 package main
 
@@ -22536,7 +22536,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8989", nil))
 }
 </pre>
-###Golang  TCP聊天程序
+###Golang  TCP 聊天程序
 <pre>
 package main
 
