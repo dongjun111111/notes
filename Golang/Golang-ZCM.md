@@ -22717,7 +22717,7 @@ func PKCS7UnPadding(plantText []byte, blockSize int) []byte {
 	return plantText[:(length - unpadding)]
 }
 
-//////////解密代码 end/////////////
+//////////解密代码 end////////////
 
 func main() {
 	res, _ := Encrypt([]byte("ddd"), []byte("1000000000000000"))
