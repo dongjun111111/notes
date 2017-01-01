@@ -22514,3 +22514,25 @@ const tpl = `<html>
 </body>
 </html>`
 </pre>
+###Golang cgi CGI 
+<pre>
+package main
+
+import (
+	"log"
+	"net/http"
+	"net/http/cgi"
+)
+
+func main() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		handler := new(cgi.Handler)
+		handler.Path = "D:/gopath/src/test" + r.URL.Path //需要访问的文件地址，该文件必须是可以执行的
+		log.Println(handler.Path)
+		handler.Dir = "D:/gopath/src/test/"
+		handler.ServeHTTP(w, r)
+	})
+
+	log.Fatal(http.ListenAndServe(":8989", nil))
+}
+</pre>
