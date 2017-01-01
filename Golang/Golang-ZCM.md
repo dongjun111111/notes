@@ -22536,3 +22536,94 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8989", nil))
 }
 </pre>
+###Golang  TCP聊天程序
+<pre>
+package main
+
+//Server
+import (
+	"fmt"
+	"net"
+)
+
+const (
+	ip   = "localhost"
+	port = 3333
+)
+
+func main() {
+	listen, err := net.ListenTCP("tcp", &net.TCPAddr{net.ParseIP(ip), port, ""})
+	if err != nil {
+		fmt.Println("监听端口失败:", err.Error())
+		return
+	}
+	fmt.Println("已初始化连接，等待客户端连接...")
+	Server(listen)
+}
+
+func Server(listen *net.TCPListener) {
+	for {
+		conn, err := listen.AcceptTCP()
+		if err != nil {
+			fmt.Println("接受客户端连接异常:", err.Error())
+			continue
+		}
+		fmt.Println("客户端连接来自:", conn.RemoteAddr().String())
+		defer conn.Close()
+		go func() {
+			data := make([]byte, 128)
+			for {
+				i, err := conn.Read(data)
+				fmt.Println("客户端发来数据:", string(data[0:i]))
+				if err != nil {
+					fmt.Println("读取客户端数据错误:", err.Error())
+					break
+				}
+				conn.Write([]byte{'f', 'i', 'n', 'i', 's', 'h'})
+			}
+
+		}()
+	}
+}
+
+package main
+
+//Client
+import (
+	"fmt"
+	"net"
+)
+
+const (
+	addr = "127.0.0.1:3333"
+)
+
+func main() {
+	conn, err := net.Dial("tcp", addr)
+	if err != nil {
+		fmt.Println("连接服务端失败:", err.Error())
+		return
+	}
+	fmt.Println("已连接服务器")
+	defer conn.Close()
+	Client(conn)
+}
+
+func Client(conn net.Conn) {
+	sms := make([]byte, 128)
+	for {
+		fmt.Print("请输入要发送的消息:")
+		_, err := fmt.Scan(&sms)
+		if err != nil {
+			fmt.Println("数据输入异常:", err.Error())
+		}
+		conn.Write(sms)
+		buf := make([]byte, 128)
+		c, err := conn.Read(buf)
+		if err != nil {
+			fmt.Println("读取服务器数据异常:", err.Error())
+		}
+		fmt.Println(string(buf[0:c]))
+	}
+}
+</pre>
