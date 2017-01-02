@@ -22892,7 +22892,7 @@ func main() {
 //   print("do something")
 //   go.os.InvokeSomeReallyHeavyAndBlockingSystemCall()
 //   print("do something 2")
-// go会帮你转成
+// golang 会帮你转成
 // def 真实的A:
 //   print("do something")
 //   Thread t = new Thread( () => {
