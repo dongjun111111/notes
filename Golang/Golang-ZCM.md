@@ -22654,7 +22654,7 @@ func EachFunc(m map[interface{}]interface{}, f func(k, v interface{})) {
 	Each(m, HandlerFunc(f))
 }
 func selfInfo(k, v interface{}) {
-	fmt.Printf("大家好,我叫%s,今年%d岁\n", k, v)
+	fmt.Printf("大家好,我叫%s,今年%d岁.\n", k, v)
 }
 func main() {
 	persons := make(map[interface{}]interface{})
