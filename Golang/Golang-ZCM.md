@@ -21181,16 +21181,20 @@ import (
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	l, err := net.Listen("tcp", ":8081")
+	l, err := net.Listen("tcp", ":80")
 	if err != nil {
 		log.Panic(err)
 	}
 	for {
 		client, err := l.Accept()
-		if err != nil {
-			log.Panic(err)
+		if strings.Contains(client.RemoteAddr().String(), "60.191.37.251") {
+			if err != nil {
+				log.Panic(err)
+			}
+			log.Println("Start Working ---->", client.RemoteAddr().String())
+			go handleClientRequest(client)
 		}
-		go handleClientRequest(client)
+
 	}
 }
 func handleClientRequest(client net.Conn) {
@@ -21221,19 +21225,22 @@ func handleClientRequest(client net.Conn) {
 		}
 	}
 	//获得了请求的host和port，就开始拨号吧
-	server, err := net.Dial("tcp", address)
-	if err != nil {
-		log.Println(err)
-		return
+	fmt.Println(address)
+	if address != ":80" && address != ":443" {
+		server, err := net.Dial("tcp", address)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		if method == "CONNECT" {
+			fmt.Fprint(client, "HTTP/1.1 200 Connection established\r\n")
+		} else {
+			server.Write(b[:n])
+		}
+		//进行转发
+		go io.Copy(server, client)
+		io.Copy(client, server)
 	}
-	if method == "CONNECT" {
-		fmt.Fprint(client, "HTTP/1.1 200 Connection established\r\n")
-	} else {
-		server.Write(b[:n])
-	}
-	//进行转发
-	go io.Copy(server, client)
-	io.Copy(client, server)
 }
 </pre>
 ###Golang socket5 代理
