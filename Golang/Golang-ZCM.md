@@ -22919,4 +22919,12 @@ func main() {
 <pre>
 // lsof -i :port_number |grep "LISTEN"
 lsof -i :8080   //查看8080端口被哪个程序占用
+
+//linux mysql 更改用户[root]密码
+mysql> UPDATE mysql.user SET password =password('newpwd') WHERE user='root';
+mysql> FLUSH PRIVILEGES;
+
+//使用密码登录
+mysql>mysql -u root -p       //以root用户身份登录
+mysql>ENTER Password
 </pre>
