@@ -22927,4 +22927,10 @@ mysql> FLUSH PRIVILEGES;
 //使用密码登录
 mysql>mysql -u root -p       //以root用户身份登录
 mysql>ENTER Password
+
+//允许远程IP连接mysql数据库 
+mysql>GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '111111' WITH GRANT OPTION;
+mysql>FLUSH PRIVILEGES;
+上句话的意思就是使用root在任意一台计算机上面以密码“111111”来连接，你如果在远程计算机上面使用密码“123”是无法连接的，包括你在本地使用mysql -uroot -p 密码为111111也无法连接。
+当然执行上面一句SQL我们还需要FLUSH下缓存区，使之生效。
 </pre>
