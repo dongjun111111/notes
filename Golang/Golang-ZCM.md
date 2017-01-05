@@ -22917,5 +22917,6 @@ func main() {
 </pre>
 ###Linux 查看端口被哪个程序占用
 <pre>
-lsof -i :8080   // lsof -i :port_number |grep "LISTEN"
+// lsof -i :port_number |grep "LISTEN"
+lsof -i :8080   //查看8080端口被哪个程序占用
 </pre>
