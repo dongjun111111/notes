@@ -22934,3 +22934,33 @@ mysql>FLUSH PRIVILEGES;
 上句话的意思就是使用root在任意一台计算机上面以密码“111111”来连接，你如果在远程计算机上面使用密码“123”是无法连接的，包括你在本地使用mysql -uroot -p 密码为111111也无法连接。
 当然执行上面一句SQL我们还需要FLUSH下缓存区，使之生效。
 </pre>
+###Golang json解析float64类型数据
+<pre>
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"strings"
+)
+
+type Record struct {
+	A json.Number `json:"a"`
+	B json.Number `json:"b"`
+}
+
+func main() {
+	var (
+		data   = `{"a":0.058,"b":2.060}`
+		record Record
+	)
+
+	dec := json.NewDecoder(strings.NewReader(data))
+	dec.UseNumber()
+	if err := dec.Decode(&record); err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("a = %s ; b = %s \n", record.A, record.B)
+}
+</pre>
