@@ -22986,3 +22986,22 @@ func main() {
 	}
 }
 </pre>
+###Golang 安全并发取不重复的随机字符串,自定义长度
+<pre>
+package main
+
+import (
+	"crypto/rand"
+	"encoding/hex"
+	"fmt"
+)
+
+func main() {
+	b := make([]byte, 45)    //自定义长度
+	n, err := rand.Read(b)
+	if n != len(b) || err != nil {
+		fmt.Errorf("Could not successfully read from the system CSPRNG.")
+	}
+	fmt.Println(hex.EncodeToString(b))
+}
+</pre> 
