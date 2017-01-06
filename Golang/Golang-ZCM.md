@@ -22933,6 +22933,12 @@ mysql>GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '111111' WITH GRAN
 mysql>FLUSH PRIVILEGES;
 上句话的意思就是使用root在任意一台计算机上面以密码“111111”来连接，你如果在远程计算机上面使用密码“123”是无法连接的，包括你在本地使用mysql -uroot -p 密码为111111也无法连接。
 当然执行上面一句SQL我们还需要FLUSH下缓存区，使之生效。
+  
+//以M为单位显示磁盘使用量和占用率
+df -m
+
+//列出home目录下所有文件或目录占用的大小，以KB作为计量单位
+du -k /home
 </pre>
 ###Golang json解析float64类型数据 bool类型数据
 <pre>
@@ -22964,7 +22970,7 @@ func main() {
 	fmt.Printf("a = %s ; b = %s \n", record.A, record.B)
 }
 
-////////////////////
+/////////////////////////////
 
 package main
 
