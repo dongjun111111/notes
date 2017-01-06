@@ -22992,7 +22992,7 @@ func main() {
 	}
 }
 </pre>
-###Golang 安全并发取不重复的随机字符串,自定义长度
+###Golang安全并发取不重复的随机字符串,自定义长度
 <pre>
 package main
 
