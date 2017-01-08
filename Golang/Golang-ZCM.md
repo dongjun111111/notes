@@ -23125,7 +23125,7 @@ func main() {
 	fmt.Println(testing.Benchmark(TestStringsPlus))
 }
 </pre>
-###Golang 通过身份证号计算年龄年纪
+###Golang 通过身份证号计算年龄/年纪
 <pre>
 func GetAgeByIdCard(idCard string) int {
 	// 仅支持18位身份证
