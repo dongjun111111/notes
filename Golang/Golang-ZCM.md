@@ -23156,5 +23156,6 @@ func GetAgeByIdCard(idCard string) int {
 <pre>
 type Examp struct {
     Num1 string `json:"1"`
+	Num2 string `json:"2"`
 }
 </pre>
