@@ -23161,5 +23161,5 @@ type Examp struct {
 </pre>
 ###svn 
 <pre>
-svnserve -d -r /home/svndata
+svnserve -d -r  /home/svndata
 </pre>
