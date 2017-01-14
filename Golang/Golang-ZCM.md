@@ -23159,7 +23159,7 @@ type Examp struct {
 	Num2 string `json:"2"`
 }
 </pre>
-###svn 
+###启动svn服务 
 <pre>
 svnserve -d -r  /home/svndata
 </pre>
