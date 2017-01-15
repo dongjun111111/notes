@@ -23152,7 +23152,7 @@ func GetAgeByIdCard(idCard string) int {
 	return age
 }
 </pre>
-###Golang json 解析key为数字
+###Golang json 解析key为数字的数据
 <pre>
 type Examp struct {
     Num1 string `json:"1"`
