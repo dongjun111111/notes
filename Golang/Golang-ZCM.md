@@ -23181,3 +23181,31 @@ func GetTodayLastSecond() time.Duration {
 	return time.Duration(end.Unix()-time.Now().Local().Unix()) * time.Second
 }
 </pre>
+###Golang json解析时候的转义问题
+<pre>
+type Query struct {
+	AppID     string `json:"AppID"`
+	Timestamp int64  `json:"Timestamp"`
+	Package   string `json:"Package"`
+}
+
+func MarshalDemo() {
+	v := &Query{}
+	v.AppID = "testid"
+	v.Timestamp = time.Now().Unix()
+	v.Package = "xxcents=100&bank=666"
+
+	data, _ := json.Marshal(v)
+	fmt.Println("Golang在解析JSON时需注意的:处理前Marshal:", string(data))
+
+	data = bytes.Replace(data, []byte("\\u0026"), []byte("&"), -1)
+	data = bytes.Replace(data, []byte("\\u003c"), []byte("<"), -1)
+	data = bytes.Replace(data, []byte("\\u003e"), []byte(">"), -1)
+	data = bytes.Replace(data, []byte("\\u003d"), []byte("="), -1)
+
+	fmt.Println("Golang在解析JSON时需注意的:处理后Marshal:", string(data))
+}
+output==>
+Golang在解析JSON时需注意的:处理前Marshal: {"AppID":"testid","Timestamp":1484568598,"Package":"xxcents=100\u0026bank=666"}
+Golang在解析JSON时需注意的:处理后Marshal: {"AppID":"testid","Timestamp":1484568598,"Package":"xxcents=100&bank=666"}
+</pre>
