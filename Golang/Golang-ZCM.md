@@ -23163,3 +23163,21 @@ type Examp struct {
 <pre>
 svnserve -d -r  /home/svndata
 </pre>
+###Golang 用缓存限制每日提交次数
+<pre>
+func Limit10TimesPerDay(key string) int {
+	count := 10  //限制10次
+	if Rc.IsExist(key) {
+		count, _ = Rc.RedisInt(key)
+	}
+	count--
+	Rc.Put(key, count, GetTodayLastSecond())
+	return count
+}
+
+func GetTodayLastSecond() time.Duration {
+	today := GetToday() + " 23:59:59"
+	end, _ := time.ParseInLocation("2006-01-02 15:04:05", today, time.Local)
+	return time.Duration(end.Unix()-time.Now().Local().Unix()) * time.Second
+}
+</pre>
