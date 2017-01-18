@@ -25,7 +25,7 @@ func (self *GoroutinePool) Init(number int, total int) {
 	self.result = make(chan error, total)
 }
 
-// 开门接客
+// 开始工作
 func (self *GoroutinePool) Start() {
 	for i := 0; i < self.Number; i++ {
 		go func() {
@@ -58,7 +58,7 @@ func (self *GoroutinePool) Start() {
 	}
 }
 
-// 关门送客
+// 停止工作
 func (self *GoroutinePool) Stop() {
 	close(self.Queue)
 	close(self.result)
