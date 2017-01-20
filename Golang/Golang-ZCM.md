@@ -23209,3 +23209,63 @@ output==>
 Golang在解析JSON时需注意的:处理前Marshal: {"AppID":"testid","Timestamp":1484568598,"Package":"xxcents=100\u0026bank=666"}
 Golang在解析JSON时需注意的:处理后Marshal: {"AppID":"testid","Timestamp":1484568598,"Package":"xxcents=100&bank=666"}
 </pre>
+###Beego框架JSON默认加密
+<pre>
+//BaseController.go
+
+package controllers
+
+import (
+	// "cmks/models"
+	"encoding/json"
+	"net/http"
+	"zcm/utils"
+
+	"github.com/astaxie/beego"
+)
+
+type BaseController struct {
+	beego.Controller
+}
+
+func (c *BaseController) Prepare() {
+	if c.Ctx.Input.Method() != "GET" && c.Ctx.Input.Method() != "HEAD" && !c.Ctx.Input.IsUpload() {
+		c.Ctx.Input.RequestBody = utils.DesBase64Decrypt(c.Ctx.Input.RequestBody)
+	}
+}
+
+func (c *BaseController) ServeJSON(encoding ...bool) {
+	var (
+		hasIndent   = true
+		hasEncoding = false
+	)
+	if beego.BConfig.RunMode == beego.PROD {
+		hasIndent = false
+	}
+	if len(encoding) > 0 && encoding[0] == true {
+		hasEncoding = true
+	}
+	c.JSON(c.Data["json"], hasIndent, hasEncoding)
+}
+
+// JSON writes json to response body.
+// if coding is true, it converts utf-8 to \u0000 type.
+func (c *BaseController) JSON(data interface{}, hasIndent bool, coding bool) error {
+	c.Ctx.Output.Header("Content-Type", "application/json; charset=utf-8")
+	var content []byte
+	var err error
+	if hasIndent {
+		content, err = json.MarshalIndent(data, "", "  ")
+	} else {
+		content, err = json.Marshal(data)
+	}
+	if err != nil {
+		http.Error(c.Ctx.Output.Context.ResponseWriter, err.Error(), http.StatusInternalServerError)
+		return err
+	}
+	if coding {
+		content = []byte(utils.StringsToJSON(string(content)))
+	}
+	return c.Ctx.Output.Body(自定义加密方法(content))
+}
+</pre>
