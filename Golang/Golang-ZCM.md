@@ -23245,7 +23245,7 @@ func (c *BaseController) ServeJSON(encoding ...bool) {
 	c.JSON(c.Data["json"], hasIndent, hasEncoding)
 }
 
-// JSON writes json to response body.
+// json writes json to response body.
 // if coding is true, it converts utf-8 to \u0000 type.
 func (c *BaseController) JSON(data interface{}, hasIndent bool, coding bool) error {
 	c.Ctx.Output.Header("Content-Type", "application/json; charset=utf-8")
