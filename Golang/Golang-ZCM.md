@@ -23226,7 +23226,7 @@ type BaseController struct {
 }
 
 func (c *BaseController) Prepare() {
-	if c.Ctx.Input.Method() != "GET" && c.Ctx.Input.Method() != "HEAD" && !c.Ctx.Input.IsUpload() {
+	if c.Ctx.Input.Method() != "GET" &&  c.Ctx.Input.Method() != "HEAD" && !c.Ctx.Input.IsUpload() {
 		c.Ctx.Input.RequestBody = utils.DesBase64Decrypt(c.Ctx.Input.RequestBody)
 	}
 }
@@ -23236,7 +23236,7 @@ func (c *BaseController) ServeJSON(encoding ...bool) {
 		hasIndent   = true
 		hasEncoding = false
 	)
-	if beego.BConfig.RunMode == beego.PROD {
+	if beego.BConfig.RunMode == beego.PROD  {
 		hasIndent = false
 	}
 	if len(encoding) > 0 && encoding[0] == true {
