@@ -23209,7 +23209,7 @@ output==>
 Golang在解析JSON时需注意的:处理前Marshal: {"AppID":"testid","Timestamp":1484568598,"Package":"xxcents=100\u0026bank=666"}
 Golang在解析JSON时需注意的:处理后Marshal: {"AppID":"testid","Timestamp":1484568598,"Package":"xxcents=100&bank=666"}
 </pre>
-###Beego框架JSON默认加密
+### Beego框架JSON默认加密
 <pre>
 //BaseController.go
 
