@@ -22732,7 +22732,7 @@ func main() {
 	println(string(finalres))
 }
 </pre>
-###Golang io.Pipe
+###Golang之io.Pipe
 <pre>
 package main
 
