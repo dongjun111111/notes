@@ -23003,7 +23003,7 @@ import (
 )
 
 func main() {
-	b := make([]byte, 45)    //自定义长度
+	b := make([]byte, 45)    //自定义的长度
 	n, err := rand.Read(b)
 	if n != len(b) || err != nil {
 		fmt.Errorf("Could not successfully read from the system CSPRNG.")
