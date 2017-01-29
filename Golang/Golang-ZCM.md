@@ -22634,7 +22634,7 @@ func Client(conn net.Conn) {
 	}
 }
 </pre>
-###Golang 接口型函数
+###Golang  接口型函数
 <pre>
 package main
 
