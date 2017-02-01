@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	urls := "http://www.fengyun5.com/Sibao/600/1.html"
+	urls := "http://fengyun5.com/Sibao/600/1.html"
 	res, _ := http.Get(urls)
 	file, _ := os.Create("downloadFiles.html")
 	io.Copy(file, res.Body)
