@@ -23226,7 +23226,7 @@ type BaseController struct {
 }
 
 func (c *BaseController) Prepare() {
-	if c.Ctx.Input.Method() != "GET" &&  c.Ctx.Input.Method() != "HEAD" && !c.Ctx.Input.IsUpload() {
+	if c.Ctx.Input.Method() != "GET" && c.Ctx.Input.Method() != "HEAD" && !c.Ctx.Input.IsUpload() {
 		c.Ctx.Input.RequestBody = utils.DesBase64Decrypt(c.Ctx.Input.RequestBody)
 	}
 }
