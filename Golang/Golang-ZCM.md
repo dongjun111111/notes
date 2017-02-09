@@ -4464,6 +4464,7 @@ itoa`s type is: string
 "hello,\u4e16\u754c"
 </pre>
 ###将其他类型的变量转换成字符串类型
+该方法返回值中会包含两个双引号，需注意！！！
 <pre>
 package main
 
@@ -4475,7 +4476,7 @@ import (
 
 func ToString(v interface{}) string {
 	data, _ := json.Marshal(v)
-	return string(data)
+	return string(data)    //return string(data)[1:len(data)-1]
 }
 
 func main() {
