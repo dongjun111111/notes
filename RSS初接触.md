@@ -6,7 +6,7 @@ RSS 文档使用一种简单的自我描述的语法。下面是一个简单的R
 <channel>
   <title>W3School Home Page</title>
   <link>http://www.w3school.com.cn</link>
-  <description>Free web building tutorials</description>
+  <description>Free web building tutorials.</description>
   <item>
     <title>RSS Tutorial</title>
     <link>http://www.w3school.com.cn/rss</link>
