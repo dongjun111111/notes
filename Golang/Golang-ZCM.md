@@ -23267,3 +23267,68 @@ func (c *BaseController) JSON(data interface{}, hasIndent bool, coding bool) err
 	return c.Ctx.Output.Body(自定义加密方法(content))
 }
 </pre>
+###Golang 顺序存储 线性表
+<pre>
+package main
+
+//顺序存储线性表
+import (
+	"fmt"
+)
+
+const MAXSIZE = 20
+
+type List struct {
+	Element [MAXSIZE]int
+	Length  int
+}
+
+func (l *List) InitList(value int, position int) {
+	l.Element[position] = value
+	l.Length++
+}
+
+func (l *List) Insert(value, position int) bool {
+	if position < 0 || position >= MAXSIZE || l.Length >= MAXSIZE {
+		return false
+	}
+	if position < l.Length {
+		for k := l.Length - 1; k >= position; k-- {
+			l.Element[k+1] = l.Element[k]
+		}
+		l.Element[position] = value
+		l.Length++
+		return true
+	} else {
+		l.Element[l.Length] = value
+		l.Length++
+		return true
+	}
+}
+
+func (l *List) Delete(position int) bool {
+	if position < 0 || position > l.Length || position >= MAXSIZE {
+		return false
+	}
+	for ; position < l.Length-1; position++ {
+		l.Element[position] = l.Element[position+1]
+	}
+	l.Element[l.Length-1] = 0
+	return true
+}
+
+func main() {
+	var L List
+	i := 0
+	b := 1
+	for i < 15 {
+		L.InitList(b, i)
+		i++
+		b++
+	}
+	L.Insert(100, 16)
+	L.Insert(200, 17)
+	fmt.Println(L.Length)
+	fmt.Println(L.Element)
+}
+</pre>
