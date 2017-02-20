@@ -23359,3 +23359,53 @@ func main(){
 	print(GetRandom(64))
 }
 </pre>
+###Golang 访问http /https post方法
+<pre>
+package main
+
+import (
+	"crypto/tls"
+	"io/ioutil"
+	"net/http"
+	"strings"
+)
+
+// 访问https协议的接口
+func HttpsPost(url, params string) ([]byte, error) {
+	body := ioutil.NopCloser(strings.NewReader(params))
+	tr := &http.Transport{
+		TLSClientConfig:    &tls.Config{InsecureSkipVerify: true},
+		DisableCompression: true,
+	}
+	client := &http.Client{Transport: tr}
+	req, err := http.NewRequest("POST", url, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+	resp, err := client.Do(req) 
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close() 
+	return ioutil.ReadAll(resp.Body)
+}
+
+func HttpPost(url, params string) ([]byte, error) {
+	body := ioutil.NopCloser(strings.NewReader(params))
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", url, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := client.Do(req) 
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close() 
+
+	data, err := ioutil.ReadAll(resp.Body)
+	return data, err
+}
+</pre>
