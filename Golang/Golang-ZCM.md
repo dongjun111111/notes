@@ -23519,3 +23519,16 @@ func getFileModTime(path string) int64 {
 	return fi.ModTime().Unix()
 }
 </pre>
+###Golang 时间格式化到毫秒
+<pre>
+package main 
+
+import (
+	"fmt"
+	"time"
+)
+func main(){
+	now := time.Now().Format("2006-01-02 15:04:05.99999")
+	fmt.Println(now)
+}
+</pre>
