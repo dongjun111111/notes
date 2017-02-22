@@ -23532,3 +23532,30 @@ func main(){
 	fmt.Println(now)
 }
 </pre>
+###Golang 循环更新数据库数据
+<pre>
+func UpdateUsersUrid() {
+	o := orm.NewOrm()
+	type Id int
+	var res []Id
+	for {
+		sql0 = `select id from table where id> limit 10000`
+		o.Raw(sql0).QueryRows(&res)
+		if len(res) > 0 {
+			for i := 0; i < len(res); i++ {
+				urid := uuid.NewUUID().Hex()
+				sql := `update users_l set urid =? where id =? limit 1`
+				_, err := o.Raw(sql, urid, res[i]).Exec()
+				if err != nil {
+					println("第" + strconv.Itoa(i+1) + "条数据出错啦")
+				} else {
+					println("第" + strconv.Itoa(i+1) + "条数据OK")
+				}
+			}
+		} else {
+			return
+		}
+	}
+	email.SendEmail("更新数据", "所有都完成啦", "admin@qq.com")
+}
+</pre>
