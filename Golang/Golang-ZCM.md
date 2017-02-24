@@ -19589,6 +19589,19 @@ func main() {
 </pre>
 ###Linux 常用命令
 <pre>
+//linux 查看端口占用的项目 
+netstat -ntpl 
+--->
+tcp        0      0 0.0.0.0:10050           0.0.0.0:*               LISTEN      4783/zabbix_agentd  
+tcp        0      0 0.0.0.0:11810           0.0.0.0:*               LISTEN      2131/sequoiadb(1181 
+tcp        0      0 0.0.0.0:11780           0.0.0.0:*               LISTEN      2132/sdbom(11780)   
+tcp        0      0 0.0.0.0:11814           0.0.0.0:*               LISTEN      2131/sequoiadb(1181 
+tcp6       0      0 :::6379                 :::*                    LISTEN      2946/redis-server * 
+tcp6       0      0 :::80                   :::*                    LISTEN      26379/./zcm         
+tcp6       0      0 :::9009                 :::*                    LISTEN      1987/java           
+tcp6       0      0 :::22                   :::*                    LISTEN      1112/sshd  
+
+
 //查看开机启动项
  cat /etc/rc.d/rc.local
 
