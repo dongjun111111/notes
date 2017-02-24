@@ -3,15 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/tealeg/xlsx"
+	"log"
 	"net/smtp"
 	"os"
 	"regexp"
-
 	"strings"
-
-	"log"
-
-	"github.com/tealeg/xlsx"
 )
 
 func main() {
@@ -37,15 +34,12 @@ func main() {
 						count++
 					}
 				}
-
 				if count > 1 {
 					sendList[curMail] += fmt.Sprintf("<tr><td>%s</td></tr>", strings.Join(cells, "</td><td>"))
 				} else {
 					sendList[curMail] += fmt.Sprintf("<tr><td colspan='%d'>%s</td></tr>", len(cells), strings.Join(cells, ""))
 				}
-
 			}
-
 		}
 	}
 
@@ -87,12 +81,10 @@ func sendMail(sendList map[string]string) {
 			fmt.Sprintf("<table border='2'>%s</table>", content),
 			"html"); err != nil {
 			fmt.Printf(" ... 发送错误(X) %s %s \n", mail, err.Error())
-
 		} else {
 			fmt.Printf(" ... 发送成功(V) %s \n", mail)
 		}
 		index++
-		//fmt.Printf("<table border='2'>%s</table> \n", content)
 	}
 
 }
