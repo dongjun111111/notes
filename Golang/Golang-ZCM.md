@@ -23832,3 +23832,19 @@ func (this *ByteBuffer) Binary(idx uint32)(ret []byte,err error){
 	return
 }
 </pre>
+###Golang []byte to int64
+<pre>
+package main 
+
+import "encoding/binary"
+
+func Int64ToBytes(i int64) []byte {
+	var buf = make([]byte, 8) // int64 is 8 byte
+	binary.LittleEndian.PutUint64(buf, uint64(i))
+	return buf
+}
+
+func BytesToInt64(buf []byte) int64 {
+	return int64(binary.LittleEndian.Uint64(buf))
+}
+</pre>
