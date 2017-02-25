@@ -23908,3 +23908,24 @@ func main() {
 	beego.Emergency(Bytes2RSAPrivateKey(Public_KEY).(*rsa.PublicKey))
 }
 </pre>
+###Golang hmac sha1 加密
+<pre>
+package main
+
+import (
+	"fmt"
+	"crypto/hmac"
+	"crypto/sha1"
+	"io"
+)
+func main(){
+ 	h := sha1.New()
+	io.WriteString(h, "jason")
+	fmt.Printf("%x\n", h.Sum(nil))
+
+	key := []byte("1212")
+	mac := hmac.New(sha1.New, key)
+	mac.Write([]byte("jason"))
+	fmt.Printf("%x\n", mac.Sum(nil))
+}
+</pre>
