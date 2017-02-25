@@ -23848,3 +23848,5 @@ func BytesToInt64(buf []byte) int64 {
 	return int64(binary.LittleEndian.Uint64(buf))
 }
 </pre>
+###json 基础知识
+json 中的所有数字类型的数据都是 float64 类型
