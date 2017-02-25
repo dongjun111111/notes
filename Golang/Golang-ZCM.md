@@ -23850,3 +23850,61 @@ func BytesToInt64(buf []byte) int64 {
 </pre>
 ###json 基础知识
 json 中的所有数字类型的数据都是 float64 类型
+###Golang RSA 公钥与私钥的格式转换
+<pre>
+package main
+
+import (
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
+	"fmt"
+	"github.com/astaxie/beego"
+	"net"
+)
+
+// LocalIP 获取本机IP
+func LocalIP() string {
+	info, _ := net.InterfaceAddrs()
+	for _, addr := range info {
+		ipNet, ok := addr.(*net.IPNet)
+		if !ok {
+			continue
+		}
+		if !ipNet.IP.IsLoopback() && ipNet.IP.To4() != nil {
+			return ipNet.IP.String()
+		}
+	}
+	return ""
+}
+
+func Bytes2RSAPrivateKey(priKey []byte) interface{} {
+	block, _ := pem.Decode(priKey)
+	if block == nil {
+		fmt.Println("Sign private key decode error")
+	}
+	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return privateKey
+}
+
+func Bytes2RSAPublicKey(pubKey []byte) interface{} {
+	block, _ := pem.Decode(pubKey)
+	if block == nil {
+		fmt.Println("Sign pubilc key decode error")
+	}
+	pubilcKey, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return pubilcKey
+}
+
+func main() {
+	fmt.Println(LocalIP())
+	beego.Emergency(Bytes2RSAPrivateKey(PRIVATE_KEY).(*rsa.PrivateKey))
+	beego.Emergency(Bytes2RSAPrivateKey(Public_KEY).(*rsa.PublicKey))
+}
+</pre>
