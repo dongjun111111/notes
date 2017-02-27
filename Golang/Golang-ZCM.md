@@ -23929,3 +23929,26 @@ func main(){
 	fmt.Printf("%x\n", mac.Sum(nil))
 }
 </pre>
+###Beego 定时任务
+<pre>
+package main 
+
+import(
+	"github.com/astaxie/beego/toolbox"
+)
+func TaskInfo() error {
+	beego.Emergency("this is task......")
+	return nil
+}
+
+func DoTask() {
+	// 秒 分 时 天 月 年
+	todotk := toolbox.NewTask("todotk", "0 00 14 * * *", TaskInfo)
+	toolbox.AddTask("todotk", todotk)
+	toolbox.StartTask()
+}
+
+func main(){
+	DoTask()
+}
+</pre>
