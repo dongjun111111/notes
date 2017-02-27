@@ -23952,3 +23952,22 @@ func main(){
 	DoTask()
 }
 </pre>
+###Golang csv excel 
+<pre>
+func EXCEL() bool {
+	f, err := os.Create("D://TestCSV.xls")
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	f.WriteString("\xEF\xBB\xBF") // 写入UTF-8 BOM
+	w := csv.NewWriter(f)
+	w.Write([]string{"Order_number", "Trade_number", "Account", "Pname", "Pay_money", "Create_date", "Capital"})
+	for i := 0; i < 10; i++ {
+		w.Write([]string{"Order_number", "Trade_number", "Account", "Pname", "Pay_money", "Create_date", "Capital"})
+	}
+	w.Flush()
+	return true
+}
+</pre>
