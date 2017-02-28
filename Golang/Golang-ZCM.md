@@ -23971,3 +23971,15 @@ func EXCEL() bool {
 	return true
 }
 </pre>
+###Redis 启动
+<pre>
+redis-server ./redis.conf
+#如果更改了端口，使用`redis-cli`客户端连接时，也需要指定端口，例如：
+redis-cli -p 6380
+
+#检测6379端口是否在监听
+netstat -lntp | grep 6379
+
+#使用客户端
+redis-cli shutdown
+</pre>
