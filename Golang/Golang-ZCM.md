@@ -23971,7 +23971,7 @@ func EXCEL() bool {
 	return true
 }
 </pre>
-###Redis 启动
+###Redis 基本操作
 <pre>
 redis-server ./redis.conf
 #如果更改了端口，使用`redis-cli`客户端连接时，也需要指定端口，例如：
