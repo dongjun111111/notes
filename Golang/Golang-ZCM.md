@@ -23157,7 +23157,7 @@ func GetAgeByIdCard(idCard string) int {
 	} else {
 		if now_mo < idcard_mo {
 			age = age - 1
-		} else {
+		} else if now_mo == idcard_mo{
 			if now_day < idcard_day {
 				age = age - 1
 			}
