@@ -23981,7 +23981,7 @@ netstat -lntp | grep 6379
 #使用客户端
 redis-cli shutdown
 </pre>
-###Linux 提示命令找不到
+###解决‘Linux提示命令找不到’的问题
 如果新装的系统，运行一些很正常的诸如：shutdown，fdisk的命令时，悍然提示：bash:command not found。那么 
 
 首先就要考虑root 的$PATH里是否已经包含了这些环境变量。 
