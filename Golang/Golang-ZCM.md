@@ -24002,3 +24002,107 @@ bin为binary的简写主要放置一些系统的必备执行档例如:cat、cp�
 
 /usr/sbin: 
 放置一些网路管理的必备程式例如:dhcpd、httpd、imap、in.*d、inetd、lpd、named、netconfig、nmbd、samba、sendmail、squid、swap、tcpd、tcpdump等。 
+###Golang xls excel表格生成实例
+<pre>
+package controllers
+
+import (
+	"github.com/tealeg/xlsx"
+)
+
+//生成excel表格导出
+func ToExcel(){
+	RES, _ := models.FUNC(uid, condition, "")
+	if Tradelist1 != nil {
+	var file *xlsx.File
+	var sheet *xlsx.Sheet
+	var row *xlsx.Row
+	var cell *xlsx.Cell
+	var err error
+	file = xlsx.NewFile()
+	sheet, _ = file.AddSheet("Sheet1")
+	for i := 0; i <= len(RES); i++ {
+		row = sheet.AddRow()
+		if i == 0 { //创建表
+			cell = row.AddCell()
+			cell.Value = "序号"
+			cell = row.AddCell()
+			cell.Value = "部门"
+			cell = row.AddCell()
+			cell.Value = "业务主管"
+			cell = row.AddCell()
+			cell.Value = "客户专员"
+			cell = row.AddCell()
+			cell.Value = "客户姓名"
+			cell = row.AddCell()
+			cell.Value = "性别"
+			cell = row.AddCell()
+			cell.Value = "身份证号"
+			cell = row.AddCell()
+			cell.Value = "联系电话"
+			cell = row.AddCell()
+			cell.Value = "产品名称"
+			cell = row.AddCell()
+			cell.Value = "合同编号"
+			cell = row.AddCell()
+			cell.Value = "投资日期"
+			cell = row.AddCell()
+			cell.Value = "结算日期"
+			cell = row.AddCell()
+			cell.Value = "投资额度/元"
+			cell = row.AddCell()
+			cell.Value = "投资期限/天"
+		} else {
+			cell = row.AddCell()
+			cell.Value = strconv.Itoa(i)
+			cell = row.AddCell()
+			orgname, _ := models.FUNC(UID[i-1].Uid)
+			if orgname != "" {
+				cell.Value = orgname
+			}
+			directorName, salemanName, _ := models.FUNC(Tradelist1[i-1].UID)
+			cell = row.AddCell()
+			cell.Value = directorName
+			cell = row.AddCell()
+			cell.Value = salemanName
+			cell = row.AddCell()
+			cell.Value = FUNC[i-1].FUNC
+			cell = row.AddCell()
+			if Tradelist1[i-1].Sex == "F" {
+				cell.Value = "女"
+			} else {
+				cell.Value = "男"
+			}
+			cell = row.AddCell()
+			cell.Value = Tradelist1[i-1].Id_card
+			cell = row.AddCell()
+			cell.Value = Tradelist1[i-1].Account
+			cell = row.AddCell()
+			cell.Value = Tradelist1[i-1].Pname
+			cell = row.AddCell()
+			TadeView, _ := models.FUNC(FUNC[i-1].Uid, UID[i-1].Id)
+			if TadeView != nil {
+				cell.Value = TadeView.Serial_number
+			}
+			cell = row.AddCell()
+			cell.Value = Tradelist1[i-1].Create_date
+			cell = row.AddCell()
+			cell.Value = Tradelist1[i-1].Endtime
+			cell = row.AddCell()
+			cell.Value = Tradelist1[i-1].Capital
+			cell = row.AddCell()
+			cell.Value = strconv.Itoa(Tradelist1[i-1].Period)
+		}
+	}
+
+	excelPath := "./static/deriveExcel/" + userid + ".xls"
+	err = file.Save(excelPath)
+	if err != nil {
+		this.Data["json"] = ""
+		fmt.Printf(err.Error())
+	} else {
+		this.Data["json"] = excelPath
+		fmt.Println("insert success!")
+	}
+}
+</pre>
