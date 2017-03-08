@@ -3037,7 +3037,33 @@ output==>
 									|model--->db.go-->|
 地址栏访问->路由router->controller-->|          		  |----->Render html
 									|---------------->|
+0. beego的basecontroller
 
+func (c *BaseController) Prepare() {
+	var abandon bool = false
+	if c.Ctx.Input.Method() != "GET" && c.Ctx.Input.Method() != "HEAD" && !c.Ctx.Input.IsUpload() {
+		if c.Ctx.Input.Method() == "POST" || c.Ctx.Input.Method() == "PUT" {
+			var Res POSTRESULT
+			json.Unmarshal(c.Ctx.Input.RequestBody, &Res)
+			if strings.TrimSpace(Res.MobileVersion) == ""  {
+				abandon = true
+			}
+		}
+	} else {
+		if c.Ctx.Input.Method() == "GET" {
+			mobileversion := c.GetString("mobileversion")
+				if strings.TrimSpace(mobileversion) == ""  {
+					abandon = true
+				}
+		}
+	}
+	if abandon {
+		data := map[string]interface{}{"ret": 403, "err": "亲,请升级APP版本~"}
+		c.Data["json"] = data
+		c.ServeJSON()
+		c.StopRun()
+	}
+}
 
 1. router  形式
 
