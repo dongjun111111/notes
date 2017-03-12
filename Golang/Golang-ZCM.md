@@ -164,12 +164,12 @@ func add1(a int) int {
 }
 func main() {
 	x := 4
-	fmt.Println("x =", x)
+	fmt.Println("x = ", x)
 
 	x1 := add1(x)
 
-	fmt.Println("x+1 =", x1)
-	fmt.Println("x =", x)
+	fmt.Println("x+1 = ", x1)
+	fmt.Println("x = ", x)
 }
 output==>
 x = 4
