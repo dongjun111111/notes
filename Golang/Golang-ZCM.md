@@ -102,7 +102,7 @@ func main(){
 	a[2] = 1
 	a[5] = 4
 	a[6] = 5
-	delete(a,6)   //删除map
+	delete(a,6)      //删除map
 	fmt.Println(a)
 }
 两次output==>
