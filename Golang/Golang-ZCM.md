@@ -951,8 +951,8 @@ func main() {
 	t := "你好"
 	const x int = 4
 	fmt.Println(i, j, t, "ok")
-	fmt.Println(x, z, "c iota:", c, "a4 iota:", a4) //c等于2 a4等于3
-	fmt.Println("x2 iota:", x2)                     //x2等于2
+	fmt.Println(x, z, "c iota:", c, "a4 iota:", a4) // c等于2 a4等于3
+	fmt.Println("x2 iota:", x2)                     // x2等于2
 	fmt.Println("z1 value :", z1, "z2 value:", z2, "z3 value:", z3)
 	os.Exit(0)
 }
