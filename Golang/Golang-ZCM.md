@@ -3341,6 +3341,12 @@ beego中存储日志信息
 //将项目中所有beego.Emergency/beego.Warning等信息保存在logs/log.log文件中
 beego.BeeLogger.SetLogger("file", `{"filename": "logs/log.log"}`)
 </pre>
+
+#####出现这样的错误
+<RawSeter.QueryRows> all args must be use ptr slice
+
+原因很可能是：
+ QueryRow  ->  QueryRows
 ###beego中设置404页面
 在入口页面main.go中编辑：
 <pre>
