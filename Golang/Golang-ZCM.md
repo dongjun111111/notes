@@ -3342,6 +3342,21 @@ beego中存储日志信息
 beego.BeeLogger.SetLogger("file", `{"filename": "logs/log.log"}`)
 </pre>
 
+beego main函数添加共有方法
+<pre>
+import (
+	"github.com/astaxie/beego/plugins/cors"
+)
+
+beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
+	AllowOrigins:     []string{"*"},
+	AllowMethods:     []string{"GET", "POST"},
+	AllowHeaders:     []string{"Origin"},
+	ExposeHeaders:    []string{"Content-Length"},
+	AllowCredentials: true,
+}))
+</pre>
+
 #####出现这样的错误
 <RawSeter.QueryRows> all args must be use ptr slice
 
