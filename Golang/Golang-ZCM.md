@@ -19704,6 +19704,72 @@ WHERE
 //mysql if else
 
 select *,if(actvity_name='活动1',"男","女") as ssva from activity where actvity_name != ""
+
+touch 命令
+linux的touch命令不常用，一般在使用make的时候可能会用到，用来修改文件时间戳，或者新建一个不存在的文件
+
+Linux系统本地自启动脚本常用：
+touch /var/local
+/etc/init.d/mysqld start
+/etc/init.d/nginx start
+/etc/init.d/php-fpm start
+service vsftpd start      //安全的ftp服务器软件
+/usr/local/redis/src/redis-server /etc/redis.conf 
+svnserve -d -r /svn
+service zabbix-agent start   // 监控软件
+/home/tomcat/tomcat_9.0/bin/catalina.sh start   //web services
+
+重启脚本：
+<pre>
+#!/bin/sh 
+
+port=80
+#关闭watch.sh
+echo -e "closing watch.sh..."
+watchpid=$(ps -ef | grep -v grep | grep watch.sh | awk '{print $2}' | tail -n 1)
+if [ -n "$watchpid" ]
+then
+    kill -9 $watchpid
+    echo -e "kill watch.sh by pid:"$watchpid
+fi
+
+
+# 编译
+echo -e "building zcm..."
+cd $GOPATH/src/zcm
+go build
+
+
+# 关闭zcm
+echo -e "closing zcm..."
+zcmpid=$(lsof -i:$port | awk '{print $2}' | tail -n 1) 
+if [ -n "$zcmpid" ]
+then
+    kill -9 $zcmpid
+    echo -e "kill zcm which listening on 80 by pid:"$zcmpid
+fi
+
+# 运行
+nohup ./zcm &
+
+while [ -z "$(lsof -i:$port |awk '{print $2}' | tail -n 1)" ]
+do
+   sleep 0.5
+done
+
+newzcmpid=$(lsof -i:$port |awk '{print $2}' | tail -n 1) 
+echo "Finish boot, zcm new pid: "$newzcmpid
+
+
+# 启动watch.sh
+echo -e "start watch.sh"
+nohup ../watch.sh &
+
+
+# 查看zcm输出
+tail -f nohup.out
+</pre>
+
 </pre>
 ###Golang goroutine pool
 <pre>
