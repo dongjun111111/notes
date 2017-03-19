@@ -1040,7 +1040,7 @@ func main() {
 	rear := append([]int{}, ee[index:]...)
 	ee = append(ee[0:index], 100)
 	ee = append(ee, rear...)
-	fmt.Println("after insert:", ee)
+	fmt.Println("after insert: ", ee)
 
 }
 output==>
