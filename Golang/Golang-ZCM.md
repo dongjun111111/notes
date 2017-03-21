@@ -367,7 +367,7 @@ type Human struct {
 type Student struct {
 	Human  //匿名字段,自定义的struct
 	Skills //匿名字段，自定义的类型string slice
-	int    // 内置类型作为匿名字段
+	int    //内置类型作为匿名字段
 	school string
 }
 
