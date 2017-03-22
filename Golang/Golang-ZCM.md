@@ -90,7 +90,7 @@ func main() {
 ouput==>
 3
 </pre>
-map 无序的，可能每次打印的map不是相同顺序的；通过 delete 删除 map 元素：
+map无序的，可能每次打印的map不是相同顺序的；通过 delete 删除 map 元素：
 <pre>
 package main 
 
