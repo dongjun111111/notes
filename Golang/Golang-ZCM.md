@@ -24277,3 +24277,97 @@ func main() {
 	fmt.Println(xor.dec("d868c83afd"))
 }
 </pre>
+###延时执行方法
+<pre>
+package main
+
+import (
+	"log"
+	"time"
+)
+
+const (
+	TIME_OUT_RUN_OK  int = 1 //运行完成
+	TIME_OUT_RUN_OUT int = 0 //超时退出
+)
+
+var (
+	_TIME_OUT_RUN_DEBUG = false
+)
+
+func SetDebug(debug_mode bool) {
+	//设置调试模式:true调试模式
+	_TIME_OUT_RUN_DEBUG = debug_mode
+	return
+}
+
+func TimeOutRunApp(timeout uint64, callback func(v ...interface{}), v ...interface{}) {
+	var single chan int = make(chan int, 1)
+
+	//开启线程运行(参数必须采用v...,这样才是全参数传递,否则会出现[]interface{}问题)
+	go timeOutRunApp(single, callback, v...)
+
+	//阻塞等待运行结果或超时
+	select {
+	case <-single:
+		//运行完成退出
+		if _TIME_OUT_RUN_DEBUG {
+			log.Println("run ok!")
+		}
+		close(single)
+
+		return
+	case <-time.After(time.Millisecond /*ms*/ * time.Duration(timeout)):
+		//超时退出
+		if _TIME_OUT_RUN_DEBUG {
+			log.Println("run timeout!")
+		}
+		close(single)
+
+		return
+	}
+}
+func timeOutRunApp(single chan int, callback func(v ...interface{}), v ...interface{}) {
+	callback(v...)
+	single <- TIME_OUT_RUN_OK
+
+	return
+}
+
+//=================测试样例
+func Run(v ...interface{}) {
+	//用于变量类型转换
+	var convert interface{}
+
+	//第一个参数
+	convert = v[0]
+	var args0 string = convert.(string)
+
+	//第二个参数
+	convert = v[1]
+	var args1 string = convert.(string)
+
+	//循环执行,flag=false:演示超时的情况,flag=true:演示非超时的情况
+	var count uint32
+	var flag bool = false
+	for {
+		time.Sleep(time.Millisecond * 1000)
+		log.Println(args0, args1, count)
+		count++
+
+		if flag {
+			return
+		}
+	}
+	return
+}
+
+func TestTimeOutRun() {
+	//设置调用超时5s,传入回调方法类App,及相关参数
+	TimeOutRunApp(5000, Run, "利用interface实现超时执行某方法:", "count=")
+}
+
+func main() {
+	TestTimeOutRun()
+}
+</pre>
