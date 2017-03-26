@@ -282,7 +282,7 @@ package main
 
 import "fmt"
 
-//init函数是golang程序自动调用的
+//init函数自动调用
 func init() {
 	fmt.Println("Golang")
 }
