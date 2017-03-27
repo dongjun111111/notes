@@ -337,7 +337,7 @@ type Human struct {
 }
 
 type Student struct {
-	Human  //匿名字段，默认Student就包含了Human的所有字段
+	Human  //匿名字段，默认Student包含了Human的所有字段
 	school string
 }
 
