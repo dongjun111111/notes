@@ -17296,6 +17296,8 @@ func main(){
 	fmt.Println(MakeHmac("str"))
 }
 </pre>
+MYSQL :
+ctrl + H  //历史日志  
 ###linux查看已连接的可用WIFI
 <pre>
 //列出可用的WiFi
