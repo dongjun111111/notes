@@ -11585,6 +11585,22 @@ CREATE TABLE `tablename` (
 
 - &符号的意思是对变量取地址，如：变量a的地址是&a;
 - *符号的意思是对指针取值，如:*&a，就是a变量所在地址的值，当然也就是a的值了。
+
+####mysql 触发器 trigger 
+
+INSERT into table1(id,tradeid) values('0','trigger');
+
+DROP TRIGGER IF EXISTS trigger_on_tab1;
+CREATE TRIGGER trigger_on_tab1
+AFTER INSERT ON  table1
+FOR EACH ROW
+BEGIN
+      INSERT into table2(id,tradeid) values('0',new.tradeid);
+END;
+-- 用完删除触发器
+DROP TRIGGER trigger_on_tab1;
+
+SHOW TRIGGERS;
 ###Golang错误处理包
 <pre>
 package err
