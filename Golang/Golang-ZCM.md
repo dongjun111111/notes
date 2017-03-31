@@ -23696,9 +23696,9 @@ func UpdateUsersUrid() {
 				sql := `update users_l set urid =? where id =? limit 1`
 				_, err := o.Raw(sql, urid, res[i]).Exec()
 				if err != nil {
-					println("第" + strconv.Itoa(i+1) + "条数据出错啦")
+					println("第" + strconv.Itoa(i+1) + "条数据出错啦~")
 				} else {
-					println("第" + strconv.Itoa(i+1) + "条数据OK")
+					println("第" + strconv.Itoa(i+1) + "条数据OK~")
 				}
 			}
 		} else {
