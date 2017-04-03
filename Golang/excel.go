@@ -44,7 +44,7 @@ func main() {
 	}
 
 	sendMail(sendList)
-	fmt.Print("按下回车结束")
+	fmt.Print("按下回车结束！")
 	bufio.NewReader(os.Stdin).ReadLine()
 
 }
