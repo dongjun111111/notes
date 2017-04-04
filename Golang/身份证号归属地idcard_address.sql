@@ -3,8 +3,8 @@ Navicat MySQL Data Transfer
 
 Source Server         : 身份证号归属地
 Source Server Version : 50616
-Source Host           : HaHaHa
-Source Database       : HaHaHa
+Source Host           : Ha
+Source Database       : Ha
 
 Target Server Type    : MYSQL
 Target Server Version : 50616
