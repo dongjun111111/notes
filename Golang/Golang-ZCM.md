@@ -10269,6 +10269,9 @@ CONT    18    继续（与STOP相反， fg/bg命令）
 STOP    19    暂停（同 Ctrl + Z）
 
 
+ifconfig  //查看IP地址
+
+
 //启动redis 
 redis-server ./redis.conf
 
