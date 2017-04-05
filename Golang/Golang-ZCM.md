@@ -24895,3 +24895,24 @@ func GetFileToBase64(filePth string) (string, error) {
 	return base64.StdEncoding.EncodeToString(data), nil
 }
 </pre>
+###Golang 图片上传到阿里云
+<pre>
+func UploadAliyun(filename, filepath string) (error, string) {
+	client, err := oss.New(utils.Endpoint, utils.AccessKeyId, utils.AccessKeySecret)
+	if err != nil {
+		return err, "1"
+	}
+	bucket, err := client.Bucket(utils.Bucketname)
+	if err != nil {
+		return err, "2"
+	}
+	path := utils.Upload_dir + time.Now().Format("200601/20060102/")
+	path += filename
+	err = bucket.PutObjectFromFile(path, filepath)
+	if err != nil {
+		return err, "3"
+	}
+	path = utils.Imghost + path
+	return err, path
+}
+</pre>
