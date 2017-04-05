@@ -24714,8 +24714,14 @@ func WhichSexByIdcard(idcard string) string {
   git clone http://usersname@192.168.1.220/zcm_group/projects
   cd projects
   git branch jason_test
+  git branch    //查看当前分支信息
   git checkout jason_test
+  git pull origin jason_test  //先从远程的jason_test分支拉取最新代码
+  git diff  //如果有冲突使用这个命令查看冲突的部分
+  git add --a
+  git commit -m 'message'
   git push origin jason_test
+  git merge  //请求合并
 </pre>
 select * from innodb_trx 查看有是哪些事务占据了表资源
 ###Golang channel 
