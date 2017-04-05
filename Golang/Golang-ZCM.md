@@ -24502,3 +24502,131 @@ func main(){
 <pre>
 验签：顾名思义，就是对接口的使用者身份的验证。对于常规的GET/POST/PUT请求中，GET是最容易暴露使用者信息的一种请求方式。如果在使用中，接口使用者的信息被任何一个第三人获知也是非常危险的，因此可以将使用者的唯一标示加动态时间戳经过MD5多次混合加密的方式进行封装数据，以在保证安全的前提下进行验签。
 </pre>
+###Golang aes+base64
+<pre>
+package tool
+
+import (
+	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
+	"encoding/base64"
+)
+
+// aes + base64 加密的KEY 16位
+const key_aes = 1234567887654321`
+
+
+// 3DES加密
+func TripleDesEncrypt(origData, key []byte) ([]byte, error) {
+	block, err := des.NewTripleDESCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	origData = PKCS5Padding(origData, block.BlockSize())
+	// origData = ZeroPadding(origData, block.BlockSize())
+	blockMode := cipher.NewCBCEncrypter(block, key[:8])
+	crypted := make([]byte, len(origData))
+	blockMode.CryptBlocks(crypted, origData)
+	return crypted, nil
+}
+
+// 3DES解密
+func TripleDesDecrypt(crypted, key []byte) ([]byte, error) {
+	block, err := des.NewTripleDESCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockMode := cipher.NewCBCDecrypter(block, key[:8])
+	origData := make([]byte, len(crypted))
+	// origData := crypted
+	blockMode.CryptBlocks(origData, crypted)
+	origData = PKCS5UnPadding(origData)
+	// origData = ZeroUnPadding(origData)
+	return origData, nil
+}
+
+func ZeroPadding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{0}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func ZeroUnPadding(origData []byte) []byte {
+	length := len(origData)
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
+}
+
+func PKCS5Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func PKCS5UnPadding(origData []byte) []byte {
+	length := len(origData)
+	// 去掉最后一个字节 unpadding 次
+	unpadding := int(origData[length-1])
+	return origData[:(length - unpadding)]
+}
+
+//手机号加密，若解码出错，返回空字符串
+func EncCode(acc string) (account string) {
+	defer func() {
+		err := recover()
+		if err != nil {
+			account = ""
+		}
+	}()
+	accbyt := []byte(acc)
+	accbyt = DesBase64Encrypt(accbyt)
+	account = string(accbyt)
+	return
+}
+
+func OriginAesEncrypt(origData, key []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockSize := block.BlockSize()
+	origData = PKCS5Padding(origData, blockSize)
+	blockMode := cipher.NewCBCEncrypter(block, key[:blockSize])
+	crypted := make([]byte, len(origData))
+	// 根据CryptBlocks方法的说明，如下方式初始化crypted也可以
+	blockMode.CryptBlocks(crypted, origData)
+	return crypted, nil
+}
+
+func OriginAesDecrypt(crypted, key []byte) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+	blockSize := block.BlockSize()
+	blockMode := cipher.NewCBCDecrypter(block, key[:blockSize])
+	origData := make([]byte, len(crypted))
+	blockMode.CryptBlocks(origData, crypted)
+	origData = PKCS5UnPadding(origData)
+	return origData, nil
+}
+
+//aes3 + base64 encrypt
+func AesBase64Encrypt(origData []byte) []byte {
+	result, err := OriginAesEncrypt(origData, []byte(key_aes))
+	if err != nil {
+		panic(err)
+	}
+	return []byte(base64.StdEncoding.EncodeToString(result))
+}
+
+func AesBase64Decrypt(crypted []byte) []byte {
+	result, _ := base64.StdEncoding.DecodeString(string(crypted))
+	origData, err := OriginAesDecrypt(result, []byte(key_aes))
+	if err != nil {
+		panic(err)
+	}
+	return origData
+}
+</pre>
