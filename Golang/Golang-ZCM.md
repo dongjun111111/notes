@@ -24630,3 +24630,47 @@ func AesBase64Decrypt(crypted []byte) []byte {
 	return origData
 }
 </pre>
+###Beego router 不同api地址设置
+<pre>
+// @APIVersion 1.0.0
+// @Title beego Test API
+// @Description beego has a very cool tools to autogenerate documents for your API
+// @Contact astaxie@gmail.com
+// @TermsOfServiceUrl http://beego.me/
+// @License Apache 2.0
+// @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html
+package routers
+
+import (
+	"github.com/astaxie/beego"
+	"zcm_hwt/controllers"
+	"zcm_hwt/controllers/api"
+)
+
+func init() {
+	ROUTER1()
+	ROUTER2()
+}
+
+func ROUTER1() {
+	ns := beego.NewNamespace("/x1",
+
+		beego.NSNamespace("/activity",
+			beego.NSInclude(
+				&controllers.ActivityController{},
+			),
+		),
+	beego.AddNamespace(ns)
+}
+
+func ROUTER2() {
+	ns2 := beego.NewNamespace("/cgi-bin",
+		beego.NSNamespace("/api/users", 
+			beego.NSInclude(
+				&api.HwtsController{},
+			),
+		),
+	)
+	beego.AddNamespace(ns2)
+}
+</pre>
