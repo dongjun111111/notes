@@ -24866,3 +24866,32 @@ func main() {
 <pre>
 	sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
 </pre>
+###Golang 图片与base64转换
+<pre>
+//将base64保存为图片
+func SaveBase64ToFile(content, path string) error {
+	data, err := base64.StdEncoding.DecodeString(content)
+	if err != nil {
+		return err
+	}
+	f, err := os.Create(path)
+	defer f.Close()
+	if err != nil {
+		return err
+	}
+	f.Write(data)
+	return nil
+}
+//将图片保存为base64
+func GetFileToBase64(filePth string) (string, error) {
+	f, err := os.Open(filePth)
+	if err != nil {
+		return "", err
+	}
+	data, err := ioutil.ReadAll(f)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(data), nil
+}
+</pre>
