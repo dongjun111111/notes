@@ -19760,11 +19760,10 @@ service zabbix-agent start   // 监控软件
 /home/tomcat/tomcat_9.0/bin/catalina.sh start   //web services
 
 重启脚本：
-<pre>
-#!/bin/sh 
+--#!/bin/sh 
 
 port=80
-#关闭watch.sh
+--#关闭watch.sh
 echo -e "closing watch.sh..."
 watchpid=$(ps -ef | grep -v grep | grep watch.sh | awk '{print $2}' | tail -n 1)
 if [ -n "$watchpid" ]
@@ -19774,13 +19773,13 @@ then
 fi
 
 
-# 编译
+--# 编译
 echo -e "building zcm..."
 cd $GOPATH/src/zcm
 go build
 
 
-# 关闭zcm
+ --#  关闭zcm
 echo -e "closing zcm..."
 zcmpid=$(lsof -i:$port | awk '{print $2}' | tail -n 1) 
 if [ -n "$zcmpid" ]
@@ -19789,7 +19788,7 @@ then
     echo -e "kill zcm which listening on 80 by pid:"$zcmpid
 fi
 
-# 运行
+--# 运行
 nohup ./zcm &
 
 while [ -z "$(lsof -i:$port |awk '{print $2}' | tail -n 1)" ]
@@ -19800,15 +19799,12 @@ done
 newzcmpid=$(lsof -i:$port |awk '{print $2}' | tail -n 1) 
 echo "Finish boot, zcm new pid: "$newzcmpid
 
-
-# 启动watch.sh
+--# 启动watch.sh
 echo -e "start watch.sh"
 nohup ../watch.sh &
 
-
-# 查看zcm输出
+--# 查看zcm输出
 tail -f nohup.out
-</pre>
 
 </pre>
 ###Golang goroutine pool
@@ -19842,7 +19838,7 @@ func main() {
   // dummy wait until jobs are finished
   time.Sleep(1 * time.Second)
 }
-<pre>
+</pre>
 ###Golang 获取当前文件执行的行数
 <pre>
 package main 
@@ -19889,6 +19885,7 @@ func main() {
 	close(channels)
 	wg.Wait()
 }
+
 </pre>
 ###Beego框架工作问题记录
 <pre>
@@ -21812,7 +21809,7 @@ txt文件的MIME类型为text/plain，使用浏览器访问时默认行为是直
 location ~* \.(txt) {
   add_header Content-Disposition "attachment";
 }
-<pre>
+</pre>
 对于某些特殊的文件，如果在访问时需要直接在浏览器上显示文件内容，则可使用如下规则，以gpg的asc加密文件为例。
 <pre>
 location ~* \.(asc) {
@@ -24139,7 +24136,7 @@ netstat -lntp | grep 6379
 #使用客户端
 redis-cli shutdown
 </pre>
-###解决‘Linux提示命令找不到’的问题
+###解决"Linux提示命令找不到"的问题
 如果新装的系统，运行一些很正常的诸如：shutdown，fdisk的命令时，悍然提示：bash:command not found。那么 
 
 首先就要考虑root 的$PATH里是否已经包含了这些环境变量。 
@@ -24914,5 +24911,118 @@ func UploadAliyun(filename, filepath string) (error, string) {
 	}
 	path = utils.Imghost + path
 	return err, path
+}
+</pre>
+###Golang 微信
+<pre>
+package services
+
+import (
+	"crypto/sha1"
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"strconv"
+	"time"
+	".../utils"
+)
+
+type TokenResult struct {
+	Access_token string //token
+	Expires_in   int    //过期时间
+}
+
+type TicketResult struct {
+	Errcode    int
+	Errmsg     string
+	Ticket     string
+	Expires_in int //过期时间
+}
+
+type View_Share struct {
+	ShareUrl   string
+	ShareTitle string
+	ShareDesc  string
+	ShareImg   string
+
+	AppId        string
+	Timestamp    int64
+	Noncestr     string
+	Signaturestr string
+}
+
+func getToken(retChan chan TokenResult) {
+	token := "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+utils.Appid
+	resp, err := http.Get(token)
+	if err != nil {
+		fmt.Println("token", err.Error())
+		return
+	}
+	defer resp.Body.Close()
+	var r TokenResult
+	if bodyByte, err := ioutil.ReadAll(resp.Body); err == nil {
+		json.Unmarshal(bodyByte, &r)
+	}
+	retChan <- r
+}
+
+func getTicket(token string, retChan chan TicketResult) {
+	ticket := "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + token + "&type=jsapi"
+	resp, err := http.Get(ticket)
+	if err != nil {
+		fmt.Println("ticket", err.Error())
+		return
+	}
+	defer resp.Body.Close()
+	var r TicketResult
+	if bodyByte, err := ioutil.ReadAll(resp.Body); err == nil {
+		json.Unmarshal(bodyByte, &r)
+	}
+	retChan <- r
+}
+
+//对字符串进行SHA1哈希
+func b(data string) string {
+	t := sha1.New()
+	io.WriteString(t, data)
+	return fmt.Sprintf("%x", t.Sum(nil))
+}
+
+func GetContentYZPromoter(shareTitle, shareImage, shareDesc, shareUrl string) (v *View_Share) {
+	v = new(View_Share)
+	v.ShareTitle = shareTitle
+	v.ShareImg = shareImage
+	v.ShareDesc = shareDesc
+	v.ShareUrl = shareUrl
+	v.AppId = utils.Appid 
+	v.Timestamp = time.Now().Unix()
+	v.Noncestr = utils.Noncestr
+	var token, ticket string
+	if utils.Rc.IsExist("token_wechat") {
+		data, _ := utils.RedisBytes("token_wechat")
+		token = string(data)
+	} else {
+		retChan := make(chan TokenResult)
+		go getToken(retChan)
+		r := <-retChan
+		token = r.Access_token
+		utils.Rc.Put("token_wechat", token, 7100*time.Second)
+	}
+	if utils.Rc.IsExist("ticket_wechat") {
+		data, _ := utils.RedisBytes("ticket_wechat")
+		ticket = string(data)
+	} else {
+		retChan2 := make(chan TicketResult)
+		go getTicket(token, retChan2)
+		r2 := <-retChan2
+		ticket = r2.Ticket
+		utils.Rc.Put("ticket_wechat", ticket, 7100*time.Second)
+	}
+	str := fmt.Sprintf("jsapi_ticket=%s&noncestr=%s&timestamp=%s&url=%s",
+		ticket, v.Noncestr, strconv.FormatInt(v.Timestamp, 10), v.ShareUrl)
+	v.Signaturestr = b(str)
+	return
 }
 </pre>
