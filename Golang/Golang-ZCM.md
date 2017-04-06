@@ -25035,3 +25035,21 @@ func GetContentYZPromoter(shareTitle, shareImage, shareDesc, shareUrl string) (v
 	return
 }
 </pre>
+###Redis非本地连接出错问题
+其实redis也有类似与MySQL的远程登录安全限制：
+
+比如说在MySQL中，我们为了确保可以远程登录需要首先修改/etc/my.cnf文件，注释这一行：
+<pre>
+bind-address=127.0.0.1 ==> #bind-address=127.0.0.1
+</pre>
+然后再登录MySQL为远程用户赋予权限：
+<pre>
+GRANT ALL PRIVILEGES ON *.* TO root@"%" IDENTIFIED BY "123456"；
+flush privileges;
+</pre>
+
+在Redis中需要手动关闭保护模式：
+<pre>
+vi /etc/redis.conf 
+# bind 127.0.0.1   //注释掉
+</pre>
