@@ -24630,7 +24630,7 @@ func AesBase64Decrypt(crypted []byte) []byte {
 	return origData
 }
 </pre>
-###Beego router 不同api地址设置
+###Beego router 设置不同api地址
 <pre>
 // @APIVersion 1.0.0
 // @Title beego Test API
