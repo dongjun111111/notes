@@ -11,7 +11,7 @@
 package main
 
 func main() {
-	//Go中字符串是不可变的,所以 var s string = "hello" s[0] = 'c' println(s)报错
+	//Go中字符串是不可变的,所以 var s string = "hello" s[0] = 'c' println(s) 报错
 	var s string = "hello"
 	c := []byte(s)  //将字符串 s 转换成 []byte 类型
 	c[0] = 'c'
