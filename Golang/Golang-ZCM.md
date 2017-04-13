@@ -24674,3 +24674,19 @@ func ROUTER2() {
 	beego.AddNamespace(ns2)
 }
 </pre>
+###根据身份证号得到用户性别
+<pre>
+//处理性别
+func WhichSexByIdcard(idcard string) string {
+	var sexs = [2]string{"女", "男"}
+	length := len(idcard)
+	if length == 18 {
+		sex, _ := strconv.Atoi(string(idcard[16]))
+		return sexs[sex%2]
+	} else if length == 15 {
+		sex, _ := strconv.Atoi(string(idcard[14]))
+		return sexs[sex%2]
+	}
+	return "男"
+}
+</pre>
