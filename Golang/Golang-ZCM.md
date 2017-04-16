@@ -284,7 +284,7 @@ import "fmt"
 
 //init函数自动调用
 func init() {
-	fmt.Println("Golang")
+	fmt.Println(" Golang ")
 }
 
 func main() {
