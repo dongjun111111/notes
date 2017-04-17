@@ -24708,3 +24708,4 @@ func WhichSexByIdcard(idcard string) string {
   git checkout jason_test
   git push origin jason_test
 </pre>
+select * from innodb_trx 查看有是哪些事务占据了表资源
