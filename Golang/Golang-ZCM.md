@@ -10272,6 +10272,16 @@ STOP    19    暂停（同 Ctrl + Z）
 //启动redis 
 redis-server ./redis.conf
 
+//输出每个ip的连接数，以及总的各个状态的连接数
+netstat -n | awk '/^tcp/ {n=split($(NF-1),array,":");if(n<=2)++S[array[(1)]];else++S[array[(4)]];++s[$NF];++N} END {for(a in S){printf("%-20s %s\n", a, S[a]);++I}printf("%-20s %s\n","TOTAL_IP",I);for(a in s) printf("%-20s %s\n",a, s[a]);printf("%-20s %s\n","TOTAL_LINK",N);}'
+
+//查看并发请求数及其TCP连接状态
+netstat -n | awk '/^tcp/ {++S[$NF]} END {for (a in S) print a, S[a]}'
+其中:
+SYN_RECV表示正在等待处理的请求数；
+ESTABLISHED表示正常数据传输状态；
+TIME_WAIT表示处理完毕，等待超时结束的请求数。
+
 ###Golang判断电脑系统
 runtime.GOOS
 runtime.GOROOT()
