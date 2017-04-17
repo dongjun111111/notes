@@ -24690,3 +24690,11 @@ func WhichSexByIdcard(idcard string) string {
 	return "男"
 }
 </pre>
+###git 搭建私服 gitlab //只能在linux
+<pre>
+  git clone http://usersname@192.168.1.220/zcm_group/projects
+  cd projects
+  git branch jason_test
+  git checkout jason_test
+  git push origin jason_test
+</pre>
