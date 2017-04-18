@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+	<title>SVG</title> 
+	<style style="text/css">
+	body{background: #fff;}
+	#river {stroke-dasharray:2790 2790;stroke-dashoffset: 2790;-webkit-animation: river 3s 0s forwards ;}
+	@-webkit-keyframes river {0% {stroke-dasharray: 0,2790;stroke-dashoffset:2790;}  
+	  100% {stroke-dasharray:2790,0; stroke-dashoffset:2790;			opacity: 1;}
+	  
+	}
+	</style> 
+</head>
+
+
+<body> 
+	
+	<svg version="1.1" id="river" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="800px" height="600px" viewBox="0 0 800 600" enable-background="new 0 0 800 600" xml:space="preserve">
+	<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="113.6748" y1="405.168" x2="671.8037" y2="405.168" gradientTransform="matrix(1 0 0 -1 -20.96 603.3398)">
+		<stop  offset="0" style="stop-color:#00FFA6"/>
+		<stop  offset="0.3118" style="stop-color:#2A6DFF"/>
+		<stop  offset="0.6882" style="stop-color:#E900BD"/>
+		<stop  offset="1" style="stop-color:#FFF654"/>
+	</linearGradient>
+	<path fill="none" stroke="url(#SVGID_1_)" stroke-miterlimit="10" d="M92.982,113.212c0,0,39.161,24.732,42.87,61.007
+		c0,0,10.717,76.258,2.061,102.641c-8.656,26.383-8.656-38.748,11.13-59.358s34.213-23.083,34.213-23.083s56.473-5.359,0,10.717
+		c-56.473,16.076,34.625,11.954,34.625,15.664s0-56.885-25.969-70.488c-25.969-13.603-30.092,100.992-29.679,126.136
+		c0.413,25.144,5.359-48.641,19.375-49.877c14.015-1.237,29.266,49.466,18.961,46.167c-10.305-3.298-26.381-28.03-26.381-28.03
+		s15.251-11.13,18.961,1.236c3.709,12.366-17.313,17.313-17.313,17.313l98.106-79.968c0,0-5.358,75.434-46.58,93.984
+		c-41.222,18.55,14.427-31.74,41.633-34.625c0,0,31.74,32.565,61.419,37.511c0,0,53.587-53.175,71.725-76.671
+		c18.137-23.496-80.793-35.863-54.413,0c26.382,35.862,33.39,39.984,33.39,39.984l-2.886-25.557c0,0,33.389-2.473,16.076,16.489
+		c-17.313,18.961-25.557,16.076-25.557,16.076s-21.437,21.435,14.839,26.793c36.275,5.359,66.367-32.977,66.367-32.977l28.031-39.984
+		c0,0,99.344,13.604,42.045,27.618c-57.299,14.014-46.992,3.297-46.992,3.297s13.188-51.526,21.846-56.885
+		c8.658-5.359,4.947,93.16-32.151,98.931s0.852-14.49,13.604-21.435c12.752-6.945,4.535-2.885,34.215,6.595
+		c29.678,9.481,37.51,10.718,37.51,10.718l79.56-95.221l-56.475,13.191l-10.306,35.45l88.213-2.886l-48.641-27.618l-4.535,73.354
+		l-13.602-22.24l-23.084,22.24l60.594-20.178l25.559,20.178"/>
+	</svg>
+
+
+
+	<script type="text/javascript">
+		var obj = document.querySelector("path");
+		var length = obj.getTotalLength();
+		console.log(length); // path 路径长度
+	</script>   
+</body>
+</html>

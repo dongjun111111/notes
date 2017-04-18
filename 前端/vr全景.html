@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=640, target-densitydpi=device-dpi, user-scalable=no">
+  <title>全景</title>
+  <link rel="stylesheet" href="http://jdc.jd.com/lab/zaowu/dist/css/reset.min.css">
+  <style>
+  html,body {width: 100%; height: 100%}
+  
+  body {
+    background-size: cover;
+-webkit-user-select: none;
+    user-select: none;
+    padding: 150px 0 0;
+    overflow: hidden;
+  }
+  #view{
+    width: 800px;
+    height: 500px;
+    overflow: hidden;
+    margin:  0 auto;
+    perspective: 420px;
+  }
+  #bigCube{
+    width: 6000px;
+    height: 6000px;
+    margin-left: -2600px;
+    margin-top: -2750px;
+    transform-origin: 3000px 3000px;
+    transform-style: preserve-3d;
+  }
+  #cube{
+    width: 6000px;
+    height: 6000px;
+    position: relative;
+    transform-style: preserve-3d;
+  }
+  .stage{
+    width: 6000px;
+    height: 6000px;
+    transform-style: preserve-3d;
+  }
+  .container {
+    width: 800px;
+    height: 500px;
+    position: absolute;
+    transform-style: preserve-3d;
+  }
+  
+  .container>div {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
+  </style>
+</head>
+
+<body>
+<div id="view">
+  <div id="bigCube">
+    <div id="cube">
+       <div class="stage">
+          <div class="container">            
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+  <script src="http://jdc.jd.com/lab/zaowu/dist/js/jquery-3.1.0.min.js"></script>
+  <!-- <script src="http://jdc.jd.com/lab/zaowu/dist/js/zepto.min.js"></script> -->
+  <script>
+    //禁用微信下拉
+    $('body').on('touchmove', function(event) {
+      event.preventDefault();
+    });
+    var BG_WIDTH = 3000,
+      BG_HEIGHT = 3000,
+      BG_NUMBER = 4,
+      PER_ANGLE = 360 / BG_NUMBER;
+    var translateZ = (function calTranslateZ(opts) {
+      return Math.round(opts.width / (2 * Math.tan(Math.PI / opts.number)))
+    })({
+      width: BG_WIDTH,
+      number: BG_NUMBER
+    })
+    console.log(translateZ);
+    var view = $("#bigCube")
+      viewW = view.width(),
+      viewH = view.height();
+    var container = $(".container"),
+      bgItem;
+    for (var i = 0; i < BG_NUMBER; i++) {
+      $("<div></div>").css({
+        "background": "url(http://jdc.jd.com/lab/zaowu/dist/images/panorama/"+ i +".jpg) 0 0/cover no-repeat",
+        "position": "absolute",
+        "width": BG_WIDTH,
+        "height": BG_HEIGHT,
+        "left": (viewW - BG_WIDTH) / 2,
+        "top": (viewH - BG_HEIGHT) / 2,
+        "transform": "rotateY(" + (180 - i * PER_ANGLE) + "deg) translateZ("+ (-translateZ +10 ) +"px)", // translateZ + 10 是为了去掉模模块间的缝隙
+        // "backface-visibility": "hidden"
+      }).appendTo(".container")
+    }
+    for(var j = 0; j < 2; j++){
+      $("<div></div>").css({
+        "background": "url(http://jdc.jd.com/lab/zaowu/dist/images/panorama/"+ (j + 4) +".jpg) 0 0/cover no-repeat",
+        "position": "absolute",
+        "width": BG_WIDTH,
+        "height": BG_HEIGHT,
+        "left": (viewW - BG_WIDTH) / 2,
+        "top": (viewH - BG_HEIGHT) / 2,
+        "transform": "rotateX("+ (j ? 1: -1) * 90 +"deg) rotateZ(90deg) translateZ("+ (-translateZ+10) +"px)" // translateZ + 10 是为了去掉模模块间的缝隙
+      }).appendTo(".container")
+    }
+    bgItem = container.find('div')
+  
+    var lastMouseX = 0,
+      lastMouseY = 0,
+      curMouseX = 0,
+      curMouseY = 0,
+      lastAngleX = 0,
+      lastAngleY = 0,
+      angleX = 0,
+      angleY = 0;
+    var initTranZ = -150,
+      tranZDistance = 0;
+    var temZ = 0;
+    var slastMouseX = 0;
+    var frameTimer;
+    var timeoutTimer;
+    var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame ||
+      function(callback) {
+        setTimeout(callback, 1000 / 60)
+      }
+    $(document).on("mousedown touchstart", mouseDownHandler)
+    $(document).on("mouseup touchend", mouseUpHandler)
+    function mouseDownHandler(evt) {
+      // 由于移动设备支持多指触摸，因此与PC的鼠标不同，返回是一数组touches。
+      lastMouseX = evt.pageX || evt.touches[0].pageX;
+      lastMouseY = evt.pageY || evt.touches[0].pageY;
+      lastAngleX = aimAngleX;
+      lastAngleY = aimAngleY;
+      curMouseX = evt.pageX || evt.touches[0].pageX;
+      curMouseY = evt.pageY || evt.touches[0].pageY;
+      slastMouseX = evt.pageX || evt.touches[0].pageX;
+      clearTimeout(timeoutTimer)
+      $(document).on("mousemove touchmove", mouseMoveHandler)
+      window.cancelAnimationFrame(frameTimer)
+      frameTimer = requestAnimationFrame(go)
+    }
+    function mouseMoveHandler(evt) {
+      curMouseX = evt.pageX || evt.touches[0].pageX;
+      curMouseY = evt.pageY || evt.touches[0].pageY;
+      dragRotate({
+        pageX: curMouseX,
+        pageY: curMouseY
+      });
+    }
+    function mouseUpHandler(evt) {
+      // touchend 不具有坐标信息，因此需以touchmove的最后一次点提供
+      // http://stackoverflow.com/questions/17957593/how-to-capture-touchend-coordinates
+      // curMouseX = evt.pageX || evt.touches[0].pageX;
+      // curMouseY = evt.pageY || evt.touches[0].pageY;
+      $(document).unbind("mousemove touchmove")
+      timeoutTimer = setTimeout(function(){
+        window.cancelAnimationFrame(frameTimer)
+      }, 2500)
+    }
+    
+    var aimAngleX = 0,aimAngleY = 0;
+    var curBgAngleX = 0, curBgAngleY = 0;
+    var curItemAngleX = 0, curItemAngleY = 0;
+    function dragRotate(evtInfo) {
+      // 注意：rotateX(Y) 与 鼠标（触摸）的X（Y）轴是交叉对应的
+      // aimAngleX(Y)的值是通过【拖拽位移换算为相应角度得到】
+      aimAngleX = ( 180 / Math.PI * (Math.atan((curMouseX - lastMouseX) / translateZ)) + lastAngleX )
+      // console.log((180 / Math.PI * Math.atan((curMouseY - lastMouseY) / (Math.sqrt(Math.pow(panoBgItemH / 2, 2) + Math.pow(translateZ, 2))*1.5)) + lastAngleY), 30)
+      // 限制上下旋转监督在30°以内
+      aimAngleY = Math.max(-60, Math.min((180 / Math.PI * Math.atan((curMouseY - lastMouseY) / (Math.sqrt(Math.pow(BG_HEIGHT / 2, 2) + Math.pow(translateZ, 2))*1.5)) + lastAngleY), 60))
+    }
+    // loop
+    function go() {
+      // bg 与 item 的位移增量速度的不一致，可形成视差运动
+      curBgAngleX += (aimAngleX - curBgAngleX) * 0.5;
+      curBgAngleY += (aimAngleY - curBgAngleY) * 0.5;
+      $("#cube").css({
+        transform: "rotateX(" + (curBgAngleY) + "deg) rotateY(" + -curBgAngleX + "deg) rotateZ(0)"
+      })
+  
+      frameTimer = requestAnimationFrame(go);
+    }
+  </script>
+</body>
+
+</html>
