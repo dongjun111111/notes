@@ -17324,6 +17324,10 @@ func main(){
 </pre>
 MYSQL :
 ctrl + H  //历史日志  
+
+增加ope_time字段：
+ope_time	timestamp CURRENT_TIMESTAMP 操作更新时间【不由程序控制，由mysql数据库自动生成】
+
 ###linux查看已连接的可用WIFI
 <pre>
 //列出可用的WiFi
