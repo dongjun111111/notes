@@ -9047,3 +9047,42 @@ function  CapsLock(event){
 	});
 }
 
++++++++js判断手机是否安装某个APP++++++++
+有个需求就是，先判断手机上是否有我们的APP应用，如果有的话打开应用，没有才跳转到wap页面。 
+wap简单来说就是运行在移动端浏览器上的网站。不管应用在什么地方，总之就是浏览器呗，可以通过JS来判断本地是否有某应用，实现方式实际就是将http协议转为本地软件协议。 
+还是直接贴代码吧。
+ 如下： 
+<script language="javascript">
+ if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+  var loadDateTime = new Date();
+  window.setTimeout(function() {
+   var timeOutDateTime = new Date();
+   if (timeOutDateTime - loadDateTime < 5000) {
+    window.location = "要跳转的页面URL";
+   } else {
+    window.close();
+   }
+  },
+  25);
+  window.location = " apps custom url schemes ";
+ } else if (navigator.userAgent.match(/android/i)) {
+  var state = null;
+  try {
+   state = window.open("apps custom url schemes ", '_blank');
+  } catch(e) {}
+  if (state) {
+   window.close();
+  } else {
+   window.location = "要跳转的页面URL";
+  }
+ }
+</script>
+
+apps custom url schemes 是什么呢？
+其实就是你与APP约定的一个协议URL，你的IOS同事或Android同事在写程序的时候会设置一个URL Scheme，
+例如设置：
+URL Scheme ：app
+然后其他的程序就可以通过URLString ＝ app://  调用该应用。
+还可以传参数，如：
+app://reaction/?uid=1
+原理：500ms内，本机有应用程序能解析这个协议并打开程序，调用该应用；如果本机没有应用程序能解析该协议或者500ms内没有打开这个程序，则执行setTimeout里面的function，就是跳转到你想跳转的页面。
