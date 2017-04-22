@@ -11460,6 +11460,8 @@ id      account
 126		18768176361
 -------------------
 </pre>
+
+lastinsertid() 有值必须是id自增长的！！！
 ###sql总数
 <pre>
 select sum(col) from (
