@@ -18274,6 +18274,9 @@ select hour(NOW());
 12
 1
 12
+
+//获取七天前到2分钟前的所有产品
+SELECT * from product where  create_date >= now()-interval 7 DAY and create_date <= now()-interval 2 MINUTE;
 </pre>
 ###Golang database/sql 使用官方包
 <pre>
