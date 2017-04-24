@@ -23707,7 +23707,7 @@ func UpdateUsersUrid() {
 	type Id int
 	var res []Id
 	for {
-		sql0 = `select id from table where id> limit 10000`
+		sql0 = `select id from table where id>1 limit 10000`
 		o.Raw(sql0).QueryRows(&res)
 		if len(res) > 0 {
 			for i := 0; i < len(res); i++ {
