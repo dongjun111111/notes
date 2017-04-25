@@ -59,8 +59,8 @@ func main() {
 }
 
 //执行命令函数
-//commandName 命名名称，如cat，ls，git 等
-//params 命令参数，如ls -l的-l，git log 的log 等
+//commandName 命名名称，如cat，ls，git
+//params 命令参数，如ls -l的-l，git log 的log
 func execCommand(commandName string, params []string) bool {
 	cmd := exec.Command(commandName, params...)
 
