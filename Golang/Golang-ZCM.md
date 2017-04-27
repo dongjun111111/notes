@@ -24861,5 +24861,5 @@ func main() {
 ###Mysql严格模式
 在此模式下，插入数据的类型不对则会报错！
 <pre>
-sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+	sql-mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
 </pre>
