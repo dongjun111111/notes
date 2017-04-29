@@ -1081,7 +1081,7 @@ func main() {
 	m[4] = 1
 	m[7] = 2
 	fmt.Println(m)
-	fmt.Println("is nil:", nil == m) //false
+	fmt.Println("is nil:", nil == m) // false
 	//直接赋值初始化map
 	n1 := map[string]int{
 		"jason": 3,
