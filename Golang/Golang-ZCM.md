@@ -1199,7 +1199,7 @@ func main() {
 	//使用*读取/修改指针指向的值
 	i1 := new(int)
 	*i1 = 3
-	fmt.Println(i1, *i1) //0xc082048098 3
+	fmt.Println(i1, *i1) //0xc0820480983
 }
 output==>
 0xc082048038
