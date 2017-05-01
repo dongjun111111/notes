@@ -2139,7 +2139,7 @@ func sayhi(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", sayhi)       //注册一个sayhello函数给“/”，当浏览器浏览“/”的时候，会调用sayhello函数
+	http.HandleFunc("/", sayhi)       //注册一个sayhello函数给“/”，当浏览器浏览“/”的时候，会调用sayhello方法
 	http.ListenAndServe(":8089", nil) //开始监听和服务
 }
 </pre>
