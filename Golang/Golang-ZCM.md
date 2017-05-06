@@ -3256,7 +3256,7 @@ Input 对象 （很多方法，下面列出常用）
 - Param 在路由设置的时候可以设置参数，这个是用来获取那些参数的，例如 Param(":id"),返回12
 - Query 该函数返回 Get 请求和 Post 请求中的所有数据，和 PHP 中 $_REQUEST 类似
 - Cookie 返回请求中的 cookie 数据，例如 Cookie("username")，就可以获取请求头中携带的 cookie 信息中 username 对应的值
-- Session session 是用户可以初始化的信息，默认采用了 beego 的 session 模块中的 Session 对象，用来获取存储在服务
+- Session session 是用户可以初始化的信息，默认采用了beego的session模块中的 Session 对象，用来获取存储在服务
 器端中的数据。
 - 。。。
 
