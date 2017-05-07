@@ -232,7 +232,7 @@ output==>
 1
 0
 </pre>
-函数作为值、类型
+函数作为值类型
 <pre>
 package main
 
