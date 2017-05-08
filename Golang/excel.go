@@ -69,7 +69,7 @@ func isEmailRow(r []string) (isEmail bool, email string) {
 
 func sendMail(sendList map[string]string) {
 
-	fmt.Printf("共需要发送%d封邮件\n", len(sendList))
+	fmt.Printf("共需要发送%d封邮件!\n", len(sendList))
 	index := 1
 	for mail, content := range sendList {
 		fmt.Printf("发送第%d封", index)
