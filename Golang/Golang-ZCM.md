@@ -25053,3 +25053,70 @@ flush privileges;
 vi /etc/redis.conf 
 # bind 127.0.0.1   //注释掉
 </pre>
+##格式转换
+中文转换成gbk编码的十六进制字符串,格式是%xx%yy形式的,比如转换”哈”这个字,是转换成”%B9%FE”的,然而我通过一番搜索发现打印机需要的格式是十六进制字节数组的,即类似[‘0xB9’,’0xFE’]格式的,这个好办,我写了个转换函数,用 replace加正则去掉第一个”%”,然后用split(“%”)转换成数组,再用map加上”0x”就行.不过最后也发现,这个库不会转换数字和字母,于是我又用 str.charCodeAt(0).toString(16)转换成对应的ASCII码,再加上”0x”,就OK了,整个转换函数也写好了,不知道还有没有更好的方法。
+<pre>
+module.exports=function(){
+	var data=function(zipData){
+			var re=zipData
+			.replace(/#(\d+)\$/g,function(a,b){
+				return Array(+b+3).join('#');
+			})
+			.replace(/#/g,'####')
+			.replace(/(\w\w):([\w#]+)(?:,|$)/g,function(a,hd,dt){
+				return dt.replace(/../g,function(a){
+					if(a!='##'){
+						return hd+a;
+					}else{
+						return a;
+					}
+				});
+			});
+			return re;
+		}('4e:020405060f12171f20212326292e2f313335373c40414244464a5155575a5b6263646567686a6b6c6d6e6f727475767778797a7b7c7d7f808182838485878a#909697999c9d9ea3aaafb0b1b4b6b7b8b9bcbdbec8cccfd0d2dadbdce0e2e6e7e9edeeeff1f4f8f9fafcfe,4f:00020304050607080b0c12131415161c1d212328292c2d2e31333537'),
+		U2Ghash={},
+		G2Uhash={};
+	!function(data){
+		var k=0;
+			data=data.match(/..../g);
+		for(var i=0x81;i<=0xfe;i++){
+			for(var j=0x40;j<=0xFE;j++){
+				U2Ghash[data[k++]]=('%'+i.toString(16)+'%'+j.toString(16))
+					.toUpperCase();
+			}
+		}
+		for(var key in U2Ghash){
+			G2Uhash[U2Ghash[key]]=key;
+		}
+	}(data);
+	function isAscii(unicode) {
+		return ((unicode == 0x20AC) || (unicode <= 0x007F && unicode >= 0x0000));
+	}
+	return{
+		encode:function(str){	
+			return str.replace(/./g,function(a){
+				var code=a.charCodeAt(0);
+				if(isAscii(code)){
+					return encodeURIComponent(a);
+				}else{
+					var key=code.toString(16);
+					if(key.length!=4)key=('000'+key).match(/....$/)[0];
+					return U2Ghash[key]||a;
+				}
+			});
+		},
+		decode:function(str){
+			return str.replace(/%[0-9A-F]{2}%[0-9A-F]{2}/g,function(a){
+				if(a in G2Uhash){
+					return String.fromCharCode('0x'+G2Uhash[a]);
+				}else{
+					return a;
+				}
+			}).replace(/%[\w]{2}/g,function(a){
+				return decodeURIComponent(a);
+			
+			});
+		}
+	};
+}();
+</pre>
