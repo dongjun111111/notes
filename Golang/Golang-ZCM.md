@@ -24725,6 +24725,12 @@ func WhichSexByIdcard(idcard string) string {
   git commit -m 'message'
   git push origin jason_test
   git merge  //请求合并
+
+  //强制更新本地
+  git fetch --all  
+  git reset --hard origin/master 
+  git pull
+
 </pre>
 select * from innodb_trx 查看有是哪些事务占据了表资源
 ###Golang channel 
