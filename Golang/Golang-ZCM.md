@@ -11604,6 +11604,10 @@ CREATE TABLE `tablename` (
 - &符号的意思是对变量取地址，如：变量a的地址是&a;
 - *符号的意思是对指针取值，如:*&a，就是a变量所在地址的值，当然也就是a的值了。
 
+查找MySQL数据库中所有有某个字段的所有表
+<pre>
+SELECT * FROM information_schema.columns WHERE column_name='guid';
+</pre>
 ####mysql 触发器 trigger 
 
 INSERT into table1(id,tradeid) values('0','trigger');
