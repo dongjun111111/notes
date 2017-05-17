@@ -25457,3 +25457,38 @@ func Work() {
 	}
 }
 </pre>
+###Golang 获取真实IP地址
+<pre>
+package main
+
+import (
+	"github.com/astaxie/beego"
+	"net"
+	"os"
+)
+
+// getBdIP 获取所在服务器的IP地址
+func getBdIP() string {
+	ip := "not found"
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		beego.Emergency(err)
+		os.Exit(1)
+		return ip
+	}
+	for _, address := range addrs {
+		// 检查ip地址判断是否回环地址
+		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				ip = ipnet.IP.String()
+				break
+			}
+		}
+	}
+	return ip
+}
+
+func main() {
+	beego.Emergency("真实地址是:"+getBdIP())
+}
+</pre>
