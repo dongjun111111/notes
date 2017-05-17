@@ -24735,6 +24735,15 @@ func WhichSexByIdcard(idcard string) string {
   git reset --hard origin/master 
   git pull
 
+	
+  //删除本地所有未提交的更改
+    如果你有的修改以及加入暂存区的话
+	那么
+	git reset --hard
+	git clean -xdf
+	
+	如果没有加入暂存区的话 ，见楼上答案
+	git checkout -f
 </pre>
 select * from innodb_trx 查看有是哪些事务占据了表资源
 ###Golang channel 
