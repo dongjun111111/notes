@@ -25492,3 +25492,37 @@ func main() {
 	beego.Emergency("真实地址是:"+getBdIP())
 }
 </pre>
+###Golang 获取文件修改时间
+<pre>
+package main
+
+import (
+	"github.com/astaxie/beego"
+	"os"
+	"strings"
+	"time"
+)
+
+func getFileModTime(path string) int64 {
+	path = strings.Replace(path, "\\", "/", -1)
+	beego.Emergency(path)
+	f, err := os.Open(path)
+	if err != nil {
+		beego.Emergency("[ERRO] Fail to open file[ %s ]", err.Error())
+		return time.Now().Unix()
+	}
+	defer f.Close()
+
+	fi, err := f.Stat()
+	if err != nil {
+		beego.Emergency("[ERRO] Fail to get file information[ %s ]", err.Error())
+		return time.Now().Unix()
+	}
+
+	return fi.ModTime().Unix()
+}
+
+func main() {
+	beego.Emergency(getFileModTime("tcp1.go"))
+}
+</pre>
