@@ -25134,3 +25134,326 @@ module.exports=function(){
 <pre>
 谷歌身份验证的实现原理:服务器端通过特定算法随机生成一个密钥，并且把这个密钥保存在数据库中。根据生成的密钥在页面上生成一个二维码，内容是一个 URI 地址。用户通过扫描二维码，把密钥保存在客户端。 客户端每 30 秒使用密钥和时间戳通过一种算法生成一个 6 位数字的一次性 密码。服务器端使用保存在数据库中的密钥和时间戳通过同一种算法生成一个 6 位数字的一次性密码， 用户登陆时输入一次性密码与服务器端进行验证，如果一 样，就登录成功了。谷歌账户两步验证的工作原理：Google 的两步验证算法源自另一种名为 HMAC-Based One-Time Password 的 算法，简称 HOTP。HOTP 的工作原理如下： 客户端和服务器事先协商好一个密钥 K，用于一次性密码的生成过程，此密 钥不被任何第三方所知道。此外客户端和服务器端各有一个计数器 C，并且事先 将计数值同步。进行验证时，客户端对密钥和计数器的组合合(K,C)使用 HMAC（Hash-based Message Authentication Code）算法计算一次性密码，公式如下： HOTP(K,C) = Truncate(HMAC-SHA-1(K,C)) 上面采用了 HMAC-SHA-1，当然也可以使用 HMAC-MD5 等。HMAC 算法得出 的值位数比较多，不方便用户输入，因此需要截断（Truncate）成为一组不太长 十进制数（例如 6 位） 。计算完成之后客户端计数器 C 计数值加 1。用户将这一 组十进制数输入并且提交之后， 服务器端同样的计算，并且与用户提交的数值比 较，如果相同，则验证通过，服务器端将计数值 C 增加 1。如果不相同，则验证失败。
 </pre> 
+###Golang 随机数、指定概率事件
+<pre>
+package main
+
+import (
+	"github.com/astaxie/beego"
+	"math/rand"
+	"time"
+)
+
+var rnd = rand.New(rand.NewSource(time.Now().UnixNano()))
+
+//随机数
+func rand_chance(base int) int {
+	return rnd.Int() % base
+}
+
+//m到m+n的随机数
+func Rand_sss(n, m int) int {
+	return rnd.Intn(n) + m
+}
+
+//概率方法
+func TestChance() string {
+	c := rand_chance(1000)
+	if c <= 99 { //笔记本
+		return "笔记本"
+	} else if c > 99 && c <= 889 { //夺宝币
+		return "夺宝币"
+	} else if c > 889 && c <= 899 { //99元现金
+		return "99元现金"
+	} else {
+		return "中性笔"
+	}
+}
+
+func main() {
+	d := []string{"11", "222", "333"}
+	smap := make(map[string]int)
+	for k, v := range d {
+		smap[v] = k + 1
+		beego.Emergency(k+1, v)
+	}
+	beego.Emergency(smap["22ff2"])
+	num := Rand_sss(10, 5)
+	beego.Emergency(num)
+	beego.Emergency(TestChance())
+}
+</pre>
+###Golang tcp使用三个协程进行心跳监测
+服务端
+<pre>
+package main
+
+// golang实现带有心跳检测的tcp长连接
+// server服务端
+import (
+	"fmt"
+	"net"
+	"time"
+)
+
+var (
+	Req_REGISTER byte = 1 // 1 --- c register cid
+	Res_REGISTER byte = 2 // 2 --- s response
+
+	Req_HEARTBEAT byte = 3 // 3 --- s send heartbeat req
+	Res_HEARTBEAT byte = 4 // 4 --- c send heartbeat res
+
+	Req byte = 5 // 5 --- cs send data
+	Res byte = 6 // 6 --- cs send ack
+)
+
+type CS struct {
+	Rch chan []byte
+	Wch chan []byte
+	Dch chan bool
+	u   string
+}
+
+func NewCs(uid string) *CS {
+	return &CS{Rch: make(chan []byte), Wch: make(chan []byte), u: uid}
+}
+
+var CMap map[string]*CS
+
+func main() {
+	CMap = make(map[string]*CS)
+	listen, err := net.ListenTCP("tcp", &net.TCPAddr{net.ParseIP("127.0.0.1"), 6666, ""})
+	if err != nil {
+		fmt.Println("监听端口失败:", err.Error())
+		return
+	}
+	fmt.Println("已初始化连接，等待客户端连接...")
+	go PushGRT()
+	Server(listen)
+	select {}
+}
+
+func PushGRT() {
+	for {
+		time.Sleep(15 * time.Second)
+		for k, v := range CMap {
+			fmt.Println("推送信息到用户【push msg to user】:" + k)
+			v.Wch <- []byte{Req, '#', 'p', 'u', 's', 'h', '!'}
+		}
+	}
+}
+
+func Server(listen *net.TCPListener) {
+	for {
+		conn, err := listen.AcceptTCP()
+		if err != nil {
+			fmt.Println("接受客户端连接异常:", err.Error())
+			continue
+		}
+		fmt.Println("客户端连接来自:", conn.RemoteAddr().String())
+		go Handler(conn)
+	}
+}
+
+func Handler(conn net.Conn) {
+	defer conn.Close()
+	data := make([]byte, 128)
+	var uid string
+	var C *CS
+	for {
+		conn.Read(data)
+		fmt.Println("客户端发来数据:", string(data))
+		if data[0] == Req_REGISTER { // register
+			conn.Write([]byte{Res_REGISTER, '#', 'o', 'k'})
+			uid = string(data[2:])
+			C = NewCs(uid)
+			CMap[uid] = C
+			break
+		} else {
+			conn.Write([]byte{Res_REGISTER, '#', 'e', 'r'})
+		}
+	}
+	//	WHandler
+	go WHandler(conn, C)
+
+	//	RHandler
+	go RHandler(conn, C)
+
+	//	Worker
+	go Work(C)
+	select {
+	case <-C.Dch:
+		fmt.Println("关闭对象协程【close handler goroutine】")
+	}
+}
+
+// 正常写数据
+// 定时检测 conn die => goroutine die
+func WHandler(conn net.Conn, C *CS) {
+	// 读取业务Work 写入Wch的数据
+	ticker := time.NewTicker(20 * time.Second)
+	for {
+		select {
+		case d := <-C.Wch:
+			conn.Write(d)
+		case <-ticker.C:
+			if _, ok := CMap[C.u]; !ok {
+				fmt.Println("连接失败，关闭写对象【conn die, close WHandler】")
+				return
+			}
+		}
+	}
+}
+
+// 读客户端数据 + 心跳检测
+func RHandler(conn net.Conn, C *CS) {
+	// 心跳ack
+	// 业务数据 写入Wch
+	for {
+		data := make([]byte, 128)
+		// setReadTimeout
+		err := conn.SetReadDeadline(time.Now().Add(10 * time.Second))
+		if err != nil {
+			fmt.Println(err)
+		}
+		if _, derr := conn.Read(data); derr == nil {
+			// 可能是来自客户端的消息确认
+			fmt.Println("================>" + string(data))
+			if data[0] == Res {
+				fmt.Println("接收客户端数据包【recv client data ack】")
+			} else if data[0] == Req {
+				fmt.Println("接收客户端数据【recv client data】")
+				fmt.Println("+++++++++++++++>" + string(data))
+				conn.Write([]byte{Res, '#'})
+				// C.Rch <- data
+			}
+			continue
+		}
+
+		conn.Write([]byte{Req_HEARTBEAT, '#'})
+		fmt.Println("发送包【send packet】")
+		conn.SetReadDeadline(time.Now().Add(2 * time.Second))
+		if _, herr := conn.Read(data); herr == nil {
+			fmt.Println("接收数据包【resv packet ack】")
+		} else {
+			delete(CMap, C.u)
+			fmt.Println("删除用户【delete user】!")
+			return
+		}
+	}
+}
+
+func Work(C *CS) {
+	time.Sleep(5 * time.Second)
+	C.Wch <- []byte{Req, '#', 'h', 'e', 'l', 'l', 'o'}
+
+	time.Sleep(15 * time.Second)
+	C.Wch <- []byte{Req, '#', 'W', 'o', 'r', 'l', 'd'}
+}
+</pre>
+客户端
+<pre>
+package main
+
+// golang实现带有心跳检测的tcp长连接
+// server客户端
+
+import (
+	"fmt"
+	"net"
+)
+
+var (
+	Req_REGISTER byte = 1 // 1 --- c register cid
+	Res_REGISTER byte = 2 // 2 --- s response
+
+	Req_HEARTBEAT byte = 3 // 3 --- s send heartbeat req
+	Res_HEARTBEAT byte = 4 // 4 --- c send heartbeat res
+
+	Req byte = 5 // 5 --- cs send data
+	Res byte = 6 // 6 --- cs send ack
+)
+
+var Dch chan bool
+var Rch chan []byte
+var Wch chan []byte
+
+func main() {
+	Dch = make(chan bool)
+	Rch = make(chan []byte)
+	Wch = make(chan []byte)
+	addr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:6666")
+	conn, err := net.DialTCP("tcp", nil, addr)
+	if err != nil {
+		fmt.Println("连接服务端失败:", err.Error())
+		return
+	}
+	fmt.Println("已连接服务器")
+	defer conn.Close()
+	go Handler(conn)
+	select {
+	case <-Dch:
+		fmt.Println("关闭连接")
+	}
+}
+
+func Handler(conn *net.TCPConn) {
+	// 直到register ok
+	data := make([]byte, 128)
+	for {
+		conn.Write([]byte{Req_REGISTER, '#', '2'})
+		conn.Read(data)
+		if data[0] == Res_REGISTER {
+			break
+		}
+	}
+	go RHandler(conn)
+	go WHandler(conn)
+	go Work()
+}
+
+func RHandler(conn *net.TCPConn) {
+
+	for {
+		// 心跳包,回复ack
+		data := make([]byte, 128)
+		i, _ := conn.Read(data)
+		if i == 0 {
+			Dch <- true
+			return
+		}
+		if data[0] == Req_HEARTBEAT {
+			fmt.Println("接收包【recv pack】")
+			conn.Write([]byte{Res_REGISTER, '#', 'h'})
+			fmt.Println("发送数据包【send pack ack】")
+		} else if data[0] == Req {
+			fmt.Println("接收数据包【recv data pack】")
+			fmt.Printf("%v\n", string(data[2:]))
+			Rch <- data[2:]
+			conn.Write([]byte{Res, '#'})
+		}
+	}
+}
+
+func WHandler(conn net.Conn) {
+	for {
+		select {
+		case msg := <-Wch:
+			fmt.Println((msg[0]))
+			fmt.Println("发送数据后【send data after】: " + string(msg[1:]))
+			conn.Write(msg)
+		}
+	}
+
+}
+
+func Work() {
+	for {
+		select {
+		case msg := <-Rch:
+			fmt.Println("工作线程接收【work recv】 " + string(msg))
+			Wch <- []byte{Req, 'I', 'a', 'm', 'J', 'a', 's', 'o', 'n', '!'}
+		}
+	}
+}
+</pre>
