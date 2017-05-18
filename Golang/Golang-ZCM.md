@@ -25530,7 +25530,6 @@ func getFileModTime(path string) int64 {
 
 	return fi.ModTime().Unix()
 }
-
 func main() {
 	beego.Emergency(getFileModTime("tcp1.go"))
 }
