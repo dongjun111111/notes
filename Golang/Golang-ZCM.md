@@ -10273,7 +10273,7 @@ ifconfig  //查看IP地址
 
 
 //启动redis 
-redis-server ./redis.conf
+redis-server ./redis.conf  或者  redis-server --port 6379 &
 
 //输出每个ip的连接数，以及总的各个状态的连接数
 netstat -n | awk '/^tcp/ {n=split($(NF-1),array,":");if(n<=2)++S[array[(1)]];else++S[array[(4)]];++s[$NF];++N} END {for(a in S){printf("%-20s %s\n", a, S[a]);++I}printf("%-20s %s\n","TOTAL_IP",I);for(a in s) printf("%-20s %s\n",a, s[a]);printf("%-20s %s\n","TOTAL_LINK",N);}'
