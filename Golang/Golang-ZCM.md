@@ -25534,3 +25534,433 @@ func main() {
 	beego.Emergency(getFileModTime("tcp1.go"))
 }
 </pre>
+###Golang 通道channel妙用
+<pre>
+// //golang生成器
+// package main
+
+// import (
+// 	"fmt"
+// 	"math/rand"
+// )
+
+// /**
+//  * 生成器
+//  * 根据已知权限使用函数生成相应数据，异步调用节省了大量时间。
+//  * @author: niuyufu
+//  */
+
+// func rand_generator_1() int {
+// 	return rand.Int()
+// }
+
+// //直接返回通道channel
+// func rand_generator_2() chan int {
+// 	//创建通道
+// 	out := make(chan int)
+// 	//创建携程
+// 	go func() {
+// 		//持续执行，直到程序被打断
+// 		for {
+// 			//向通道内写入数据，如果无人读取会等待
+// 			out <- rand.Int()
+// 		}
+// 	}()
+// 	return out
+// }
+
+// func main() {
+// 	//生成随机数作为一个服务
+// 	rand_service_handler := rand_generator_2()
+// 	//从服务中读取随机数并打印
+// 	fmt.Println("\n", <-rand_service_handler)
+// 	fmt.Println("\n", <-rand_service_handler)
+// 	fmt.Println("\n", <-rand_service_handler)
+// }
+
+// //golang多路复用，高并发版生成器：
+// package main
+
+// import (
+// 	"fmt"
+// 	"math/rand"
+// )
+
+// /**
+//  * 多路复用，高并发版生成器
+//  * 根据已知权限使用函数生成相应数据，异步调用节省了大量时间。
+//  * @author: niuyufu
+//  */
+
+// func rand_generator_1() int {
+// 	return rand.Int()
+// }
+
+// //直接返回通道channel
+// func rand_generator_2() chan int {
+// 	//创建通道
+// 	out := make(chan int)
+// 	//创建携程
+// 	go func() {
+// 		//持续执行，直到程序被打断
+// 		for {
+// 			//向通道内写入数据，如果无人读取会等待
+// 			out <- rand.Int()
+// 		}
+// 	}()
+// 	return out
+// }
+
+// //函数 rand_generator_3,返回通道（channel）
+// func rand_generator_3() chan int {
+// 	//创建两个随机数生成器服务
+// 	rand_service_handler_1 := rand_generator_2()
+// 	rand_service_handler_2 := rand_generator_2()
+// 	//创建通道
+// 	out := make(chan int)
+// 	//创建协程
+// 	go func() {
+// 		for {
+// 			//读取生成器1中的数据，整合
+// 			out <- <-rand_service_handler_1
+// 		}
+// 	}()
+// 	go func() {
+// 		for {
+// 			//读取生成器1中的数据，整合
+// 			out <- <-rand_service_handler_2
+// 		}
+// 	}()
+// 	return out
+// }
+// func main() {
+// 	//生成随机数作为一个服务
+// 	rand_service_handler := rand_generator_3()
+// 	//从服务中读取随机数并打印
+// 	fmt.Println(<-rand_service_handler)
+// 	fmt.Println(<-rand_service_handler)
+// 	fmt.Println(<-rand_service_handler)
+// }
+
+// //golang之Furture技术
+
+// package main
+
+// import (
+// 	"fmt"
+// )
+
+// /**
+//  * Furture技术
+//  * 在不准备好参数的情况下调用函数：这样的设计可以提供很大的自由度和并发度， 参数调用与参数调用完全解耦
+//  * @author: niuyufu
+//  */
+
+// //一个查询结构体
+// type query struct {
+// 	//参数channel
+// 	sql chan string
+// 	//结果channel
+// 	result chan string
+// }
+
+// //执行query
+// func execQuery(q query) {
+// 	//启动协程
+// 	go func() {
+// 		//获取输入
+// 		sql := <-q.sql
+// 		//访问数据库，输出结果通道
+// 		q.result <- "get " + sql
+// 	}()
+// }
+// func main() {
+// 	//初始化Query
+// 	q := query{make(chan string, 1), make(chan string, 1)}
+// 	//执行Query，注意执行的时候无需准备参数
+// 	execQuery(q)
+
+// 	//准备参数
+// 	q.sql <- "select * from table"
+// 	//获取结果
+// 	fmt.Println(<-q.result)
+// }
+
+// //golang之并发循环
+// package main
+
+// import (
+// 	"fmt"
+// )
+
+// /**
+//  * 并发循环
+//  * 并发一次性跑完N个任务，这个牛X
+//  * @author: niuyufu
+//  */
+// func doSomething(i int, xi int) {
+// 	fmt.Println("i=", i, ",xi=", xi)
+// }
+
+// func main() {
+// 	//建立计数器
+// 	//这里就好比有好多一次性需要处理完的任务
+// 	data := []int{1, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3, 2, 3, 1, 2, 3}
+// 	N := len(data)
+// 	sem := make(chan int, N)
+// 	//经过这个for可以让cpu占满来跑你的任务
+// 	for i, xi := range data {
+// 		//建立协程
+// 		go func(i int, xi int) {
+// 			doSomething(i, xi)
+// 			//计数
+// 			sem <- 0
+// 		}(i, xi)
+// 	}
+// 	fmt.Println("并发循环开始")
+// 	//等待结束，查看跑完结果
+// 	for i := 0; i < N; i++ {
+// 		<-sem
+// 	}
+// 	fmt.Println("搞定了。")
+// }
+
+// //golang之Chain Filter技术
+// package main
+
+// import (
+// 	"fmt"
+// )
+
+// /**
+//  * Chain Filter技术
+//  * 并发过滤链，每个通道只有两个协程访问，性能良好
+//  * @author: niuyufu
+//  */
+// func Generate(ch chan<- int) {
+// 	for i := 2; ; i++ {
+// 		//fmt.Println("Generate:i:", i)
+// 		ch <- i
+// 	}
+// }
+// func Filter(in <-chan int, out chan<- int, prime int) {
+// 	for {
+// 		//只有输出才能再创建
+// 		i := <-in
+// 		//fmt.Println("Filter:in pop:", i)
+// 		if i%prime != 0 {
+// 			//fmt.Println("Filter:out add:", i)
+// 			out <- i
+// 		}
+// 	}
+// }
+
+// //
+// func main() {
+// 	//result数组
+// 	var numbers []int
+// 	//channel大小为1
+// 	ch := make(chan int)
+// 	go Generate(ch) //generate的gorouine占用channel：ch，通道被占用一次
+// 	for i := 0; i < 1000; i++ {
+// 		prime := <-ch
+// 		numbers = append(numbers, prime)
+// 		fmt.Println(prime, "n")
+// 		ch1 := make(chan int)
+// 		go Filter(ch, ch1, prime) //Filter的gorouine也点用了channel:ch，通道被占用二次
+// 		ch = ch1                  //打通两个通道
+// 		//fmt.Println(<-ch1)
+// 	}
+// 	//fmt.Printf("len=%d cap=%d slice=%v\n", len(numbers), cap(numbers), numbers)
+// }
+
+// //golang之共享变量
+// package main
+
+// import (
+// 	"fmt"
+// 	"time"
+// )
+
+// /**
+//  * 共享变量
+//  * 通过一个单独的协程来维护这两个通道。保证数据的一致性。
+//  * @author: niuyufu
+//  */
+// //共享变量有一个读通道和一个写通道组成
+// type sharded_var struct {
+// 	reader chan int
+// 	writer chan int
+// }
+
+// //共享变量维护协程
+// func sharded_var_whachdog(v sharded_var) {
+// 	go func() {
+// 		//初始值
+// 		var value int = 0
+// 		for {
+// 			//监听读写通道，完成服务
+// 			select {
+// 			case value = <-v.writer:
+// 			case v.reader <- value:
+// 			}
+// 		}
+// 	}()
+// }
+
+// //超时避免阻塞
+// func never_leak(ch chan int) {
+// 	//初始化timeout,缓冲为1
+// 	timeout := make(chan bool, 1)
+// 	//启动timeout协程，由于缓存为1，不可能泄漏
+// 	go func() {
+// 		time.Sleep(1 * time.Second)
+// 		timeout <- true
+// 	}()
+// 	//监听通道，由于设有超时，不可能泄漏
+// 	select {
+// 	case <-ch:
+// 		// a read from ch has occurred
+// 	case <-timeout:
+// 		// the read from ch has timed out
+// 	}
+// }
+
+// func main() {
+// 	//初始化，并开始维护协程
+// 	v := sharded_var{make(chan int), make(chan int)}
+// 	sharded_var_whachdog(v)
+
+// 	//读取初始化
+// 	fmt.Println(<-v.reader)
+// 	//写入一个值
+// 	v.writer <- 1
+// 	//读取新写入的值
+// 	fmt.Println(<-v.reader)
+// }
+
+// //golang之select之超时使用
+
+// package main
+
+// import (
+// 	"fmt"
+// 	"time"
+// )
+
+// /**
+//  * select之超时使用
+//  * select的使用，会随机从case中筛选可执行操作，如果没有能执行的操作则阻塞。
+//  * 使用超时避免读阻塞，使用缓冲避免写阻塞
+//  * @author: niuyufu
+//  */
+// func main() {
+// 	timeout := make(chan bool, 1)
+// 	ch := make(chan int)
+
+// 	//每秒生产一下true数据
+// 	go func() {
+// 		time.Sleep(1e9) //sleep one second
+// 		timeout <- true
+// 	}()
+
+// 	select {
+// 	case <-ch:
+// 		fmt.Println("ch pop")
+// 	case <-timeout:
+// 		fmt.Println("timeout!")
+// 	}
+// }
+
+// //golang之select之默认值操作
+// package main
+
+// import (
+// 	"fmt"
+// )
+
+// /**
+// * select之默认值操作
+// * 没有能操作的case时，默认调用default操作
+// * @author: niuyufu
+//  */
+// func main() {
+// 	ch1 := make(chan int, 1)
+// 	ch2 := make(chan int, 1)
+
+// 	//协程操作不仅能同步调用还能异步调用
+// 	ch1 <- 1
+// 	//同步
+// 	select {
+// 	case <-ch1:
+// 		fmt.Println("ch1 pop one element")
+// 	case <-ch2:
+// 		fmt.Println("ch2 pop one element")
+// 	default:
+// 		fmt.Println("default")
+// 	}
+// }
+
+// //golang之select验证是否通道写满
+
+// package main
+
+// import (
+// 	"fmt"
+// )
+
+// /**
+//  * select验证是否通道写满？
+//  * @author: niuyufu
+//  */
+// func main() {
+// 	ch1 := make(chan int, 1)
+// 	ch1 <- 1
+// 	select {
+// 	case ch1 <- 2:
+// 		fmt.Println("channel is not full !")
+// 	default:
+// 		fmt.Println("channel is full !")
+// 	}
+// }
+
+//golang之生产者消费者
+
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+
+	ch := make(chan int, 1)
+	timeout := make(chan bool, 1)
+
+	//生产者
+	go func() {
+		for i := 0; i < 5; i++ {
+			ch <- i
+			fmt.Println("生产了：%d", i)
+		}
+	}()
+
+	//消费者
+	var value int
+	//设置最大操作数
+	for i := 0; i < 10; i++ {
+		//每秒生产一下true数据
+		go func() {
+			time.Sleep(10 * time.Microsecond) //sleep one second
+			timeout <- true
+		}()
+		select {
+		case value = <-ch:
+			fmt.Println("消费了：%d", value)
+		case <-timeout:
+			fmt.Println("timeout!")
+		}
+	}
+}
+</pre>
