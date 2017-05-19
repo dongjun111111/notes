@@ -12548,6 +12548,9 @@ select count(*) as qi from users_q                         //别名要与最外�
 99
 </pre>
 IPC ==> Inter-Process Communication,进程间通信
+
+设置MySQL自动更新时间：
+将time_stamp类型的数据的默认值改成 CURRENT_TIMESTAMP  就ok了
 ###Golang json 
 <pre>
 package main
