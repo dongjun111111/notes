@@ -24747,6 +24747,9 @@ func WhichSexByIdcard(idcard string) string {
 	
 	如果没有加入暂存区的话 ，见楼上答案
 	git checkout -f
+
+git commit -m "提示//内容  "    // 换行
+
 </pre>
 select * from innodb_trx 查看有是哪些事务占据了表资源
 ###Golang channel 
