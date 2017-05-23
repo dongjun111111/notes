@@ -25648,7 +25648,7 @@ func main() {
 // 	fmt.Println(<-rand_service_handler)
 // }
 
-// //golang之Furture技术
+// //golang之 Furture 技术
 
 // package main
 
