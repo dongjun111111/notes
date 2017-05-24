@@ -12,5 +12,5 @@ func main() {
 	res, _ := http.Get(urls)
 	file, _ := os.Create("download-Files.html")
 	io.Copy(file, res.Body)
-	fmt.Println("下载完成！")
+	fmt.Println("下载完成!")
 }
