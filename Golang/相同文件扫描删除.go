@@ -7,7 +7,6 @@ path1 和path2是存放照片的路径，程序默认会按照默认的路径顺
 import (
 	"container/list"
 	"crypto/md5"
-	//  "errors"
 	"flag"
 	"fmt"
 	"io"
