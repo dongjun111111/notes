@@ -25970,3 +25970,169 @@ func main() {
 	}
 }
 </pre>
+###Beego 框架底层加解密
+<pre>
+package controllers
+
+import (
+	"encoding/json"
+	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
+	"zcm/models"
+	"zcm/services"
+	"zcm/utils"
+
+	"github.com/astaxie/beego"
+)
+
+type BaseController struct {
+	beego.Controller
+}
+
+type POSTRESULT struct {
+	Account       string `json:"Account"` 
+	MobileVersion string `json:"MobileVersion"`
+	App           int    `json:"App"`
+	Uid           int    `json:"Uid"`
+	Token         string `json:"Token"`
+	Platformname  string `json:"Platformname"`
+}
+
+// Prepare 初始化
+func (c *BaseController) Prepare() {
+	var res POSTRESULT
+	if c.Ctx.Input.Method() != "GET" && c.Ctx.Input.Method() != "HEAD" && !c.Ctx.Input.IsUpload() {
+		beego.Emergency("base接口，ip：", c.Ctx.Input.IP())
+		if c.Ctx.Input.IP() != "127.0.0.1" {
+			beego.Emergency("加密")
+			c.Ctx.Input.RequestBody = utils.DesBase64Decrypt(c.Ctx.Input.RequestBody)
+		}
+		if c.Ctx.Input.Method() == "POST" || c.Ctx.Input.Method() == "PUT" {
+			json.Unmarshal(c.Ctx.Input.RequestBody, &res)
+			isVerify = true
+		}
+	} else {
+		if c.Ctx.Input.Method() == "GET" {
+			res.MobileVersion = c.GetString("mobileversion")
+			res.Platformname = c.GetString("platformname")
+			res.Token = c.GetString("token")
+			res.Uid, _ = strconv.Atoi(c.GetString("uid"))
+			res.App, _ = strconv.Atoi(c.GetString("app"))
+			if utils.VersionToInt(res.MobileVersion) >= 200 {
+				isVerify = true
+			}
+		}
+	}
+	//检验Token 和 MobileVersion
+	if isVerify && (res.App == 1 || res.App == 2) {
+		app := strconv.Itoa(res.App)
+		mobileversion := res.MobileVersion
+		platformname := res.Platformname
+		// 版本控制
+		if app == "2" { // anroid
+			if config, ok := services.GetConfigCacheByKey("android_version"); ok && config != nil {
+				if mobileversion == "" || (mobileversion != "" && services.IsUpdateAppLastNewVersion(app, mobileversion, "")) {
+					versionVerify = true
+				}
+			}
+		}
+		if app == "1" { // iOS
+			config, ok := services.GetIosVersionCache(platformname)
+			if !ok || config == nil {
+				versionVerify = true
+			} else {
+				if config.ConfigValue != "" {
+					if mobileversion == "" || (mobileversion != "" && platformname != "" && services.IsUpdateAppLastNewVersion(app, mobileversion, platformname)) {
+						versionVerify = true
+					}
+				}
+			}
+		}
+		// token 控制
+		if res.Uid != 0 || res.Account != "" {
+			users, _ := models.GetUsersById(res.Uid)
+			if users == nil && res.Account != "" {
+				users, _ = models.GetUsersByAccount(res.Account)
+			}
+		}
+	}
+	c.Data["json"] = data
+	c.ServeJSON()
+	c.StopRun()
+	}
+}
+
+func (c *BaseController) Finish() {
+	ctx := c.Ctx
+	ip := c.GetIp()
+	requestBody, _ := url.QueryUnescape(string(ctx.Input.RequestBody))
+	uri, _ := url.QueryUnescape(ctx.Input.URI())
+	datajson, _ := json.Marshal(c.Data["json"])
+	utils.ZLog.Println("请求地址：", uri, "RequestBody：", requestBody, "ResponseBody：", string(datajson), "IP：", ip)
+}
+
+func (c *BaseController) ServeJSON(encoding ...bool) {
+	var (
+		hasIndent   = true
+		hasEncoding = false
+	)
+	if beego.BConfig.RunMode == beego.PROD {
+		hasIndent = false
+	}
+	if len(encoding) > 0 && encoding[0] == true {
+		hasEncoding = true
+	}
+	c.JSON(c.Data["json"], hasIndent, hasEncoding)
+}
+
+func (c *BaseController) JSON(data interface{}, hasIndent bool, coding bool) error {
+	c.Ctx.Output.Header("Content-Type", "application/json; charset=utf-8")
+	var content []byte
+	var err error
+	if hasIndent {
+		content, err = json.MarshalIndent(data, "", "  ")
+	} else {
+		content, err = json.Marshal(data)
+	}
+	if err != nil {
+		http.Error(c.Ctx.Output.Context.ResponseWriter, err.Error(), http.StatusInternalServerError)
+		return err
+	}
+	if coding {
+		content = []byte(utils.StringsToJSON(string(content)))
+	}
+	if c.Ctx.Input.IP() != "127.0.0.1" {
+		return c.Ctx.Output.Body(utils.DesBase64Encrypt(content))
+	} else {
+		return c.Ctx.Output.Body(content)
+	}
+
+}
+func (c *BaseController) GetIp() string {
+	ips := c.Proxy()
+	if len(ips) > 0 && ips[0] != "" {
+		rip := strings.Split(ips[0], ":")
+		return rip[0]
+	}
+	ip := strings.Split(c.Ctx.Request.RemoteAddr, ":")
+	if len(ip) > 0 {
+		if ip[0] != "[" {
+			return ip[0]
+		}
+	}
+	return "127.0.0.1"
+}
+
+// Proxy returns proxy client ips slice.
+func (c *BaseController) Proxy() []string {
+	if ips := c.Ctx.Input.Header("Remoteip"); ips != "" {
+		return strings.Split(ips, ",")
+	}
+	if ips := c.Ctx.Input.Header("X-Forwarded-For"); ips != "" {
+		return strings.Split(ips, ",")
+	}
+	return []string{}
+}
+</pre>
