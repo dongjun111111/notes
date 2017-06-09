@@ -24750,6 +24750,7 @@ func WhichSexByIdcard(idcard string) string {
 
 git commit -m "提示//内容  "    // 换行
 
+git diff --cached  // 查看已经暂存起来的变化
 </pre>
 select * from innodb_trx 查看有是哪些事务占据了表资源
 ###Golang channel 
