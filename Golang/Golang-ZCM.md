@@ -26181,3 +26181,47 @@ func main() {
 	fmt.Printf("%q: {%d,%d}\n", q.Name, *q.X, *q.Y)
 }
 </pre>
+###Golang 字符编码问题
+<pre>
+package main  
+  
+/* 
+ 
+Author:xcl 
+Date:2016-2-10 
+*/  
+  
+import (  
+    "bytes"  
+    "encoding/json"  
+    "fmt"  
+    "time"  
+)  
+  
+type Query struct {  
+    AppID     string `json:"AppID"`  
+    Timestamp int64  `json:"Timestamp"`  
+    Package   string `json:"Package"`  
+}  
+  
+func main() {  
+    MarshalDemo()  
+}  
+  
+func MarshalDemo() {  
+    v := &Query{}  
+    v.AppID = "testid"  
+    v.Timestamp = time.Now().Unix()  
+    v.Package = "xxcents=100&bank=666"  
+  
+    data, _ := json.Marshal(v)  
+    fmt.Println("Marshal:", string(data))  
+  
+    data = bytes.Replace(data, []byte("\\u0026"), []byte("&"), -1)  
+    data = bytes.Replace(data, []byte("\\u003c"), []byte("<"), -1)  
+    data = bytes.Replace(data, []byte("\\u003e"), []byte(">"), -1)  
+    data = bytes.Replace(data, []byte("\\u003d"), []byte("="), -1)  
+  
+    fmt.Println("处理后:", string(data))  
+}  
+</pre>
