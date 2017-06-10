@@ -24753,6 +24753,11 @@ git commit -m "提示//内容  "    // 换行
 git diff --cached  // 查看已经暂存起来的变化
 </pre>
 select * from innodb_trx 查看有是哪些事务占据了表资源
+
+GIT提示以下错误：
+There is no tracking information for the current branch. Please specify which branch you want to merge with.
+因为本地的分支与远程的分支没有关联，需要手动关联，使用 git branch -vv  可以查看本地分支和远程分支的关联关系。解决方案是：
+git branch --set-upstream-to=origin/dev  dev   // 前面的dev是远程分支的名称，后面的dev是本地分支的名称
 ###Golang channel 
 <pre>
 package main
