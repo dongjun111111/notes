@@ -26225,3 +26225,202 @@ func MarshalDemo() {
     fmt.Println("处理后:", string(data))  
 }  
 </pre>
+###Golang 提升APP消息推送的送达率 
+APNS常见的一些限制和要注意的地方:
+  
+1. 频繁建立和断开连接，被当成受到攻击,直接把链接给断了。
+2. 开发一堆并发，有个消息发生异常推送失败了，apns ack要等一段时间(可能有1sec左右的延迟)才返回，而
+这期间，后面发的消息也会被认为有问题，直接被其扔了。
+这时麻烦了，要依返回的Identifier，找到出错的消息，跳过它，把后面的消息重发。
+3. 还有一些如扩展的JSON太长了，超过了长度限制。
+4. 莫名其妙的连接断开错误，需要时刻做好重连准备。
+5. .....
+
+分别建立多个长连接，通过Ring比较平均的分配给长连接去发送推送，
+当其中如果有长连接出问题时，也只会影响这个RingNode的List中部分消息，不会影响其它链接，这么做重发消息范围也缩小了。
+<pre>
+package main
+
+import (
+	"container/list"
+	"container/ring"
+	"fmt"
+	"log"
+	"net"
+	"runtime"
+	"strings"
+	"sync"
+	"time"
+)
+
+var (
+	dialNetwork string = "tcp"
+	dialAddress string = "localhost:80"
+)
+
+func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	test()
+}
+
+////////////////////////////////////////////
+func test() {
+
+	///////////////////////////////////////////
+	//初始化
+	cr := NewConnRing(3)
+	cr.InitConn()
+	cr.ListConnRing()
+
+	//得到通知环
+	var rn *RingNode
+	var ok bool
+
+	//  for _ = range time.Tick(time.Second * 1) {
+	for i := 0; i < 5; i++ {
+		v := cr.GetRingNode().Next().Value
+		if rn, ok = v.(*RingNode); ok {
+			rn.Add(NewNotification(fmt.Sprintf("%d-%s", rn.NodeID, "PushNotification")))
+			rn.ListNotification()
+			log.Println(strings.Repeat("--", 50))
+		}
+	}
+	///////////////////////////////////////////
+	cr.Close()
+
+}
+
+////////////////////////////////////////////
+// Ring
+//
+////////////////////////////////////////////
+type ConnRing struct {
+	r *ring.Ring
+}
+
+func NewConnRing(n int) *ConnRing {
+	cr := &ConnRing{}
+	cr.r = ring.New(n)
+	return cr
+}
+
+func (cr *ConnRing) InitConn() {
+	for i := 1; i <= cr.r.Len(); i++ {
+		cr.r.Value = NewRingNode(dialNetwork, dialAddress, i)
+		cr.r = cr.r.Next()
+		//log.Println("[InitConn] i:", i, " conn ok")
+	}
+}
+
+func (cr *ConnRing) GetRingNode() *ring.Ring {
+	cr.r = cr.r.Next()
+	return cr.r
+}
+
+func (cr *ConnRing) ListConnRing() {
+	cr.r.Do(func(p interface{}) {
+		if v, ok := p.(*RingNode); ok {
+			log.Println("[ListConnRing] NodeID:", v.NodeID)
+		}
+	})
+}
+
+func (cr *ConnRing) Close() {
+	for i := 1; i <= cr.r.Len(); i++ {
+		v := cr.r.Value
+		//  v := cr.GetRingNode().Next().Value
+		if rn, ok := v.(*RingNode); ok {
+			(*rn).Close()
+		}
+
+	}
+}
+
+///////////////////////////////////////////////////////
+// 环的节点
+///////////////////////////////////////////////////////
+type RingNode struct {
+	NodeID int
+	Status int
+	conn
+	NList *list.List //通知列表
+}
+
+func NewRingNode(dialNetwork, dialAddress string, id int) *RingNode {
+	x := &RingNode{}
+	x.NodeID = id
+	x.NList = list.New()
+	x.Dial(dialNetwork, dialAddress)
+	return x
+}
+
+func (rn *RingNode) Add(v *Notification) {
+	rn.NList.PushBack(v)
+}
+
+func (rn *RingNode) Remove() {
+	//......
+}
+
+func (rn *RingNode) Get() *Notification {
+	x := rn.NList.Front()
+	if v, ok := x.Value.(*Notification); ok {
+		return v
+	} else {
+		return nil
+	}
+}
+
+func (rn *RingNode) ListNotification() {
+	log.Println("节点(", rn.NodeID, ")共有(", rn.NList.Len(), ")笔数据,明细如下:")
+	for e := rn.NList.Front(); e != nil; e = e.Next() {
+		if c, ok := e.Value.(*Notification); ok {
+			log.Println("ID:", rn.NodeID, " Content:", c.Content)
+		} else {
+			log.Println("ID:", rn.NodeID, " Value:", e.Value)
+		}
+	}
+}
+
+///////////////////////////////////////////////////////
+// 通知
+///////////////////////////////////////////////////////
+type Notification struct {
+	Content string
+	Ct      time.Time
+}
+
+func NewNotification(v string) *Notification {
+	return &Notification{Content: v, Ct: time.Now()}
+}
+
+///////////////////////////////////////////////////////
+// 基本的服务器连接处理
+///////////////////////////////////////////////////////
+type conn struct {
+	mu   sync.Mutex
+	conn net.Conn
+	err  error
+}
+
+func (c *conn) Dial(network, address string) {
+	con, err := net.Dial(network, address)
+	if err != nil {
+		log.Fatal(err)
+	}
+	c.conn = con
+	log.Println(address, "连接成功!")
+	return
+}
+
+func (c *conn) Close() error {
+	c.mu.Lock()
+	addr := c.conn.RemoteAddr()
+	if c.conn != nil {
+		c.conn.Close()
+	}
+	c.mu.Unlock()
+	log.Println(addr, "断开连接!")
+	return nil
+}
+</pre>
