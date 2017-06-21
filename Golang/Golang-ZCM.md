@@ -26424,3 +26424,8 @@ func (c *conn) Close() error {
 	return nil
 }
 </pre>
+###AES RSA 
+<pre>
+客户端使用AES加密报文，使用RSA公钥加密AES密钥
+服务端使用私钥解密AES密钥，再使用AES密钥解密密文
+</pre>
