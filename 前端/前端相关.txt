@@ -9086,3 +9086,19 @@ URL Scheme ：app
 还可以传参数，如：
 app://reaction/?uid=1
 原理：500ms内，本机有应用程序能解析这个协议并打开程序，调用该应用；如果本机没有应用程序能解析该协议或者500ms内没有打开这个程序，则执行setTimeout里面的function，就是跳转到你想跳转的页面。
+
++++++++++使用JS限制IE浏览器+++++++++++++
+<script type="text/javascript">
+var browserInfo = {
+    browser: "",
+    version: ""
+};
+var ua = navigator.userAgent.toLowerCase();
+if (window.ActiveXObject) {
+    browserInfo.browser = "IE";
+    browserInfo.version = ua.match(/msie ([\d.]+)/)[1];
+    if (browserInfo.version <= 7) {
+        if (confirm("您的ie浏览器版本过低，建议使用chorme浏览器")) {}
+    }
+}
+</script>
