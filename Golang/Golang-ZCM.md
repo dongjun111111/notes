@@ -26429,3 +26429,23 @@ func (c *conn) Close() error {
 客户端使用AES加密报文，使用RSA公钥加密AES密钥
 服务端使用私钥解密AES密钥，再使用AES密钥解密密文
 </pre>
+###Golang rsa私钥如何pkcs1转化为pkcs8格式
+<pre>
+func MarshalPKCS8PrivateKey(key *rsa.PrivateKey) []byte {
+    info := struct {
+        Version             int
+        PrivateKeyAlgorithm []asn1.ObjectIdentifier
+        PrivateKey          []byte
+    }{}
+    info.Version = 0
+    info.PrivateKeyAlgorithm = make([]asn1.ObjectIdentifier, 1)
+    info.PrivateKeyAlgorithm[0] = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 1, 1}
+    info.PrivateKey = x509.MarshalPKCS1PrivateKey(key)
+
+    k, err := asn1.Marshal(info)
+    if err != nil {
+        log.Panic(err.Error())
+    }
+    return k
+}
+</pre>
