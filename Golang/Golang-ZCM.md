@@ -26449,3 +26449,87 @@ func MarshalPKCS8PrivateKey(key *rsa.PrivateKey) []byte {
     return k
 }
 </pre>
+###Golang
+<pre>
+import (
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/transform"
+	"encoding/csv"
+)
+
+
+// 处理结果csv文件保存
+func csvFileSave(fileWrite string, records [][]string) error {
+	// 创建文件
+	csvWriter, err := os.Create(fileWrite)
+	defer csvWriter.Close()
+
+	if err != nil {
+		return errors.New("创建csv结果文件出错" + err.Error())
+	}
+
+	// 写入UTF-8 BOM
+	csvWriter.WriteString("\xEF\xBB\xBF")
+
+	w := csv.NewWriter(csvWriter)
+	w.WriteAll(records)
+
+	if err := w.Error(); err != nil {
+		return errors.New("csv结果文件写入数据出错" + err.Error())
+	}
+
+	return nil
+}
+
+func csvFileRead(fileNew string) ([][]string, error) {
+	var records [][]string
+	// 读取csv文件
+	csvFile, err := os.Open(fileNew)
+	if err != nil {
+		return records, errors.New("读取csv文件出错 " + err.Error())
+	}
+	// 这个方法体执行完成后，关闭文件
+	defer csvFile.Close()
+
+	r := csv.NewReader(transform.NewReader(csvFile, simplifiedchinese.GB18030.NewDecoder()))
+	records, err = r.ReadAll()
+	fmt.Println("[[", records[0][2])
+	if records[0][2] == "姓名" {
+		fmt.Println("==")
+		return records, err
+	} else {
+		fmt.Println("!=")
+		r2 := csv.NewReader(csvFile)
+		records2, err := r2.ReadAll()
+		fmt.Println(records2, err)
+		return records2, err
+	}
+}
+
+// 处理csv文件及数据入库
+func csvFileToDb(records, results [][]string) ([][]string, error) {
+	fmt.Println("toDb=", records)
+	// 遍历数据
+	for k, record := range records {
+		if k > 0 {
+			custName := record[2]
+			contractName := record[1]
+			custIdCard := record[3]
+			result := "成功"
+
+			fmt.Printf("%s %s %s \n", contractName, custName, custIdCard)
+
+			if contractName != "编号" {
+				res, err := UpdateCustomer(contractName, custIdCard)
+				if err != nil {
+					result = "处理失败"
+				}
+				r := []string{custName, contractName, custIdCard, fmt.Sprintf("%s%d", result, res)}
+				results = append(results, r)
+			}
+		}
+	}
+
+	return results, nil
+}
+</pre>
