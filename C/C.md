@@ -170,7 +170,7 @@ return 0;
 output==>
 aaaaaaabcdeAABD
 </pre>
-###C实现栈的线性表的链表数据结构
+### C实现栈的线性表的链表数据结构
 <pre>
 //#include <stdio.h>
 //#include <malloc.h>
@@ -561,7 +561,7 @@ int main( )
    return 0;
 }
 </pre>
- #define
+ # define
 
  #define 是 C 指令，用于为各种数据类型定义别名，与 typedef 类似，但是它们有以下几点不同：
 
@@ -719,7 +719,7 @@ int main(){
 该函数分配一个 num 字节的数组，并把它们进行初始化。
 - 4.void *realloc(void *address, int newsize); 
 该函数重新分配内存，把内存扩展到 newsize。
-####malloc动态分配内存
+#### malloc动态分配内存
 <pre>
 #include <stdio.h>
 #include <stdlib.h>
