@@ -1,5 +1,5 @@
-#C
-###用c实现小闹钟
+# C
+### 用c实现小闹钟
 <pre>
 #include <stdio.h>
 #include <time.h>
@@ -73,7 +73,7 @@ void sleep(long wait)
 }
 */
 </pre>
-###extern 关键字释解
+### extern 关键字释解
 1 基本解释：extern可以置于变量或者函数前，以标示变量或者函数的定义在别的文件中，提示编译器遇到此变量和函数时在其他模块中寻找其定义,此外extern也可用来进行链接指定。
 
 也就是说extern有两个作用:
@@ -293,7 +293,7 @@ output==>
 弹出元素为：0  
 请按任意键继续. . .  
 </pre>
-###基础知识
+### 基础知识
 堆和栈分为三种：
 
 一、堆栈空间分配区别：
@@ -426,7 +426,7 @@ int main(){
     printf("\n");  
 }  
 </pre>
-###C string.h
+### C string.h
 字符串常用函数
 <pre>
 #include <stdio.h>
@@ -620,7 +620,7 @@ chkconfig --level 345 nfs off
 
 因此，在16位编译器中，int占16位（2字节），int最大值为2^(16-1) = 32767；对于32位或64位编译器，int占32位（4字节），int最大值为 2^(32-1) = 2147483647。
 
-###C 文件操作函数
+### C 文件操作函数
 基本函数模型是：
 <pre>
 FILE *fopen(const char * filename,const char * mode);
@@ -708,7 +708,7 @@ int main(){
 	printf("average of 3,4,5 = %f\n",average(3,3,4,5));
 }
 </pre>
-##内存操作
+## 内存操作
 主要用到的是 stdlib.h 下的calloc .free . malloc .realloc函数。
 
 - 1.void *calloc(int num, int size);
@@ -741,7 +741,7 @@ int main(){
 	printf("Description:%s\n",description);
 }
 </pre>
-####重新调整内存的大小和释放内存
+#### 重新调整内存的大小和释放内存
 当程序退出时，操作系统会自动释放所有分配给程序的内存，但是，建议您在不需要内存时，都应该调用函数 free() 来释放内存。或者，您可以通过调用函数 realloc() 来增加或减少已分配的内存块的大小。让我们使用 realloc() 和 free() 函数。
 <pre>
 #include <stdio.h>
