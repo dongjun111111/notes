@@ -26533,3 +26533,8 @@ func csvFileToDb(records, results [][]string) ([][]string, error) {
 	return results, nil
 }
 </pre>
+###Mysql 时间加一
+<pre>
+SELECT curdate()+1;          // ERROR
+SELECT DATE_ADD(DATE(NOW()),INTERVAL 1 DAY);   // SUCCESS
+</pre>
