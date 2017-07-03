@@ -26538,3 +26538,11 @@ func csvFileToDb(records, results [][]string) ([][]string, error) {
 SELECT curdate()+1;          // ERROR
 SELECT DATE_ADD(DATE(NOW()),INTERVAL 1 DAY);   // SUCCESS
 </pre>
+
+<pre>
+type Project struct {
+	Name string `json:"name"`
+    Url  string `json:"url"`
+    Docs string `json:"docs,omitempty"`  //omitempty 为空则不输出
+}
+</pre>
