@@ -26546,3 +26546,8 @@ type Project struct {
     Docs string `json:"docs,omitempty"`  //omitempty 为空则不输出
 }
 </pre>
+###Linux 查询项目文件大小
+第一级目录大小
+<pre>
+du -h --max-depth=1
+</pre>
