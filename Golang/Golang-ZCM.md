@@ -26568,11 +26568,17 @@ du -h --max-depth=1
 <pre>
 package main
 import (
+	"fmt"
 	"github.com/pborman/uuid"
+	satoriuuid "github.com/satori/go.uuid"
 )
 
 func main() {
-	println("唯一ID生成方法:")
+	////////////////////////////////"github.com/pborman/uuid"/////////////////////////////////
 	println(uuid.New())
+
+	////////////////////////"github.com/satori/go.uuid"////////////////////////////////////////
+	u1 := satoriuuid.NewV4()
+	fmt.Printf("%s\n", u1)
 }
 </pre>
