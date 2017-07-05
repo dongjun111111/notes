@@ -12519,6 +12519,11 @@ func main(){
 <pre>
 git checkout 文件名
 </pre>
+取消暂存操作
+<pre>
+git reset head .   //取消所有已经暂存的文件
+git reset head +文件名 //取消某个已经暂存的文件
+</pre>
 ###mysql的cancat与left|right 与 substring的使用案例
 <pre>
 SELECT concat('点击量是',click,";",left(author,3)) as newclick FROM `default_news` where click >400;
