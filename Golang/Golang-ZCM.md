@@ -12523,6 +12523,9 @@ git checkout 文件名
 <pre>
 git reset head .   //取消所有已经暂存的文件
 git reset head +文件名 //取消某个已经暂存的文件
+
+//慎用
+git reset --hard <commit_id> #跳到某次commit
 </pre>
 ###mysql的cancat与left|right 与 substring的使用案例
 <pre>
