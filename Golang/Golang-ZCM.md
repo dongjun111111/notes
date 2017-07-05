@@ -26546,8 +26546,33 @@ type Project struct {
     Docs string `json:"docs,omitempty"`  //omitempty 为空则不输出
 }
 </pre>
-###Linux 查询项目文件大小
-第一级目录大小
+###Linux 文件夹映射
 <pre>
+//第一级目录大小
+
 du -h --max-depth=1
+
+// 给当前文件夹创建快捷方式直接映射到挂载盘上去 
+
+  du -sh /home/go/src/zcmlc_v1/static/
+  du -sh /disk1/static/
+  cd /home/go/src/zcmlc_v1/
+  ll
+  mv static/ static_bak
+  ln -s /disk1/static/ /home/go/src/zcmlc_v1/static   
+  ll
+  mv static_bak/ /disk1/
+  df
+</pre>
+###UUID生成方法
+<pre>
+package main
+import (
+	"github.com/pborman/uuid"
+)
+
+func main() {
+	println("唯一ID生成方法:")
+	println(uuid.New())
+}
 </pre>
