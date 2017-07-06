@@ -26590,3 +26590,60 @@ func main() {
 	fmt.Printf("%s\n", u1)
 }
 </pre>
+###Linux crontab定时任务 chkconfig注册服务 
+<pre>
+//查看已经配置的定时任务 
+
+more /var/spool/cron/root 
+
+//注册服务示例
+
+//文件名称：jason
+# chkconfig: - 85 15
+
+#start func 
+
+start(){
+	echo "welcome to 221 server"
+	sleep 1
+}
+
+#stop func 
+
+stop(){
+	echo "221 server had stopped"
+	sleep 1
+}
+
+#status 
+
+status(){
+	echo "221 is running..."
+}
+
+
+case "$1" in
+start)
+  start
+  ;;
+stop)
+  stop
+  ;;
+reload|restart)
+  stop
+  start
+  ;;
+status)
+  status $SNAME
+  ;;
+*)
+  echo $"Usage: $0 {start|stop|restart|status}"
+  exit 1
+esac
+
+>>>>chkconfig --add jason    //注册服务
+>>>>chkconfig --level 35 jason on  //添加开机自启动
+>>>>service jason start    //测试
+welcome to 221 server
+
+</pre>
