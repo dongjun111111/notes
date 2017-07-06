@@ -26647,3 +26647,7 @@ esac
 welcome to 221 server
 
 </pre>
+ss // socket statistic的缩写
+ss -pl|grep smtp //查看进程使用的socket以及tcp具体状态  fd文件描述符(file descriptor)
+tcp    LISTEN     0      80     :::3306                 :::*                     users:(("mysqld",pid=2233,fd=37))
+
