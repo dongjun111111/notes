@@ -26658,3 +26658,20 @@ ss // socket statistic的缩写
 ss -pl|grep smtp //查看进程使用的socket以及tcp具体状态  fd文件描述符(file descriptor)
 tcp    LISTEN     0      80     :::3306                 :::*                     users:(("mysqld",pid=2233,fd=37))
 
+###linux 环境变量
+<pre>
+#bash
+  
+unset 环境变量名  //删除环境变量
+unset PATH
+
+
+关于环境变量命令介绍
+
+1.echo 显示某个环境变量值 echo $PATH
+2.export 设置一个新的环境变量 export HELLO="hello" (可以无引号)
+3.env 显示所有环境变量
+4.set 显示本地定义的shell变量
+5.unset 清除环境变量 unset HELLO
+6.readonly 设置只读环境变量 readonly HELLO
+</pre>
