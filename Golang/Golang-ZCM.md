@@ -26597,6 +26597,20 @@ func main() {
 	fmt.Printf("%s\n", u1)
 }
 </pre>
+还有一种是这样的
+<pre>
+package main
+
+import (
+	github.com/snluu/uuid
+)
+
+func main(){
+	var id uuid.UUID
+	id = uuid.Rand()
+	println(id.Hex())
+}
+</pre>
 ###Linux crontab定时任务 chkconfig注册服务 
 <pre>
 //查看已经配置的定时任务 
