@@ -26674,4 +26674,8 @@ unset PATH
 4.set 显示本地定义的shell变量
 5.unset 清除环境变量 unset HELLO
 6.readonly 设置只读环境变量 readonly HELLO
+
+
+//获取Linux系统下的UUID
+cat /proc/sys/kernel/random/uuid
 </pre>
