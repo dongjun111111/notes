@@ -26692,4 +26692,12 @@ unset PATH
 
 //获取Linux系统下的UUID
 cat /proc/sys/kernel/random/uuid
+
+
+//linux 清空文件内容命令
+echo "" >log.log
+
+> 是重写，覆盖式
+
+>>是尾部追加
 </pre>
