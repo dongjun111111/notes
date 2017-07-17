@@ -22,3 +22,19 @@ kafka是高并发型的消息队列，但这是有前提条件的。条件是top
 kafka的另一个特性是高可用。放眼目前业界数据层的高可用解决方案，采用的无非都是两种：冗余数据和共享存储。后者以价格昂贵著称，比如SAN，给土豪公司玩的。在党中央构建节约性社会的号召下，我建议使用前者。冗余数据最常见的便是日志复制，kafka的道理也一样。由一组节点组成leader，follower组成小的cluster，由zookeeper做协调(Paxos算法)。leader，follower的比例和数量可配置，一般为1:2。在写入的时候, follower会不断复制leader的数据，leader挂掉后会从follwer中选举新的leader。
  
 kafka使用了零拷贝技术来优化性能，直接发送磁盘的数据到socket。此为其极为取巧的设计和亮点。
+
+###MySQL 几个基本操作
+1. 创建用户oldboy，使之可以管理数据库oldboy
+mysql>grant all on oldboy.* to oldboy@'localhost' identified by '123';
+
+2. 查看创建的用户oldboy拥有哪些权限
+mysql>show grants for oldboy@'localhost'\G;
+
+3. 查看当前数据库里有哪些用户
+mysql>select user,host from mysql.user;
+
+4. 
+delete是逻辑删除表中的数据，一列一列的删除表中数据，速度比较慢
+mysql> delete from test;
+truncate是物理删除表中的数据，一次性全部都给清空表中数据，速度很快
+mysql> truncate table test;
