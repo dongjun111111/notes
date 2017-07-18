@@ -68,3 +68,11 @@ set character_set_server=utf8;
 <pre>
 cat bak.sql |grep -v  "INSERT INTO `log`" | grep -E "INSERT"
 </pre>
+
+【查看所有操作记录】Git记录着你输入的每一条指令！键入查看自己的每一次提交：
+git reflog
+你会发现，版本号就在这里：
+然后键入：
+git reset --hard 版本号
+
+gitk 图形化界面显示git内容
