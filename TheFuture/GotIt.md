@@ -47,6 +47,9 @@ show variables like 'log_bin_basename';
 -- 当前binlog文件
 show master status;
 
+-- 清空现有的所用binlog;
+reset master;
+
 -- 查看当前MySQL配置   log_bin ON则表明已经开启二进制日志binlog
 
 show variables like '%bin%';
