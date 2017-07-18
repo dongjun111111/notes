@@ -60,9 +60,8 @@ set character_set_server=utf8;
 --  利用bin_log恢复数据
 
 /usr/bin/mysqlbinlog  --no-defaults  mysql-bin.000034 --start-datetime='2017-07-17 00:00:00' --stop-datetime='2017-07-17 14:00:00'  > binlogtest.sql;
-
--- grep用法  -v 不包含  -E 多个条件联合
- 
+</pre>
+ grep用法  -v 不包含  -E 多个条件联合
+<pre>
 cat bak.sql |grep -v  "INSERT INTO `log`" | grep -E "INSERT"
-
 </pre>
