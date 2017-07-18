@@ -24,6 +24,7 @@ kafka的另一个特性是高可用。放眼目前业界数据层的高可用解
 kafka使用了零拷贝技术来优化性能，直接发送磁盘的数据到socket。此为其极为取巧的设计和亮点。
 
 ###MySQL 几个基本操作
+<pre>
 1. 创建用户oldboy，使之可以管理数据库oldboy
 mysql>grant all on oldboy.* to oldboy@'localhost' identified by '123';
 
@@ -38,3 +39,30 @@ delete是逻辑删除表中的数据，一列一列的删除表中数据，速�
 mysql> delete from test;
 truncate是物理删除表中的数据，一次性全部都给清空表中数据，速度很快
 mysql> truncate table test;
+
+
+-- binlog 文件位置
+show variables like 'log_bin_basename';
+
+-- 当前binlog文件
+show master status;
+
+-- 查看当前MySQL配置   log_bin ON则表明已经开启二进制日志binlog
+
+show variables like '%bin%';
+
+
+show variables like '%char%';  
+set character_set_server=utf8;
+-- 配置文件my.ini
+
+
+--  利用bin_log恢复数据
+
+/usr/bin/mysqlbinlog  --no-defaults  mysql-bin.000034 --start-datetime='2017-07-17 00:00:00' --stop-datetime='2017-07-17 14:00:00'  > binlogtest.sql;
+
+-- grep用法  -v 不包含  -E 多个条件联合
+ 
+cat bak.sql |grep -v  "INSERT INTO `log`" | grep -E "INSERT"
+
+</pre>
