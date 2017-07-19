@@ -77,6 +77,16 @@ git reset --hard 版本号
 
 gitk 图形化界面显示git内容
 
+创建本地分支
+git branch test  
+把分支推到远程分支【创建远程分支】
+git push origin test 
+删除本地分支   
+git branch -d xxxxx
+删除远程分支  
+git branch -r -d origin/branch-name  
+git push origin :branch-name  
+
 ###数据链路
 在数据通信网中，按一种链路协议的技术要求连接两个或多个数据站的电信设施，称为数据链路，简称数据链。数据链路(data link) 除了物理线路外，还必须有通信协议来控制这些数据的传输。若把实现这些协议的硬件和软件加到链路上，就构成了数据链路。
 
