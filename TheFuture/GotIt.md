@@ -76,3 +76,16 @@ git reflog
 git reset --hard 版本号
 
 gitk 图形化界面显示git内容
+
+###数据链路
+在数据通信网中，按一种链路协议的技术要求连接两个或多个数据站的电信设施，称为数据链路，简称数据链。数据链路(data link) 除了物理线路外，还必须有通信协议来控制这些数据的传输。若把实现这些协议的硬件和软件加到链路上，就构成了数据链路。
+
+MySQL数据库开启数据库链路：
+
+1. 开启federated引擎  ||federated  联合的；联邦的；
+　　
+windows下在my.ini中加入federated，即可开启;
+　　
+linux中，需要编译时加入选项，再在my.ini中加入federated，方可开启。
+ 
+   
