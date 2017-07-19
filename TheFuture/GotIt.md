@@ -113,4 +113,28 @@ show columns from overdue;
 ALTER TABLE `overdue` ADD INDEX idx_contract_code( `contract_code` ); -- 添加查询索引
 ALTER TABLE `overdue` ADD UNIQUE (`code`) ; -- 添加唯一索引
 ALTER TABLE `overdue` ADD PRIMARY KEY ( `code` );-- 添加主键索引
+
+
+ 慢查询日志开启：
+
+在配置文件my.cnf或my.ini中在[mysqld]一行下面加入两个配置参数
+
+log-slow-queries=/data/mysqldata/slow-query.log           
+
+long_query_time=2                                                                 
+
+注：log-slow-queries参数为慢查询日志存放的位置，一般这个目录要有mysql的运行帐号的可写权限，一般都将这个目录设置为mysql的数据存放目录；
+
+long_query_time=2中的2表示查询超过两秒才记录；
+
+在my.cnf或者my.ini中添加log-queries-not-using-indexes参数，表示记录下没有使用索引的查询。
+
+log-slow-queries=/data/mysqldata/slow-query.log           
+
+long_query_time=10                                                               
+
+log-queries-not-using-indexes    
+
+//查看所有链接的详细信息
+show full processlist;
 </pre>
