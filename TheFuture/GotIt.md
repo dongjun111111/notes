@@ -97,5 +97,20 @@ MySQL数据库开启数据库链路：
 windows下在my.ini中加入federated，即可开启;
 　　
 linux中，需要编译时加入选项，再在my.ini中加入federated，方可开启。
- 
-   
+
+###Mysql常用命令
+schema 计划，图表  [ˈski:mə]
+<pre>
+select TABLE_NAME from INFORMATION_SCHEMA.columns where COLUMN_NAME  like 'contract_code';
+
+SELECT * FROM `performance_schema`.users;   //查询该数据库的用户以及连接数
+SELECT * FROM `performance_schema`.accounts;
+SELECT * FROM `performance_schema`.hosts;  //查询该数据库的使用者IP以及连接数
+
+
+show index from overdue;
+show columns from overdue;
+ALTER TABLE `overdue` ADD INDEX idx_contract_code( `contract_code` ); -- 添加查询索引
+ALTER TABLE `overdue` ADD UNIQUE (`code`) ; -- 添加唯一索引
+ALTER TABLE `overdue` ADD PRIMARY KEY ( `code` );-- 添加主键索引
+</pre>
