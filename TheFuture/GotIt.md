@@ -160,3 +160,19 @@ Sorted Set——有序集合  //Sorted Sets是将 Set 中的元素增加了一�
 
 ###闭包 closure
 子函数可以访问父函数的局部变量
+
+###MySQL 严格模式 
+临时开启：
+set sql_mode="STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION";
+
+检查是否生效，执行sql：select @@sql_mode;
+
+永久开启：
+
+通过配置文件修改：linux找my.cnf文件；sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES。
+
+严格模式主要用以下场景：
+
+1. 不支持对not null字段插入null值
+2. 不支持对自增长字段插入”值
+3. 不支持text字段有默认值
