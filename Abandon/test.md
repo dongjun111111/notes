@@ -438,4 +438,5 @@ return fmt.Sprintf("%.2fh", float64(u)/1000/1000/1000/60/60)
 特殊算法：
 推荐算法
 
-
+###Nginx 
+nginx -t 检测配置文件错误
