@@ -440,3 +440,13 @@ return fmt.Sprintf("%.2fh", float64(u)/1000/1000/1000/60/60)
 
 ###Nginx 
 nginx -t 检测配置文件错误
+
+###Linux根据进程号PID找到对应程序文件所在的目录
+ps -ef|grep '' //程序名称 
+//得到进程号PID,比如说PID:2333
+
+cd /proc/PID 比如这个 cd /proc/2333
+
+进到这里之后，执行 
+
+ls -ail  // 找到  exe->****
