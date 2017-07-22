@@ -438,19 +438,24 @@ return fmt.Sprintf("%.2fh", float64(u)/1000/1000/1000/60/60)
 特殊算法：
 推荐算法
 
-###Nginx 
+###Nginx
 nginx -t 检测配置文件错误
 
 ###Linux根据进程号PID找到对应程序文件所在的目录
-ps -ef|grep '' //程序名称 
+ps -ef|grep '' //程序名称
 //得到进程号PID,比如说PID:2333
 
 cd /proc/PID 比如这个 cd /proc/2333
 
-进到这里之后，执行 
+进到这里之后，执行
 
 ls -ail  // 找到  exe->****
 
 
 //根据端口号获取程序
 netstat -anp|grep 8080
+
+###字符编码
+在计算机内存中，统一使用Unicode编码，当需要保存到硬盘或者需要传输的时候，就转换为UTF-8编码。
+
+用记事本编辑的时候，从文件读取的UTF-8字符被转换为Unicode字符到内存里，编辑完成后，保存的时候再把Unicode转换为UTF-8保存到文件。
