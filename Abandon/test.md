@@ -450,3 +450,7 @@ cd /proc/PID 比如这个 cd /proc/2333
 进到这里之后，执行 
 
 ls -ail  // 找到  exe->****
+
+
+//根据端口号获取程序
+netstat -anp|grep 8080
