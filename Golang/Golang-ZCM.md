@@ -19745,7 +19745,7 @@ find . -name 'rdb.*'
 service mysqld start
 
 //启动nginx服务
-/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf    或者是   /usr/local/redis/src/redis-server /etc/redis.conf
 
 //关闭nginx服务
 /usr/local/nginx/sbin/nginx -s stop
