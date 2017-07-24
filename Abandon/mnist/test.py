@@ -4,7 +4,7 @@
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
-num = 1000   # 设定训练次数 
+num = 1000  # 设定训练次数 
 print("指定的训练次数是：",num)
 # 获取数据
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
