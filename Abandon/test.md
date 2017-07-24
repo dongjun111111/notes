@@ -458,3 +458,11 @@ netstat -anp|grep 8080
 在计算机内存中，统一使用Unicode编码，当需要保存到硬盘或者需要传输的时候，就转换为UTF-8编码。
 
 用记事本编辑的时候，从文件读取的UTF-8字符被转换为Unicode字符到内存里，编辑完成后，保存的时候再把Unicode转换为UTF-8保存到文件。
+
+###记一次https配置问题
+如果你的Apple设备无法访问https网址，那么很有可能你的nginx配置出了问题：
+<pre>
+	#添加这个
+	ssl_ciphers HIGH:!aNULL:!MD5;
+	ssl_prefer_server_ciphers on;
+</pre>
