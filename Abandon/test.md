@@ -67,9 +67,14 @@ set character_set_server=utf8;
  grep用法  -v 不包含  -E 多个条件联合
 <pre>
 cat bak.sql |grep -v  "INSERT INTO `log`" | grep -E "INSERT"
+
+
+-- EXISTS的用法
+SELECT * FROM activity  WHERE NOT EXISTS  (SELECT * FROM advises WHERE id=-1);
+SELECT * FROM activity  WHERE  EXISTS  (SELECT * FROM advises WHERE id=-1);
 </pre>
 
-【查看所有操作记录】Git记录着你输入的每一条指令！键入查看自己的每一次提交：
+查看所有操作记录】Git记录着你输入的每一条指令！键入查看自己的每一次提交：
 git reflog
 你会发现，版本号就在这里：
 然后键入：
