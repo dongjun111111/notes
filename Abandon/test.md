@@ -477,3 +477,6 @@ http://127.0.0.1:43110/1F7L7DZNeGNMWBCux9zjQPu3YRdtzQToKG
 iptables -A INPUT -p tcp --dport 111 -j DROP
 打开端口
 iptables -A INPUT -p tcp --dport 111 -j ACCEPT
+
+### vscode打开指定文件
+control+p 
