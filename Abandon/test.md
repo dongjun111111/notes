@@ -471,3 +471,9 @@ netstat -anp|grep 8080
 凑个热闹：
 
 http://127.0.0.1:43110/1F7L7DZNeGNMWBCux9zjQPu3YRdtzQToKG
+
+### 打开或者关闭端口
+关闭端口
+iptables -A INPUT -p tcp --dport 111 -j DROP
+打开端口
+iptables -A INPUT -p tcp --dport 111 -j ACCEPT
