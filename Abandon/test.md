@@ -466,3 +466,8 @@ netstat -anp|grep 8080
 	ssl_ciphers HIGH:!aNULL:!MD5;
 	ssl_prefer_server_ciphers on;
 </pre>
+
+### 可能是下一代的互联网:)
+凑个热闹：
+
+http://127.0.0.1:43110/1F7L7DZNeGNMWBCux9zjQPu3YRdtzQToKG
