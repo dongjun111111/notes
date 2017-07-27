@@ -459,6 +459,16 @@ ls -ail  // 找到  exe->****
 //根据端口号获取程序
 netstat -anp|grep 8080
 
+
+
+
+fdisk –l    //查看硬盘分区情况
+
+df –h //查看当前硬盘使用情况
+
+cat /proc/cpuinfo  //查看服务器硬件信息
+
+dmidecode -t 4   //查看CPU信息
 ### 字符编码
 在计算机内存中，统一使用Unicode编码，当需要保存到硬盘或者需要传输的时候，就转换为UTF-8编码。
 
