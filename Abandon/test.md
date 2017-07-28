@@ -495,3 +495,6 @@ iptables -A INPUT -p tcp --dport 111 -j ACCEPT
 
 ### vscode打开指定文件
 control+p 
+
+### RPC还是REST 
+RPC更偏向内部调用，REST更偏向外部调用。所以中国的技术圈子更倡导RPC，比如阿里开源的dubbo。美国的技术圈子更倡导REST，比如spring cloud，是个纯REST的项目，不支持RPC。大概是美国的技术圈，保留的初心多那么一点点吧 ; 如果你的系统很复杂，用RPC就要小心地去控制复杂度了，用REST反而会简单些 ;通过RPC能解耦服务，这才是使用RPC的真正目的。通过RPC能解耦服务，这才是使用RPC的真正目的;一个高性能RPC框架最重要的四个点就是：传输协议，框架线程模型，IO模型，零拷贝;
