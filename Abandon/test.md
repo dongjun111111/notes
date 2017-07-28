@@ -497,4 +497,514 @@ iptables -A INPUT -p tcp --dport 111 -j ACCEPT
 control+p 
 
 ### RPC还是REST 
-RPC更偏向内部调用，REST更偏向外部调用。所以中国的技术圈子更倡导RPC，比如阿里开源的dubbo。美国的技术圈子更倡导REST，比如spring cloud，是个纯REST的项目，不支持RPC。大概是美国的技术圈，保留的初心多那么一点点吧 ; 如果你的系统很复杂，用RPC就要小心地去控制复杂度了，用REST反而会简单些 ;通过RPC能解耦服务，这才是使用RPC的真正目的。通过RPC能解耦服务，这才是使用RPC的真正目的;一个高性能RPC框架最重要的四个点就是：传输协议，框架线程模型，IO模型，零拷贝;
+RPC更偏向内部调用，REST更偏向外部调用。所以中国的技术圈子更倡导RPC，比如阿里开源的dubbo。美国的技术圈子更倡导REST，比如spring cloud，是个纯REST的项目，不支持RPC。大概是美国的技术圈，保留的初心多那么一点点吧 ; 如果你的系统很复杂，用RPC就要小心地去控制复杂度了，用REST反而会简单些 ;通过RPC能解耦服务，这才是使用RPC的真正目的。通过RPC能解耦服务，这才是使用RPC的真正目的;一个高性能RPC框架最重要的四个点就是：传输协议，框架线程模型，IO模型，零拷贝
+
+### 云风-翻墙工具
+xtunnel.go 这个程序运行在本地
+<pre>
+package main
+
+import "net"
+import "log"
+import "container/list"
+import "io"
+
+import "sync"
+
+const bindAddr = "127.0.0.1:1080"
+const serverAddr = "www.yourvps.com:2011"
+const bufferSize = 4096
+const maxConn = 0x10000
+const xor = 0x64
+
+type tunnel struct {
+	id int
+	*list.Element
+	send  chan []byte
+	reply io.Writer
+}
+
+type bundle struct {
+	t [maxConn]tunnel
+	*list.List
+	*xsocket
+	sync.Mutex
+}
+
+type xsocket struct {
+	net.Conn
+	*sync.Mutex
+}
+
+func (s xsocket) Read(data []byte) (n int, err error) {
+	n, err = io.ReadFull(s.Conn, data)
+	if n > 0 {
+		for i := 0; i < n; i++ {
+			data[i] = data[i] ^ xor
+		}
+	}
+
+	return
+}
+
+func (s xsocket) Write(data []byte) (n int, err error) {
+	s.Lock()
+	defer s.Unlock()
+	log.Println("Send", len(data))
+	for i := 0; i < len(data); i++ {
+		data[i] = data[i] ^ xor
+	}
+	x := 0
+	all := len(data)
+
+	for all > 0 {
+		n, err = s.Conn.Write(data)
+		if err != nil {
+			n += x
+			return
+		}
+		if all != n {
+			log.Println("Write only", n, all)
+		}
+		all -= n
+		x += n
+		data = data[n:]
+	}
+
+	return all, err
+}
+
+func (t *tunnel) processBack(c net.Conn) {
+	//c.SetReadTimeout(1e7) 原版中有的
+	var buf [bufferSize]byte
+	for {
+		n, err := c.Read(buf[4:])
+		if n > 0 {
+			t.sendBack(buf[:4+n])
+		}
+		e, ok := err.(net.Error)
+		if !(ok && e.Timeout()) && err != nil {
+			log.Println(n, err)
+			return
+		}
+	}
+}
+
+func (t *tunnel) sendClose() {
+	buf := [4]byte{
+		byte(t.id >> 8),
+		byte(t.id & 0xff),
+		0,
+		0,
+	}
+	t.reply.Write(buf[:])
+}
+
+func (t *tunnel) sendBack(buf []byte) {
+	buf[0] = byte(t.id >> 8)
+	buf[1] = byte(t.id & 0xff)
+	length := len(buf) - 4
+	buf[2] = byte(length >> 8)
+	buf[3] = byte(length & 0xff)
+	t.reply.Write(buf)
+}
+
+func (t *tunnel) process(c net.Conn, b *bundle) {
+	go t.processBack(c)
+	send := t.send
+
+	for {
+		buf, ok := <-send
+		if !ok {
+			c.Close()
+			return
+		}
+		n, err := c.Write(buf)
+		if err != nil {
+			b.free(t.id)
+		} else if n != len(buf) {
+			log.Println("Write", n, len(buf))
+		}
+	}
+}
+
+func (t *tunnel) open(b *bundle, c net.Conn) {
+	t.send = make(chan []byte)
+	t.reply = b.xsocket
+	go t.process(c, b)
+}
+
+func (t *tunnel) close() {
+	close(t.send)
+}
+
+func newBundle(c net.Conn) *bundle {
+	b := new(bundle)
+	b.List = list.New()
+	for i := 0; i < maxConn; i++ {
+		t := &b.t[i]
+		t.id = i
+		t.Element = b.PushBack(t)
+	}
+	b.xsocket = &xsocket{c, new(sync.Mutex)}
+	return b
+}
+
+func (b *bundle) alloc(c net.Conn) *tunnel {
+	b.Lock()
+	defer b.Unlock()
+	f := b.Front()
+	if f == nil {
+		return nil
+	}
+	t := b.Remove(f).(*tunnel)
+	t.Element = nil
+	t.open(b, c)
+	return t
+}
+
+func (b *bundle) free(id int) {
+	b.Lock()
+	defer b.Unlock()
+	t := &b.t[id]
+	if t.Element == nil {
+		t.sendClose()
+		t.Element = b.PushBack(t)
+		t.close()
+	}
+}
+
+func (b *bundle) get(id int) *tunnel {
+	b.Lock()
+	defer b.Unlock()
+	t := &b.t[id]
+	if t.Element != nil {
+		return nil
+	}
+	return t
+}
+
+func servSocks(b *bundle) {
+	a, err := net.ResolveTCPAddr("tcp", bindAddr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	l, err2 := net.ListenTCP("tcp", a)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+	log.Printf("xtunnelc bind %s", a)
+	for {
+		c, err := l.Accept()
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println(c.RemoteAddr())
+		b.alloc(c)
+	}
+}
+
+func mainServer(c net.Conn) {
+	b := newBundle(c)
+	go servSocks(b)
+	var header [4]byte
+	for {
+		_, err := b.Read(header[:])
+		if err != nil {
+			log.Fatal(err)
+		}
+		id := int(header[0])<<8 | int(header[1])
+		length := int(header[2])<<8 | int(header[3])
+		log.Println("Recv", id, length)
+		if length == 0 {
+			b.free(id)
+		} else {
+			t := b.get(id)
+			buf := make([]byte, length)
+			n, err := b.Read(buf)
+			if err != nil {
+				log.Fatal(err)
+			} else if n != len(buf) {
+				log.Println("Read", n, len(buf))
+			}
+			if t != nil {
+				t.send <- buf
+			}
+		}
+	}
+}
+
+func start(addr string) {
+	a, err := net.ResolveTCPAddr("tcp", addr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	c, err2 := net.DialTCP("tcp", nil, a)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+	log.Printf("xtunnelc connect %s", a)
+	mainServer(c)
+}
+
+func main() {
+	start(serverAddr)
+}
+
+</pre>
+xtunneld.go 这个程序运行在墙外
+<pre>
+package main
+
+import "net"
+import "log"
+import "container/list"
+import "io"
+
+import "sync"
+
+const socksServer = "127.0.0.1:1080"
+const bindAddr = ":2011"
+const bufferSize = 4096
+const maxConn = 0x10000
+const xor = 0x64
+
+var socksAddr *net.TCPAddr
+
+func init() {
+	_, err := net.ResolveTCPAddr("tcp", socksServer)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+type tunnel struct {
+	id int
+	*list.Element
+	send  chan []byte
+	reply io.Writer
+}
+
+type bundle struct {
+	t [maxConn]tunnel
+	*list.List
+	*xsocket
+}
+
+type xsocket struct {
+	net.Conn
+	*sync.Mutex
+}
+
+func (s xsocket) Read(data []byte) (n int, err error) {
+	n, err = io.ReadFull(s.Conn, data)
+	if n > 0 {
+		for i := 0; i < n; i++ {
+			data[i] = data[i] ^ xor
+		}
+	}
+
+	return
+}
+
+func (s xsocket) Write(data []byte) (n int, err error) {
+	s.Lock()
+	defer s.Unlock()
+	log.Println("Send", len(data))
+	for i := 0; i < len(data); i++ {
+		data[i] = data[i] ^ xor
+	}
+	x := 0
+	all := len(data)
+
+	for all > 0 {
+		n, err = s.Conn.Write(data)
+		if err != nil {
+			n += x
+			return
+		}
+		all -= n
+		x += n
+		data = data[n:]
+	}
+
+	return all, err
+}
+
+func (t *tunnel) processBack(c net.Conn) {
+	//c.SetReadTimeout(1e7)  原版中有的
+	var buf [bufferSize]byte
+	for {
+		n, err := c.Read(buf[4:])
+		if n > 0 {
+			t.sendBack(buf[:4+n])
+		}
+		e, ok := err.(net.Error)
+		if !(ok && e.Timeout()) && err != nil {
+			log.Println(n, err)
+			return
+		}
+	}
+}
+
+func (t *tunnel) sendClose() {
+	buf := [4]byte{
+		byte(t.id >> 8),
+		byte(t.id & 0xff),
+		0,
+		0,
+	}
+	t.reply.Write(buf[:])
+}
+
+func (t *tunnel) sendBack(buf []byte) {
+	buf[0] = byte(t.id >> 8)
+	buf[1] = byte(t.id & 0xff)
+	length := len(buf) - 4
+	buf[2] = byte(length >> 8)
+	buf[3] = byte(length & 0xff)
+	t.reply.Write(buf)
+}
+
+func connectSocks() net.Conn {
+	c, err := net.DialTCP("tcp", nil, socksAddr)
+	if err != nil {
+		return nil
+	}
+	log.Println(c.RemoteAddr())
+	return c
+}
+
+func (t *tunnel) process() {
+	c := connectSocks()
+	if c == nil {
+		t.sendClose()
+	} else {
+		go t.processBack(c)
+	}
+	send := t.send
+
+	for {
+		buf, ok := <-send
+		if !ok {
+			if c != nil {
+				c.Close()
+			}
+			return
+		}
+		if c != nil {
+			n, err := c.Write(buf)
+			if err != nil {
+				log.Println("tunnel", n, err)
+				t.sendClose()
+			}
+		}
+	}
+}
+
+func (t *tunnel) open(reply io.Writer) {
+	t.send = make(chan []byte)
+	t.reply = reply
+	go t.process()
+}
+
+func (t *tunnel) close() {
+	close(t.send)
+}
+
+func newBundle(c net.Conn) *bundle {
+	b := new(bundle)
+	b.List = list.New()
+	for i := 0; i < maxConn; i++ {
+		t := &b.t[i]
+		t.id = i
+		t.Element = b.PushBack(t)
+	}
+	b.xsocket = &xsocket{c, new(sync.Mutex)}
+	return b
+}
+
+func (b *bundle) free(id int) {
+	t := &b.t[id]
+	if t.Element == nil {
+		t.Element = b.PushBack(t)
+		t.close()
+	}
+}
+
+func (b *bundle) get(id int) *tunnel {
+	t := &b.t[id]
+	if t.Element != nil {
+		b.Remove(t.Element)
+		t.Element = nil
+		t.open(b.xsocket)
+	}
+	return t
+}
+
+func servTunnel(c net.Conn) {
+	b := newBundle(c)
+	var header [4]byte
+	for {
+		_, err := b.Read(header[:])
+		if err != nil {
+			log.Fatal(err)
+		}
+		id := int(header[0])<<8 | int(header[1])
+		length := int(header[2])<<8 | int(header[3])
+		log.Println("Recv", id, length)
+		if length == 0 {
+			b.free(id)
+		} else {
+			t := b.get(id)
+			buf := make([]byte, length)
+			_, err := b.Read(buf)
+			if err != nil {
+				log.Fatal(err)
+			}
+			t.send <- buf
+		}
+	}
+}
+
+func start(addr string) {
+	a, err := net.ResolveTCPAddr("tcp", addr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	l, err2 := net.ListenTCP("tcp", a)
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+	log.Printf("xtunneld bind %s", a)
+	c, err3 := l.Accept()
+	if err3 != nil {
+		log.Fatal(err3)
+	}
+	l.Close()
+	servTunnel(c)
+}
+
+func main() {
+	start(bindAddr)
+}
+
+</pre>
+
+### ssh 端口转发
+<pre>
+ 实用例子
+
+有A,B,C 3台服务器, A,C有公网IP, B是某IDC的服务器无公网IP. A通过B连接C的80端口(A<=>B<=>C), 那么在B上执行如下命令即可: 
+
+$ ssh -CfNg -L 6300:127.0.0.1:80 userc@C
+$ ssh -CfNg -R 80:127.0.0.1:6300 usera@A
+
+服务器A和服务器C之间, 利用跳板服务器B建立了加密隧道. 在A上连接127.0.0.1:80, 就等同C上的80端口. 需要注意的是, 服务器B上的6300端口的数据没有加密, 可被监听, 例: 
+
+# tcpdump -s 0-i lo port 6300
+
+
+既然SSH可以传送数据，那么我们可以让那些不加密的网络连接，全部改走SSH连接，从而提高安全性。假定我们要让8080端口的数据，都通过SSH传向远程主机，命令就这样写：
+ssh -D 8080 user@host
+</pre>
