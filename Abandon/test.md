@@ -1176,3 +1176,12 @@ func main() {
 </pre>
 ### SQL语句监测优化工具
 https://github.com/Meituan-Dianping/SQLAdvisor
+###  zabbix gitlab
+启动zabbix命令
+ 
+/usr/sbin/zabbix_agentd -c /etc/zabbix/zabbix_agentd.conf
+
+启动 gitlab 命令
+
+/usr/bin/gitlab-ctl start
+
