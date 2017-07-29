@@ -1048,9 +1048,12 @@ iptables -t nat -A REDSOCKS -p tcp -j REDIRECT --to-ports 31338
 # Any tcp connection made by `linuxaria' should be redirected, put your username here.
 iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner linuxaria -j REDSOCKS
 此配置实现了把所有除本地局域网连接以外的TCP连接全部转发到 31338 端口, 显然你应该用代理软件提前监听这个端口, 当然也可以是其他任意指定的代理监听端口.
+
+//列出所有正在监听的端口以及程序名称
+netstat -lntp
 </pre>
 
-### 关于弃权基本常识
+### 关于期权基本常识
 期权中的陷阱
 
 我们来看看青蛙和凤凰这过程中期权问题：
