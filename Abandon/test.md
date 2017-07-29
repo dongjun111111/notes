@@ -1007,6 +1007,18 @@ $ ssh -CfNg -R 80:127.0.0.1:6300 usera@A
 
 既然SSH可以传送数据，那么我们可以让那些不加密的网络连接，全部改走SSH连接，从而提高安全性。假定我们要让8080端口的数据，都通过SSH传向远程主机，命令就这样写：
 ssh -D 8080 user@host
+
+嗯，这里自己搭建了一个自用的梯子：
+//1.在本机执行
+ssh -f -N -D 127.0.0.1:7079 root@xxxxxx.com
+//2.在火狐浏览器配置中配置 设置-选项-高级-网络-连接-手动配置代理-SOCKS主机  记得将 【使用 SOCKS v5 代理 DNS】勾上
+//3.在中转服务器【一般是云主机】 修改ssh config
+vi  /etc/ssh/ssh_config //在最后加上
+
+AllowTcpForwarding yes
+GatewayPorts       yes
+
+//4.ok
 </pre>
 
 ### 关于弃权基本常识
