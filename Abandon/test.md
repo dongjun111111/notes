@@ -1019,6 +1019,35 @@ AllowTcpForwarding yes
 GatewayPorts       yes
 
 //4.ok
+
+
+基本参数解释：
+-f   输入密码后进入后台模式
+-N   不执行远程命令,用于端口转发 
+-D   socket5代理
+-L   tcp转发  
+
+如果想实现sock5全局代理，可以参考下面：
+#!/bin/bash
+# Create new chain
+iptables -t nat -N REDSOCKS
+ 
+# Ignore LANs and some other reserved addresses.
+iptables -t nat -A REDSOCKS -d 0.0.0.0/8 -j RETURN
+iptables -t nat -A REDSOCKS -d 10.0.0.0/8 -j RETURN
+iptables -t nat -A REDSOCKS -d 127.0.0.0/8 -j RETURN
+iptables -t nat -A REDSOCKS -d 169.254.0.0/16 -j RETURN
+iptables -t nat -A REDSOCKS -d 172.16.0.0/12 -j RETURN
+iptables -t nat -A REDSOCKS -d 192.168.0.0/16 -j RETURN
+iptables -t nat -A REDSOCKS -d 224.0.0.0/4 -j RETURN
+iptables -t nat -A REDSOCKS -d 240.0.0.0/4 -j RETURN
+ 
+# Anything else should be redirected to port 31338
+iptables -t nat -A REDSOCKS -p tcp -j REDIRECT --to-ports 31338
+ 
+# Any tcp connection made by `linuxaria' should be redirected, put your username here.
+iptables -t nat -A OUTPUT -p tcp -m owner --uid-owner linuxaria -j REDSOCKS
+此配置实现了把所有除本地局域网连接以外的TCP连接全部转发到 31338 端口, 显然你应该用代理软件提前监听这个端口, 当然也可以是其他任意指定的代理监听端口.
 </pre>
 
 ### 关于弃权基本常识
