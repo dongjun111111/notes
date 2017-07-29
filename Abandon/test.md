@@ -1185,3 +1185,6 @@ https://github.com/Meituan-Dianping/SQLAdvisor
 
 /usr/bin/gitlab-ctl start
 
+github提交不显示绿点问题
+
+git config user.email //对比两个邮箱是否相同，如果不相同就使用命令 ：git config --global user.email  DONE!!!
