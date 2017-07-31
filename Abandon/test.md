@@ -1216,5 +1216,7 @@ UDP 是User Datagram Protocol的简称， 中文名是用户数据报协议，�
 ldd $(which /usr/local/nginx/sbin/nginx)
 </pre>
 //X-Forwarded-For:简称XFF头，它代表客户端，也就是HTTP的请求端真实的IP，只有在通过了HTTP 代理或者负载均衡服务器时才会添加该项。
+
 nginx.conf中的 proxy_set_header Remoteip $proxy_add_x_forwarded_for;
+
 ECS中的nginx访问不了不一定是服务器问题，很有可能是安全组设置没有设定。
