@@ -1190,3 +1190,31 @@ github提交不显示绿点问题
 git config user.email //对比两个邮箱是否相同，如果不相同就使用命令 ：git config --global user.email  DONE!!!
 ### Abandon
   https://github.com/exacity/deeplearningbook-chinese/
+### TCP UDP 
+TCP和UDP是OSI模型中的运输层中的协议。TCP提供可靠的通信传输，而UDP则常被用于让广播和细节控制交给应用的通信传输。TCP与UDP基本区别：
+
+1. 基于连接与无连接。
+2. TCP要求系统资源较多，UDP较少。
+3. UDP程序结构较简单。
+4. 流模式（TCP）与数据报模式(UDP)。
+5. TCP保证数据正确性，UDP可能丢包。
+6. TCP保证数据顺序，UDP不保证。
+7. TCP面向连接（如打电话要先拨号建立连接）;UDP是无连接的，即发送数据之前不需要建立连接。
+8. TCP提供可靠的服务。也就是说，通过TCP连接传送的数据，无差错，不丢失，不重复，且按序到达;UDP尽最大努力交付，即不保证可靠交付。
+9. TCP面向字节流，实际上是TCP把数据看成一连串无结构的字节流;UDP是面向报文的，UDP没有拥塞控制，因此网络出现拥塞不会使源主机的发送速率降低（对实时应用很有用，如IP电话，实时视频会议等）。
+10. 每一条TCP连接只能是点到点的;UDP支持一对一，一对多，多对一和多对多的交互通信。
+11. TCP首部开销20字节;UDP的首部开销小，只有8个字节。
+12. TCP的逻辑通信信道是全双工的可靠信道，UDP则是不可靠信道。
+
+TCP（Transmission Control Protocol 传输控制协议）是一种面向连接的、可靠的、基于字节流的传输层通信协议，由IETF的RFC 793定义。在简化的计算机网络OSI模型中，完成第四层传输层所指定的功能。
+
+UDP 是User Datagram Protocol的简称， 中文名是用户数据报协议，是OSI（Open System Interconnection，开放式系统互联） 参考模型中一种无连接的传输层协议，提供面向事务的简单不可靠信息传送服务，IETF RFC 768是UDP的正式规范。UDP在IP报文的协议号是17
+
+### 查看程序依赖包与依赖关系
+<pre>
+//以nginx为例
+ldd $(which /usr/local/nginx/sbin/nginx)
+</pre>
+//X-Forwarded-For:简称XFF头，它代表客户端，也就是HTTP的请求端真实的IP，只有在通过了HTTP 代理或者负载均衡服务器时才会添加该项。
+nginx.conf中的 proxy_set_header Remoteip $proxy_add_x_forwarded_for;
+ECS中的nginx访问不了不一定是服务器问题，很有可能是安全组设置没有设定。
