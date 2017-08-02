@@ -1357,3 +1357,142 @@ http {
 ### 服务器快照原理
 快照激活后，应用服务器可以对快照卷进行读写操作。应用服务器下发写请求后，数据将直接写入快照卷，并在独享映射表中记录数据在快照卷中的存放位置。<br>
 快照卷用的是存储池的空间，一般存储池预留的20%就是给快照卷用的！
+
+### 使用企业微信号发送消息
+<pre>
+package services
+
+import (
+    "bufio"
+    "bytes"
+    "encoding/json"
+    "errors"
+    "strings"
+    "io/ioutil"
+    "net/http"
+    "os"
+)
+
+const (
+    requestError = errors.New("request error,check url or network")
+    agentidX = 0
+    corpidX = ""
+    corpsecretX = ""
+    sendurl   = `https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=`
+    get_token = `https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=`
+)
+
+type access_token struct {
+    Access_token string `json:"access_token"`
+    Expires_in   int    `json:"expires_in"`
+}
+
+type send_msg struct {
+    Touser  string            `json:"touser"`
+    Toparty string            `json:"toparty"`
+    Totag   string            `json:"totag"`
+    Msgtype string            `json:"msgtype"`
+    Agentid int               `json:"agentid"`
+    Text    map[string]string `json:"text"`
+    Safe    int               `json:"safe"`
+}
+
+type send_msg_error struct {
+    Errcode int    `json:"errcode`
+    Errmsg  string `json:"errmsg"`
+}
+
+//通过corpid 和 corpsecret 获取token 
+func Get_token(corpid, corpsecret string) (at access_token, err error) {
+    resp, err := http.Get(get_token + corpid + "&corpsecret=" + corpsecret)
+    if err != nil {
+        return
+    }
+    defer resp.Body.Close()
+    if resp.StatusCode != 200 {
+        err = requestError
+        return
+    }
+    buf, _ := ioutil.ReadAll(resp.Body)
+	err = json.Unmarshal(buf, &at)
+    if at.Access_token == "" {
+        err = errors.New("corpid or corpsecret error.")
+    }
+    return
+}
+
+func Parse(jsonpath string) ([]byte, error) {
+    var zs = []byte("//")
+    File, err := os.Open(jsonpath)
+    if err != nil {
+        return nil, err
+    }
+    defer File.Close()
+    var buf []byte
+    b := bufio.NewReader(File)
+    for {
+        line, _, err := b.ReadLine()
+        if err != nil {
+            if err.Error() == "EOF" {
+                break
+            }
+            return nil, err
+        }
+        line = bytes.TrimSpace(line)
+        if len(line) <= 0 {
+            continue
+        }
+        index := bytes.Index(line, zs)
+        if index == 0 {
+            continue
+        }
+        if index > 0 {
+            line = line[:index]
+        }
+        buf = append(buf, line...)
+    }
+    return buf, nil
+}
+
+//发送消息
+func Send_msg(Access_token string, msgbody []byte) error {
+	body := bytes.NewBuffer(msgbody)
+    resp, err := http.Post(sendurl+Access_token, "application/json", body)
+    if resp.StatusCode != 200 {
+        return requestError
+    }
+    buf, _ := ioutil.ReadAll(resp.Body)
+    resp.Body.Close()
+    var e send_msg_error
+    err = json.Unmarshal(buf, &e)
+    if err != nil {
+        return err
+	}
+    if e.Errcode != 0 && e.Errmsg != "ok" {
+        return errors.New(string(buf))
+    }
+    return nil
+}
+
+func QiYeWeiXinSendMsg(touser,message_body string) error {
+	if  strings.TrimSpace(touser) ==""{
+		touser = "@all"
+	}
+    var m send_msg = send_msg{Touser:touser, Msgtype: "text", Agentid:agentidX, Text: map[string]string{"content":message_body}}
+    token, err := Get_token(corpidX,corpsecretX)
+    if err != nil {
+        println(err.Error())
+        return err
+    }
+    buf, err := json.Marshal(m)
+    if err != nil {
+        return err
+    }
+    err = Send_msg(token.Access_token, buf)
+    if err != nil {
+		println(err.Error())
+		return err
+	}
+	return nil
+}
+</pre>
