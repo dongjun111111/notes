@@ -1056,6 +1056,15 @@ linux ~ 与 /
 
 ~代表你的/home/用户明目录
 假设你的用户名是x，那么~/就是/home/x/
+
+linux 中的 buffer 与 cache 
+
+buffer是用于存放要输出到disk（块设备）的数据的，而cache是存放从disk上读出的数据。这二者是为了提高IO性能的，并由OS管理。
+
+-/+ buffers/cache:   10321516   14355944
+
+即-buffers/cache，表示一个应用程序认为系统被用掉多少内存，这里是 10321516 KB；
+即+buffers/cache，表示一个应用程序认为系统还有多少内存，这里是 14355944 KB；
 </pre>
 
 ### 关于期权基本常识
