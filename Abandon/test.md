@@ -1523,3 +1523,53 @@ func QiYeWeiXinSendMsg(touser,message_body string) error {
 	return nil
 }
 </pre>
+### 数据库备份数据shell脚本
+<pre>
+#!/bin/bash
+#你要修改的地方从这里开始
+MYSQL_USER=root     #mysql用户名
+MYSQL_PASS=         #mysql密码
+FTP_IP=             #远程ftp地址
+FTP_USER=           #远程ftp用户名
+FTP_PASS=           #远程ftp密码
+FTP_backup=         #远程ftp上存放备份文件的目录，需要先在FTP上面建好
+WEB_DATA=/home/wwwroot     #本地要备份的网站数据
+#你要修改的地方从这里结束
+ 
+if [ ! -f /usr/bin/ftp ]; then
+    yum install ftp -y
+fi
+if [ ! -d /home/backup ]; then
+    mkdir /home/backup
+fi
+  
+#定义备份文件的名字
+DataBakName=Data_$(date +"%Y%m%d").tar.gz
+OldData=Data_$(date -d -5day +"%Y%m%d").tar.gz
+ 
+#删除本地3天前的数据
+rm -rf /home/backup/Data_$(date -d -3day +"%Y%m%d").tar.gz
+cd /home/backup
+  
+#导出数据库,一个数据库一个压缩文件
+for db in `/usr/local/mysql/bin/mysql -u$MYSQL_USER -p$MYSQL_PASS -B -N -e 'SHOW DATABASES' | xargs`; do
+    (/usr/local/mysql/bin/mysqldump -u$MYSQL_USER -p$MYSQL_PASS ${db} -q --skip-lock-tables | gzip -9 - > ${db}.sql.gz;
+    echo dumped /home/backup/${db}.sql.gz)    
+done
+ 
+#将导出的数据库和网站目录压缩为一个文件
+tar zcf /home/backup/$DataBakName $WEB_DATA /home/backup/*.sql.gz
+ 
+#删除本地已导出的数据库
+rm -rf /home/backup/*.sql.gz
+  
+#上传到FTP空间,删除FTP空间5天前的数据
+ftp -v -n $FTP_IP << END
+user $FTP_USER $FTP_PASS
+type binary
+cd $FTP_backup
+delete $OldData
+put $DataBakName
+bye
+END
+</pre>
