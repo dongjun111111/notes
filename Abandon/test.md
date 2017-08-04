@@ -1523,6 +1523,7 @@ func QiYeWeiXinSendMsg(touser,message_body string) error {
 	return nil
 }
 </pre>
+
 ### 数据库备份数据shell脚本
 <pre>
 #!/bin/bash
@@ -1559,10 +1560,10 @@ done
  
 #将导出的数据库和网站目录压缩为一个文件
 tar zcf /home/backup/$DataBakName $WEB_DATA /home/backup/*.sql.gz
- 
+
 #删除本地已导出的数据库
 rm -rf /home/backup/*.sql.gz
-  
+
 #上传到FTP空间,删除FTP空间5天前的数据
 ftp -v -n $FTP_IP << END
 user $FTP_USER $FTP_PASS
