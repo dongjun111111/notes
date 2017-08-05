@@ -1574,3 +1574,6 @@ put $DataBakName
 bye
 END
 </pre>
+
+### MySQL distinct
+select (distinct id)
