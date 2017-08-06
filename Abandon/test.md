@@ -1576,4 +1576,4 @@ END
 </pre>
 
 ### MySQL distinct
-select (distinct id)
+select (distinct id) from table 
