@@ -1574,7 +1574,6 @@ put $DataBakName
 bye
 END
 </pre>
-
 ### MySQL distinct
 select (distinct id) from table 
 ### 100亿加减法思路
@@ -1601,3 +1600,16 @@ select (distinct id) from table
 （2）有一个构造方法，把一个包含有多位数值的字符串转换到内部的符号和字节数组中
 
 （3）提供加减乘除的功能
+
+### Linux 上的base64加解密
+
+echo -n "snailwarrior" | base64
+
+c25haWx3YXJyaW9y
+
+echo -n 选项没有输出字符串结尾的' '换行字符，因此字符串"snailwarrior"精确的base64编码是"c25haWx3YXJyaW9y"，可以用php函数来检验哦。文件方式等进行的"snailwarrior"字符串编码都带入了对' '的编码，因此，不小心就会发生莫名的编码错误哦。
+
+Base64解码
+
+echo -n "c25haWx3YXJyaW9y" | base64 -d
+
