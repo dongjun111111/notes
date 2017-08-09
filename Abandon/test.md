@@ -1638,3 +1638,9 @@ OAuth2.0成员
 * 简化模式（implicit）
 * 密码模式（resource owner password credentials）
 * 客户端模式（client credentials）
+
+### traceroute
+使用 traceroute 查找请求都经过了哪些网关。
+<pre>
+traceroute www.baidu.com
+</pre>
