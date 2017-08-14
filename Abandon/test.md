@@ -1694,3 +1694,7 @@ traceroute www.baidu.com
 
         为了进化而努力。
 
+### mysql regexp
+<pre>
+SELECT * FROM users_bank where  card_no  regexp '^[0-9]+$';  -- 找出所有只是数字      not REGEXP 不只是数字
+</pre>
