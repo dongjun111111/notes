@@ -1698,3 +1698,8 @@ traceroute www.baidu.com
 <pre>
 SELECT * FROM users_bank where  card_no  regexp '^[0-9]+$';  -- 找出所有只是数字      not REGEXP 不只是数字
 </pre>
+HTTrack - 克隆任意网站
+
+HTTrack可以克隆指定网站－把整个网站下载到本地。
+
+httrack http://163.com -O /tmp/163
