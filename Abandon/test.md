@@ -1726,7 +1726,7 @@ httrack http://163.com -O /tmp/163
 ###python中的self字段
 <pre>
 class Test(object):
-    # 类的方法中需要添加self
+# 类的方法中需要添加self
     def add(self,a,b):
         print(a+b)
 
