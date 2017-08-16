@@ -1744,3 +1744,102 @@ def addTwo(a,b):
 
 addTwo(2,3)
 </pre>
+### 限制Goruntine数量
+<pre>
+/*
+	限制goroutine数量
+*/
+
+package main
+
+import (
+	"net"
+	"strconv"
+	"sync"
+)
+func demo9MincIP(ip net.IP) {
+	for j := len(ip) - 1; j >= 0; j-- {
+		ip[j]++
+		if ip[j] > 0 {
+			break
+		}
+	}
+}
+
+func demo9Miplist(cidr string) []string {
+	var list []string
+	ip, ipNet, err := net.ParseCIDR(cidr)
+	if err != nil {
+		ip = net.ParseIP(cidr)
+		list = append(list, ip.String())
+		return list
+	}
+	for ip := ip.Mask(ipNet.Mask); ipNet.Contains(ip); demo9MincIP(ip) {
+		list = append(list, ip.String())
+	}
+	return list
+}
+
+func demo9chantest(wg *sync.WaitGroup, routineCtl chan string){
+	defer wg.Done()
+	for ip := range routineCtl{
+		println("do something..."+ip)
+	}
+}
+	
+func main() {	
+	routineCtl := make(chan string,100) 
+	var i int = 0
+	var portlist = []int{21,22,23,25,587,53,79,80,88,110,111,113,135,139,161,264,389,443,445,512,513,514,548,554,593,873,1099,1433,1521,2049,3260,5432,5900,6000,9100,9160,10000,11211,27017,27018,44818,47808,8080,8443,8554,3306,9999,500,3389}
+	ips := demo9Miplist("192.168.1.0/24")
+	var processNum = 100
+	var wg = &sync.WaitGroup{}
+	for i:=0; i<processNum; i++{
+		wg.Add(1)
+		go demo9chantest(wg, routineCtl)
+	}
+	for _, ports := range portlist {
+		for _,ip :=range ips[1:len(ips)-1]{
+			ip = ip+":"+strconv.Itoa(ports)
+			routineCtl <- ip
+			i++
+		}			
+	}
+	close(routineCtl)
+	wg.Wait()
+	println("i的数量:")
+	println(i)
+}
+</pre>
+工作线程
+<pre>
+/*
+	使用工作线程控制数量
+*/
+package main
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/xgfone/go-tools/worker"
+)
+
+func ExampleDispatcher() {
+	JobQueue := make(chan interface{}, 10)
+	dispatcher := worker.NewDispatcher(100, worker.FuncTask(func(job interface{}) {
+		fmt.Println("Receive job",job)
+	}))
+	dispatcher.Dispatch(JobQueue)
+
+	for _, i := range []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27} {
+		JobQueue <- i
+	}
+
+	time.Sleep(time.Second)
+	dispatcher.Stop()
+}
+func main(){
+	 ExampleDispatcher() 
+}
+</pre>
