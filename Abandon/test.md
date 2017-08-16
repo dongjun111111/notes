@@ -1694,12 +1694,53 @@ traceroute www.baidu.com
 
         为了进化而努力。
 
-### mysql regexp
+###mysql regexp
 <pre>
 SELECT * FROM users_bank where  card_no  regexp '^[0-9]+$';  -- 找出所有只是数字      not REGEXP 不只是数字
 </pre>
-HTTrack - 克隆任意网站
+mysql 中 emun 与 tinyint 
 
+1.  enum的存储原理我仔细查看了下手册。是这样的:
+
+在建立这个字段时，我们会给他规定一个范围比如enum('a','b','c'),这时mysql内部会建立一张hash结构的map表，类似:0000 -> a，0001 -> b，0002 -> c。
+
+当我插入一条数据，此字段的值位a或b或c时，他存储在里面的不是这个字符，而是对应他的索引，也就是那个0000或0001或0002。
+同样，enum在mysql手册上的说明:
+<pre>
+ENUM('value1','value2',...)
+1或2个字节，取决于枚举值的个数(最多65,535个值)
+除非enum的个数超过了一定数量，否则他所占的存储空间也总是1字节。
+</pre>
+2. tinyint:
+<pre>
+类型  字节  最小值  最大值
+      (带符号的/无符号的)  (带符号的/无符号的)
+TINYINT  1  -128  127
+他的最小存储所占空间也是1字节。
+</pre>
+最后，Enum，既然要用它，就不必要使用什么0，1，2来代替实际的字符串了。甚至中文字符串。他并不会对数据库性能进行多余开销。因为对于它来说，你使用'0','1','2'和'张三','李四','王五'数据表所占的存储空间一样。但是考虑到我们实际应用时数据需要从db服务器回传到web app，所以在网络传输时，当然还是尽可能的传输小数据比较好。所以如果很在意这些，还是不用它好了。
+### HTTrack - 克隆任意网站
 HTTrack可以克隆指定网站－把整个网站下载到本地。
 
 httrack http://163.com -O /tmp/163
+###python中的self字段
+<pre>
+class Test(object):
+    # 类的方法中需要添加self
+    def add(self,a,b):
+        print(a+b)
+
+    def display(self):
+        print("hello")
+    
+
+test = Test()
+test.add(1,2)
+test.display()
+
+# 普通方法不需要加self
+def addTwo(a,b):
+    print(a+b)
+
+addTwo(2,3)
+</pre>
