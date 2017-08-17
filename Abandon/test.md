@@ -1937,7 +1937,6 @@ func showHelp() {
 	fmt.Println("     csv2xlsx ./test.csv")
 	fmt.Println("       -Convert test.csv to xlsx.")
 	fmt.Println()
-	fmt.Println()
 }
 
 func main() {
