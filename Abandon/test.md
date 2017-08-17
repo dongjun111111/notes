@@ -1954,4 +1954,72 @@ func main() {
 	}
 }
 </pre>
-### TEST GIT-FLOW
+### git merge 
+* git merge –no-ff 可以保存你之前的分支历史。能够更好的查看 merge历史，以及branch 状态。
+* git merge 则不会显示 feature，只保留单条分支记录。
+
+基本使用分支方法：
+<pre>
+a. 创建develop分支
+git branch dev       # 本地新建分支
+git push -u origin dev     # 将本地分支推送到远端 
+
+b. 在Dev分支基础上再建立功能分支【次步可忽略】
+git checkout -b feature1 dev   # 在本地Dev分支基础上再新建功能分支1，并且切换到该分支下
+git push -u origin feature1  # 将本地分支1推送到远端
+
+# 做一些改动    
+git status
+git add some-file
+git commit   
+
+c. 完成功能开发
+git push origin dev # 拉取Dev分支最新代码
+git checkout dev  # 从feature1分支切回都Dev分支
+git merge --no-ff feature1 # 将本地分支1内容合并到Dev分支
+git push origin dev  # 将合并后的Dev分支推到远端
+
+# 删除功能分支feature1 【次步可忽略】
+git branch feature1 
+git branch -d feature1 # 删除本地此分支
+git push origin --delete feature1  # 删除远端此分支
+
+d. 开始Relase  【感觉这一步好繁琐】
+git checkout -b release-0.1.0 dev
+# Optional: Bump version number, commit
+# Prepare release, commit
+
+e. 完成Release
+
+git checkout master
+git merge --no-ff release-0.1.0
+git push
+
+git checkout dev    # 切回Dev分支，将release-0.1.0合并到Dev
+git merge --no-ff release-0.1.0
+git push
+
+git branch -d release-0.1.0  # 然后删除临时正式分支 release-0.1.0
+git push origin --delete release-0.1.0  
+
+git tag -a v0.1.0 master  # 打上标签
+git push --tags
+
+f. 开始Hotfix
+git checkout -b hotfix-0.1.1 master 
+
+g. 完成 Hotfix 
+git checkout master
+git merge --no-ff hotfix-0.1.1
+git push
+
+
+git checkout dev
+git merge --no-ff hotfix-0.1.1
+git push
+
+git branch -d hotfix-0.1.1
+
+git tag -a v0.1.1 master
+git push --tags
+</pre>
