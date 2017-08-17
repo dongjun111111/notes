@@ -1811,7 +1811,9 @@ func main() {
 	println(i)
 }
 </pre>
+
 工作线程
+
 <pre>
 /*
 	使用工作线程控制数量
