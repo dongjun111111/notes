@@ -1961,6 +1961,7 @@ func main() {
 * git merge 则不会显示 feature，只保留单条分支记录。
 
 基本使用分支方法：
+
 <pre>
 a. 创建develop分支
 git branch dev       # 本地新建分支
