@@ -30,7 +30,7 @@ func main() {
 	reqBody := new(pb.HelloRequest)
 	reqBody.Name = "gRPC"
 	reqBody.Age = 7
-	reqBody.Email = "admin@aitbx.com"
+	reqBody.Email = "admin@xxxx.com"
 	r, err := c.SayHello(context.Background(), reqBody)
 	if err != nil {
 		grpclog.Fatalln(err)
