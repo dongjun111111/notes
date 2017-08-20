@@ -2016,7 +2016,6 @@ git checkout master
 git merge --no-ff hotfix-0.1.1
 git push
 
-
 git checkout dev
 git merge --no-ff hotfix-0.1.1
 git push
