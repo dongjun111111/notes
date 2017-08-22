@@ -1576,6 +1576,8 @@ END
 </pre>
 ### MySQL distinct
 select (distinct id) from table 
+
+delete table_a from table_a,table_b where table_a.id=table_b.id
 ### 100亿加减法思路
 负数在计算机中以补码的形式存储。
 负数的补码表示方法是：将负数表示成二进制原码（负数最高位是1，正数最高位是0）然后将原码取反（1变0，0变1），即反码，将反码加1（最后一位上加1），即转化为补码。如用八位
