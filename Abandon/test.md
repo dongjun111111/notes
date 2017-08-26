@@ -2032,7 +2032,7 @@ git push --tags
 
 GOOS=linux GOARCH=amd64 go build -o djason
 
-golang在Linux下编译生成.a与.so静态库、动态链接库文件
+golang在Linux下编译生成.a与.so静态链接库、动态链接库文件
 <pre>
 go build -buildmode=c-archive -o lib.a
 
