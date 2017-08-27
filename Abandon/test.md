@@ -2028,13 +2028,10 @@ git tag -a v0.1.1 master
 git push --tags
 </pre>
 ### golang 交叉编译 
-// 目标程序是 Linux64位
-
-GOOS=linux GOARCH=amd64 go build -o djason
-
-golang在Linux下编译生成.a与.so静态链接库、动态链接库文件
 <pre>
+// 目标程序是 Linux64位
+GOOS=linux GOARCH=amd64 go build -o djason
+// golang在Linux下编译生成.a与.so静态链接库、动态链接库文件
 go build -buildmode=c-archive -o lib.a
-
 go build -buildmode=c-shared -o test.so  test-so.go
 </pre>
