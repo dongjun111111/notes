@@ -2027,7 +2027,7 @@ git branch -d hotfix-0.1.1
 git tag -a v0.1.1 master
 git push --tags
 </pre>
-### golang 交叉编译 
+###golang 交叉编译 
 <pre>
 // 目标程序是 Linux64位
 GOOS=linux GOARCH=amd64 go build -o djason
