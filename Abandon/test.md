@@ -2027,7 +2027,7 @@ git push --tags
 </pre>
 ###golang 交叉编译 
 <pre>
-// 目标程序是 Linux64位
+// 目标程序是 linux 64位
 GOOS=linux GOARCH=amd64 go build -o djason
 // golang在Linux下编译生成.a与.so静态链接库、动态链接库文件
 go build -buildmode=c-archive -o lib.a
