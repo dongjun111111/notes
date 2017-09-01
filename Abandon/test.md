@@ -1992,7 +1992,7 @@ git push origin --delete feature1  # 删除远端此分支
 d. 开始Relase  【感觉这一步好繁琐】
 git checkout -b release-0.1.0 dev
 # Optional: Bump version number, commit
-# Prepare release, commit
+# Prepare release,commit
 
 e. 完成Release
 
