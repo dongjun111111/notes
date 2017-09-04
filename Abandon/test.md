@@ -1523,7 +1523,6 @@ func QiYeWeiXinSendMsg(touser,message_body string) error {
 	return nil
 }
 </pre>
-
 ### 数据库备份数据shell脚本
 <pre>
 #!/bin/bash
