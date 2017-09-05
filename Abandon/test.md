@@ -2032,3 +2032,5 @@ GOOS=linux GOARCH=amd64 go build -o djason
 go build -buildmode=c-archive -o lib.a
 go build -buildmode=c-shared -o test.so test-so.go
 </pre>
+### 支付宝、微信支付
+https://github.com/shengzhi/payment
