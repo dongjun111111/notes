@@ -2032,9 +2032,9 @@ GOOS=linux GOARCH=amd64 go build -o djason
 go build -buildmode=c-archive -o lib.a
 go build -buildmode=c-shared -o test.so test-so.go
 </pre>
-### 支付宝、微信支付
+###支付宝、微信支付
 https://github.com/shengzhi/payment
-### MySQL 索引失效
+###MySQL 索引失效
 在索引列上使用函数使得索引失效的是常见的索引失效原因之一，因此尽可能的避免在索引列上使用函数。尽管可以使用基于函数的索引来
 解决索引失效的问题，但如此一来带来的比如磁盘空间的占用以及列上过多的索引导致DML性能的下降。
 
