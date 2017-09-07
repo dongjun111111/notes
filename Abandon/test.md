@@ -1972,7 +1972,7 @@ b. 在Dev分支基础上再建立功能分支【次步可忽略】
 git checkout -b feature1 dev   # 在本地Dev分支基础上再新建功能分支1，并且切换到该分支下
 git push -u origin feature1  # 将本地分支1推送到远端
 
-# 做一些改动    
+-- 做一些改动    
 git status
 git add some-file
 git commit   
@@ -1983,15 +1983,16 @@ git checkout dev  # 从feature1分支切回都Dev分支
 git merge --no-ff feature1 # 将本地分支1内容合并到Dev分支
 git push origin dev  # 将合并后的Dev分支推到远端
 
-# 删除功能分支feature1 【次步可忽略】
+-- 删除功能分支feature1 【次步可忽略】
 git branch feature1 
 git branch -d feature1 # 删除本地此分支
 git push origin --delete feature1  # 删除远端此分支
 
 d. 开始Relase  【感觉这一步好繁琐】
 git checkout -b release-0.1.0 dev
-# Optional: Bump version number, commit
-# Prepare release,commit
+
+-- Optional: Bump version number, commit
+-- Prepare release,commit
 
 e. 完成Release
 
