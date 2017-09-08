@@ -2039,5 +2039,5 @@ https://github.com/shengzhi/payment
 在索引列上使用函数使得索引失效的是常见的索引失效原因之一，因此尽可能的避免在索引列上使用函数。尽管可以使用基于函数的索引来
 解决索引失效的问题，但如此一来带来的比如磁盘空间的占用以及列上过多的索引导致DML性能的下降。
 
-查询条件使用函数在索引列上，或者对索引列进行运算，运算包括(+，-，*，/，! 等) 错误的例子：select * from test where id-1=9; 正确的例子：select * from test where id=10; 
+查询条件使用函数在索引列上，或者对索引列进行运算，运算包括(+，-，*，/，! 等) 错误的例子：select * from test where id-1=9; 正确的例子：select * from test where id=10 。
 
