@@ -1695,7 +1695,7 @@ traceroute www.baidu.com
 
         为了进化而努力。
 
-###mysql regexp
+### mysql regexp
 <pre>
 SELECT * FROM users_bank where  card_no  regexp '^[0-9]+$';  -- 找出所有只是数字      not REGEXP 不只是数字
 </pre>
@@ -1957,7 +1957,7 @@ func main() {
 	}
 }
 </pre>
-###git merge 
+### git merge 
 * git merge –no-ff 可以保存你之前的分支历史。能够更好的查看 merge历史，以及branch 状态。
 * git merge 则不会显示 feature，只保留单条分支记录。
 
@@ -2033,9 +2033,9 @@ GOOS=linux GOARCH=amd64 go build -o djason
 go build -buildmode=c-archive -o lib.a
 go build -buildmode=c-shared -o test.so test-so.go
 </pre>
-###支付宝、微信支付
+### 支付宝、微信支付
 https://github.com/shengzhi/payment
-###MySQL 索引失效
+### MySQL 索引失效
 在索引列上使用函数使得索引失效的是常见的索引失效原因之一，因此尽可能的避免在索引列上使用函数。尽管可以使用基于函数的索引来
 解决索引失效的问题，但如此一来带来的比如磁盘空间的占用以及列上过多的索引导致DML性能的下降。
 
@@ -2219,7 +2219,7 @@ func main() {
     fmt.Println(SearchBST(t.root, 6))
 }
 </pre>
-###Golang 高并发
+### Golang 高并发
 <pre>
 package main 
 
@@ -2312,5 +2312,24 @@ func main(){
         handle()
     }
 	wg.Wait()
+}
+</pre>
+### string 性能优化
+<pre>
+func str2bytes(s string) []byte {
+   x := (*[2]uintptr)(unsafe.Pointer(&s))
+   h := [3]uintptr{x[0], x[1], x[1]}
+   return *(*[]byte)(unsafe.Pointer(&h))
+}
+
+func bytes2str(b []byte) string {
+   return *(*string)(unsafe.Pointer(&b))
+}
+
+func main(){
+	s :="I want to know more about this world "
+	b := str2bytes(s)
+	s2 := bytes2str(b)
+	fmt.Println(b, s2)
 }
 </pre>
