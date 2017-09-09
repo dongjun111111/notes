@@ -2219,3 +2219,98 @@ func main() {
     fmt.Println(SearchBST(t.root, 6))
 }
 </pre>
+###Golang 高并发
+<pre>
+package main 
+
+import (
+	"sync"
+	"runtime"
+	"time"
+)
+
+var (
+    MaxWorker = 1000   //最大工作线程数
+	MaxQueue  = 20000  //最大队列数
+	i         = 0
+	wg        sync.WaitGroup
+)
+
+func doTask() {
+	//耗时操作(模拟)
+   	time.Sleep(200 * time.Millisecond)
+    wg.Done()
+}
+
+//这里模拟的http接口,每次请求抽象为一个job  实际工作操作
+func handle() {
+	job := Job{}
+	i++
+	println(i) 
+    JobQueue <- job
+}
+
+type Worker struct {
+    quit chan bool
+}
+
+func NewWorker() Worker {
+    return Worker{
+        quit: make(chan bool)}
+}
+
+// Start method starts the run loop for the worker, listening for a quit channel in
+// case we need to stop it
+func (w Worker) Start() {
+    go func() {
+        for {
+            select {
+            case <-JobQueue:
+                // we have received a work request.
+                doTask()
+            case <-w.quit:
+                // we have received a signal to stop
+                return
+            }
+        }
+    }()
+}
+
+// Stop signals the worker to stop listening for work requests.
+func (w Worker) Stop() {
+    go func() {
+        w.quit <- true
+    }()
+}
+
+type Job struct {
+}
+
+var JobQueue chan Job = make(chan Job, MaxQueue)
+
+type Dispatcher struct {
+}
+
+func NewDispatcher() *Dispatcher {
+    return &Dispatcher{}
+}
+
+func (d *Dispatcher) Run() {
+    // starting n number of workers
+    for i := 0; i < MaxWorker; i++ {
+        worker := NewWorker()
+        worker.Start()
+    }
+}
+
+func main(){
+	runtime.GOMAXPROCS(runtime.NumCPU())
+    d := NewDispatcher()
+	d.Run()
+    for i:=0;i<MaxQueue;i++ {
+        wg.Add(1)
+        handle()
+    }
+	wg.Wait()
+}
+</pre>
