@@ -2040,4 +2040,182 @@ https://github.com/shengzhi/payment
 解决索引失效的问题，但如此一来带来的比如磁盘空间的占用以及列上过多的索引导致DML性能的下降。
 
 查询条件使用函数在索引列上，或者对索引列进行运算，运算包括(+，-，*，/，! 等) 错误的例子：select * from test where id-1=9; 正确的例子：select * from test where id=10 。
+###Golang 二叉树
+<pre>
+/*
+功能：二叉树
+*/
 
+package main
+
+import (
+    "fmt"
+    "sync"
+)
+
+//二叉树节点结构
+type Node struct {
+    data  int
+    left  *Node
+    right *Node
+}
+
+//二叉查找树结构
+type BST struct {
+    root *Node
+    lock sync.RWMutex
+}
+
+//插入方法(判断位置 中序遍历)
+func insertNode(node *Node, addNode *Node) {
+    if addNode.data < node.data {
+        if node.left == nil {
+            node.left = addNode
+        } else {
+            insertNode(node.left, addNode)
+        }
+    } else {
+        if node.right == nil {
+            node.right = addNode
+        } else {
+            insertNode(node.right, addNode)
+        }
+    }
+}
+
+//插入操作
+func (t *BST) Insert(data int) {
+    t.lock.Lock()
+    defer t.lock.Unlock()
+    node := &Node{
+        data:  data,
+        left:  nil,
+        right: nil,
+    }
+    if t.root == nil {
+        t.root = node
+    } else {
+        insertNode(t.root, node)
+    }
+}
+
+//先序遍历
+func PreOrderTraverse(bst *Node) {
+    if bst != nil {
+        fmt.Printf("%d  ", bst.data)
+        PreOrderTraverse(bst.left)
+        PreOrderTraverse(bst.right)
+    }
+}
+
+//中序遍历
+func InOrderTraverse(bst *Node) {
+    if bst != nil {
+        InOrderTraverse(bst.left)
+        fmt.Printf("%d  ", bst.data)
+        InOrderTraverse(bst.right)
+    }
+}
+
+//后序遍历
+func PostOrderTraverse(bst *Node) {
+    if bst != nil {
+        PostOrderTraverse(bst.left)
+        PostOrderTraverse(bst.right)
+        fmt.Printf("%d  ", bst.data)
+    }
+}
+
+//查找
+func SearchBST(node *Node, key int) bool {
+    if node == nil {
+        return false
+    }
+    if key == node.data {
+        return true
+    }
+    if key < node.data {
+        return SearchBST(node.left, key)
+    } else {
+        return SearchBST(node.right, key)
+    }
+}
+
+//删除执行函数
+func remove(node *Node, key int) *Node {
+    if node == nil {
+        return nil
+    }
+    if key == node.data {
+        if node.left == nil && node.right == nil {
+            node = nil
+            return nil
+        }
+        if node.left == nil {
+            node = node.right
+            return node
+        }
+        if node.right == nil {
+            node = node.left
+            return node
+        }
+        rightside := node.right
+        for {
+            if rightside != nil && rightside.left != nil {
+                rightside = rightside.left
+            } else {
+                break
+            }
+        }
+        node.data = rightside.data
+        node.right = remove(node.right, node.data)
+        return node
+    }
+    if key < node.data {
+        node.left = remove(node.left, key)
+        return node
+    } else {
+        node.right = remove(node.right, key)
+        return node
+    }
+}
+
+//删除操作
+func (t *BST) Remove(key int) {
+    t.lock.Lock()
+    defer t.lock.Unlock()
+    remove(t.root, key)
+}
+>>>>>>> Stashed changes
+
+func main() {
+    var t BST
+    t.Insert(2)
+    t.Insert(6)
+    t.Insert(5)
+    t.Insert(1)
+    t.Insert(10)
+    t.Insert(8)
+
+    fmt.Println("PREORDER...")
+    PreOrderTraverse(t.root)
+    fmt.Println("\nINORDER...")
+    InOrderTraverse(t.root)
+    fmt.Println("\nPOSTORDER...")
+    PostOrderTraverse(t.root)
+    fmt.Printf("\n")
+    fmt.Println("Search...")
+    fmt.Println(SearchBST(t.root, 6))
+    fmt.Println("Remove...")
+    t.Remove(6)
+    fmt.Println("PREORDER...")
+    PreOrderTraverse(t.root)
+    fmt.Println("\nINORDER...")
+    InOrderTraverse(t.root)
+    fmt.Println("\nPOSTORDER...")
+    PostOrderTraverse(t.root)
+    fmt.Printf("\n")
+    fmt.Println("Search...")
+    fmt.Println(SearchBST(t.root, 6))
+}
+</pre>
