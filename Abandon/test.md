@@ -2327,7 +2327,7 @@ func bytes2str(b []byte) string {
 }
 
 func main(){
-	s :="I want to know more about this world "
+	s :="I want to know more about this world"
 	b := str2bytes(s)
 	s2 := bytes2str(b)
 	fmt.Println(b, s2)
