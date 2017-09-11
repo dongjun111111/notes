@@ -148,7 +148,6 @@ func UnPackJson(buffer []byte) (interface{}, error) {
 			//可变头
 			msg.Len = 1
 			msg.Code = byte(data["code"].(float64))
-			//p.Cache(conn, &msg)
 			return &msg, nil
 		}
 	case MSGTYPE_MESSAGE:
