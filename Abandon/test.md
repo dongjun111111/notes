@@ -2220,6 +2220,7 @@ func main() {
 }
 </pre>
 ### Golang 高并发
+例子1
 <pre>
 package main 
 
@@ -2237,7 +2238,8 @@ var (
 )
 
 func doTask() {
-	//耗时操作(模拟)
+	//操作
+	println(1)
    	time.Sleep(200 * time.Millisecond)
     wg.Done()
 }
@@ -2312,6 +2314,165 @@ func main(){
         handle()
     }
 	wg.Wait()
+}
+</pre>
+例子2
+<pre>
+package main
+
+import (
+    "fmt"
+	"time"
+	"runtime"
+	"os"
+)
+
+// MaxWorker 与 DispatchNumControl 遵循木桶理论
+var (
+    //待处理的任务数
+    JOBSNUM = 10
+    //创建的工作任务线程数
+    MaxWorker = 5
+    //可以正常运行的协程数
+    DISPATCHNUM = 10
+)
+
+type Payload struct {
+	Num int
+}
+
+//待执行的工作
+type Job struct {
+	Payload Payload
+}
+
+//任务channel
+var JobQueue = make(chan Job, JOBSNUM)
+
+//用于控制并发处理的协程数
+var DispatchNumControl = make(chan bool, DISPATCHNUM)
+
+//执行任务的工作者单元
+type Worker struct {
+	WorkerPool chan chan Job //工作者池--每个元素是一个工作者的私有任务channel
+	JobChannel chan Job      //每个工作者单元包含一个任务管道 用于获取任务
+	quit       chan bool     //退出信号
+	no         int           //编号
+}
+
+//调度中心
+type Dispatcher struct {
+	//工作者池
+	WorkerPool chan chan Job
+	//工作者数量
+	MaxWorkers int
+}
+
+//创建一个新工作者单元
+func NewWorker(workerPool chan chan Job, no int) Worker {
+	println("创建一个新工作者单元")
+	return Worker{
+		WorkerPool: workerPool,
+		JobChannel: make(chan Job),
+		quit:       make(chan bool),
+		no:         no,
+	}
+}
+
+//循环  监听任务和结束信号
+func (w Worker) Start() {
+	go func() {
+		for {
+			// register the current worker into the worker queue.
+			w.WorkerPool <- w.JobChannel
+            fmt.Println("w.WorkerPool <- w.JobChannel", w)
+			select {
+			case job := <-w.JobChannel:
+                // 收到任务
+                print("++++++++++++++++++++++++++正在执行任务++++++++++++++++++++++++++++++")
+				fmt.Println(job)
+				time.Sleep(100 * time.Second)
+			case <-w.quit:
+				// 收到退出信号
+				return
+			}
+		}
+	}()
+}
+
+// 停止信号
+func (w Worker) Stop() {
+	go func() {
+		w.quit <- true
+	}()
+}
+
+//创建调度中心
+func NewDispatcher(maxWorkers int) *Dispatcher {
+	pool := make(chan chan Job, maxWorkers)
+	return &Dispatcher{WorkerPool: pool, MaxWorkers: maxWorkers}
+}
+
+//工作者池的初始化
+func (d *Dispatcher) Run() {
+	// starting n number of workers
+	for i := 1; i < d.MaxWorkers+1; i++ {
+		worker := NewWorker(d.WorkerPool, i)
+		worker.Start()
+	}
+	go d.dispatch()
+}
+
+//使用有缓冲channel控制并发量
+func Limit(work Job) bool {
+   select {
+   case <-time.After(time.Millisecond * 50):
+      //超过限额，限制协程
+      return false
+   case DispatchNumControl <- true:
+      //正常，放入任务队列
+      return true
+   }
+}
+
+//调度
+func (d *Dispatcher) dispatch() {
+	for {
+		select {
+		case job := <-JobQueue:
+			println("job := <-JobQueue:")
+			go func(job Job) {
+                if Limit(job){
+                    // fmt.Println("等待空闲worker(任务多的时候会阻塞这里)")
+                    jobChannel := <-d.WorkerPool
+                    // 将任务放到上述woker的私有任务channel中
+                    jobChannel <- job
+                }else{
+                    println("我很忙，暂时不处理任务zZZ")
+                }
+			}(job)
+        }
+	}   
+}
+
+func AddQueue() {
+	for i := 1; i <= 10; i++ {
+		// 新建一个任务
+		payLoad := Payload{Num: i}
+		work := Job{Payload: payLoad}
+		// 任务放入任务队列channel
+		JobQueue <- work
+		println("JobQueue <- work", i)
+	    println("当前协程数:", runtime.NumGoroutine()-2)  // -2 
+		time.Sleep(100 * time.Millisecond)
+	}
+	os.Exit(0)
+}
+
+func main() {  
+	dispatcher := NewDispatcher(MaxWorker)
+    dispatcher.Run()
+    AddQueue()
 }
 </pre>
 ### string 性能优化
