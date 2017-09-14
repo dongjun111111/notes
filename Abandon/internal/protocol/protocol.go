@@ -98,14 +98,14 @@ type ParamPush struct {
 	Flag    uint8
 }
 
-// 0:about publice response
+//  publice response
 type Resp struct {
 	Header
 	AddHeader
 	ParamResp
 }
 
-// 1:about ua
+//  ua
 type Register struct {
 	Header
 	AddHeader
