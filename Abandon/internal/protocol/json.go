@@ -164,7 +164,6 @@ func UnPackJson(buffer []byte) (interface{}, error) {
 
 		msg.Msg = append(msg.Msg, contentBuff...)
 
-		//p.Cache(conn, &msg)
 		return &msg, nil
 	}
 
