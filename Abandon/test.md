@@ -2499,3 +2499,50 @@ func main(){
 ### shell 
 //筛选出占用超过1G的文件夹
 du -sh * |grep G
+### 捕获杀死进程命令【Linux】
+<pre>
+package main
+
+import (
+ "fmt"
+ "os"
+ "os/signal"
+ "syscall"
+)
+
+func main() {
+	go SignalProc()
+
+	done := make(chan bool, 1)
+	for {
+		select {
+		case <-done:
+			break
+		}
+
+	}
+	fmt.Println("exit")
+
+}
+
+func SignalProc() {
+	sigs:= make(chan os.Signal)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGUSR1, syscall.SIGUSR2, syscall.SIGHUP,os.Interrupt)
+
+	for {
+		msg := <-sigs
+		fmt.Println("Recevied signal:", msg)
+
+		switch msg {
+		default:
+			fmt.Println("get sig=%v\n", msg)
+		case syscall.SIGHUP:
+			fmt.Println("get sighup\n")
+		case syscall.SIGUSR1:
+			fmt.Println("SIGUSR1 test")
+		case syscall.SIGUSR2:
+			fmt.Println("SIGUSR2 test")
+		}
+	}
+}
+</pre>
