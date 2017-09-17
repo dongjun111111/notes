@@ -133,7 +133,6 @@ func UnPackJson(buffer []byte) (interface{}, error) {
 			SetMsgType(&msg, cmd)
 			SetEncode(&msg, 0)
 			msg.Tid = uint32(tid)
-			//p.Cache(conn, &msg)
 			return &msg, nil
 		}
 
