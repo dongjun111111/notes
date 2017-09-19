@@ -123,7 +123,6 @@ func UnPackJson(buffer []byte) (interface{}, error) {
 			for i := 0; i < 32 && i < len(tokenBuff); i++ {
 				msg.Token[i] = tokenBuff[i]
 			}
-			//p.Cache(conn, &msg)
 			return &msg, nil
 		}
 	case MSGTYPE_HEARTBEAT:
