@@ -61,10 +61,6 @@ func CodecDecode(b []byte, length int, encode int) {
 		for i := 0; i < length; i = i + 2 {
 			b[i], b[i+1] = b[i+1], b[i]
 		}
-		/*
-			case ENCODE_HT_RVS:
-				b[0], b[length-1] = b[length-1], b[0]*/
-
 	case ENCODE_LOOP_XOR:
 		if length == 1 {
 			return
