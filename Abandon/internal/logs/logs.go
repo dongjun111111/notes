@@ -2,7 +2,6 @@ package logs
 
 import (
 	"fmt"
-
 	seelog "github.com/cihub/seelog"
 )
 
