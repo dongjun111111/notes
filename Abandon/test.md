@@ -1846,7 +1846,9 @@ func main(){
 	 ExampleDispatcher() 
 }
 </pre>
-###Golang csv转换成 xlsx
+
+### Golang csv转换成 xlsx
+
 <pre>
 package main
 
@@ -1957,7 +1959,9 @@ func main() {
 	}
 }
 </pre>
+
 ### git merge 
+
 * git merge –no-ff 可以保存你之前的分支历史。能够更好的查看 merge历史，以及branch 状态。
 * git merge 则不会显示 feature，只保留单条分支记录。
 
@@ -2025,7 +2029,9 @@ git branch -d hotfix-0.1.1
 git tag -a v0.1.1 master
 git push --tags
 </pre>
-###golang 交叉编译 
+
+### golang 交叉编译 
+
 <pre>
 // 目标程序是 linux 64位
 GOOS=linux GOARCH=amd64 go build -o djason
@@ -2040,7 +2046,7 @@ https://github.com/shengzhi/payment
 解决索引失效的问题，但如此一来带来的比如磁盘空间的占用以及列上过多的索引导致DML性能的下降。
 
 查询条件使用函数在索引列上，或者对索引列进行运算，运算包括(+，-，*，/，! 等) 错误的例子：select * from test where id-1=9; 正确的例子：select * from test where id=10 。
-###Golang 二叉树
+### Golang 二叉树
 <pre>
 /*
 功能：二叉树
@@ -2219,7 +2225,9 @@ func main() {
     fmt.Println(SearchBST(t.root, 6))
 }
 </pre>
+
 ### Golang 高并发
+
 例子1
 <pre>
 package main 
@@ -2316,7 +2324,9 @@ func main(){
 	wg.Wait()
 }
 </pre>
+
 例子2
+
 <pre>
 package main
 
@@ -2475,7 +2485,9 @@ func main() {
     AddQueue()
 }
 </pre>
+
 ### string 性能优化
+
 <pre>
 func str2bytes(s string) []byte {
    x := (*[2]uintptr)(unsafe.Pointer(&s))
@@ -2494,12 +2506,17 @@ func main(){
 	fmt.Println(b, s2)
 }
 </pre>
+
 ### Hook目的
+
 过滤一些关键函数调用，在函数执行前，先执行自己的挂钩函数。达到监控函数调用，改变函数功能的目的。
+
 ### shell 
 //筛选出占用超过1G的文件夹
 du -sh * |grep G
+
 ### 捕获杀死进程命令【Linux】
+
 <pre>
 package main
 
@@ -2545,6 +2562,7 @@ func SignalProc() {
 	}
 }
 </pre>
+
 ### flysnow overwall
 this had been running at remote server
 <pre>
@@ -2615,7 +2633,9 @@ func handleClientRequest(client net.Conn) {
 	io.Copy(client, server)
 }
 </pre>
+
 ### 乐观锁与悲观锁 使用场景
+
 * 如果对读的响应度要求非常高，比如证券交易系统，那么适合用乐观锁，因为悲观锁会阻塞读
 * 如果读远多于写，那么也适合用乐观锁，因为用悲观锁会导致大量读被少量的写阻塞
 * 如果写操作频繁并且冲突比例很高，那么适合用悲观写独占锁
