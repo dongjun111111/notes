@@ -2636,6 +2636,37 @@ func handleClientRequest(client net.Conn) {
 
 ### 乐观锁与悲观锁 使用场景
 
-* 如果对读的响应度要求非常高，比如证券交易系统，那么适合用乐观锁，因为悲观锁会阻塞读
-* 如果读远多于写，那么也适合用乐观锁，因为用悲观锁会导致大量读被少量的写阻塞
-* 如果写操作频繁并且冲突比例很高，那么适合用悲观写独占锁
+* [1]如果对读的响应度要求非常高，比如证券交易系统，那么适合用乐观锁，因为悲观锁会阻塞读
+* [2]如果读远多于写，那么也适合用乐观锁，因为用悲观锁会导致大量读被少量的写阻塞
+* [3]如果写操作频繁并且冲突比例很高，那么适合用悲观写独占锁
+
+悲观锁示例：
+
+那么是否包上事务就万事大吉了呢？
+    显然不是。因为如果同时有两个事务都分别SELECT到相同的vip_member记录，那么一样的会发生数据覆盖问题。那有什么办法可以解决呢？难道要设置事务隔离级别为SERIALIZABLE，考虑到性能不现实。
+    我们知道InnoDB支持行锁。查看MySQL官方文档（innodb locking reads）了解到InnoDB在读取行数据时可以加两种锁：读共享锁和写独占锁。
+
+如果事务A先获得了某行的写共享锁，那么事务B就必须等待事务A commit或者roll back之后才可以访问行数据。
+显然要解决会员状态更新问题，不能加读共享锁，只能加写共享锁，把SQL改写成如下:
+<pre>
+vipMember = SELECT * FROM vip_member WHERE uid=1001 LIMIT 1 FOR UPDATE # 查uid为1001的会员
+if vipMember.end_at < NOW():
+   UPDATE vip_member SET start_at=NOW(), end_at=DATE_ADD(NOW(), INTERVAL 1 MONTH), active_status=1, updated_at=NOW() WHERE uid=1001
+else:
+   UPDATE vip_member SET end_at=DATE_ADD(end_at, INTERVAL 1 MONTH), active_status=1, updated_at=NOW() WHERE uid=1001
+</pre>
+
+乐观锁示例：
+
+上面一种加锁方案是一种悲观锁机制。而且SELECT...FOR UPDATE方式也不太常用，联想到CAS实现的乐观锁机制，于是我想到了第三种解决方案：乐观锁。
+具体来说也挺简单，首先SELECT SQL不作任何修改，然后在UPDATE SQL的WHERE条件中加上SELECT出来的vip_memer的end_at条件。
+这样可以根据UPDATE返回值来判断是否更新成功，如果返回值是0则表明存在并发更新，那么只需要重试一下就好了。
+<pre>
+vipMember = SELECT * FROM vip_member WHERE uid=1001 LIMIT 1 # 查uid为1001的会员
+cur_end_at = vipMember.end_at
+if vipMember.end_at < NOW():
+   UPDATE vip_member SET start_at=NOW(), end_at=DATE_ADD(NOW(), INTERVAL 1 MONTH), active_status=1, updated_at=NOW() WHERE uid=1001 AND end_at=cur_end_at
+else:
+   UPDATE vip_member SET end_at=DATE_ADD(end_at, INTERVAL 1 MONTH), active_status=1, updated_at=NOW() WHERE uid=1001 AND end_at=cur_end_at
+</pre>
+
