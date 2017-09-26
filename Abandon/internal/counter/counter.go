@@ -1,4 +1,4 @@
-//counter 实现简单的计数器
+//counter实现一个简单的计数器
 package counter
 
 import (
