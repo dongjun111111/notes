@@ -1724,10 +1724,12 @@ TINYINT  1  -128  127
 HTTrack可以克隆指定网站－把整个网站下载到本地。
 
 httrack http://163.com -O /tmp/163
-###python中的self字段
+
+### python中的self字段
 <pre>
+
 class Test(object):
-# 类的方法中需要添加self
+#类的方法中需要添加self
     def add(self,a,b):
         print(a+b)
 
@@ -1739,16 +1741,18 @@ test = Test()
 test.add(1,2)
 test.display()
 
-# 普通方法不需要加self
+#普通方法不需要加self
 def addTwo(a,b):
     print(a+b)
 
 addTwo(2,3)
+
 </pre>
+
 ### 限制Goruntine数量
 <pre>
 /*
-	限制goroutine数量
+ 制goroutine数量
 */
 
 package main
@@ -1813,7 +1817,7 @@ func main() {
 }
 </pre>
 
-工作线程
+### 工作线程
 
 <pre>
 /*
@@ -2028,8 +2032,8 @@ git push
 git branch -d hotfix-0.1.1
 git tag -a v0.1.1 master
 git push --tags
-</pre>
 
+</pre>
 ### golang 交叉编译 
 
 <pre>
@@ -2041,12 +2045,16 @@ go build -buildmode=c-shared -o test.so test-so.go
 </pre>
 ### 支付宝、微信支付
 https://github.com/shengzhi/payment
+
 ### MySQL 索引失效
+
 在索引列上使用函数使得索引失效的是常见的索引失效原因之一，因此尽可能的避免在索引列上使用函数。尽管可以使用基于函数的索引来
 解决索引失效的问题，但如此一来带来的比如磁盘空间的占用以及列上过多的索引导致DML性能的下降。
 
 查询条件使用函数在索引列上，或者对索引列进行运算，运算包括(+，-，*，/，! 等) 错误的例子：select * from test where id-1=9; 正确的例子：select * from test where id=10 。
+
 ### Golang 二叉树
+
 <pre>
 /*
 功能：二叉树
@@ -2227,8 +2235,8 @@ func main() {
 </pre>
 
 ### Golang 高并发
-
 例子1
+
 <pre>
 package main 
 
@@ -2512,6 +2520,7 @@ func main(){
 过滤一些关键函数调用，在函数执行前，先执行自己的挂钩函数。达到监控函数调用，改变函数功能的目的。
 
 ### shell 
+
 //筛选出占用超过1G的文件夹
 du -sh * |grep G
 
