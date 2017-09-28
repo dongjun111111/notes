@@ -2261,7 +2261,7 @@ func main(){
         wg.Add(1)
         handle()
     }
-	wg.Wait()
+    wg.Wait()
 }
 
 </pre>
@@ -2272,10 +2272,10 @@ func main(){
 package main
 
 import (
-    "fmt"
-	"time"
-	"runtime"
-	"os"
+     "fmt"
+     "time"
+     "runtime"
+     "os"
 )
 
 // MaxWorker 与 DispatchNumControl 遵循木桶理论
@@ -2289,12 +2289,12 @@ var (
 )
 
 type Payload struct {
-	Num int
+    Num int
 }
 
 //待执行的工作
 type Job struct {
-	Payload Payload
+     Payload Payload
 }
 
 //任务channel
@@ -2589,13 +2589,14 @@ func handleClientRequest(client net.Conn) {
     我们知道InnoDB支持行锁。查看MySQL官方文档（innodb locking reads）了解到InnoDB在读取行数据时可以加两种锁：读共享锁和写独占锁。
 
 如果事务A先获得了某行的写共享锁，那么事务B就必须等待事务A commit或者roll back之后才可以访问行数据。
-显然要解决会员状态更新问题，不能加读共享锁，只能加写共享锁，把SQL改写成如下:
+显然要解决员状态更新问题，不能加读共享锁，只能加写共享锁，把SQL改写成如下:
+
 <pre>
-vipMember = SELECT * FROM vip_member WHERE uid=1001 LIMIT 1 FOR UPDATE # 查uid为1001的会员
-if vipMember.end_at < NOW():
-   UPDATE vip_member SET start_at=NOW(), end_at=DATE_ADD(NOW(), INTERVAL 1 MONTH), active_status=1, updated_at=NOW() WHERE uid=1001
-else:
-   UPDATE vip_member SET end_at=DATE_ADD(end_at, INTERVAL 1 MONTH), active_status=1, updated_at=NOW() WHERE uid=1001
+   vipMember = SELECT * FROM vip_member WHERE uid=1001 LIMIT 1 FOR UPDATE # 查uid为1001的会员
+   if vipMember.end_at < NOW():
+	   UPDATE vip_member SET start_at=NOW(), end_at=DATE_ADD(NOW(), INTERVAL 1 MONTH), active_status=1, updated_at=NOW() 	 WHERE uid=1001
+   else:
+	   UPDATE vip_member SET end_at=DATE_ADD(end_at, INTERVAL 1 MONTH), active_status=1, updated_at=NOW() WHERE uid=1001
 </pre>
 
 乐观锁示例：
@@ -2611,7 +2612,9 @@ if vipMember.end_at < NOW():
 else:
    UPDATE vip_member SET end_at=DATE_ADD(end_at, INTERVAL 1 MONTH), active_status=1, updated_at=NOW() WHERE uid=1001 AND end_at=cur_end_at
 </pre>
+
 ### Windows 开机自启动设置
+
 将需要执行的可执行文件放到 <span color=red>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup</span> 目录下,开始->执行 msconfig命令，看是否存在。
 
 ### 限制Goruntine数量
