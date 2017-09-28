@@ -1749,73 +1749,6 @@ addTwo(2,3)
 
 </pre>
 
-### 限制Goruntine数量
-
-<pre>
-//限制goroutine数量
-package main
-
-import (
-	"net"
-	"strconv"
-	"sync"
-)
-func demo9MincIP(ip net.IP) {
-	for j := len(ip) - 1; j >= 0; j-- {
-		ip[j]++
-		if ip[j] > 0 {
-			break
-		}
-	}
-}
-
-func demo9Miplist(cidr string) []string {
-	var list []string
-	ip, ipNet, err := net.ParseCIDR(cidr)
-	if err != nil {
-		ip = net.ParseIP(cidr)
-		list = append(list, ip.String())
-		return list
-	}
-	for ip := ip.Mask(ipNet.Mask); ipNet.Contains(ip); demo9MincIP(ip) {
-		list = append(list, ip.String())
-	}
-	return list
-}
-
-func demo9chantest(wg *sync.WaitGroup, routineCtl chan string){
-	defer wg.Done()
-	for ip := range routineCtl{
-		println("do something..."+ip)
-	}
-}
-	
-func main() {	
-	routineCtl := make(chan string,100) 
-	var i int = 0
-	var portlist = []int{21,22,23,25,587,53,79,80,88,110,111,113,135,139,161,264,389,443,445,512,513,514,548,554,593,873,1099,1433,1521,2049,3260,5432,5900,6000,9100,9160,10000,11211,27017,27018,44818,47808,8080,8443,8554,3306,9999,500,3389}
-	ips := demo9Miplist("192.168.1.0/24")
-	var processNum = 100
-	var wg = &sync.WaitGroup{}
-	for i:=0; i<processNum; i++{
-		wg.Add(1)
-		go demo9chantest(wg, routineCtl)
-	}
-	for _, ports := range portlist {
-		for _,ip :=range ips[1:len(ips)-1]{
-			ip = ip+":"+strconv.Itoa(ports)
-			routineCtl <- ip
-			i++
-		}			
-	}
-	close(routineCtl)
-	wg.Wait()
-	println("i的数量:")
-	println(i)
-}
-
-</pre>
-
 ### 工作线程
 
 <pre>
@@ -2679,4 +2612,71 @@ else:
    UPDATE vip_member SET end_at=DATE_ADD(end_at, INTERVAL 1 MONTH), active_status=1, updated_at=NOW() WHERE uid=1001 AND end_at=cur_end_at
 </pre>
 ### Windows 开机自启动设置
-将需要执行的可执行文件放到 <span color=red>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup</span> 目录下,开始->执行 msconfig命令，看是否存在
+将需要执行的可执行文件放到 <span color=red>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup</span> 目录下,开始->执行 msconfig命令，看是否存在。
+
+### 限制Goruntine数量
+
+<pre>
+//限制goroutine数量
+package main
+
+import (
+	"net"
+	"strconv"
+	"sync"
+)
+func demo9MincIP(ip net.IP) {
+	for j := len(ip) - 1; j >= 0; j-- {
+		ip[j]++
+		if ip[j] > 0 {
+			break
+		}
+	}
+}
+
+func demo9Miplist(cidr string) []string {
+	var list []string
+	ip, ipNet, err := net.ParseCIDR(cidr)
+	if err != nil {
+		ip = net.ParseIP(cidr)
+		list = append(list, ip.String())
+		return list
+	}
+	for ip := ip.Mask(ipNet.Mask); ipNet.Contains(ip); demo9MincIP(ip) {
+		list = append(list, ip.String())
+	}
+	return list
+}
+
+func demo9chantest(wg *sync.WaitGroup, routineCtl chan string){
+	defer wg.Done()
+	for ip := range routineCtl{
+		println("do something..."+ip)
+	}
+}
+	
+func main() {	
+	routineCtl := make(chan string,100) 
+	var i int = 0
+	var portlist = []int{21,22,23,25,587,53,79,80,88,110,111,113,135,139,161,264,389,443,445,512,513,514,548,554,593,873,1099,1433,1521,2049,3260,5432,5900,6000,9100,9160,10000,11211,27017,27018,44818,47808,8080,8443,8554,3306,9999,500,3389}
+	ips := demo9Miplist("192.168.1.0/24")
+	var processNum = 100
+	var wg = &sync.WaitGroup{}
+	for i:=0; i<processNum; i++{
+		wg.Add(1)
+		go demo9chantest(wg, routineCtl)
+	}
+	for _, ports := range portlist {
+		for _,ip :=range ips[1:len(ips)-1]{
+			ip = ip+":"+strconv.Itoa(ports)
+			routineCtl <- ip
+			i++
+		}			
+	}
+	close(routineCtl)
+	wg.Wait()
+	println("i的数量:")
+	println(i)
+}
+
+</pre>
