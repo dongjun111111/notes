@@ -1750,10 +1750,10 @@ addTwo(2,3)
 </pre>
 
 ### 限制Goruntine数量
+
 <pre>
-/*
- 制goroutine数量
-*/
+
+//限制goroutine数量
 
 package main
 
@@ -1815,6 +1815,7 @@ func main() {
 	println("i的数量:")
 	println(i)
 }
+
 </pre>
 
 ### 工作线程
@@ -1962,6 +1963,7 @@ func main() {
 		csv2xlsx(csvFile)
 	}
 }
+
 </pre>
 
 ### git merge 
