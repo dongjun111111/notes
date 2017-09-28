@@ -1752,9 +1752,7 @@ addTwo(2,3)
 ### 限制Goruntine数量
 
 <pre>
-
 //限制goroutine数量
-
 package main
 
 import (
@@ -1821,9 +1819,9 @@ func main() {
 ### 工作线程
 
 <pre>
-/*
-	使用工作线程控制数量
-*/
+
+//使用工作线程控制数量
+
 package main
 
 import (
