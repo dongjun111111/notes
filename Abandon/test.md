@@ -2257,7 +2257,7 @@ func main(){
 	runtime.GOMAXPROCS(runtime.NumCPU())
     d := NewDispatcher()
 	d.Run()
-    for i:=0;i<MaxQueue;i++ {
+    for i := 0; i < MaxQueue; i++ {
         wg.Add(1)
         handle()
     }
