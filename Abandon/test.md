@@ -2133,7 +2133,6 @@ func (t *BST) Remove(key int) {
     defer t.lock.Unlock()
     remove(t.root, key)
 }
->>>>>>> Stashed changes
 
 func main() {
     var t BST
@@ -2264,6 +2263,7 @@ func main(){
     }
 	wg.Wait()
 }
+
 </pre>
 
 例子2
