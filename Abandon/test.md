@@ -2669,4 +2669,5 @@ if vipMember.end_at < NOW():
 else:
    UPDATE vip_member SET end_at=DATE_ADD(end_at, INTERVAL 1 MONTH), active_status=1, updated_at=NOW() WHERE uid=1001 AND end_at=cur_end_at
 </pre>
-
+### Windows 开机自启动设置
+将需要执行的可执行文件放到 <span color=red>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup</span> 目录下,开始->执行 msconfig命令，看是否存在
