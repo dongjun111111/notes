@@ -459,9 +459,6 @@ ls -ail  // 找到  exe->****
 //根据端口号获取程序
 netstat -anp|grep 8080
 
-
-
-
 fdisk –l    //查看硬盘分区情况
 
 df –h //查看当前硬盘使用情况
