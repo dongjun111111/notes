@@ -50,7 +50,7 @@ func NewStorager(dial, pswd string, db int) *Storager {
 //	body, err := p.cli.Get(id)
 //	if err != nil {
 //		logs.Logger.Error(err)
-//		return nil
+//	return nil
 //	}
 //	json.Unmarshal(body, &omsg)
 //	return &omsg
