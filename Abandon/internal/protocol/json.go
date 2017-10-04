@@ -142,7 +142,6 @@ func UnPackJson(buffer []byte) (interface{}, error) {
 			SetMsgType(&msg.Header, cmd)
 			SetEncode(&msg.Header, 0)
 			msg.Tid = uint32(tid)
-
 			//可变头
 			msg.Len = 1
 			msg.Code = byte(data["code"].(float64))
