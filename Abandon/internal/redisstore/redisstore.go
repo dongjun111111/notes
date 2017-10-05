@@ -1,4 +1,4 @@
-// redisstore 实现离线消息的redis存储与获取
+//redisstore实现离线消息的redis存储与获取
 package redisstore
 
 import (
