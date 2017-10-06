@@ -46,7 +46,7 @@ func (p *Storager) FindSessions(id string) *Sessions {
 		return &sess
 	}
 
-	//如未找到则查询redis
+	//如果没有找到则查询redis
 	//var sess Sessions
 	b, err := p.cli.Get(id)
 	if err != nil {
