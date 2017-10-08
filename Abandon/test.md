@@ -2580,8 +2580,10 @@ func handleClientRequest(client net.Conn) {
 悲观锁示例：
 
 那么是否包上事务就万事大吉了呢？
-    显然不是。因为如果同时有两个事务都分别SELECT到相同的vip_member记录，那么一样的会发生数据覆盖问题。那有什么办法可以解决呢？难道要设置事务隔离级别为SERIALIZABLE，考虑到性能不现实。
-    我们知道InnoDB支持行锁。查看MySQL官方文档（innodb locking reads）了解到InnoDB在读取行数据时可以加两种锁：读共享锁和写独占锁。
+
+显然不是。因为如果同时有两个事务都分别SELECT到相同的vip_member记录，那么一样的会发生数据覆盖问题。那有什么办法可以解决呢？难道要设置事务隔离级别为SERIALIZABLE，考虑到性能不现实。
+
+我们知道InnoDB支持行锁。查看MySQL官方文档（innodb locking reads）了解到InnoDB在读取行数据时可以加两种锁：读共享锁和写独占锁。
 
 如果事务A先获得了某行的写共享锁，那么事务B就必须等待事务A commit或者roll back之后才可以访问行数据。
 显然要解决员状态更新问题，不能加读共享锁，只能加写共享锁，把SQL改写成如下:
