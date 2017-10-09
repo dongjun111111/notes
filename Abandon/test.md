@@ -1350,7 +1350,6 @@ http {
              fastcgi_read_timeout 180; #读取超时时间
              fastcgi_buffer_size 128k; #设置FastCGI服务器相应头部的缓存区大小
              fastcgi_buffers 4 256k; #设置FastCGI进程返回信息的缓存区数量的大小
-
              fastcgi_busy_buffers_size 256k;
              fastcgi_temp_file_write_size 256k;
         }
