@@ -1906,7 +1906,7 @@ git branch dev       # 本地新建分支
 git push -u origin dev     # 将本地分支推送到远端 
 
 b. 在Dev分支基础上再建立功能分支【次步可忽略】
-git checkout -b feature1 dev   # 在本地Dev分支基础上再新建功能分支1，并且切换到该分支下
+git checkout -b feature1 dev   # 在本地Dev分支基础上再新建功能分支1,并且切换到该分支下
 git push -u origin feature1  # 将本地分支1推送到远端
 
 -- 做一些改动    
