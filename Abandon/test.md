@@ -2009,7 +2009,7 @@ type BST struct {
     lock sync.RWMutex
 }
 
-//插入方法(判断位置 中序遍历)
+//插入方法(判断位置中序遍历)
 func insertNode(node *Node, addNode *Node) {
     if addNode.data < node.data {
         if node.left == nil {
