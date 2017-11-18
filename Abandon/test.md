@@ -2686,3 +2686,58 @@ pid 是进程标识。如果想要更改配置而不需停止并重新启动服�
 
 根据约定，当您发送一个挂起信号（信号 1 或 HUP）时，大多数服务器进程（所有常用的进程）都会进行复位操作并重新加载它们的配置文件。清单 2 显示了向所有正在运行的 Web 服务器进程发送挂起信号的一种方法。
 </pre>
+
+### beego 全局错误捕获
+<pre>
+package main
+
+import (
+	"fmt"
+	"net/url"
+	"runtime"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context"
+	"github.com/astaxie/beego/logs"
+)
+
+func main() {
+	beego.Run()
+}
+
+func Recover(ctx *context.Context) {
+	stack := ""
+	if err := recover(); err != nil {
+		if err == beego.ErrAbort {
+			return
+		}
+		if !beego.BConfig.RecoverPanic {
+			panic(err)
+		}
+		msg := fmt.Sprintf("the request url is  %v </br>", ctx.Input.URL())
+		stack += msg
+		logs.Critical(msg)
+		msg = fmt.Sprintf("Handler crashed with error %v </br>", err)
+		stack += msg
+		logs.Critical(msg)
+		for i := 1; ; i++ {
+			_, file, line, ok := runtime.Caller(i)
+			if !ok {
+				break
+			}
+			logs.Critical(fmt.Sprintf("%s:%d", file, line))
+			stack = stack + fmt.Sprintf("%s:%d</br>", file, line)
+		}
+		// 请求信息
+		input := string(ctx.Input.RequestBody)
+		if s, err := url.QueryUnescape(input); err == nil { // url解码成功
+			input = s
+		}
+		stack += fmt.Sprintf("<br/>请求信息:</br>body:%s</br>url:%s", input, ctx.Request.RequestURI)
+		// 发送邮件
+		// stack
+	}
+
+	return
+}
+</pre>
