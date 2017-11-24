@@ -20,7 +20,7 @@ func Encode(data interface{}) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// -----------------
+// ----------------
 // Decode
 // 用gob进行数据解码
 //
