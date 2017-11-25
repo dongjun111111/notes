@@ -24,7 +24,7 @@ int main(){
 			printf("\a\a\a\a\a\a\a\a\a\a");		 			
 		}else{			
 		}
-		sleep(1000);
+		sleep(1000) ;
 			
 	}
 	return 0;
