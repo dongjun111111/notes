@@ -1,6 +1,6 @@
-#Docker
-##常用命令
-###查看docker信息
+# Docker
+## 常用命令
+### 查看docker信息
 1. 查看docker版本
 
 docker version 
@@ -8,7 +8,7 @@ docker version
 2. docker系统信息
 
 docker info
-###对image的操作
+### 对image的操作
 1. 检索image
 docker search image_name  
 2. 下载image
@@ -19,7 +19,7 @@ docker images
 docker rmi image_name 
 5. 显示一个镜像的历史
 docker history image_name
-###启动容器（run）
+### docker（run）
 docker容器可以理解为在沙盒中运行的进程。这个沙盒包含了该进程运行所必须的资源，包括文件系统、系统类库、shell 环境等等。但这个沙盒默认是不会运行任何程序的。你需要在沙盒中运行一个进程来启动某一个容器。这个进程是该容器的唯一进程，所以当该进程结束的时候，容器也会完全的停止。
 
 1. 在容器中运行"echo"命令，输出"hello word"
@@ -29,7 +29,7 @@ docker run -i -t image_name /bin/bash
 3. 在容器中安装新的程序
 docker run image_name apt-get install -y app_name
 Note：  在执行apt-get 命令的时候，要带上-y参数。如果不指定-y参数的话，apt-get命令会进入交互模式，需要用户输入命令来进行确认，但在docker环境中是无法响应这种交互的。apt-get 命令执行完毕之后，容器就会停止，但对容器的改动不会丢失。
-###查看容器（ps）
+### 查看容器（ps）
 
 1. 列出当前所有正在运行的container
 docker ps
@@ -37,7 +37,7 @@ docker ps
 docker ps -a
 3. 列出最近一次启动的container  
 docker ps -l
-###保存对容器的修改（commit）         
+### 保存对容器的修改（commit）         
 当你对某一个容器做了修改之后（通过在容器中运行某一个命令），可以把对容器的修改保存下来，这样下次可以从保存后的最新状态运行该容器。  
 1.  保存对容器的修改
 docker commit ID new_image_name 
@@ -73,7 +73,7 @@ docker restart Name/ID
 9. 附加到一个运行的容器上面; --no-stdin=false Do not attach stdin; --sig-proxy=true Proxify all received signal to the process  
 docker attach ID 
 
-###保存和加载镜像 （save、load）
+### 保存和加载镜像 （save、load）
 当需要把一台机器上的镜像迁移到另一台机器的时候，需要保存镜像与加载镜像。
 
 1. 保存镜像到一个tar包; -o, --output="" Write to an file  
@@ -85,11 +85,11 @@ $docker save image_name > /home/save.tar
 4. 使用scp将save.tar拷到机器b上，然后：  
 $docker load < /home/save.tar
 
-###登录registry server（login）
+### 登录registry server（login）
 1. 登陆registry server; -e, --email="" Email; -p, --password="" Password; -u, --username="" Username  
 $docker login 
 
-###发布image（push）
+### 发布image（push）
 1. 发布docker镜像  
 $docker push new_image_name  
 
