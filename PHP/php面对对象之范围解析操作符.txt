@@ -1,27 +1,28 @@
-ÕâÊÇÔÚÍøÉÏÕÒµÄ²©¿ÍÄÚÈÝ£¬¸Ð¾õ²»´í£¬Ö±½ÓÕ³ÁË¡£Ô­ÎÄ£ºhttp://blog.sina.com.cn/s/blog_758ddcb90100yjfg.html
+è¿™æ˜¯åœ¨ç½‘ä¸Šæ‰¾çš„åšå®¢å†…å®¹ï¼Œæ„Ÿè§‰ä¸é”™ï¼Œç›´æŽ¥ç²˜äº†ã€‚åŽŸæ–‡ï¼šhttp://blog.sina.com.cn/s/blog_758ddcb90100yjfg.html
 
-·¶Î§½âÎö²Ù×÷·û¾ÍÊÇÒ»¶ÔÃ°ºÅ£¨::£©£¬ÔÚÃ»ÓÐÉùÃ÷ÈÎºÎÊµÀýµÄÇé¿öÏÂ·ÃÎÊÀàÖÐµÄº¯Êý»òÕß»ùÀàÖÐµÄ¾²Ì¬³ÉÔ±¡¢·½·¨ºÍ³£Á¿£¬»¹¿ÉÒÔÓÃÓÚ¸²¸ÇÀàÖÐµÄ³ÉÔ±ºÍ·½·¨¡£µ±ÔÚÀàµÄÍâ²¿·ÃÎÊÕâÐ©¾²Ì¬³ÉÔ±¡¢·½·¨ºÍ³£Á¿Ê±£¬±ØÐëÊ¹ÓÃÀàµÄÃû×Ö¡£
+èŒƒå›´è§£æžæ“ä½œç¬¦å°±æ˜¯ä¸€å¯¹å†’å·ï¼ˆ::ï¼‰ï¼Œåœ¨æ²¡æœ‰å£°æ˜Žä»»ä½•å®žä¾‹çš„æƒ…å†µä¸‹è®¿é—®ç±»ä¸­çš„å‡½æ•°æˆ–è€…åŸºç±»ä¸­çš„é™æ€æˆå‘˜ã€æ–¹æ³•å’Œå¸¸é‡ï¼Œè¿˜å¯ä»¥ç”¨äºŽè¦†ç›–ç±»ä¸­çš„æˆå‘˜å’Œæ–¹æ³•ã€‚å½“åœ¨ç±»çš„å¤–éƒ¨è®¿é—®è¿™äº›é™æ€æˆå‘˜ã€æ–¹æ³•å’Œå¸¸é‡æ—¶ï¼Œå¿…é¡»ä½¿ç”¨ç±»çš„åå­—ã€‚
  
 <?php
 class MyClass {
     const CONST_VALUE = 'A constant value';
 }
 
-echo MyClass::CONST_VALUE; // ÔÚÀàµÄÍâ²¿Ê¹ÓÃ·¶Î§½âÎö²Ù×÷·û·ÃÎÊ³£Á¿£¬Íâ²¿·ÃÎÊ±ØÐëÊ¹ÓÃÀàÃû¡£
+echo MyClass::CONST_VALUE; // åœ¨ç±»çš„å¤–éƒ¨ä½¿ç”¨èŒƒå›´è§£æžæ“ä½œç¬¦è®¿é—®å¸¸é‡ï¼Œå¤–éƒ¨è®¿é—®å¿…é¡»ä½¿ç”¨ç±»åã€‚
 ?>
  
 <?php
 class OtherClass extends MyClass
 {
     public static $my_static = 'static var';
-// selfºÍparentÕâÁ½¸öÌØÊâµÄ¹Ø¼ü×ÖÓÃÓÚÔÚÀàµÄÄÚ²¿¶Ô³ÉÔ±»ò·½·¨½øÐÐ·ÃÎÊ¡£
+// selfå’Œparentè¿™ä¸¤ä¸ªç‰¹æ®Šçš„å…³é”®å­—ç”¨äºŽåœ¨ç±»çš„å†…éƒ¨å¯¹æˆå‘˜æˆ–æ–¹æ³•è¿›è¡Œè®¿é—®ã€‚
     public static function doubleColon() {
         echo parent::CONST_VALUE . "\n";
         echo self::$my_static . "\n";
     }
 }
 
-OtherClass::doubleColon();// ÔÚÀàµÄÍâ²¿Ê¹ÓÃ£¨::£©·ÃÎÊ·½·¨¡£
+OtherClass::doubleColon();// åœ¨ç±»çš„å¤–éƒ¨ä½¿ç”¨ï¼ˆ::ï¼‰è®¿é—®æ–¹æ³•ã€‚
 ?>
+
  
-×¢Òâ£ºÉÏÃæÀý×ÓÖÐMyClassÀàºÍOtherClassÀà¶¼Ã»ÓÐÍ¨¹ýnew¹Ø¼ü×ÖÊµÀý»¯¶ÔÏó£¬Òò´Ë²»ÄÜÊ¹ÓÃÒýÓÃ¶ÔÏó²ÎÊýµÄÖ¸Áî£¬±ÈÈç£ºOtherClass->doubleColon();
+æ³¨æ„ï¼šä¸Šé¢ä¾‹å­ä¸­MyClassç±»å’ŒOtherClassç±»éƒ½æ²¡æœ‰é€šè¿‡newå…³é”®å­—å®žä¾‹åŒ–å¯¹è±¡ï¼Œå› æ­¤ä¸èƒ½ä½¿ç”¨å¼•ç”¨å¯¹è±¡å‚æ•°çš„æŒ‡ä»¤ï¼Œæ¯”å¦‚ï¼šOtherClass->doubleColon();
