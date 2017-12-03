@@ -41,7 +41,6 @@ mysql> delete from test;
 truncate是物理删除表中的数据，一次性全部都给清空表中数据，速度很快
 mysql> truncate table test;
 
-
 -- binlog 文件位置
 show variables like 'log_bin_basename';
 
