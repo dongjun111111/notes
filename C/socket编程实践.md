@@ -67,7 +67,7 @@ int main(){
    
     printf("Message form server: %s\n", buffer);
    
-    //关闭套接字
+    // 关闭套接字
     close(sock);
 
     return 0;
