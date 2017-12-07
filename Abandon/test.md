@@ -1684,3 +1684,89 @@ traceroute www.baidu.com
 
 
         看到比较典型的大概有上面这几种，熟悉的人肯定已经熟悉的不能再熟
+
+
+### OSS 
+<pre>
+package oss
+
+import (
+	"bytes"
+	"os"
+	"io"
+	"fmt"
+	"io/ioutil"
+	
+	
+	"github.com/astaxie/beego"
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+)
+
+const (
+	Endpoint        = "https://oss-cn-hangzhou.aliyuncs.com"
+	AccessKeyId     = ""
+	AccessKeySecret = ""
+	OssDir          = "test/test"
+)
+
+func OssBucket() (*oss.Bucket, error) {
+	client, err := oss.New(Endpoint, AccessKeyId, AccessKeySecret)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+
+	bucket, err := client.Bucket("zcmlcimg")
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+	return bucket, err
+}
+func OssUpdateGetFile(filepath string, fd io.Reader) (string, error) {
+	bucket, err := OssBucket()
+	if err != nil {
+		beego.Emergency("[OSSBucket]", err.Error())
+		return "", err
+	}
+
+	if filepath != "" {
+		beego.Emergency("test/test/" + filepath)
+		err := bucket.PutObject("test/test/"+filepath, fd)
+		if err != nil {
+			beego.Emergency("[OSSPutObject]", err.Error())
+			return "", err
+		}
+		filepathNew := "https://img.test.com/test/attachment/" + filepath
+		fmt.Println("[oss]OssUpdateGetFile", filepathNew, err)
+		return filepathNew, err
+	}
+	return "", err
+}
+func readFile(path string) []byte {
+    fi, err := os.Open(path)
+    if err != nil {
+        panic(err)
+    }
+    defer fi.Close()
+    fd, err := ioutil.ReadAll(fi)
+    return fd
+}
+
+// 上传文件
+func UploadFiles(){
+	// 读取
+	f := readFile("../wechat.jpg")
+	bf := bytes.NewReader(f)
+	uuid :=  NewUUID().Hex32()
+	url ,err := OssUpdateGetFile("img/"+uuid+".jpg",bf)
+	if err!=nil{
+		beego.Emergency("ERROR::::",err.Error())
+	}else{
+	beego.Emergency("上传成功，URL:",url)
+	}
+}
+func main(){
+	UploadFiles()
+}
+</pre>
