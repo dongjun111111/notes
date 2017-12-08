@@ -40,7 +40,7 @@ int main(){
     return 0;
 }
 </pre>
-客户端：client.c
+客户端 ：client.c
 <pre>
 #include <stdio.h>
 #include <string.h>
