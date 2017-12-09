@@ -1770,3 +1770,8 @@ func main(){
 	UploadFiles()
 }
 </pre>
+
+### MySQL group_concat 具有相同性质的多条数据合并某一个字段
+<pre>
+select loan_return_date,reduction_time,group_concat(reduction_type) as reduction_type,group_concat(reduction_money) as reduction_money,state from (SELECT  b.reduction_code as new_tag,a.loan_return_date,a.reduction_time,IF((a.reduction_mark='' or a.reduction_mark is null),case b.reduction_type when 'CapitalAmount' then 'TOP4' when 'TaxAmount' then 'TOP3' when 'OverdueAmount' then 'TOP2' when 'OverdueBreachAmount' then 'TOP1' end,a.reduction_mark) as reduction_type,IF((b.code='' or b.code is null),a.reduction_money,b.reduction_money) as reduction_money,a.state from reduction a LEFT JOIN reduction_moneys b on a.code=b.reduction_code where a.state='SUCCESS' and a.contract_code=?) as tmp GROUP BY tmp.new_tag `
+</pre>
