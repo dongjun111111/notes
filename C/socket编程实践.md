@@ -61,7 +61,7 @@ int main(){
     serv_addr.sin_port = htons(1234);  //端口
     connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
    
-    //读取服务器传回的数据
+    // 读取服务器传回的数据
     char buffer[40];
     read(sock, buffer, sizeof(buffer)-1);
    
