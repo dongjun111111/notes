@@ -33,7 +33,7 @@ int main(){
     char str[] = "Hello World!";
     write(clnt_sock, str, sizeof(str));
    
-    // 关闭套接字
+    //关闭套接字
     close(clnt_sock);
     close(serv_sock);
 
