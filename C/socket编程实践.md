@@ -54,7 +54,7 @@ int main(){
     //创建套接字
     int sock = socket(AF_INET, SOCK_STREAM, 0);
 
-    //向服务器（特定的IP和端口）发起请求
+    // 向服务器（特定的IP和端口）发起请求
     struct sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));  //每个字节都用0填充
     serv_addr.sin_family = AF_INET;  //使用IPv4地址
