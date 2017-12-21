@@ -1794,3 +1794,8 @@ ajaxSubmit   //可以提交form表单内容
 	}
 });
 </pre>
+
+### 在Mysql中给查询出来的结果增加自增序列号
+<pre>
+select (@k:=@k+1) as num,imp.* from contract_repayment_schedule_imp imp,(select @k:=0) another where imp.contract_code='63cb8c87-7115-4216-9e2b-029691a7f67e' ORDER BY imp.loan_return_date;
+</pre>
