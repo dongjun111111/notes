@@ -1799,3 +1799,31 @@ ajaxSubmit   //可以提交form表单内容
 <pre>
 select (@k:=@k+1) as num,imp.* from contract_repayment_schedule_imp imp,(select @k:=0) another where imp.contract_code='63cb8c87-7115-4216-9e2b-029691a7f67e' ORDER BY imp.loan_return_date;
 </pre>
+
+### 通过应用名称查看是否正常运行的命令
+<pre>
+Unix:
+netstat -aon|grep :$PORT
+
+Windows：
+netstat -aon|findstr :$PORT
+
+监控脚本（win）：
+#！ /bin/sh
+PRO_NAME="finance_insert"
+PORT=9527
+echo -e "数据记录项目正在监控中···"
+while true;
+do 
+NUM=`netstat -aon|findstr :$PORT |awk '{print $2}' | tail -n 1 |wc -l `
+if [ "${NUM}" -lt 1 ]
+then
+echo "${PRO_NAME} was down"
+cd E:/jrkj/work/go/src/finance_insert 
+./finance_insert
+else
+echo "$PRO_NAME 项目运行正常: " + date "+%G-%m-%d %H:%M:%S" -d "$t_t"
+fi 
+sleep 5
+done
+</pre>
