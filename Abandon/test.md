@@ -1827,3 +1827,45 @@ fi
 sleep 5
 done
 </pre>
+
+### HTTP POST
+<pre>
+func HttpPost_OLD(url, postData string, params ...string) ([]byte, error) {
+	contentType := "application/x-www-form-urlencoded;charset=utf-8"
+	resp, err := http.Post(url,
+		contentType,
+		strings.NewReader(postData))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	b, err := ioutil.ReadAll(resp.Body)
+	return b, err
+}
+
+
+func  HttpPost(url, postData string, params ...string) ([]byte, error) {
+	req, err := http.NewRequest("POST", url, bytes.NewReader([]byte(postData)))
+	req.Header.Add("Content-Type","application/x-www-form-urlencoded;charset=utf-8")
+	 // 完成后断开连接
+	req.Header.Set("Connection", "close")
+	// 设置 TimeOut
+    DefaultClient := http.Client{
+        Transport: &http.Transport{
+            Dial: func(netw, addr string) (net.Conn, error) {
+                deadline := time.Now().Add(30 * time.Second)
+                c, err := net.DialTimeout(netw, addr, time.Second*30)
+                if err != nil {
+                    return nil, err
+                }
+                c.SetDeadline(deadline)
+                return c, nil
+            },
+        },
+    }
+	resp, err := DefaultClient.Do(req)
+	defer resp.Body.Close()
+	b, err := ioutil.ReadAll(resp.Body)
+	return b, err
+}
+</pre>
