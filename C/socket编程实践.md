@@ -30,7 +30,7 @@ int main(){
     socklen_t clnt_addr_size = sizeof(clnt_addr);
     int clnt_sock = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_size);
 
-    //向客户端发送数据
+    // 向客户端发送数据
     char str[] = "Hello World!";
     write(clnt_sock, str, sizeof(str));
    
