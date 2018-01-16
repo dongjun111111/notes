@@ -1869,3 +1869,6 @@ func  HttpPost(url, postData string, params ...string) ([]byte, error) {
 	return b, err
 }
 </pre>
+
+###Dynamic Link Library
+什么是动态链接库？DLL三个字母对于你来说一定很熟悉吧，它是Dynamic Link Library 的缩写形式，动态链接库 (DLL) 是作为共享函数库的可执行文件。动态链接提供了一种方法，使进程可以调用不属于其可执行代码的函数。函数的可执行代码位于一个 DLL 中，该 DLL 包含一个或多个已被编译、链接并与使用它们的进程分开存储的函数。DLL 还有助于共享数据和资源。多个应用程序可同时访问内存中单个 DLL 副本的内容。
