@@ -1870,5 +1870,55 @@ func  HttpPost(url, postData string, params ...string) ([]byte, error) {
 }
 </pre>
 
-###Dynamic Link Library
+### Dynamic Link Library
 什么是动态链接库？DLL三个字母对于你来说一定很熟悉吧，它是Dynamic Link Library 的缩写形式，动态链接库 (DLL) 是作为共享函数库的可执行文件。动态链接提供了一种方法，使进程可以调用不属于其可执行代码的函数。函数的可执行代码位于一个 DLL 中，该 DLL 包含一个或多个已被编译、链接并与使用它们的进程分开存储的函数。DLL 还有助于共享数据和资源。多个应用程序可同时访问内存中单个 DLL 副本的内容。
+
+### 使用堆排序对1亿个数字进行排序
+<pre>
+// Golang语言用堆排序的方法进行一千万个int随机数排序
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"os"
+)
+
+func sort(list []int, root, length int) {
+	for {
+		child := 2*root + 1
+		if child >= length {
+			break
+		}
+		if child+1 < length && list[child] < list[child+1] {
+			child++ //这里重点讲一下,就是调整堆的时候,以左右孩子为节点的堆可能也需要调整
+		}
+		if list[root] > list[child] {
+			return
+		}
+		list[root], list[child] = list[child], list[root]
+		root = child
+	}
+}
+
+func main() {
+	Num := 100000000
+	var list []int
+	//生成一千万个0---10000的随机数
+	for i := Num; i > 0; i-- {
+		list = append(list, rand.Intn(10000))
+	}
+	length := len(list)
+	//第一次建立大顶堆
+	for root := length/2 - 1; root >= 0; root-- {
+		sort(list, root, length)
+	}
+	//调整位置并建并从第一个root开始建堆.如果不明白为什么,大家多把图画几遍就应该明朗了
+	for i := length - 1; i >= 1; i-- {
+		list[0], list[i] = list[i], list[0]
+		sort(list, 0, i)
+	}
+	fmt.Println(list)
+	os.Exit(1)
+}
+</pre>
