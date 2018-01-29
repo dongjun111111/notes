@@ -1,3 +1,20 @@
+// zcmpdf := pdf.NewZCMPdf(nil) //初始化
+// zcmpdf.ZAddPage() //新建页
+// zcmpdf.DoDefaultBR()   //回车
+// WriteDefaultLine() //一条默认长度横线
+// WriteVerticalLine(620) //一条620长度竖线
+// ResetX()  //横向绘画结束后作为背景，后面的可以在此基础上绘画
+// WriteInCenterFixedlength("d",10) //距离左边 10 写入 ‘d’
+// AddX(60) //横向 向右 走 60 
+// AddY(10) //纵向 向上 走 10
+// Write() //不带有自动换行的功能
+// WritePassage() //带有自动换行的功能
+// WriteWithLineLen(70) //一条70长度的下横线
+// WriteWithLine("    ") //一条4个空格长度的下横线（可以填入字符串）
+// utils.AmountConvert(12.00, true) //转化成大写汉字
+
+
+
 package pdf
 
 import (
