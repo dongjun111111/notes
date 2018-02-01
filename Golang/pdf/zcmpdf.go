@@ -12,6 +12,7 @@
 // WriteWithLineLen(70) //一条70长度的下横线
 // WriteWithLine("    ") //一条4个空格长度的下横线（可以填入字符串）
 // utils.AmountConvert(12.00, true) //转化成大写汉字
+// .Write("ffff").SetTextColor(255, 0, 0) // 设置颜色
 
 
 
