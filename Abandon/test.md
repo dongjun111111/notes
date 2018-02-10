@@ -2254,3 +2254,18 @@ func main() {
 	errFatal("start p2p server", http.ListenAndServe(*p2pAddr, nil))
 }
 </pre>
+
+### mysql 调优
+<pre>
+强制索引 FORCE INDEX
+force index(id)
+忽略索引 IGNORE INDEX 
+ignore index(id) 
+延时插入 INSERT DELAYED
+INSERT DELAYED INTO table1 set field1= …
+INSERT DELAYED INTO，是客户端提交数据给MySQL，MySQL返回OK状态给客户端。而这是并不是已经将数据插入表，而是存储在内存里面等待排队。当mysql有空余时，再插入。另一个重要的好处是，来自许多客户端的插入被集中在一起，并被编写入一个块。这比执行许多独立的插入要快很多。坏处是，不能返回自动递增的ID，以及系统崩溃时，MySQL还没有来得及插入数据的话，这些数据将会丢失。
+强制使用临时表 SQL_BUFFER_RESUL
+SELECT SQL_BUFFER_RESULT * FROM TABLE1 WHERE …
+当我们查询的结果集中的数据比较多时，可以通过SQL_BUFFER_RESULT.选项强制将结果集放到临时表中，这样就可以很快地释放MySQL的表锁（这样其它的SQL语句就可以对这些记录进行查询了），并且可以长时间地为客户端提供大记录集。
+</pre>
+
