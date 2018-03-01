@@ -2269,3 +2269,17 @@ SELECT SQL_BUFFER_RESULT * FROM TABLE1 WHERE …
 当我们查询的结果集中的数据比较多时，可以通过SQL_BUFFER_RESULT.选项强制将结果集放到临时表中，这样就可以很快地释放MySQL的表锁（这样其它的SQL语句就可以对这些记录进行查询了），并且可以长时间地为客户端提供大记录集。
 </pre>
 
+###grpc 调用
+<pre>
+	conn, err := grpc.Dial("127.0.0.1:9986", grpc.WithInsecure())
+	if err != nil {
+		beego.Error(err)
+		os.Exit(0)
+	}
+	defer conn.Close()
+	client := repaymentpb.NewRepaymentScheduleImpPbClient(conn)
+	r, err := client.RepaymentScheduleImp(context.Background(), &repaymentpb.RepaymentScheduleImpFilter{
+		ContractCode: cgBorrowerRecord.ContractCode,
+	})
+</pre>
+
