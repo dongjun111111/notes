@@ -2269,7 +2269,7 @@ SELECT SQL_BUFFER_RESULT * FROM TABLE1 WHERE …
 当我们查询的结果集中的数据比较多时，可以通过SQL_BUFFER_RESULT.选项强制将结果集放到临时表中，这样就可以很快地释放MySQL的表锁（这样其它的SQL语句就可以对这些记录进行查询了），并且可以长时间地为客户端提供大记录集。
 </pre>
 
-###grpc 调用
+### grpc 调用
 <pre>
 	conn, err := grpc.Dial("127.0.0.1:9986", grpc.WithInsecure())
 	if err != nil {
@@ -2283,3 +2283,39 @@ SELECT SQL_BUFFER_RESULT * FROM TABLE1 WHERE …
 	})
 </pre>
 
+### 根据时间种子生成制定长度的字符串
+<pre>
+package main
+
+import (
+	ran "math/rand"
+	"strconv"
+	"time"
+)
+
+func GetRandom(length int) string {
+	r := ran.New(ran.NewSource(time.Now().UnixNano()))
+	var result string
+	for i := 0; i < length; i++ {
+		if int(r.Intn(2))%2 == 0 {
+			var choice int
+			if int(r.Intn(2))%2 == 0 {
+				choice = 65
+			} else {
+				choice = 97
+			}
+			result = result + string(choice+r.Intn(26))
+		} else {
+			result = result + strconv.Itoa(r.Intn(10))
+		}
+	}
+	return result
+}
+
+func main() {
+	println(GetRandom(11))
+	println(GetRandom(111))
+	println(GetRandom(999))
+}
+
+</pre>
