@@ -2319,3 +2319,84 @@ func main() {
 }
 
 </pre>
+
+### 计算密集型场景下不同核心的区别
+<pre>
+package main
+
+// 计算密集型 多核表现
+
+import (
+	"flag"
+	"fmt"
+	"log"
+	"math/rand"
+	"net/http"
+	_ "net/http/pprof"
+	"runtime"
+	"sort"
+	"sync"
+	"time"
+)
+
+func tD() [][]int {
+	now := time.Now()
+	src := rand.NewSource(now.UnixNano())
+	seed := rand.New(src)
+	data := make([][]int, 1000)
+	for i := 0; i < len(data); i++ {
+		data[i] = make([]int, 1000)
+		for j := 0; j < 1000; j++ {
+			data[i][j] = seed.Intn(1000)
+		}
+	}
+	return data
+}
+func test() {
+	data := tD()
+	ch := make(chan int)
+	for i := 0; i < len(data); i++ {
+		go func(ch chan int, data []int) {
+			sort.Ints(data[:])
+			ch <- 1
+		}(ch, data[i][:])
+	}
+	for i := 0; i < len(data); i++ {
+		<-ch
+	}
+}
+
+func main() {
+	flag.Parse()
+	go func() {
+		log.Println(http.ListenAndServe("localhost:7777", nil))
+	}()
+
+	var wg sync.WaitGroup
+	wg.Add(10)
+	for i := 0; i < 100; i++ {
+		go test()
+	}
+
+	wg.Wait()
+	time.Sleep(3 * time.Second)
+
+	runtime.GOMAXPROCS(1)
+	st := time.Now()
+	test()
+	fmt.Println("runtime.GOMAXPROCS(1)时间差：", time.Since(st))
+	runtime.GOMAXPROCS(2)
+	st = time.Now()
+	test()
+	fmt.Println("runtime.GOMAXPROCS(2)时间差：", time.Since(st))
+	runtime.GOMAXPROCS(3)
+	st = time.Now()
+	test()
+	fmt.Println("runtime.GOMAXPROCS(3)时间差：", time.Since(st))
+	runtime.GOMAXPROCS(4)
+	st = time.Now()
+	test()
+	fmt.Println("runtime.GOMAXPROCS(4)时间差：", time.Since(st))
+	fmt.Println("==计算结束==")
+}
+</pre>
