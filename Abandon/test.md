@@ -2584,3 +2584,15 @@ func main() {
 	Println("Send success!")
 }
 </pre>
+
+### 可伸缩切片
+<pre>
+// 可伸缩切片 指针形式，避免浪费内存
+	var osa = make([]string, 0)
+	sa := &osa
+	for i := 0; i < 20; i++ {
+		*sa = append(*sa, fmt.Sprintf("%v", i))
+		fmt.Printf("addr of osa => %p ; addr of sa => %p ; content of sa => %v \n", osa, sa, sa)
+	}
+	fmt.Printf("addr of osa => %p ; addr of sa => %p ; content of sa => %v\n", osa, sa, sa)
+</pre>
