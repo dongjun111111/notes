@@ -2956,3 +2956,15 @@ func main() {
 	fmt.Println("success:", success)
 }
 </pre>
+###  翻转字符串
+<pre>
+func RuneReverseString(str string) string {
+	// 能转中文
+	bytes := []rune(str)
+	for from, to := 0, len(bytes)-1; from < to; from, to = from+1, to-1 {
+		bytes[from], bytes[to] = bytes[to], bytes[from]
+	}
+	str = string(bytes)
+	return str
+}
+</pre>
