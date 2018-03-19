@@ -3010,4 +3010,61 @@ message SysList {
 protoc -I ./ yd_api/pbs/syspb/*.proto --go_out=plugins=grpc:.
 
 
+### context 上下文
+<pre>
+// 上下文传值
+package main
 
+import (
+	"context"
+	"fmt"
+)
+
+func process(ctx context.Context) {
+	ret, ok := ctx.Value("trace_id").(int)
+	if !ok {
+		ret = 87654321
+	}
+
+	fmt.Printf("ret:%d\n", ret)
+	s, _ := ctx.Value("session").(string)
+	fmt.Printf("session:%s\n", s)
+	dd := ctx.Value("ff") //从上下文中取出数据
+	if dd != nil {
+		fmt.Println("TEST", dd.(string))
+	}
+}
+
+func main() {
+	ctx := context.WithValue(context.Background(), "trace_id", 12345678) //往上下文中写入数据
+	ctx = context.WithValue(ctx, "session", "qrertwrtytD")
+	ctx = context.WithValue(ctx, "ff", "fffffff")
+	process(ctx)
+}
+
+//////////////////////////////////////////////////////
+
+package main
+
+import (
+	"context"
+	"fmt"
+	"strconv"
+	"time"
+)
+
+func main() {
+	d := time.Now().Add(2 * time.Second) // 定义了超时时长2s
+	ctx, cancel := context.WithDeadline(context.Background(), d)
+
+	defer cancel()
+	var timedure int = 1 // 3
+	select {
+	case <-time.After(time.Duration(timedure) * time.Second):
+		fmt.Println("如果执行时间>=" + strconv.Itoa(timedure) + "s，执行这段。")
+	case <-ctx.Done():
+		//2秒到了，执行该代码
+		fmt.Println("超过2s执行这里，", ctx.Err())
+	}
+}
+</pre>
