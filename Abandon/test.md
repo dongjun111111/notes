@@ -2957,6 +2957,7 @@ func main() {
 }
 </pre>
 ###  翻转字符串
+* 1：
 <pre>
 func RuneReverseString(str string) string {
 	// 能转中文
@@ -2968,3 +2969,45 @@ func RuneReverseString(str string) string {
 	return str
 }
 </pre>
+
+### gRPC 编写示例 
+<pre>
+syntax = "proto3";
+
+package syspb;
+
+import "yd_api/pbs/pubpb/public.proto";
+
+option go_package="yd_api/pbs/syspb";
+
+service WhitelistPb {
+    // 方法名称
+     rpc SysOrganizationIpsDtl (SysIpsFilter) returns (SysList) {
+    }
+}
+
+message SysIpsFilter {
+    string orgName = 1;
+    string orgCode = 2;
+    string ipState = 3;
+    string appState = 4;
+}
+
+message SysIps {
+    int64 Id = 1;
+    string OrgCode = 2;
+    string AppId = 3;
+    string AppKey = 4; 
+    int64 AppState = 5;
+}
+message SysList {
+    repeated SysIps List = 1;
+    pubpb.PageOut page = 2;
+}
+</pre>
+
+* 2：
+protoc -I ./ yd_api/pbs/syspb/*.proto --go_out=plugins=grpc:.
+
+
+
