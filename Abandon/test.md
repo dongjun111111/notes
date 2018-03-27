@@ -3127,3 +3127,16 @@ func (this *HttpClient) Fetch(dstUrl string, method string, proxyHost string, he
 }
 </pre>
 
+### 高并发文件下载问题
+<pre>
+//使用这种方式为什么不会出现oom（out of memory）的情况？因为两个原因，第一个， resp.Body 只是个reader 并没有发生真实的读取操作，第二个是io.copy 这个函数设置了缓冲区大小限制为3m，不会一次全部读取到内存中，即使出现大文件也不会卡死。
+func downLoadFile(url string)(len int, err error){
+	//err write /dev/null: bad file descriptor#
+	out, err := os.OpenFile("/dev/null", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	defer out.Close()
+	resp, err := http.Get(url)
+	defer resp.Body.Close()
+	n, err := io.Copy(out, resp.Body)
+	return n, err
+}
+</pre>
