@@ -3077,3 +3077,53 @@ https://github.com/g4zhuj/hashring
 第一步, 将服务的key按该hash算法计算,得到在服务在一致性hash环上的位置.
 第二步, 将缓存的key，用同样的方法计算出hash环上的位置，按顺时针方向，找到第一个大于等于该hash环位置的服务key，从而得到该key需要分配的服务器。
 
+
+### 高并发net/http改造
+<pre>
+//高并发net/http改造 
+//官方文档指出：client 只需要全局实例化，然后是协程安全的，所以，使用多协程的方式，用共享的client去发送req是可行的。
+//golang net/http库的流程，就很清楚了，问题就处在上面的Transport ，每个transport 维护了一个连接池，我们代码中每个协程都会new 一个transport ，这样，就会不断新建连接。
+//所以 http.Client 不能重复多次实例化
+//超时时间设置
+//代理IP设置
+//设置head头
+var client *http.Client
+
+func init (){
+	client = &http.Client{}
+    client.Transport = &http.Transport{
+	 	MaxIdleConnsPerHost: 1000, 
+    }
+}
+
+type HttpClient struct {}
+
+func NewHttpClient()(*HttpClient){
+	httpClient := HttpClient{}
+	return &httpClient
+}
+
+// 代理IP设置
+func (this *HttpClient) replaceUrl(srcUrl string, ip string)(string){
+	httpPrefix := "http://"
+	parsedUrl, err := url.Parse(srcUrl)
+	if err != nil {
+		return ""
+	}
+	return httpPrefix + ip + parsedUrl.Path
+}
+
+func (this *HttpClient) Fetch(dstUrl string, method string, proxyHost string, header map[string]string, preload bool, timeout int64)(*http.Response, error){
+	// proxyHost 换掉 url 中请求
+	newUrl := this.replaceUrl(dstUrl, proxyHost)
+	req, _ := http.NewRequest(method, newUrl, nil)
+	for k, v := range header {
+		req.Header.Add(k, v)
+	}
+	client.Timeout = time.Duration(timeout)*time.Second //超时时间设置
+
+	resp, err := client.Do(req)
+    return resp, err  //由调用方close body
+}
+</pre>
+
