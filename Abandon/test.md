@@ -3140,3 +3140,6 @@ func downLoadFile(url string)(len int, err error){
 	return n, err
 }
 </pre>
+### 此图片来自微信公众平台，未经允许不可引用【微信图片防盗链】
+原理与解决思路：
+防止盗链主要是利用http的head里的Referer来判断请求的源，如果请求的来源域名不是授权域名就禁止，利用iframe将当前请求的Referer变为空，这样就能躲过请求源检查，你用php的curl，伪造微信网址作为Referer一样能正常访问，不过这样压力都转到服务器去了。
