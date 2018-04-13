@@ -3148,3 +3148,102 @@ func downLoadFile(url string)(len int, err error){
 <pre>
  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 </pre>
+
+###  golang 内存共享池
+<pre>
+package main
+
+import (
+	"container/list"
+	"fmt"
+	"math/rand"
+	"runtime"
+	"time"
+)
+
+var makes int
+var frees int
+
+func makeBuffer() []byte {
+	makes += 1
+	return make([]byte, rand.Intn(5000000)+5000000)
+}
+
+type queued struct {
+	when  time.Time
+	slice []byte
+}
+
+/*
+如果buffer 这个channel满了，则以上的写入过程会阻塞，这种情况下default触发。这种简单的机制可以用于安全的创建一个共享池，甚至可通过channel传递实现多个goroutines之间的完美、安全共享。
+在我们的实际项目中运用了相似的技术，实际使用中（简单版本）的回收器（recycler ）展示在下面，有一个goroutine 处理buffers的构造并在多个goroutine之间共享。get(获取一个新buffer)和give(回收一个buffer到pool)这两个channel被所有goroutines使用。
+回收器对收回的buffer保持连接，并定期的丢弃那些过于陈旧可能不会再使用的buffer（在示例代码中这个周期是一分钟）。这让程序可以自动应对爆发性的buffers需求。
+*/
+func makeRecycler() (get, give chan []byte) {
+	get = make(chan []byte)
+	give = make(chan []byte)
+
+	go func() {
+		q := new(list.List)
+		for {
+			if q.Len() == 0 {
+				q.PushFront(queued{when: time.Now(), slice: makeBuffer()})
+			}
+			e := q.Front()
+			timeout := time.NewTimer(time.Minute) //一分钟定时清理
+			select {
+			case b := <-give:
+				timeout.Stop()
+				q.PushFront(queued{when: time.Now(), slice: b})
+
+			case get <- e.Value.(queued).slice:
+				timeout.Stop()
+				q.Remove(e)
+
+			case <-timeout.C:
+				e := q.Front()
+				for e != nil {
+					n := e.Next()
+					if time.Since(e.Value.(queued).when) > time.Minute {
+						q.Remove(e)
+						e.Value = nil
+					}
+					e = n
+				}
+			}
+		}
+
+	}()
+
+	return
+}
+
+func main() {
+	pool := make([][]byte, 20)
+
+	get, give := makeRecycler()
+
+	var m runtime.MemStats
+	for {
+		b := <-get
+		i := rand.Intn(len(pool))
+		if pool[i] != nil {
+			give <- pool[i]
+		}
+
+		pool[i] = b
+
+		time.Sleep(time.Second)
+
+		bytes := 0
+		for i := 0; i < len(pool); i++ {
+			if pool[i] != nil {
+				bytes += len(pool[i])
+			}
+		}
+
+		runtime.ReadMemStats(&m)
+		fmt.Printf("%d,%d,%d,%d,%d,%d,%d\n", m.HeapSys, bytes, m.HeapAlloc, m.HeapIdle, m.HeapReleased, makes, frees)
+	}
+}
+</pre>
