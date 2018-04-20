@@ -3366,3 +3366,8 @@ func main() {
 	}
 }
 </pre>
+### 减小可执行文件大小 
+减小go生成的可执行文件大小：
+go build -ldflags "-s -w" hello.go
+-s去掉符号表（然后panic时候的stack trace就没有任何文件名/行号信息了，这个等价于普通C/C++程序被strip的效果），
+-w去掉DWARF调试信息，得到的程序就不能用gdb调试了。
