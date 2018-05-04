@@ -3398,3 +3398,8 @@ golang的map实现并不是像c++一样使用红黑树，而是使用了hashmap�
 在iterate整个map的时候，使用delete是安全的。这跟c++是不一样的，c++在delete的时候，会导致整棵树发生变化，所以不能在迭代的时候删除元素。
 那为什么golang的map是安全的呢，从源码来看，golang的map使用了桶的概念，元素是被hash到桶存储，每个桶预设是存储八个kv,而且在头部有一个uint8 tophash[8]的结构，存储每个key的高八位（即hash(key)>>(64-8)），如果该位置未被放置元素，则有一个特殊的标志Empty。在插入删除的时候，首先会比较该uint8跟hash(key)是否相等。当然，桶还利用了overflow指针，可以无限的增长，类似链表。
 所以，for循环其实是对每个桶进行迭代，判断每个uint8位置，删除操作也并不是实际的memset，而是把对应的tophash的位置置为Empty.因此，在迭代golang的map过程中，使用delete是安全的。
+
+- 如果知道size，预先分配资源make(map[int]int, 1000)
+- uint32, uint64, string作为键，非常快
+- 清理map：for k:= range m { delete(m, k) }
+- key和value中没有指针可以使GC scanning更快
