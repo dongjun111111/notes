@@ -3531,3 +3531,19 @@ func main() {
     fmt.Println("delete action done!")
 }
 </pre>
+
+### json.MarshalIndent 数据格式化输出
+<pre>
+user := User{
+	UserName: "test",
+	PassWord: "1234567890",
+}
+
+//一行一行字符串形式
+str, _ := json.Marshal(user)
+fmt.Println(string(str))
+
+//有层次打印json,后两个参数分别为每一行的前缀,每一层的缩进
+str0, _ := json.MarshalIndent(user, "", " ")
+fmt.Println(string(str0))
+</pre>
