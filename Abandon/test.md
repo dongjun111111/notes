@@ -3547,3 +3547,57 @@ fmt.Println(string(str))
 str0, _ := json.MarshalIndent(user, "", " ")
 fmt.Println(string(str0))
 </pre>
+
+###  shell发布命令 
+<pre>
+#! /bin/bash
+arr_host=("192.168.6.205" "0.0.0.0");
+arr_host_name=("205测试服" "189准正式服");
+pwd_arr=("example_password");
+project_path="";
+login_user="";
+if [[ $1 -gt 1 || $1 -lt 0 ]]
+then
+   echo "目标服务器？0（205测试服），1（189正式服）";
+   exit;
+fi
+
+if [[ $1 -eq 1 ]]
+then
+  project_path="/home/yd/gopath/src/yd_crm/"
+  login_user="yd"
+else
+  project_path="/home/go/src/yd_crm/"
+  login_user="root"
+fi
+
+host_url=${arr_host[$1]};
+host_name=${arr_host_name[$1]};
+host_pwd=${pwd_arr[$1]};
+
+# echo 'bee pack 打包中...'
+# bee pack -be GOOS=linux -exr='^[0-9a-n]|[*.iml]$'
+echo '部署代码至 '$host_name'...pwd:'$host_pwd
+# scp yd_crm.tar.gz  $login_user@$host_url:$project_path;
+# echo '解压服务器文件，重启程序...'
+if [[ $1 -eq 1 ]]
+then
+ssh $login_user@$host_url  << remotessh
+    cd $project_path
+    git checkout -- .
+    git pull origin master
+    go build
+    ctl restart yd_crm
+    ctl tail -f yd_crm
+remotessh
+else
+ssh $login_user@$host_url  << remotessh
+    cd $project_path
+    git checkout -- .
+    git pull origin master
+    go build
+    ctl restart yd_crm
+    ctl tail -f yd_crm
+remotessh
+fi
+</pre>
