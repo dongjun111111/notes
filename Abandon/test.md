@@ -3601,3 +3601,6 @@ ssh $login_user@$host_url  << remotessh
 remotessh
 fi
 </pre>
+
+### git 切换到远程某分支
+ git checkout -b origin/分支名
