@@ -3604,3 +3604,52 @@ fi
 
 ### git 切换到远程某分支
  git checkout -b origin/分支名
+ 
+
+### 获取服务器主机名与ip地址，以此来判断代码运行环境
+package pkg
+
+import (
+	"net"
+	"os"
+)
+
+// 运行环境 
+func RunEnv() (env string, name string) {
+	host := map[string]string{
+		"prod-server":     "PROD",  // 正式服
+		"test-cs":         "TEST",  // 测试服
+		"dev":             "DEV",   // 本地开发服
+		"alpha":           "ALPHA", // 预发服
+	}
+	n, err := os.Hostname()
+	if err != nil {
+		env, name = host["ENV_dev"], host["dev"]
+		return
+	}
+	_, ok := host[n]
+	if ok {
+		env, name = host["ENV_"+n], host[n]
+		return
+	}
+	env, name = host["ENV_dev"], host["dev"]
+	return
+}
+
+// 获取服务器ip地址
+func InternalIPs() (ips []string, err error) {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		os.Stderr.WriteString("InternalIPs Err:" + err.Error())
+		return
+	}
+
+	for _, a := range addrs {
+		if ipnet, ok := a.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				ips = append(ips, ipnet.IP.String())
+			}
+		}
+	}
+	return
+}
