@@ -3736,3 +3736,37 @@ func downloadFile(url string, fb func(length, downLen int64)) error {
 	return err
 }
 </pre>
+
+### 使用上下文进行超时控制
+<pre>
+package main
+
+import (
+	"context"
+	"fmt"
+	"time"
+)
+
+func main() {
+	d := time.Now().Add(500 * time.Millisecond) //500 ms
+	ctx, cancel := context.WithDeadline(context.Background(), d)
+
+	defer cancel()
+	c := make(chan bool)
+	//模拟耗时代码
+	go func() {
+		time.Sleep(400 * time.Millisecond) //改成 600 试试
+		c <- true                          //返回
+	}()
+	select {
+	case flag := <-c: //从chan 获取值
+		if flag {
+			fmt.Println("执行任务成功")
+		} else {
+			fmt.Println("执行任务失败")
+		}
+	case <-ctx.Done(): //是ctx的通道先返回的数据
+		fmt.Println("执行任务超时~")
+	}
+}
+</pre>
