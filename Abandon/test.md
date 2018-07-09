@@ -3770,3 +3770,40 @@ func main() {
 	}
 }
 </pre>
+
+
+### 发送邮件
+<pre>
+
+import gomail "gopkg.in/gomail.v2"
+
+func SendEmailByGomail(title, content string, users []string, files []string) {
+	m := gomail.NewMessage()
+	m.SetHeader("From", "FROM@163.com")
+	m.SetHeader("To", users...)
+	m.SetHeader("Subject", title)
+	m.SetBody("text/html", content)
+	for _, v := range files {
+		h := make(map[string][]string, 0)
+		filename := filepath.Base(v)
+		h["Content-Type"] = []string{`application/octet-stream; charset=utf-8; name="` + filename + `"`}
+		fileSetting := gomail.SetHeader(h)
+		m.Attach(v, fileSetting)
+	}
+	d := gomail.NewDialer("smtp.mxhichina.com", 465,USER, PWD)
+	count := 0
+	for {
+		count++
+		err := d.DialAndSend(m)
+		if err != nil {
+			time.Sleep(time.Second * 180)
+			fmt.Println(err)
+		} else {
+			break
+		}
+		if count >= 3 {
+			break
+		}
+	}
+}
+</pre>
