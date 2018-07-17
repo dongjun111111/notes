@@ -3807,3 +3807,21 @@ func SendEmailByGomail(title, content string, users []string, files []string) {
 	}
 }
 </pre>
+
+### template sort 
+<pre>
+// 格式化处理信息
+func SmsTpl2Bytes(msg string, data map[string]string) ([]byte, error) {
+	tp := template.New("sms")
+	tp, err := tp.Parse(msg)
+	if err != nil {
+		return nil, err
+	}
+	bf := new(bytes.Buffer)
+	err = tp.Execute(bf, data)
+	if err != nil {
+		return nil, err
+	}
+	return bf.Bytes(), err
+}
+</pre>
