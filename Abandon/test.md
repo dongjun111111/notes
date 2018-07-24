@@ -3859,3 +3859,152 @@ func main() {
 	time.Sleep(time.Second * 8)
 }
 </pre>
+
+### goroutine 通信 
+<pre>
+package main
+
+// goroutine并发控制与通信
+
+import (
+	"context"
+	"crypto/md5"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"sync"
+	"time"
+)
+
+// import (
+// 	"fmt"
+// 	"time"
+// )
+
+// // ===================== 1 全局共享变量  =====================
+// func main() {
+// 	running := true
+// 	f := func() {
+// 		for running {
+// 			fmt.Println("sub proc running...")
+// 			time.Sleep(1 * time.Second)
+// 		}
+// 		fmt.Println("sub proc exit")
+// 	}
+// 	go f()
+// 	go f()
+// 	go f()
+// 	time.Sleep(2 * time.Second)
+// 	running = false
+// 	time.Sleep(3 * time.Second)
+// 	fmt.Println("main proc exit")
+// }
+
+// // ===================== 2 channel 通信  =====================
+// var count int32 = 0
+
+// func consumer(stop <-chan bool) {
+// 	for {
+// 		select {
+// 		case <-stop:
+// 			fmt.Println("exit sub goroutine")
+// 			return
+// 		default:
+// 			fmt.Println("running...")
+// 			count = atomic.LoadInt32(&count)
+// 			atomic.AddInt32(&count, 1)
+// 			time.Sleep(500 * time.Millisecond)
+// 		}
+// 	}
+// }
+
+// func waitForSignal() {
+// 	sigs := make(chan os.Signal)
+// 	signal.Notify(sigs, os.Interrupt)
+// 	signal.Notify(sigs, syscall.SIGTERM)
+// 	println(os.Interrupt.String())
+// 	println(syscall.SIGTERM)
+// 	<-sigs
+// }
+
+// func main() {
+// 	stop := make(chan bool)
+// 	var wg sync.WaitGroup
+// 	// Spawn example consumers
+// 	for i := 0; i < 3; i++ {
+// 		wg.Add(1)
+// 		go func(stop <-chan bool) {
+// 			defer wg.Done()
+// 			consumer(stop)
+// 			println("AAAA")
+// 		}(stop)
+// 	}
+// 	waitForSignal()
+// 	close(stop)
+// 	fmt.Println("stopping all jobs!")
+// 	println("count总数::::::", count)
+// 	wg.Wait()
+// }
+
+// ===================== 3 context控制   =====================
+type favContextKey string
+
+func main() {
+	wg := &sync.WaitGroup{}
+	values := []string{"https://www.baidu.com/", "https://www.zhihu.com/"}
+	ctx, cancel := context.WithCancel(context.Background())
+
+	for _, url := range values {
+		wg.Add(1)
+		subCtx := context.WithValue(ctx, favContextKey("url"), url)
+		go reqURL(subCtx, wg)
+	}
+
+	go func() {
+		time.Sleep(time.Second * 3)
+		cancel()
+	}()
+
+	wg.Wait()
+	fmt.Println("exit main goroutine")
+}
+
+func reqURL(ctx context.Context, wg *sync.WaitGroup) {
+	defer wg.Done()
+	url, _ := ctx.Value(favContextKey("url")).(string)
+	for {
+		select {
+		case <-ctx.Done():
+			fmt.Printf("stop getting url:%s\n", url)
+			return
+		default:
+			r, err := http.Get(url)
+			if r.StatusCode == http.StatusOK && err == nil {
+				body, _ := ioutil.ReadAll(r.Body)
+				subCtx := context.WithValue(ctx, favContextKey("resp"), fmt.Sprintf("%s%x", url, md5.Sum(body)))
+				wg.Add(1)
+				go showResp(subCtx, wg)
+			}
+			r.Body.Close()
+			//启动子goroutine是为了不阻塞当前goroutine，这里在实际场景中可以去执行其他逻辑，这里为了方便直接sleep一秒
+			// doSometing()
+			time.Sleep(time.Second * 1)
+		}
+	}
+}
+
+func showResp(ctx context.Context, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for {
+		select {
+		case <-ctx.Done():
+			fmt.Println("stop showing resp")
+			return
+		default:
+			//子goroutine里一般会处理一些IO任务，如读写数据库或者rpc调用，这里为了方便直接把数据打印
+			fmt.Println("printing ", ctx.Value(favContextKey("resp")))
+			time.Sleep(time.Second * 1)
+		}
+	}
+}
+</pre>
