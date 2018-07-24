@@ -3825,3 +3825,37 @@ func SmsTpl2Bytes(msg string, data map[string]string) ([]byte, error) {
 	return bf.Bytes(), err
 }
 </pre>
+### sync.Cond 控制速率
+<pre>
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+/*
+cond的主要作用就是获取锁之后，wait()方法会等待一个通知，来进行下一步锁释放等操作，以此控制锁合适释放，释放频率
+*/
+var locker = new(sync.Mutex)
+var cond = sync.NewCond(locker)
+
+func work_something(x int) {
+	cond.L.Lock() //获取锁
+	cond.Wait()   //等待通知  暂时阻塞
+	fmt.Println("当前锁标识：", x)
+	cond.L.Unlock() //释放锁
+}
+func main() {
+	for i := 0; i < 40; i++ {
+		go work_something(i)
+	}
+	fmt.Println("start all")
+	time.Sleep(time.Second * 1)
+	cond.Signal() // 下发一个通知给已经获取锁的goroutine，只有一个goroutine释放
+	time.Sleep(time.Second * 1)
+	cond.Signal() //  下发一个通知给已经获取锁的goroutine，只有一个goroutine释放
+	time.Sleep(time.Second * 1)
+	cond.Broadcast() // 下发广播给所有等待的goroutine，所有未释放的goroutine都释放掉
+	time.Sleep(time.Second * 8)
+}
+</pre>
