@@ -4044,3 +4044,30 @@ func main(){
         println(ip)
 }
 </pre>
+
+
+## golang http basic auth middlerware
+Golang http 简单认证中间件
+<pre>
+package main
+
+import (
+	"net/http"
+
+	"github.com/goji/httpauth"
+	"github.com/gorilla/mux"
+)
+
+func main() {
+	r := mux.NewRouter()
+
+	r.HandleFunc("/", YourHandler)
+	http.Handle("/", httpauth.SimpleBasicAuth("test", "1234")(r))
+
+	http.ListenAndServe(":7000", nil)
+}
+
+func YourHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("hello basic auth !\n"))
+}
+</pre>
