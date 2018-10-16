@@ -4047,7 +4047,7 @@ func main(){
 
 
 ## golang http basic auth middlerware
-Golang http 简单认证中间件
+http 简单认证中间件
 <pre>
 package main
 
