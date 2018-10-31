@@ -4071,3 +4071,10 @@ func YourHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("hello basic auth !\n"))
 }
 </pre>
+
+## 用户密码存储的方案
+
+1. md5 (不推荐，易用彩虹表破解，安全性不高)
+2. salt1+用户名+salt2+MD5拼接 (比md5好但还是有可能被破解)
+3. scrypt 方案。（由黑客开发，安全比高。但加密性能并不是很高） golang.org/x/crypto/scrypt
+4. bcrypt 方案。（最均衡的选择）golang.org/x/crypto/bcrypt
