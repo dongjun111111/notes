@@ -4072,7 +4072,7 @@ func YourHandler(w http.ResponseWriter, r *http.Request) {
 }
 </pre>
 
-## 用户密码存储的方案
+### 用户密码存储的方案
 
 1. md5 (不推荐，易用彩虹表破解，安全性不高)
 2. salt1+用户名+salt2+MD5拼接 (比md5好但还是有可能被破解)
