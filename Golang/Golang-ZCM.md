@@ -1,5 +1,6 @@
-#喵
-##基础知识
+# 喵
+
+## 基础知识
 <font color=red>在Golang中不能用string(int)==>string，只能用strconv.Itoa(int) ==>string,同理,将string转成int只能用strconv.Atoi；string强制转换只能用于将切片转成string</font>。
 
 字符串
